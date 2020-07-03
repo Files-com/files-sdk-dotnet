@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Files.com</id>
+    <version>0.0.8.86</version>
+    <authors>Kevin Killingsworth</authors>
+    <owners>Files.com</owners>
+    <title>Files.com Client</title>
+    <description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</description>
+    <projectUrl>https://developers.files.com/</projectUrl>
+    <language>en-US</language>
+    <icon>icon.png</icon>
+    <dependencies>
+      <group targetFramework="netcoreapp3.0">
+        <dependency id="log4net" version="2.0.8.0" />
+        <dependency id="Polly" version="7.2.1" />
+        <dependency id="Microsoft.Extensions.Http" version="3.1.5" />
+        <dependency id="Microsoft.Extensions.Hosting" version="3.1.5" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="System.Configuration.ConfigurationManager" version="4.7.0" />
+      </group>
+    </dependencies>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <copyright>Copyright 2020</copyright>
+    <releaseNotes>
+      Initial pre-alpha
+    </releaseNotes>
+    <tags>Files Files.com FTP SFTP SCP</tags>
+  </metadata>
+  <files>
+    <file src="icon.png" target="icon.png" />
+  </files>
+</package>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <configSections>
+        <sectionGroup name="files.com">
+            <section
+                name="filesConfiguration"
+                type="Files.FilesConfiguration, Files.com"
+            />
+        </sectionGroup>
+    </configSections>
+    <files.com>
+        <filesConfiguration ApiKey="my-key" />
+    </files.com>
+</configuration>
