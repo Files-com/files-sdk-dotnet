@@ -11,12 +11,6 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-
-        public static Lock Create(Dictionary<string, object> attributes, Dictionary<string, object> options)
-        {
-            return Lock.Create((string)attributes["path"], attributes, options);
-        }
-
         public Lock()
         {
             this.attributes = new Dictionary<string, object>();

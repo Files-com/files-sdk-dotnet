@@ -266,6 +266,24 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// </summary>
+        public static async Task<ApiKey> FindCurrent(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+
+            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+        }
+
+
+        /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Api Key ID.
         /// </summary>
@@ -303,24 +321,6 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// </summary>
-        public static async Task<ApiKey> FindCurrent(
-            
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-
-            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
-        }
-
-
-        /// <summary>
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   name - string - Internal name for the API Key.  For your use.
@@ -354,6 +354,40 @@ namespace Files.Models
             }
 
             string responseJson = await FilesClient.SendRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+        }
+
+
+        /// <summary>
+        /// Parameters:
+        ///   expires_at - string - API Key expiration date
+        ///   name - string - Internal name for the API Key.  For your use.
+        ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        /// </summary>
+        public static async Task<ApiKey> UpdateCurrent(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Patch, parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -403,12 +437,8 @@ namespace Files.Models
 
 
         /// <summary>
-        /// Parameters:
-        ///   expires_at - string - API Key expiration date
-        ///   name - string - Internal name for the API Key.  For your use.
-        ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
-        public static async Task<ApiKey> UpdateCurrent(
+        public static async Task<ApiKey> DeleteCurrent(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -417,20 +447,8 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
-            }
 
-            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -470,24 +488,6 @@ namespace Files.Models
         {
             return await Delete(id, parameters, options);
         }
-
-        /// <summary>
-        /// </summary>
-        public static async Task<ApiKey> DeleteCurrent(
-            
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-
-            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
-        }
-
 
     }
 }

@@ -11,12 +11,6 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-
-        public static Request Create(Dictionary<string, object> attributes, Dictionary<string, object> options)
-        {
-            return Request.Create((string)attributes["path"], attributes, options);
-        }
-
         public Request()
         {
             this.attributes = new Dictionary<string, object>();
