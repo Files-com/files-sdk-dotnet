@@ -312,7 +312,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Either personnel or business_other account types
+        /// Either personal or business_other account types
         /// </summary>
         [JsonPropertyName("one_drive_account_type")]
         public string OneDriveAccountType
@@ -464,7 +464,7 @@ namespace Files.Models
         ///   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
-        ///   one_drive_account_type - string - Either personnel or business_other account types
+        ///   one_drive_account_type - string - Either personal or business_other account types
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -773,7 +773,7 @@ namespace Files.Models
         ///   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
-        ///   one_drive_account_type - string - Either personnel or business_other account types
+        ///   one_drive_account_type - string - Either personal or business_other account types
         /// </summary>
         public static async Task<RemoteServer> Create(
             
@@ -952,7 +952,7 @@ namespace Files.Models
         ///   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
-        ///   one_drive_account_type - string - Either personnel or business_other account types
+        ///   one_drive_account_type - string - Either personal or business_other account types
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id, 
