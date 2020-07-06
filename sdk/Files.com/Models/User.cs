@@ -33,7 +33,7 @@ namespace Files.Models
             this.attributes.Add("disabled", false);
             this.attributes.Add("email", "");
             this.attributes.Add("ftp_permission", false);
-            this.attributes.Add("group_ids", new object[0]);
+            this.attributes.Add("group_ids", null);
             this.attributes.Add("header_text", null);
             this.attributes.Add("language", null);
             this.attributes.Add("last_login_at", null);
@@ -250,9 +250,9 @@ namespace Files.Models
         /// Comma-separated list of group IDs of which this user is a member
         /// </summary>
         [JsonPropertyName("group_ids")]
-        public object[] GroupIds
+        public string GroupIds
         {
-            get { return (object[]) attributes["group_ids"]; }
+            get { return (string) attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
         }
 
