@@ -18,7 +18,7 @@ namespace Files.Models
 
             this.attributes.Add("send", null);
             this.attributes.Add("action", null);
-            this.attributes.Add("ask_about_overwrites", false);
+            this.attributes.Add("ask_about_overwrites", null);
             this.attributes.Add("available_parts", null);
             this.attributes.Add("expires", null);
             this.attributes.Add("headers", null);

@@ -18,7 +18,7 @@ namespace Files.Models
 
             this.attributes.Add("id", null);
             this.attributes.Add("body", null);
-            this.attributes.Add("reactions", new object[0]);
+            this.attributes.Add("reactions", new string[0]);
             this.attributes.Add("user_id", null);
         }
 
@@ -52,9 +52,9 @@ namespace Files.Models
         /// Reactions to this comment.
         /// </summary>
         [JsonPropertyName("reactions")]
-        public object[] Reactions
+        public string[] Reactions
         {
-            get { return (object[]) attributes["reactions"]; }
+            get { return (string[]) attributes["reactions"]; }
             set { attributes["reactions"] = value; }
         }
 

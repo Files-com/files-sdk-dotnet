@@ -52,7 +52,7 @@ namespace Files.Models
             this.attributes.Add("backblaze_b2_key_id", null);
             this.attributes.Add("backblaze_b2_application_key", null);
             this.attributes.Add("rackspace_api_key", null);
-            this.attributes.Add("reset_authentication", false);
+            this.attributes.Add("reset_authentication", null);
         }
 
         public RemoteServer(Dictionary<string, object> attributes, Dictionary<string, object> options)

@@ -23,7 +23,7 @@ namespace Files.Models
             this.attributes.Add("display", null);
             this.attributes.Add("ip", null);
             this.attributes.Add("source", null);
-            this.attributes.Add("targets", new object[0]);
+            this.attributes.Add("targets", new string[0]);
             this.attributes.Add("user_id", null);
             this.attributes.Add("username", null);
             this.attributes.Add("action", null);
@@ -104,9 +104,9 @@ namespace Files.Models
         /// Targets
         /// </summary>
         [JsonPropertyName("targets")]
-        public object[] Targets
+        public string[] Targets
         {
-            get { return (object[]) attributes["targets"]; }
+            get { return (string[]) attributes["targets"]; }
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace Files.Models
             this.attributes.Add("id", null);
             this.attributes.Add("subject", null);
             this.attributes.Add("body", null);
-            this.attributes.Add("comments", new object[0]);
+            this.attributes.Add("comments", new string[0]);
             this.attributes.Add("user_id", null);
             this.attributes.Add("project_id", null);
         }
@@ -64,9 +64,9 @@ namespace Files.Models
         /// Comments.
         /// </summary>
         [JsonPropertyName("comments")]
-        public object[] Comments
+        public string[] Comments
         {
-            get { return (object[]) attributes["comments"]; }
+            get { return (string[]) attributes["comments"]; }
             set { attributes["comments"] = value; }
         }
 

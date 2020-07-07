@@ -19,7 +19,7 @@ namespace Files.Models
             this.attributes.Add("id", null);
             this.attributes.Add("associated_with", null);
             this.attributes.Add("group_id", null);
-            this.attributes.Add("ip_addresses", new object[0]);
+            this.attributes.Add("ip_addresses", new string[0]);
         }
 
         public IpAddress(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -59,9 +59,9 @@ namespace Files.Models
         /// A list of IP addresses.
         /// </summary>
         [JsonPropertyName("ip_addresses")]
-        public object[] IpAddresses
+        public string[] IpAddresses
         {
-            get { return (object[]) attributes["ip_addresses"]; }
+            get { return (string[]) attributes["ip_addresses"]; }
         }
 
 

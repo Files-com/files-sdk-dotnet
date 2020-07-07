@@ -20,14 +20,14 @@ namespace Files.Models
             this.attributes.Add("path", null);
             this.attributes.Add("group_id", null);
             this.attributes.Add("group_name", null);
-            this.attributes.Add("notify_user_actions", false);
-            this.attributes.Add("notify_on_copy", false);
+            this.attributes.Add("notify_user_actions", null);
+            this.attributes.Add("notify_on_copy", null);
             this.attributes.Add("send_interval", null);
-            this.attributes.Add("unsubscribed", false);
+            this.attributes.Add("unsubscribed", null);
             this.attributes.Add("unsubscribed_reason", null);
             this.attributes.Add("user_id", null);
             this.attributes.Add("username", null);
-            this.attributes.Add("suppressed_email", false);
+            this.attributes.Add("suppressed_email", null);
         }
 
         public Notification(Dictionary<string, object> attributes, Dictionary<string, object> options)

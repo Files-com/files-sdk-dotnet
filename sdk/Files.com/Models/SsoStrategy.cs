@@ -16,7 +16,7 @@ namespace Files.Models
             this.attributes = new Dictionary<string, object>();
             this.options = new Dictionary<string, object>();
 
-            this.attributes.Add("protocol", new object[0]);
+            this.attributes.Add("protocol", new string[0]);
             this.attributes.Add("provider", null);
             this.attributes.Add("label", null);
             this.attributes.Add("logo_url", null);
@@ -29,27 +29,27 @@ namespace Files.Models
             this.attributes.Add("scim_authentication_method", null);
             this.attributes.Add("scim_username", null);
             this.attributes.Add("subdomain", null);
-            this.attributes.Add("provision_users", false);
-            this.attributes.Add("provision_groups", false);
-            this.attributes.Add("deprovision_users", false);
-            this.attributes.Add("deprovision_groups", false);
+            this.attributes.Add("provision_users", null);
+            this.attributes.Add("provision_groups", null);
+            this.attributes.Add("deprovision_users", null);
+            this.attributes.Add("deprovision_groups", null);
             this.attributes.Add("provision_group_default", null);
             this.attributes.Add("provision_group_exclusion", null);
             this.attributes.Add("provision_group_inclusion", null);
             this.attributes.Add("provision_group_required", null);
-            this.attributes.Add("provision_attachments_permission", false);
-            this.attributes.Add("provision_dav_permission", false);
-            this.attributes.Add("provision_ftp_permission", false);
-            this.attributes.Add("provision_sftp_permission", false);
+            this.attributes.Add("provision_attachments_permission", null);
+            this.attributes.Add("provision_dav_permission", null);
+            this.attributes.Add("provision_ftp_permission", null);
+            this.attributes.Add("provision_sftp_permission", null);
             this.attributes.Add("provision_time_zone", null);
             this.attributes.Add("ldap_base_dn", null);
             this.attributes.Add("ldap_domain", null);
-            this.attributes.Add("enabled", false);
+            this.attributes.Add("enabled", null);
             this.attributes.Add("ldap_host", null);
             this.attributes.Add("ldap_host_2", null);
             this.attributes.Add("ldap_host_3", null);
             this.attributes.Add("ldap_port", null);
-            this.attributes.Add("ldap_secure", false);
+            this.attributes.Add("ldap_secure", null);
             this.attributes.Add("ldap_username", null);
             this.attributes.Add("ldap_username_field", null);
         }
@@ -64,9 +64,9 @@ namespace Files.Models
         /// SSO Protocol
         /// </summary>
         [JsonPropertyName("protocol")]
-        public object[] Protocol
+        public string[] Protocol
         {
-            get { return (object[]) attributes["protocol"]; }
+            get { return (string[]) attributes["protocol"]; }
         }
 
         /// <summary>

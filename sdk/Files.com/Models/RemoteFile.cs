@@ -126,20 +126,20 @@ namespace Files.Models
             this.attributes.Add("mime_type", null);
             this.attributes.Add("region", null);
             this.attributes.Add("permissions", null);
-            this.attributes.Add("subfolders_locked?", false);
+            this.attributes.Add("subfolders_locked?", null);
             this.attributes.Add("download_uri", null);
             this.attributes.Add("priority_color", null);
             this.attributes.Add("preview_id", null);
             this.attributes.Add("preview", null);
             this.attributes.Add("action", null);
             this.attributes.Add("length", null);
-            this.attributes.Add("mkdir_parents", false);
+            this.attributes.Add("mkdir_parents", null);
             this.attributes.Add("part", null);
             this.attributes.Add("parts", null);
             this.attributes.Add("ref", null);
             this.attributes.Add("restart", null);
             this.attributes.Add("structure", null);
-            this.attributes.Add("with_rename", false);
+            this.attributes.Add("with_rename", null);
         }
 
         public RemoteFile(Dictionary<string, object> attributes, Dictionary<string, object> options)

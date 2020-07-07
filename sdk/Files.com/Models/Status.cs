@@ -20,7 +20,7 @@ namespace Files.Models
             this.attributes.Add("message", null);
             this.attributes.Add("status", null);
             this.attributes.Add("data", null);
-            this.attributes.Add("errors", new object[0]);
+            this.attributes.Add("errors", new string[0]);
         }
 
         public Status(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -69,9 +69,9 @@ namespace Files.Models
         /// A list of api errors
         /// </summary>
         [JsonPropertyName("errors")]
-        public object[] Errors
+        public string[] Errors
         {
-            get { return (object[]) attributes["errors"]; }
+            get { return (string[]) attributes["errors"]; }
         }
 
 

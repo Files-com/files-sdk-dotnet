@@ -17,7 +17,7 @@ namespace Files.Models
             this.options = new Dictionary<string, object>();
 
             this.attributes.Add("name", null);
-            this.attributes.Add("email", "");
+            this.attributes.Add("email", null);
             this.attributes.Add("details", null);
         }
 

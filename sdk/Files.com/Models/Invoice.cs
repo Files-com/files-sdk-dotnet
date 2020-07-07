@@ -22,9 +22,9 @@ namespace Files.Models
             this.attributes.Add("created_at", null);
             this.attributes.Add("currency", null);
             this.attributes.Add("download_uri", null);
-            this.attributes.Add("invoice_line_items", new object[0]);
+            this.attributes.Add("invoice_line_items", new string[0]);
             this.attributes.Add("method", null);
-            this.attributes.Add("payment_line_items", new object[0]);
+            this.attributes.Add("payment_line_items", new string[0]);
             this.attributes.Add("payment_reversed_at", null);
             this.attributes.Add("payment_type", null);
             this.attributes.Add("site_name", null);
@@ -96,9 +96,9 @@ namespace Files.Models
         /// Associated invoice line items
         /// </summary>
         [JsonPropertyName("invoice_line_items")]
-        public object[] InvoiceLineItems
+        public string[] InvoiceLineItems
         {
-            get { return (object[]) attributes["invoice_line_items"]; }
+            get { return (string[]) attributes["invoice_line_items"]; }
         }
 
         /// <summary>
@@ -114,9 +114,9 @@ namespace Files.Models
         /// Associated payment line items
         /// </summary>
         [JsonPropertyName("payment_line_items")]
-        public object[] PaymentLineItems
+        public string[] PaymentLineItems
         {
-            get { return (object[]) attributes["payment_line_items"]; }
+            get { return (string[]) attributes["payment_line_items"]; }
         }
 
         /// <summary>

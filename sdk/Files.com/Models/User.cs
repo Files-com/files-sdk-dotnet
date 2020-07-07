@@ -18,21 +18,21 @@ namespace Files.Models
 
             this.attributes.Add("id", null);
             this.attributes.Add("username", null);
-            this.attributes.Add("admin_group_ids", new object[0]);
+            this.attributes.Add("admin_group_ids", new Nullable<Int64>[0]);
             this.attributes.Add("allowed_ips", null);
-            this.attributes.Add("attachments_permission", false);
+            this.attributes.Add("attachments_permission", null);
             this.attributes.Add("api_keys_count", null);
             this.attributes.Add("authenticate_until", null);
             this.attributes.Add("authentication_method", null);
             this.attributes.Add("avatar_url", null);
-            this.attributes.Add("billing_permission", false);
-            this.attributes.Add("bypass_site_allowed_ips", false);
-            this.attributes.Add("bypass_inactive_disable", false);
+            this.attributes.Add("billing_permission", null);
+            this.attributes.Add("bypass_site_allowed_ips", null);
+            this.attributes.Add("bypass_inactive_disable", null);
             this.attributes.Add("created_at", null);
-            this.attributes.Add("dav_permission", false);
-            this.attributes.Add("disabled", false);
-            this.attributes.Add("email", "");
-            this.attributes.Add("ftp_permission", false);
+            this.attributes.Add("dav_permission", null);
+            this.attributes.Add("disabled", null);
+            this.attributes.Add("email", null);
+            this.attributes.Add("ftp_permission", null);
             this.attributes.Add("group_ids", null);
             this.attributes.Add("header_text", null);
             this.attributes.Add("language", null);
@@ -45,30 +45,30 @@ namespace Files.Models
             this.attributes.Add("password_set_at", null);
             this.attributes.Add("password_validity_days", null);
             this.attributes.Add("public_keys_count", null);
-            this.attributes.Add("receive_admin_alerts", false);
-            this.attributes.Add("require_2fa", false);
-            this.attributes.Add("require_password_change", false);
-            this.attributes.Add("restapi_permission", false);
-            this.attributes.Add("self_managed", false);
-            this.attributes.Add("sftp_permission", false);
-            this.attributes.Add("site_admin", false);
-            this.attributes.Add("skip_welcome_screen", false);
+            this.attributes.Add("receive_admin_alerts", null);
+            this.attributes.Add("require_2fa", null);
+            this.attributes.Add("require_password_change", null);
+            this.attributes.Add("restapi_permission", null);
+            this.attributes.Add("self_managed", null);
+            this.attributes.Add("sftp_permission", null);
+            this.attributes.Add("site_admin", null);
+            this.attributes.Add("skip_welcome_screen", null);
             this.attributes.Add("ssl_required", null);
             this.attributes.Add("sso_strategy_id", null);
-            this.attributes.Add("subscribe_to_newsletter", false);
-            this.attributes.Add("externally_managed", false);
+            this.attributes.Add("subscribe_to_newsletter", null);
+            this.attributes.Add("externally_managed", null);
             this.attributes.Add("time_zone", null);
             this.attributes.Add("type_of_2fa", null);
             this.attributes.Add("user_root", null);
             this.attributes.Add("avatar_file", null);
-            this.attributes.Add("avatar_delete", false);
+            this.attributes.Add("avatar_delete", null);
             this.attributes.Add("change_password", null);
             this.attributes.Add("change_password_confirmation", null);
             this.attributes.Add("grant_permission", null);
             this.attributes.Add("group_id", null);
             this.attributes.Add("password", null);
             this.attributes.Add("password_confirmation", null);
-            this.attributes.Add("announcements_read", false);
+            this.attributes.Add("announcements_read", null);
         }
 
         public User(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -101,9 +101,9 @@ namespace Files.Models
         /// List of group IDs of which this user is an administrator
         /// </summary>
         [JsonPropertyName("admin_group_ids")]
-        public object[] AdminGroupIds
+        public Nullable<Int64>[] AdminGroupIds
         {
-            get { return (object[]) attributes["admin_group_ids"]; }
+            get { return (Nullable<Int64>[]) attributes["admin_group_ids"]; }
             set { attributes["admin_group_ids"] = value; }
         }
 
@@ -557,7 +557,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `preview`, or `history`.
+        /// Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         /// </summary>
         [JsonPropertyName("grant_permission")]
         public string GrantPermission
@@ -691,7 +691,7 @@ namespace Files.Models
         ///   change_password - string - Used for changing a password on an existing user.
         ///   change_password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
         ///   email - string - User's email.
-        ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `preview`, or `history`.
+        ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         ///   group_id - int64 - Group ID to associate this user with.
         ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
         ///   password - string - User password.
@@ -1054,7 +1054,7 @@ namespace Files.Models
         ///   change_password - string - Used for changing a password on an existing user.
         ///   change_password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
         ///   email - string - User's email.
-        ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `preview`, or `history`.
+        ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         ///   group_id - int64 - Group ID to associate this user with.
         ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
         ///   password - string - User password.
@@ -1357,7 +1357,7 @@ namespace Files.Models
         ///   change_password - string - Used for changing a password on an existing user.
         ///   change_password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
         ///   email - string - User's email.
-        ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `preview`, or `history`.
+        ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         ///   group_id - int64 - Group ID to associate this user with.
         ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
         ///   password - string - User password.

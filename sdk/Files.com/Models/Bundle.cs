@@ -19,8 +19,8 @@ namespace Files.Models
             this.attributes.Add("code", null);
             this.attributes.Add("url", null);
             this.attributes.Add("description", null);
-            this.attributes.Add("password_protected", false);
-            this.attributes.Add("require_registration", false);
+            this.attributes.Add("password_protected", null);
+            this.attributes.Add("require_registration", null);
             this.attributes.Add("clickwrap_body", null);
             this.attributes.Add("id", null);
             this.attributes.Add("created_at", null);
@@ -31,7 +31,7 @@ namespace Files.Models
             this.attributes.Add("username", null);
             this.attributes.Add("clickwrap_id", null);
             this.attributes.Add("inbox_id", null);
-            this.attributes.Add("paths", new object[0]);
+            this.attributes.Add("paths", new string[0]);
             this.attributes.Add("password", null);
         }
 
@@ -194,9 +194,9 @@ namespace Files.Models
         /// A list of paths in this bundle
         /// </summary>
         [JsonPropertyName("paths")]
-        public object[] Paths
+        public string[] Paths
         {
-            get { return (object[]) attributes["paths"]; }
+            get { return (string[]) attributes["paths"]; }
             set { attributes["paths"] = value; }
         }
 

@@ -25,10 +25,10 @@ namespace Files.Models
             this.attributes.Add("interval", null);
             this.attributes.Add("next_process_on", null);
             this.attributes.Add("path", null);
-            this.attributes.Add("realtime", false);
+            this.attributes.Add("realtime", null);
             this.attributes.Add("user_id", null);
-            this.attributes.Add("user_ids", new object[0]);
-            this.attributes.Add("group_ids", new object[0]);
+            this.attributes.Add("user_ids", new Nullable<Int64>[0]);
+            this.attributes.Add("group_ids", new Nullable<Int64>[0]);
         }
 
         public Automation(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -151,9 +151,9 @@ namespace Files.Models
         /// IDs of Users for the Automation (i.e. who to Request File from)
         /// </summary>
         [JsonPropertyName("user_ids")]
-        public object[] UserIds
+        public Nullable<Int64>[] UserIds
         {
-            get { return (object[]) attributes["user_ids"]; }
+            get { return (Nullable<Int64>[]) attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
 
@@ -161,9 +161,9 @@ namespace Files.Models
         /// IDs of Groups for the Automation (i.e. who to Request File from)
         /// </summary>
         [JsonPropertyName("group_ids")]
-        public object[] GroupIds
+        public Nullable<Int64>[] GroupIds
         {
-            get { return (object[]) attributes["group_ids"]; }
+            get { return (Nullable<Int64>[]) attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
         }
 

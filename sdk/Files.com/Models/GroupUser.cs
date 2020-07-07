@@ -19,8 +19,8 @@ namespace Files.Models
             this.attributes.Add("group_name", null);
             this.attributes.Add("group_id", null);
             this.attributes.Add("user_id", null);
-            this.attributes.Add("admin", false);
-            this.attributes.Add("usernames", new object[0]);
+            this.attributes.Add("admin", null);
+            this.attributes.Add("usernames", new string[0]);
             this.attributes.Add("id", null);
         }
 
@@ -74,9 +74,9 @@ namespace Files.Models
         /// A list of usernames for users in this group
         /// </summary>
         [JsonPropertyName("usernames")]
-        public object[] Usernames
+        public string[] Usernames
         {
-            get { return (object[]) attributes["usernames"]; }
+            get { return (string[]) attributes["usernames"]; }
             set { attributes["usernames"] = value; }
         }
 

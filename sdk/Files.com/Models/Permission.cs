@@ -29,7 +29,7 @@ namespace Files.Models
             this.attributes.Add("group_id", null);
             this.attributes.Add("group_name", null);
             this.attributes.Add("permission", null);
-            this.attributes.Add("recursive", false);
+            this.attributes.Add("recursive", null);
         }
 
         public Permission(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -200,7 +200,7 @@ namespace Files.Models
         /// Parameters:
         ///   group_id - int64 - Group ID
         ///   path - string - Folder path
-        ///   permission - string -  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `previewonly`, or `history`
+        ///   permission - string -  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
         ///   recursive - boolean - Apply to subfolders recursively?
         ///   user_id - int64 - User ID.  Provide `username` or `user_id`
         ///   username - string - User username.  Provide `username` or `user_id`

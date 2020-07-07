@@ -16,8 +16,8 @@ namespace Files.Models
             this.attributes = new Dictionary<string, object>();
             this.options = new Dictionary<string, object>();
 
-            this.attributes.Add("fields", new object[0]);
-            this.attributes.Add("messages", new object[0]);
+            this.attributes.Add("fields", new string[0]);
+            this.attributes.Add("messages", new string[0]);
         }
 
         public Errors(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -30,18 +30,18 @@ namespace Files.Models
         /// A list of fields where errors occur
         /// </summary>
         [JsonPropertyName("fields")]
-        public object[] Fields
+        public string[] Fields
         {
-            get { return (object[]) attributes["fields"]; }
+            get { return (string[]) attributes["fields"]; }
         }
 
         /// <summary>
         /// A list of error messages
         /// </summary>
         [JsonPropertyName("messages")]
-        public object[] Messages
+        public string[] Messages
         {
-            get { return (object[]) attributes["messages"]; }
+            get { return (string[]) attributes["messages"]; }
         }
 
 

@@ -34,7 +34,7 @@ namespace Files.Models
             this.attributes.Add("mime_type", null);
             this.attributes.Add("region", null);
             this.attributes.Add("permissions", null);
-            this.attributes.Add("subfolders_locked?", false);
+            this.attributes.Add("subfolders_locked?", null);
             this.attributes.Add("download_uri", null);
             this.attributes.Add("priority_color", null);
             this.attributes.Add("preview_id", null);

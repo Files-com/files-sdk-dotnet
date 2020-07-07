@@ -18,10 +18,10 @@ namespace Files.Models
 
             this.attributes.Add("id", null);
             this.attributes.Add("name", null);
-            this.attributes.Add("admin_ids", new object[0]);
+            this.attributes.Add("admin_ids", new string[0]);
             this.attributes.Add("notes", null);
-            this.attributes.Add("user_ids", new object[0]);
-            this.attributes.Add("usernames", new object[0]);
+            this.attributes.Add("user_ids", new Nullable<Int64>[0]);
+            this.attributes.Add("usernames", new string[0]);
         }
 
         public Group(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -54,9 +54,9 @@ namespace Files.Models
         /// List of user IDs who are group administrators (separated by commas)
         /// </summary>
         [JsonPropertyName("admin_ids")]
-        public object[] AdminIds
+        public string[] AdminIds
         {
-            get { return (object[]) attributes["admin_ids"]; }
+            get { return (string[]) attributes["admin_ids"]; }
             set { attributes["admin_ids"] = value; }
         }
 
@@ -74,9 +74,9 @@ namespace Files.Models
         /// List of user IDs who belong to this group (separated by commas)
         /// </summary>
         [JsonPropertyName("user_ids")]
-        public object[] UserIds
+        public Nullable<Int64>[] UserIds
         {
-            get { return (object[]) attributes["user_ids"]; }
+            get { return (Nullable<Int64>[]) attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
 
@@ -84,9 +84,9 @@ namespace Files.Models
         /// List of usernames who belong to this group (separated by commas)
         /// </summary>
         [JsonPropertyName("usernames")]
-        public object[] Usernames
+        public string[] Usernames
         {
-            get { return (object[]) attributes["usernames"]; }
+            get { return (string[]) attributes["usernames"]; }
             set { attributes["usernames"] = value; }
         }
 

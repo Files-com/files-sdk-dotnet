@@ -19,7 +19,7 @@ namespace Files.Models
             this.attributes.Add("id", null);
             this.attributes.Add("date", null);
             this.attributes.Add("current_storage", null);
-            this.attributes.Add("usage_by_top_level_dir", new object[0]);
+            this.attributes.Add("usage_by_top_level_dir", new string[0]);
         }
 
         public UsageDailySnapshot(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -59,9 +59,9 @@ namespace Files.Models
         /// Usage broken down by each top-level folder
         /// </summary>
         [JsonPropertyName("usage_by_top_level_dir")]
-        public object[] UsageByTopLevelDir
+        public string[] UsageByTopLevelDir
         {
-            get { return (object[]) attributes["usage_by_top_level_dir"]; }
+            get { return (string[]) attributes["usage_by_top_level_dir"]; }
         }
 
 
