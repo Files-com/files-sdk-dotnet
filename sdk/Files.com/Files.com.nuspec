@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Files.com</id>
-    <version>0.0.8.93</version>
+    <version>0.0.8.97</version>
     <authors>Files.com - support@files.com - https://www.files.com/</authors>
     <owners>Files.com</owners>
     <title>Files.com Client</title>
@@ -16,6 +16,7 @@
         <dependency id="Polly" version="7.2.1" />
         <dependency id="Microsoft.Extensions.Http" version="3.1.5" />
         <dependency id="Microsoft.Extensions.Hosting" version="3.1.5" />
+        <dependency id="Microsoft.Extensions.Http.Polly" version="3.1.5" />
       </group>
       <group targetFramework=".NETStandard2.0">
         <dependency id="System.Configuration.ConfigurationManager" version="4.7.0" />

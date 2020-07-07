@@ -51,16 +51,42 @@ namespace Files
             var builder = new HostBuilder()
                 .ConfigureServices((HostExecutionContext, services) =>
                 {
+                    TimeSpan[] retries = new TimeSpan[config.MaxNetworkRetries];
+                    Random rand = new Random();
+                    for (int i = 0; i < retries.Length; i++)
+                    {
+                        double delay;
+
+                        if (i == 0)
+                        {
+                            delay = config.InitialNetworkRequestDelay;
+                        }
+                        else if (i == retries.Length - 1)
+                        {
+                            delay = config.MaxNetworkRetryDelay;
+                        }
+                        else
+                        { 
+                            delay = Math.Min(config.InitialNetworkRequestDelay, rand.NextDouble() * config.MaxNetworkRetryDelay);
+                        }
+
+                        retries[i] = TimeSpan.FromSeconds(delay);
+                    }
+
                     services.AddHttpClient(HttpFilesApi, client =>
                     {
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
                         client.DefaultRequestHeaders.Add("X-FilesApi-Key", ApiKey);
-                    });
+                    })
+                    .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(retries));
+
                     services.AddHttpClient(HttpUpload, client =>
                     {
                         client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
-                    });
+                    })
+                    .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(retries));
+
                     services.AddTransient<IFilesApiService, FilesApiService>();
                 }).UseConsoleLifetime();
 
