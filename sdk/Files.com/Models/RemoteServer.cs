@@ -42,6 +42,8 @@ namespace Files.Models
             this.attributes.Add("auth_status", null);
             this.attributes.Add("auth_account_name", null);
             this.attributes.Add("one_drive_account_type", null);
+            this.attributes.Add("azure_blob_storage_account", null);
+            this.attributes.Add("azure_blob_storage_container", null);
             this.attributes.Add("aws_access_key", null);
             this.attributes.Add("aws_secret_key", null);
             this.attributes.Add("password", null);
@@ -53,6 +55,7 @@ namespace Files.Models
             this.attributes.Add("backblaze_b2_application_key", null);
             this.attributes.Add("rackspace_api_key", null);
             this.attributes.Add("reset_authentication", null);
+            this.attributes.Add("azure_blob_storage_access_key", null);
         }
 
         public RemoteServer(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -322,6 +325,26 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// Azure Blob Storage Account name
+        /// </summary>
+        [JsonPropertyName("azure_blob_storage_account")]
+        public string AzureBlobStorageAccount
+        {
+            get { return (string) attributes["azure_blob_storage_account"]; }
+            set { attributes["azure_blob_storage_account"] = value; }
+        }
+
+        /// <summary>
+        /// Azure Blob Storage Container name
+        /// </summary>
+        [JsonPropertyName("azure_blob_storage_container")]
+        public string AzureBlobStorageContainer
+        {
+            get { return (string) attributes["azure_blob_storage_container"]; }
+            set { attributes["azure_blob_storage_container"] = value; }
+        }
+
+        /// <summary>
         /// AWS Access Key.
         /// </summary>
         [JsonPropertyName("aws_access_key")]
@@ -432,6 +455,16 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// Azure Blob Storage secret key.
+        /// </summary>
+        [JsonPropertyName("azure_blob_storage_access_key")]
+        public string AzureBlobStorageAccessKey
+        {
+            get { return (string) attributes["azure_blob_storage_access_key"]; }
+            set { attributes["azure_blob_storage_access_key"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   aws_access_key - string - AWS Access Key.
         ///   aws_secret_key - string - AWS secret key.
@@ -444,6 +477,7 @@ namespace Files.Models
         ///   backblaze_b2_application_key - string - Backblaze B2 Cloud Storage applicationKey.
         ///   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
         ///   reset_authentication - boolean - Reset authenticated account
+        ///   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -465,6 +499,8 @@ namespace Files.Models
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
+        ///   azure_blob_storage_account - string - Azure Blob Storage Account name
+        ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -521,6 +557,10 @@ namespace Files.Models
             if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
             }
             if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
             {
@@ -605,6 +645,14 @@ namespace Files.Models
             if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string ))
             {
                 throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -753,6 +801,7 @@ namespace Files.Models
         ///   backblaze_b2_application_key - string - Backblaze B2 Cloud Storage applicationKey.
         ///   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
         ///   reset_authentication - boolean - Reset authenticated account
+        ///   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -774,6 +823,8 @@ namespace Files.Models
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
+        ///   azure_blob_storage_account - string - Azure Blob Storage Account name
+        ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         /// </summary>
         public static async Task<RemoteServer> Create(
             
@@ -827,6 +878,10 @@ namespace Files.Models
             if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
             }
             if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
             {
@@ -912,6 +967,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
             }
+            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -932,6 +995,7 @@ namespace Files.Models
         ///   backblaze_b2_application_key - string - Backblaze B2 Cloud Storage applicationKey.
         ///   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
         ///   reset_authentication - boolean - Reset authenticated account
+        ///   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -953,6 +1017,8 @@ namespace Files.Models
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
+        ///   azure_blob_storage_account - string - Azure Blob Storage Account name
+        ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id, 
@@ -1012,6 +1078,10 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
             }
+            if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
+            }
             if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
             {
                 throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
@@ -1095,6 +1165,14 @@ namespace Files.Models
             if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string ))
             {
                 throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
