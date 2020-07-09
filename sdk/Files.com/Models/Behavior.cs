@@ -94,6 +94,8 @@ namespace Files.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   behavior - string - Behavior type.
+        ///   path - string - Folder behaviors path.
         /// </summary>
         public async Task<Behavior> Update(Dictionary<string, object> parameters)
         {
@@ -114,6 +116,14 @@ namespace Files.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -362,6 +372,7 @@ namespace Files.Models
         ///   encoding - string - HTTP encoding method.  Can be JSON, XML, or RAW (form data).
         ///   headers - object - Additional request headers.
         ///   body - object - Additional body parameters.
+        ///   action - string - action for test body
         /// </summary>
         public static async Task<Behavior> WebhookTest(
             
@@ -392,6 +403,10 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: body must be of type object", "parameters[\"body\"]");
             }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
             if (!parameters.ContainsKey("url") || parameters["url"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: url", "parameters[\"url\"]");
@@ -407,6 +422,8 @@ namespace Files.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   behavior - string - Behavior type.
+        ///   path - string - Folder behaviors path.
         /// </summary>
         public static async Task<Behavior> Update(
             Nullable<Int64> id, 
@@ -429,6 +446,14 @@ namespace Files.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

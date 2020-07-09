@@ -959,6 +959,7 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   ids - string - comma-separated list of User IDs
         ///   q[username] - string - List users matching username.
         ///   q[email] - string - List users matching email.
         ///   q[notes] - string - List users matching notes field.
@@ -990,6 +991,10 @@ namespace Files.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("ids") && !(parameters["ids"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: ids must be of type string", "parameters[\"ids\"]");
             }
             if (parameters.ContainsKey("search") && !(parameters["search"] is string ))
             {

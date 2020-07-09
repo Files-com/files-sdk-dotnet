@@ -45,6 +45,7 @@ namespace Files.Models
         ///
         /// Parameters:
         ///   destination (required) - string - Copy destination path.
+        ///   structure - boolean - Copy structure only?
         /// </summary>
         public async Task<FileAction> Copy(Dictionary<string, object> parameters)
         {
@@ -61,6 +62,10 @@ namespace Files.Models
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
             }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
@@ -179,6 +184,7 @@ namespace Files.Models
         ///
         /// Parameters:
         ///   destination (required) - string - Copy destination path.
+        ///   structure - boolean - Copy structure only?
         /// </summary>
         public static async Task<FileAction> Copy(
             string path, 
@@ -197,6 +203,10 @@ namespace Files.Models
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
             }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {

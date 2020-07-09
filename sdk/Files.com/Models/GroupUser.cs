@@ -140,6 +140,9 @@ namespace Files.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   group_id (required) - int64 - Group ID from which to remove user.
+        ///   user_id (required) - int64 - User ID to remove from group.
         /// </summary>
         public async Task<GroupUser> Delete(Dictionary<string, object> parameters)
         {
@@ -153,9 +156,25 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
+            }
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/group_users/{attributes["id"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -279,6 +298,9 @@ namespace Files.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   group_id (required) - int64 - Group ID from which to remove user.
+        ///   user_id (required) - int64 - User ID to remove from group.
         /// </summary>
         public static async Task<GroupUser> Delete(
             Nullable<Int64> id, 
@@ -294,9 +316,25 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
+            }
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/group_users/{parameters["id"]}", System.Net.Http.HttpMethod.Delete, parameters, options);

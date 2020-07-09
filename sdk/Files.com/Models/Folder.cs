@@ -243,6 +243,7 @@ namespace Files.Models
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   search - string - If `search_all` is `true`, provide the search string here.  Otherwise, this parameter acts like an alias of `filter`.
         ///   search_all - boolean - Search entire site?
+        ///   with_previews - boolean - Include file previews?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
         public static async Task<Folder[]> ListFor(
@@ -290,6 +291,10 @@ namespace Files.Models
             if (parameters.ContainsKey("search_all") && !(parameters["search_all"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: search_all must be of type bool", "parameters[\"search_all\"]");
+            }
+            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
             }
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool ))
             {
