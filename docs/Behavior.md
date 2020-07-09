@@ -1,0 +1,203 @@
+# Files.Models.Behavior
+
+## Example Behavior Object
+
+```
+{
+  "id": 1,
+  "path": "",
+  "attachment_url": "",
+  "behavior": "webhook",
+  "value": {
+    "method": "GET"
+  }
+}
+```
+
+* `id` / `Id`  (Nullable<Int64>): Folder behavior ID
+* `path` / `Path`  (string): Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `attachment_url` / `AttachmentUrl`  (string): URL for attached file
+* `behavior` / `BehaviorType`  (string): Behavior type.
+* `value` / `Value`  (object): Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
+* `attachment_file` / `AttachmentFile`  (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+
+
+---
+
+## List Behaviors
+
+```
+Task<Behavior[]> Behavior.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `page` (Nullable<Int64>): Current page number.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+* `behavior` (string): If set, only shows folder behaviors matching this behavior type.
+
+
+---
+
+## List Behaviors by path
+
+```
+Task<Behavior[]> Behavior.ListFor(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `page` (Nullable<Int64>): Current page number.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+* `path` (string): Required - Path to operate on.
+* `recursive` (string): Show behaviors above this path?
+* `behavior` (string): If set only shows folder behaviors matching this behavior type.
+
+
+---
+
+## Show Behavior
+
+```
+Task<Behavior> Behavior.Find(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Behavior ID.
+
+
+---
+
+## Create Behavior
+
+```
+Task<Behavior> Behavior.Create(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
+* `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `path` (string): Required - Folder behaviors path.
+* `behavior` (string): Required - Behavior type.
+
+
+---
+
+## Test webhook
+
+```
+Task<Behavior> Behavior.WebhookTest(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `url` (string): Required - URL for testing the webhook.
+* `method` (string): HTTP method(GET or POST).
+* `encoding` (string): HTTP encoding method.  Can be JSON, XML, or RAW (form data).
+* `headers` (object): Additional request headers.
+* `body` (object): Additional body parameters.
+* `action` (string): action for test body
+
+
+---
+
+## Update Behavior
+
+```
+Task<Behavior> Behavior.Update(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Behavior ID.
+* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
+* `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `behavior` (string): Behavior type.
+* `path` (string): Folder behaviors path.
+
+
+---
+
+## Delete Behavior
+
+```
+Task<Behavior> Behavior.Delete(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Behavior ID.
+
+
+---
+
+## Update Behavior
+
+```
+var Behavior = Behavior.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("value", "{\"method\": \"GET\"}");
+parameters.Add("behavior", "webhook");
+
+Behavior.Update(parameters);
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Behavior ID.
+* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
+* `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `behavior` (string): Behavior type.
+* `path` (string): Folder behaviors path.
+
+
+---
+
+## Delete Behavior
+
+```
+var Behavior = Behavior.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+Behavior.Delete
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Behavior ID.

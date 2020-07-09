@@ -1,0 +1,246 @@
+# Files.Models.Bundle
+
+## Example Bundle Object
+
+```
+{
+  "code": "abc123",
+  "url": "https://subdomain.files.com/f/12345678",
+  "description": "The public description of the bundle.",
+  "password_protected": true,
+  "require_registration": true,
+  "clickwrap_body": "[Legal text]",
+  "id": 1,
+  "created_at": "2000-01-01T01:00:00Z",
+  "expires_at": "2000-01-01T01:00:00Z",
+  "max_uses": 1,
+  "note": "The internal note on the bundle.",
+  "user_id": 1,
+  "username": "user",
+  "clickwrap_id": 1,
+  "inbox_id": 1,
+  "paths": [
+
+  ]
+}
+```
+
+* `code` / `Code`  (string): Bundle code.  This code forms the end part of the Public URL.
+* `url` / `Url`  (string): Public URL of Share Link
+* `description` / `Description`  (string): Public description
+* `password_protected` / `PasswordProtected`  (bool): Is this bundle password protected?
+* `require_registration` / `RequireRegistration`  (bool): Show a registration page that captures the downloader's name and email address?
+* `clickwrap_body` / `ClickwrapBody`  (string): Legal text that must be agreed to prior to accessing Bundle.
+* `id` / `Id`  (Nullable<Int64>): Bundle ID
+* `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
+* `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
+* `max_uses` / `MaxUses`  (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `note` / `Note`  (string): Bundle internal note
+* `user_id` / `UserId`  (Nullable<Int64>): Bundle creator user ID
+* `username` / `Username`  (string): Bundle creator username
+* `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
+* `inbox_id` / `InboxId`  (Nullable<Int64>): ID of the associated inbox, if available.
+* `paths` / `Paths`  (string[]): A list of paths in this bundle
+* `password` / `Password`  (string): Password for this bundle.
+
+
+---
+
+## List Bundles
+
+```
+Task<Bundle[]> Bundle.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `page` (Nullable<Int64>): Current page number.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+
+
+---
+
+## Show Bundle
+
+```
+Task<Bundle> Bundle.Find(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+
+
+---
+
+## Create Bundle
+
+```
+Task<Bundle> Bundle.Create(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `paths` (string[]): Required - A list of paths to include in this bundle.
+* `password` (string): Password for this bundle.
+* `expires_at` (string): Bundle expiration date/time
+* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `description` (string): Public description
+* `note` (string): Bundle internal note
+* `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
+* `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
+* `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
+
+
+---
+
+## Send email(s) with a link to bundle
+
+```
+Task<Bundle> Bundle.Share(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+* `to` (string[]): Required - A list of email addresses to share this bundle with.
+* `note` (string): Note to include in email.
+
+
+---
+
+## Update Bundle
+
+```
+Task<Bundle> Bundle.Update(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+* `password` (string): Password for this bundle.
+* `expires_at` (string): Bundle expiration date/time
+* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `description` (string): Public description
+* `note` (string): Bundle internal note
+* `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
+* `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
+* `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
+
+
+---
+
+## Delete Bundle
+
+```
+Task<Bundle> Bundle.Delete(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+
+
+---
+
+## Send email(s) with a link to bundle
+
+```
+var Bundle = Bundle.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("to", ["johndoe@gmail.com"]);
+parameters.Add("note", "Just a note.");
+
+Bundle.Share(parameters);
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+* `to` (string[]): Required - A list of email addresses to share this bundle with.
+* `note` (string): Note to include in email.
+
+
+---
+
+## Update Bundle
+
+```
+var Bundle = Bundle.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("password", "Password");
+parameters.Add("expires_at", "2000-01-01T01:00:00Z");
+parameters.Add("max_uses", 1);
+parameters.Add("description", "The public description of the bundle.");
+parameters.Add("note", "The internal note on the bundle.");
+parameters.Add("code", "abc123");
+parameters.Add("require_registration", true);
+parameters.Add("clickwrap_id", 1);
+parameters.Add("inbox_id", 1);
+
+Bundle.Update(parameters);
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+* `password` (string): Password for this bundle.
+* `expires_at` (string): Bundle expiration date/time
+* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `description` (string): Public description
+* `note` (string): Bundle internal note
+* `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
+* `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
+* `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
+
+
+---
+
+## Delete Bundle
+
+```
+var Bundle = Bundle.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+Bundle.Delete
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
