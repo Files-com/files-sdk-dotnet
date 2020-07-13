@@ -64,6 +64,7 @@
   "max_prior_passwords": 1,
   "next_billing_amount": "",
   "next_billing_date": "Apr 20",
+  "office_integration_available": true,
   "opt_out_global": true,
   "overage_notified_at": "2000-01-01T01:00:00Z",
   "overage_notify": true,
@@ -176,6 +177,7 @@
 * `max_prior_passwords` / `MaxPriorPasswords`  (Nullable<Int64>): Number of prior passwords to disallow
 * `next_billing_amount` / `NextBillingAmount`  (double): Next billing amount
 * `next_billing_date` / `NextBillingDate`  (string): Next billing date
+* `office_integration_available` / `OfficeIntegrationAvailable`  (bool): Allow users to use Office for the web?
 * `opt_out_global` / `OptOutGlobal`  (bool): Use servers in the USA only?
 * `overage_notified_at` / `OverageNotifiedAt`  (Nullable<DateTime>): Last time the site was notified about an overage
 * `overage_notify` / `OverageNotify`  (bool): Notify site email of overages?
@@ -287,6 +289,7 @@ Task<Site> Site.Update(
 * `desktop_app_session_lifetime` (Nullable<Int64>): Desktop app session lifetime (in hours)
 * `folder_permissions_groups_only` (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
 * `welcome_screen` (string): Does the welcome screen appear?
+* `office_integration_available` (bool): Allow users to use Office for the web?
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): Is TLS disabled(site setting)?

@@ -32,6 +32,7 @@
   "name": "John Doe",
   "notes": "Internal notes on this user.",
   "notification_daily_send_time": 18,
+  "office_integration_enabled": true,
   "password_set_at": "2000-01-01T01:00:00Z",
   "password_validity_days": 1,
   "public_keys_count": 1,
@@ -79,6 +80,7 @@
 * `name` / `Name`  (string): User's full name
 * `notes` / `Notes`  (string): Any internal notes on the user
 * `notification_daily_send_time` / `NotificationDailySendTime`  (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
+* `office_integration_enabled` / `OfficeIntegrationEnabled`  (bool): Enable integration with Office for the web?
 * `password_set_at` / `PasswordSetAt`  (Nullable<DateTime>): Last time the user's password was set
 * `password_validity_days` / `PasswordValidityDays`  (Nullable<Int64>): Number of days to allow user to use the same password
 * `public_keys_count` / `PublicKeysCount`  (Nullable<Int64>): Number of public keys associated with this user
@@ -195,6 +197,7 @@ Task<User> User.Create(
 * `notification_daily_send_time` (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
 * `notes` (string): Any internal notes on the user
+* `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_password_change` (bool): Is a password change required upon next user login?
@@ -303,6 +306,7 @@ Task<User> User.Update(
 * `notification_daily_send_time` (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
 * `notes` (string): Any internal notes on the user
+* `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_password_change` (bool): Is a password change required upon next user login?
@@ -418,6 +422,7 @@ parameters.Add("language", "en");
 parameters.Add("notification_daily_send_time", 18);
 parameters.Add("name", "John Doe");
 parameters.Add("notes", "Internal notes on this user.");
+parameters.Add("office_integration_enabled", true);
 parameters.Add("password_validity_days", 1);
 parameters.Add("receive_admin_alerts", true);
 parameters.Add("require_password_change", true);
@@ -464,6 +469,7 @@ User.Update(parameters);
 * `notification_daily_send_time` (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
 * `notes` (string): Any internal notes on the user
+* `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_password_change` (bool): Is a password change required upon next user login?

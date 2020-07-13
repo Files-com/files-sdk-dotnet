@@ -76,6 +76,7 @@ namespace Files.Models
             this.attributes.Add("max_prior_passwords", null);
             this.attributes.Add("next_billing_amount", null);
             this.attributes.Add("next_billing_date", null);
+            this.attributes.Add("office_integration_available", null);
             this.attributes.Add("opt_out_global", null);
             this.attributes.Add("overage_notified_at", null);
             this.attributes.Add("overage_notify", null);
@@ -674,6 +675,15 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// Allow users to use Office for the web?
+        /// </summary>
+        [JsonPropertyName("office_integration_available")]
+        public bool OfficeIntegrationAvailable
+        {
+            get { return (bool) attributes["office_integration_available"]; }
+        }
+
+        /// <summary>
         /// Use servers in the USA only?
         /// </summary>
         [JsonPropertyName("opt_out_global")]
@@ -1174,6 +1184,7 @@ namespace Files.Models
         ///   desktop_app_session_lifetime - int64 - Desktop app session lifetime (in hours)
         ///   folder_permissions_groups_only - boolean - If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
         ///   welcome_screen - string - Does the welcome screen appear?
+        ///   office_integration_available - boolean - Allow users to use Office for the web?
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - Is TLS disabled(site setting)?
@@ -1344,6 +1355,10 @@ namespace Files.Models
             if (parameters.ContainsKey("welcome_screen") && !(parameters["welcome_screen"] is string ))
             {
                 throw new ArgumentException("Bad parameter: welcome_screen must be of type string", "parameters[\"welcome_screen\"]");
+            }
+            if (parameters.ContainsKey("office_integration_available") && !(parameters["office_integration_available"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: office_integration_available must be of type bool", "parameters[\"office_integration_available\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double ))
             {
