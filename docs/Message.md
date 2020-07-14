@@ -18,7 +18,7 @@
 * `body` / `Body`  (string): Message body.
 * `comments` / `Comments`  (string[]): Comments.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `project_id` / `ProjectId`  (Nullable<Int64>): Project to attach the message to.
+* `project_id` / `ProjectId`  (Nullable<Int64>): Project to which the message should be attached.
 
 
 ---
@@ -39,7 +39,7 @@ Task<Message[]> Message.List(
 * `page` (Nullable<Int64>): Current page number.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-* `project_id` (Nullable<Int64>): Required - Project to return messages for.
+* `project_id` (Nullable<Int64>): Required - Project for which to return messages.
 
 
 ---
@@ -74,7 +74,7 @@ Task<Message> Message.Create(
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `project_id` (Nullable<Int64>): Required - Project to attach the message to.
+* `project_id` (Nullable<Int64>): Required - Project to which the message should be attached.
 * `subject` (string): Required - Message subject.
 * `body` (string): Required - Message body.
 
@@ -94,7 +94,7 @@ Task<Message> Message.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Message ID.
-* `project_id` (Nullable<Int64>): Required - Project to attach the message to.
+* `project_id` (Nullable<Int64>): Required - Project to which the message should be attached.
 * `subject` (string): Required - Message subject.
 * `body` (string): Required - Message body.
 
@@ -126,8 +126,8 @@ var Message = Message.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("project_id", 1);
-parameters.Add("subject", "subject");
-parameters.Add("body", "body");
+parameters.Add("subject", "Files.com Account Upgrade");
+parameters.Add("body", "We should upgrade our Files.com account!");
 
 Message.Update(parameters);
 ```
@@ -135,7 +135,7 @@ Message.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Message ID.
-* `project_id` (Nullable<Int64>): Required - Project to attach the message to.
+* `project_id` (Nullable<Int64>): Required - Project to which the message should be attached.
 * `subject` (string): Required - Message subject.
 * `body` (string): Required - Message body.
 
