@@ -19,9 +19,9 @@ namespace Files
             Dictionary<string, object> options
         );
 
-        Task StreamDownload(string uriString, string localPath);
+        Task StreamDownload(string uriString, Stream writeStream);
 
-        Task ChunkUpload(HttpMethod verb, string uriString, FileStream readStream, int readLength);
+        Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, int readLength);
     }
 
     public class FilesApiService : IFilesApiService
@@ -118,8 +118,8 @@ namespace Files
             }
         }
 
-        public async Task StreamDownload(string uriString, string localPath)
-        {
+        public async Task StreamDownload(string uriString, Stream writeStream)
+        { 
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             Uri uri = new Uri(uriString);
 
@@ -127,15 +127,15 @@ namespace Files
             {
                 response.EnsureSuccessStatusCode();
 
-                using (FileStream fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None))
-                {
-                    await response.Content.CopyToAsync(fileStream);
+                using (writeStream)
+                { 
+                    await response.Content.CopyToAsync(writeStream);
                 }
-                log.Debug($"Successfully downloaded {uri} to {localPath}");
+                log.Debug($"Successfully downloaded {uri}");
             }
         }
 
-        public async Task ChunkUpload(HttpMethod verb, string uriString, FileStream readStream, int readLength)
+        public async Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, int readLength)
         {
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpUpload);
             Uri uri = new Uri(uriString);

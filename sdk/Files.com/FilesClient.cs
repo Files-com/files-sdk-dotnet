@@ -146,7 +146,7 @@ namespace Files
             }
         }
 
-        public static async Task StreamDownload(string uri, string localPath)
+        public static async Task StreamDownload(string uri, Stream writeStream)
         { 
             if (Instance == null) {
                 throw new InvalidOperationException("Instance must be created before streaming download");
@@ -159,7 +159,7 @@ namespace Files
                 try
                 {
                     var filesApi = services.GetRequiredService<IFilesApiService>();
-                    await filesApi.StreamDownload(uri, localPath);
+                    await filesApi.StreamDownload(uri, writeStream);
                 }
                 catch (Exception ex)
                 {
@@ -169,7 +169,7 @@ namespace Files
             }
         }
 
-        public static async Task ChunkUpload(HttpMethod verb, string uri, FileStream readStream, int readLength)
+        public static async Task ChunkUpload(HttpMethod verb, string uri, Stream readStream, int readLength)
         {
             if (Instance == null) {
                 throw new InvalidOperationException("Instance must be created before uploading chunk");

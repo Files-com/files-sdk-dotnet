@@ -28,7 +28,15 @@ namespace Files.Models
             return f;
         }
 
-        private static async Task<Tuple<int, string>> UploadChunk(string path, System.IO.FileStream readStream, string fileRef, Int64 partNumber, int offset, int fileLength, Dictionary<string, object> options = null)
+        public static async Task<RemoteFile> DownloadFile(string path, System.IO.Stream stream, Dictionary<string, object> options = null)
+        {
+            RemoteFile f = new RemoteFile(null, options);
+            f.Path = path;
+            await f.DownloadFile(stream);
+            return f;
+        }
+
+        private static async Task<Tuple<int, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, int offset, int fileLength, Dictionary<string, object> options = null)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             if (fileRef != null) {
@@ -50,19 +58,27 @@ namespace Files.Models
 
         public static async Task<bool> UploadFile(string localPath, string destinationPath = null, Dictionary<string, object> options = null)
         {
+            System.IO.FileInfo fileInfo = new System.IO.FileInfo(localPath);
+
+            if (destinationPath == null) {
+                destinationPath = localPath.Substring(localPath.LastIndexOf('/') + 1);
+            }
+
+            // TODO: Remove int restriction on length to allow files > 2GB
+            DateTime mTime = fileInfo.LastWriteTimeUtc;
+            int fileLength = (int) fileInfo.Length;
+
+            System.IO.Stream readStream = System.IO.File.OpenRead(localPath);
+            return await UploadFile(destinationPath, readStream, fileLength, mTime, options);
+        }
+
+        public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, int fileLength, DateTime mTime, Dictionary<string, object> options = null)
+        {
             bool success = false;
 
-            using (System.IO.FileStream localFileStream = System.IO.File.OpenRead(localPath))
+            using (readStream)
             {
-                System.IO.FileInfo fileInfo = new System.IO.FileInfo(localPath);
-
-                if (destinationPath == null) {
-                    destinationPath = localPath.Substring(localPath.LastIndexOf('/') + 1);
-                }
-
                 // TODO: Remove int restriction on length to allow files > 2GB
-                DateTime mtime = fileInfo.LastWriteTimeUtc;
-                int fileLength = (int) fileInfo.Length;
                 Int64 parts = 0;
                 int bytesWritten = 0;
                 string fileRef = null;
@@ -70,15 +86,14 @@ namespace Files.Models
                 // TODO: Set up multiple parallel streams instead of looping serial uploads here.
                 while (bytesWritten < fileLength) {
                     parts++;
-                    Tuple<int, string> result = await UploadChunk(destinationPath, localFileStream, fileRef, parts, bytesWritten, fileLength, options);
+                    Tuple<int, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options);
                     bytesWritten += result.Item1;
                     fileRef = result.Item2;
                 }
 
                 Dictionary<string, object> createParams = new Dictionary<string, object>();
                 createParams["action"] = "end";
-                createParams["provided_mtime"] = mtime.ToString("u");
-                createParams["provided_mtime"] = mtime.ToString("u");
+                createParams["provided_mtime"] = mTime.ToString("u");
                 createParams["ref"] = fileRef;
                 createParams["size"] = (Int64) fileLength;
 
@@ -99,14 +114,20 @@ namespace Files.Models
 
         public async Task DownloadFile(string outputFile)
         {
+            System.IO.FileStream fileStream = new System.IO.FileStream(outputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None);
+            await DownloadFile(fileStream);
+        }
+
+        public async Task DownloadFile(System.IO.Stream writeStream)
+        {
             try
             {
                 string uri = await GetDownloadUriWithLoad();
-                await FilesClient.StreamDownload(uri, outputFile);
+                await FilesClient.StreamDownload(uri, writeStream);
             }
             catch (Exception e)
             {
-                log.Error($"DownloadFile failed for {Path} to {outputFile}: {e.ToString()}");
+                log.Error($"DownloadFile failed for {Path}: {e.ToString()}");
             }
         }
         public RemoteFile() : this(null, null) { }
