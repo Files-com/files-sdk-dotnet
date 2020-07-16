@@ -17,35 +17,103 @@ namespace Files.Models
             return Folder.Create((string)attributes["path"], attributes, options);
         }
 
-        public Folder()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("display_name", null);
-            this.attributes.Add("type", null);
-            this.attributes.Add("size", null);
-            this.attributes.Add("mtime", null);
-            this.attributes.Add("provided_mtime", null);
-            this.attributes.Add("crc32", null);
-            this.attributes.Add("md5", null);
-            this.attributes.Add("mime_type", null);
-            this.attributes.Add("region", null);
-            this.attributes.Add("permissions", null);
-            this.attributes.Add("subfolders_locked?", null);
-            this.attributes.Add("download_uri", null);
-            this.attributes.Add("priority_color", null);
-            this.attributes.Add("preview_id", null);
-            this.attributes.Add("preview", null);
-        }
+        public Folder() : this(null, null) { }
 
         public Folder(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("display_name"))
+            {
+                this.attributes.Add("display_name", null);
+            }
+            if (!this.attributes.ContainsKey("type"))
+            {
+                this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("size"))
+            {
+                this.attributes.Add("size", null);
+            }
+            if (!this.attributes.ContainsKey("mtime"))
+            {
+                this.attributes.Add("mtime", null);
+            }
+            if (!this.attributes.ContainsKey("provided_mtime"))
+            {
+                this.attributes.Add("provided_mtime", null);
+            }
+            if (!this.attributes.ContainsKey("crc32"))
+            {
+                this.attributes.Add("crc32", null);
+            }
+            if (!this.attributes.ContainsKey("md5"))
+            {
+                this.attributes.Add("md5", null);
+            }
+            if (!this.attributes.ContainsKey("mime_type"))
+            {
+                this.attributes.Add("mime_type", null);
+            }
+            if (!this.attributes.ContainsKey("region"))
+            {
+                this.attributes.Add("region", null);
+            }
+            if (!this.attributes.ContainsKey("permissions"))
+            {
+                this.attributes.Add("permissions", null);
+            }
+            if (!this.attributes.ContainsKey("subfolders_locked?"))
+            {
+                this.attributes.Add("subfolders_locked?", null);
+            }
+            if (!this.attributes.ContainsKey("download_uri"))
+            {
+                this.attributes.Add("download_uri", null);
+            }
+            if (!this.attributes.ContainsKey("priority_color"))
+            {
+                this.attributes.Add("priority_color", null);
+            }
+            if (!this.attributes.ContainsKey("preview_id"))
+            {
+                this.attributes.Add("preview_id", null);
+            }
+            if (!this.attributes.ContainsKey("preview"))
+            {
+                this.attributes.Add("preview", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// File/Folder ID
@@ -305,7 +373,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/folders/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Folder[]>(responseJson);
         }
@@ -334,7 +402,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/folders/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }

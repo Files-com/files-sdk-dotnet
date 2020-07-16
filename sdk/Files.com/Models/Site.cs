@@ -11,128 +11,475 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Site()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("name", null);
-            this.attributes.Add("allowed_2fa_method_sms", null);
-            this.attributes.Add("allowed_2fa_method_totp", null);
-            this.attributes.Add("allowed_2fa_method_u2f", null);
-            this.attributes.Add("allowed_2fa_method_yubi", null);
-            this.attributes.Add("admin_user_id", null);
-            this.attributes.Add("allow_bundle_names", null);
-            this.attributes.Add("allowed_ips", null);
-            this.attributes.Add("ask_about_overwrites", null);
-            this.attributes.Add("bundle_expiration", null);
-            this.attributes.Add("bundle_password_required", null);
-            this.attributes.Add("color2_left", null);
-            this.attributes.Add("color2_link", null);
-            this.attributes.Add("color2_text", null);
-            this.attributes.Add("color2_top", null);
-            this.attributes.Add("color2_top_text", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("currency", null);
-            this.attributes.Add("custom_namespace", null);
-            this.attributes.Add("days_to_retain_backups", null);
-            this.attributes.Add("default_time_zone", null);
-            this.attributes.Add("desktop_app", null);
-            this.attributes.Add("desktop_app_session_ip_pinning", null);
-            this.attributes.Add("desktop_app_session_lifetime", null);
-            this.attributes.Add("disable_notifications", null);
-            this.attributes.Add("disable_password_reset", null);
-            this.attributes.Add("domain", null);
-            this.attributes.Add("email", null);
-            this.attributes.Add("non_sso_groups_allowed", null);
-            this.attributes.Add("non_sso_users_allowed", null);
-            this.attributes.Add("folder_permissions_groups_only", null);
-            this.attributes.Add("hipaa", null);
-            this.attributes.Add("icon128", null);
-            this.attributes.Add("icon16", null);
-            this.attributes.Add("icon32", null);
-            this.attributes.Add("icon48", null);
-            this.attributes.Add("immutable_files_set_at", null);
-            this.attributes.Add("include_password_in_welcome_email", null);
-            this.attributes.Add("language", null);
-            this.attributes.Add("ldap_base_dn", null);
-            this.attributes.Add("ldap_domain", null);
-            this.attributes.Add("ldap_enabled", null);
-            this.attributes.Add("ldap_group_action", null);
-            this.attributes.Add("ldap_group_exclusion", null);
-            this.attributes.Add("ldap_group_inclusion", null);
-            this.attributes.Add("ldap_host", null);
-            this.attributes.Add("ldap_host_2", null);
-            this.attributes.Add("ldap_host_3", null);
-            this.attributes.Add("ldap_port", null);
-            this.attributes.Add("ldap_secure", null);
-            this.attributes.Add("ldap_type", null);
-            this.attributes.Add("ldap_user_action", null);
-            this.attributes.Add("ldap_user_include_groups", null);
-            this.attributes.Add("ldap_username", null);
-            this.attributes.Add("ldap_username_field", null);
-            this.attributes.Add("login_help_text", null);
-            this.attributes.Add("logo", null);
-            this.attributes.Add("max_prior_passwords", null);
-            this.attributes.Add("next_billing_amount", null);
-            this.attributes.Add("next_billing_date", null);
-            this.attributes.Add("office_integration_available", null);
-            this.attributes.Add("opt_out_global", null);
-            this.attributes.Add("overage_notified_at", null);
-            this.attributes.Add("overage_notify", null);
-            this.attributes.Add("overdue", null);
-            this.attributes.Add("password_min_length", null);
-            this.attributes.Add("password_require_letter", null);
-            this.attributes.Add("password_require_mixed", null);
-            this.attributes.Add("password_require_number", null);
-            this.attributes.Add("password_require_special", null);
-            this.attributes.Add("password_require_unbreached", null);
-            this.attributes.Add("password_requirements_apply_to_bundles", null);
-            this.attributes.Add("password_validity_days", null);
-            this.attributes.Add("phone", null);
-            this.attributes.Add("require_2fa", null);
-            this.attributes.Add("require_2fa_stop_time", null);
-            this.attributes.Add("require_2fa_user_type", null);
-            this.attributes.Add("session", null);
-            this.attributes.Add("session_pinned_by_ip", null);
-            this.attributes.Add("sftp_user_root_enabled", null);
-            this.attributes.Add("sharing_enabled", null);
-            this.attributes.Add("show_request_access_link", null);
-            this.attributes.Add("site_footer", null);
-            this.attributes.Add("site_header", null);
-            this.attributes.Add("smtp_address", null);
-            this.attributes.Add("smtp_authentication", null);
-            this.attributes.Add("smtp_from", null);
-            this.attributes.Add("smtp_port", null);
-            this.attributes.Add("smtp_username", null);
-            this.attributes.Add("session_expiry", null);
-            this.attributes.Add("ssl_required", null);
-            this.attributes.Add("subdomain", null);
-            this.attributes.Add("switch_to_plan_date", null);
-            this.attributes.Add("tls_disabled", null);
-            this.attributes.Add("trial_days_left", null);
-            this.attributes.Add("trial_until", null);
-            this.attributes.Add("updated_at", null);
-            this.attributes.Add("use_provided_modified_at", null);
-            this.attributes.Add("user", null);
-            this.attributes.Add("user_lockout", null);
-            this.attributes.Add("user_lockout_lock_period", null);
-            this.attributes.Add("user_lockout_tries", null);
-            this.attributes.Add("user_lockout_within", null);
-            this.attributes.Add("user_requests_enabled", null);
-            this.attributes.Add("welcome_custom_text", null);
-            this.attributes.Add("welcome_email_cc", null);
-            this.attributes.Add("welcome_email_enabled", null);
-            this.attributes.Add("welcome_screen", null);
-            this.attributes.Add("windows_mode_ftp", null);
-            this.attributes.Add("disable_users_from_inactivity_period_days", null);
-        }
+        public Site() : this(null, null) { }
 
         public Site(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_sms"))
+            {
+                this.attributes.Add("allowed_2fa_method_sms", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_totp"))
+            {
+                this.attributes.Add("allowed_2fa_method_totp", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_u2f"))
+            {
+                this.attributes.Add("allowed_2fa_method_u2f", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_yubi"))
+            {
+                this.attributes.Add("allowed_2fa_method_yubi", null);
+            }
+            if (!this.attributes.ContainsKey("admin_user_id"))
+            {
+                this.attributes.Add("admin_user_id", null);
+            }
+            if (!this.attributes.ContainsKey("allow_bundle_names"))
+            {
+                this.attributes.Add("allow_bundle_names", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_ips"))
+            {
+                this.attributes.Add("allowed_ips", null);
+            }
+            if (!this.attributes.ContainsKey("ask_about_overwrites"))
+            {
+                this.attributes.Add("ask_about_overwrites", null);
+            }
+            if (!this.attributes.ContainsKey("bundle_expiration"))
+            {
+                this.attributes.Add("bundle_expiration", null);
+            }
+            if (!this.attributes.ContainsKey("bundle_password_required"))
+            {
+                this.attributes.Add("bundle_password_required", null);
+            }
+            if (!this.attributes.ContainsKey("color2_left"))
+            {
+                this.attributes.Add("color2_left", null);
+            }
+            if (!this.attributes.ContainsKey("color2_link"))
+            {
+                this.attributes.Add("color2_link", null);
+            }
+            if (!this.attributes.ContainsKey("color2_text"))
+            {
+                this.attributes.Add("color2_text", null);
+            }
+            if (!this.attributes.ContainsKey("color2_top"))
+            {
+                this.attributes.Add("color2_top", null);
+            }
+            if (!this.attributes.ContainsKey("color2_top_text"))
+            {
+                this.attributes.Add("color2_top_text", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("currency"))
+            {
+                this.attributes.Add("currency", null);
+            }
+            if (!this.attributes.ContainsKey("custom_namespace"))
+            {
+                this.attributes.Add("custom_namespace", null);
+            }
+            if (!this.attributes.ContainsKey("days_to_retain_backups"))
+            {
+                this.attributes.Add("days_to_retain_backups", null);
+            }
+            if (!this.attributes.ContainsKey("default_time_zone"))
+            {
+                this.attributes.Add("default_time_zone", null);
+            }
+            if (!this.attributes.ContainsKey("desktop_app"))
+            {
+                this.attributes.Add("desktop_app", null);
+            }
+            if (!this.attributes.ContainsKey("desktop_app_session_ip_pinning"))
+            {
+                this.attributes.Add("desktop_app_session_ip_pinning", null);
+            }
+            if (!this.attributes.ContainsKey("desktop_app_session_lifetime"))
+            {
+                this.attributes.Add("desktop_app_session_lifetime", null);
+            }
+            if (!this.attributes.ContainsKey("disable_notifications"))
+            {
+                this.attributes.Add("disable_notifications", null);
+            }
+            if (!this.attributes.ContainsKey("disable_password_reset"))
+            {
+                this.attributes.Add("disable_password_reset", null);
+            }
+            if (!this.attributes.ContainsKey("domain"))
+            {
+                this.attributes.Add("domain", null);
+            }
+            if (!this.attributes.ContainsKey("email"))
+            {
+                this.attributes.Add("email", null);
+            }
+            if (!this.attributes.ContainsKey("non_sso_groups_allowed"))
+            {
+                this.attributes.Add("non_sso_groups_allowed", null);
+            }
+            if (!this.attributes.ContainsKey("non_sso_users_allowed"))
+            {
+                this.attributes.Add("non_sso_users_allowed", null);
+            }
+            if (!this.attributes.ContainsKey("folder_permissions_groups_only"))
+            {
+                this.attributes.Add("folder_permissions_groups_only", null);
+            }
+            if (!this.attributes.ContainsKey("hipaa"))
+            {
+                this.attributes.Add("hipaa", null);
+            }
+            if (!this.attributes.ContainsKey("icon128"))
+            {
+                this.attributes.Add("icon128", null);
+            }
+            if (!this.attributes.ContainsKey("icon16"))
+            {
+                this.attributes.Add("icon16", null);
+            }
+            if (!this.attributes.ContainsKey("icon32"))
+            {
+                this.attributes.Add("icon32", null);
+            }
+            if (!this.attributes.ContainsKey("icon48"))
+            {
+                this.attributes.Add("icon48", null);
+            }
+            if (!this.attributes.ContainsKey("immutable_files_set_at"))
+            {
+                this.attributes.Add("immutable_files_set_at", null);
+            }
+            if (!this.attributes.ContainsKey("include_password_in_welcome_email"))
+            {
+                this.attributes.Add("include_password_in_welcome_email", null);
+            }
+            if (!this.attributes.ContainsKey("language"))
+            {
+                this.attributes.Add("language", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_base_dn"))
+            {
+                this.attributes.Add("ldap_base_dn", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_domain"))
+            {
+                this.attributes.Add("ldap_domain", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_enabled"))
+            {
+                this.attributes.Add("ldap_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_group_action"))
+            {
+                this.attributes.Add("ldap_group_action", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_group_exclusion"))
+            {
+                this.attributes.Add("ldap_group_exclusion", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_group_inclusion"))
+            {
+                this.attributes.Add("ldap_group_inclusion", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_host"))
+            {
+                this.attributes.Add("ldap_host", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_host_2"))
+            {
+                this.attributes.Add("ldap_host_2", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_host_3"))
+            {
+                this.attributes.Add("ldap_host_3", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_port"))
+            {
+                this.attributes.Add("ldap_port", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_secure"))
+            {
+                this.attributes.Add("ldap_secure", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_type"))
+            {
+                this.attributes.Add("ldap_type", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_user_action"))
+            {
+                this.attributes.Add("ldap_user_action", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_user_include_groups"))
+            {
+                this.attributes.Add("ldap_user_include_groups", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_username"))
+            {
+                this.attributes.Add("ldap_username", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_username_field"))
+            {
+                this.attributes.Add("ldap_username_field", null);
+            }
+            if (!this.attributes.ContainsKey("login_help_text"))
+            {
+                this.attributes.Add("login_help_text", null);
+            }
+            if (!this.attributes.ContainsKey("logo"))
+            {
+                this.attributes.Add("logo", null);
+            }
+            if (!this.attributes.ContainsKey("max_prior_passwords"))
+            {
+                this.attributes.Add("max_prior_passwords", null);
+            }
+            if (!this.attributes.ContainsKey("next_billing_amount"))
+            {
+                this.attributes.Add("next_billing_amount", null);
+            }
+            if (!this.attributes.ContainsKey("next_billing_date"))
+            {
+                this.attributes.Add("next_billing_date", null);
+            }
+            if (!this.attributes.ContainsKey("office_integration_available"))
+            {
+                this.attributes.Add("office_integration_available", null);
+            }
+            if (!this.attributes.ContainsKey("opt_out_global"))
+            {
+                this.attributes.Add("opt_out_global", null);
+            }
+            if (!this.attributes.ContainsKey("overage_notified_at"))
+            {
+                this.attributes.Add("overage_notified_at", null);
+            }
+            if (!this.attributes.ContainsKey("overage_notify"))
+            {
+                this.attributes.Add("overage_notify", null);
+            }
+            if (!this.attributes.ContainsKey("overdue"))
+            {
+                this.attributes.Add("overdue", null);
+            }
+            if (!this.attributes.ContainsKey("password_min_length"))
+            {
+                this.attributes.Add("password_min_length", null);
+            }
+            if (!this.attributes.ContainsKey("password_require_letter"))
+            {
+                this.attributes.Add("password_require_letter", null);
+            }
+            if (!this.attributes.ContainsKey("password_require_mixed"))
+            {
+                this.attributes.Add("password_require_mixed", null);
+            }
+            if (!this.attributes.ContainsKey("password_require_number"))
+            {
+                this.attributes.Add("password_require_number", null);
+            }
+            if (!this.attributes.ContainsKey("password_require_special"))
+            {
+                this.attributes.Add("password_require_special", null);
+            }
+            if (!this.attributes.ContainsKey("password_require_unbreached"))
+            {
+                this.attributes.Add("password_require_unbreached", null);
+            }
+            if (!this.attributes.ContainsKey("password_requirements_apply_to_bundles"))
+            {
+                this.attributes.Add("password_requirements_apply_to_bundles", null);
+            }
+            if (!this.attributes.ContainsKey("password_validity_days"))
+            {
+                this.attributes.Add("password_validity_days", null);
+            }
+            if (!this.attributes.ContainsKey("phone"))
+            {
+                this.attributes.Add("phone", null);
+            }
+            if (!this.attributes.ContainsKey("require_2fa"))
+            {
+                this.attributes.Add("require_2fa", null);
+            }
+            if (!this.attributes.ContainsKey("require_2fa_stop_time"))
+            {
+                this.attributes.Add("require_2fa_stop_time", null);
+            }
+            if (!this.attributes.ContainsKey("require_2fa_user_type"))
+            {
+                this.attributes.Add("require_2fa_user_type", null);
+            }
+            if (!this.attributes.ContainsKey("session"))
+            {
+                this.attributes.Add("session", null);
+            }
+            if (!this.attributes.ContainsKey("session_pinned_by_ip"))
+            {
+                this.attributes.Add("session_pinned_by_ip", null);
+            }
+            if (!this.attributes.ContainsKey("sftp_user_root_enabled"))
+            {
+                this.attributes.Add("sftp_user_root_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("sharing_enabled"))
+            {
+                this.attributes.Add("sharing_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("show_request_access_link"))
+            {
+                this.attributes.Add("show_request_access_link", null);
+            }
+            if (!this.attributes.ContainsKey("site_footer"))
+            {
+                this.attributes.Add("site_footer", null);
+            }
+            if (!this.attributes.ContainsKey("site_header"))
+            {
+                this.attributes.Add("site_header", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_address"))
+            {
+                this.attributes.Add("smtp_address", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_authentication"))
+            {
+                this.attributes.Add("smtp_authentication", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_from"))
+            {
+                this.attributes.Add("smtp_from", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_port"))
+            {
+                this.attributes.Add("smtp_port", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_username"))
+            {
+                this.attributes.Add("smtp_username", null);
+            }
+            if (!this.attributes.ContainsKey("session_expiry"))
+            {
+                this.attributes.Add("session_expiry", null);
+            }
+            if (!this.attributes.ContainsKey("ssl_required"))
+            {
+                this.attributes.Add("ssl_required", null);
+            }
+            if (!this.attributes.ContainsKey("subdomain"))
+            {
+                this.attributes.Add("subdomain", null);
+            }
+            if (!this.attributes.ContainsKey("switch_to_plan_date"))
+            {
+                this.attributes.Add("switch_to_plan_date", null);
+            }
+            if (!this.attributes.ContainsKey("tls_disabled"))
+            {
+                this.attributes.Add("tls_disabled", null);
+            }
+            if (!this.attributes.ContainsKey("trial_days_left"))
+            {
+                this.attributes.Add("trial_days_left", null);
+            }
+            if (!this.attributes.ContainsKey("trial_until"))
+            {
+                this.attributes.Add("trial_until", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
+            }
+            if (!this.attributes.ContainsKey("use_provided_modified_at"))
+            {
+                this.attributes.Add("use_provided_modified_at", null);
+            }
+            if (!this.attributes.ContainsKey("user"))
+            {
+                this.attributes.Add("user", null);
+            }
+            if (!this.attributes.ContainsKey("user_lockout"))
+            {
+                this.attributes.Add("user_lockout", null);
+            }
+            if (!this.attributes.ContainsKey("user_lockout_lock_period"))
+            {
+                this.attributes.Add("user_lockout_lock_period", null);
+            }
+            if (!this.attributes.ContainsKey("user_lockout_tries"))
+            {
+                this.attributes.Add("user_lockout_tries", null);
+            }
+            if (!this.attributes.ContainsKey("user_lockout_within"))
+            {
+                this.attributes.Add("user_lockout_within", null);
+            }
+            if (!this.attributes.ContainsKey("user_requests_enabled"))
+            {
+                this.attributes.Add("user_requests_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("welcome_custom_text"))
+            {
+                this.attributes.Add("welcome_custom_text", null);
+            }
+            if (!this.attributes.ContainsKey("welcome_email_cc"))
+            {
+                this.attributes.Add("welcome_email_cc", null);
+            }
+            if (!this.attributes.ContainsKey("welcome_email_enabled"))
+            {
+                this.attributes.Add("welcome_email_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("welcome_screen"))
+            {
+                this.attributes.Add("welcome_screen", null);
+            }
+            if (!this.attributes.ContainsKey("windows_mode_ftp"))
+            {
+                this.attributes.Add("windows_mode_ftp", null);
+            }
+            if (!this.attributes.ContainsKey("disable_users_from_inactivity_period_days"))
+            {
+                this.attributes.Add("disable_users_from_inactivity_period_days", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Site name

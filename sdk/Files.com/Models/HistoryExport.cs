@@ -11,42 +11,131 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public HistoryExport()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("start_at", null);
-            this.attributes.Add("end_at", null);
-            this.attributes.Add("status", null);
-            this.attributes.Add("query_action", null);
-            this.attributes.Add("query_interface", null);
-            this.attributes.Add("query_user_id", null);
-            this.attributes.Add("query_file_id", null);
-            this.attributes.Add("query_parent_id", null);
-            this.attributes.Add("query_path", null);
-            this.attributes.Add("query_folder", null);
-            this.attributes.Add("query_src", null);
-            this.attributes.Add("query_destination", null);
-            this.attributes.Add("query_ip", null);
-            this.attributes.Add("query_username", null);
-            this.attributes.Add("query_failure_type", null);
-            this.attributes.Add("query_target_id", null);
-            this.attributes.Add("query_target_name", null);
-            this.attributes.Add("query_target_permission", null);
-            this.attributes.Add("query_target_user_id", null);
-            this.attributes.Add("query_target_username", null);
-            this.attributes.Add("query_target_platform", null);
-            this.attributes.Add("query_target_permission_set", null);
-            this.attributes.Add("user_id", null);
-        }
+        public HistoryExport() : this(null, null) { }
 
         public HistoryExport(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("start_at"))
+            {
+                this.attributes.Add("start_at", null);
+            }
+            if (!this.attributes.ContainsKey("end_at"))
+            {
+                this.attributes.Add("end_at", null);
+            }
+            if (!this.attributes.ContainsKey("status"))
+            {
+                this.attributes.Add("status", null);
+            }
+            if (!this.attributes.ContainsKey("query_action"))
+            {
+                this.attributes.Add("query_action", null);
+            }
+            if (!this.attributes.ContainsKey("query_interface"))
+            {
+                this.attributes.Add("query_interface", null);
+            }
+            if (!this.attributes.ContainsKey("query_user_id"))
+            {
+                this.attributes.Add("query_user_id", null);
+            }
+            if (!this.attributes.ContainsKey("query_file_id"))
+            {
+                this.attributes.Add("query_file_id", null);
+            }
+            if (!this.attributes.ContainsKey("query_parent_id"))
+            {
+                this.attributes.Add("query_parent_id", null);
+            }
+            if (!this.attributes.ContainsKey("query_path"))
+            {
+                this.attributes.Add("query_path", null);
+            }
+            if (!this.attributes.ContainsKey("query_folder"))
+            {
+                this.attributes.Add("query_folder", null);
+            }
+            if (!this.attributes.ContainsKey("query_src"))
+            {
+                this.attributes.Add("query_src", null);
+            }
+            if (!this.attributes.ContainsKey("query_destination"))
+            {
+                this.attributes.Add("query_destination", null);
+            }
+            if (!this.attributes.ContainsKey("query_ip"))
+            {
+                this.attributes.Add("query_ip", null);
+            }
+            if (!this.attributes.ContainsKey("query_username"))
+            {
+                this.attributes.Add("query_username", null);
+            }
+            if (!this.attributes.ContainsKey("query_failure_type"))
+            {
+                this.attributes.Add("query_failure_type", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_id"))
+            {
+                this.attributes.Add("query_target_id", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_name"))
+            {
+                this.attributes.Add("query_target_name", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_permission"))
+            {
+                this.attributes.Add("query_target_permission", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_user_id"))
+            {
+                this.attributes.Add("query_target_user_id", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_username"))
+            {
+                this.attributes.Add("query_target_username", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_platform"))
+            {
+                this.attributes.Add("query_target_platform", null);
+            }
+            if (!this.attributes.ContainsKey("query_target_permission_set"))
+            {
+                this.attributes.Add("query_target_permission_set", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// History Export ID

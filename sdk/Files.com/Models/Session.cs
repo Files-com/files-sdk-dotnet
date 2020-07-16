@@ -11,48 +11,131 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Session()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("language", null);
-            this.attributes.Add("login_token", null);
-            this.attributes.Add("login_token_domain", null);
-            this.attributes.Add("max_dir_listing_size", null);
-            this.attributes.Add("multiple_regions", null);
-            this.attributes.Add("read_only", null);
-            this.attributes.Add("root_path", null);
-            this.attributes.Add("site_id", null);
-            this.attributes.Add("ssl_required", null);
-            this.attributes.Add("tls_disabled", null);
-            this.attributes.Add("two_factor_setup_needed", null);
-            this.attributes.Add("allowed_2fa_method_sms", null);
-            this.attributes.Add("allowed_2fa_method_totp", null);
-            this.attributes.Add("allowed_2fa_method_u2f", null);
-            this.attributes.Add("allowed_2fa_method_yubi", null);
-            this.attributes.Add("use_provided_modified_at", null);
-            this.attributes.Add("windows_mode_ftp", null);
-            this.attributes.Add("username", null);
-            this.attributes.Add("password", null);
-            this.attributes.Add("otp", null);
-            this.attributes.Add("partial_session_id", null);
-        }
+        public Session() : this(null, null) { }
 
         public Session(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("language"))
+            {
+                this.attributes.Add("language", null);
+            }
+            if (!this.attributes.ContainsKey("login_token"))
+            {
+                this.attributes.Add("login_token", null);
+            }
+            if (!this.attributes.ContainsKey("login_token_domain"))
+            {
+                this.attributes.Add("login_token_domain", null);
+            }
+            if (!this.attributes.ContainsKey("max_dir_listing_size"))
+            {
+                this.attributes.Add("max_dir_listing_size", null);
+            }
+            if (!this.attributes.ContainsKey("multiple_regions"))
+            {
+                this.attributes.Add("multiple_regions", null);
+            }
+            if (!this.attributes.ContainsKey("read_only"))
+            {
+                this.attributes.Add("read_only", null);
+            }
+            if (!this.attributes.ContainsKey("root_path"))
+            {
+                this.attributes.Add("root_path", null);
+            }
+            if (!this.attributes.ContainsKey("site_id"))
+            {
+                this.attributes.Add("site_id", null);
+            }
+            if (!this.attributes.ContainsKey("ssl_required"))
+            {
+                this.attributes.Add("ssl_required", null);
+            }
+            if (!this.attributes.ContainsKey("tls_disabled"))
+            {
+                this.attributes.Add("tls_disabled", null);
+            }
+            if (!this.attributes.ContainsKey("two_factor_setup_needed"))
+            {
+                this.attributes.Add("two_factor_setup_needed", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_sms"))
+            {
+                this.attributes.Add("allowed_2fa_method_sms", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_totp"))
+            {
+                this.attributes.Add("allowed_2fa_method_totp", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_u2f"))
+            {
+                this.attributes.Add("allowed_2fa_method_u2f", null);
+            }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_yubi"))
+            {
+                this.attributes.Add("allowed_2fa_method_yubi", null);
+            }
+            if (!this.attributes.ContainsKey("use_provided_modified_at"))
+            {
+                this.attributes.Add("use_provided_modified_at", null);
+            }
+            if (!this.attributes.ContainsKey("windows_mode_ftp"))
+            {
+                this.attributes.Add("windows_mode_ftp", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("password"))
+            {
+                this.attributes.Add("password", null);
+            }
+            if (!this.attributes.ContainsKey("otp"))
+            {
+                this.attributes.Add("otp", null);
+            }
+            if (!this.attributes.ContainsKey("partial_session_id"))
+            {
+                this.attributes.Add("partial_session_id", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Session ID
         /// </summary>
         [JsonPropertyName("id")]
-        public Nullable<Int64> Id
+        public string Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (string) attributes["id"]; }
             set { attributes["id"] = value; }
         }
 

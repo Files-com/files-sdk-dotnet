@@ -39,7 +39,32 @@ Task<Behavior[]> Behavior.List(
 * `page` (Nullable<Int64>): Current page number.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+* `cursor` (string): Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `behavior`.
+* `filter` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+* `filter_gt` (object): If set, return records where the specifiied field is greater than the supplied value. Valid fields are `behavior`.
+* `filter_gteq` (object): If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `behavior`.
+* `filter_like` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+* `filter_lt` (object): If set, return records where the specifiied field is less than the supplied value. Valid fields are `behavior`.
+* `filter_lteq` (object): If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `behavior`.
 * `behavior` (string): If set, only shows folder behaviors matching this behavior type.
+
+
+---
+
+## Show Behavior
+
+```
+Task<Behavior> Behavior.Find(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Behavior ID.
 
 
 ---
@@ -59,26 +84,17 @@ Task<Behavior[]> Behavior.ListFor(
 * `page` (Nullable<Int64>): Current page number.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+* `cursor` (string): Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `behavior`.
+* `filter` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+* `filter_gt` (object): If set, return records where the specifiied field is greater than the supplied value. Valid fields are `behavior`.
+* `filter_gteq` (object): If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `behavior`.
+* `filter_like` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+* `filter_lt` (object): If set, return records where the specifiied field is less than the supplied value. Valid fields are `behavior`.
+* `filter_lteq` (object): If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `behavior`.
 * `path` (string): Required - Path to operate on.
 * `recursive` (string): Show behaviors above this path?
-* `behavior` (string): If set only shows folder behaviors matching this behavior type.
-
-
----
-
-## Show Behavior
-
-```
-Task<Behavior> Behavior.Find(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Behavior ID.
+* `behavior` (string): DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
 
 
 ---

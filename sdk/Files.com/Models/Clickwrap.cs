@@ -11,24 +11,59 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Clickwrap()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("name", null);
-            this.attributes.Add("body", null);
-            this.attributes.Add("use_with_users", null);
-            this.attributes.Add("use_with_bundles", null);
-            this.attributes.Add("use_with_inboxes", null);
-            this.attributes.Add("id", null);
-        }
+        public Clickwrap() : this(null, null) { }
 
         public Clickwrap(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("body"))
+            {
+                this.attributes.Add("body", null);
+            }
+            if (!this.attributes.ContainsKey("use_with_users"))
+            {
+                this.attributes.Add("use_with_users", null);
+            }
+            if (!this.attributes.ContainsKey("use_with_bundles"))
+            {
+                this.attributes.Add("use_with_bundles", null);
+            }
+            if (!this.attributes.ContainsKey("use_with_inboxes"))
+            {
+                this.attributes.Add("use_with_inboxes", null);
+            }
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Name of the Clickwrap agreement (used when selecting from multiple Clickwrap agreements.)

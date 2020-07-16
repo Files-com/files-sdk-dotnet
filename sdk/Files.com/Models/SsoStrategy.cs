@@ -11,54 +11,179 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public SsoStrategy()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("protocol", new string[0]);
-            this.attributes.Add("provider", null);
-            this.attributes.Add("label", null);
-            this.attributes.Add("logo_url", null);
-            this.attributes.Add("id", null);
-            this.attributes.Add("saml_provider_cert_fingerprint", null);
-            this.attributes.Add("saml_provider_issuer_url", null);
-            this.attributes.Add("saml_provider_metadata_url", null);
-            this.attributes.Add("saml_provider_slo_target_url", null);
-            this.attributes.Add("saml_provider_sso_target_url", null);
-            this.attributes.Add("scim_authentication_method", null);
-            this.attributes.Add("scim_username", null);
-            this.attributes.Add("subdomain", null);
-            this.attributes.Add("provision_users", null);
-            this.attributes.Add("provision_groups", null);
-            this.attributes.Add("deprovision_users", null);
-            this.attributes.Add("deprovision_groups", null);
-            this.attributes.Add("provision_group_default", null);
-            this.attributes.Add("provision_group_exclusion", null);
-            this.attributes.Add("provision_group_inclusion", null);
-            this.attributes.Add("provision_group_required", null);
-            this.attributes.Add("provision_attachments_permission", null);
-            this.attributes.Add("provision_dav_permission", null);
-            this.attributes.Add("provision_ftp_permission", null);
-            this.attributes.Add("provision_sftp_permission", null);
-            this.attributes.Add("provision_time_zone", null);
-            this.attributes.Add("ldap_base_dn", null);
-            this.attributes.Add("ldap_domain", null);
-            this.attributes.Add("enabled", null);
-            this.attributes.Add("ldap_host", null);
-            this.attributes.Add("ldap_host_2", null);
-            this.attributes.Add("ldap_host_3", null);
-            this.attributes.Add("ldap_port", null);
-            this.attributes.Add("ldap_secure", null);
-            this.attributes.Add("ldap_username", null);
-            this.attributes.Add("ldap_username_field", null);
-        }
+        public SsoStrategy() : this(null, null) { }
 
         public SsoStrategy(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("protocol"))
+            {
+                this.attributes.Add("protocol", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("provider"))
+            {
+                this.attributes.Add("provider", null);
+            }
+            if (!this.attributes.ContainsKey("label"))
+            {
+                this.attributes.Add("label", null);
+            }
+            if (!this.attributes.ContainsKey("logo_url"))
+            {
+                this.attributes.Add("logo_url", null);
+            }
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("saml_provider_cert_fingerprint"))
+            {
+                this.attributes.Add("saml_provider_cert_fingerprint", null);
+            }
+            if (!this.attributes.ContainsKey("saml_provider_issuer_url"))
+            {
+                this.attributes.Add("saml_provider_issuer_url", null);
+            }
+            if (!this.attributes.ContainsKey("saml_provider_metadata_url"))
+            {
+                this.attributes.Add("saml_provider_metadata_url", null);
+            }
+            if (!this.attributes.ContainsKey("saml_provider_slo_target_url"))
+            {
+                this.attributes.Add("saml_provider_slo_target_url", null);
+            }
+            if (!this.attributes.ContainsKey("saml_provider_sso_target_url"))
+            {
+                this.attributes.Add("saml_provider_sso_target_url", null);
+            }
+            if (!this.attributes.ContainsKey("scim_authentication_method"))
+            {
+                this.attributes.Add("scim_authentication_method", null);
+            }
+            if (!this.attributes.ContainsKey("scim_username"))
+            {
+                this.attributes.Add("scim_username", null);
+            }
+            if (!this.attributes.ContainsKey("subdomain"))
+            {
+                this.attributes.Add("subdomain", null);
+            }
+            if (!this.attributes.ContainsKey("provision_users"))
+            {
+                this.attributes.Add("provision_users", null);
+            }
+            if (!this.attributes.ContainsKey("provision_groups"))
+            {
+                this.attributes.Add("provision_groups", null);
+            }
+            if (!this.attributes.ContainsKey("deprovision_users"))
+            {
+                this.attributes.Add("deprovision_users", null);
+            }
+            if (!this.attributes.ContainsKey("deprovision_groups"))
+            {
+                this.attributes.Add("deprovision_groups", null);
+            }
+            if (!this.attributes.ContainsKey("provision_group_default"))
+            {
+                this.attributes.Add("provision_group_default", null);
+            }
+            if (!this.attributes.ContainsKey("provision_group_exclusion"))
+            {
+                this.attributes.Add("provision_group_exclusion", null);
+            }
+            if (!this.attributes.ContainsKey("provision_group_inclusion"))
+            {
+                this.attributes.Add("provision_group_inclusion", null);
+            }
+            if (!this.attributes.ContainsKey("provision_group_required"))
+            {
+                this.attributes.Add("provision_group_required", null);
+            }
+            if (!this.attributes.ContainsKey("provision_attachments_permission"))
+            {
+                this.attributes.Add("provision_attachments_permission", null);
+            }
+            if (!this.attributes.ContainsKey("provision_dav_permission"))
+            {
+                this.attributes.Add("provision_dav_permission", null);
+            }
+            if (!this.attributes.ContainsKey("provision_ftp_permission"))
+            {
+                this.attributes.Add("provision_ftp_permission", null);
+            }
+            if (!this.attributes.ContainsKey("provision_sftp_permission"))
+            {
+                this.attributes.Add("provision_sftp_permission", null);
+            }
+            if (!this.attributes.ContainsKey("provision_time_zone"))
+            {
+                this.attributes.Add("provision_time_zone", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_base_dn"))
+            {
+                this.attributes.Add("ldap_base_dn", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_domain"))
+            {
+                this.attributes.Add("ldap_domain", null);
+            }
+            if (!this.attributes.ContainsKey("enabled"))
+            {
+                this.attributes.Add("enabled", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_host"))
+            {
+                this.attributes.Add("ldap_host", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_host_2"))
+            {
+                this.attributes.Add("ldap_host_2", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_host_3"))
+            {
+                this.attributes.Add("ldap_host_3", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_port"))
+            {
+                this.attributes.Add("ldap_port", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_secure"))
+            {
+                this.attributes.Add("ldap_secure", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_username"))
+            {
+                this.attributes.Add("ldap_username", null);
+            }
+            if (!this.attributes.ContainsKey("ldap_username_field"))
+            {
+                this.attributes.Add("ldap_username_field", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// SSO Protocol

@@ -14,15 +14,15 @@ namespace Files.Models
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(RemoteFile));
 
-        public static async Task<RemoteFile> Create(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public static async Task<RemoteFile> Create(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
             return (RemoteFile) await RemoteFile.Create((string)attributes["path"], attributes, options);
         }
 
-        public static async Task<RemoteFile> DownloadFile(string path, string localPath = null)
+        public static async Task<RemoteFile> DownloadFile(string path, string localPath = null, Dictionary<string, object> options = null)
         {
             localPath = localPath != null ? localPath : (System.IO.Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + path.Substring(path.LastIndexOf('/') + 1));
-            RemoteFile f = new RemoteFile();
+            RemoteFile f = new RemoteFile(null, options);
             f.Path = path;
             await f.DownloadFile(localPath);
             return f;
@@ -109,44 +109,139 @@ namespace Files.Models
                 log.Error($"DownloadFile failed for {Path} to {outputFile}: {e.ToString()}");
             }
         }
-        public RemoteFile()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("display_name", null);
-            this.attributes.Add("type", null);
-            this.attributes.Add("size", null);
-            this.attributes.Add("mtime", null);
-            this.attributes.Add("provided_mtime", null);
-            this.attributes.Add("crc32", null);
-            this.attributes.Add("md5", null);
-            this.attributes.Add("mime_type", null);
-            this.attributes.Add("region", null);
-            this.attributes.Add("permissions", null);
-            this.attributes.Add("subfolders_locked?", null);
-            this.attributes.Add("download_uri", null);
-            this.attributes.Add("priority_color", null);
-            this.attributes.Add("preview_id", null);
-            this.attributes.Add("preview", null);
-            this.attributes.Add("action", null);
-            this.attributes.Add("length", null);
-            this.attributes.Add("mkdir_parents", null);
-            this.attributes.Add("part", null);
-            this.attributes.Add("parts", null);
-            this.attributes.Add("ref", null);
-            this.attributes.Add("restart", null);
-            this.attributes.Add("structure", null);
-            this.attributes.Add("with_rename", null);
-        }
+        public RemoteFile() : this(null, null) { }
 
         public RemoteFile(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("display_name"))
+            {
+                this.attributes.Add("display_name", null);
+            }
+            if (!this.attributes.ContainsKey("type"))
+            {
+                this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("size"))
+            {
+                this.attributes.Add("size", null);
+            }
+            if (!this.attributes.ContainsKey("mtime"))
+            {
+                this.attributes.Add("mtime", null);
+            }
+            if (!this.attributes.ContainsKey("provided_mtime"))
+            {
+                this.attributes.Add("provided_mtime", null);
+            }
+            if (!this.attributes.ContainsKey("crc32"))
+            {
+                this.attributes.Add("crc32", null);
+            }
+            if (!this.attributes.ContainsKey("md5"))
+            {
+                this.attributes.Add("md5", null);
+            }
+            if (!this.attributes.ContainsKey("mime_type"))
+            {
+                this.attributes.Add("mime_type", null);
+            }
+            if (!this.attributes.ContainsKey("region"))
+            {
+                this.attributes.Add("region", null);
+            }
+            if (!this.attributes.ContainsKey("permissions"))
+            {
+                this.attributes.Add("permissions", null);
+            }
+            if (!this.attributes.ContainsKey("subfolders_locked?"))
+            {
+                this.attributes.Add("subfolders_locked?", null);
+            }
+            if (!this.attributes.ContainsKey("download_uri"))
+            {
+                this.attributes.Add("download_uri", null);
+            }
+            if (!this.attributes.ContainsKey("priority_color"))
+            {
+                this.attributes.Add("priority_color", null);
+            }
+            if (!this.attributes.ContainsKey("preview_id"))
+            {
+                this.attributes.Add("preview_id", null);
+            }
+            if (!this.attributes.ContainsKey("preview"))
+            {
+                this.attributes.Add("preview", null);
+            }
+            if (!this.attributes.ContainsKey("action"))
+            {
+                this.attributes.Add("action", null);
+            }
+            if (!this.attributes.ContainsKey("length"))
+            {
+                this.attributes.Add("length", null);
+            }
+            if (!this.attributes.ContainsKey("mkdir_parents"))
+            {
+                this.attributes.Add("mkdir_parents", null);
+            }
+            if (!this.attributes.ContainsKey("part"))
+            {
+                this.attributes.Add("part", null);
+            }
+            if (!this.attributes.ContainsKey("parts"))
+            {
+                this.attributes.Add("parts", null);
+            }
+            if (!this.attributes.ContainsKey("ref"))
+            {
+                this.attributes.Add("ref", null);
+            }
+            if (!this.attributes.ContainsKey("restart"))
+            {
+                this.attributes.Add("restart", null);
+            }
+            if (!this.attributes.ContainsKey("structure"))
+            {
+                this.attributes.Add("structure", null);
+            }
+            if (!this.attributes.ContainsKey("with_rename"))
+            {
+                this.attributes.Add("with_rename", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// File/Folder ID
@@ -412,7 +507,6 @@ namespace Files.Models
         ///
         /// Parameters:
         ///   action - string - Can be blank, `redirect` or `stat`.  If set to `stat`, we will return file information but without a download URL, and without logging a download.  If set to `redirect` we will serve a 302 redirect directly to the file.  This is used for integrations with Zapier, and is not recommended for most integrations.
-        ///   id - int64 - If provided, lookup the file by id instead of path.
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
@@ -433,10 +527,6 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
             {
                 throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
@@ -454,7 +544,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{attributes["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -490,7 +580,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{attributes["path"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -521,7 +611,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{attributes["path"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -551,7 +641,6 @@ namespace Files.Models
         ///
         /// Parameters:
         ///   action - string - Can be blank, `redirect` or `stat`.  If set to `stat`, we will return file information but without a download URL, and without logging a download.  If set to `redirect` we will serve a 302 redirect directly to the file.  This is used for integrations with Zapier, and is not recommended for most integrations.
-        ///   id - int64 - If provided, lookup the file by id instead of path.
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
@@ -574,10 +663,6 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
             {
                 throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
@@ -595,7 +680,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -681,7 +766,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -719,7 +804,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{parameters["path"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -752,7 +837,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{parameters["path"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }

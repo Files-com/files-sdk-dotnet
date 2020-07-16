@@ -11,23 +11,55 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Style()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("logo", null);
-            this.attributes.Add("thumbnail", null);
-            this.attributes.Add("file", null);
-        }
+        public Style() : this(null, null) { }
 
         public Style(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("logo"))
+            {
+                this.attributes.Add("logo", null);
+            }
+            if (!this.attributes.ContainsKey("thumbnail"))
+            {
+                this.attributes.Add("thumbnail", null);
+            }
+            if (!this.attributes.ContainsKey("file"))
+            {
+                this.attributes.Add("file", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Style ID
@@ -108,7 +140,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: file", "parameters[\"file\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/styles/{attributes["path"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
 
             return JsonSerializer.Deserialize<Style>(responseJson);
         }
@@ -133,7 +165,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/styles/{attributes["path"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<Style>(responseJson);
         }
@@ -154,7 +186,7 @@ namespace Files.Models
         /// Parameters:
         ///   path (required) - string - Style path.
         /// </summary>
-        public static async Task<Style> List(
+        public static async Task<Style> Find(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -173,18 +205,18 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/styles/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Style>(responseJson);
         }
 
-        public static async Task<Style> All(
+        public static async Task<Style> Get(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(path, parameters, options);
+            return await Find(path, parameters, options);
         }
 
         /// <summary>
@@ -218,7 +250,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: file", "parameters[\"file\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/styles/{parameters["path"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
 
             return JsonSerializer.Deserialize<Style>(responseJson);
         }
@@ -245,7 +277,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/styles/{parameters["path"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<Style>(responseJson);
         }

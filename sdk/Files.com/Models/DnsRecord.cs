@@ -11,22 +11,51 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public DnsRecord()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("domain", null);
-            this.attributes.Add("rrtype", null);
-            this.attributes.Add("value", null);
-        }
+        public DnsRecord() : this(null, null) { }
 
         public DnsRecord(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("domain"))
+            {
+                this.attributes.Add("domain", null);
+            }
+            if (!this.attributes.ContainsKey("rrtype"))
+            {
+                this.attributes.Add("rrtype", null);
+            }
+            if (!this.attributes.ContainsKey("value"))
+            {
+                this.attributes.Add("value", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Unique label for DNS record; used by Zapier and other integrations.

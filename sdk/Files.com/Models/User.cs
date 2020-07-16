@@ -11,72 +11,251 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public User()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("username", null);
-            this.attributes.Add("admin_group_ids", new Nullable<Int64>[0]);
-            this.attributes.Add("allowed_ips", null);
-            this.attributes.Add("attachments_permission", null);
-            this.attributes.Add("api_keys_count", null);
-            this.attributes.Add("authenticate_until", null);
-            this.attributes.Add("authentication_method", null);
-            this.attributes.Add("avatar_url", null);
-            this.attributes.Add("billing_permission", null);
-            this.attributes.Add("bypass_site_allowed_ips", null);
-            this.attributes.Add("bypass_inactive_disable", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("dav_permission", null);
-            this.attributes.Add("disabled", null);
-            this.attributes.Add("email", null);
-            this.attributes.Add("ftp_permission", null);
-            this.attributes.Add("group_ids", null);
-            this.attributes.Add("header_text", null);
-            this.attributes.Add("language", null);
-            this.attributes.Add("last_login_at", null);
-            this.attributes.Add("last_protocol_cipher", null);
-            this.attributes.Add("lockout_expires", null);
-            this.attributes.Add("name", null);
-            this.attributes.Add("notes", null);
-            this.attributes.Add("notification_daily_send_time", null);
-            this.attributes.Add("office_integration_enabled", null);
-            this.attributes.Add("password_set_at", null);
-            this.attributes.Add("password_validity_days", null);
-            this.attributes.Add("public_keys_count", null);
-            this.attributes.Add("receive_admin_alerts", null);
-            this.attributes.Add("require_2fa", null);
-            this.attributes.Add("require_password_change", null);
-            this.attributes.Add("restapi_permission", null);
-            this.attributes.Add("self_managed", null);
-            this.attributes.Add("sftp_permission", null);
-            this.attributes.Add("site_admin", null);
-            this.attributes.Add("skip_welcome_screen", null);
-            this.attributes.Add("ssl_required", null);
-            this.attributes.Add("sso_strategy_id", null);
-            this.attributes.Add("subscribe_to_newsletter", null);
-            this.attributes.Add("externally_managed", null);
-            this.attributes.Add("time_zone", null);
-            this.attributes.Add("type_of_2fa", null);
-            this.attributes.Add("user_root", null);
-            this.attributes.Add("avatar_file", null);
-            this.attributes.Add("avatar_delete", null);
-            this.attributes.Add("change_password", null);
-            this.attributes.Add("change_password_confirmation", null);
-            this.attributes.Add("grant_permission", null);
-            this.attributes.Add("group_id", null);
-            this.attributes.Add("password", null);
-            this.attributes.Add("password_confirmation", null);
-            this.attributes.Add("announcements_read", null);
-        }
+        public User() : this(null, null) { }
 
         public User(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("admin_group_ids"))
+            {
+                this.attributes.Add("admin_group_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("allowed_ips"))
+            {
+                this.attributes.Add("allowed_ips", null);
+            }
+            if (!this.attributes.ContainsKey("attachments_permission"))
+            {
+                this.attributes.Add("attachments_permission", null);
+            }
+            if (!this.attributes.ContainsKey("api_keys_count"))
+            {
+                this.attributes.Add("api_keys_count", null);
+            }
+            if (!this.attributes.ContainsKey("authenticate_until"))
+            {
+                this.attributes.Add("authenticate_until", null);
+            }
+            if (!this.attributes.ContainsKey("authentication_method"))
+            {
+                this.attributes.Add("authentication_method", null);
+            }
+            if (!this.attributes.ContainsKey("avatar_url"))
+            {
+                this.attributes.Add("avatar_url", null);
+            }
+            if (!this.attributes.ContainsKey("billing_permission"))
+            {
+                this.attributes.Add("billing_permission", null);
+            }
+            if (!this.attributes.ContainsKey("bypass_site_allowed_ips"))
+            {
+                this.attributes.Add("bypass_site_allowed_ips", null);
+            }
+            if (!this.attributes.ContainsKey("bypass_inactive_disable"))
+            {
+                this.attributes.Add("bypass_inactive_disable", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("dav_permission"))
+            {
+                this.attributes.Add("dav_permission", null);
+            }
+            if (!this.attributes.ContainsKey("disabled"))
+            {
+                this.attributes.Add("disabled", null);
+            }
+            if (!this.attributes.ContainsKey("email"))
+            {
+                this.attributes.Add("email", null);
+            }
+            if (!this.attributes.ContainsKey("ftp_permission"))
+            {
+                this.attributes.Add("ftp_permission", null);
+            }
+            if (!this.attributes.ContainsKey("group_ids"))
+            {
+                this.attributes.Add("group_ids", null);
+            }
+            if (!this.attributes.ContainsKey("header_text"))
+            {
+                this.attributes.Add("header_text", null);
+            }
+            if (!this.attributes.ContainsKey("language"))
+            {
+                this.attributes.Add("language", null);
+            }
+            if (!this.attributes.ContainsKey("last_login_at"))
+            {
+                this.attributes.Add("last_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_protocol_cipher"))
+            {
+                this.attributes.Add("last_protocol_cipher", null);
+            }
+            if (!this.attributes.ContainsKey("lockout_expires"))
+            {
+                this.attributes.Add("lockout_expires", null);
+            }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("notes"))
+            {
+                this.attributes.Add("notes", null);
+            }
+            if (!this.attributes.ContainsKey("notification_daily_send_time"))
+            {
+                this.attributes.Add("notification_daily_send_time", null);
+            }
+            if (!this.attributes.ContainsKey("office_integration_enabled"))
+            {
+                this.attributes.Add("office_integration_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("password_set_at"))
+            {
+                this.attributes.Add("password_set_at", null);
+            }
+            if (!this.attributes.ContainsKey("password_validity_days"))
+            {
+                this.attributes.Add("password_validity_days", null);
+            }
+            if (!this.attributes.ContainsKey("public_keys_count"))
+            {
+                this.attributes.Add("public_keys_count", null);
+            }
+            if (!this.attributes.ContainsKey("receive_admin_alerts"))
+            {
+                this.attributes.Add("receive_admin_alerts", null);
+            }
+            if (!this.attributes.ContainsKey("require_2fa"))
+            {
+                this.attributes.Add("require_2fa", null);
+            }
+            if (!this.attributes.ContainsKey("require_password_change"))
+            {
+                this.attributes.Add("require_password_change", null);
+            }
+            if (!this.attributes.ContainsKey("restapi_permission"))
+            {
+                this.attributes.Add("restapi_permission", null);
+            }
+            if (!this.attributes.ContainsKey("self_managed"))
+            {
+                this.attributes.Add("self_managed", null);
+            }
+            if (!this.attributes.ContainsKey("sftp_permission"))
+            {
+                this.attributes.Add("sftp_permission", null);
+            }
+            if (!this.attributes.ContainsKey("site_admin"))
+            {
+                this.attributes.Add("site_admin", null);
+            }
+            if (!this.attributes.ContainsKey("skip_welcome_screen"))
+            {
+                this.attributes.Add("skip_welcome_screen", null);
+            }
+            if (!this.attributes.ContainsKey("ssl_required"))
+            {
+                this.attributes.Add("ssl_required", null);
+            }
+            if (!this.attributes.ContainsKey("sso_strategy_id"))
+            {
+                this.attributes.Add("sso_strategy_id", null);
+            }
+            if (!this.attributes.ContainsKey("subscribe_to_newsletter"))
+            {
+                this.attributes.Add("subscribe_to_newsletter", null);
+            }
+            if (!this.attributes.ContainsKey("externally_managed"))
+            {
+                this.attributes.Add("externally_managed", null);
+            }
+            if (!this.attributes.ContainsKey("time_zone"))
+            {
+                this.attributes.Add("time_zone", null);
+            }
+            if (!this.attributes.ContainsKey("type_of_2fa"))
+            {
+                this.attributes.Add("type_of_2fa", null);
+            }
+            if (!this.attributes.ContainsKey("user_root"))
+            {
+                this.attributes.Add("user_root", null);
+            }
+            if (!this.attributes.ContainsKey("avatar_file"))
+            {
+                this.attributes.Add("avatar_file", null);
+            }
+            if (!this.attributes.ContainsKey("avatar_delete"))
+            {
+                this.attributes.Add("avatar_delete", null);
+            }
+            if (!this.attributes.ContainsKey("change_password"))
+            {
+                this.attributes.Add("change_password", null);
+            }
+            if (!this.attributes.ContainsKey("change_password_confirmation"))
+            {
+                this.attributes.Add("change_password_confirmation", null);
+            }
+            if (!this.attributes.ContainsKey("grant_permission"))
+            {
+                this.attributes.Add("grant_permission", null);
+            }
+            if (!this.attributes.ContainsKey("group_id"))
+            {
+                this.attributes.Add("group_id", null);
+            }
+            if (!this.attributes.ContainsKey("password"))
+            {
+                this.attributes.Add("password", null);
+            }
+            if (!this.attributes.ContainsKey("password_confirmation"))
+            {
+                this.attributes.Add("password_confirmation", null);
+            }
+            if (!this.attributes.ContainsKey("announcements_read"))
+            {
+                this.attributes.Add("announcements_read", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// User ID
@@ -975,6 +1154,14 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `active`, `master_admin`, `site_id`, `authenticate_until`, `email`, `last_desktop_login_at`, `last_login_at`, `username`, `notes`, `site_admin`, `receive_admin_alerts`, `allowed_ips`, `password_validity_days`, `ssl_required` or `not_site_admin`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `username`, `email`, `notes`, `site_admin`, `allowed_ips`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `username`, `email`, `notes`, `site_admin`, `allowed_ips`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `username`, `email`, `notes`, `site_admin`, `allowed_ips`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `username`, `email`, `notes`, `site_admin`, `allowed_ips`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `username`, `email`, `notes`, `site_admin`, `allowed_ips`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `username`, `email`, `notes`, `site_admin`, `allowed_ips`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`.
         ///   ids - string - comma-separated list of User IDs
         ///   q[username] - string - List users matching username.
         ///   q[email] - string - List users matching email.
@@ -984,8 +1171,6 @@ namespace Files.Models
         ///   q[password_validity_days] - string - If set, list only users with overridden password validity days setting.
         ///   q[ssl_required] - string - If set, list only users with overridden SSL required setting.
         ///   search - string - Searches for partial matches of name, username, or email.
-        ///   sort_by[last_login_at] - string - If set, sort users by 'last_login_at' in either 'asc' or 'desc' direction
-        ///   sort_by[authenticate_until] - string - If set, sort users by 'authenticate_until' in either 'asc' or 'desc' direction
         /// </summary>
         public static async Task<User[]> List(
             
@@ -1007,6 +1192,38 @@ namespace Files.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
             if (parameters.ContainsKey("ids") && !(parameters["ids"] is string ))
             {

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Files.Models
 {
-    public class Errors
+    public class PublicIpAddress
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Errors() : this(null, null) { }
+        public PublicIpAddress() : this(null, null) { }
 
-        public Errors(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public PublicIpAddress(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -28,13 +28,13 @@ namespace Files.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("fields"))
+            if (!this.attributes.ContainsKey("ip_address"))
             {
-                this.attributes.Add("fields", new string[0]);
+                this.attributes.Add("ip_address", null);
             }
-            if (!this.attributes.ContainsKey("messages"))
+            if (!this.attributes.ContainsKey("server_name"))
             {
-                this.attributes.Add("messages", new string[0]);
+                this.attributes.Add("server_name", null);
             }
         }
 
@@ -50,21 +50,21 @@ namespace Files.Models
 
 
         /// <summary>
-        /// A list of fields where errors occur
+        /// The public IP address.
         /// </summary>
-        [JsonPropertyName("fields")]
-        public string[] Fields
+        [JsonPropertyName("ip_address")]
+        public string IpAddress
         {
-            get { return (string[]) attributes["fields"]; }
+            get { return (string) attributes["ip_address"]; }
         }
 
         /// <summary>
-        /// A list of error messages
+        /// The name of the frontend server.
         /// </summary>
-        [JsonPropertyName("messages")]
-        public string[] Messages
+        [JsonPropertyName("server_name")]
+        public string ServerName
         {
-            get { return (string[]) attributes["messages"]; }
+            get { return (string) attributes["server_name"]; }
         }
 
 

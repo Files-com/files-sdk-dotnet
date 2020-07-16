@@ -11,31 +11,87 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Action()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("when", null);
-            this.attributes.Add("destination", null);
-            this.attributes.Add("display", null);
-            this.attributes.Add("ip", null);
-            this.attributes.Add("source", null);
-            this.attributes.Add("targets", new string[0]);
-            this.attributes.Add("user_id", null);
-            this.attributes.Add("username", null);
-            this.attributes.Add("action", null);
-            this.attributes.Add("failure_type", null);
-            this.attributes.Add("interface", null);
-        }
+        public Action() : this(null, null) { }
 
         public Action(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("when"))
+            {
+                this.attributes.Add("when", null);
+            }
+            if (!this.attributes.ContainsKey("destination"))
+            {
+                this.attributes.Add("destination", null);
+            }
+            if (!this.attributes.ContainsKey("display"))
+            {
+                this.attributes.Add("display", null);
+            }
+            if (!this.attributes.ContainsKey("ip"))
+            {
+                this.attributes.Add("ip", null);
+            }
+            if (!this.attributes.ContainsKey("source"))
+            {
+                this.attributes.Add("source", null);
+            }
+            if (!this.attributes.ContainsKey("targets"))
+            {
+                this.attributes.Add("targets", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("action"))
+            {
+                this.attributes.Add("action", null);
+            }
+            if (!this.attributes.ContainsKey("failure_type"))
+            {
+                this.attributes.Add("failure_type", null);
+            }
+            if (!this.attributes.ContainsKey("interface"))
+            {
+                this.attributes.Add("interface", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Action ID

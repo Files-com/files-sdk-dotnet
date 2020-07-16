@@ -26,9 +26,7 @@ namespace Files
 
         public static FilesClient Instance { get; private set; }
 
-        public FilesClient() : this((FilesConfiguration)ConfigurationManager.GetSection(ConfigManagerSectionName)) { }
-
-        public FilesClient(FilesConfiguration config)
+        public FilesClient(FilesConfiguration config = null)
         {
             if (Instance != null) {
                 log.Info("Files.com Client instance already exists, replacing instance with new one");
@@ -37,21 +35,34 @@ namespace Files
             Instance = this;
             this.config = config;
 
-            // TODO: Add user/password support?
-            if (this.config.ApiKey != null)
+            if (this.config == null)
+            {
+                log.Info("FilesConfiguration found in app.config");
+                this.config = (FilesConfiguration)ConfigurationManager.GetSection(ConfigManagerSectionName);
+            }
+            if (this.config == null)
+            {
+                log.Info("No FilesConfiguration found, using defaults");
+                this.config = new FilesConfiguration();
+            }
+
+            if (this.SessionId != null && this.SessionId.Length > 0)
+            {
+                log.Info("Files.com Client created with Session Id");
+            }
+            else if (this.ApiKey != null && this.SessionId.Length > 0)
             {
                 log.Info("Files.com Client created with API Key");
             }
             else
             {
-                log.Error("Files.com Client Settings must have ApiKey");
-                throw new InvalidOperationException("Incomplete settings for Files.com Client");
+                log.Info("Files.com Client created with no preconfigured auth");
             }
 
             var builder = new HostBuilder()
                 .ConfigureServices((HostExecutionContext, services) =>
                 {
-                    TimeSpan[] retries = new TimeSpan[config.MaxNetworkRetries];
+                    TimeSpan[] retries = new TimeSpan[this.config.MaxNetworkRetries];
                     Random rand = new Random();
                     for (int i = 0; i < retries.Length; i++)
                     {
@@ -59,15 +70,15 @@ namespace Files
 
                         if (i == 0)
                         {
-                            delay = config.InitialNetworkRequestDelay;
+                            delay = this.config.InitialNetworkRequestDelay;
                         }
                         else if (i == retries.Length - 1)
                         {
-                            delay = config.MaxNetworkRetryDelay;
+                            delay = this.config.MaxNetworkRetryDelay;
                         }
                         else
                         { 
-                            delay = Math.Min(config.InitialNetworkRequestDelay, rand.NextDouble() * config.MaxNetworkRetryDelay);
+                            delay = Math.Min(this.config.InitialNetworkRequestDelay, rand.NextDouble() * this.config.MaxNetworkRetryDelay);
                         }
 
                         retries[i] = TimeSpan.FromSeconds(delay);
@@ -77,7 +88,6 @@ namespace Files
                     {
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
-                        client.DefaultRequestHeaders.Add("X-FilesApi-Key", ApiKey);
                     })
                     .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(retries));
 
@@ -101,6 +111,11 @@ namespace Files
         public string ApiKey
         { 
             get { return config.ApiKey; }
+        }
+
+        public string SessionId
+        {
+            get { return config.SessionId; }
         }
 
         public static async Task<string> SendRequest(

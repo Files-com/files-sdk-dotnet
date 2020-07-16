@@ -15,7 +15,7 @@ namespace files_cli.Commands
 
         public override async Task<int> RunAsync(string[] remainingArguments)
         {
-            User[] users = (User[]) await User.All();
+            User[] users = await User.All(null, await GetOptions());
 
             Console.WriteLine($"Found {users.Length} users");
             Console.WriteLine();

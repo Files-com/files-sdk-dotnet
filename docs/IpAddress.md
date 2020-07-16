@@ -36,3 +36,22 @@ Task<IpAddress[]> IpAddress.List(
 * `page` (Nullable<Int64>): Current page number.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+
+
+---
+
+## List all possible public IP addresses
+
+```
+Task<IpAddress[]> IpAddress.GetReserved(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `page` (Nullable<Int64>): Current page number.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.

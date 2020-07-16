@@ -11,32 +11,91 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public FilePartUpload()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("send", null);
-            this.attributes.Add("action", null);
-            this.attributes.Add("ask_about_overwrites", null);
-            this.attributes.Add("available_parts", null);
-            this.attributes.Add("expires", null);
-            this.attributes.Add("headers", null);
-            this.attributes.Add("http_method", null);
-            this.attributes.Add("next_partsize", null);
-            this.attributes.Add("parameters", null);
-            this.attributes.Add("part_number", null);
-            this.attributes.Add("partsize", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("ref", null);
-            this.attributes.Add("upload_uri", null);
-        }
+        public FilePartUpload() : this(null, null) { }
 
         public FilePartUpload(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("send"))
+            {
+                this.attributes.Add("send", null);
+            }
+            if (!this.attributes.ContainsKey("action"))
+            {
+                this.attributes.Add("action", null);
+            }
+            if (!this.attributes.ContainsKey("ask_about_overwrites"))
+            {
+                this.attributes.Add("ask_about_overwrites", null);
+            }
+            if (!this.attributes.ContainsKey("available_parts"))
+            {
+                this.attributes.Add("available_parts", null);
+            }
+            if (!this.attributes.ContainsKey("expires"))
+            {
+                this.attributes.Add("expires", null);
+            }
+            if (!this.attributes.ContainsKey("headers"))
+            {
+                this.attributes.Add("headers", null);
+            }
+            if (!this.attributes.ContainsKey("http_method"))
+            {
+                this.attributes.Add("http_method", null);
+            }
+            if (!this.attributes.ContainsKey("next_partsize"))
+            {
+                this.attributes.Add("next_partsize", null);
+            }
+            if (!this.attributes.ContainsKey("parameters"))
+            {
+                this.attributes.Add("parameters", null);
+            }
+            if (!this.attributes.ContainsKey("part_number"))
+            {
+                this.attributes.Add("part_number", null);
+            }
+            if (!this.attributes.ContainsKey("partsize"))
+            {
+                this.attributes.Add("partsize", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("ref"))
+            {
+                this.attributes.Add("ref", null);
+            }
+            if (!this.attributes.ContainsKey("upload_uri"))
+            {
+                this.attributes.Add("upload_uri", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Content-Type and File to send

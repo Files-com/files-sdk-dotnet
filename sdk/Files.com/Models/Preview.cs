@@ -11,23 +11,55 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Preview()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("status", null);
-            this.attributes.Add("download_uri", null);
-            this.attributes.Add("type", null);
-            this.attributes.Add("size", null);
-        }
+        public Preview() : this(null, null) { }
 
         public Preview(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("status"))
+            {
+                this.attributes.Add("status", null);
+            }
+            if (!this.attributes.ContainsKey("download_uri"))
+            {
+                this.attributes.Add("download_uri", null);
+            }
+            if (!this.attributes.ContainsKey("type"))
+            {
+                this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("size"))
+            {
+                this.attributes.Add("size", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Preview ID

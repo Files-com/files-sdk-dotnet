@@ -11,58 +11,195 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public RemoteServer()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("authentication_method", null);
-            this.attributes.Add("hostname", null);
-            this.attributes.Add("name", null);
-            this.attributes.Add("port", null);
-            this.attributes.Add("max_connections", null);
-            this.attributes.Add("s3_bucket", null);
-            this.attributes.Add("s3_region", null);
-            this.attributes.Add("server_certificate", null);
-            this.attributes.Add("server_host_key", null);
-            this.attributes.Add("server_type", null);
-            this.attributes.Add("ssl", null);
-            this.attributes.Add("username", null);
-            this.attributes.Add("google_cloud_storage_bucket", null);
-            this.attributes.Add("google_cloud_storage_project_id", null);
-            this.attributes.Add("backblaze_b2_s3_endpoint", null);
-            this.attributes.Add("backblaze_b2_bucket", null);
-            this.attributes.Add("wasabi_bucket", null);
-            this.attributes.Add("wasabi_region", null);
-            this.attributes.Add("rackspace_username", null);
-            this.attributes.Add("rackspace_region", null);
-            this.attributes.Add("rackspace_container", null);
-            this.attributes.Add("auth_setup_link", null);
-            this.attributes.Add("auth_status", null);
-            this.attributes.Add("auth_account_name", null);
-            this.attributes.Add("one_drive_account_type", null);
-            this.attributes.Add("azure_blob_storage_account", null);
-            this.attributes.Add("azure_blob_storage_container", null);
-            this.attributes.Add("aws_access_key", null);
-            this.attributes.Add("aws_secret_key", null);
-            this.attributes.Add("password", null);
-            this.attributes.Add("private_key", null);
-            this.attributes.Add("google_cloud_storage_credentials_json", null);
-            this.attributes.Add("wasabi_access_key", null);
-            this.attributes.Add("wasabi_secret_key", null);
-            this.attributes.Add("backblaze_b2_key_id", null);
-            this.attributes.Add("backblaze_b2_application_key", null);
-            this.attributes.Add("rackspace_api_key", null);
-            this.attributes.Add("reset_authentication", null);
-            this.attributes.Add("azure_blob_storage_access_key", null);
-        }
+        public RemoteServer() : this(null, null) { }
 
         public RemoteServer(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("authentication_method"))
+            {
+                this.attributes.Add("authentication_method", null);
+            }
+            if (!this.attributes.ContainsKey("hostname"))
+            {
+                this.attributes.Add("hostname", null);
+            }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("port"))
+            {
+                this.attributes.Add("port", null);
+            }
+            if (!this.attributes.ContainsKey("max_connections"))
+            {
+                this.attributes.Add("max_connections", null);
+            }
+            if (!this.attributes.ContainsKey("s3_bucket"))
+            {
+                this.attributes.Add("s3_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("s3_region"))
+            {
+                this.attributes.Add("s3_region", null);
+            }
+            if (!this.attributes.ContainsKey("server_certificate"))
+            {
+                this.attributes.Add("server_certificate", null);
+            }
+            if (!this.attributes.ContainsKey("server_host_key"))
+            {
+                this.attributes.Add("server_host_key", null);
+            }
+            if (!this.attributes.ContainsKey("server_type"))
+            {
+                this.attributes.Add("server_type", null);
+            }
+            if (!this.attributes.ContainsKey("ssl"))
+            {
+                this.attributes.Add("ssl", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("google_cloud_storage_bucket"))
+            {
+                this.attributes.Add("google_cloud_storage_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("google_cloud_storage_project_id"))
+            {
+                this.attributes.Add("google_cloud_storage_project_id", null);
+            }
+            if (!this.attributes.ContainsKey("backblaze_b2_s3_endpoint"))
+            {
+                this.attributes.Add("backblaze_b2_s3_endpoint", null);
+            }
+            if (!this.attributes.ContainsKey("backblaze_b2_bucket"))
+            {
+                this.attributes.Add("backblaze_b2_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("wasabi_bucket"))
+            {
+                this.attributes.Add("wasabi_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("wasabi_region"))
+            {
+                this.attributes.Add("wasabi_region", null);
+            }
+            if (!this.attributes.ContainsKey("rackspace_username"))
+            {
+                this.attributes.Add("rackspace_username", null);
+            }
+            if (!this.attributes.ContainsKey("rackspace_region"))
+            {
+                this.attributes.Add("rackspace_region", null);
+            }
+            if (!this.attributes.ContainsKey("rackspace_container"))
+            {
+                this.attributes.Add("rackspace_container", null);
+            }
+            if (!this.attributes.ContainsKey("auth_setup_link"))
+            {
+                this.attributes.Add("auth_setup_link", null);
+            }
+            if (!this.attributes.ContainsKey("auth_status"))
+            {
+                this.attributes.Add("auth_status", null);
+            }
+            if (!this.attributes.ContainsKey("auth_account_name"))
+            {
+                this.attributes.Add("auth_account_name", null);
+            }
+            if (!this.attributes.ContainsKey("one_drive_account_type"))
+            {
+                this.attributes.Add("one_drive_account_type", null);
+            }
+            if (!this.attributes.ContainsKey("azure_blob_storage_account"))
+            {
+                this.attributes.Add("azure_blob_storage_account", null);
+            }
+            if (!this.attributes.ContainsKey("azure_blob_storage_container"))
+            {
+                this.attributes.Add("azure_blob_storage_container", null);
+            }
+            if (!this.attributes.ContainsKey("aws_access_key"))
+            {
+                this.attributes.Add("aws_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("aws_secret_key"))
+            {
+                this.attributes.Add("aws_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("password"))
+            {
+                this.attributes.Add("password", null);
+            }
+            if (!this.attributes.ContainsKey("private_key"))
+            {
+                this.attributes.Add("private_key", null);
+            }
+            if (!this.attributes.ContainsKey("google_cloud_storage_credentials_json"))
+            {
+                this.attributes.Add("google_cloud_storage_credentials_json", null);
+            }
+            if (!this.attributes.ContainsKey("wasabi_access_key"))
+            {
+                this.attributes.Add("wasabi_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("wasabi_secret_key"))
+            {
+                this.attributes.Add("wasabi_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("backblaze_b2_key_id"))
+            {
+                this.attributes.Add("backblaze_b2_key_id", null);
+            }
+            if (!this.attributes.ContainsKey("backblaze_b2_application_key"))
+            {
+                this.attributes.Add("backblaze_b2_application_key", null);
+            }
+            if (!this.attributes.ContainsKey("rackspace_api_key"))
+            {
+                this.attributes.Add("rackspace_api_key", null);
+            }
+            if (!this.attributes.ContainsKey("reset_authentication"))
+            {
+                this.attributes.Add("reset_authentication", null);
+            }
+            if (!this.attributes.ContainsKey("azure_blob_storage_access_key"))
+            {
+                this.attributes.Add("azure_blob_storage_access_key", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Remote server ID

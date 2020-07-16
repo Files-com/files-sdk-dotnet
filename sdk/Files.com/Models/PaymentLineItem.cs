@@ -11,23 +11,55 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public PaymentLineItem()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("amount", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("invoice_id", null);
-            this.attributes.Add("payment_id", null);
-            this.attributes.Add("updated_at", null);
-        }
+        public PaymentLineItem() : this(null, null) { }
 
         public PaymentLineItem(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("amount"))
+            {
+                this.attributes.Add("amount", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("invoice_id"))
+            {
+                this.attributes.Add("invoice_id", null);
+            }
+            if (!this.attributes.ContainsKey("payment_id"))
+            {
+                this.attributes.Add("payment_id", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Payment line item amount

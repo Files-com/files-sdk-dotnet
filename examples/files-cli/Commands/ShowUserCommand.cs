@@ -19,7 +19,7 @@ namespace files_cli.Commands
 
         public override async Task<int> RunAsync(string[] remainingArguments)
         {
-            User user = (User) await User.Get(UserId);
+            User user = await User.Get(UserId, null, await GetOptions());
 
             Console.WriteLine($"Id: {user.Id}");
             Console.WriteLine($"Username: {user.Username}");

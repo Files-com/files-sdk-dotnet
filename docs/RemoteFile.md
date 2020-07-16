@@ -68,7 +68,6 @@ Task<RemoteFile> RemoteFile.Download(
 
 * `path` (string): Required - Path to operate on.
 * `action` (string): Can be blank, `redirect` or `stat`.  If set to `stat`, we will return file information but without a download URL, and without logging a download.  If set to `redirect` we will serve a 302 redirect directly to the file.  This is used for integrations with Zapier, and is not recommended for most integrations.
-* `id` (Nullable<Int64>): If provided, lookup the file by id instead of path.
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `with_previews` (bool): Include file preview information?
 * `with_priority_color` (bool): Include file priority color information?
@@ -150,7 +149,6 @@ var File = RemoteFile.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("id", 1);
 parameters.Add("with_previews", true);
 parameters.Add("with_priority_color", true);
 
@@ -161,7 +159,6 @@ File.Download(parameters);
 
 * `path` (string): Required - Path to operate on.
 * `action` (string): Can be blank, `redirect` or `stat`.  If set to `stat`, we will return file information but without a download URL, and without logging a download.  If set to `redirect` we will serve a 302 redirect directly to the file.  This is used for integrations with Zapier, and is not recommended for most integrations.
-* `id` (Nullable<Int64>): If provided, lookup the file by id instead of path.
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `with_previews` (bool): Include file preview information?
 * `with_priority_color` (bool): Include file priority color information?

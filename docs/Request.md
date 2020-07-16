@@ -40,6 +40,8 @@ Task<Request[]> Request.List(
 * `page` (Nullable<Int64>): Current page number.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+* `cursor` (string): Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
 * `mine` (bool): Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
 * `path` (string): Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
 
@@ -49,7 +51,7 @@ Task<Request[]> Request.List(
 ## List Requests
 
 ```
-Task<Request[]> Request.Folders(
+Task<Request[]> Request.FindFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -61,8 +63,10 @@ Task<Request[]> Request.Folders(
 * `page` (Nullable<Int64>): Current page number.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+* `cursor` (string): Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
 * `mine` (bool): Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
-* `path` (string): Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
+* `path` (string): Required - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
 
 
 ---
@@ -100,28 +104,3 @@ Task<Request> Request.Delete(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Request ID.
-
-
----
-
-## List Requests
-
-```
-var Request = Request.ListFor(path)[0];
-
-var parameters = new Dictionary<string, object>();
-
-parameters.Add("page", 1);
-parameters.Add("per_page", 1);
-parameters.Add("mine", true);
-
-Request.Folders(parameters);
-```
-
-### Parameters
-
-* `page` (Nullable<Int64>): Current page number.
-* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-* `mine` (bool): Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
-* `path` (string): Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.

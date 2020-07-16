@@ -11,24 +11,59 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Behavior()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("attachment_url", null);
-            this.attributes.Add("behavior", null);
-            this.attributes.Add("value", null);
-            this.attributes.Add("attachment_file", null);
-        }
+        public Behavior() : this(null, null) { }
 
         public Behavior(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("attachment_url"))
+            {
+                this.attributes.Add("attachment_url", null);
+            }
+            if (!this.attributes.ContainsKey("behavior"))
+            {
+                this.attributes.Add("behavior", null);
+            }
+            if (!this.attributes.ContainsKey("value"))
+            {
+                this.attributes.Add("value", null);
+            }
+            if (!this.attributes.ContainsKey("attachment_file"))
+            {
+                this.attributes.Add("attachment_file", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Folder behavior ID
@@ -185,6 +220,14 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `behavior`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `behavior`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `behavior`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `behavior`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `behavior`.
         ///   behavior - string - If set, only shows folder behaviors matching this behavior type.
         /// </summary>
         public static async Task<Behavior[]> List(
@@ -208,6 +251,38 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+            }
             if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
             {
                 throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
@@ -226,60 +301,6 @@ namespace Files.Models
         {
             return await List(parameters, options);
         }
-
-        /// <summary>
-        /// Parameters:
-        ///   page - int64 - Current page number.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-        ///   path (required) - string - Path to operate on.
-        ///   recursive - string - Show behaviors above this path?
-        ///   behavior - string - If set only shows folder behaviors matching this behavior type.
-        /// </summary>
-        public static async Task<Behavior[]> ListFor(
-            string path, 
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            parameters.Add("path", path);
-            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
-            }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
-            }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
-            }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
-
-            string responseJson = await FilesClient.SendRequest($"/behaviors/folders/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Behavior[]>(responseJson);
-        }
-
 
         /// <summary>
         /// Parameters:
@@ -317,6 +338,100 @@ namespace Files.Models
         {
             return await Find(id, parameters, options);
         }
+
+        /// <summary>
+        /// Parameters:
+        ///   page - int64 - Current page number.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `behavior`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `behavior`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `behavior`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `behavior`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `behavior`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `behavior`.
+        ///   path (required) - string - Path to operate on.
+        ///   recursive - string - Show behaviors above this path?
+        ///   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
+        /// </summary>
+        public static async Task<Behavior[]> ListFor(
+            string path, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("path", path);
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
+            }
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
+            }
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/behaviors/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<Behavior[]>(responseJson);
+        }
+
 
         /// <summary>
         /// Parameters:

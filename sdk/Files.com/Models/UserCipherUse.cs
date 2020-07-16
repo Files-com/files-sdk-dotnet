@@ -11,24 +11,59 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public UserCipherUse()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("protocol_cipher", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("interface", null);
-            this.attributes.Add("updated_at", null);
-            this.attributes.Add("user_id", null);
-        }
+        public UserCipherUse() : this(null, null) { }
 
         public UserCipherUse(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("protocol_cipher"))
+            {
+                this.attributes.Add("protocol_cipher", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("interface"))
+            {
+                this.attributes.Add("interface", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// UserCipherUse ID

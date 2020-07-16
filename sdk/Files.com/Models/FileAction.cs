@@ -27,18 +27,35 @@ namespace Files.Models
         [JsonPropertyName("upload_uri")]
         public string UploadUri { get; set; }
 
-        public FileAction()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-        }
+        public FileAction() : this(null, null) { }
 
         public FileAction(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Copy file/folder
@@ -76,7 +93,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/file_actions/copy/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/file_actions/copy/{attributes["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<FileAction>(responseJson);
         }
@@ -113,7 +130,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/file_actions/move/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/file_actions/move/{attributes["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<FileAction>(responseJson);
         }
@@ -171,7 +188,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/file_actions/begin_upload/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/file_actions/begin_upload/{attributes["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<FileAction[]>(responseJson);
         }
@@ -217,7 +234,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/file_actions/copy/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/file_actions/copy/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<FileAction>(responseJson);
         }
@@ -256,7 +273,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/file_actions/move/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/file_actions/move/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<FileAction>(responseJson);
         }
@@ -316,7 +333,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/file_actions/begin_upload/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/file_actions/begin_upload/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<FileAction[]>(responseJson);
         }

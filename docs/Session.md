@@ -25,7 +25,7 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Session ID
+* `id` / `Id`  (string): Session ID
 * `language` / `Language`  (string): Session language
 * `login_token` / `LoginToken`  (string): Login token. If set, this token will allow your user to log in via browser at the domain in `login_token_domain`.
 * `login_token_domain` / `LoginTokenDomain`  (string): Domain to use with `login_token`.

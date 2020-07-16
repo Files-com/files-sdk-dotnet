@@ -11,31 +11,87 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public History()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("when", null);
-            this.attributes.Add("destination", null);
-            this.attributes.Add("display", null);
-            this.attributes.Add("ip", null);
-            this.attributes.Add("source", null);
-            this.attributes.Add("targets", new string[0]);
-            this.attributes.Add("user_id", null);
-            this.attributes.Add("username", null);
-            this.attributes.Add("action", null);
-            this.attributes.Add("failure_type", null);
-            this.attributes.Add("interface", null);
-        }
+        public History() : this(null, null) { }
 
         public History(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("when"))
+            {
+                this.attributes.Add("when", null);
+            }
+            if (!this.attributes.ContainsKey("destination"))
+            {
+                this.attributes.Add("destination", null);
+            }
+            if (!this.attributes.ContainsKey("display"))
+            {
+                this.attributes.Add("display", null);
+            }
+            if (!this.attributes.ContainsKey("ip"))
+            {
+                this.attributes.Add("ip", null);
+            }
+            if (!this.attributes.ContainsKey("source"))
+            {
+                this.attributes.Add("source", null);
+            }
+            if (!this.attributes.ContainsKey("targets"))
+            {
+                this.attributes.Add("targets", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("action"))
+            {
+                this.attributes.Add("action", null);
+            }
+            if (!this.attributes.ContainsKey("failure_type"))
+            {
+                this.attributes.Add("failure_type", null);
+            }
+            if (!this.attributes.ContainsKey("interface"))
+            {
+                this.attributes.Add("interface", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Action ID
@@ -164,6 +220,8 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
         public static async Task<History[]> ListForFile(
@@ -200,6 +258,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -209,7 +275,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history/files(/*path)", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/history/files/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<History[]>(responseJson);
         }
@@ -223,6 +289,8 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
         public static async Task<History[]> ListForFolder(
@@ -259,6 +327,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -268,7 +344,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history/folders(/*path)", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/history/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<History[]>(responseJson);
         }
@@ -282,6 +358,8 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         ///   user_id (required) - int64 - User ID.
         /// </summary>
         public static async Task<History[]> ListForUser(
@@ -318,6 +396,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -341,6 +427,8 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         /// </summary>
         public static async Task<History[]> ListLogins(
             
@@ -375,6 +463,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
 
@@ -390,6 +486,14 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `path`, `created_at`, `folder` or `user_id`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `user_id`, `folder` or `path`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `user_id`, `folder` or `path`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
         /// </summary>
         public static async Task<History[]> List(
             
@@ -423,6 +527,38 @@ namespace Files.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/history", System.Net.Http.HttpMethod.Get, parameters, options);

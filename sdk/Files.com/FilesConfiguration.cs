@@ -1,13 +1,21 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 namespace Files
 {
     public class FilesConfiguration : ConfigurationSection
     {
-        [ConfigurationProperty("ApiKey", IsRequired = true)]
+        [ConfigurationProperty("ApiKey")]
         public string ApiKey
         {
             get { return (string) this["ApiKey"]; }
             set { this["ApiKey"] = value; }
+        }
+
+        [ConfigurationProperty("SessionId")]
+        public string SessionId
+        {
+            get { return (string) this["SessionId"]; }
+            set { this["SessionId"] = value; }
         }
 
         [ConfigurationProperty("BaseUrl", DefaultValue = "https://app.files.com/")]

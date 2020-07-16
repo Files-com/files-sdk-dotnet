@@ -11,24 +11,59 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public GroupUser()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("group_name", null);
-            this.attributes.Add("group_id", null);
-            this.attributes.Add("user_id", null);
-            this.attributes.Add("admin", null);
-            this.attributes.Add("usernames", new string[0]);
-            this.attributes.Add("id", null);
-        }
+        public GroupUser() : this(null, null) { }
 
         public GroupUser(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("group_name"))
+            {
+                this.attributes.Add("group_name", null);
+            }
+            if (!this.attributes.ContainsKey("group_id"))
+            {
+                this.attributes.Add("group_id", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("admin"))
+            {
+                this.attributes.Add("admin", null);
+            }
+            if (!this.attributes.ContainsKey("usernames"))
+            {
+                this.attributes.Add("usernames", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Group name

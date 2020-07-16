@@ -11,31 +11,87 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public UsageSnapshot()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("start_at", null);
-            this.attributes.Add("end_at", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("current_storage", null);
-            this.attributes.Add("high_water_storage", null);
-            this.attributes.Add("total_downloads", null);
-            this.attributes.Add("total_uploads", null);
-            this.attributes.Add("updated_at", null);
-            this.attributes.Add("usage_by_top_level_dir", null);
-            this.attributes.Add("root_storage", null);
-            this.attributes.Add("deleted_files_counted_in_minimum", null);
-            this.attributes.Add("deleted_files_storage", null);
-        }
+        public UsageSnapshot() : this(null, null) { }
 
         public UsageSnapshot(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("start_at"))
+            {
+                this.attributes.Add("start_at", null);
+            }
+            if (!this.attributes.ContainsKey("end_at"))
+            {
+                this.attributes.Add("end_at", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("current_storage"))
+            {
+                this.attributes.Add("current_storage", null);
+            }
+            if (!this.attributes.ContainsKey("high_water_storage"))
+            {
+                this.attributes.Add("high_water_storage", null);
+            }
+            if (!this.attributes.ContainsKey("total_downloads"))
+            {
+                this.attributes.Add("total_downloads", null);
+            }
+            if (!this.attributes.ContainsKey("total_uploads"))
+            {
+                this.attributes.Add("total_uploads", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
+            }
+            if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
+            {
+                this.attributes.Add("usage_by_top_level_dir", null);
+            }
+            if (!this.attributes.ContainsKey("root_storage"))
+            {
+                this.attributes.Add("root_storage", null);
+            }
+            if (!this.attributes.ContainsKey("deleted_files_counted_in_minimum"))
+            {
+                this.attributes.Add("deleted_files_counted_in_minimum", null);
+            }
+            if (!this.attributes.ContainsKey("deleted_files_storage"))
+            {
+                this.attributes.Add("deleted_files_storage", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Site usage ID

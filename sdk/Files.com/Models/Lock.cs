@@ -17,27 +17,71 @@ namespace Files.Models
             return Lock.Create((string)attributes["path"], attributes, options);
         }
 
-        public Lock()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("path", null);
-            this.attributes.Add("timeout", null);
-            this.attributes.Add("depth", null);
-            this.attributes.Add("owner", null);
-            this.attributes.Add("scope", null);
-            this.attributes.Add("token", null);
-            this.attributes.Add("type", null);
-            this.attributes.Add("user_id", null);
-            this.attributes.Add("username", null);
-        }
+        public Lock() : this(null, null) { }
 
         public Lock(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("timeout"))
+            {
+                this.attributes.Add("timeout", null);
+            }
+            if (!this.attributes.ContainsKey("depth"))
+            {
+                this.attributes.Add("depth", null);
+            }
+            if (!this.attributes.ContainsKey("owner"))
+            {
+                this.attributes.Add("owner", null);
+            }
+            if (!this.attributes.ContainsKey("scope"))
+            {
+                this.attributes.Add("scope", null);
+            }
+            if (!this.attributes.ContainsKey("token"))
+            {
+                this.attributes.Add("token", null);
+            }
+            if (!this.attributes.ContainsKey("type"))
+            {
+                this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -158,7 +202,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{attributes["path"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }
@@ -226,7 +270,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Lock[]>(responseJson);
         }
@@ -260,7 +304,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }
@@ -297,7 +341,7 @@ namespace Files.Models
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{parameters["path"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }

@@ -11,30 +11,83 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Notification()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("group_id", null);
-            this.attributes.Add("group_name", null);
-            this.attributes.Add("notify_user_actions", null);
-            this.attributes.Add("notify_on_copy", null);
-            this.attributes.Add("send_interval", null);
-            this.attributes.Add("unsubscribed", null);
-            this.attributes.Add("unsubscribed_reason", null);
-            this.attributes.Add("user_id", null);
-            this.attributes.Add("username", null);
-            this.attributes.Add("suppressed_email", null);
-        }
+        public Notification() : this(null, null) { }
 
         public Notification(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("group_id"))
+            {
+                this.attributes.Add("group_id", null);
+            }
+            if (!this.attributes.ContainsKey("group_name"))
+            {
+                this.attributes.Add("group_name", null);
+            }
+            if (!this.attributes.ContainsKey("notify_user_actions"))
+            {
+                this.attributes.Add("notify_user_actions", null);
+            }
+            if (!this.attributes.ContainsKey("notify_on_copy"))
+            {
+                this.attributes.Add("notify_on_copy", null);
+            }
+            if (!this.attributes.ContainsKey("send_interval"))
+            {
+                this.attributes.Add("send_interval", null);
+            }
+            if (!this.attributes.ContainsKey("unsubscribed"))
+            {
+                this.attributes.Add("unsubscribed", null);
+            }
+            if (!this.attributes.ContainsKey("unsubscribed_reason"))
+            {
+                this.attributes.Add("unsubscribed_reason", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("suppressed_email"))
+            {
+                this.attributes.Add("suppressed_email", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Notification ID
@@ -243,11 +296,19 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
-        ///   user_id - int64 - Show notifications for this User ID.
+        ///   user_id - int64 - DEPRECATED: Show notifications for this User ID. Use `filter[user_id]` instead.
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-        ///   group_id - int64 - Show notifications for this Group ID.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `path`, `user_id` or `group_id`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `user_id`, `group_id` or `path`.
+        ///   group_id - int64 - DEPRECATED: Show notifications for this Group ID. Use `filter[group_id]` instead.
         ///   path - string - Show notifications for this Path.
         ///   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
         /// </summary>
@@ -275,6 +336,38 @@ namespace Files.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
             {

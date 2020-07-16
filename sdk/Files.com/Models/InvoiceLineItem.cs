@@ -11,27 +11,71 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public InvoiceLineItem()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("amount", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("description", null);
-            this.attributes.Add("type", null);
-            this.attributes.Add("service_end_at", null);
-            this.attributes.Add("service_start_at", null);
-            this.attributes.Add("updated_at", null);
-            this.attributes.Add("plan", null);
-            this.attributes.Add("site", null);
-        }
+        public InvoiceLineItem() : this(null, null) { }
 
         public InvoiceLineItem(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("amount"))
+            {
+                this.attributes.Add("amount", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("description"))
+            {
+                this.attributes.Add("description", null);
+            }
+            if (!this.attributes.ContainsKey("type"))
+            {
+                this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("service_end_at"))
+            {
+                this.attributes.Add("service_end_at", null);
+            }
+            if (!this.attributes.ContainsKey("service_start_at"))
+            {
+                this.attributes.Add("service_start_at", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
+            }
+            if (!this.attributes.ContainsKey("plan"))
+            {
+                this.attributes.Add("plan", null);
+            }
+            if (!this.attributes.ContainsKey("site"))
+            {
+                this.attributes.Add("site", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Invoice line item amount

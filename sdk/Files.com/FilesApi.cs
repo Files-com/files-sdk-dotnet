@@ -41,6 +41,13 @@ namespace Files
             Dictionary<string, object> options
         )
         {
+            FilesClient filesClient = FilesClient.Instance;
+
+            if (filesClient == null)
+            {
+                throw new InvalidOperationException("FilesClient instance must be created before sending API requests.");
+            }
+
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             string parsedPath = ParsePathParameters(path, parameters);
             Uri uri = new Uri(httpClient.BaseAddress, $"api/rest/v1{parsedPath}");
@@ -56,6 +63,42 @@ namespace Files
                 },
                 Content = httpContent,
             };
+
+            bool requiresAuth = !(path == "/sessions" && verb == HttpMethod.Post);
+
+            if (requiresAuth)
+            {
+                if (options.ContainsKey("session_id"))
+                {
+                    if (!(options["session_id"] is string))
+                    {
+                        throw new ArgumentException("Bad option: session_id must be of type Int64", "options[\"session_id\"]");
+                    }
+
+                    httpRequestMessage.Headers.Add("X-FilesApi-Auth", options["session_id"].ToString());
+                }
+                else if (options.ContainsKey("api_key"))
+                {
+                    if (!(options["api_key"] is string))
+                    {
+                        throw new ArgumentException("Bad option: api_key must be of type string", "options[\"api_key\"]");
+                    }
+
+                    httpRequestMessage.Headers.Add("X-FilesApi-Key", (string) options["api_key"]);
+                }
+                else if (filesClient.SessionId != null && filesClient.SessionId.Length > 0)
+                {
+                    httpRequestMessage.Headers.Add("X-FilesApi-Auth", filesClient.SessionId.ToString());
+                }
+                else if (filesClient.ApiKey != null && filesClient.ApiKey.Length > 0)
+                {
+                    httpRequestMessage.Headers.Add("X-FilesApi-Key", filesClient.ApiKey);
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Authentication required for API request: {verb} {uri}");
+                }
+            }
 
             log.Info($"Sending {verb} request: {uri}");
             log.Debug($"content: {jsonString}");

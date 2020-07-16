@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Files.com</id>
-    <version>0.0.8.97</version>
+    <version>0.0.9.23</version>
     <authors>Files.com - support@files.com - https://www.files.com/</authors>
     <owners>Files.com</owners>
     <title>Files.com Client</title>

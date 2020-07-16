@@ -23,7 +23,7 @@ namespace files_cli.Commands
 
         public override async Task<int> RunAsync(string[] remainingArguments)
         {
-            var result = await RemoteFile.UploadFile(LocalPath, Path);
+            var result = await RemoteFile.UploadFile(LocalPath, Path, await GetOptions());
             Console.WriteLine(result);
 
             return 0;

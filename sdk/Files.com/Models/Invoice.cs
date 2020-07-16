@@ -11,32 +11,91 @@ namespace Files.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public Invoice()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("amount", null);
-            this.attributes.Add("balance", null);
-            this.attributes.Add("created_at", null);
-            this.attributes.Add("currency", null);
-            this.attributes.Add("download_uri", null);
-            this.attributes.Add("invoice_line_items", new string[0]);
-            this.attributes.Add("method", null);
-            this.attributes.Add("payment_line_items", new string[0]);
-            this.attributes.Add("payment_reversed_at", null);
-            this.attributes.Add("payment_type", null);
-            this.attributes.Add("site_name", null);
-            this.attributes.Add("type", null);
-            this.attributes.Add("updated_at", null);
-        }
+        public Invoice() : this(null, null) { }
 
         public Invoice(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("amount"))
+            {
+                this.attributes.Add("amount", null);
+            }
+            if (!this.attributes.ContainsKey("balance"))
+            {
+                this.attributes.Add("balance", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("currency"))
+            {
+                this.attributes.Add("currency", null);
+            }
+            if (!this.attributes.ContainsKey("download_uri"))
+            {
+                this.attributes.Add("download_uri", null);
+            }
+            if (!this.attributes.ContainsKey("invoice_line_items"))
+            {
+                this.attributes.Add("invoice_line_items", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("method"))
+            {
+                this.attributes.Add("method", null);
+            }
+            if (!this.attributes.ContainsKey("payment_line_items"))
+            {
+                this.attributes.Add("payment_line_items", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("payment_reversed_at"))
+            {
+                this.attributes.Add("payment_reversed_at", null);
+            }
+            if (!this.attributes.ContainsKey("payment_type"))
+            {
+                this.attributes.Add("payment_type", null);
+            }
+            if (!this.attributes.ContainsKey("site_name"))
+            {
+                this.attributes.Add("site_name", null);
+            }
+            if (!this.attributes.ContainsKey("type"))
+            {
+                this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Line item Id

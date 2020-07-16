@@ -17,26 +17,67 @@ namespace Files.Models
             return Request.Create((string)attributes["path"], attributes, options);
         }
 
-        public Request()
-        {
-            this.attributes = new Dictionary<string, object>();
-            this.options = new Dictionary<string, object>();
-
-            this.attributes.Add("id", null);
-            this.attributes.Add("path", null);
-            this.attributes.Add("source", null);
-            this.attributes.Add("destination", null);
-            this.attributes.Add("automation_id", null);
-            this.attributes.Add("user_display_name", null);
-            this.attributes.Add("user_ids", null);
-            this.attributes.Add("group_ids", null);
-        }
+        public Request() : this(null, null) { }
 
         public Request(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
+
+            if (this.attributes == null)
+            {
+                this.attributes = new Dictionary<string, object>();
+            }
+
+            if (this.options == null)
+            {
+                this.options = new Dictionary<string, object>();
+            }
+
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("source"))
+            {
+                this.attributes.Add("source", null);
+            }
+            if (!this.attributes.ContainsKey("destination"))
+            {
+                this.attributes.Add("destination", null);
+            }
+            if (!this.attributes.ContainsKey("automation_id"))
+            {
+                this.attributes.Add("automation_id", null);
+            }
+            if (!this.attributes.ContainsKey("user_display_name"))
+            {
+                this.attributes.Add("user_display_name", null);
+            }
+            if (!this.attributes.ContainsKey("user_ids"))
+            {
+                this.attributes.Add("user_ids", null);
+            }
+            if (!this.attributes.ContainsKey("group_ids"))
+            {
+                this.attributes.Add("group_ids", null);
+            }
         }
+
+        public object GetOption(string name)
+        {
+            return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        public void SetOption(string name, object value)
+        {
+            this.options[name] = value;
+        }
+
 
         /// <summary>
         /// Request ID
@@ -118,50 +159,6 @@ namespace Files.Models
             set { attributes["group_ids"] = value; }
         }
 
-        /// <summary>
-        /// List Requests
-        ///
-        /// Parameters:
-        ///   page - int64 - Current page number.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
-        ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
-        /// </summary>
-        public async Task<Request[]> Folders(Dictionary<string, object> parameters)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["path"] = attributes["path"];
-
-            if (!attributes.ContainsKey("path")) {
-                throw new ArgumentException("Current object doesn't have a path");
-            }
-            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
-            }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
-            }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
-            }
-            if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool ))
-            {
-                throw new ArgumentException("Bad parameter: mine must be of type bool", "parameters[\"mine\"]");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-
-            string responseJson = await FilesClient.SendRequest($"/requests/folders/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Request[]>(responseJson);
-        }
-
-
 
         public async Task Save()
         {
@@ -182,6 +179,8 @@ namespace Files.Models
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
         ///   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
@@ -207,6 +206,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
             if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: mine must be of type bool", "parameters[\"mine\"]");
@@ -231,15 +238,16 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// List Requests
-        ///
         /// Parameters:
         ///   page - int64 - Current page number.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
+        ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
+        ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
-        public static async Task<Request[]> Folders(
+        public static async Task<Request[]> FindFolder(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -261,6 +269,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
             if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: mine must be of type bool", "parameters[\"mine\"]");
@@ -269,8 +285,12 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
 
-            string responseJson = await FilesClient.SendRequest($"/requests/folders/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/requests/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Request[]>(responseJson);
         }

@@ -23,7 +23,7 @@
 ## Show Style
 
 ```
-Task<Style> Style.List(
+Task<Style> Style.Find(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
