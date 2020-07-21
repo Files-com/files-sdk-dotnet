@@ -7,6 +7,7 @@
   "name": "",
   "extended_description": "",
   "documentation_links": "Important Info => http://files.test/learn-more",
+  "icon_url": "",
   "logo_url": "",
   "logo_thumbnail_url": "",
   "sso_strategy_type": "",
@@ -21,6 +22,7 @@
 * `name` / `Name`  (string): Name of the App
 * `extended_description` / `ExtendedDescription`  (string): Long form description of the App
 * `documentation_links` / `DocumentationLinks`  (string): Collection of named links to documentation
+* `icon_url` / `IconUrl`  (string): App icon
 * `logo_url` / `LogoUrl`  (string): Full size logo for the App
 * `logo_thumbnail_url` / `LogoThumbnailUrl`  (string): Logo thumbnail for the App
 * `sso_strategy_type` / `SsoStrategyType`  (string): Associated SSO Strategy type, if any

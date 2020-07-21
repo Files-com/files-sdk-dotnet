@@ -40,6 +40,10 @@ namespace Files.Models
             {
                 this.attributes.Add("documentation_links", null);
             }
+            if (!this.attributes.ContainsKey("icon_url"))
+            {
+                this.attributes.Add("icon_url", null);
+            }
             if (!this.attributes.ContainsKey("logo_url"))
             {
                 this.attributes.Add("logo_url", null);
@@ -110,6 +114,15 @@ namespace Files.Models
         public string DocumentationLinks
         {
             get { return (string) attributes["documentation_links"]; }
+        }
+
+        /// <summary>
+        /// App icon
+        /// </summary>
+        [JsonPropertyName("icon_url")]
+        public string IconUrl
+        {
+            get { return (string) attributes["icon_url"]; }
         }
 
         /// <summary>
