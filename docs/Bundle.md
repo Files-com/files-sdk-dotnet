@@ -9,6 +9,7 @@
   "description": "The public description of the bundle.",
   "password_protected": true,
   "require_registration": true,
+  "require_share_recipient": true,
   "clickwrap_body": "[Legal text]",
   "id": 1,
   "created_at": "2000-01-01T01:00:00Z",
@@ -30,6 +31,7 @@
 * `description` / `Description`  (string): Public description
 * `password_protected` / `PasswordProtected`  (bool): Is this bundle password protected?
 * `require_registration` / `RequireRegistration`  (bool): Show a registration page that captures the downloader's name and email address?
+* `require_share_recipient` / `RequireShareRecipient`  (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 * `clickwrap_body` / `ClickwrapBody`  (string): Legal text that must be agreed to prior to accessing Bundle.
 * `id` / `Id`  (Nullable<Int64>): Bundle ID
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
@@ -114,6 +116,7 @@ Task<Bundle> Bundle.Create(
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
+* `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 
 
 ---
@@ -151,14 +154,15 @@ Task<Bundle> Bundle.Update(
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
 * `password` (string): Password for this bundle.
-* `expires_at` (string): Bundle expiration date/time
-* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
-* `description` (string): Public description
-* `note` (string): Bundle internal note
-* `code` (string): Bundle code.  This code forms the end part of the Public URL.
-* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
+* `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `description` (string): Public description
+* `expires_at` (string): Bundle expiration date/time
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
+* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `note` (string): Bundle internal note
+* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
+* `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 
 
 ---
@@ -210,14 +214,15 @@ var Bundle = Bundle.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("password", "Password");
-parameters.Add("expires_at", "2000-01-01T01:00:00Z");
-parameters.Add("max_uses", 1);
-parameters.Add("description", "The public description of the bundle.");
-parameters.Add("note", "The internal note on the bundle.");
-parameters.Add("code", "abc123");
-parameters.Add("require_registration", true);
 parameters.Add("clickwrap_id", 1);
+parameters.Add("code", "abc123");
+parameters.Add("description", "The public description of the bundle.");
+parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("inbox_id", 1);
+parameters.Add("max_uses", 1);
+parameters.Add("note", "The internal note on the bundle.");
+parameters.Add("require_registration", true);
+parameters.Add("require_share_recipient", true);
 
 Bundle.Update(parameters);
 ```
@@ -226,14 +231,15 @@ Bundle.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
 * `password` (string): Password for this bundle.
-* `expires_at` (string): Bundle expiration date/time
-* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
-* `description` (string): Public description
-* `note` (string): Bundle internal note
-* `code` (string): Bundle code.  This code forms the end part of the Public URL.
-* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
+* `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `description` (string): Public description
+* `expires_at` (string): Bundle expiration date/time
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
+* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `note` (string): Bundle internal note
+* `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
+* `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 
 
 ---

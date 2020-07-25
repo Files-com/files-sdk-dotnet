@@ -48,6 +48,10 @@ namespace Files.Models
             {
                 this.attributes.Add("require_registration", null);
             }
+            if (!this.attributes.ContainsKey("require_share_recipient"))
+            {
+                this.attributes.Add("require_share_recipient", null);
+            }
             if (!this.attributes.ContainsKey("clickwrap_body"))
             {
                 this.attributes.Add("clickwrap_body", null);
@@ -157,6 +161,16 @@ namespace Files.Models
         {
             get { return (bool) attributes["require_registration"]; }
             set { attributes["require_registration"] = value; }
+        }
+
+        /// <summary>
+        /// Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        /// </summary>
+        [JsonPropertyName("require_share_recipient")]
+        public bool RequireShareRecipient
+        {
+            get { return (bool) attributes["require_share_recipient"]; }
+            set { attributes["require_share_recipient"] = value; }
         }
 
         /// <summary>
@@ -323,14 +337,15 @@ namespace Files.Models
         /// <summary>
         /// Parameters:
         ///   password - string - Password for this bundle.
-        ///   expires_at - string - Bundle expiration date/time
-        ///   max_uses - int64 - Maximum number of times bundle can be accessed
-        ///   description - string - Public description
-        ///   note - string - Bundle internal note
-        ///   code - string - Bundle code.  This code forms the end part of the Public URL.
-        ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
+        ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   description - string - Public description
+        ///   expires_at - string - Bundle expiration date/time
         ///   inbox_id - int64 - ID of the associated inbox, if available.
+        ///   max_uses - int64 - Maximum number of times bundle can be accessed
+        ///   note - string - Bundle internal note
+        ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
+        ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
         /// </summary>
         public async Task<Bundle> Update(Dictionary<string, object> parameters)
         {
@@ -348,37 +363,41 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
             }
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            if (parameters.ContainsKey("clickwrap_id") && !(parameters["clickwrap_id"] is Nullable<Int64> ))
             {
-                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
-            }
-            if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
-            }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
-            }
-            if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+                throw new ArgumentException("Bad parameter: clickwrap_id must be of type Nullable<Int64>", "parameters[\"clickwrap_id\"]");
             }
             if (parameters.ContainsKey("code") && !(parameters["code"] is string ))
             {
                 throw new ArgumentException("Bad parameter: code must be of type string", "parameters[\"code\"]");
             }
-            if (parameters.ContainsKey("require_registration") && !(parameters["require_registration"] is bool ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
             {
-                throw new ArgumentException("Bad parameter: require_registration must be of type bool", "parameters[\"require_registration\"]");
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("clickwrap_id") && !(parameters["clickwrap_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
-                throw new ArgumentException("Bad parameter: clickwrap_id must be of type Nullable<Int64>", "parameters[\"clickwrap_id\"]");
+                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
+            }
+            if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
+            }
+            if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+            }
+            if (parameters.ContainsKey("require_registration") && !(parameters["require_registration"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: require_registration must be of type bool", "parameters[\"require_registration\"]");
+            }
+            if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -572,6 +591,7 @@ namespace Files.Models
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
+        ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
         /// </summary>
         public static async Task<Bundle> Create(
             
@@ -625,6 +645,10 @@ namespace Files.Models
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
+            }
+            if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
             }
             if (!parameters.ContainsKey("paths") || parameters["paths"] == null)
             {
@@ -684,14 +708,15 @@ namespace Files.Models
         /// <summary>
         /// Parameters:
         ///   password - string - Password for this bundle.
-        ///   expires_at - string - Bundle expiration date/time
-        ///   max_uses - int64 - Maximum number of times bundle can be accessed
-        ///   description - string - Public description
-        ///   note - string - Bundle internal note
-        ///   code - string - Bundle code.  This code forms the end part of the Public URL.
-        ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
+        ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   description - string - Public description
+        ///   expires_at - string - Bundle expiration date/time
         ///   inbox_id - int64 - ID of the associated inbox, if available.
+        ///   max_uses - int64 - Maximum number of times bundle can be accessed
+        ///   note - string - Bundle internal note
+        ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
+        ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
         /// </summary>
         public static async Task<Bundle> Update(
             Nullable<Int64> id, 
@@ -711,37 +736,41 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
             }
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            if (parameters.ContainsKey("clickwrap_id") && !(parameters["clickwrap_id"] is Nullable<Int64> ))
             {
-                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
-            }
-            if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
-            }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
-            }
-            if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+                throw new ArgumentException("Bad parameter: clickwrap_id must be of type Nullable<Int64>", "parameters[\"clickwrap_id\"]");
             }
             if (parameters.ContainsKey("code") && !(parameters["code"] is string ))
             {
                 throw new ArgumentException("Bad parameter: code must be of type string", "parameters[\"code\"]");
             }
-            if (parameters.ContainsKey("require_registration") && !(parameters["require_registration"] is bool ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
             {
-                throw new ArgumentException("Bad parameter: require_registration must be of type bool", "parameters[\"require_registration\"]");
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("clickwrap_id") && !(parameters["clickwrap_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
-                throw new ArgumentException("Bad parameter: clickwrap_id must be of type Nullable<Int64>", "parameters[\"clickwrap_id\"]");
+                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
+            }
+            if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
+            }
+            if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+            }
+            if (parameters.ContainsKey("require_registration") && !(parameters["require_registration"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: require_registration must be of type bool", "parameters[\"require_registration\"]");
+            }
+            if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
