@@ -5,7 +5,7 @@
 ```
 {
   "id": 1,
-  "path": "path",
+  "path": "",
   "group_id": 1,
   "group_name": "",
   "notify_user_actions": true,
@@ -15,7 +15,7 @@
   "unsubscribed_reason": "",
   "user_id": 1,
   "username": "User",
-  "suppressed_email": "suppressed_email"
+  "suppressed_email": true
 }
 ```
 
