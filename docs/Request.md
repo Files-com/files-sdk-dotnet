@@ -29,7 +29,7 @@
 
 ```
 Task<Request[]> Request.List(
-    string path, 
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -51,7 +51,7 @@ Task<Request[]> Request.List(
 ## List Requests
 
 ```
-Task<Request[]> Request.FindFolder(
+Task<Request[]> Request.GetFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -75,7 +75,7 @@ Task<Request[]> Request.FindFolder(
 
 ```
 Task<Request> Request.Create(
-    string path, 
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -99,6 +99,24 @@ Task<Request> Request.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Request ID.
+
+
+---
+
+## Delete Request
+
+```
+var Request = Request.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+Request.Delete
 ```
 
 ### Parameters

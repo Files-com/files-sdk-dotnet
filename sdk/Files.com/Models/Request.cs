@@ -164,10 +164,39 @@ namespace Files.Models
             set { attributes["group_ids"] = value; }
         }
 
+        /// <summary>
+        /// </summary>
+        public async Task<Request> Delete(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id")) {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/requests/{attributes["id"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
+
+            return JsonSerializer.Deserialize<Request>(responseJson);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
 
         public async Task Save()
         {
-            if (this.attributes["path"] != null)
+            if (this.attributes["id"] != null)
             {
                 throw new NotImplementedException("The Request object doesn't support updates.");
             }
@@ -189,7 +218,7 @@ namespace Files.Models
         ///   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
         public static async Task<Request[]> List(
-            string path, 
+            
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -197,7 +226,6 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
             if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
@@ -233,12 +261,12 @@ namespace Files.Models
         }
 
         public static async Task<Request[]> All(
-            string path, 
+            
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(path, parameters, options);
+            return await List(parameters, options);
         }
 
         /// <summary>
@@ -251,7 +279,7 @@ namespace Files.Models
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
         ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
-        public static async Task<Request[]> FindFolder(
+        public static async Task<Request[]> GetFolder(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -308,7 +336,7 @@ namespace Files.Models
         ///   group_ids - string - A list of group IDs to request the file from. If sent as a string, it should be comma-delimited.
         /// </summary>
         public static async Task<Request> Create(
-            string path, 
+            
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -316,7 +344,6 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -349,8 +376,6 @@ namespace Files.Models
 
 
         /// <summary>
-        /// Parameters:
-        ///   id (required) - int64 - Request ID.
         /// </summary>
         public static async Task<Request> Delete(
             Nullable<Int64> id, 

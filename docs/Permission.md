@@ -31,7 +31,7 @@
 
 ```
 Task<Permission[]> Permission.List(
-    string path, 
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -62,7 +62,7 @@ Task<Permission[]> Permission.List(
 
 ```
 Task<Permission> Permission.Create(
-    string path, 
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -88,6 +88,24 @@ Task<Permission> Permission.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Permission ID.
+
+
+---
+
+## Delete Permission
+
+```
+var Permission = Permission.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+Permission.Delete
 ```
 
 ### Parameters

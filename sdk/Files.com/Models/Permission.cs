@@ -164,10 +164,39 @@ namespace Files.Models
             set { attributes["recursive"] = value; }
         }
 
+        /// <summary>
+        /// </summary>
+        public async Task<Permission> Delete(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id")) {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/permissions/{attributes["id"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
+
+            return JsonSerializer.Deserialize<Permission>(responseJson);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
 
         public async Task Save()
         {
-            if (this.attributes["path"] != null)
+            if (this.attributes["id"] != null)
             {
                 throw new NotImplementedException("The Permission object doesn't support updates.");
             }
@@ -197,7 +226,7 @@ namespace Files.Models
         ///   include_groups - boolean - If searching by user or group, also include user's permissions that are inherited from its groups?
         /// </summary>
         public static async Task<Permission[]> List(
-            string path, 
+            
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -205,7 +234,6 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
             if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
@@ -273,12 +301,12 @@ namespace Files.Models
         }
 
         public static async Task<Permission[]> All(
-            string path, 
+            
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(path, parameters, options);
+            return await List(parameters, options);
         }
 
         /// <summary>
@@ -291,7 +319,7 @@ namespace Files.Models
         ///   username - string - User username.  Provide `username` or `user_id`
         /// </summary>
         public static async Task<Permission> Create(
-            string path, 
+            
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -299,7 +327,6 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
@@ -332,8 +359,6 @@ namespace Files.Models
 
 
         /// <summary>
-        /// Parameters:
-        ///   id (required) - int64 - Permission ID.
         /// </summary>
         public static async Task<Permission> Delete(
             Nullable<Int64> id, 
