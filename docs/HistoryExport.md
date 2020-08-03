@@ -26,7 +26,8 @@
   "query_target_user_id": 1,
   "query_target_username": "jerry",
   "query_target_platform": "windows",
-  "query_target_permission_set": "desktop_app"
+  "query_target_permission_set": "desktop_app",
+  "results_url": "https://files.com/history_results.csv"
 }
 ```
 
@@ -53,27 +54,8 @@
 * `query_target_username` / `QueryTargetUsername`  (string): If searching for Histories about API keys, this parameter restricts results to API keys created by/for this username.
 * `query_target_platform` / `QueryTargetPlatform`  (string): If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
 * `query_target_permission_set` / `QueryTargetPermissionSet`  (string): If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
+* `results_url` / `ResultsUrl`  (string): If `status` is `ready` and the query succeeded, this will be a URL where all the results can be downloaded at once as a CSV.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-
-
----
-
-## List History Exports
-
-```
-Task<HistoryExport[]> HistoryExport.List(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `page` (Nullable<Int64>): Current page number.
-* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `action` (string): Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
 
 
 ---
@@ -129,38 +111,3 @@ Task<HistoryExport> HistoryExport.Create(
 * `query_target_username` (string): If searching for Histories about API keys, this parameter restricts results to API keys created by/for this username.
 * `query_target_platform` (string): If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
 * `query_target_permission_set` (string): If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
-
-
----
-
-## Delete History Export
-
-```
-Task<HistoryExport> HistoryExport.Delete(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - History Export ID.
-
-
----
-
-## Delete History Export
-
-```
-var HistoryExport = HistoryExport.ListFor(path)[0];
-
-var parameters = new Dictionary<string, object>();
-
-
-HistoryExport.Delete
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - History Export ID.
