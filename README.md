@@ -37,7 +37,7 @@ In the app.config or web.config of a .NET application, add the following section
 ### appsettings.json
 
 TODO: Add appsettings.json support for .NET CORE
-   
+
 ### Per-Instance API Key
 
 When instantiating a client, FilesConfiguration can be set directly:
@@ -61,9 +61,9 @@ or you may set them on a config object for per-session configuration.
 * `MaxNetworkRetries` - max retries (default: 3)
 * `MaxNetworkRetryDelay` - max retry delay in seconds (default: 2)
 
+
 ## Getting Support
 
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
 Just email support@files.com and we'll get the process started.
-
