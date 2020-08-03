@@ -220,15 +220,8 @@ namespace Files.Models
 
         public async Task Save()
         {
-            if (this.attributes["path"] != null)
-            {
-                throw new NotImplementedException("The Lock object doesn't support updates.");
-            }
-            else
-            {
-                var newObj = await Lock.Create(this.attributes, this.options);
-                this.attributes = newObj.getAttributes();
-            }
+            var newObj = await Lock.Create(Path, this.attributes, this.options);
+            this.attributes = newObj.getAttributes();
         }
 
         /// <summary>

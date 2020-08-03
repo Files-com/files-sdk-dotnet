@@ -650,15 +650,8 @@ namespace Files.Models
 
         public async Task Save()
         {
-            if (this.attributes["path"] != null)
-            {
-                await this.Update(this.attributes);
-            }
-            else
-            {
-                var newObj = await RemoteFile.Create(this.attributes, this.options);
-                this.attributes = newObj.getAttributes();
-            }
+            var newObj = await RemoteFile.Create(Path, this.attributes, this.options);
+            this.attributes = newObj.getAttributes();
         }
 
         /// <summary>

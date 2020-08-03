@@ -293,15 +293,8 @@ namespace Files.Models
 
         public async Task Save()
         {
-            if (this.attributes["path"] != null)
-            {
-                throw new NotImplementedException("The Folder object doesn't support updates.");
-            }
-            else
-            {
-                var newObj = await Folder.Create(this.attributes, this.options);
-                this.attributes = newObj.getAttributes();
-            }
+            var newObj = await Folder.Create(Path, this.attributes, this.options);
+            this.attributes = newObj.getAttributes();
         }
 
         /// <summary>
