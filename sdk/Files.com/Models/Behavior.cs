@@ -54,6 +54,11 @@ namespace Files.Models
             }
         }
 
+        public Dictionary<string, object> getAttributes()
+        {
+            return new Dictionary<string, object>(this.attributes);
+        }
+
         public object GetOption(string name)
         {
             return (this.options.ContainsKey(name) ? this.options[name] : null);
@@ -209,9 +214,8 @@ namespace Files.Models
             }
             else
             {
-                // TODO: Remove this cast after return types are implemented
-                var newObj = (Behavior) await Behavior.Create(this.attributes, this.options);
-                this.attributes = newObj.attributes;
+                var newObj = await Behavior.Create(this.attributes, this.options);
+                this.attributes = newObj.getAttributes();
             }
         }
 

@@ -38,6 +38,11 @@ namespace Files.Models
             }
         }
 
+        public Dictionary<string, object> getAttributes()
+        {
+            return new Dictionary<string, object>(this.attributes);
+        }
+
         public object GetOption(string name)
         {
             return (this.options.ContainsKey(name) ? this.options[name] : null);
