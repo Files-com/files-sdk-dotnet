@@ -34,9 +34,11 @@ In the app.config or web.config of a .NET application, add the following section
         <filesConfiguration ApiKey="my-key" />
     </files.com>
 
+
 ### appsettings.json
 
 TODO: Add appsettings.json support for .NET CORE
+
 
 ### Per-Instance API Key
 
@@ -47,6 +49,7 @@ When instantiating a client, FilesConfiguration can be set directly:
     FilesConfiguration filesConfig = new FilesConfiguration();
     filesConfig.ApiKey = "my-key";
     FilesClient client = new FilesClient(filesConfig);
+
 
 ### Files Configuration
 
