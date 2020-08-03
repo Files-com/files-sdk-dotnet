@@ -7,7 +7,7 @@
     <owners>Files.com</owners>
     <title>Files.com Client</title>
     <description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</description>
-    <projectUrl>https://developers.files.com/</projectUrl>
+    <projectUrl>https://github.com/Files-com/files-sdk-dotnet/tree/master/sdk/Files.com</projectUrl>
     <language>en-US</language>
     <icon>icon.png</icon>
     <dependencies>
@@ -26,7 +26,7 @@
     <license type="expression">MIT</license>
     <copyright>Copyright 2020</copyright>
     <releaseNotes>
-      Initial pre-alpha
+      This release contains bug fixes and the latest features from Files.com.
     </releaseNotes>
     <tags>Files Files.com FTP SFTP SCP WebDAV</tags>
   </metadata>
