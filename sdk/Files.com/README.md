@@ -21,6 +21,7 @@ Fetch the dependencies:
 
 There are multiple ways to authenticate to the API.
 
+
 ### app.config/web.config
 
 In the app.config or web.config of a .NET application, add the following section:
