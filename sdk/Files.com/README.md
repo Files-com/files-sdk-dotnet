@@ -15,6 +15,7 @@ Fetch the dependencies:
  * .NET Standard 2.0
  * .NET Framework 4.7
 
+
 ## Usage
 
 ### Authentication
