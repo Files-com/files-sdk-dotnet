@@ -2,6 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <PackageId>Files.com</PackageId>
+    <PackageVersion>0.0.9.26</PackageVersion>
+    <Authors>Files.com - support@files.com - https://www.files.com/</Authors>
+    <Title>Files.com Client</Title>
+    <Description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</Description>
+    <Copyright>Copyright 2020</Copyright>
+    <PackageProjectUrl>https://github.com/Files-com/files-sdk-dotnet/tree/master/sdk/Files.com</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReleaseNotes>
+      Initial Release
+    </PackageReleaseNotes>
+    <PackageTags>Files Files.com FTP SFTP SCP WebDAV</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,5 +34,8 @@
     <Compile Remove="Models\permission.cs" />
     <Compile Remove="Models\file.cs" />
     <Compile Remove="Models\lock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
