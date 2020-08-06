@@ -20,6 +20,7 @@ Fetch the dependencies:
 
 ## Usage
 
+
 ### Authentication
 
 There are multiple ways to authenticate to the API.
