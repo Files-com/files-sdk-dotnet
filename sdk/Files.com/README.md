@@ -75,3 +75,4 @@ or you may set them on a config object for per-session configuration.
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
 Just email support@files.com and we'll get the process started.
+
