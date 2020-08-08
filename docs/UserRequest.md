@@ -4,14 +4,12 @@
 
 ```
 {
-  "id": 1,
   "name": "John Doe",
   "email": "john.doe@files.com",
   "details": "Changed Departments"
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): ID
 * `name` / `Name`  (string): User's full name
 * `email` / `Email`  (string): User email address
 * `details` / `Details`  (string): Details of the user's request
