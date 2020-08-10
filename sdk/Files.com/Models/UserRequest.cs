@@ -28,6 +28,10 @@ namespace Files.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -57,6 +61,16 @@ namespace Files.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// ID
+        /// </summary>
+        [JsonPropertyName("id")]
+        public Nullable<Int64> Id
+        {
+            get { return (Nullable<Int64>) attributes["id"]; }
+            set { attributes["id"] = value; }
+        }
 
         /// <summary>
         /// User's full name
