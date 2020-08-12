@@ -60,6 +60,10 @@ namespace Files.Models
             {
                 this.attributes.Add("next_partsize", null);
             }
+            if (!this.attributes.ContainsKey("parallel_parts"))
+            {
+                this.attributes.Add("parallel_parts", null);
+            }
             if (!this.attributes.ContainsKey("parameters"))
             {
                 this.attributes.Add("parameters", null);
@@ -172,6 +176,15 @@ namespace Files.Models
         public string NextPartsize
         {
             get { return (string) attributes["next_partsize"]; }
+        }
+
+        /// <summary>
+        /// If true, parts may be uploaded in parallel
+        /// </summary>
+        [JsonPropertyName("parallel_parts")]
+        public bool ParallelParts
+        {
+            get { return (bool) attributes["parallel_parts"]; }
         }
 
         /// <summary>
