@@ -354,7 +354,6 @@ namespace Files.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action - string - Deprecated: If set to `count` returns a count of matching records rather than the records themselves.
         ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
-        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `created_at`.
         ///   history_export_id (required) - int64 - ID of the associated history export.
         /// </summary>
         public static async Task<HistoryExportResult[]> List(
@@ -385,10 +384,6 @@ namespace Files.Models
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
-            }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
-            {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
             if (parameters.ContainsKey("history_export_id") && !(parameters["history_export_id"] is Nullable<Int64> ))
             {

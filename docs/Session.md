@@ -10,7 +10,7 @@
   "login_token_domain": "https://mysite.files.com",
   "max_dir_listing_size": 1,
   "multiple_regions": true,
-  "read_only": "en",
+  "read_only": true,
   "root_path": "",
   "site_id": 1,
   "ssl_required": true,

@@ -210,9 +210,9 @@ namespace Files.Models
         /// Return results that are actions performed by the user indiciated by this User ID
         /// </summary>
         [JsonPropertyName("query_user_id")]
-        public Nullable<Int64> QueryUserId
+        public string QueryUserId
         {
-            get { return (Nullable<Int64>) attributes["query_user_id"]; }
+            get { return (string) attributes["query_user_id"]; }
             set { attributes["query_user_id"] = value; }
         }
 
@@ -220,9 +220,9 @@ namespace Files.Models
         /// Return results that are file actions related to the file indicated by this File ID
         /// </summary>
         [JsonPropertyName("query_file_id")]
-        public Nullable<Int64> QueryFileId
+        public string QueryFileId
         {
-            get { return (Nullable<Int64>) attributes["query_file_id"]; }
+            get { return (string) attributes["query_file_id"]; }
             set { attributes["query_file_id"] = value; }
         }
 
@@ -230,9 +230,9 @@ namespace Files.Models
         /// Return results that are file actions inside the parent folder specified by this folder ID
         /// </summary>
         [JsonPropertyName("query_parent_id")]
-        public Nullable<Int64> QueryParentId
+        public string QueryParentId
         {
-            get { return (Nullable<Int64>) attributes["query_parent_id"]; }
+            get { return (string) attributes["query_parent_id"]; }
             set { attributes["query_parent_id"] = value; }
         }
 
@@ -310,9 +310,9 @@ namespace Files.Models
         /// If searching for Histories about specific objects (such as Users, or API Keys), this paremeter restricts results to objects that match this ID.
         /// </summary>
         [JsonPropertyName("query_target_id")]
-        public Nullable<Int64> QueryTargetId
+        public string QueryTargetId
         {
-            get { return (Nullable<Int64>) attributes["query_target_id"]; }
+            get { return (string) attributes["query_target_id"]; }
             set { attributes["query_target_id"] = value; }
         }
 
@@ -340,9 +340,9 @@ namespace Files.Models
         /// If searching for Histories about API keys, this parameter restricts results to API keys created by/for this user ID.
         /// </summary>
         [JsonPropertyName("query_target_user_id")]
-        public Nullable<Int64> QueryTargetUserId
+        public string QueryTargetUserId
         {
-            get { return (Nullable<Int64>) attributes["query_target_user_id"]; }
+            get { return (string) attributes["query_target_user_id"]; }
             set { attributes["query_target_user_id"] = value; }
         }
 
@@ -454,9 +454,9 @@ namespace Files.Models
         ///   end_at - string - End date/time of export range.
         ///   query_action - string - Filter results by this this action type. Valid values: `create`, `read`, `update`, `destroy`, `move`, `login`, `failedlogin`, `copy`, `user_create`, `user_update`, `user_destroy`, `group_create`, `group_update`, `group_destroy`, `permission_create`, `permission_destroy`, `api_key_create`, `api_key_update`, `api_key_destroy`
         ///   query_interface - string - Filter results by this this interface type. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`
-        ///   query_user_id - int64 - Return results that are actions performed by the user indiciated by this User ID
-        ///   query_file_id - int64 - Return results that are file actions related to the file indicated by this File ID
-        ///   query_parent_id - int64 - Return results that are file actions inside the parent folder specified by this folder ID
+        ///   query_user_id - string - Return results that are actions performed by the user indiciated by this User ID
+        ///   query_file_id - string - Return results that are file actions related to the file indicated by this File ID
+        ///   query_parent_id - string - Return results that are file actions inside the parent folder specified by this folder ID
         ///   query_path - string - Return results that are file actions related to this path.
         ///   query_folder - string - Return results that are file actions related to files or folders inside this folder path.
         ///   query_src - string - Return results that are file moves originating from this path.
@@ -464,10 +464,10 @@ namespace Files.Models
         ///   query_ip - string - Filter results by this IP address.
         ///   query_username - string - Filter results by this username.
         ///   query_failure_type - string - If searching for Histories about login failures, this parameter restricts results to failures of this specific type.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`
-        ///   query_target_id - int64 - If searching for Histories about specific objects (such as Users, or API Keys), this paremeter restricts results to objects that match this ID.
+        ///   query_target_id - string - If searching for Histories about specific objects (such as Users, or API Keys), this paremeter restricts results to objects that match this ID.
         ///   query_target_name - string - If searching for Histories about Users, Groups or other objects with names, this parameter restricts results to objects with this name/username.
         ///   query_target_permission - string - If searching for Histories about Permisisons, this parameter restricts results to permissions of this level.
-        ///   query_target_user_id - int64 - If searching for Histories about API keys, this parameter restricts results to API keys created by/for this user ID.
+        ///   query_target_user_id - string - If searching for Histories about API keys, this parameter restricts results to API keys created by/for this user ID.
         ///   query_target_username - string - If searching for Histories about API keys, this parameter restricts results to API keys created by/for this username.
         ///   query_target_platform - string - If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
         ///   query_target_permission_set - string - If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
@@ -501,17 +501,17 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: query_interface must be of type string", "parameters[\"query_interface\"]");
             }
-            if (parameters.ContainsKey("query_user_id") && !(parameters["query_user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("query_user_id") && !(parameters["query_user_id"] is string ))
             {
-                throw new ArgumentException("Bad parameter: query_user_id must be of type Nullable<Int64>", "parameters[\"query_user_id\"]");
+                throw new ArgumentException("Bad parameter: query_user_id must be of type string", "parameters[\"query_user_id\"]");
             }
-            if (parameters.ContainsKey("query_file_id") && !(parameters["query_file_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("query_file_id") && !(parameters["query_file_id"] is string ))
             {
-                throw new ArgumentException("Bad parameter: query_file_id must be of type Nullable<Int64>", "parameters[\"query_file_id\"]");
+                throw new ArgumentException("Bad parameter: query_file_id must be of type string", "parameters[\"query_file_id\"]");
             }
-            if (parameters.ContainsKey("query_parent_id") && !(parameters["query_parent_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("query_parent_id") && !(parameters["query_parent_id"] is string ))
             {
-                throw new ArgumentException("Bad parameter: query_parent_id must be of type Nullable<Int64>", "parameters[\"query_parent_id\"]");
+                throw new ArgumentException("Bad parameter: query_parent_id must be of type string", "parameters[\"query_parent_id\"]");
             }
             if (parameters.ContainsKey("query_path") && !(parameters["query_path"] is string ))
             {
@@ -541,9 +541,9 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: query_failure_type must be of type string", "parameters[\"query_failure_type\"]");
             }
-            if (parameters.ContainsKey("query_target_id") && !(parameters["query_target_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("query_target_id") && !(parameters["query_target_id"] is string ))
             {
-                throw new ArgumentException("Bad parameter: query_target_id must be of type Nullable<Int64>", "parameters[\"query_target_id\"]");
+                throw new ArgumentException("Bad parameter: query_target_id must be of type string", "parameters[\"query_target_id\"]");
             }
             if (parameters.ContainsKey("query_target_name") && !(parameters["query_target_name"] is string ))
             {
@@ -553,9 +553,9 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: query_target_permission must be of type string", "parameters[\"query_target_permission\"]");
             }
-            if (parameters.ContainsKey("query_target_user_id") && !(parameters["query_target_user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("query_target_user_id") && !(parameters["query_target_user_id"] is string ))
             {
-                throw new ArgumentException("Bad parameter: query_target_user_id must be of type Nullable<Int64>", "parameters[\"query_target_user_id\"]");
+                throw new ArgumentException("Bad parameter: query_target_user_id must be of type string", "parameters[\"query_target_user_id\"]");
             }
             if (parameters.ContainsKey("query_target_username") && !(parameters["query_target_username"] is string ))
             {
