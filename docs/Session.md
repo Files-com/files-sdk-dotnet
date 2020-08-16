@@ -80,3 +80,8 @@ Task<Session> Session.Delete(
     Dictionary<string, object> options = null
 )
 ```
+
+### Parameters
+
+* `format` (string): 
+* `session` (object): 

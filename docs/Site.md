@@ -241,6 +241,11 @@ Task<Site> Site.Get(
 )
 ```
 
+### Parameters
+
+* `format` (string): 
+* `site` (object): 
+
 
 ---
 
@@ -253,6 +258,11 @@ Task<UsageSnapshot> Site.GetUsage(
     Dictionary<string, object> options = null
 )
 ```
+
+### Parameters
+
+* `format` (string): 
+* `site` (object): 
 
 
 ---
