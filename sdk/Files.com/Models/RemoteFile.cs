@@ -614,7 +614,7 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.  For legacy reasons, this parameter may also be provided as the HTTP header `Depth: Infinity`
+        ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
         /// </summary>
         public async Task<RemoteFile> Delete(Dictionary<string, object> parameters)
         {
@@ -830,7 +830,7 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.  For legacy reasons, this parameter may also be provided as the HTTP header `Depth: Infinity`
+        ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
         /// </summary>
         public static async Task<RemoteFile> Delete(
             string path, 

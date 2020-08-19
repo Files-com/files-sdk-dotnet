@@ -23,6 +23,7 @@
   "provision_groups": true,
   "deprovision_users": true,
   "deprovision_groups": true,
+  "deprovision_behavior": "disable",
   "provision_group_default": "Employees",
   "provision_group_exclusion": "Employees",
   "provision_group_inclusion": "Employees",
@@ -62,6 +63,7 @@
 * `provision_groups` / `ProvisionGroups`  (bool): Auto-provision group membership based on group memberships on the SSO side?
 * `deprovision_users` / `DeprovisionUsers`  (bool): Auto-deprovision users?
 * `deprovision_groups` / `DeprovisionGroups`  (bool): Auto-deprovision group membership based on group memberships on the SSO side?
+* `deprovision_behavior` / `DeprovisionBehavior`  (string): Method used for deprovisioning users.
 * `provision_group_default` / `ProvisionGroupDefault`  (string): Comma-separated list of group names for groups to automatically add all auto-provisioned users to.
 * `provision_group_exclusion` / `ProvisionGroupExclusion`  (string): Comma-separated list of group names for groups (with optional wildcards) that will be excluded from auto-provisioning.
 * `provision_group_inclusion` / `ProvisionGroupInclusion`  (string): Comma-separated list of group names for groups (with optional wildcards) that will be auto-provisioned.

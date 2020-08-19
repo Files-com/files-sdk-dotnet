@@ -96,6 +96,10 @@ namespace Files.Models
             {
                 this.attributes.Add("deprovision_groups", null);
             }
+            if (!this.attributes.ContainsKey("deprovision_behavior"))
+            {
+                this.attributes.Add("deprovision_behavior", null);
+            }
             if (!this.attributes.ContainsKey("provision_group_default"))
             {
                 this.attributes.Add("provision_group_default", null);
@@ -341,6 +345,15 @@ namespace Files.Models
         public bool DeprovisionGroups
         {
             get { return (bool) attributes["deprovision_groups"]; }
+        }
+
+        /// <summary>
+        /// Method used for deprovisioning users.
+        /// </summary>
+        [JsonPropertyName("deprovision_behavior")]
+        public string DeprovisionBehavior
+        {
+            get { return (string) attributes["deprovision_behavior"]; }
         }
 
         /// <summary>
