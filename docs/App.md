@@ -9,6 +9,7 @@
   "documentation_links": "Important Info => http://files.test/learn-more",
   "icon_url": "",
   "logo_url": "",
+  "screenshot_list_urls": "",
   "logo_thumbnail_url": "",
   "sso_strategy_type": "",
   "remote_server_type": "",
@@ -24,6 +25,7 @@
 * `documentation_links` / `DocumentationLinks`  (string): Collection of named links to documentation
 * `icon_url` / `IconUrl`  (string): App icon
 * `logo_url` / `LogoUrl`  (string): Full size logo for the App
+* `screenshot_list_urls` / `ScreenshotListUrls`  (string): Screenshots of the App
 * `logo_thumbnail_url` / `LogoThumbnailUrl`  (string): Logo thumbnail for the App
 * `sso_strategy_type` / `SsoStrategyType`  (string): Associated SSO Strategy type, if any
 * `remote_server_type` / `RemoteServerType`  (string): Associated Remote Server type, if any

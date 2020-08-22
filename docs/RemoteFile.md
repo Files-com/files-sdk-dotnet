@@ -4,7 +4,6 @@
 
 ```
 {
-  "id": 1,
   "path": "path/file.txt",
   "display_name": "file.txt",
   "type": "file",
@@ -24,7 +23,6 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): File/Folder ID
 * `path` / `Path`  (string): File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `display_name` / `DisplayName`  (string): File/Folder display name
 * `type` / `Type`  (string): Type: `directory` or `file`.

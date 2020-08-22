@@ -34,10 +34,6 @@ namespace Files.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("id"))
-            {
-                this.attributes.Add("id", null);
-            }
             if (!this.attributes.ContainsKey("path"))
             {
                 this.attributes.Add("path", null);
@@ -119,16 +115,6 @@ namespace Files.Models
             this.options[name] = value;
         }
 
-
-        /// <summary>
-        /// File/Folder ID
-        /// </summary>
-        [JsonPropertyName("id")]
-        public Nullable<Int64> Id
-        {
-            get { return (Nullable<Int64>) attributes["id"]; }
-            set { attributes["id"] = value; }
-        }
 
         /// <summary>
         /// File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.

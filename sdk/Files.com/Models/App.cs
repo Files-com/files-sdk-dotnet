@@ -48,6 +48,10 @@ namespace Files.Models
             {
                 this.attributes.Add("logo_url", null);
             }
+            if (!this.attributes.ContainsKey("screenshot_list_urls"))
+            {
+                this.attributes.Add("screenshot_list_urls", null);
+            }
             if (!this.attributes.ContainsKey("logo_thumbnail_url"))
             {
                 this.attributes.Add("logo_thumbnail_url", null);
@@ -137,6 +141,15 @@ namespace Files.Models
         public string LogoUrl
         {
             get { return (string) attributes["logo_url"]; }
+        }
+
+        /// <summary>
+        /// Screenshots of the App
+        /// </summary>
+        [JsonPropertyName("screenshot_list_urls")]
+        public string ScreenshotListUrls
+        {
+            get { return (string) attributes["screenshot_list_urls"]; }
         }
 
         /// <summary>

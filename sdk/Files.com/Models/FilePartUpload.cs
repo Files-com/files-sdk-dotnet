@@ -137,9 +137,9 @@ namespace Files.Models
         /// Currently unused
         /// </summary>
         [JsonPropertyName("available_parts")]
-        public string AvailableParts
+        public Nullable<Int64> AvailableParts
         {
-            get { return (string) attributes["available_parts"]; }
+            get { return (Nullable<Int64>) attributes["available_parts"]; }
         }
 
         /// <summary>
@@ -173,9 +173,9 @@ namespace Files.Models
         /// Currently unused
         /// </summary>
         [JsonPropertyName("next_partsize")]
-        public string NextPartsize
+        public Nullable<Int64> NextPartsize
         {
-            get { return (string) attributes["next_partsize"]; }
+            get { return (Nullable<Int64>) attributes["next_partsize"]; }
         }
 
         /// <summary>
@@ -191,27 +191,27 @@ namespace Files.Models
         /// Additional upload parameters
         /// </summary>
         [JsonPropertyName("parameters")]
-        public string Parameters
+        public object Parameters
         {
-            get { return (string) attributes["parameters"]; }
+            get { return (object) attributes["parameters"]; }
         }
 
         /// <summary>
         /// Currently unused
         /// </summary>
         [JsonPropertyName("part_number")]
-        public string PartNumber
+        public Nullable<Int64> PartNumber
         {
-            get { return (string) attributes["part_number"]; }
+            get { return (Nullable<Int64>) attributes["part_number"]; }
         }
 
         /// <summary>
         /// Currently unused
         /// </summary>
         [JsonPropertyName("partsize")]
-        public string Partsize
+        public Nullable<Int64> Partsize
         {
-            get { return (string) attributes["partsize"]; }
+            get { return (Nullable<Int64>) attributes["partsize"]; }
         }
 
         /// <summary>
