@@ -56,6 +56,10 @@ namespace Files.Models
             {
                 this.attributes.Add("saml_provider_issuer_url", null);
             }
+            if (!this.attributes.ContainsKey("saml_provider_metadata_content"))
+            {
+                this.attributes.Add("saml_provider_metadata_content", null);
+            }
             if (!this.attributes.ContainsKey("saml_provider_metadata_url"))
             {
                 this.attributes.Add("saml_provider_metadata_url", null);
@@ -255,6 +259,15 @@ namespace Files.Models
         public string SamlProviderIssuerUrl
         {
             get { return (string) attributes["saml_provider_issuer_url"]; }
+        }
+
+        /// <summary>
+        /// Custom identity provider metadata
+        /// </summary>
+        [JsonPropertyName("saml_provider_metadata_content")]
+        public string SamlProviderMetadataContent
+        {
+            get { return (string) attributes["saml_provider_metadata_content"]; }
         }
 
         /// <summary>
