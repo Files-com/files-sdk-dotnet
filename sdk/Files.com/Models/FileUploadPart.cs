@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Files.Models
 {
-    public class FilePartUpload
+    public class FileUploadPart
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public FilePartUpload() : this(null, null) { }
+        public FileUploadPart() : this(null, null) { }
 
-        public FilePartUpload(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public FileUploadPart(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -125,7 +125,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// If false, rename conflicting files instead of asking for overwrite confirmation
+        /// If `true`, this file exists and you may wish to ask the user for overwrite confirmation
         /// </summary>
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
@@ -134,7 +134,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Currently unused
+        /// Number of parts in the upload
         /// </summary>
         [JsonPropertyName("available_parts")]
         public Nullable<Int64> AvailableParts
@@ -143,7 +143,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Currently unused
+        /// Date/time of when this Upload part expires and the URL cannot be used any more
         /// </summary>
         [JsonPropertyName("expires")]
         public string Expires
@@ -152,7 +152,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Additional upload headers
+        /// Additional upload headers to provide as part of the upload
         /// </summary>
         [JsonPropertyName("headers")]
         public object Headers
@@ -161,7 +161,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Upload method, usually POST
+        /// HTTP Method to use for uploading the part, usually `PUT`
         /// </summary>
         [JsonPropertyName("http_method")]
         public string HttpMethod
@@ -170,7 +170,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Currently unused
+        /// Size in bytes for this part
         /// </summary>
         [JsonPropertyName("next_partsize")]
         public Nullable<Int64> NextPartsize
@@ -179,7 +179,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// If true, parts may be uploaded in parallel
+        /// If `true`, multiple parts may be uploaded in parallel.  If `false`, be sure to only upload one part at a time, in order.
         /// </summary>
         [JsonPropertyName("parallel_parts")]
         public bool ParallelParts
@@ -188,7 +188,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Additional upload parameters
+        /// Additional HTTP parameters to send with the upload
         /// </summary>
         [JsonPropertyName("parameters")]
         public object Parameters
@@ -197,7 +197,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Currently unused
+        /// Number of this upload part
         /// </summary>
         [JsonPropertyName("part_number")]
         public Nullable<Int64> PartNumber
@@ -206,7 +206,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Currently unused
+        /// Size in bytes for the next upload part
         /// </summary>
         [JsonPropertyName("partsize")]
         public Nullable<Int64> Partsize
@@ -215,7 +215,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// New file path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
         public string Path
