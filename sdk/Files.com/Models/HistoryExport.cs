@@ -177,7 +177,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Status of export.  Will be: `building` or `ready`
+        /// Status of export.  Will be: `building`, `ready`, or `failed`
         /// </summary>
         [JsonPropertyName("status")]
         public string Status

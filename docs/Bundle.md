@@ -20,6 +20,7 @@
   "username": "user",
   "clickwrap_id": 1,
   "inbox_id": 1,
+  "has_inbox": true,
   "paths": [
 
   ]
@@ -42,6 +43,7 @@
 * `username` / `Username`  (string): Bundle creator username
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` / `InboxId`  (Nullable<Int64>): ID of the associated inbox, if available.
+* `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
 * `paths` / `Paths`  (string[]): A list of paths in this bundle
 * `password` / `Password`  (string): Password for this bundle.
 

@@ -92,6 +92,10 @@ namespace Files.Models
             {
                 this.attributes.Add("inbox_id", null);
             }
+            if (!this.attributes.ContainsKey("has_inbox"))
+            {
+                this.attributes.Add("has_inbox", null);
+            }
             if (!this.attributes.ContainsKey("paths"))
             {
                 this.attributes.Add("paths", new string[0]);
@@ -275,6 +279,16 @@ namespace Files.Models
         {
             get { return (Nullable<Int64>) attributes["inbox_id"]; }
             set { attributes["inbox_id"] = value; }
+        }
+
+        /// <summary>
+        /// Does this bundle have an associated inbox?
+        /// </summary>
+        [JsonPropertyName("has_inbox")]
+        public bool HasInbox
+        {
+            get { return (bool) attributes["has_inbox"]; }
+            set { attributes["has_inbox"] = value; }
         }
 
         /// <summary>
