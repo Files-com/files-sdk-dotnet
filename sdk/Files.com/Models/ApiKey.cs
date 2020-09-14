@@ -562,7 +562,7 @@ namespace Files.Models
         ///   format - string
         ///   api_key - object
         /// </summary>
-        public static async Task<ApiKey> DeleteCurrent(
+        public static async Task<ApiKey> Current(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null

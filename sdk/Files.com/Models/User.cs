@@ -160,6 +160,10 @@ namespace Files.Models
             {
                 this.attributes.Add("require_2fa", null);
             }
+            if (!this.attributes.ContainsKey("active_2fa"))
+            {
+                this.attributes.Add("active_2fa", null);
+            }
             if (!this.attributes.ContainsKey("require_password_change"))
             {
                 this.attributes.Add("require_password_change", null);
@@ -593,6 +597,16 @@ namespace Files.Models
         {
             get { return (bool) attributes["require_2fa"]; }
             set { attributes["require_2fa"] = value; }
+        }
+
+        /// <summary>
+        /// Is 2fa required to sign in?
+        /// </summary>
+        [JsonPropertyName("active_2fa")]
+        public bool Active2fa
+        {
+            get { return (bool) attributes["active_2fa"]; }
+            set { attributes["active_2fa"] = value; }
         }
 
         /// <summary>
