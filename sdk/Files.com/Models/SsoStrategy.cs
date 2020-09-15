@@ -140,6 +140,10 @@ namespace Files.Models
             {
                 this.attributes.Add("provision_time_zone", null);
             }
+            if (!this.attributes.ContainsKey("provision_company"))
+            {
+                this.attributes.Add("provision_company", null);
+            }
             if (!this.attributes.ContainsKey("ldap_base_dn"))
             {
                 this.attributes.Add("ldap_base_dn", null);
@@ -448,6 +452,15 @@ namespace Files.Models
         public string ProvisionTimeZone
         {
             get { return (string) attributes["provision_time_zone"]; }
+        }
+
+        /// <summary>
+        /// Default company for auto provisioned users.
+        /// </summary>
+        [JsonPropertyName("provision_company")]
+        public string ProvisionCompany
+        {
+            get { return (string) attributes["provision_company"]; }
         }
 
         /// <summary>

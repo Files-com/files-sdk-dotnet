@@ -32,6 +32,7 @@
   "disable_password_reset": true,
   "domain": "my-custom-domain.com",
   "email": "john.doe@files.com",
+  "reply_to_email": "jane.doe@files.com",
   "non_sso_groups_allowed": true,
   "non_sso_users_allowed": true,
   "folder_permissions_groups_only": true,
@@ -145,6 +146,7 @@
 * `disable_password_reset` / `DisablePasswordReset`  (bool): Is password reset disabled?
 * `domain` / `Domain`  (string): Custom domain
 * `email` / `Email`  (string): Main email for this site
+* `reply_to_email` / `ReplyToEmail`  (string): Reply-to email for this site
 * `non_sso_groups_allowed` / `NonSsoGroupsAllowed`  (bool): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
 * `non_sso_users_allowed` / `NonSsoUsersAllowed`  (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
 * `folder_permissions_groups_only` / `FolderPermissionsGroupsOnly`  (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
@@ -283,6 +285,7 @@ Task<Site> Site.Update(
 * `subdomain` (string): Site subdomain
 * `domain` (string): Custom domain
 * `email` (string): Main email for this site
+* `reply_to_email` (string): Reply-to email for this site
 * `allow_bundle_names` (bool): Are manual Bundle names allowed?
 * `bundle_expiration` (Nullable<Int64>): Site-wide Bundle expiration in days
 * `overage_notify` (bool): Notify site email of overages?

@@ -140,6 +140,10 @@ namespace Files.Models
             {
                 this.attributes.Add("email", null);
             }
+            if (!this.attributes.ContainsKey("reply_to_email"))
+            {
+                this.attributes.Add("reply_to_email", null);
+            }
             if (!this.attributes.ContainsKey("non_sso_groups_allowed"))
             {
                 this.attributes.Add("non_sso_groups_allowed", null);
@@ -736,6 +740,15 @@ namespace Files.Models
         public string Email
         {
             get { return (string) attributes["email"]; }
+        }
+
+        /// <summary>
+        /// Reply-to email for this site
+        /// </summary>
+        [JsonPropertyName("reply_to_email")]
+        public string ReplyToEmail
+        {
+            get { return (string) attributes["reply_to_email"]; }
         }
 
         /// <summary>
@@ -1542,6 +1555,7 @@ namespace Files.Models
         ///   subdomain - string - Site subdomain
         ///   domain - string - Custom domain
         ///   email - string - Main email for this site
+        ///   reply_to_email - string - Reply-to email for this site
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
         ///   bundle_expiration - int64 - Site-wide Bundle expiration in days
         ///   overage_notify - boolean - Notify site email of overages?
@@ -1665,6 +1679,10 @@ namespace Files.Models
             if (parameters.ContainsKey("email") && !(parameters["email"] is string ))
             {
                 throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
+            }
+            if (parameters.ContainsKey("reply_to_email") && !(parameters["reply_to_email"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: reply_to_email must be of type string", "parameters[\"reply_to_email\"]");
             }
             if (parameters.ContainsKey("allow_bundle_names") && !(parameters["allow_bundle_names"] is bool ))
             {
