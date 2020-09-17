@@ -256,7 +256,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Inteface through which the action was taken. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`
+        /// Inteface through which the action was taken. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`, `office`
         /// </summary>
         [JsonPropertyName("interface")]
         public string Interface
