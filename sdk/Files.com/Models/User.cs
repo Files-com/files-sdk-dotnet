@@ -600,7 +600,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Is 2fa required to sign in?
+        /// Is 2fa active for the user?
         /// </summary>
         [JsonPropertyName("active_2fa")]
         public bool Active2fa

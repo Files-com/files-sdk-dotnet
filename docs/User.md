@@ -89,7 +89,7 @@
 * `public_keys_count` / `PublicKeysCount`  (Nullable<Int64>): Number of public keys associated with this user
 * `receive_admin_alerts` / `ReceiveAdminAlerts`  (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_2fa` / `Require2fa`  (bool): Is 2fa required to sign in?
-* `active_2fa` / `Active2fa`  (bool): Is 2fa required to sign in?
+* `active_2fa` / `Active2fa`  (bool): Is 2fa active for the user?
 * `require_password_change` / `RequirePasswordChange`  (bool): Is a password change required upon next user login?
 * `restapi_permission` / `RestapiPermission`  (bool): Can this user access the REST API?
 * `self_managed` / `SelfManaged`  (bool): Does this user manage it's own credentials or is it a shared/bot user?

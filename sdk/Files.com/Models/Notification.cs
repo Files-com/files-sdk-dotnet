@@ -52,6 +52,10 @@ namespace Files.Models
             {
                 this.attributes.Add("notify_on_copy", null);
             }
+            if (!this.attributes.ContainsKey("recursive"))
+            {
+                this.attributes.Add("recursive", null);
+            }
             if (!this.attributes.ContainsKey("send_interval"))
             {
                 this.attributes.Add("send_interval", null);
@@ -155,6 +159,16 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// Enable notifications for each subfolder in this path
+        /// </summary>
+        [JsonPropertyName("recursive")]
+        public bool Recursive
+        {
+            get { return (bool) attributes["recursive"]; }
+            set { attributes["recursive"] = value; }
+        }
+
+        /// <summary>
         /// The time interval that notifications are aggregated to
         /// </summary>
         [JsonPropertyName("send_interval")]
@@ -218,6 +232,7 @@ namespace Files.Models
         /// Parameters:
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
+        ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
         /// </summary>
         public async Task<Notification> Update(Dictionary<string, object> parameters)
@@ -239,6 +254,10 @@ namespace Files.Models
             if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
             {
@@ -442,6 +461,7 @@ namespace Files.Models
         ///   user_id - int64 - The id of the user to notify. Provide `user_id`, `username` or `group_id`.
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
+        ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
         ///   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
         ///   path - string - Path
@@ -467,6 +487,10 @@ namespace Files.Models
             if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
             {
@@ -495,6 +519,7 @@ namespace Files.Models
         /// Parameters:
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
+        ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
         /// </summary>
         public static async Task<Notification> Update(
@@ -518,6 +543,10 @@ namespace Files.Models
             if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
             {

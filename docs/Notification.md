@@ -10,6 +10,7 @@
   "group_name": "",
   "notify_user_actions": true,
   "notify_on_copy": true,
+  "recursive": true,
   "send_interval": "fifteen_minutes",
   "unsubscribed": true,
   "unsubscribed_reason": "",
@@ -25,6 +26,7 @@
 * `group_name` / `GroupName`  (string): Group name if applicable
 * `notify_user_actions` / `NotifyUserActions`  (bool): Trigger notification on notification user actions?
 * `notify_on_copy` / `NotifyOnCopy`  (bool): Triggers notification when moving or copying files to this path
+* `recursive` / `Recursive`  (bool): Enable notifications for each subfolder in this path
 * `send_interval` / `SendInterval`  (string): The time interval that notifications are aggregated to
 * `unsubscribed` / `Unsubscribed`  (bool): Is the user unsubscribed from this notification?
 * `unsubscribed_reason` / `UnsubscribedReason`  (string): The reason that the user unsubscribed
@@ -98,6 +100,7 @@ Task<Notification> Notification.Create(
 * `user_id` (Nullable<Int64>): The id of the user to notify. Provide `user_id`, `username` or `group_id`.
 * `notify_on_copy` (bool): If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
+* `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
 * `group_id` (Nullable<Int64>): The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
 * `path` (string): Path
@@ -121,6 +124,7 @@ Task<Notification> Notification.Update(
 * `id` (Nullable<Int64>): Required - Notification ID.
 * `notify_on_copy` (bool): If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
+* `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
 
 
@@ -152,6 +156,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("notify_on_copy", true);
 parameters.Add("notify_user_actions", true);
+parameters.Add("recursive", true);
 parameters.Add("send_interval", "daily");
 
 Notification.Update(parameters);
@@ -162,6 +167,7 @@ Notification.Update(parameters);
 * `id` (Nullable<Int64>): Required - Notification ID.
 * `notify_on_copy` (bool): If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
+* `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
 
 
