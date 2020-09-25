@@ -56,6 +56,10 @@ namespace Files.Models
             {
                 this.attributes.Add("allow_bundle_names", null);
             }
+            if (!this.attributes.ContainsKey("allowed_countries"))
+            {
+                this.attributes.Add("allowed_countries", null);
+            }
             if (!this.attributes.ContainsKey("allowed_ips"))
             {
                 this.attributes.Add("allowed_ips", null);
@@ -123,6 +127,10 @@ namespace Files.Models
             if (!this.attributes.ContainsKey("desktop_app_session_lifetime"))
             {
                 this.attributes.Add("desktop_app_session_lifetime", null);
+            }
+            if (!this.attributes.ContainsKey("disallowed_countries"))
+            {
+                this.attributes.Add("disallowed_countries", null);
             }
             if (!this.attributes.ContainsKey("disable_notifications"))
             {
@@ -554,6 +562,15 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// Comma seperated list of allowed Country codes
+        /// </summary>
+        [JsonPropertyName("allowed_countries")]
+        public string AllowedCountries
+        {
+            get { return (string) attributes["allowed_countries"]; }
+        }
+
+        /// <summary>
         /// List of allowed IP addresses
         /// </summary>
         [JsonPropertyName("allowed_ips")]
@@ -704,6 +721,15 @@ namespace Files.Models
         public Nullable<Int64> DesktopAppSessionLifetime
         {
             get { return (Nullable<Int64>) attributes["desktop_app_session_lifetime"]; }
+        }
+
+        /// <summary>
+        /// Comma seperated list of disallowed Country codes
+        /// </summary>
+        [JsonPropertyName("disallowed_countries")]
+        public string DisallowedCountries
+        {
+            get { return (string) attributes["disallowed_countries"]; }
         }
 
         /// <summary>
@@ -1581,7 +1607,9 @@ namespace Files.Models
         ///   user_lockout_within - int64 - Number of hours for user lockout window
         ///   user_lockout_lock_period - int64 - How many hours to lock user out for failed password?
         ///   include_password_in_welcome_email - boolean - Include password in emails to new users?
+        ///   allowed_countries - string - Comma seperated list of allowed Country codes
         ///   allowed_ips - string - List of allowed IP addresses
+        ///   disallowed_countries - string - Comma seperated list of disallowed Country codes
         ///   days_to_retain_backups - int64 - Number of days to keep deleted files
         ///   max_prior_passwords - int64 - Number of prior passwords to disallow
         ///   password_validity_days - int64 - Number of days password is valid
@@ -1784,9 +1812,17 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: include_password_in_welcome_email must be of type bool", "parameters[\"include_password_in_welcome_email\"]");
             }
+            if (parameters.ContainsKey("allowed_countries") && !(parameters["allowed_countries"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: allowed_countries must be of type string", "parameters[\"allowed_countries\"]");
+            }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string ))
             {
                 throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
+            }
+            if (parameters.ContainsKey("disallowed_countries") && !(parameters["disallowed_countries"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: disallowed_countries must be of type string", "parameters[\"disallowed_countries\"]");
             }
             if (parameters.ContainsKey("days_to_retain_backups") && !(parameters["days_to_retain_backups"] is Nullable<Int64> ))
             {
