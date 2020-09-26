@@ -120,6 +120,10 @@ namespace Files.Models
             {
                 this.attributes.Add("provision_group_required", null);
             }
+            if (!this.attributes.ContainsKey("provision_site_admin_groups"))
+            {
+                this.attributes.Add("provision_site_admin_groups", null);
+            }
             if (!this.attributes.ContainsKey("provision_attachments_permission"))
             {
                 this.attributes.Add("provision_attachments_permission", null);
@@ -407,6 +411,15 @@ namespace Files.Models
         public string ProvisionGroupRequired
         {
             get { return (string) attributes["provision_group_required"]; }
+        }
+
+        /// <summary>
+        /// Comma-separated list of group names whose members will be created as Site Admins.
+        /// </summary>
+        [JsonPropertyName("provision_site_admin_groups")]
+        public string ProvisionSiteAdminGroups
+        {
+            get { return (string) attributes["provision_site_admin_groups"]; }
         }
 
         /// <summary>
