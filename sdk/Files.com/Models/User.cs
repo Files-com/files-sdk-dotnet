@@ -590,12 +590,12 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Is 2fa required to sign in?
+        /// 2FA required setting
         /// </summary>
         [JsonPropertyName("require_2fa")]
-        public bool Require2fa
+        public string Require2fa
         {
-            get { return (bool) attributes["require_2fa"]; }
+            get { return (string) attributes["require_2fa"]; }
             set { attributes["require_2fa"] = value; }
         }
 
@@ -948,6 +948,7 @@ namespace Files.Models
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
+        ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
@@ -1119,6 +1120,10 @@ namespace Files.Models
             if (parameters.ContainsKey("subscribe_to_newsletter") && !(parameters["subscribe_to_newsletter"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: subscribe_to_newsletter must be of type bool", "parameters[\"subscribe_to_newsletter\"]");
+            }
+            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: require_2fa must be of type string", "parameters[\"require_2fa\"]");
             }
             if (parameters.ContainsKey("time_zone") && !(parameters["time_zone"] is string ))
             {
@@ -1363,6 +1368,7 @@ namespace Files.Models
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
+        ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
@@ -1532,6 +1538,10 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: subscribe_to_newsletter must be of type bool", "parameters[\"subscribe_to_newsletter\"]");
             }
+            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: require_2fa must be of type string", "parameters[\"require_2fa\"]");
+            }
             if (parameters.ContainsKey("time_zone") && !(parameters["time_zone"] is string ))
             {
                 throw new ArgumentException("Bad parameter: time_zone must be of type string", "parameters[\"time_zone\"]");
@@ -1676,6 +1686,7 @@ namespace Files.Models
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
+        ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
@@ -1849,6 +1860,10 @@ namespace Files.Models
             if (parameters.ContainsKey("subscribe_to_newsletter") && !(parameters["subscribe_to_newsletter"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: subscribe_to_newsletter must be of type bool", "parameters[\"subscribe_to_newsletter\"]");
+            }
+            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: require_2fa must be of type string", "parameters[\"require_2fa\"]");
             }
             if (parameters.ContainsKey("time_zone") && !(parameters["time_zone"] is string ))
             {

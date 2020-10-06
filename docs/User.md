@@ -38,7 +38,7 @@
   "password_validity_days": 1,
   "public_keys_count": 1,
   "receive_admin_alerts": true,
-  "require_2fa": true,
+  "require_2fa": "always_require",
   "active_2fa": true,
   "require_password_change": true,
   "restapi_permission": true,
@@ -88,7 +88,7 @@
 * `password_validity_days` / `PasswordValidityDays`  (Nullable<Int64>): Number of days to allow user to use the same password
 * `public_keys_count` / `PublicKeysCount`  (Nullable<Int64>): Number of public keys associated with this user
 * `receive_admin_alerts` / `ReceiveAdminAlerts`  (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
-* `require_2fa` / `Require2fa`  (bool): Is 2fa required to sign in?
+* `require_2fa` / `Require2fa`  (string): 2FA required setting
 * `active_2fa` / `Active2fa`  (bool): Is 2fa active for the user?
 * `require_password_change` / `RequirePasswordChange`  (bool): Is a password change required upon next user login?
 * `restapi_permission` / `RestapiPermission`  (bool): Can this user access the REST API?
@@ -220,6 +220,7 @@ Task<User> User.Create(
 * `ssl_required` (string): SSL required setting
 * `sso_strategy_id` (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `subscribe_to_newsletter` (bool): Is the user subscribed to the newsletter?
+* `require_2fa` (string): 2FA required setting
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
@@ -330,6 +331,7 @@ Task<User> User.Update(
 * `ssl_required` (string): SSL required setting
 * `sso_strategy_id` (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `subscribe_to_newsletter` (bool): Is the user subscribed to the newsletter?
+* `require_2fa` (string): 2FA required setting
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
@@ -447,6 +449,7 @@ parameters.Add("skip_welcome_screen", true);
 parameters.Add("ssl_required", "always_require");
 parameters.Add("sso_strategy_id", 1);
 parameters.Add("subscribe_to_newsletter", true);
+parameters.Add("require_2fa", "always_require");
 parameters.Add("time_zone", "Pacific Time (US & Canada)");
 parameters.Add("username", "user");
 
@@ -495,6 +498,7 @@ User.Update(parameters);
 * `ssl_required` (string): SSL required setting
 * `sso_strategy_id` (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `subscribe_to_newsletter` (bool): Is the user subscribed to the newsletter?
+* `require_2fa` (string): 2FA required setting
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
