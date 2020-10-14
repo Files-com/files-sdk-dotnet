@@ -12,10 +12,10 @@
   "max_connections": 1,
   "s3_bucket": "my-bucket",
   "s3_region": "us-east-1",
-  "server_certificate": "[certificate]",
+  "server_certificate": "require_match",
   "server_host_key": "[public key]",
   "server_type": "s3",
-  "ssl": "always",
+  "ssl": "if_available",
   "username": "user",
   "google_cloud_storage_bucket": "my-bucket",
   "google_cloud_storage_project_id": "my-project",
@@ -250,10 +250,10 @@ parameters.Add("max_connections", 1);
 parameters.Add("port", 1);
 parameters.Add("s3_bucket", "my-bucket");
 parameters.Add("s3_region", "us-east-1");
-parameters.Add("server_certificate", "[certificate]");
+parameters.Add("server_certificate", "require_match");
 parameters.Add("server_host_key", "[public key]");
 parameters.Add("server_type", "s3");
-parameters.Add("ssl", "always");
+parameters.Add("ssl", "if_available");
 parameters.Add("username", "user");
 parameters.Add("google_cloud_storage_bucket", "my-bucket");
 parameters.Add("google_cloud_storage_project_id", "my-project");
