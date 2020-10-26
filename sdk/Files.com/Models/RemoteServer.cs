@@ -156,6 +156,10 @@ namespace Files.Models
             {
                 this.attributes.Add("private_key", null);
             }
+            if (!this.attributes.ContainsKey("ssl_certificate"))
+            {
+                this.attributes.Add("ssl_certificate", null);
+            }
             if (!this.attributes.ContainsKey("google_cloud_storage_credentials_json"))
             {
                 this.attributes.Add("google_cloud_storage_credentials_json", null);
@@ -527,6 +531,16 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// SSL client certificate.
+        /// </summary>
+        [JsonPropertyName("ssl_certificate")]
+        public string SslCertificate
+        {
+            get { return (string) attributes["ssl_certificate"]; }
+            set { attributes["ssl_certificate"] = value; }
+        }
+
+        /// <summary>
         /// A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         /// </summary>
         [JsonPropertyName("google_cloud_storage_credentials_json")]
@@ -612,6 +626,7 @@ namespace Files.Models
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
         ///   private_key - string - Private key if needed.
+        ///   ssl_certificate - string - SSL client certificate.
         ///   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         ///   wasabi_access_key - string - Wasabi access key.
         ///   wasabi_secret_key - string - Wasabi secret key.
@@ -671,6 +686,10 @@ namespace Files.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: ssl_certificate must be of type string", "parameters[\"ssl_certificate\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_credentials_json") && !(parameters["google_cloud_storage_credentials_json"] is string ))
             {
@@ -940,6 +959,7 @@ namespace Files.Models
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
         ///   private_key - string - Private key if needed.
+        ///   ssl_certificate - string - SSL client certificate.
         ///   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         ///   wasabi_access_key - string - Wasabi access key.
         ///   wasabi_secret_key - string - Wasabi secret key.
@@ -996,6 +1016,10 @@ namespace Files.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: ssl_certificate must be of type string", "parameters[\"ssl_certificate\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_credentials_json") && !(parameters["google_cloud_storage_credentials_json"] is string ))
             {
@@ -1134,6 +1158,7 @@ namespace Files.Models
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
         ///   private_key - string - Private key if needed.
+        ///   ssl_certificate - string - SSL client certificate.
         ///   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         ///   wasabi_access_key - string - Wasabi access key.
         ///   wasabi_secret_key - string - Wasabi secret key.
@@ -1195,6 +1220,10 @@ namespace Files.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: ssl_certificate must be of type string", "parameters[\"ssl_certificate\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_credentials_json") && !(parameters["google_cloud_storage_credentials_json"] is string ))
             {
