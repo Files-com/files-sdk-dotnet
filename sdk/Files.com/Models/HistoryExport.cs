@@ -40,6 +40,14 @@ namespace Files.Models
             {
                 this.attributes.Add("end_at", null);
             }
+            if (!this.attributes.ContainsKey("export_as"))
+            {
+                this.attributes.Add("export_as", null);
+            }
+            if (!this.attributes.ContainsKey("file_export"))
+            {
+                this.attributes.Add("file_export", null);
+            }
             if (!this.attributes.ContainsKey("status"))
             {
                 this.attributes.Add("status", null);
@@ -174,6 +182,26 @@ namespace Files.Models
         {
             get { return (Nullable<DateTime>) attributes["end_at"]; }
             set { attributes["end_at"] = value; }
+        }
+
+        /// <summary>
+        /// Export format
+        /// </summary>
+        [JsonPropertyName("export_as")]
+        public string ExportAs
+        {
+            get { return (string) attributes["export_as"]; }
+            set { attributes["export_as"] = value; }
+        }
+
+        /// <summary>
+        /// Is a file export, downloadable using the results_url
+        /// </summary>
+        [JsonPropertyName("file_export")]
+        public bool FileExport
+        {
+            get { return (bool) attributes["file_export"]; }
+            set { attributes["file_export"] = value; }
         }
 
         /// <summary>
@@ -452,6 +480,7 @@ namespace Files.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   start_at - string - Start date/time of export range.
         ///   end_at - string - End date/time of export range.
+        ///   export_as - string - Export format
         ///   query_action - string - Filter results by this this action type. Valid values: `create`, `read`, `update`, `destroy`, `move`, `login`, `failedlogin`, `copy`, `user_create`, `user_update`, `user_destroy`, `group_create`, `group_update`, `group_destroy`, `permission_create`, `permission_destroy`, `api_key_create`, `api_key_update`, `api_key_destroy`
         ///   query_interface - string - Filter results by this this interface type. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`, `office`
         ///   query_user_id - string - Return results that are actions performed by the user indiciated by this User ID
@@ -492,6 +521,10 @@ namespace Files.Models
             if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string ))
             {
                 throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+            }
+            if (parameters.ContainsKey("export_as") && !(parameters["export_as"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: export_as must be of type string", "parameters[\"export_as\"]");
             }
             if (parameters.ContainsKey("query_action") && !(parameters["query_action"] is string ))
             {
