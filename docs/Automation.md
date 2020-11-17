@@ -20,7 +20,20 @@
   ],
   "group_ids": [
 
-  ]
+  ],
+  "trigger": "realtime",
+  "schedule": {
+    "days_of_week": [
+      0,
+      2,
+      4
+    ],
+    "times_of_day": [
+      "6:30",
+      "14:30"
+    ],
+    "time_zone": "Eastern Time (US & Canada)"
+  }
 }
 ```
 
@@ -37,6 +50,8 @@
 * `user_id` / `UserId`  (Nullable<Int64>): User ID of the Automation's creator.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): IDs of Groups for the Automation (i.e. who to Request File from)
+* `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+* `schedule` / `Schedule`  (object): Custom schedule description for when the automation should be run.
 
 
 ---
@@ -96,7 +111,7 @@ Task<Automation> Automation.Create(
 
 ### Parameters
 
-* `automation` (string): Required - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+* `automation` (string): Required - Automation type
 * `source` (string): Source Path
 * `destination` (string): Destination Path
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -105,6 +120,8 @@ Task<Automation> Automation.Create(
 * `path` (string): Path on which this Automation runs.  Supports globs.
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+* `schedule` (object): Custom schedule for running this automation.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
 
 
 ---
@@ -122,7 +139,7 @@ Task<Automation> Automation.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
-* `automation` (string): Required - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+* `automation` (string): Required - Automation type
 * `source` (string): Source Path
 * `destination` (string): Destination Path
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -131,6 +148,8 @@ Task<Automation> Automation.Update(
 * `path` (string): Path on which this Automation runs.  Supports globs.
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+* `schedule` (object): Custom schedule for running this automation.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
 
 
 ---
@@ -163,6 +182,8 @@ parameters.Add("automation", "create_folder");
 parameters.Add("source", "source");
 parameters.Add("destination", "destination");
 parameters.Add("interval", "year");
+parameters.Add("schedule", {"days_of_week":[0,1,3],"times_of_day":["7:30","11:30"],"time_zone":"Eastern Time (US & Canada)"});
+parameters.Add("trigger", "realtime");
 
 Automation.Update(parameters);
 ```
@@ -170,7 +191,7 @@ Automation.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
-* `automation` (string): Required - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+* `automation` (string): Required - Automation type
 * `source` (string): Source Path
 * `destination` (string): Destination Path
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -179,6 +200,8 @@ Automation.Update(parameters);
 * `path` (string): Path on which this Automation runs.  Supports globs.
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+* `schedule` (object): Custom schedule for running this automation.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
 
 
 ---

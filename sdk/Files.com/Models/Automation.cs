@@ -80,6 +80,14 @@ namespace Files.Models
             {
                 this.attributes.Add("group_ids", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("trigger"))
+            {
+                this.attributes.Add("trigger", null);
+            }
+            if (!this.attributes.ContainsKey("schedule"))
+            {
+                this.attributes.Add("schedule", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -229,8 +237,28 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+        /// </summary>
+        [JsonPropertyName("trigger")]
+        public string Trigger
+        {
+            get { return (string) attributes["trigger"]; }
+            set { attributes["trigger"] = value; }
+        }
+
+        /// <summary>
+        /// Custom schedule description for when the automation should be run.
+        /// </summary>
+        [JsonPropertyName("schedule")]
+        public object Schedule
+        {
+            get { return (object) attributes["schedule"]; }
+            set { attributes["schedule"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
-        ///   automation (required) - string - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+        ///   automation (required) - string - Automation type
         ///   source - string - Source Path
         ///   destination - string - Destination Path
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -239,6 +267,8 @@ namespace Files.Models
         ///   path - string - Path on which this Automation runs.  Supports globs.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+        ///   schedule - object - Custom schedule for running this automation.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
         {
@@ -287,6 +317,14 @@ namespace Files.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -462,7 +500,7 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
-        ///   automation (required) - string - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+        ///   automation (required) - string - Automation type
         ///   source - string - Source Path
         ///   destination - string - Destination Path
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -471,6 +509,8 @@ namespace Files.Models
         ///   path - string - Path on which this Automation runs.  Supports globs.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+        ///   schedule - object - Custom schedule for running this automation.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
         /// </summary>
         public static async Task<Automation> Create(
             
@@ -517,6 +557,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
+            }
             if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
@@ -530,7 +578,7 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
-        ///   automation (required) - string - Type of automation.  One of: `create_folder`, `request_file`, `request_move`
+        ///   automation (required) - string - Automation type
         ///   source - string - Source Path
         ///   destination - string - Destination Path
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
@@ -539,6 +587,8 @@ namespace Files.Models
         ///   path - string - Path on which this Automation runs.  Supports globs.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+        ///   schedule - object - Custom schedule for running this automation.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
         /// </summary>
         public static async Task<Automation> Update(
             Nullable<Int64> id, 
@@ -589,6 +639,14 @@ namespace Files.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
