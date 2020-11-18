@@ -182,7 +182,7 @@ parameters.Add("automation", "create_folder");
 parameters.Add("source", "source");
 parameters.Add("destination", "destination");
 parameters.Add("interval", "year");
-parameters.Add("schedule", {"days_of_week":[0,1,3],"times_of_day":["7:30","11:30"],"time_zone":"Eastern Time (US & Canada)"});
+parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
 parameters.Add("trigger", "realtime");
 
 Automation.Update(parameters);

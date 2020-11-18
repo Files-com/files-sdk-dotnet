@@ -360,6 +360,7 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
+        ///   paths - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -382,6 +383,10 @@ namespace Files.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
             }
             if (parameters.ContainsKey("password") && !(parameters["password"] is string ))
             {
@@ -725,6 +730,7 @@ namespace Files.Models
 
         /// <summary>
         /// Parameters:
+        ///   paths - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -749,6 +755,10 @@ namespace Files.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
             }
             if (parameters.ContainsKey("password") && !(parameters["password"] is string ))
             {

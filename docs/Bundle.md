@@ -154,6 +154,7 @@ Task<Bundle> Bundle.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
+* `paths` (string[]): A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
@@ -216,6 +217,7 @@ var Bundle = Bundle.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("paths", ["file.txt"]);
 parameters.Add("password", "Password");
 parameters.Add("clickwrap_id", 1);
 parameters.Add("code", "abc123");
@@ -233,6 +235,7 @@ Bundle.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
+* `paths` (string[]): A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
