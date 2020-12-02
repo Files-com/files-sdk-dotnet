@@ -36,6 +36,22 @@ namespace Files.Models
             {
                 this.attributes.Add("automation", null);
             }
+            if (!this.attributes.ContainsKey("trigger"))
+            {
+                this.attributes.Add("trigger", null);
+            }
+            if (!this.attributes.ContainsKey("interval"))
+            {
+                this.attributes.Add("interval", null);
+            }
+            if (!this.attributes.ContainsKey("next_process_on"))
+            {
+                this.attributes.Add("next_process_on", null);
+            }
+            if (!this.attributes.ContainsKey("schedule"))
+            {
+                this.attributes.Add("schedule", null);
+            }
             if (!this.attributes.ContainsKey("source"))
             {
                 this.attributes.Add("source", null);
@@ -52,21 +68,9 @@ namespace Files.Models
             {
                 this.attributes.Add("destination_replace_to", null);
             }
-            if (!this.attributes.ContainsKey("interval"))
-            {
-                this.attributes.Add("interval", null);
-            }
-            if (!this.attributes.ContainsKey("next_process_on"))
-            {
-                this.attributes.Add("next_process_on", null);
-            }
             if (!this.attributes.ContainsKey("path"))
             {
                 this.attributes.Add("path", null);
-            }
-            if (!this.attributes.ContainsKey("realtime"))
-            {
-                this.attributes.Add("realtime", null);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -79,14 +83,6 @@ namespace Files.Models
             if (!this.attributes.ContainsKey("group_ids"))
             {
                 this.attributes.Add("group_ids", new Nullable<Int64>[0]);
-            }
-            if (!this.attributes.ContainsKey("trigger"))
-            {
-                this.attributes.Add("trigger", null);
-            }
-            if (!this.attributes.ContainsKey("schedule"))
-            {
-                this.attributes.Add("schedule", null);
             }
         }
 
@@ -124,6 +120,46 @@ namespace Files.Models
         {
             get { return (string) attributes["automation"]; }
             set { attributes["automation"] = value; }
+        }
+
+        /// <summary>
+        /// How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+        /// </summary>
+        [JsonPropertyName("trigger")]
+        public string Trigger
+        {
+            get { return (string) attributes["trigger"]; }
+            set { attributes["trigger"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+        /// </summary>
+        [JsonPropertyName("interval")]
+        public string Interval
+        {
+            get { return (string) attributes["interval"]; }
+            set { attributes["interval"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `daily`, date this automation will next run.
+        /// </summary>
+        [JsonPropertyName("next_process_on")]
+        public string NextProcessOn
+        {
+            get { return (string) attributes["next_process_on"]; }
+            set { attributes["next_process_on"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+        /// </summary>
+        [JsonPropertyName("schedule")]
+        public object Schedule
+        {
+            get { return (object) attributes["schedule"]; }
+            set { attributes["schedule"] = value; }
         }
 
         /// <summary>
@@ -167,26 +203,6 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// How often to run this automation?  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
-        /// </summary>
-        [JsonPropertyName("interval")]
-        public string Interval
-        {
-            get { return (string) attributes["interval"]; }
-            set { attributes["interval"] = value; }
-        }
-
-        /// <summary>
-        /// Date this automation will next run.
-        /// </summary>
-        [JsonPropertyName("next_process_on")]
-        public string NextProcessOn
-        {
-            get { return (string) attributes["next_process_on"]; }
-            set { attributes["next_process_on"] = value; }
-        }
-
-        /// <summary>
         /// Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
@@ -194,16 +210,6 @@ namespace Files.Models
         {
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
-        }
-
-        /// <summary>
-        /// Does this automation run in real time?  This is a read-only property based on automation type.
-        /// </summary>
-        [JsonPropertyName("realtime")]
-        public bool Realtime
-        {
-            get { return (bool) attributes["realtime"]; }
-            set { attributes["realtime"] = value; }
         }
 
         /// <summary>
@@ -234,26 +240,6 @@ namespace Files.Models
         {
             get { return (Nullable<Int64>[]) attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
-        }
-
-        /// <summary>
-        /// How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
-        /// </summary>
-        [JsonPropertyName("trigger")]
-        public string Trigger
-        {
-            get { return (string) attributes["trigger"]; }
-            set { attributes["trigger"] = value; }
-        }
-
-        /// <summary>
-        /// Custom schedule description for when the automation should be run.
-        /// </summary>
-        [JsonPropertyName("schedule")]
-        public object Schedule
-        {
-            get { return (object) attributes["schedule"]; }
-            set { attributes["schedule"] = value; }
         }
 
         /// <summary>
