@@ -123,7 +123,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+        /// How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
         /// </summary>
         [JsonPropertyName("trigger")]
         public string Trigger
@@ -254,7 +254,7 @@ namespace Files.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
-        ///   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
         {
@@ -496,7 +496,7 @@ namespace Files.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
-        ///   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
         /// </summary>
         public static async Task<Automation> Create(
             
@@ -574,7 +574,7 @@ namespace Files.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
-        ///   trigger - string - How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
         /// </summary>
         public static async Task<Automation> Update(
             Nullable<Int64> id, 

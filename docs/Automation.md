@@ -38,7 +38,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Automation ID
 * `automation` / `AutomationType`  (string): Automation type
-* `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+* `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `next_process_on` / `NextProcessOn`  (string): If trigger is `daily`, date this automation will next run.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
@@ -119,7 +119,7 @@ Task<Automation> Automation.Create(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
-* `trigger` (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
 
 
 ---
@@ -147,7 +147,7 @@ Task<Automation> Automation.Update(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
-* `trigger` (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
 
 
 ---
@@ -199,7 +199,7 @@ Automation.Update(parameters);
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
-* `trigger` (string): How this automation is triggered to run. One of: `realtime` or `custom_schedule`.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
 
 
 ---
