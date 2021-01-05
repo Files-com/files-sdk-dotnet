@@ -11,6 +11,32 @@
   "require_registration": true,
   "require_share_recipient": true,
   "clickwrap_body": "[Legal text]",
+  "form_field_set": {
+    "id": 1,
+    "title": "Sample Form Title",
+    "form_layout": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "form_fields": [
+      {
+        "id": 1,
+        "label": "Sample Label",
+        "required": true,
+        "help_text": "Help Text",
+        "field_type": "text",
+        "options_for_select": [
+          "red",
+          "green",
+          "blue"
+        ],
+        "default_option": "red",
+        "form_field_set_id": 1
+      }
+    ]
+  },
   "id": 1,
   "created_at": "2000-01-01T01:00:00Z",
   "expires_at": "2000-01-01T01:00:00Z",
@@ -22,7 +48,7 @@
   "inbox_id": 1,
   "has_inbox": true,
   "paths": [
-
+    "file.txt"
   ]
 }
 ```
@@ -34,6 +60,7 @@
 * `require_registration` / `RequireRegistration`  (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` / `RequireShareRecipient`  (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 * `clickwrap_body` / `ClickwrapBody`  (string): Legal text that must be agreed to prior to accessing Bundle.
+* `form_field_set` / `FormFieldSet`  (object): Custom Form to use
 * `id` / `Id`  (Nullable<Int64>): Bundle ID
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
 * `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
@@ -46,6 +73,7 @@
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
 * `paths` / `Paths`  (string[]): A list of paths in this bundle
 * `password` / `Password`  (string): Password for this bundle.
+* `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of Form Field Set to use with this bundle
 
 
 ---
@@ -65,7 +93,7 @@ Task<Bundle[]> Bundle.List(
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `cursor` (string): Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `created_at` or `code`.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `created_at` and `code`.
 * `filter` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `created_at`.
 * `filter_gt` (object): If set, return records where the specifiied field is greater than the supplied value. Valid fields are `created_at`.
 * `filter_gteq` (object): If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `created_at`.
@@ -108,6 +136,7 @@ Task<Bundle> Bundle.Create(
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `paths` (string[]): Required - A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
+* `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `expires_at` (string): Bundle expiration date/time
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `description` (string): Public description
@@ -156,6 +185,7 @@ Task<Bundle> Bundle.Update(
 * `id` (Nullable<Int64>): Required - Bundle ID.
 * `paths` (string[]): A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
+* `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
 * `description` (string): Public description
@@ -219,6 +249,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("paths", ["file.txt"]);
 parameters.Add("password", "Password");
+parameters.Add("form_field_set_id", 1);
 parameters.Add("clickwrap_id", 1);
 parameters.Add("code", "abc123");
 parameters.Add("description", "The public description of the bundle.");
@@ -237,6 +268,7 @@ Bundle.Update(parameters);
 * `id` (Nullable<Int64>): Required - Bundle ID.
 * `paths` (string[]): A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
+* `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
 * `description` (string): Public description

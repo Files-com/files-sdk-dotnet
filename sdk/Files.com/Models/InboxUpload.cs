@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Files.Models
 {
-    public class BundleDownload
+    public class InboxUpload
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public BundleDownload() : this(null, null) { }
+        public InboxUpload() : this(null, null) { }
 
-        public BundleDownload(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public InboxUpload(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -28,13 +28,9 @@ namespace Files.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("bundle_registration"))
+            if (!this.attributes.ContainsKey("inbox_registration"))
             {
-                this.attributes.Add("bundle_registration", null);
-            }
-            if (!this.attributes.ContainsKey("download_method"))
-            {
-                this.attributes.Add("download_method", null);
+                this.attributes.Add("inbox_registration", null);
             }
             if (!this.attributes.ContainsKey("path"))
             {
@@ -64,23 +60,14 @@ namespace Files.Models
 
         /// <summary>
         /// </summary>
-        [JsonPropertyName("bundle_registration")]
-        public object BundleRegistration
+        [JsonPropertyName("inbox_registration")]
+        public object InboxRegistration
         {
-            get { return (object) attributes["bundle_registration"]; }
+            get { return (object) attributes["inbox_registration"]; }
         }
 
         /// <summary>
-        /// Download method (file or full_zip)
-        /// </summary>
-        [JsonPropertyName("download_method")]
-        public string DownloadMethod
-        {
-            get { return (string) attributes["download_method"]; }
-        }
-
-        /// <summary>
-        /// Download path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
         public string Path
@@ -89,7 +76,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Download date/time
+        /// Upload date/time
         /// </summary>
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
@@ -103,10 +90,10 @@ namespace Files.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   bundle_id - int64 - Bundle ID
-        ///   bundle_registration_id - int64 - BundleRegistration ID
+        ///   inbox_registration_id - int64 - InboxRegistration ID
+        ///   inbox_id - int64 - Inbox ID
         /// </summary>
-        public static async Task<BundleDownload[]> List(
+        public static async Task<InboxUpload[]> List(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -123,21 +110,21 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("inbox_registration_id") && !(parameters["inbox_registration_id"] is Nullable<Int64> ))
             {
-                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
+                throw new ArgumentException("Bad parameter: inbox_registration_id must be of type Nullable<Int64>", "parameters[\"inbox_registration_id\"]");
             }
-            if (parameters.ContainsKey("bundle_registration_id") && !(parameters["bundle_registration_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64> ))
             {
-                throw new ArgumentException("Bad parameter: bundle_registration_id must be of type Nullable<Int64>", "parameters[\"bundle_registration_id\"]");
+                throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_downloads", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/inbox_uploads", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<BundleDownload[]>(responseJson);
+            return JsonSerializer.Deserialize<InboxUpload[]>(responseJson);
         }
 
-        public static async Task<BundleDownload[]> All(
+        public static async Task<InboxUpload[]> All(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null

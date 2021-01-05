@@ -44,6 +44,14 @@ namespace Files.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("status"))
+            {
+                this.attributes.Add("status", null);
+            }
+            if (!this.attributes.ContainsKey("file_migration_id"))
+            {
+                this.attributes.Add("file_migration_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -61,6 +69,24 @@ namespace Files.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// Status of file operation. Possible values: completed, enqueued.
+        /// </summary>
+        [JsonPropertyName("status")]
+        public string Status
+        {
+            get { return (string) attributes["status"]; }
+        }
+
+        /// <summary>
+        /// If status is enqueued, this is the id of the FileMigration to check for status updates.
+        /// </summary>
+        [JsonPropertyName("file_migration_id")]
+        public Nullable<Int64> FileMigrationId
+        {
+            get { return (Nullable<Int64>) attributes["file_migration_id"]; }
+        }
 
         /// <summary>
         /// Copy file/folder

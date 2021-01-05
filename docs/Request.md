@@ -39,7 +39,7 @@ Task<Request[]> Request.List(
 
 * `cursor` (string): Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `destination`.
 * `mine` (bool): Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
 * `path` (string): Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
 
@@ -60,7 +60,7 @@ Task<Request[]> Request.GetFolder(
 
 * `cursor` (string): Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id`, `folder_id` or `destination`.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `destination`.
 * `mine` (bool): Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
 * `path` (string): Required - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
 

@@ -28,11 +28,14 @@
   "path": "",
   "user_id": 1,
   "user_ids": [
-
+    1,
+    2
   ],
   "group_ids": [
-
-  ]
+    1,
+    2
+  ],
+  "webhook_url": "https://app.files.com/api/webhooks/abc123"
 }
 ```
 
@@ -50,6 +53,7 @@
 * `user_id` / `UserId`  (Nullable<Int64>): User ID of the Automation's creator.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): IDs of Groups for the Automation (i.e. who to Request File from)
+* `webhook_url` / `WebhookUrl`  (string): If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
 
 
 ---
@@ -68,7 +72,7 @@ Task<Automation[]> Automation.List(
 
 * `cursor` (string): Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `site_id` and `automation`.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`.
 * `filter` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `automation`.
 * `filter_gt` (object): If set, return records where the specifiied field is greater than the supplied value. Valid fields are `automation`.
 * `filter_gteq` (object): If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `automation`.
@@ -180,6 +184,8 @@ parameters.Add("automation", "create_folder");
 parameters.Add("source", "source");
 parameters.Add("destination", "destination");
 parameters.Add("interval", "year");
+parameters.Add("user_ids", [1,2]);
+parameters.Add("group_ids", [1,2]);
 parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
 parameters.Add("trigger", "realtime");
 
