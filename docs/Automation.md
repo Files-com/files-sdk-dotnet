@@ -35,13 +35,15 @@
     1,
     2
   ],
-  "webhook_url": "https://app.files.com/api/webhooks/abc123"
+  "webhook_url": "https://app.files.com/api/webhooks/abc123",
+  "trigger_actions": "[ \"create\" ]",
+  "trigger_action_path": "path/to/file/or/folder"
 }
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Automation ID
 * `automation` / `AutomationType`  (string): Automation type
-* `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+* `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `next_process_on` / `NextProcessOn`  (string): If trigger is `daily`, date this automation will next run.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
@@ -54,6 +56,8 @@
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): IDs of Groups for the Automation (i.e. who to Request File from)
 * `webhook_url` / `WebhookUrl`  (string): If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
+* `trigger_actions` / `TriggerActions`  (string): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+* `trigger_action_path` / `TriggerActionPath`  (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 
 
 ---
@@ -123,7 +127,9 @@ Task<Automation> Automation.Create(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
-* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+* `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 
 
 ---
@@ -151,7 +157,9 @@ Task<Automation> Automation.Update(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
-* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+* `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 
 
 ---
@@ -188,6 +196,8 @@ parameters.Add("user_ids", [1,2]);
 parameters.Add("group_ids", [1,2]);
 parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
 parameters.Add("trigger", "realtime");
+parameters.Add("trigger_actions", "[ \"create\" ]");
+parameters.Add("trigger_action_path", "path/to/file/or/folder");
 
 Automation.Update(parameters);
 ```
@@ -205,7 +215,9 @@ Automation.Update(parameters);
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
-* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+* `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+* `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 
 
 ---

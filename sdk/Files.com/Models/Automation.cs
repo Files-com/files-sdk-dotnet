@@ -88,6 +88,14 @@ namespace Files.Models
             {
                 this.attributes.Add("webhook_url", null);
             }
+            if (!this.attributes.ContainsKey("trigger_actions"))
+            {
+                this.attributes.Add("trigger_actions", null);
+            }
+            if (!this.attributes.ContainsKey("trigger_action_path"))
+            {
+                this.attributes.Add("trigger_action_path", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -127,7 +135,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+        /// How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         /// </summary>
         [JsonPropertyName("trigger")]
         public string Trigger
@@ -257,6 +265,26 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+        /// </summary>
+        [JsonPropertyName("trigger_actions")]
+        public string TriggerActions
+        {
+            get { return (string) attributes["trigger_actions"]; }
+            set { attributes["trigger_actions"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `action`, this is the path to watch for the specified trigger actions.
+        /// </summary>
+        [JsonPropertyName("trigger_action_path")]
+        public string TriggerActionPath
+        {
+            get { return (string) attributes["trigger_action_path"]; }
+            set { attributes["trigger_action_path"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   automation (required) - string - Automation type
         ///   source - string - Source Path
@@ -268,7 +296,9 @@ namespace Files.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
-        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+        ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+        ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
         {
@@ -325,6 +355,14 @@ namespace Files.Models
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
+            }
+            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
+            }
+            if (parameters.ContainsKey("trigger_action_path") && !(parameters["trigger_action_path"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_action_path must be of type string", "parameters[\"trigger_action_path\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -510,7 +548,9 @@ namespace Files.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
-        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+        ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+        ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
         /// </summary>
         public static async Task<Automation> Create(
             
@@ -565,6 +605,14 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
             }
+            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
+            }
+            if (parameters.ContainsKey("trigger_action_path") && !(parameters["trigger_action_path"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_action_path must be of type string", "parameters[\"trigger_action_path\"]");
+            }
             if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
@@ -588,7 +636,9 @@ namespace Files.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
-        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, or `email`.
+        ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
+        ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
+        ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
         /// </summary>
         public static async Task<Automation> Update(
             Nullable<Int64> id, 
@@ -647,6 +697,14 @@ namespace Files.Models
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
+            }
+            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
+            }
+            if (parameters.ContainsKey("trigger_action_path") && !(parameters["trigger_action_path"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_action_path must be of type string", "parameters[\"trigger_action_path\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
