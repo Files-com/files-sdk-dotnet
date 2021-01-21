@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Files.Models
 {
-    public class BundleRecipient
+    public class InboxRecipient
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public BundleRecipient() : this(null, null) { }
+        public InboxRecipient() : this(null, null) { }
 
-        public BundleRecipient(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public InboxRecipient(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -52,9 +52,9 @@ namespace Files.Models
             {
                 this.attributes.Add("user_id", null);
             }
-            if (!this.attributes.ContainsKey("bundle_id"))
+            if (!this.attributes.ContainsKey("inbox_id"))
             {
-                this.attributes.Add("bundle_id", null);
+                this.attributes.Add("inbox_id", null);
             }
             if (!this.attributes.ContainsKey("share_after_create"))
             {
@@ -99,7 +99,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// A note sent to the recipient with the bundle.
+        /// A note sent to the recipient with the inbox.
         /// </summary>
         [JsonPropertyName("note")]
         public string Note
@@ -119,7 +119,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// When the Bundle was shared with this recipient.
+        /// When the Inbox was shared with this recipient.
         /// </summary>
         [JsonPropertyName("sent_at")]
         public Nullable<DateTime> SentAt
@@ -139,13 +139,13 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Bundle to share.
+        /// Inbox to share.
         /// </summary>
-        [JsonPropertyName("bundle_id")]
-        public Nullable<Int64> BundleId
+        [JsonPropertyName("inbox_id")]
+        public Nullable<Int64> InboxId
         {
-            get { return (Nullable<Int64>) attributes["bundle_id"]; }
-            set { attributes["bundle_id"] = value; }
+            get { return (Nullable<Int64>) attributes["inbox_id"]; }
+            set { attributes["inbox_id"] = value; }
         }
 
         /// <summary>
@@ -163,11 +163,11 @@ namespace Files.Models
         {
             if (this.attributes["id"] != null)
             {
-                throw new NotImplementedException("The BundleRecipient object doesn't support updates.");
+                throw new NotImplementedException("The InboxRecipient object doesn't support updates.");
             }
             else
             {
-                var newObj = await BundleRecipient.Create(this.attributes, this.options);
+                var newObj = await InboxRecipient.Create(this.attributes, this.options);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -184,9 +184,9 @@ namespace Files.Models
         ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `has_registrations`.
         ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `has_registrations`.
         ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `has_registrations`.
-        ///   bundle_id (required) - int64 - List recipients for the bundle with this ID.
+        ///   inbox_id (required) - int64 - List recipients for the inbox with this ID.
         /// </summary>
-        public static async Task<BundleRecipient[]> List(
+        public static async Task<InboxRecipient[]> List(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -235,21 +235,21 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64> ))
             {
-                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
+                throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
             }
-            if (!parameters.ContainsKey("bundle_id") || parameters["bundle_id"] == null)
+            if (!parameters.ContainsKey("inbox_id") || parameters["inbox_id"] == null)
             {
-                throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
+                throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<BundleRecipient[]>(responseJson);
+            return JsonSerializer.Deserialize<InboxRecipient[]>(responseJson);
         }
 
-        public static async Task<BundleRecipient[]> All(
+        public static async Task<InboxRecipient[]> All(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -261,14 +261,14 @@ namespace Files.Models
         /// <summary>
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   bundle_id (required) - int64 - Bundle to share.
-        ///   recipient (required) - string - Email addresses to share this bundle with.
+        ///   inbox_id (required) - int64 - Inbox to share.
+        ///   recipient (required) - string - Email addresses to share this inbox with.
         ///   name - string - Name of recipient.
         ///   company - string - Company of recipient.
         ///   note - string - Note to include in email.
         ///   share_after_create - boolean - Set to true to share the link with the recipient upon creation.
         /// </summary>
-        public static async Task<BundleRecipient> Create(
+        public static async Task<InboxRecipient> Create(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -281,9 +281,9 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64> ))
             {
-                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
+                throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
             }
             if (parameters.ContainsKey("recipient") && !(parameters["recipient"] is string ))
             {
@@ -305,18 +305,18 @@ namespace Files.Models
             {
                 throw new ArgumentException("Bad parameter: share_after_create must be of type bool", "parameters[\"share_after_create\"]");
             }
-            if (!parameters.ContainsKey("bundle_id") || parameters["bundle_id"] == null)
+            if (!parameters.ContainsKey("inbox_id") || parameters["inbox_id"] == null)
             {
-                throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
+                throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
             }
             if (!parameters.ContainsKey("recipient") || parameters["recipient"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: recipient", "parameters[\"recipient\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<BundleRecipient>(responseJson);
+            return JsonSerializer.Deserialize<InboxRecipient>(responseJson);
         }
 
 

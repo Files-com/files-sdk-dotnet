@@ -48,6 +48,14 @@ namespace Files.Models
             {
                 this.attributes.Add("errors", new string[0]);
             }
+            if (!this.attributes.ContainsKey("clickwrap_id"))
+            {
+                this.attributes.Add("clickwrap_id", null);
+            }
+            if (!this.attributes.ContainsKey("clickwrap_body"))
+            {
+                this.attributes.Add("clickwrap_body", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -67,7 +75,7 @@ namespace Files.Models
 
 
         /// <summary>
-        /// Status http code
+        /// Status HTTP code
         /// </summary>
         [JsonPropertyName("code")]
         public Nullable<Int64> Code
@@ -109,6 +117,24 @@ namespace Files.Models
         public string[] Errors
         {
             get { return (string[]) attributes["errors"]; }
+        }
+
+        /// <summary>
+        /// Required Clickwrap id
+        /// </summary>
+        [JsonPropertyName("clickwrap_id")]
+        public Nullable<Int64> ClickwrapId
+        {
+            get { return (Nullable<Int64>) attributes["clickwrap_id"]; }
+        }
+
+        /// <summary>
+        /// Required Clickwrap body
+        /// </summary>
+        [JsonPropertyName("clickwrap_body")]
+        public string ClickwrapBody
+        {
+            get { return (string) attributes["clickwrap_body"]; }
         }
 
 

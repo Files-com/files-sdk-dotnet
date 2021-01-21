@@ -1,6 +1,6 @@
-# Files.Models.BundleRecipient
+# Files.Models.InboxRecipient
 
-## Example BundleRecipient Object
+## Example InboxRecipient Object
 
 ```
 {
@@ -14,20 +14,20 @@
 
 * `company` / `Company`  (string): The recipient's company.
 * `name` / `Name`  (string): The recipient's name.
-* `note` / `Note`  (string): A note sent to the recipient with the bundle.
+* `note` / `Note`  (string): A note sent to the recipient with the inbox.
 * `recipient` / `Recipient`  (string): The recipient's email address.
-* `sent_at` / `SentAt`  (Nullable<DateTime>): When the Bundle was shared with this recipient.
+* `sent_at` / `SentAt`  (Nullable<DateTime>): When the Inbox was shared with this recipient.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `bundle_id` / `BundleId`  (Nullable<Int64>): Bundle to share.
+* `inbox_id` / `InboxId`  (Nullable<Int64>): Inbox to share.
 * `share_after_create` / `ShareAfterCreate`  (bool): Set to true to share the link with the recipient upon creation.
 
 
 ---
 
-## List Bundle Recipients
+## List Inbox Recipients
 
 ```
-Task<BundleRecipient[]> BundleRecipient.List(
+Task<InboxRecipient[]> InboxRecipient.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -46,15 +46,15 @@ Task<BundleRecipient[]> BundleRecipient.List(
 * `filter_like` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `has_registrations`.
 * `filter_lt` (object): If set, return records where the specifiied field is less than the supplied value. Valid fields are `has_registrations`.
 * `filter_lteq` (object): If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `has_registrations`.
-* `bundle_id` (Nullable<Int64>): Required - List recipients for the bundle with this ID.
+* `inbox_id` (Nullable<Int64>): Required - List recipients for the inbox with this ID.
 
 
 ---
 
-## Create Bundle Recipient
+## Create Inbox Recipient
 
 ```
-Task<BundleRecipient> BundleRecipient.Create(
+Task<InboxRecipient> InboxRecipient.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -64,8 +64,8 @@ Task<BundleRecipient> BundleRecipient.Create(
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `bundle_id` (Nullable<Int64>): Required - Bundle to share.
-* `recipient` (string): Required - Email addresses to share this bundle with.
+* `inbox_id` (Nullable<Int64>): Required - Inbox to share.
+* `recipient` (string): Required - Email addresses to share this inbox with.
 * `name` (string): Name of recipient.
 * `company` (string): Company of recipient.
 * `note` (string): Note to include in email.
