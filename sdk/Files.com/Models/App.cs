@@ -72,6 +72,14 @@ namespace Files.Models
             {
                 this.attributes.Add("external_homepage_url", null);
             }
+            if (!this.attributes.ContainsKey("marketing_youtube_url"))
+            {
+                this.attributes.Add("marketing_youtube_url", null);
+            }
+            if (!this.attributes.ContainsKey("tutorial_youtube_url"))
+            {
+                this.attributes.Add("tutorial_youtube_url", null);
+            }
             if (!this.attributes.ContainsKey("app_type"))
             {
                 this.attributes.Add("app_type", null);
@@ -195,6 +203,24 @@ namespace Files.Models
         public string ExternalHomepageUrl
         {
             get { return (string) attributes["external_homepage_url"]; }
+        }
+
+        /// <summary>
+        /// Marketing video page
+        /// </summary>
+        [JsonPropertyName("marketing_youtube_url")]
+        public string MarketingYoutubeUrl
+        {
+            get { return (string) attributes["marketing_youtube_url"]; }
+        }
+
+        /// <summary>
+        /// Tutorial video page
+        /// </summary>
+        [JsonPropertyName("tutorial_youtube_url")]
+        public string TutorialYoutubeUrl
+        {
+            get { return (string) attributes["tutorial_youtube_url"]; }
         }
 
         /// <summary>
