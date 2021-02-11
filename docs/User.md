@@ -60,7 +60,7 @@
 * `username` / `Username`  (string): User's username
 * `admin_group_ids` / `AdminGroupIds`  (Nullable<Int64>[]): List of group IDs of which this user is an administrator
 * `allowed_ips` / `AllowedIps`  (string): A list of allowed IPs if applicable.  Newline delimited
-* `attachments_permission` / `AttachmentsPermission`  (bool): Can the user create Bundles (aka Share Links)?  This field will be aliased or renamed in the future to `bundles_permission`.
+* `attachments_permission` / `AttachmentsPermission`  (bool): DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
 * `api_keys_count` / `ApiKeysCount`  (Nullable<Int64>): Number of api keys associated with this user
 * `authenticate_until` / `AuthenticateUntil`  (Nullable<DateTime>): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` / `AuthenticationMethod`  (string): How is this user authenticated?
@@ -191,7 +191,7 @@ Task<User> User.Create(
 * `password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` (bool): Signifies that the user has read all the announcements in the UI.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
-* `attachments_permission` (bool): Can the user create Bundles (aka Share Links)?  This field will be aliased or renamed in the future to `bundles_permission`.
+* `attachments_permission` (bool): DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
 * `authenticate_until` (string): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `billing_permission` (bool): Allow this user to perform operations on the account, payments, and invoices?
@@ -302,7 +302,7 @@ Task<User> User.Update(
 * `password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` (bool): Signifies that the user has read all the announcements in the UI.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
-* `attachments_permission` (bool): Can the user create Bundles (aka Share Links)?  This field will be aliased or renamed in the future to `bundles_permission`.
+* `attachments_permission` (bool): DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
 * `authenticate_until` (string): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `billing_permission` (bool): Allow this user to perform operations on the account, payments, and invoices?
@@ -469,7 +469,7 @@ User.Update(parameters);
 * `password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` (bool): Signifies that the user has read all the announcements in the UI.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
-* `attachments_permission` (bool): Can the user create Bundles (aka Share Links)?  This field will be aliased or renamed in the future to `bundles_permission`.
+* `attachments_permission` (bool): DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
 * `authenticate_until` (string): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `billing_permission` (bool): Allow this user to perform operations on the account, payments, and invoices?

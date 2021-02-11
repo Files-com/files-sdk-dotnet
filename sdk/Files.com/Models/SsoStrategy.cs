@@ -449,7 +449,7 @@ namespace Files.Models
         }
 
         /// <summary>
-        /// Auto-provisioned users get Sharing permission?
+        /// DEPRECATED: Auto-provisioned users get Sharing permission. Use a Group with the Bundle permission instead.
         /// </summary>
         [JsonPropertyName("provision_attachments_permission")]
         public bool ProvisionAttachmentsPermission
