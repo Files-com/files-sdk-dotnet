@@ -32,6 +32,10 @@ namespace Files.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("history_version"))
+            {
+                this.attributes.Add("history_version", null);
+            }
             if (!this.attributes.ContainsKey("start_at"))
             {
                 this.attributes.Add("start_at", null);
@@ -154,6 +158,16 @@ namespace Files.Models
         {
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Version of the history for the export.
+        /// </summary>
+        [JsonPropertyName("history_version")]
+        public string HistoryVersion
+        {
+            get { return (string) attributes["history_version"]; }
+            set { attributes["history_version"] = value; }
         }
 
         /// <summary>
