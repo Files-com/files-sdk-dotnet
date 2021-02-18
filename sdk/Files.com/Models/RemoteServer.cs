@@ -40,6 +40,10 @@ namespace Files.Models
             {
                 this.attributes.Add("hostname", null);
             }
+            if (!this.attributes.ContainsKey("remote_home_path"))
+            {
+                this.attributes.Add("remote_home_path", null);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -238,6 +242,16 @@ namespace Files.Models
         {
             get { return (string) attributes["hostname"]; }
             set { attributes["hostname"] = value; }
+        }
+
+        /// <summary>
+        /// Initial home folder on remote server
+        /// </summary>
+        [JsonPropertyName("remote_home_path")]
+        public string RemoteHomePath
+        {
+            get { return (string) attributes["remote_home_path"]; }
+            set { attributes["remote_home_path"] = value; }
         }
 
         /// <summary>
