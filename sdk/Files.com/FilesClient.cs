@@ -89,13 +89,13 @@ namespace Files
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
                     })
-                    .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(retries));
+                    .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
 
                     services.AddHttpClient(HttpUpload, client =>
                     {
                         client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
                     })
-                    .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(retries));
+                    .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
 
                     services.AddTransient<IFilesApiService, FilesApiService>();
                 }).UseConsoleLifetime();
