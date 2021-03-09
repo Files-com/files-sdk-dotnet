@@ -23,6 +23,9 @@
   },
   "source": "",
   "destination": "",
+  "destinations": [
+    "destination"
+  ],
   "destination_replace_from": "",
   "destination_replace_to": "",
   "path": "",
@@ -49,7 +52,8 @@
 * `next_process_on` / `NextProcessOn`  (string): If trigger is `daily`, date this automation will next run.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
 * `source` / `Source`  (string): Source Path
-* `destination` / `Destination`  (string): Destination Path
+* `destination` / `Destination`  (string): DEPRECATED: Destination Path
+* `destinations` / `Destinations`  (string): Destination Path
 * `destination_replace_from` / `DestinationReplaceFrom`  (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` / `DestinationReplaceTo`  (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `path` / `Path`  (string): Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -121,7 +125,8 @@ Task<Automation> Automation.Create(
 
 * `automation` (string): Required - Automation type
 * `source` (string): Source Path
-* `destination` (string): Destination Path
+* `destination` (string): DEPRECATED: Destination Path
+* `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `interval` (string): How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -152,7 +157,8 @@ Task<Automation> Automation.Update(
 * `id` (Nullable<Int64>): Required - Automation ID.
 * `automation` (string): Required - Automation type
 * `source` (string): Source Path
-* `destination` (string): Destination Path
+* `destination` (string): DEPRECATED: Destination Path
+* `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `interval` (string): How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -195,6 +201,7 @@ var parameters = new Dictionary<string, object>();
 parameters.Add("automation", "create_folder");
 parameters.Add("source", "source");
 parameters.Add("destination", "destination");
+parameters.Add("destinations", "[\"folder_a/file_a.txt\", {\"folder_path\":\"folder_b\", \"file_path\":\"file_b.txt\"}, {\"folder_path\":\"folder_c\"}]");
 parameters.Add("interval", "year");
 parameters.Add("user_ids", [1,2]);
 parameters.Add("group_ids", [1,2]);
@@ -212,7 +219,8 @@ Automation.Update(parameters);
 * `id` (Nullable<Int64>): Required - Automation ID.
 * `automation` (string): Required - Automation type
 * `source` (string): Source Path
-* `destination` (string): Destination Path
+* `destination` (string): DEPRECATED: Destination Path
+* `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `interval` (string): How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
