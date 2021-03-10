@@ -139,6 +139,57 @@ namespace Files.Models
 
 
 
+        /// <summary>
+        /// Parameters:
+        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+        ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   bundle_id (required) - int64 - ID of the associated Bundle
+        /// </summary>
+        public static async Task<BundleRegistration[]> List(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
+            }
+            if (!parameters.ContainsKey("bundle_id") || parameters["bundle_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/bundle_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<BundleRegistration[]>(responseJson);
+        }
+
+        public static async Task<BundleRegistration[]> All(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return await List(parameters, options);
+        }
+
     }
 }
 

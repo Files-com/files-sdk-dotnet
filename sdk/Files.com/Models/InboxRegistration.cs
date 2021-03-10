@@ -126,6 +126,52 @@ namespace Files.Models
 
 
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   folder_behavior_id (required) - int64 - ID of the associated Inbox.
+        /// </summary>
+        public static async Task<InboxRegistration[]> List(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+            }
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("folder_behavior_id") && !(parameters["folder_behavior_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: folder_behavior_id must be of type Nullable<Int64>", "parameters[\"folder_behavior_id\"]");
+            }
+            if (!parameters.ContainsKey("folder_behavior_id") || parameters["folder_behavior_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: folder_behavior_id", "parameters[\"folder_behavior_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/inbox_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<InboxRegistration[]>(responseJson);
+        }
+
+        public static async Task<InboxRegistration[]> All(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return await List(parameters, options);
+        }
+
     }
 }
 
