@@ -361,6 +361,9 @@ namespace Files.Models
         }
 
         /// <summary>
+        /// Parameters:
+        ///   format - string
+        ///   api_key - object
         /// </summary>
         public static async Task<ApiKey> FindCurrent(
             
@@ -371,6 +374,14 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("format") && !(parameters["format"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: format must be of type string", "parameters[\"format\"]");
+            }
+            if (parameters.ContainsKey("api_key") && !(parameters["api_key"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: api_key must be of type object", "parameters[\"api_key\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Get, parameters, options);
 
@@ -537,6 +548,9 @@ namespace Files.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   format - string
+        ///   api_key - object
         /// </summary>
         public static async Task<ApiKey> DeleteCurrent(
             
@@ -547,6 +561,14 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("format") && !(parameters["format"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: format must be of type string", "parameters[\"format\"]");
+            }
+            if (parameters.ContainsKey("api_key") && !(parameters["api_key"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: api_key must be of type object", "parameters[\"api_key\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Delete, parameters, options);
 

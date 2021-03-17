@@ -69,6 +69,11 @@ Task<ApiKey> ApiKey.FindCurrent(
 )
 ```
 
+### Parameters
+
+* `format` (string): 
+* `api_key` (object): 
+
 
 ---
 
@@ -158,6 +163,11 @@ Task<ApiKey> ApiKey.DeleteCurrent(
     Dictionary<string, object> options = null
 )
 ```
+
+### Parameters
+
+* `format` (string): 
+* `api_key` (object): 
 
 
 ---

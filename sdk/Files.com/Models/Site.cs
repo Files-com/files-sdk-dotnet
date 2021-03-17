@@ -1518,6 +1518,9 @@ namespace Files.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   format - string
+        ///   site - object
         /// </summary>
         public static async Task<Site> Get(
             
@@ -1528,6 +1531,14 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("format") && !(parameters["format"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: format must be of type string", "parameters[\"format\"]");
+            }
+            if (parameters.ContainsKey("site") && !(parameters["site"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: site must be of type object", "parameters[\"site\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/site", System.Net.Http.HttpMethod.Get, parameters, options);
 
@@ -1536,6 +1547,9 @@ namespace Files.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   format - string
+        ///   site - object
         /// </summary>
         public static async Task<UsageSnapshot> GetUsage(
             
@@ -1546,6 +1560,14 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("format") && !(parameters["format"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: format must be of type string", "parameters[\"format\"]");
+            }
+            if (parameters.ContainsKey("site") && !(parameters["site"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: site must be of type object", "parameters[\"site\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/site/usage", System.Net.Http.HttpMethod.Get, parameters, options);
 
