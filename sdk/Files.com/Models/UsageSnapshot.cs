@@ -44,6 +44,10 @@ namespace Files.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("high_water_user_count"))
+            {
+                this.attributes.Add("high_water_user_count", null);
+            }
             if (!this.attributes.ContainsKey("current_storage"))
             {
                 this.attributes.Add("current_storage", null);
@@ -132,6 +136,15 @@ namespace Files.Models
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+        }
+
+        /// <summary>
+        /// Site usage report highest usage in time period
+        /// </summary>
+        [JsonPropertyName("high_water_user_count")]
+        public double HighWaterUserCount
+        {
+            get { return (double) attributes["high_water_user_count"]; }
         }
 
         /// <summary>

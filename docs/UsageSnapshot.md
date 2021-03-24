@@ -8,6 +8,7 @@
   "start_at": "2000-01-01T01:00:00Z",
   "end_at": "2000-01-01T01:00:00Z",
   "created_at": "2000-01-01T01:00:00Z",
+  "high_water_user_count": 1.0,
   "current_storage": 1.0,
   "high_water_storage": 1.0,
   "total_downloads": 1,
@@ -24,6 +25,7 @@
 * `start_at` / `StartAt`  (Nullable<DateTime>): Site usage report start date/time
 * `end_at` / `EndAt`  (Nullable<DateTime>): Site usage report end date/time
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Site usage report created at date/time
+* `high_water_user_count` / `HighWaterUserCount`  (double): Site usage report highest usage in time period
 * `current_storage` / `CurrentStorage`  (double): Current site usage as of report
 * `high_water_storage` / `HighWaterStorage`  (double): Site usage report highest usage in time period
 * `total_downloads` / `TotalDownloads`  (Nullable<Int64>): Number of downloads in report time period
