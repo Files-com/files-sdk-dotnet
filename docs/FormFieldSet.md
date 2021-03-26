@@ -27,7 +27,10 @@
       "default_option": "red",
       "form_field_set_id": 1
     }
-  ]
+  ],
+  "skip_name": true,
+  "skip_email": true,
+  "skip_company": true
 }
 ```
 
@@ -35,6 +38,9 @@
 * `title` / `Title`  (string): Title to be displayed
 * `form_layout` / `FormLayout`  (Nullable<Int64>): Layout of the form
 * `form_fields` / `FormFields`  (string[]): Associated form fields
+* `skip_name` / `SkipName`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
+* `skip_email` / `SkipEmail`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing email
+* `skip_company` / `SkipCompany`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing company
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 
 
@@ -90,6 +96,9 @@ Task<FormFieldSet> FormFieldSet.Create(
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `title` (string): Title to be displayed
+* `skip_email` (bool): Skip validating form email
+* `skip_name` (bool): Skip validating form name
+* `skip_company` (bool): Skip validating company
 * `form_fields` (object[]): 
 
 
@@ -109,6 +118,9 @@ Task<FormFieldSet> FormFieldSet.Update(
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `skip_email` (bool): Skip validating form email
+* `skip_name` (bool): Skip validating form name
+* `skip_company` (bool): Skip validating company
 * `form_fields` (object[]): 
 
 
@@ -139,6 +151,9 @@ var FormFieldSet = FormFieldSet.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("title", "Sample Form Title");
+parameters.Add("skip_email", true);
+parameters.Add("skip_name", true);
+parameters.Add("skip_company", true);
 parameters.Add("form_fields", [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}]);
 
 FormFieldSet.Update(parameters);
@@ -148,6 +163,9 @@ FormFieldSet.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `skip_email` (bool): Skip validating form email
+* `skip_name` (bool): Skip validating form name
+* `skip_company` (bool): Skip validating company
 * `form_fields` (object[]): 
 
 
