@@ -44,6 +44,25 @@ Task<GroupUser[]> GroupUser.List(
 
 ---
 
+## Create Group User
+
+```
+Task<GroupUser> GroupUser.Create(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `group_id` (Nullable<Int64>): Required - Group ID to add user to.
+* `user_id` (Nullable<Int64>): Required - User ID to add to group.
+* `admin` (bool): Is the user a group administrator?
+
+
+---
+
 ## Update Group User
 
 ```

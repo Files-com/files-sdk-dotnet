@@ -230,9 +230,16 @@ namespace Files.Models
 
         public async Task Save()
         {
-            await Update(this.attributes);
+            if (this.attributes["id"] != null)
+            {
+                await this.Update(this.attributes);
+            }
+            else
+            {
+                var newObj = await GroupUser.Create(this.attributes, this.options);
+                this.attributes = newObj.getAttributes();
+            }
         }
-
 
         /// <summary>
         /// Parameters:
@@ -280,6 +287,48 @@ namespace Files.Models
         {
             return await List(parameters, options);
         }
+
+        /// <summary>
+        /// Parameters:
+        ///   group_id (required) - int64 - Group ID to add user to.
+        ///   user_id (required) - int64 - User ID to add to group.
+        ///   admin - boolean - Is the user a group administrator?
+        /// </summary>
+        public static async Task<GroupUser> Create(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
+            }
+            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
+            }
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/group_users", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            return JsonSerializer.Deserialize<GroupUser>(responseJson);
+        }
+
 
         /// <summary>
         /// Parameters:
