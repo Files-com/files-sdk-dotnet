@@ -408,9 +408,6 @@ namespace Files.Models
 
 
         /// <summary>
-        /// Parameters:
-        ///   format - string
-        ///   session - object
         /// </summary>
         public static async Task<Session> Delete(
             
@@ -421,14 +418,6 @@ namespace Files.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("format") && !(parameters["format"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: format must be of type string", "parameters[\"format\"]");
-            }
-            if (parameters.ContainsKey("session") && !(parameters["session"] is object ))
-            {
-                throw new ArgumentException("Bad parameter: session must be of type object", "parameters[\"session\"]");
-            }
 
             string responseJson = await FilesClient.SendRequest($"/sessions", System.Net.Http.HttpMethod.Delete, parameters, options);
 
