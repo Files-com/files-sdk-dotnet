@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-cd sdk/Files.com || exit
+cd sdk/FilesCom || exit
 dotnet build --configuration Release
 cd ../../

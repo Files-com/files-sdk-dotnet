@@ -1,7 +1,7 @@
 ﻿using ManyConsole;
 using System;
 using System.Threading.Tasks;
-using Files.Models;
+using FilesCom.Models;
 using System.Collections.Generic;
 
 namespace files_cli.Commands
