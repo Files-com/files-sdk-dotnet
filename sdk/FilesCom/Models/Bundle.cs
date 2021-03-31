@@ -343,9 +343,9 @@ namespace FilesCom.Models
         /// Send email(s) with a link to bundle
         ///
         /// Parameters:
-        ///   to (required) - array(string) - A list of email addresses to share this bundle with.
+        ///   to - array(string) - A list of email addresses to share this bundle with. Required unless `recipients` is used.
         ///   note - string - Note to include in email.
-        ///   recipients - array(object) - A list of recipients to share this bundle with.
+        ///   recipients - array(object) - A list of recipients to share this bundle with. Required unless `to` is used.
         /// </summary>
         public async Task<Bundle> Share(Dictionary<string, object> parameters)
         {
@@ -374,10 +374,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("to") || parameters["to"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: to", "parameters[\"to\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/bundles/{attributes["id"]}/share", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -721,9 +717,9 @@ namespace FilesCom.Models
         /// Send email(s) with a link to bundle
         ///
         /// Parameters:
-        ///   to (required) - array(string) - A list of email addresses to share this bundle with.
+        ///   to - array(string) - A list of email addresses to share this bundle with. Required unless `recipients` is used.
         ///   note - string - Note to include in email.
-        ///   recipients - array(object) - A list of recipients to share this bundle with.
+        ///   recipients - array(object) - A list of recipients to share this bundle with. Required unless `to` is used.
         /// </summary>
         public static async Task<Bundle> Share(
             Nullable<Int64> id, 
@@ -754,10 +750,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("to") || parameters["to"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: to", "parameters[\"to\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/bundles/{parameters["id"]}/share", System.Net.Http.HttpMethod.Post, parameters, options);

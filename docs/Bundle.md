@@ -166,9 +166,9 @@ Task<Bundle> Bundle.Share(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
-* `to` (string[]): Required - A list of email addresses to share this bundle with.
+* `to` (string[]): A list of email addresses to share this bundle with. Required unless `recipients` is used.
 * `note` (string): Note to include in email.
-* `recipients` (object[]): A list of recipients to share this bundle with.
+* `recipients` (object[]): A list of recipients to share this bundle with. Required unless `to` is used.
 
 
 ---
@@ -236,9 +236,9 @@ Bundle.Share(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
-* `to` (string[]): Required - A list of email addresses to share this bundle with.
+* `to` (string[]): A list of email addresses to share this bundle with. Required unless `recipients` is used.
 * `note` (string): Note to include in email.
-* `recipients` (object[]): A list of recipients to share this bundle with.
+* `recipients` (object[]): A list of recipients to share this bundle with. Required unless `to` is used.
 
 
 ---
