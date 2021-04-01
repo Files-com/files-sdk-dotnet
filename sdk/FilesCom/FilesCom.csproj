@@ -28,7 +28,12 @@
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.5" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Models\folder.cs" />
+    <Compile Remove="Models\request.cs" />
     <Compile Remove="Models\__Model.cs" />
+    <Compile Remove="Models\permission.cs" />
+    <Compile Remove="Models\file.cs" />
+    <Compile Remove="Models\lock.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath="\"/>
