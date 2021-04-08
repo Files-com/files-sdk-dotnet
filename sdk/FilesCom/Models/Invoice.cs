@@ -54,7 +54,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("invoice_line_items"))
             {
-                this.attributes.Add("invoice_line_items", new string[0]);
+                this.attributes.Add("invoice_line_items", null);
             }
             if (!this.attributes.ContainsKey("method"))
             {
@@ -62,7 +62,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("payment_line_items"))
             {
-                this.attributes.Add("payment_line_items", new string[0]);
+                this.attributes.Add("payment_line_items", null);
             }
             if (!this.attributes.ContainsKey("payment_reversed_at"))
             {
@@ -160,9 +160,9 @@ namespace FilesCom.Models
         /// Associated invoice line items
         /// </summary>
         [JsonPropertyName("invoice_line_items")]
-        public string[] InvoiceLineItems
+        public object InvoiceLineItems
         {
-            get { return (string[]) attributes["invoice_line_items"]; }
+            get { return (object) attributes["invoice_line_items"]; }
         }
 
         /// <summary>
@@ -178,9 +178,9 @@ namespace FilesCom.Models
         /// Associated payment line items
         /// </summary>
         [JsonPropertyName("payment_line_items")]
-        public string[] PaymentLineItems
+        public object PaymentLineItems
         {
-            get { return (string[]) attributes["payment_line_items"]; }
+            get { return (object) attributes["payment_line_items"]; }
         }
 
         /// <summary>

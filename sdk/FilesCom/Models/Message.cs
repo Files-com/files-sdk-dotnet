@@ -42,7 +42,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("comments"))
             {
-                this.attributes.Add("comments", new string[0]);
+                this.attributes.Add("comments", null);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -104,9 +104,9 @@ namespace FilesCom.Models
         /// Comments.
         /// </summary>
         [JsonPropertyName("comments")]
-        public string[] Comments
+        public object Comments
         {
-            get { return (string[]) attributes["comments"]; }
+            get { return (object) attributes["comments"]; }
             set { attributes["comments"] = value; }
         }
 

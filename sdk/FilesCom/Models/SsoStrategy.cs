@@ -30,7 +30,7 @@ namespace FilesCom.Models
 
             if (!this.attributes.ContainsKey("protocol"))
             {
-                this.attributes.Add("protocol", new string[0]);
+                this.attributes.Add("protocol", null);
             }
             if (!this.attributes.ContainsKey("provider"))
             {
@@ -218,9 +218,9 @@ namespace FilesCom.Models
         /// SSO Protocol
         /// </summary>
         [JsonPropertyName("protocol")]
-        public string[] Protocol
+        public string Protocol
         {
-            get { return (string[]) attributes["protocol"]; }
+            get { return (string) attributes["protocol"]; }
         }
 
         /// <summary>

@@ -4,9 +4,7 @@
 
 ```
 {
-  "protocol": [
-    "okta"
-  ],
+  "protocol": "oauth2",
   "provider": "okta",
   "label": "My Corporate SSO Provider",
   "logo_url": "https://mysite.files.com/.../logo.png",
@@ -51,7 +49,7 @@
 }
 ```
 
-* `protocol` / `Protocol`  (string[]): SSO Protocol
+* `protocol` / `Protocol`  (string): SSO Protocol
 * `provider` / `Provider`  (string): Provider name
 * `label` / `Label`  (string): Custom label for the SSO provider on the login page.
 * `logo_url` / `LogoUrl`  (string): URL holding a custom logo for the SSO provider on the login page.

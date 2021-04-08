@@ -20,22 +20,20 @@
       3,
       4
     ],
-    "form_fields": [
-      {
-        "id": 1,
-        "label": "Sample Label",
-        "required": true,
-        "help_text": "Help Text",
-        "field_type": "text",
-        "options_for_select": [
-          "red",
-          "green",
-          "blue"
-        ],
-        "default_option": "red",
-        "form_field_set_id": 1
-      }
-    ],
+    "form_fields": {
+      "id": 1,
+      "label": "Sample Label",
+      "required": true,
+      "help_text": "Help Text",
+      "field_type": "text",
+      "options_for_select": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "default_option": "red",
+      "form_field_set_id": 1
+    },
     "skip_name": true,
     "skip_email": true,
     "skip_company": true

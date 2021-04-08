@@ -63,7 +63,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Type of event being recorded. Valid values: `remote_server_sync`, `lockout`, `ldap_login`, `saml_login`
+        /// Type of event being recorded.
         /// </summary>
         [JsonPropertyName("event_type")]
         public string EventType
@@ -72,7 +72,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Status of event. Valid values: `error`
+        /// Status of event.
         /// </summary>
         [JsonPropertyName("status")]
         public string Status

@@ -38,7 +38,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("admin_ids"))
             {
-                this.attributes.Add("admin_ids", new string[0]);
+                this.attributes.Add("admin_ids", null);
             }
             if (!this.attributes.ContainsKey("notes"))
             {
@@ -94,9 +94,9 @@ namespace FilesCom.Models
         /// List of user IDs who are group administrators (separated by commas)
         /// </summary>
         [JsonPropertyName("admin_ids")]
-        public string[] AdminIds
+        public string AdminIds
         {
-            get { return (string[]) attributes["admin_ids"]; }
+            get { return (string) attributes["admin_ids"]; }
             set { attributes["admin_ids"] = value; }
         }
 

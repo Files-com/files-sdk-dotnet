@@ -46,7 +46,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("errors"))
             {
-                this.attributes.Add("errors", new string[0]);
+                this.attributes.Add("errors", null);
             }
             if (!this.attributes.ContainsKey("clickwrap_id"))
             {
@@ -114,9 +114,9 @@ namespace FilesCom.Models
         /// A list of api errors
         /// </summary>
         [JsonPropertyName("errors")]
-        public string[] Errors
+        public object Errors
         {
-            get { return (string[]) attributes["errors"]; }
+            get { return (object) attributes["errors"]; }
         }
 
         /// <summary>

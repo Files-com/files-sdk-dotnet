@@ -6,18 +6,16 @@
 {
   "id": 1,
   "body": "What a great file!",
-  "reactions": [
-    {
-      "id": 1,
-      "emoji": "👍"
-    }
-  ]
+  "reactions": {
+    "id": 1,
+    "emoji": "👍"
+  }
 }
 ```
 
 * `id` / `Id`  (Nullable<Int64>): File Comment ID
 * `body` / `Body`  (string): Comment body.
-* `reactions` / `Reactions`  (string[]): Reactions to this comment.
+* `reactions` / `Reactions`  (object): Reactions to this comment.
 * `path` / `Path`  (string): File path.
 
 

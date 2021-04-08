@@ -21,7 +21,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Group ID
 * `name` / `Name`  (string): Group name
-* `admin_ids` / `AdminIds`  (string[]): List of user IDs who are group administrators (separated by commas)
+* `admin_ids` / `AdminIds`  (string): List of user IDs who are group administrators (separated by commas)
 * `notes` / `Notes`  (string): Notes about this group
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): List of user IDs who belong to this group (separated by commas)
 * `usernames` / `Usernames`  (string[]): List of usernames who belong to this group (separated by commas)
