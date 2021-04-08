@@ -56,10 +56,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("source", null);
             }
-            if (!this.attributes.ContainsKey("destination"))
-            {
-                this.attributes.Add("destination", null);
-            }
             if (!this.attributes.ContainsKey("destinations"))
             {
                 this.attributes.Add("destinations", null);
@@ -103,6 +99,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("value"))
             {
                 this.attributes.Add("value", null);
+            }
+            if (!this.attributes.ContainsKey("destination"))
+            {
+                this.attributes.Add("destination", null);
             }
         }
 
@@ -190,16 +190,6 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["source"]; }
             set { attributes["source"] = value; }
-        }
-
-        /// <summary>
-        /// DEPRECATED: Destination Path
-        /// </summary>
-        [JsonPropertyName("destination")]
-        public string Destination
-        {
-            get { return (string) attributes["destination"]; }
-            set { attributes["destination"] = value; }
         }
 
         /// <summary>
@@ -313,10 +303,20 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// DEPRECATED: Destination Path. Use `destinations` instead.
+        /// </summary>
+        [JsonPropertyName("destination")]
+        public string Destination
+        {
+            get { return (string) attributes["destination"]; }
+            set { attributes["destination"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   automation (required) - string - Automation type
         ///   source - string - Source Path
-        ///   destination - string - DEPRECATED: Destination Path
+        ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -578,7 +578,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   automation (required) - string - Automation type
         ///   source - string - Source Path
-        ///   destination - string - DEPRECATED: Destination Path
+        ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -676,7 +676,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   automation (required) - string - Automation type
         ///   source - string - Source Path
-        ///   destination - string - DEPRECATED: Destination Path
+        ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
