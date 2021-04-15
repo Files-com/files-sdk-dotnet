@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", null);
             }
+            if (!this.attributes.ContainsKey("clickwrap_body"))
+            {
+                this.attributes.Add("clickwrap_body", null);
+            }
             if (!this.attributes.ContainsKey("form_field_set_id"))
             {
                 this.attributes.Add("form_field_set_id", null);
@@ -104,6 +108,15 @@ namespace FilesCom.Models
         public string Email
         {
             get { return (string) attributes["email"]; }
+        }
+
+        /// <summary>
+        /// Clickwrap text that was shown to the registrant
+        /// </summary>
+        [JsonPropertyName("clickwrap_body")]
+        public string ClickwrapBody
+        {
+            get { return (string) attributes["clickwrap_body"]; }
         }
 
         /// <summary>
