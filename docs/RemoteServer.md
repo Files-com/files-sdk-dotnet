@@ -31,6 +31,7 @@
   "auth_status": "in_setup",
   "auth_account_name": "me@example.com",
   "one_drive_account_type": "personal",
+  "sharepoint_hostname": "filescom.sharepoint.com",
   "azure_blob_storage_account": "storage-account-name",
   "azure_blob_storage_container": "container-name"
 }
@@ -63,6 +64,7 @@
 * `auth_status` / `AuthStatus`  (string): Either `in_setup` or `complete`
 * `auth_account_name` / `AuthAccountName`  (string): Describes the authorized account
 * `one_drive_account_type` / `OneDriveAccountType`  (string): Either personal or business_other account types
+* `sharepoint_hostname` / `SharepointHostname`  (string): Cloud hosted sharepoint hostname
 * `azure_blob_storage_account` / `AzureBlobStorageAccount`  (string): Azure Blob Storage Account name
 * `azure_blob_storage_container` / `AzureBlobStorageContainer`  (string): Azure Blob Storage Container name
 * `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
@@ -163,6 +165,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `rackspace_region` (string): Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
 * `rackspace_container` (string): The name of the container (top level directory) where files will sync.
 * `one_drive_account_type` (string): Either personal or business_other account types
+* `sharepoint_hostname` (string): Cloud hosted sharepoint hostname
 * `azure_blob_storage_account` (string): Azure Blob Storage Account name
 * `azure_blob_storage_container` (string): Azure Blob Storage Container name
 
@@ -216,6 +219,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `rackspace_region` (string): Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
 * `rackspace_container` (string): The name of the container (top level directory) where files will sync.
 * `one_drive_account_type` (string): Either personal or business_other account types
+* `sharepoint_hostname` (string): Cloud hosted sharepoint hostname
 * `azure_blob_storage_account` (string): Azure Blob Storage Account name
 * `azure_blob_storage_container` (string): Azure Blob Storage Container name
 
@@ -268,6 +272,7 @@ parameters.Add("rackspace_username", "rackspaceuser");
 parameters.Add("rackspace_region", "dfw");
 parameters.Add("rackspace_container", "my-container");
 parameters.Add("one_drive_account_type", "personal");
+parameters.Add("sharepoint_hostname", "filescom.sharepoint.com");
 parameters.Add("azure_blob_storage_account", "storage-account-name");
 parameters.Add("azure_blob_storage_container", "container-name");
 
@@ -311,6 +316,7 @@ RemoteServer.Update(parameters);
 * `rackspace_region` (string): Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
 * `rackspace_container` (string): The name of the container (top level directory) where files will sync.
 * `one_drive_account_type` (string): Either personal or business_other account types
+* `sharepoint_hostname` (string): Cloud hosted sharepoint hostname
 * `azure_blob_storage_account` (string): Azure Blob Storage Account name
 * `azure_blob_storage_container` (string): Azure Blob Storage Container name
 
