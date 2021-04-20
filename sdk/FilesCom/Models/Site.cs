@@ -76,6 +76,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_password_required", null);
             }
+            if (!this.attributes.ContainsKey("bundle_require_share_recipient"))
+            {
+                this.attributes.Add("bundle_require_share_recipient", null);
+            }
             if (!this.attributes.ContainsKey("color2_left"))
             {
                 this.attributes.Add("color2_left", null);
@@ -604,6 +608,15 @@ namespace FilesCom.Models
         public bool BundlePasswordRequired
         {
             get { return (bool) attributes["bundle_password_required"]; }
+        }
+
+        /// <summary>
+        /// Do Bundles require recipients for sharing?
+        /// </summary>
+        [JsonPropertyName("bundle_require_share_recipient")]
+        public bool BundleRequireShareRecipient
+        {
+            get { return (bool) attributes["bundle_require_share_recipient"]; }
         }
 
         /// <summary>
@@ -1602,6 +1615,7 @@ namespace FilesCom.Models
         ///   immutable_files - boolean - Are files protected from modification?
         ///   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
         ///   bundle_password_required - boolean - Do Bundles require password protection?
+        ///   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
         ///   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         ///   opt_out_global - boolean - Use servers in the USA only?
         ///   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
@@ -1857,6 +1871,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_password_required") && !(parameters["bundle_password_required"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: bundle_password_required must be of type bool", "parameters[\"bundle_password_required\"]");
+            }
+            if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_require_share_recipient must be of type bool", "parameters[\"bundle_require_share_recipient\"]");
             }
             if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool ))
             {

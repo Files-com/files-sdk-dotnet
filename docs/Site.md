@@ -16,6 +16,7 @@
   "ask_about_overwrites": true,
   "bundle_expiration": 1,
   "bundle_password_required": true,
+  "bundle_require_share_recipient": true,
   "color2_left": "#0066a7",
   "color2_link": "#d34f5d",
   "color2_text": "#0066a7",
@@ -216,6 +217,7 @@
 * `ask_about_overwrites` / `AskAboutOverwrites`  (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
+* `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
 * `color2_left` / `Color2Left`  (string): Page link and button color
 * `color2_link` / `Color2Link`  (string): Top bar link color
 * `color2_text` / `Color2Text`  (string): Page link and button color
@@ -406,6 +408,7 @@ Task<Site> Site.Update(
 * `immutable_files` (bool): Are files protected from modification?
 * `session_pinned_by_ip` (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `bundle_password_required` (bool): Do Bundles require password protection?
+* `bundle_require_share_recipient` (bool): Do Bundles require recipients for sharing?
 * `password_requirements_apply_to_bundles` (bool): Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
 * `opt_out_global` (bool): Use servers in the USA only?
 * `use_provided_modified_at` (bool): Allow uploaders to set `provided_modified_at` for uploaded files?
