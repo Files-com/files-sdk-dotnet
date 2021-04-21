@@ -128,6 +128,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("provision_group_required", null);
             }
+            if (!this.attributes.ContainsKey("provision_email_signup_groups"))
+            {
+                this.attributes.Add("provision_email_signup_groups", null);
+            }
             if (!this.attributes.ContainsKey("provision_site_admin_groups"))
             {
                 this.attributes.Add("provision_site_admin_groups", null);
@@ -437,6 +441,15 @@ namespace FilesCom.Models
         public string ProvisionGroupRequired
         {
             get { return (string) attributes["provision_group_required"]; }
+        }
+
+        /// <summary>
+        /// Comma-separated list of group names whose members will be created with email_signup authentication.
+        /// </summary>
+        [JsonPropertyName("provision_email_signup_groups")]
+        public string ProvisionEmailSignupGroups
+        {
+            get { return (string) attributes["provision_email_signup_groups"]; }
         }
 
         /// <summary>

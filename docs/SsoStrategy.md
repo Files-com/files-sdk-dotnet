@@ -29,6 +29,7 @@
   "provision_group_exclusion": "Employees",
   "provision_group_inclusion": "Employees",
   "provision_group_required": "",
+  "provision_email_signup_groups": "Employees",
   "provision_site_admin_groups": "Employees",
   "provision_attachments_permission": true,
   "provision_dav_permission": true,
@@ -74,6 +75,7 @@
 * `provision_group_exclusion` / `ProvisionGroupExclusion`  (string): Comma-separated list of group names for groups (with optional wildcards) that will be excluded from auto-provisioning.
 * `provision_group_inclusion` / `ProvisionGroupInclusion`  (string): Comma-separated list of group names for groups (with optional wildcards) that will be auto-provisioned.
 * `provision_group_required` / `ProvisionGroupRequired`  (string): Comma or newline separated list of group names (with optional wildcards) to require membership for user provisioning.
+* `provision_email_signup_groups` / `ProvisionEmailSignupGroups`  (string): Comma-separated list of group names whose members will be created with email_signup authentication.
 * `provision_site_admin_groups` / `ProvisionSiteAdminGroups`  (string): Comma-separated list of group names whose members will be created as Site Admins.
 * `provision_attachments_permission` / `ProvisionAttachmentsPermission`  (bool): DEPRECATED: Auto-provisioned users get Sharing permission. Use a Group with the Bundle permission instead.
 * `provision_dav_permission` / `ProvisionDavPermission`  (bool): Auto-provisioned users get WebDAV permission?
