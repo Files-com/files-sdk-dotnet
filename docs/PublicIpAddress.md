@@ -1,4 +1,4 @@
-# Files.Models.PublicIpAddress
+# FilesCom.Models.PublicIpAddress
 
 ## Example PublicIpAddress Object
 

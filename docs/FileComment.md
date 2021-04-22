@@ -1,4 +1,4 @@
-# Files.Models.FileComment
+# FilesCom.Models.FileComment
 
 ## Example FileComment Object
 

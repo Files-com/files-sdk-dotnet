@@ -1,4 +1,4 @@
-# Files.Models.InboxRegistration
+# FilesCom.Models.InboxRegistration
 
 ## Example InboxRegistration Object
 

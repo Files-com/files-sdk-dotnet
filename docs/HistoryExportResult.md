@@ -1,4 +1,4 @@
-# Files.Models.HistoryExportResult
+# FilesCom.Models.HistoryExportResult
 
 ## Example HistoryExportResult Object
 

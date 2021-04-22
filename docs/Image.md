@@ -1,4 +1,4 @@
-# Files.Models.Image
+# FilesCom.Models.Image
 
 ## Example Image Object
 

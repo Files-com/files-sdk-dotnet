@@ -1,4 +1,4 @@
-# Files.Models.UsageDailySnapshot
+# FilesCom.Models.UsageDailySnapshot
 
 ## Example UsageDailySnapshot Object
 

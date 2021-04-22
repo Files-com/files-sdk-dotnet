@@ -1,4 +1,4 @@
-# Files.Models.InboxUpload
+# FilesCom.Models.InboxUpload
 
 ## Example InboxUpload Object
 

@@ -1,4 +1,4 @@
-# Files.Models.Payment
+# FilesCom.Models.Payment
 
 ## Example Payment Object
 

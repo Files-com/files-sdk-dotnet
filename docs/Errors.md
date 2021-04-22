@@ -1,4 +1,4 @@
-# Files.Models.Errors
+# FilesCom.Models.Errors
 
 ## Example Errors Object
 

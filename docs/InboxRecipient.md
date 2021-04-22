@@ -1,4 +1,4 @@
-# Files.Models.InboxRecipient
+# FilesCom.Models.InboxRecipient
 
 ## Example InboxRecipient Object
 

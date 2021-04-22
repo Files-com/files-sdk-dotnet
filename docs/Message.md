@@ -1,4 +1,4 @@
-# Files.Models.Message
+# FilesCom.Models.Message
 
 ## Example Message Object
 

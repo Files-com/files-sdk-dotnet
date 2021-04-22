@@ -1,4 +1,4 @@
-# Files.Models.Clickwrap
+# FilesCom.Models.Clickwrap
 
 ## Example Clickwrap Object
 

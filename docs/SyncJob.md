@@ -1,4 +1,4 @@
-# Files.Models.SyncJob
+# FilesCom.Models.SyncJob
 
 ## Example SyncJob Object
 

@@ -1,4 +1,4 @@
-# Files.Models.ApiKey
+# FilesCom.Models.ApiKey
 
 ## Example ApiKey Object
 

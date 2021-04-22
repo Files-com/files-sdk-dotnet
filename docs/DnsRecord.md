@@ -1,4 +1,4 @@
-# Files.Models.DnsRecord
+# FilesCom.Models.DnsRecord
 
 ## Example DnsRecord Object
 

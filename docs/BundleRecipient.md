@@ -1,4 +1,4 @@
-# Files.Models.BundleRecipient
+# FilesCom.Models.BundleRecipient
 
 ## Example BundleRecipient Object
 

@@ -1,4 +1,4 @@
-# Files.Models.BundleRegistration
+# FilesCom.Models.BundleRegistration
 
 ## Example BundleRegistration Object
 

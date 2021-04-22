@@ -1,4 +1,4 @@
-# Files.Models.GroupUser
+# FilesCom.Models.GroupUser
 
 ## Example GroupUser Object
 

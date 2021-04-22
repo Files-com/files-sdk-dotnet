@@ -1,4 +1,4 @@
-# Files.Models.Bundle
+# FilesCom.Models.Bundle
 
 ## Example Bundle Object
 

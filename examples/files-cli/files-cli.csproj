@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Files.com" Version="0.0.9.24" />
+    <PackageReference Include="FilesCom" Version="0.0.9.24" />
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0-preview.1.20120.5" />
     <PackageReference Include="ManyConsole" Version="2.0.1" />

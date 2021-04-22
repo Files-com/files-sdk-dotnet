@@ -1,4 +1,4 @@
-# Files.Models.UsageSnapshot
+# FilesCom.Models.UsageSnapshot
 
 ## Example UsageSnapshot Object
 

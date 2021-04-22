@@ -1,4 +1,4 @@
-# Files.Models.InvoiceLineItem
+# FilesCom.Models.InvoiceLineItem
 
 ## Example InvoiceLineItem Object
 

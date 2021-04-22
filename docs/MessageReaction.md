@@ -1,4 +1,4 @@
-# Files.Models.MessageReaction
+# FilesCom.Models.MessageReaction
 
 ## Example MessageReaction Object
 

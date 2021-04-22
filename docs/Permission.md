@@ -1,4 +1,4 @@
-# Files.Models.Permission
+# FilesCom.Models.Permission
 
 ## Example Permission Object
 

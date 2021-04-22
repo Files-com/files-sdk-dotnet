@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.com", "Files.com\Files.com.csproj", "{C8D938CB-35AA-42AE-A858-E3CAE9E35E1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Files.com", "FilesCom\FilesCom.csproj", "{C8D938CB-35AA-42AE-A858-E3CAE9E35E1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilesTests", "FilesTests\FilesTests.csproj", "{AB2C798D-7A63-4F32-8AD7-E0DAA7C4E8AC}"
 EndProject

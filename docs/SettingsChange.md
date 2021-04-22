@@ -1,4 +1,4 @@
-# Files.Models.SettingsChange
+# FilesCom.Models.SettingsChange
 
 ## Example SettingsChange Object
 

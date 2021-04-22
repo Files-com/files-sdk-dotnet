@@ -1,4 +1,4 @@
-# Files.Models.Group
+# FilesCom.Models.Group
 
 ## Example Group Object
 

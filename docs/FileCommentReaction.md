@@ -1,4 +1,4 @@
-# Files.Models.FileCommentReaction
+# FilesCom.Models.FileCommentReaction
 
 ## Example FileCommentReaction Object
 

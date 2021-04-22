@@ -1,4 +1,4 @@
-# Files.Models.Lock
+# FilesCom.Models.Lock
 
 ## Example Lock Object
 

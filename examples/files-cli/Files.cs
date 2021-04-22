@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Files;
+using FilesCom;
 using ManyConsole;
 
 namespace files_cli
@@ -11,7 +11,7 @@ namespace files_cli
 
         public static IEnumerable<ConsoleCommand> GetCommands()
         {
-            return ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(Files));
+            return ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(FilesCom));
         }
 
         public static int Main(string[] args)

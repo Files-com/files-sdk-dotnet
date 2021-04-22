@@ -1,4 +1,4 @@
-# Files.Models.SsoStrategy
+# FilesCom.Models.SsoStrategy
 
 ## Example SsoStrategy Object
 

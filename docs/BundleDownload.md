@@ -1,4 +1,4 @@
-# Files.Models.BundleDownload
+# FilesCom.Models.BundleDownload
 
 ## Example BundleDownload Object
 

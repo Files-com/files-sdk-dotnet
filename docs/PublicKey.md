@@ -1,4 +1,4 @@
-# Files.Models.PublicKey
+# FilesCom.Models.PublicKey
 
 ## Example PublicKey Object
 

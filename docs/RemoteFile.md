@@ -1,4 +1,4 @@
-# Files.Models.RemoteFile
+# FilesCom.Models.RemoteFile
 
 ## Example RemoteFile Object
 

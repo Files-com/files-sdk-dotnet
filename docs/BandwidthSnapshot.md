@@ -1,4 +1,4 @@
-# Files.Models.BandwidthSnapshot
+# FilesCom.Models.BandwidthSnapshot
 
 ## Example BandwidthSnapshot Object
 

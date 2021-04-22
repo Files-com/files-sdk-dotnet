@@ -9,7 +9,7 @@
     <Title>Files.com Client</Title>
     <Description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</Description>
     <Copyright>Copyright 2020</Copyright>
-    <PackageProjectUrl>https://github.com/Files-com/files-sdk-dotnet/tree/master/sdk/Files.com</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Files-com/files-sdk-dotnet/tree/master/sdk/FilesCom</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

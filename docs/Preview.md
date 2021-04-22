@@ -1,4 +1,4 @@
-# Files.Models.Preview
+# FilesCom.Models.Preview
 
 ## Example Preview Object
 

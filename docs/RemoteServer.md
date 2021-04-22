@@ -1,4 +1,4 @@
-# Files.Models.RemoteServer
+# FilesCom.Models.RemoteServer
 
 ## Example RemoteServer Object
 

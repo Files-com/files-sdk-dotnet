@@ -1,4 +1,4 @@
-# Files.Models.Style
+# FilesCom.Models.Style
 
 ## Example Style Object
 

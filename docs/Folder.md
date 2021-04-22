@@ -1,4 +1,4 @@
-# Files.Models.Folder
+# FilesCom.Models.Folder
 
 ## Example Folder Object
 

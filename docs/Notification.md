@@ -1,4 +1,4 @@
-# Files.Models.Notification
+# FilesCom.Models.Notification
 
 ## Example Notification Object
 

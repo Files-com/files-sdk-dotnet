@@ -1,4 +1,4 @@
-# Files.Models.FileAction
+# FilesCom.Models.FileAction
 
 ## Example FileAction Object
 

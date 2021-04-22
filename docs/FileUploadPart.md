@@ -1,4 +1,4 @@
-# Files.Models.FileUploadPart
+# FilesCom.Models.FileUploadPart
 
 ## Example FileUploadPart Object
 

@@ -1,4 +1,4 @@
-# Files.Models.Session
+# FilesCom.Models.Session
 
 ## Example Session Object
 

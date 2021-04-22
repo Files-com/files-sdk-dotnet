@@ -1,4 +1,4 @@
-# Files.Models.Behavior
+# FilesCom.Models.Behavior
 
 ## Example Behavior Object
 

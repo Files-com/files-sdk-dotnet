@@ -6,7 +6,7 @@ The Files.com .NET client library provides convenient access to the Files.com AP
 ## Installation
 
 To install the package:
-    dotnet add package Files.com
+    dotnet add package FilesCom
 
 Fetch the dependencies:
     dotnet restore
@@ -32,7 +32,7 @@ In the app.config or web.config of a .NET application, add the following section
 
     <configSections>
         <sectionGroup name="files.com">
-            <section name="filesConfiguration" type="Files.com.FilesConfiguration, Files.com"/>
+            <section name="filesConfiguration" type="FilesCom.FilesConfiguration, FilesCom"/>
         </sectionGroup>
     </configSections>
     <files.com>

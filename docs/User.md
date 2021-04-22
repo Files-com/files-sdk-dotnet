@@ -1,4 +1,4 @@
-# Files.Models.User
+# FilesCom.Models.User
 
 ## Example User Object
 
