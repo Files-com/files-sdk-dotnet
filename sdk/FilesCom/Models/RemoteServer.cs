@@ -136,10 +136,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("one_drive_account_type", null);
             }
-            if (!this.attributes.ContainsKey("sharepoint_hostname"))
-            {
-                this.attributes.Add("sharepoint_hostname", null);
-            }
             if (!this.attributes.ContainsKey("azure_blob_storage_account"))
             {
                 this.attributes.Add("azure_blob_storage_account", null);
@@ -489,16 +485,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Cloud hosted sharepoint hostname
-        /// </summary>
-        [JsonPropertyName("sharepoint_hostname")]
-        public string SharepointHostname
-        {
-            get { return (string) attributes["sharepoint_hostname"]; }
-            set { attributes["sharepoint_hostname"] = value; }
-        }
-
-        /// <summary>
         /// Azure Blob Storage Account name
         /// </summary>
         [JsonPropertyName("azure_blob_storage_account")]
@@ -684,7 +670,6 @@ namespace FilesCom.Models
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
-        ///   sharepoint_hostname - string - Cloud hosted sharepoint hostname
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         /// </summary>
@@ -835,10 +820,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string ))
             {
                 throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_hostname") && !(parameters["sharepoint_hostname"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_hostname must be of type string", "parameters[\"sharepoint_hostname\"]");
             }
             if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string ))
             {
@@ -1012,7 +993,6 @@ namespace FilesCom.Models
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
-        ///   sharepoint_hostname - string - Cloud hosted sharepoint hostname
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         /// </summary>
@@ -1161,10 +1141,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
             }
-            if (parameters.ContainsKey("sharepoint_hostname") && !(parameters["sharepoint_hostname"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_hostname must be of type string", "parameters[\"sharepoint_hostname\"]");
-            }
             if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
@@ -1216,7 +1192,6 @@ namespace FilesCom.Models
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
-        ///   sharepoint_hostname - string - Cloud hosted sharepoint hostname
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         /// </summary>
@@ -1369,10 +1344,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string ))
             {
                 throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_hostname") && !(parameters["sharepoint_hostname"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_hostname must be of type string", "parameters[\"sharepoint_hostname\"]");
             }
             if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string ))
             {
