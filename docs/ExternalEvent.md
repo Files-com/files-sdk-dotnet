@@ -4,6 +4,7 @@
 
 ```
 {
+  "id": 1,
   "event_type": "",
   "status": "",
   "body": "",
@@ -11,6 +12,7 @@
 }
 ```
 
+* `id` / `Id`  (Nullable<Int64>): Event ID
 * `event_type` / `EventType`  (string): Type of event being recorded.
 * `status` / `Status`  (string): Status of event.
 * `body` / `Body`  (string): Event body
@@ -40,3 +42,20 @@ Task<ExternalEvent[]> ExternalEvent.List(
 * `filter_like` (object): If set, return records where the specifiied field is equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
 * `filter_lt` (object): If set, return records where the specifiied field is less than the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
 * `filter_lteq` (object): If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
+
+
+---
+
+## Show External Event
+
+```
+Task<ExternalEvent> ExternalEvent.Find(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - External Event ID.

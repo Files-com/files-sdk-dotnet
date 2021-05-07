@@ -28,6 +28,10 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
             if (!this.attributes.ContainsKey("event_type"))
             {
                 this.attributes.Add("event_type", null);
@@ -61,6 +65,15 @@ namespace FilesCom.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// Event ID
+        /// </summary>
+        [JsonPropertyName("id")]
+        public Nullable<Int64> Id
+        {
+            get { return (Nullable<Int64>) attributes["id"]; }
+        }
 
         /// <summary>
         /// Type of event being recorded.
@@ -170,6 +183,43 @@ namespace FilesCom.Models
         )
         {
             return await List(parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - External Event ID.
+        /// </summary>
+        public static async Task<ExternalEvent> Find(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("id", id);
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/external_events/{parameters["id"]}", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+        }
+
+        public static async Task<ExternalEvent> Get(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return await Find(id, parameters, options);
         }
 
     }
