@@ -288,6 +288,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("office_integration_available", null);
             }
+            if (!this.attributes.ContainsKey("oncehub_link"))
+            {
+                this.attributes.Add("oncehub_link", null);
+            }
             if (!this.attributes.ContainsKey("opt_out_global"))
             {
                 this.attributes.Add("opt_out_global", null);
@@ -1085,6 +1089,15 @@ namespace FilesCom.Models
         public bool OfficeIntegrationAvailable
         {
             get { return (bool) attributes["office_integration_available"]; }
+        }
+
+        /// <summary>
+        /// Link to scheduling a meeting with our Sales team
+        /// </summary>
+        [JsonPropertyName("oncehub_link")]
+        public string OncehubLink
+        {
+            get { return (string) attributes["oncehub_link"]; }
         }
 
         /// <summary>
