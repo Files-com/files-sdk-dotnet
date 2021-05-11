@@ -22,6 +22,7 @@
   "color2_text": "#0066a7",
   "color2_top": "#000000",
   "color2_top_text": "#ffffff",
+  "contact_name": "John Doe",
   "created_at": "2000-01-01T01:00:00Z",
   "currency": "USD",
   "custom_namespace": true,
@@ -224,6 +225,7 @@
 * `color2_text` / `Color2Text`  (string): Page link and button color
 * `color2_top` / `Color2Top`  (string): Top bar background color
 * `color2_top_text` / `Color2TopText`  (string): Top bar text color
+* `contact_name` / `ContactName`  (string): Site main contact name
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Time this site was created
 * `currency` / `Currency`  (string): Preferred currency
 * `custom_namespace` / `CustomNamespace`  (bool): Is this site using a custom namespace for users?
