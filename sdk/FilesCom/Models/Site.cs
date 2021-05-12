@@ -100,6 +100,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("color2_top_text", null);
             }
+            if (!this.attributes.ContainsKey("contact_name"))
+            {
+                this.attributes.Add("contact_name", null);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -666,6 +670,15 @@ namespace FilesCom.Models
         public string Color2TopText
         {
             get { return (string) attributes["color2_top_text"]; }
+        }
+
+        /// <summary>
+        /// Site main contact name
+        /// </summary>
+        [JsonPropertyName("contact_name")]
+        public string ContactName
+        {
+            get { return (string) attributes["contact_name"]; }
         }
 
         /// <summary>
