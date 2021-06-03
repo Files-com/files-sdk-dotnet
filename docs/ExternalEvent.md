@@ -8,7 +8,8 @@
   "event_type": "",
   "status": "",
   "body": "",
-  "created_at": "2000-01-01T01:00:00Z"
+  "created_at": "2000-01-01T01:00:00Z",
+  "body_url": ""
 }
 ```
 
@@ -17,6 +18,7 @@
 * `status` / `Status`  (string): Status of event.
 * `body` / `Body`  (string): Event body
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): External event create date/time
+* `body_url` / `BodyUrl`  (string): Link to log file.
 
 
 ---
