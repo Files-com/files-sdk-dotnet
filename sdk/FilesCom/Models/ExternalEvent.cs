@@ -48,10 +48,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
-            if (!this.attributes.ContainsKey("body_url"))
-            {
-                this.attributes.Add("body_url", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -113,15 +109,6 @@ namespace FilesCom.Models
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
-        }
-
-        /// <summary>
-        /// Link to log file.
-        /// </summary>
-        [JsonPropertyName("body_url")]
-        public string BodyUrl
-        {
-            get { return (string) attributes["body_url"]; }
         }
 
 
