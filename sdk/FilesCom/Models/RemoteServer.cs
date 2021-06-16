@@ -144,6 +144,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("azure_blob_storage_container", null);
             }
+            if (!this.attributes.ContainsKey("s3_compatible_bucket"))
+            {
+                this.attributes.Add("s3_compatible_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("s3_compatible_region"))
+            {
+                this.attributes.Add("s3_compatible_region", null);
+            }
+            if (!this.attributes.ContainsKey("s3_compatible_endpoint"))
+            {
+                this.attributes.Add("s3_compatible_endpoint", null);
+            }
             if (!this.attributes.ContainsKey("aws_access_key"))
             {
                 this.attributes.Add("aws_access_key", null);
@@ -195,6 +207,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("azure_blob_storage_access_key"))
             {
                 this.attributes.Add("azure_blob_storage_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("s3_compatible_access_key"))
+            {
+                this.attributes.Add("s3_compatible_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("s3_compatible_secret_key"))
+            {
+                this.attributes.Add("s3_compatible_secret_key", null);
             }
         }
 
@@ -395,7 +415,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Wasabi region
+        /// Wasabi Bucket name
         /// </summary>
         [JsonPropertyName("wasabi_bucket")]
         public string WasabiBucket
@@ -405,7 +425,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Wasabi Bucket name
+        /// Wasabi region
         /// </summary>
         [JsonPropertyName("wasabi_region")]
         public string WasabiRegion
@@ -502,6 +522,36 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["azure_blob_storage_container"]; }
             set { attributes["azure_blob_storage_container"] = value; }
+        }
+
+        /// <summary>
+        /// S3-compatible Bucket name
+        /// </summary>
+        [JsonPropertyName("s3_compatible_bucket")]
+        public string S3CompatibleBucket
+        {
+            get { return (string) attributes["s3_compatible_bucket"]; }
+            set { attributes["s3_compatible_bucket"] = value; }
+        }
+
+        /// <summary>
+        /// S3-compatible Bucket name
+        /// </summary>
+        [JsonPropertyName("s3_compatible_region")]
+        public string S3CompatibleRegion
+        {
+            get { return (string) attributes["s3_compatible_region"]; }
+            set { attributes["s3_compatible_region"] = value; }
+        }
+
+        /// <summary>
+        /// S3-compatible endpoint
+        /// </summary>
+        [JsonPropertyName("s3_compatible_endpoint")]
+        public string S3CompatibleEndpoint
+        {
+            get { return (string) attributes["s3_compatible_endpoint"]; }
+            set { attributes["s3_compatible_endpoint"] = value; }
         }
 
         /// <summary>
@@ -635,6 +685,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// S3-compatible access key
+        /// </summary>
+        [JsonPropertyName("s3_compatible_access_key")]
+        public string S3CompatibleAccessKey
+        {
+            get { return (string) attributes["s3_compatible_access_key"]; }
+            set { attributes["s3_compatible_access_key"] = value; }
+        }
+
+        /// <summary>
+        /// S3-compatible secret key
+        /// </summary>
+        [JsonPropertyName("s3_compatible_secret_key")]
+        public string S3CompatibleSecretKey
+        {
+            get { return (string) attributes["s3_compatible_secret_key"]; }
+            set { attributes["s3_compatible_secret_key"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   aws_access_key - string - AWS Access Key.
         ///   aws_secret_key - string - AWS secret key.
@@ -664,14 +734,19 @@ namespace FilesCom.Models
         ///   google_cloud_storage_project_id - string - Google Cloud Project ID
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage S3 Endpoint
-        ///   wasabi_bucket - string - Wasabi region
-        ///   wasabi_region - string - Wasabi Bucket name
+        ///   wasabi_bucket - string - Wasabi Bucket name
+        ///   wasabi_region - string - Wasabi region
         ///   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   s3_compatible_bucket - string - S3-compatible Bucket name
+        ///   s3_compatible_region - string - S3-compatible Bucket name
+        ///   s3_compatible_endpoint - string - S3-compatible endpoint
+        ///   s3_compatible_access_key - string - S3-compatible access key
+        ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -828,6 +903,26 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -987,14 +1082,19 @@ namespace FilesCom.Models
         ///   google_cloud_storage_project_id - string - Google Cloud Project ID
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage S3 Endpoint
-        ///   wasabi_bucket - string - Wasabi region
-        ///   wasabi_region - string - Wasabi Bucket name
+        ///   wasabi_bucket - string - Wasabi Bucket name
+        ///   wasabi_region - string - Wasabi region
         ///   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   s3_compatible_bucket - string - S3-compatible Bucket name
+        ///   s3_compatible_region - string - S3-compatible Bucket name
+        ///   s3_compatible_endpoint - string - S3-compatible endpoint
+        ///   s3_compatible_access_key - string - S3-compatible access key
+        ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
         public static async Task<RemoteServer> Create(
             
@@ -1149,6 +1249,26 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
             }
+            if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1186,14 +1306,19 @@ namespace FilesCom.Models
         ///   google_cloud_storage_project_id - string - Google Cloud Project ID
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage S3 Endpoint
-        ///   wasabi_bucket - string - Wasabi region
-        ///   wasabi_region - string - Wasabi Bucket name
+        ///   wasabi_bucket - string - Wasabi Bucket name
+        ///   wasabi_region - string - Wasabi region
         ///   rackspace_username - string - Rackspace username used to login to the Rackspace Cloud Control Panel.
         ///   rackspace_region - string - Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
         ///   rackspace_container - string - The name of the container (top level directory) where files will sync.
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   s3_compatible_bucket - string - S3-compatible Bucket name
+        ///   s3_compatible_region - string - S3-compatible Bucket name
+        ///   s3_compatible_endpoint - string - S3-compatible endpoint
+        ///   s3_compatible_access_key - string - S3-compatible access key
+        ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id, 
@@ -1352,6 +1477,26 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
