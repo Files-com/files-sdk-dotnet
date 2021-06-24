@@ -77,6 +77,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            set { attributes["id"] = value; }
         }
 
         /// <summary>
@@ -86,6 +87,7 @@ namespace FilesCom.Models
         public string EventType
         {
             get { return (string) attributes["event_type"]; }
+            set { attributes["event_type"] = value; }
         }
 
         /// <summary>
@@ -95,6 +97,7 @@ namespace FilesCom.Models
         public string Status
         {
             get { return (string) attributes["status"]; }
+            set { attributes["status"] = value; }
         }
 
         /// <summary>
@@ -104,6 +107,7 @@ namespace FilesCom.Models
         public string Body
         {
             get { return (string) attributes["body"]; }
+            set { attributes["body"] = value; }
         }
 
         /// <summary>
@@ -122,9 +126,22 @@ namespace FilesCom.Models
         public string BodyUrl
         {
             get { return (string) attributes["body_url"]; }
+            set { attributes["body_url"] = value; }
         }
 
 
+        public async Task Save()
+        {
+            if (this.attributes["id"] != null)
+            {
+                throw new NotImplementedException("The ExternalEvent object doesn't support updates.");
+            }
+            else
+            {
+                var newObj = await ExternalEvent.Create(this.attributes, this.options);
+                this.attributes = newObj.getAttributes();
+            }
+        }
 
         /// <summary>
         /// Parameters:
@@ -234,6 +251,43 @@ namespace FilesCom.Models
         {
             return await Find(id, parameters, options);
         }
+
+        /// <summary>
+        /// Parameters:
+        ///   status (required) - string - Status of event.
+        ///   body (required) - string - Event body
+        /// </summary>
+        public static async Task<ExternalEvent> Create(
+            
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("status") && !(parameters["status"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
+            }
+            if (parameters.ContainsKey("body") && !(parameters["body"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
+            }
+            if (!parameters.ContainsKey("status") || parameters["status"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: status", "parameters[\"status\"]");
+            }
+            if (!parameters.ContainsKey("body") || parameters["body"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/external_events", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+        }
+
 
     }
 }

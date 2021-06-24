@@ -61,3 +61,21 @@ Task<ExternalEvent> ExternalEvent.Find(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - External Event ID.
+
+
+---
+
+## Create External Event
+
+```
+Task<ExternalEvent> ExternalEvent.Create(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `status` (string): Required - Status of event.
+* `body` (string): Required - Event body
