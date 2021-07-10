@@ -36,6 +36,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("extended_description", null);
             }
+            if (!this.attributes.ContainsKey("short_description"))
+            {
+                this.attributes.Add("short_description", null);
+            }
             if (!this.attributes.ContainsKey("documentation_links"))
             {
                 this.attributes.Add("documentation_links", null);
@@ -122,6 +126,15 @@ namespace FilesCom.Models
         public string ExtendedDescription
         {
             get { return (string) attributes["extended_description"]; }
+        }
+
+        /// <summary>
+        /// Short description of the App
+        /// </summary>
+        [JsonPropertyName("short_description")]
+        public string ShortDescription
+        {
+            get { return (string) attributes["short_description"]; }
         }
 
         /// <summary>
