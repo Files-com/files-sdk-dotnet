@@ -52,6 +52,26 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("body_url", null);
             }
+            if (!this.attributes.ContainsKey("folder_behavior_id"))
+            {
+                this.attributes.Add("folder_behavior_id", null);
+            }
+            if (!this.attributes.ContainsKey("successful_files"))
+            {
+                this.attributes.Add("successful_files", null);
+            }
+            if (!this.attributes.ContainsKey("errored_files"))
+            {
+                this.attributes.Add("errored_files", null);
+            }
+            if (!this.attributes.ContainsKey("bytes_synced"))
+            {
+                this.attributes.Add("bytes_synced", null);
+            }
+            if (!this.attributes.ContainsKey("remote_server_type"))
+            {
+                this.attributes.Add("remote_server_type", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -129,6 +149,56 @@ namespace FilesCom.Models
             set { attributes["body_url"] = value; }
         }
 
+        /// <summary>
+        /// Folder Behavior ID
+        /// </summary>
+        [JsonPropertyName("folder_behavior_id")]
+        public Nullable<Int64> FolderBehaviorId
+        {
+            get { return (Nullable<Int64>) attributes["folder_behavior_id"]; }
+            set { attributes["folder_behavior_id"] = value; }
+        }
+
+        /// <summary>
+        /// For sync events, the number of files handled successfully.
+        /// </summary>
+        [JsonPropertyName("successful_files")]
+        public Nullable<Int64> SuccessfulFiles
+        {
+            get { return (Nullable<Int64>) attributes["successful_files"]; }
+            set { attributes["successful_files"] = value; }
+        }
+
+        /// <summary>
+        /// For sync events, the number of files that encountered errors.
+        /// </summary>
+        [JsonPropertyName("errored_files")]
+        public Nullable<Int64> ErroredFiles
+        {
+            get { return (Nullable<Int64>) attributes["errored_files"]; }
+            set { attributes["errored_files"] = value; }
+        }
+
+        /// <summary>
+        /// For sync events, the total number of bytes synced.
+        /// </summary>
+        [JsonPropertyName("bytes_synced")]
+        public Nullable<Int64> BytesSynced
+        {
+            get { return (Nullable<Int64>) attributes["bytes_synced"]; }
+            set { attributes["bytes_synced"] = value; }
+        }
+
+        /// <summary>
+        /// Associated Remote Server type, if any
+        /// </summary>
+        [JsonPropertyName("remote_server_type")]
+        public string RemoteServerType
+        {
+            get { return (string) attributes["remote_server_type"]; }
+            set { attributes["remote_server_type"] = value; }
+        }
+
 
         public async Task Save()
         {
@@ -147,13 +217,13 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `remote_server_type`, `event_type`, `created_at` or `status`.
-        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
-        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
-        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
-        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
-        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
-        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type` or `status`.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `remote_server_type`, `event_type`, `created_at`, `status`, `site_id` or `folder_behavior_id`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`.
         /// </summary>
         public static async Task<ExternalEvent[]> List(
             
