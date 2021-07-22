@@ -46,6 +46,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("depth", null);
             }
+            if (!this.attributes.ContainsKey("recursive"))
+            {
+                this.attributes.Add("recursive", null);
+            }
             if (!this.attributes.ContainsKey("owner"))
             {
                 this.attributes.Add("owner", null);
@@ -54,6 +58,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("scope", null);
             }
+            if (!this.attributes.ContainsKey("exclusive"))
+            {
+                this.attributes.Add("exclusive", null);
+            }
             if (!this.attributes.ContainsKey("token"))
             {
                 this.attributes.Add("token", null);
@@ -61,6 +69,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("type"))
             {
                 this.attributes.Add("type", null);
+            }
+            if (!this.attributes.ContainsKey("allow_access_by_any_user"))
+            {
+                this.attributes.Add("allow_access_by_any_user", null);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -99,7 +111,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Lock timeout
+        /// Lock timeout in seconds
         /// </summary>
         [JsonPropertyName("timeout")]
         public Nullable<Int64> Timeout
@@ -109,7 +121,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Lock depth (0 or infinity)
+        /// DEPRECATED: Lock depth
         /// </summary>
         [JsonPropertyName("depth")]
         public string Depth
@@ -119,7 +131,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Owner of lock.  This can be any arbitrary string.
+        /// Does lock apply to subfolders?
+        /// </summary>
+        [JsonPropertyName("recursive")]
+        public bool Recursive
+        {
+            get { return (bool) attributes["recursive"]; }
+            set { attributes["recursive"] = value; }
+        }
+
+        /// <summary>
+        /// Owner of the lock.  This can be any arbitrary string.
         /// </summary>
         [JsonPropertyName("owner")]
         public string Owner
@@ -129,13 +151,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Lock scope(shared or exclusive)
+        /// DEPRECATED: Lock scope
         /// </summary>
         [JsonPropertyName("scope")]
         public string Scope
         {
             get { return (string) attributes["scope"]; }
             set { attributes["scope"] = value; }
+        }
+
+        /// <summary>
+        /// Is lock exclusive?
+        /// </summary>
+        [JsonPropertyName("exclusive")]
+        public bool Exclusive
+        {
+            get { return (bool) attributes["exclusive"]; }
+            set { attributes["exclusive"] = value; }
         }
 
         /// <summary>
@@ -149,13 +181,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Lock type
+        /// DEPRECATED: Lock type
         /// </summary>
         [JsonPropertyName("type")]
         public string Type
         {
             get { return (string) attributes["type"]; }
             set { attributes["type"] = value; }
+        }
+
+        /// <summary>
+        /// Can lock be modified by users other than its creator?
+        /// </summary>
+        [JsonPropertyName("allow_access_by_any_user")]
+        public bool AllowAccessByAnyUser
+        {
+            get { return (bool) attributes["allow_access_by_any_user"]; }
+            set { attributes["allow_access_by_any_user"] = value; }
         }
 
         /// <summary>
@@ -271,6 +313,9 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   path (required) - string - Path
+        ///   allow_access_by_any_user - boolean - Allow lock to be updated by any user?
+        ///   exclusive - boolean - Is lock exclusive?
+        ///   recursive - string - Does lock apply to subfolders?
         ///   timeout - int64 - Lock timeout length
         /// </summary>
         public static async Task<Lock> Create(
@@ -286,6 +331,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("allow_access_by_any_user") && !(parameters["allow_access_by_any_user"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: allow_access_by_any_user must be of type bool", "parameters[\"allow_access_by_any_user\"]");
+            }
+            if (parameters.ContainsKey("exclusive") && !(parameters["exclusive"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: exclusive must be of type bool", "parameters[\"exclusive\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64> ))
             {
