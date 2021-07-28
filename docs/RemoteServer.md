@@ -35,7 +35,8 @@
   "azure_blob_storage_container": "container-name",
   "s3_compatible_bucket": "my-bucket",
   "s3_compatible_region": "us-east-1",
-  "s3_compatible_endpoint": "mys3platform.com"
+  "s3_compatible_endpoint": "mys3platform.com",
+  "enable_dedicated_ips": true
 }
 ```
 
@@ -71,6 +72,7 @@
 * `s3_compatible_bucket` / `S3CompatibleBucket`  (string): S3-compatible Bucket name
 * `s3_compatible_region` / `S3CompatibleRegion`  (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` / `S3CompatibleEndpoint`  (string): S3-compatible endpoint
+* `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
 * `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
 * `password` / `Password`  (string): Password if needed.
@@ -176,6 +178,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_region` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
+* `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible access key
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 
@@ -234,6 +237,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_region` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
+* `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible access key
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 
@@ -291,6 +295,7 @@ parameters.Add("azure_blob_storage_container", "container-name");
 parameters.Add("s3_compatible_bucket", "my-bucket");
 parameters.Add("s3_compatible_region", "us-east-1");
 parameters.Add("s3_compatible_endpoint", "mys3platform.com");
+parameters.Add("enable_dedicated_ips", true);
 
 RemoteServer.Update(parameters);
 ```
@@ -337,6 +342,7 @@ RemoteServer.Update(parameters);
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_region` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
+* `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible access key
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 

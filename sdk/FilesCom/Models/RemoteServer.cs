@@ -156,6 +156,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("s3_compatible_endpoint", null);
             }
+            if (!this.attributes.ContainsKey("enable_dedicated_ips"))
+            {
+                this.attributes.Add("enable_dedicated_ips", null);
+            }
             if (!this.attributes.ContainsKey("aws_access_key"))
             {
                 this.attributes.Add("aws_access_key", null);
@@ -555,6 +559,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// `true` if remote server only accepts connections from dedicated IPs
+        /// </summary>
+        [JsonPropertyName("enable_dedicated_ips")]
+        public bool EnableDedicatedIps
+        {
+            get { return (bool) attributes["enable_dedicated_ips"]; }
+            set { attributes["enable_dedicated_ips"] = value; }
+        }
+
+        /// <summary>
         /// AWS Access Key.
         /// </summary>
         [JsonPropertyName("aws_access_key")]
@@ -745,6 +759,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_region - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
+        ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible access key
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
@@ -915,6 +930,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+            }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
             if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string ))
             {
@@ -1093,6 +1112,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_region - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
+        ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible access key
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
@@ -1261,6 +1281,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
             }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+            }
             if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
@@ -1317,6 +1341,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_region - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
+        ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible access key
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
@@ -1489,6 +1514,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+            }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
             if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string ))
             {
