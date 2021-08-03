@@ -68,6 +68,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("body", null);
             }
+            if (!this.attributes.ContainsKey("raw_body"))
+            {
+                this.attributes.Add("raw_body", null);
+            }
             if (!this.attributes.ContainsKey("action"))
             {
                 this.attributes.Add("action", null);
@@ -191,6 +195,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// raw body text
+        /// </summary>
+        [JsonPropertyName("raw_body")]
+        public string RawBody
+        {
+            get { return (string) attributes["raw_body"]; }
+            set { attributes["raw_body"] = value; }
+        }
+
+        /// <summary>
         /// action for test body
         /// </summary>
         [JsonPropertyName("action")]
@@ -221,6 +235,7 @@ namespace FilesCom.Models
         ///   encoding - string - HTTP encoding method.  Can be JSON, XML, or RAW (form data).
         ///   headers - object - Additional request headers.
         ///   body - object - Additional body parameters.
+        ///   raw_body - string - raw body text
         ///   action - string - action for test body
         /// </summary>
         public static async Task<WebhookTest> Create(
@@ -251,6 +266,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("body") && !(parameters["body"] is object ))
             {
                 throw new ArgumentException("Bad parameter: body must be of type object", "parameters[\"body\"]");
+            }
+            if (parameters.ContainsKey("raw_body") && !(parameters["raw_body"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: raw_body must be of type string", "parameters[\"raw_body\"]");
             }
             if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
             {

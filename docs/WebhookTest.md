@@ -22,6 +22,7 @@
 * `encoding` / `Encoding`  (string): HTTP encoding method.  Can be JSON, XML, or RAW (form data).
 * `headers` / `Headers`  (object): Additional request headers.
 * `body` / `Body`  (object): Additional body parameters.
+* `raw_body` / `RawBody`  (string): raw body text
 * `action` / `Action`  (string): action for test body
 
 
@@ -44,4 +45,5 @@ Task<WebhookTest> WebhookTest.Create(
 * `encoding` (string): HTTP encoding method.  Can be JSON, XML, or RAW (form data).
 * `headers` (object): Additional request headers.
 * `body` (object): Additional body parameters.
+* `raw_body` (string): raw body text
 * `action` (string): action for test body
