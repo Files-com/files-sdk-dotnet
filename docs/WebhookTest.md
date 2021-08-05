@@ -23,6 +23,8 @@
 * `headers` / `Headers`  (object): Additional request headers.
 * `body` / `Body`  (object): Additional body parameters.
 * `raw_body` / `RawBody`  (string): raw body text
+* `file_as_body` / `FileAsBody`  (bool): Send the file data as the request body?
+* `file_form_field` / `FileFormField`  (string): Send the file data as a named parameter in the request POST body
 * `action` / `Action`  (string): action for test body
 
 
@@ -46,4 +48,6 @@ Task<WebhookTest> WebhookTest.Create(
 * `headers` (object): Additional request headers.
 * `body` (object): Additional body parameters.
 * `raw_body` (string): raw body text
+* `file_as_body` (bool): Send the file data as the request body?
+* `file_form_field` (string): Send the file data as a named parameter in the request POST body
 * `action` (string): action for test body

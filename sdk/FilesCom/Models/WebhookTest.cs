@@ -72,6 +72,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("raw_body", null);
             }
+            if (!this.attributes.ContainsKey("file_as_body"))
+            {
+                this.attributes.Add("file_as_body", null);
+            }
+            if (!this.attributes.ContainsKey("file_form_field"))
+            {
+                this.attributes.Add("file_form_field", null);
+            }
             if (!this.attributes.ContainsKey("action"))
             {
                 this.attributes.Add("action", null);
@@ -205,6 +213,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Send the file data as the request body?
+        /// </summary>
+        [JsonPropertyName("file_as_body")]
+        public bool FileAsBody
+        {
+            get { return (bool) attributes["file_as_body"]; }
+            set { attributes["file_as_body"] = value; }
+        }
+
+        /// <summary>
+        /// Send the file data as a named parameter in the request POST body
+        /// </summary>
+        [JsonPropertyName("file_form_field")]
+        public string FileFormField
+        {
+            get { return (string) attributes["file_form_field"]; }
+            set { attributes["file_form_field"] = value; }
+        }
+
+        /// <summary>
         /// action for test body
         /// </summary>
         [JsonPropertyName("action")]
@@ -236,6 +264,8 @@ namespace FilesCom.Models
         ///   headers - object - Additional request headers.
         ///   body - object - Additional body parameters.
         ///   raw_body - string - raw body text
+        ///   file_as_body - boolean - Send the file data as the request body?
+        ///   file_form_field - string - Send the file data as a named parameter in the request POST body
         ///   action - string - action for test body
         /// </summary>
         public static async Task<WebhookTest> Create(
@@ -270,6 +300,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("raw_body") && !(parameters["raw_body"] is string ))
             {
                 throw new ArgumentException("Bad parameter: raw_body must be of type string", "parameters[\"raw_body\"]");
+            }
+            if (parameters.ContainsKey("file_as_body") && !(parameters["file_as_body"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: file_as_body must be of type bool", "parameters[\"file_as_body\"]");
+            }
+            if (parameters.ContainsKey("file_form_field") && !(parameters["file_form_field"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: file_form_field must be of type string", "parameters[\"file_form_field\"]");
             }
             if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
             {
