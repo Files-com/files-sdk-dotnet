@@ -136,6 +136,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("desktop_app_session_lifetime", null);
             }
+            if (!this.attributes.ContainsKey("mobile_app"))
+            {
+                this.attributes.Add("mobile_app", null);
+            }
+            if (!this.attributes.ContainsKey("mobile_app_session_ip_pinning"))
+            {
+                this.attributes.Add("mobile_app_session_ip_pinning", null);
+            }
+            if (!this.attributes.ContainsKey("mobile_app_session_lifetime"))
+            {
+                this.attributes.Add("mobile_app_session_lifetime", null);
+            }
             if (!this.attributes.ContainsKey("disallowed_countries"))
             {
                 this.attributes.Add("disallowed_countries", null);
@@ -751,6 +763,33 @@ namespace FilesCom.Models
         public Nullable<Int64> DesktopAppSessionLifetime
         {
             get { return (Nullable<Int64>) attributes["desktop_app_session_lifetime"]; }
+        }
+
+        /// <summary>
+        /// Is the mobile app enabled?
+        /// </summary>
+        [JsonPropertyName("mobile_app")]
+        public bool MobileApp
+        {
+            get { return (bool) attributes["mobile_app"]; }
+        }
+
+        /// <summary>
+        /// Is mobile app session IP pinning enabled?
+        /// </summary>
+        [JsonPropertyName("mobile_app_session_ip_pinning")]
+        public bool MobileAppSessionIpPinning
+        {
+            get { return (bool) attributes["mobile_app_session_ip_pinning"]; }
+        }
+
+        /// <summary>
+        /// Mobile app session lifetime (in hours)
+        /// </summary>
+        [JsonPropertyName("mobile_app_session_lifetime")]
+        public Nullable<Int64> MobileAppSessionLifetime
+        {
+            get { return (Nullable<Int64>) attributes["mobile_app_session_lifetime"]; }
         }
 
         /// <summary>
@@ -1613,6 +1652,9 @@ namespace FilesCom.Models
         ///   desktop_app - boolean - Is the desktop app enabled?
         ///   desktop_app_session_ip_pinning - boolean - Is desktop app session IP pinning enabled?
         ///   desktop_app_session_lifetime - int64 - Desktop app session lifetime (in hours)
+        ///   mobile_app - boolean - Is the mobile app enabled?
+        ///   mobile_app_session_ip_pinning - boolean - Is mobile app session IP pinning enabled?
+        ///   mobile_app_session_lifetime - int64 - Mobile app session lifetime (in hours)
         ///   folder_permissions_groups_only - boolean - If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
         ///   welcome_screen - string - Does the welcome screen appear?
         ///   office_integration_available - boolean - Allow users to use Office for the web?
@@ -1785,6 +1827,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("desktop_app_session_lifetime") && !(parameters["desktop_app_session_lifetime"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: desktop_app_session_lifetime must be of type Nullable<Int64>", "parameters[\"desktop_app_session_lifetime\"]");
+            }
+            if (parameters.ContainsKey("mobile_app") && !(parameters["mobile_app"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: mobile_app must be of type bool", "parameters[\"mobile_app\"]");
+            }
+            if (parameters.ContainsKey("mobile_app_session_ip_pinning") && !(parameters["mobile_app_session_ip_pinning"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: mobile_app_session_ip_pinning must be of type bool", "parameters[\"mobile_app_session_ip_pinning\"]");
+            }
+            if (parameters.ContainsKey("mobile_app_session_lifetime") && !(parameters["mobile_app_session_lifetime"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: mobile_app_session_lifetime must be of type Nullable<Int64>", "parameters[\"mobile_app_session_lifetime\"]");
             }
             if (parameters.ContainsKey("folder_permissions_groups_only") && !(parameters["folder_permissions_groups_only"] is bool ))
             {

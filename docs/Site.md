@@ -31,6 +31,9 @@
   "desktop_app": true,
   "desktop_app_session_ip_pinning": true,
   "desktop_app_session_lifetime": 1,
+  "mobile_app": true,
+  "mobile_app_session_ip_pinning": true,
+  "mobile_app_session_lifetime": 1,
   "disallowed_countries": "US,DE",
   "disable_notifications": true,
   "disable_password_reset": true,
@@ -234,6 +237,9 @@
 * `desktop_app` / `DesktopApp`  (bool): Is the desktop app enabled?
 * `desktop_app_session_ip_pinning` / `DesktopAppSessionIpPinning`  (bool): Is desktop app session IP pinning enabled?
 * `desktop_app_session_lifetime` / `DesktopAppSessionLifetime`  (Nullable<Int64>): Desktop app session lifetime (in hours)
+* `mobile_app` / `MobileApp`  (bool): Is the mobile app enabled?
+* `mobile_app_session_ip_pinning` / `MobileAppSessionIpPinning`  (bool): Is mobile app session IP pinning enabled?
+* `mobile_app_session_lifetime` / `MobileAppSessionLifetime`  (Nullable<Int64>): Mobile app session lifetime (in hours)
 * `disallowed_countries` / `DisallowedCountries`  (string): Comma seperated list of disallowed Country codes
 * `disable_notifications` / `DisableNotifications`  (bool): Are notifications disabled?
 * `disable_password_reset` / `DisablePasswordReset`  (bool): Is password reset disabled?
@@ -384,6 +390,9 @@ Task<Site> Site.Update(
 * `desktop_app` (bool): Is the desktop app enabled?
 * `desktop_app_session_ip_pinning` (bool): Is desktop app session IP pinning enabled?
 * `desktop_app_session_lifetime` (Nullable<Int64>): Desktop app session lifetime (in hours)
+* `mobile_app` (bool): Is the mobile app enabled?
+* `mobile_app_session_ip_pinning` (bool): Is mobile app session IP pinning enabled?
+* `mobile_app_session_lifetime` (Nullable<Int64>): Mobile app session lifetime (in hours)
 * `folder_permissions_groups_only` (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
 * `welcome_screen` (string): Does the welcome screen appear?
 * `office_integration_available` (bool): Allow users to use Office for the web?
