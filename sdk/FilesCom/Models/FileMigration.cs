@@ -60,6 +60,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("status", null);
             }
+            if (!this.attributes.ContainsKey("log_url"))
+            {
+                this.attributes.Add("log_url", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -148,6 +152,15 @@ namespace FilesCom.Models
         public string Status
         {
             get { return (string) attributes["status"]; }
+        }
+
+        /// <summary>
+        /// Link to download the log file for this migration.
+        /// </summary>
+        [JsonPropertyName("log_url")]
+        public string LogUrl
+        {
+            get { return (string) attributes["log_url"]; }
         }
 
 

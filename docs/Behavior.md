@@ -107,7 +107,7 @@ Task<Behavior> Behavior.Create(
 
 ### Parameters
 
-* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
+* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `path` (string): Required - Folder behaviors path.
 * `behavior` (string): Required - Behavior type.
@@ -150,7 +150,7 @@ Task<Behavior> Behavior.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Behavior ID.
-* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
+* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `behavior` (string): Behavior type.
 * `path` (string): Folder behaviors path.
@@ -191,7 +191,7 @@ Behavior.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Behavior ID.
-* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior.
+* `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `behavior` (string): Behavior type.
 * `path` (string): Folder behaviors path.

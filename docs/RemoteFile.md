@@ -146,6 +146,86 @@ Task<RemoteFile> RemoteFile.Delete(
 
 ---
 
+## Return metadata for file/folder
+
+```
+Task<RemoteFile> RemoteFile.Metadata(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
+* `with_previews` (bool): Include file preview information?
+* `with_priority_color` (bool): Include file priority color information?
+
+
+---
+
+## Copy file/folder
+
+```
+Task<FileAction> RemoteFile.Copy(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Copy destination path.
+* `structure` (bool): Copy structure only?
+
+
+---
+
+## Move file/folder
+
+```
+Task<FileAction> RemoteFile.Move(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Move destination path.
+
+
+---
+
+## Begin file upload
+
+```
+Task<RemoteFile[]> RemoteFile.BeginUpload(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `mkdir_parents` (bool): Create parent directories if they do not exist?
+* `part` (Nullable<Int64>): Part if uploading a part.
+* `parts` (Nullable<Int64>): How many parts to fetch?
+* `ref` (string): 
+* `restart` (Nullable<Int64>): File byte offset to restart from.
+* `with_rename` (bool): Allow file rename instead of overwrite?
+
+
+---
+
 ## Download file
 
 ```
@@ -208,3 +288,98 @@ File.Delete(parameters);
 
 * `path` (string): Required - Path to operate on.
 * `recursive` (bool): If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
+
+
+---
+
+## Return metadata for file/folder
+
+```
+var File = RemoteFile.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("with_previews", true);
+parameters.Add("with_priority_color", true);
+
+File.Metadata(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
+* `with_previews` (bool): Include file preview information?
+* `with_priority_color` (bool): Include file priority color information?
+
+
+---
+
+## Copy file/folder
+
+```
+var File = RemoteFile.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("structure", true);
+
+File.Copy(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Copy destination path.
+* `structure` (bool): Copy structure only?
+
+
+---
+
+## Move file/folder
+
+```
+var File = RemoteFile.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+
+File.Move(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Move destination path.
+
+
+---
+
+## Begin file upload
+
+```
+var File = RemoteFile.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("mkdir_parents", true);
+parameters.Add("part", 1);
+parameters.Add("parts", 1);
+parameters.Add("ref", "upload-1");
+parameters.Add("restart", 1);
+parameters.Add("with_rename", true);
+
+File.BeginUpload(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `mkdir_parents` (bool): Create parent directories if they do not exist?
+* `part` (Nullable<Int64>): Part if uploading a part.
+* `parts` (Nullable<Int64>): How many parts to fetch?
+* `ref` (string): 
+* `restart` (Nullable<Int64>): File byte offset to restart from.
+* `with_rename` (bool): Allow file rename instead of overwrite?

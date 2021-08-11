@@ -11,7 +11,8 @@
   "files_total": 1,
   "operation": "move",
   "region": "USA",
-  "status": "complete"
+  "status": "complete",
+  "log_url": "https://www.example.com/log_file"
 }
 ```
 
@@ -23,6 +24,7 @@
 * `operation` / `Operation`  (string): The type of operation
 * `region` / `Region`  (string): Region
 * `status` / `Status`  (string): Status
+* `log_url` / `LogUrl`  (string): Link to download the log file for this migration.
 
 
 ---
