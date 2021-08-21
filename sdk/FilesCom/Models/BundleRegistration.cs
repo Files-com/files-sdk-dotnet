@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", null);
             }
+            if (!this.attributes.ContainsKey("ip"))
+            {
+                this.attributes.Add("ip", null);
+            }
             if (!this.attributes.ContainsKey("inbox_code"))
             {
                 this.attributes.Add("inbox_code", null);
@@ -112,6 +116,15 @@ namespace FilesCom.Models
         public string Email
         {
             get { return (string) attributes["email"]; }
+        }
+
+        /// <summary>
+        /// Registrant IP Address
+        /// </summary>
+        [JsonPropertyName("ip")]
+        public string Ip
+        {
+            get { return (string) attributes["ip"]; }
         }
 
         /// <summary>
