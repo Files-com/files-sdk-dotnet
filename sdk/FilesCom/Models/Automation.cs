@@ -44,10 +44,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("interval", null);
             }
-            if (!this.attributes.ContainsKey("next_process_on"))
-            {
-                this.attributes.Add("next_process_on", null);
-            }
             if (!this.attributes.ContainsKey("schedule"))
             {
                 this.attributes.Add("schedule", null);
@@ -160,16 +156,6 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["interval"]; }
             set { attributes["interval"] = value; }
-        }
-
-        /// <summary>
-        /// If trigger is `daily`, date this automation will next run.
-        /// </summary>
-        [JsonPropertyName("next_process_on")]
-        public string NextProcessOn
-        {
-            get { return (string) attributes["next_process_on"]; }
-            set { attributes["next_process_on"] = value; }
         }
 
         /// <summary>

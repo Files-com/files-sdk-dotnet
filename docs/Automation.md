@@ -8,7 +8,6 @@
   "automation": "create_folder",
   "trigger": "realtime",
   "interval": "week",
-  "next_process_on": "2020-01-01",
   "schedule": {
     "days_of_week": [
       0,
@@ -48,7 +47,6 @@
 * `automation` / `AutomationType`  (string): Automation type
 * `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
-* `next_process_on` / `NextProcessOn`  (string): If trigger is `daily`, date this automation will next run.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
 * `source` / `Source`  (string): Source Path
 * `destinations` / `Destinations`  (string): Destination Path
