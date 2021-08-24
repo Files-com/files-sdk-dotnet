@@ -240,6 +240,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_id", null);
             }
+            if (!this.attributes.ContainsKey("imported_password_hash"))
+            {
+                this.attributes.Add("imported_password_hash", null);
+            }
             if (!this.attributes.ContainsKey("password"))
             {
                 this.attributes.Add("password", null);
@@ -800,6 +804,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Pre-calculated hash of the user's password.
+        /// </summary>
+        [JsonPropertyName("imported_password_hash")]
+        public string ImportedPasswordHash
+        {
+            get { return (string) attributes["imported_password_hash"]; }
+            set { attributes["imported_password_hash"] = value; }
+        }
+
+        /// <summary>
         /// User password.
         /// </summary>
         [JsonPropertyName("password")]
@@ -917,6 +931,7 @@ namespace FilesCom.Models
         ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         ///   group_id - int64 - Group ID to associate this user with.
         ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
+        ///   imported_password_hash - string - Pre-calculated hash of the user's password.
         ///   password - string - User password.
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
@@ -996,6 +1011,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("imported_password_hash") && !(parameters["imported_password_hash"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: imported_password_hash must be of type string", "parameters[\"imported_password_hash\"]");
             }
             if (parameters.ContainsKey("password") && !(parameters["password"] is string ))
             {
@@ -1327,6 +1346,7 @@ namespace FilesCom.Models
         ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         ///   group_id - int64 - Group ID to associate this user with.
         ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
+        ///   imported_password_hash - string - Pre-calculated hash of the user's password.
         ///   password - string - User password.
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
@@ -1403,6 +1423,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("imported_password_hash") && !(parameters["imported_password_hash"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: imported_password_hash must be of type string", "parameters[\"imported_password_hash\"]");
             }
             if (parameters.ContainsKey("password") && !(parameters["password"] is string ))
             {
@@ -1645,6 +1669,7 @@ namespace FilesCom.Models
         ///   grant_permission - string - Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
         ///   group_id - int64 - Group ID to associate this user with.
         ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
+        ///   imported_password_hash - string - Pre-calculated hash of the user's password.
         ///   password - string - User password.
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
@@ -1726,6 +1751,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("imported_password_hash") && !(parameters["imported_password_hash"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: imported_password_hash must be of type string", "parameters[\"imported_password_hash\"]");
             }
             if (parameters.ContainsKey("password") && !(parameters["password"] is string ))
             {
