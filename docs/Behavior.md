@@ -8,6 +8,8 @@
   "path": "",
   "attachment_url": "",
   "behavior": "webhook",
+  "name": "",
+  "description": "",
   "value": {
     "method": "GET"
   }
@@ -18,6 +20,8 @@
 * `path` / `Path`  (string): Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `attachment_url` / `AttachmentUrl`  (string): URL for attached file
 * `behavior` / `BehaviorType`  (string): Behavior type.
+* `name` / `Name`  (string): Name for this behavior.
+* `description` / `Description`  (string): Description for this behavior.
 * `value` / `Value`  (object): Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
 * `attachment_file` / `AttachmentFile`  (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 
@@ -109,6 +113,8 @@ Task<Behavior> Behavior.Create(
 
 * `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `name` (string): Name for this behavior.
+* `description` (string): Description for this behavior.
 * `path` (string): Required - Folder behaviors path.
 * `behavior` (string): Required - Behavior type.
 
@@ -152,6 +158,8 @@ Task<Behavior> Behavior.Update(
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `name` (string): Name for this behavior.
+* `description` (string): Description for this behavior.
 * `behavior` (string): Behavior type.
 * `path` (string): Folder behaviors path.
 
@@ -193,6 +201,8 @@ Behavior.Update(parameters);
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (string): The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `name` (string): Name for this behavior.
+* `description` (string): Description for this behavior.
 * `behavior` (string): Behavior type.
 * `path` (string): Folder behaviors path.
 

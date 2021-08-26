@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("interval", null);
             }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
             if (!this.attributes.ContainsKey("schedule"))
             {
                 this.attributes.Add("schedule", null);
@@ -63,6 +67,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("destination_replace_to"))
             {
                 this.attributes.Add("destination_replace_to", null);
+            }
+            if (!this.attributes.ContainsKey("description"))
+            {
+                this.attributes.Add("description", null);
             }
             if (!this.attributes.ContainsKey("path"))
             {
@@ -159,6 +167,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Name for this automation.
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name
+        {
+            get { return (string) attributes["name"]; }
+            set { attributes["name"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
         /// </summary>
         [JsonPropertyName("schedule")]
@@ -206,6 +224,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["destination_replace_to"]; }
             set { attributes["destination_replace_to"] = value; }
+        }
+
+        /// <summary>
+        /// Description for the this Automation.
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description
+        {
+            get { return (string) attributes["description"]; }
+            set { attributes["description"] = value; }
         }
 
         /// <summary>
@@ -311,6 +339,8 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
+        ///   description - string - Description for the this Automation.
+        ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -371,6 +401,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
             {
@@ -573,6 +611,8 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
+        ///   description - string - Description for the this Automation.
+        ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -631,6 +671,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
             }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
@@ -671,6 +719,8 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
+        ///   description - string - Description for the this Automation.
+        ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -733,6 +783,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
             {

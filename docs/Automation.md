@@ -8,6 +8,7 @@
   "automation": "create_folder",
   "trigger": "realtime",
   "interval": "week",
+  "name": "",
   "schedule": {
     "days_of_week": [
       0,
@@ -26,6 +27,7 @@
   ],
   "destination_replace_from": "",
   "destination_replace_to": "",
+  "description": "",
   "path": "",
   "user_id": 1,
   "user_ids": [
@@ -47,11 +49,13 @@
 * `automation` / `AutomationType`  (string): Automation type
 * `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+* `name` / `Name`  (string): Name for this automation.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
 * `source` / `Source`  (string): Source Path
 * `destinations` / `Destinations`  (string): Destination Path
 * `destination_replace_from` / `DestinationReplaceFrom`  (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` / `DestinationReplaceTo`  (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
+* `description` / `Description`  (string): Description for the this Automation.
 * `path` / `Path`  (string): Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID of the Automation's creator.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
@@ -131,6 +135,8 @@ Task<Automation> Automation.Create(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
+* `description` (string): Description for the this Automation.
+* `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -163,6 +169,8 @@ Task<Automation> Automation.Update(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
+* `description` (string): Description for the this Automation.
+* `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
@@ -224,6 +232,8 @@ Automation.Update(parameters);
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
+* `description` (string): Description for the this Automation.
+* `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.

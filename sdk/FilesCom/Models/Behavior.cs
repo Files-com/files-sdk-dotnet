@@ -44,6 +44,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("behavior", null);
             }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("description"))
+            {
+                this.attributes.Add("description", null);
+            }
             if (!this.attributes.ContainsKey("value"))
             {
                 this.attributes.Add("value", null);
@@ -111,6 +119,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Name for this behavior.
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name
+        {
+            get { return (string) attributes["name"]; }
+            set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// Description for this behavior.
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description
+        {
+            get { return (string) attributes["description"]; }
+            set { attributes["description"] = value; }
+        }
+
+        /// <summary>
         /// Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
         /// </summary>
         [JsonPropertyName("value")]
@@ -134,6 +162,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   name - string - Name for this behavior.
+        ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
         ///   path - string - Folder behaviors path.
         /// </summary>
@@ -156,6 +186,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
             {
@@ -421,6 +459,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   name - string - Name for this behavior.
+        ///   description - string - Description for this behavior.
         ///   path (required) - string - Folder behaviors path.
         ///   behavior (required) - string - Behavior type.
         /// </summary>
@@ -440,6 +480,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
@@ -521,6 +569,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   name - string - Name for this behavior.
+        ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
         ///   path - string - Folder behaviors path.
         /// </summary>
@@ -545,6 +595,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
             {
