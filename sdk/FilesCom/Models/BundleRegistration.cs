@@ -64,6 +64,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("form_field_data", null);
             }
+            if (!this.attributes.ContainsKey("bundle_id"))
+            {
+                this.attributes.Add("bundle_id", null);
+            }
+            if (!this.attributes.ContainsKey("bundle_recipient_id"))
+            {
+                this.attributes.Add("bundle_recipient_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -161,6 +169,24 @@ namespace FilesCom.Models
         public string FormFieldData
         {
             get { return (string) attributes["form_field_data"]; }
+        }
+
+        /// <summary>
+        /// Id of associated bundle
+        /// </summary>
+        [JsonPropertyName("bundle_id")]
+        public Nullable<Int64> BundleId
+        {
+            get { return (Nullable<Int64>) attributes["bundle_id"]; }
+        }
+
+        /// <summary>
+        /// Id of associated bundle recipient
+        /// </summary>
+        [JsonPropertyName("bundle_recipient_id")]
+        public Nullable<Int64> BundleRecipientId
+        {
+            get { return (Nullable<Int64>) attributes["bundle_recipient_id"]; }
         }
 
 

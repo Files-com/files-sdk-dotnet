@@ -56,6 +56,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("form_field_data", null);
             }
+            if (!this.attributes.ContainsKey("inbox_id"))
+            {
+                this.attributes.Add("inbox_id", null);
+            }
+            if (!this.attributes.ContainsKey("inbox_recipient_id"))
+            {
+                this.attributes.Add("inbox_recipient_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -135,6 +143,24 @@ namespace FilesCom.Models
         public string FormFieldData
         {
             get { return (string) attributes["form_field_data"]; }
+        }
+
+        /// <summary>
+        /// Id of associated inbox
+        /// </summary>
+        [JsonPropertyName("inbox_id")]
+        public Nullable<Int64> InboxId
+        {
+            get { return (Nullable<Int64>) attributes["inbox_id"]; }
+        }
+
+        /// <summary>
+        /// Id of associated inbox recipient
+        /// </summary>
+        [JsonPropertyName("inbox_recipient_id")]
+        public Nullable<Int64> InboxRecipientId
+        {
+            get { return (Nullable<Int64>) attributes["inbox_recipient_id"]; }
         }
 
 
