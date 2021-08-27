@@ -143,7 +143,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   folder_behavior_id (required) - int64 - ID of the associated Inbox.
+        ///   folder_behavior_id - int64 - ID of the associated Inbox.
         /// </summary>
         public static async Task<InboxRegistration[]> List(
             
@@ -165,10 +165,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("folder_behavior_id") && !(parameters["folder_behavior_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: folder_behavior_id must be of type Nullable<Int64>", "parameters[\"folder_behavior_id\"]");
-            }
-            if (!parameters.ContainsKey("folder_behavior_id") || parameters["folder_behavior_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: folder_behavior_id", "parameters[\"folder_behavior_id\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/inbox_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
