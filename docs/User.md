@@ -109,7 +109,7 @@
 * `change_password_confirmation` / `ChangePasswordConfirmation`  (string): Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
 * `grant_permission` / `GrantPermission`  (string): Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
 * `group_id` / `GroupId`  (Nullable<Int64>): Group ID to associate this user with.
-* `imported_password_hash` / `ImportedPasswordHash`  (string): Pre-calculated hash of the user's password.
+* `imported_password_hash` / `ImportedPasswordHash`  (string): Pre-calculated hash of the user's password. If supplied, this will be used to authenticate the user on first login. Supported hash menthods are MD5, SHA1, and SHA256.
 * `password` / `Password`  (string): User password.
 * `password_confirmation` / `PasswordConfirmation`  (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` / `AnnouncementsRead`  (bool): Signifies that the user has read all the announcements in the UI.
@@ -188,7 +188,7 @@ Task<User> User.Create(
 * `grant_permission` (string): Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
 * `group_id` (Nullable<Int64>): Group ID to associate this user with.
 * `group_ids` (string): A list of group ids to associate this user with.  Comma delimited.
-* `imported_password_hash` (string): Pre-calculated hash of the user's password.
+* `imported_password_hash` (string): Pre-calculated hash of the user's password. If supplied, this will be used to authenticate the user on first login. Supported hash menthods are MD5, SHA1, and SHA256.
 * `password` (string): User password.
 * `password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` (bool): Signifies that the user has read all the announcements in the UI.
@@ -300,7 +300,7 @@ Task<User> User.Update(
 * `grant_permission` (string): Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
 * `group_id` (Nullable<Int64>): Group ID to associate this user with.
 * `group_ids` (string): A list of group ids to associate this user with.  Comma delimited.
-* `imported_password_hash` (string): Pre-calculated hash of the user's password.
+* `imported_password_hash` (string): Pre-calculated hash of the user's password. If supplied, this will be used to authenticate the user on first login. Supported hash menthods are MD5, SHA1, and SHA256.
 * `password` (string): User password.
 * `password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` (bool): Signifies that the user has read all the announcements in the UI.
@@ -468,7 +468,7 @@ User.Update(parameters);
 * `grant_permission` (string): Permission to grant on the user root.  Can be blank or `full`, `read`, `write`, `list`, or `history`.
 * `group_id` (Nullable<Int64>): Group ID to associate this user with.
 * `group_ids` (string): A list of group ids to associate this user with.  Comma delimited.
-* `imported_password_hash` (string): Pre-calculated hash of the user's password.
+* `imported_password_hash` (string): Pre-calculated hash of the user's password. If supplied, this will be used to authenticate the user on first login. Supported hash menthods are MD5, SHA1, and SHA256.
 * `password` (string): User password.
 * `password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` (bool): Signifies that the user has read all the announcements in the UI.
