@@ -168,6 +168,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", null);
             }
+            if (!this.attributes.ContainsKey("ftp_enabled"))
+            {
+                this.attributes.Add("ftp_enabled", null);
+            }
             if (!this.attributes.ContainsKey("reply_to_email"))
             {
                 this.attributes.Add("reply_to_email", null);
@@ -379,6 +383,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("session_pinned_by_ip"))
             {
                 this.attributes.Add("session_pinned_by_ip", null);
+            }
+            if (!this.attributes.ContainsKey("sftp_enabled"))
+            {
+                this.attributes.Add("sftp_enabled", null);
             }
             if (!this.attributes.ContainsKey("sftp_user_root_enabled"))
             {
@@ -835,6 +843,15 @@ namespace FilesCom.Models
         public string Email
         {
             get { return (string) attributes["email"]; }
+        }
+
+        /// <summary>
+        /// Is FTP enabled?
+        /// </summary>
+        [JsonPropertyName("ftp_enabled")]
+        public bool FtpEnabled
+        {
+            get { return (bool) attributes["ftp_enabled"]; }
         }
 
         /// <summary>
@@ -1315,6 +1332,15 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Is SFTP enabled?
+        /// </summary>
+        [JsonPropertyName("sftp_enabled")]
+        public bool SftpEnabled
+        {
+            get { return (bool) attributes["sftp_enabled"]; }
+        }
+
+        /// <summary>
         /// Use user FTP roots also for SFTP?
         /// </summary>
         [JsonPropertyName("sftp_user_root_enabled")]
@@ -1693,6 +1719,8 @@ namespace FilesCom.Models
         ///   non_sso_users_allowed - boolean - If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
         ///   sharing_enabled - boolean - Allow bundle creation
         ///   user_requests_enabled - boolean - Enable User Requests feature
+        ///   ftp_enabled - boolean - Is FTP enabled?
+        ///   sftp_enabled - boolean - Is SFTP enabled?
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
         ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
@@ -1991,6 +2019,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_requests_enabled") && !(parameters["user_requests_enabled"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: user_requests_enabled must be of type bool", "parameters[\"user_requests_enabled\"]");
+            }
+            if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: ftp_enabled must be of type bool", "parameters[\"ftp_enabled\"]");
+            }
+            if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: sftp_enabled must be of type bool", "parameters[\"sftp_enabled\"]");
             }
             if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool ))
             {
