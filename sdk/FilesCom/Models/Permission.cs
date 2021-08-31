@@ -11,12 +11,6 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-
-        public static Permission Create(Dictionary<string, object> attributes, Dictionary<string, object> options)
-        {
-            return Permission.Create((string)attributes["path"], attributes, options);
-        }
-
         public Permission() : this(null, null) { }
 
         public Permission(Dictionary<string, object> attributes, Dictionary<string, object> options)
