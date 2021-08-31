@@ -12,10 +12,13 @@ Fetch the dependencies:
     dotnet restore
 
 
-## Requirements
+## Frameworks Supported
 
- * .NET Standard 2.0
- * .NET Framework 4.7
+- .NET 5
+
+- .NET Core 2.1, 2.2, 3.0, 3.1
+
+- .NET Standard 2.1
 
 
 ## Usage
