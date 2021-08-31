@@ -11,12 +11,6 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-
-        public static Folder Create(Dictionary<string, object> attributes, Dictionary<string, object> options)
-        {
-            return Folder.Create((string)attributes["path"], attributes, options);
-        }
-
         public Folder() : this(null, null) { }
 
         public Folder(Dictionary<string, object> attributes, Dictionary<string, object> options)

@@ -169,7 +169,7 @@ Task<RemoteFile> RemoteFile.Metadata(
 ## Copy file/folder
 
 ```
-Task<FileAction> RemoteFile.Copy(
+Task<RemoteFile> RemoteFile.Copy(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -188,7 +188,7 @@ Task<FileAction> RemoteFile.Copy(
 ## Move file/folder
 
 ```
-Task<FileAction> RemoteFile.Move(
+Task<RemoteFile> RemoteFile.Move(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

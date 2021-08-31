@@ -46,8 +46,8 @@ namespace FilesCom.Models
             parameters["mkdir_parents"] = true;
             parameters["mkdir_parents"] = true;
 
-            FileAction[] uploadActions = await FileAction.BeginUpload(path, parameters, options);
-            FileAction uploadAction = uploadActions[0];
+            RemoteFile[] uploadActions = await BeginUpload(path, parameters, options);
+            RemoteFile uploadAction = uploadActions[0];
             int chunkLength = Math.Min(fileLength - offset, uploadAction.Partsize);
             System.Net.Http.HttpMethod httpMethod = new System.Net.Http.HttpMethod(uploadAction.HttpMethod);
 
@@ -683,7 +683,7 @@ namespace FilesCom.Models
         ///   destination (required) - string - Copy destination path.
         ///   structure - boolean - Copy structure only?
         /// </summary>
-        public async Task<FileAction> Copy(Dictionary<string, object> parameters)
+        public async Task<RemoteFile> Copy(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -714,7 +714,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/file_actions/copy/{attributes["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileAction>(responseJson);
+            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
 
 
@@ -724,7 +724,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   destination (required) - string - Move destination path.
         /// </summary>
-        public async Task<FileAction> Move(Dictionary<string, object> parameters)
+        public async Task<RemoteFile> Move(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -751,7 +751,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/file_actions/move/{attributes["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileAction>(responseJson);
+            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
 
 
@@ -1087,7 +1087,7 @@ namespace FilesCom.Models
         ///   destination (required) - string - Copy destination path.
         ///   structure - boolean - Copy structure only?
         /// </summary>
-        public static async Task<FileAction> Copy(
+        public static async Task<RemoteFile> Copy(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1120,7 +1120,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/file_actions/copy/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileAction>(responseJson);
+            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
 
 
@@ -1130,7 +1130,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   destination (required) - string - Move destination path.
         /// </summary>
-        public static async Task<FileAction> Move(
+        public static async Task<RemoteFile> Move(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1159,7 +1159,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/file_actions/move/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileAction>(responseJson);
+            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
 
 
