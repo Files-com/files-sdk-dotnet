@@ -289,7 +289,7 @@ namespace FilesCom.Models
         ///   with_previews - boolean - Include file previews?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public static async Task<Folder[]> ListFor(
+        public static async Task<RemoteFile[]> ListFor(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -342,7 +342,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Folder[]>(responseJson);
+            return JsonSerializer.Deserialize<RemoteFile[]>(responseJson);
         }
 
 

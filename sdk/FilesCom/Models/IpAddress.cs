@@ -142,7 +142,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
-        public static async Task<IpAddress[]> GetReserved(
+        public static async Task<PublicIpAddress[]> GetReserved(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -162,7 +162,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/ip_addresses/reserved", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<IpAddress[]>(responseJson);
+            return JsonSerializer.Deserialize<PublicIpAddress[]>(responseJson);
         }
 
 

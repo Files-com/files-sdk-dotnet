@@ -58,7 +58,7 @@
 ## List Invoices
 
 ```
-Task<Invoice[]> Invoice.List(
+Task<AccountLineItem[]> Invoice.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

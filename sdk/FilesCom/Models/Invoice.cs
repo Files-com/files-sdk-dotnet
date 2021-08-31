@@ -235,7 +235,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
-        public static async Task<Invoice[]> List(
+        public static async Task<AccountLineItem[]> List(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -255,10 +255,10 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/invoices", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Invoice[]>(responseJson);
+            return JsonSerializer.Deserialize<AccountLineItem[]>(responseJson);
         }
 
-        public static async Task<Invoice[]> All(
+        public static async Task<AccountLineItem[]> All(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null

@@ -42,7 +42,7 @@
 ## List history for specific file
 
 ```
-Task<History[]> History.ListForFile(
+Task<Action[]> History.ListForFile(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -65,7 +65,7 @@ Task<History[]> History.ListForFile(
 ## List history for specific folder
 
 ```
-Task<History[]> History.ListForFolder(
+Task<Action[]> History.ListForFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -88,7 +88,7 @@ Task<History[]> History.ListForFolder(
 ## List history for specific user
 
 ```
-Task<History[]> History.ListForUser(
+Task<Action[]> History.ListForUser(
     Nullable<Int64> user_id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -111,7 +111,7 @@ Task<History[]> History.ListForUser(
 ## List site login history
 
 ```
-Task<History[]> History.ListLogins(
+Task<Action[]> History.ListLogins(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -133,7 +133,7 @@ Task<History[]> History.ListLogins(
 ## List site full action history
 
 ```
-Task<History[]> History.List(
+Task<Action[]> History.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

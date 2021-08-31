@@ -36,7 +36,7 @@ namespace FilesCom.Models
             return f;
         }
 
-        private static async Task<Tuple<int, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, int offset, int fileLength, Dictionary<string, object> options = null)
+        private static async Task<Tuple<Int64, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options = null)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             if (fileRef != null) {
@@ -46,9 +46,9 @@ namespace FilesCom.Models
             parameters["mkdir_parents"] = true;
             parameters["mkdir_parents"] = true;
 
-            RemoteFile[] uploadActions = await BeginUpload(path, parameters, options);
-            RemoteFile uploadAction = uploadActions[0];
-            int chunkLength = Math.Min(fileLength - offset, uploadAction.Partsize);
+            FileUploadPart[] uploadActions = await BeginUpload(path, parameters, options);
+            FileUploadPart uploadAction = uploadActions[0];
+            Int64 chunkLength = Math.Min(fileLength - offset, (Int64)uploadAction.Partsize);
             System.Net.Http.HttpMethod httpMethod = new System.Net.Http.HttpMethod(uploadAction.HttpMethod);
 
             await FilesClient.ChunkUpload(httpMethod, uploadAction.UploadUri, readStream, chunkLength);
@@ -64,29 +64,27 @@ namespace FilesCom.Models
                 destinationPath = localPath.Substring(localPath.LastIndexOf('/') + 1);
             }
 
-            // TODO: Remove int restriction on length to allow files > 2GB
             DateTime mTime = fileInfo.LastWriteTimeUtc;
-            int fileLength = (int) fileInfo.Length;
+            Int64 fileLength = fileInfo.Length;
 
             System.IO.Stream readStream = System.IO.File.OpenRead(localPath);
             return await UploadFile(destinationPath, readStream, fileLength, mTime, options);
         }
 
-        public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, int fileLength, DateTime mTime, Dictionary<string, object> options = null)
+        public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null)
         {
             bool success = false;
 
             using (readStream)
             {
-                // TODO: Remove int restriction on length to allow files > 2GB
                 Int64 parts = 0;
-                int bytesWritten = 0;
+                Int64 bytesWritten = 0;
                 string fileRef = null;
 
                 // TODO: Set up multiple parallel streams instead of looping serial uploads here.
                 while (bytesWritten < fileLength) {
                     parts++;
-                    Tuple<int, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options);
+                    Tuple<Int64, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options);
                     bytesWritten += result.Item1;
                     fileRef = result.Item2;
                 }
@@ -95,7 +93,7 @@ namespace FilesCom.Models
                 createParams["action"] = "end";
                 createParams["provided_mtime"] = mTime.ToString("u");
                 createParams["ref"] = fileRef;
-                createParams["size"] = (Int64) fileLength;
+                createParams["size"] = fileLength;
 
                 await RemoteFile.Create(destinationPath, createParams);
                 success = true;
@@ -766,7 +764,7 @@ namespace FilesCom.Models
         ///   restart - int64 - File byte offset to restart from.
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         /// </summary>
-        public async Task<RemoteFile[]> BeginUpload(Dictionary<string, object> parameters)
+        public async Task<FileUploadPart[]> BeginUpload(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -809,7 +807,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/file_actions/begin_upload/{attributes["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile[]>(responseJson);
+            return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
         }
 
 
@@ -1174,7 +1172,7 @@ namespace FilesCom.Models
         ///   restart - int64 - File byte offset to restart from.
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         /// </summary>
-        public static async Task<RemoteFile[]> BeginUpload(
+        public static async Task<FileUploadPart[]> BeginUpload(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1219,7 +1217,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/file_actions/begin_upload/{parameters["path"]}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile[]>(responseJson);
+            return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
         }
 
 

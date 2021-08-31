@@ -21,7 +21,7 @@ namespace FilesCom
 
         Task StreamDownload(string uriString, Stream writeStream);
 
-        Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, int readLength);
+        Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, Int64 readLength);
     }
 
     public class FilesApiService : IFilesApiService
@@ -119,7 +119,7 @@ namespace FilesCom
         }
 
         public async Task StreamDownload(string uriString, Stream writeStream)
-        { 
+        {
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             Uri uri = new Uri(uriString);
 
@@ -128,22 +128,22 @@ namespace FilesCom
                 response.EnsureSuccessStatusCode();
 
                 using (writeStream)
-                { 
+                {
                     await response.Content.CopyToAsync(writeStream);
                 }
                 log.Debug($"Successfully downloaded {uri}");
             }
         }
 
-        public async Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, int readLength)
+        public async Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, Int64 readLength)
         {
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpUpload);
             Uri uri = new Uri(uriString);
             byte[] buffer = new byte[readLength];
             HttpContent httpContent = new ByteArrayContent(buffer);
 
-            // TODO: Remove int restriction on length to allow files > 2GB
-            await readStream.ReadAsync(buffer, 0, readLength);
+            // Note: Casting to Integer here (int) means each part has a 2GB max length.  This is largely ok in the Files.com API design.
+            await readStream.ReadAsync(buffer, 0, (int)readLength);
 
             var httpRequestMessage = new HttpRequestMessage
             {

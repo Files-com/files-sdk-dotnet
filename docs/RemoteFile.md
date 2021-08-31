@@ -206,7 +206,7 @@ Task<RemoteFile> RemoteFile.Move(
 ## Begin file upload
 
 ```
-Task<RemoteFile[]> RemoteFile.BeginUpload(
+Task<FileUploadPart[]> RemoteFile.BeginUpload(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

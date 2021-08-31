@@ -77,7 +77,7 @@ namespace FilesCom
                             delay = this.config.MaxNetworkRetryDelay;
                         }
                         else
-                        { 
+                        {
                             delay = Math.Min(this.config.InitialNetworkRequestDelay, rand.NextDouble() * this.config.MaxNetworkRetryDelay);
                         }
 
@@ -104,12 +104,12 @@ namespace FilesCom
         }
 
         public string BaseUrl
-        { 
+        {
             get { return config.BaseUrl; }
         }
 
         public string ApiKey
-        { 
+        {
             get { return config.ApiKey; }
         }
 
@@ -147,7 +147,7 @@ namespace FilesCom
         }
 
         public static async Task StreamDownload(string uri, Stream writeStream)
-        { 
+        {
             if (Instance == null) {
                 throw new InvalidOperationException("Instance must be created before streaming download");
             }
@@ -169,7 +169,7 @@ namespace FilesCom
             }
         }
 
-        public static async Task ChunkUpload(HttpMethod verb, string uri, Stream readStream, int readLength)
+        public static async Task ChunkUpload(HttpMethod verb, string uri, Stream readStream, Int64 readLength)
         {
             if (Instance == null) {
                 throw new InvalidOperationException("Instance must be created before uploading chunk");

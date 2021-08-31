@@ -42,7 +42,7 @@ Task<IpAddress[]> IpAddress.List(
 ## List all possible public IP addresses
 
 ```
-Task<IpAddress[]> IpAddress.GetReserved(
+Task<PublicIpAddress[]> IpAddress.GetReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

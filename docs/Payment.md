@@ -58,7 +58,7 @@
 ## List Payments
 
 ```
-Task<Payment[]> Payment.List(
+Task<AccountLineItem[]> Payment.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

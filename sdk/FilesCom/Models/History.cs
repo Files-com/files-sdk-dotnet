@@ -227,7 +227,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
-        public static async Task<History[]> ListForFile(
+        public static async Task<Action[]> ListForFile(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -272,7 +272,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/history/files/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<History[]>(responseJson);
+            return JsonSerializer.Deserialize<Action[]>(responseJson);
         }
 
 
@@ -286,7 +286,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
-        public static async Task<History[]> ListForFolder(
+        public static async Task<Action[]> ListForFolder(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -331,7 +331,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/history/folders/{parameters["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<History[]>(responseJson);
+            return JsonSerializer.Deserialize<Action[]>(responseJson);
         }
 
 
@@ -345,7 +345,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         ///   user_id (required) - int64 - User ID.
         /// </summary>
-        public static async Task<History[]> ListForUser(
+        public static async Task<Action[]> ListForUser(
             Nullable<Int64> user_id, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -390,7 +390,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/history/users/{parameters["user_id"]}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<History[]>(responseJson);
+            return JsonSerializer.Deserialize<Action[]>(responseJson);
         }
 
 
@@ -403,7 +403,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `user_id` and `created_at`.
         /// </summary>
-        public static async Task<History[]> ListLogins(
+        public static async Task<Action[]> ListLogins(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -439,7 +439,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<History[]>(responseJson);
+            return JsonSerializer.Deserialize<Action[]>(responseJson);
         }
 
 
@@ -458,7 +458,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `user_id`, `folder` or `path`.
         ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
         /// </summary>
-        public static async Task<History[]> List(
+        public static async Task<Action[]> List(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -518,10 +518,10 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/history", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<History[]>(responseJson);
+            return JsonSerializer.Deserialize<Action[]>(responseJson);
         }
 
-        public static async Task<History[]> All(
+        public static async Task<Action[]> All(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
