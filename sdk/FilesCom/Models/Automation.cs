@@ -435,7 +435,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/automations/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
         }
@@ -817,7 +817,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/automations/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
         }

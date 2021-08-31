@@ -103,7 +103,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: global_access", "parameters[\"global_access\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/projects/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/projects/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Project>(responseJson);
         }
@@ -285,7 +285,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: global_access", "parameters[\"global_access\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/projects/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/projects/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Project>(responseJson);
         }

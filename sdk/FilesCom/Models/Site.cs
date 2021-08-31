@@ -2225,7 +2225,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: smtp_password must be of type string", "parameters[\"smtp_password\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/site", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/site", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Site>(responseJson);
         }

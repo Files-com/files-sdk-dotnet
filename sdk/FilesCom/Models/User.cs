@@ -1161,7 +1161,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/users/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<User>(responseJson);
         }
@@ -1901,7 +1901,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/users/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<User>(responseJson);
         }

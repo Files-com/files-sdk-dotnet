@@ -158,7 +158,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: title", "parameters[\"title\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/public_keys/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/public_keys/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<PublicKey>(responseJson);
         }
@@ -359,7 +359,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: title", "parameters[\"title\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/public_keys/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/public_keys/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<PublicKey>(responseJson);
         }

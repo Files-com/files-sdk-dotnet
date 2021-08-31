@@ -590,7 +590,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{attributes["path"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{attributes["path"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
@@ -986,7 +986,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{parameters["path"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/files/{parameters["path"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }

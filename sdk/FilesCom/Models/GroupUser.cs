@@ -173,7 +173,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/group_users/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }
@@ -375,7 +375,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/group_users/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }

@@ -131,7 +131,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/message_comments/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/message_comments/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<MessageComment>(responseJson);
         }
@@ -332,7 +332,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/message_comments/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/message_comments/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<MessageComment>(responseJson);
         }

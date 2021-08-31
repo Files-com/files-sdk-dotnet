@@ -234,7 +234,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys/{attributes["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/api_keys/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -487,7 +487,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/api_key", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -530,7 +530,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys/{parameters["id"]}", System.Net.Http.HttpMethod.Patch, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/api_keys/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
