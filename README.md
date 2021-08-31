@@ -20,6 +20,8 @@ Fetch the dependencies:
 
 - .NET Standard 2.1
 
+We are open to adding support for additional frameworks where we can.  Please send us your requests.
+
 
 ## Usage
 
