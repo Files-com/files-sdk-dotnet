@@ -41,6 +41,7 @@
   "require_2fa": "always_require",
   "active_2fa": true,
   "require_password_change": true,
+  "password_expired": true,
   "restapi_permission": true,
   "self_managed": true,
   "sftp_permission": true,
@@ -91,6 +92,7 @@
 * `require_2fa` / `Require2fa`  (string): 2FA required setting
 * `active_2fa` / `Active2fa`  (bool): Is 2fa active for the user?
 * `require_password_change` / `RequirePasswordChange`  (bool): Is a password change required upon next user login?
+* `password_expired` / `PasswordExpired`  (bool): Is user's password expired?
 * `restapi_permission` / `RestapiPermission`  (bool): Can this user access the REST API?
 * `self_managed` / `SelfManaged`  (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` / `SftpPermission`  (bool): Can the user access with SFTP?

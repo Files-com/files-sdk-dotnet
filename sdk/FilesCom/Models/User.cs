@@ -168,6 +168,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("require_password_change", null);
             }
+            if (!this.attributes.ContainsKey("password_expired"))
+            {
+                this.attributes.Add("password_expired", null);
+            }
             if (!this.attributes.ContainsKey("restapi_permission"))
             {
                 this.attributes.Add("restapi_permission", null);
@@ -621,6 +625,16 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["require_password_change"]; }
             set { attributes["require_password_change"] = value; }
+        }
+
+        /// <summary>
+        /// Is user's password expired?
+        /// </summary>
+        [JsonPropertyName("password_expired")]
+        public bool PasswordExpired
+        {
+            get { return (bool) attributes["password_expired"]; }
+            set { attributes["password_expired"] = value; }
         }
 
         /// <summary>
