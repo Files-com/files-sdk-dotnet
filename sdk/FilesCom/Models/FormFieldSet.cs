@@ -84,6 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -94,6 +95,7 @@ namespace FilesCom.Models
         [JsonPropertyName("title")]
         public string Title
         {
+            
             get { return (string) attributes["title"]; }
             set { attributes["title"] = value; }
         }
@@ -104,6 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("form_layout")]
         public Nullable<Int64> FormLayout
         {
+            
             get { return (Nullable<Int64>) attributes["form_layout"]; }
             set { attributes["form_layout"] = value; }
         }
@@ -114,6 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("form_fields")]
         public object FormFields
         {
+            
             get { return (object) attributes["form_fields"]; }
             set { attributes["form_fields"] = value; }
         }
@@ -124,6 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("skip_name")]
         public bool SkipName
         {
+            
             get { return (bool) attributes["skip_name"]; }
             set { attributes["skip_name"] = value; }
         }
@@ -134,6 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("skip_email")]
         public bool SkipEmail
         {
+            
             get { return (bool) attributes["skip_email"]; }
             set { attributes["skip_email"] = value; }
         }
@@ -144,6 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("skip_company")]
         public bool SkipCompany
         {
+            
             get { return (bool) attributes["skip_company"]; }
             set { attributes["skip_company"] = value; }
         }
@@ -154,6 +161,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }

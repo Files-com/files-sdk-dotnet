@@ -108,6 +108,7 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public Nullable<Int64> Code
         {
+            
             get { return (Nullable<Int64>) attributes["code"]; }
             set { attributes["code"] = value; }
         }
@@ -118,6 +119,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
+            
             get { return (string) attributes["message"]; }
             set { attributes["message"] = value; }
         }
@@ -128,6 +130,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
+            
             get { return (string) attributes["status"]; }
             set { attributes["status"] = value; }
         }
@@ -138,6 +141,7 @@ namespace FilesCom.Models
         [JsonPropertyName("data")]
         public object Data
         {
+            
             get { return (object) attributes["data"]; }
             set { attributes["data"] = value; }
         }
@@ -148,6 +152,7 @@ namespace FilesCom.Models
         [JsonPropertyName("success")]
         public bool Success
         {
+            
             get { return (bool) attributes["success"]; }
             set { attributes["success"] = value; }
         }
@@ -158,6 +163,7 @@ namespace FilesCom.Models
         [JsonPropertyName("url")]
         public string Url
         {
+            
             get { return (string) attributes["url"]; }
             set { attributes["url"] = value; }
         }
@@ -168,6 +174,7 @@ namespace FilesCom.Models
         [JsonPropertyName("method")]
         public string Method
         {
+            
             get { return (string) attributes["method"]; }
             set { attributes["method"] = value; }
         }
@@ -178,6 +185,7 @@ namespace FilesCom.Models
         [JsonPropertyName("encoding")]
         public string Encoding
         {
+            
             get { return (string) attributes["encoding"]; }
             set { attributes["encoding"] = value; }
         }
@@ -188,6 +196,7 @@ namespace FilesCom.Models
         [JsonPropertyName("headers")]
         public object Headers
         {
+            
             get { return (object) attributes["headers"]; }
             set { attributes["headers"] = value; }
         }
@@ -198,6 +207,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public object Body
         {
+            
             get { return (object) attributes["body"]; }
             set { attributes["body"] = value; }
         }
@@ -208,6 +218,7 @@ namespace FilesCom.Models
         [JsonPropertyName("raw_body")]
         public string RawBody
         {
+            
             get { return (string) attributes["raw_body"]; }
             set { attributes["raw_body"] = value; }
         }
@@ -218,6 +229,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file_as_body")]
         public bool FileAsBody
         {
+            
             get { return (bool) attributes["file_as_body"]; }
             set { attributes["file_as_body"] = value; }
         }
@@ -228,6 +240,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file_form_field")]
         public string FileFormField
         {
+            
             get { return (string) attributes["file_form_field"]; }
             set { attributes["file_form_field"] = value; }
         }
@@ -238,6 +251,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
+            
             get { return (string) attributes["action"]; }
             set { attributes["action"] = value; }
         }

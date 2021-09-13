@@ -76,6 +76,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -86,6 +87,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -96,6 +98,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public string Body
         {
+            
             get { return (string) attributes["body"]; }
             set { attributes["body"] = value; }
         }
@@ -106,6 +109,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_with_users")]
         public string UseWithUsers
         {
+            
             get { return (string) attributes["use_with_users"]; }
             set { attributes["use_with_users"] = value; }
         }
@@ -116,6 +120,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_with_bundles")]
         public string UseWithBundles
         {
+            
             get { return (string) attributes["use_with_bundles"]; }
             set { attributes["use_with_bundles"] = value; }
         }
@@ -126,6 +131,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_with_inboxes")]
         public string UseWithInboxes
         {
+            
             get { return (string) attributes["use_with_inboxes"]; }
             set { attributes["use_with_inboxes"] = value; }
         }

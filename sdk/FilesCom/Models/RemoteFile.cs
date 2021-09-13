@@ -269,6 +269,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
+            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -279,6 +280,7 @@ namespace FilesCom.Models
         [JsonPropertyName("display_name")]
         public string DisplayName
         {
+            
             get { return (string) attributes["display_name"]; }
             set { attributes["display_name"] = value; }
         }
@@ -289,6 +291,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
+            
             get { return (string) attributes["type"]; }
             set { attributes["type"] = value; }
         }
@@ -299,6 +302,7 @@ namespace FilesCom.Models
         [JsonPropertyName("size")]
         public Nullable<Int64> Size
         {
+            
             get { return (Nullable<Int64>) attributes["size"]; }
             set { attributes["size"] = value; }
         }
@@ -309,6 +313,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mtime")]
         public Nullable<DateTime> Mtime
         {
+            
             get { return (Nullable<DateTime>) attributes["mtime"]; }
             set { attributes["mtime"] = value; }
         }
@@ -319,6 +324,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provided_mtime")]
         public Nullable<DateTime> ProvidedMtime
         {
+            
             get { return (Nullable<DateTime>) attributes["provided_mtime"]; }
             set { attributes["provided_mtime"] = value; }
         }
@@ -329,6 +335,7 @@ namespace FilesCom.Models
         [JsonPropertyName("crc32")]
         public string Crc32
         {
+            
             get { return (string) attributes["crc32"]; }
             set { attributes["crc32"] = value; }
         }
@@ -339,6 +346,7 @@ namespace FilesCom.Models
         [JsonPropertyName("md5")]
         public string Md5
         {
+            
             get { return (string) attributes["md5"]; }
             set { attributes["md5"] = value; }
         }
@@ -349,6 +357,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mime_type")]
         public string MimeType
         {
+            
             get { return (string) attributes["mime_type"]; }
             set { attributes["mime_type"] = value; }
         }
@@ -359,6 +368,7 @@ namespace FilesCom.Models
         [JsonPropertyName("region")]
         public string Region
         {
+            
             get { return (string) attributes["region"]; }
             set { attributes["region"] = value; }
         }
@@ -369,6 +379,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permissions")]
         public string Permissions
         {
+            
             get { return (string) attributes["permissions"]; }
             set { attributes["permissions"] = value; }
         }
@@ -379,6 +390,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subfolders_locked?")]
         public bool SubfoldersLocked
         {
+            
             get { return (bool) attributes["subfolders_locked?"]; }
             set { attributes["subfolders_locked?"] = value; }
         }
@@ -389,6 +401,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
+            
             get { return (string) attributes["download_uri"]; }
             set { attributes["download_uri"] = value; }
         }
@@ -399,6 +412,7 @@ namespace FilesCom.Models
         [JsonPropertyName("priority_color")]
         public string PriorityColor
         {
+            
             get { return (string) attributes["priority_color"]; }
             set { attributes["priority_color"] = value; }
         }
@@ -409,6 +423,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview_id")]
         public Nullable<Int64> PreviewId
         {
+            
             get { return (Nullable<Int64>) attributes["preview_id"]; }
             set { attributes["preview_id"] = value; }
         }
@@ -419,6 +434,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview")]
         public object Preview
         {
+            
             get { return (object) attributes["preview"]; }
             set { attributes["preview"] = value; }
         }
@@ -429,6 +445,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
+            
             get { return (string) attributes["action"]; }
             set { attributes["action"] = value; }
         }
@@ -439,6 +456,7 @@ namespace FilesCom.Models
         [JsonPropertyName("length")]
         public Nullable<Int64> Length
         {
+            
             get { return (Nullable<Int64>) attributes["length"]; }
             set { attributes["length"] = value; }
         }
@@ -449,6 +467,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mkdir_parents")]
         public bool MkdirParents
         {
+            
             get { return (bool) attributes["mkdir_parents"]; }
             set { attributes["mkdir_parents"] = value; }
         }
@@ -459,6 +478,7 @@ namespace FilesCom.Models
         [JsonPropertyName("part")]
         public Nullable<Int64> Part
         {
+            
             get { return (Nullable<Int64>) attributes["part"]; }
             set { attributes["part"] = value; }
         }
@@ -469,6 +489,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parts")]
         public Nullable<Int64> Parts
         {
+            
             get { return (Nullable<Int64>) attributes["parts"]; }
             set { attributes["parts"] = value; }
         }
@@ -478,6 +499,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ref")]
         public string Ref
         {
+            
             get { return (string) attributes["ref"]; }
             set { attributes["ref"] = value; }
         }
@@ -488,6 +510,7 @@ namespace FilesCom.Models
         [JsonPropertyName("restart")]
         public Nullable<Int64> Restart
         {
+            
             get { return (Nullable<Int64>) attributes["restart"]; }
             set { attributes["restart"] = value; }
         }
@@ -498,6 +521,7 @@ namespace FilesCom.Models
         [JsonPropertyName("structure")]
         public string Structure
         {
+            
             get { return (string) attributes["structure"]; }
             set { attributes["structure"] = value; }
         }
@@ -508,6 +532,7 @@ namespace FilesCom.Models
         [JsonPropertyName("with_rename")]
         public bool WithRename
         {
+            
             get { return (bool) attributes["with_rename"]; }
             set { attributes["with_rename"] = value; }
         }

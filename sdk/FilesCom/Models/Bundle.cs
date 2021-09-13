@@ -140,6 +140,7 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public string Code
         {
+            
             get { return (string) attributes["code"]; }
             set { attributes["code"] = value; }
         }
@@ -150,6 +151,7 @@ namespace FilesCom.Models
         [JsonPropertyName("url")]
         public string Url
         {
+            
             get { return (string) attributes["url"]; }
             set { attributes["url"] = value; }
         }
@@ -160,6 +162,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
+            
             get { return (string) attributes["description"]; }
             set { attributes["description"] = value; }
         }
@@ -170,6 +173,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_protected")]
         public bool PasswordProtected
         {
+            
             get { return (bool) attributes["password_protected"]; }
             set { attributes["password_protected"] = value; }
         }
@@ -180,6 +184,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview_only")]
         public bool PreviewOnly
         {
+            
             get { return (bool) attributes["preview_only"]; }
             set { attributes["preview_only"] = value; }
         }
@@ -190,6 +195,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_registration")]
         public bool RequireRegistration
         {
+            
             get { return (bool) attributes["require_registration"]; }
             set { attributes["require_registration"] = value; }
         }
@@ -200,6 +206,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_share_recipient")]
         public bool RequireShareRecipient
         {
+            
             get { return (bool) attributes["require_share_recipient"]; }
             set { attributes["require_share_recipient"] = value; }
         }
@@ -210,6 +217,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
+            
             get { return (string) attributes["clickwrap_body"]; }
             set { attributes["clickwrap_body"] = value; }
         }
@@ -220,6 +228,7 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_set")]
         public object FormFieldSet
         {
+            
             get { return (object) attributes["form_field_set"]; }
             set { attributes["form_field_set"] = value; }
         }
@@ -230,6 +239,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -240,7 +250,9 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -249,6 +261,7 @@ namespace FilesCom.Models
         [JsonPropertyName("expires_at")]
         public Nullable<DateTime> ExpiresAt
         {
+            
             get { return (Nullable<DateTime>) attributes["expires_at"]; }
             set { attributes["expires_at"] = value; }
         }
@@ -259,6 +272,7 @@ namespace FilesCom.Models
         [JsonPropertyName("max_uses")]
         public Nullable<Int64> MaxUses
         {
+            
             get { return (Nullable<Int64>) attributes["max_uses"]; }
             set { attributes["max_uses"] = value; }
         }
@@ -269,6 +283,7 @@ namespace FilesCom.Models
         [JsonPropertyName("note")]
         public string Note
         {
+            
             get { return (string) attributes["note"]; }
             set { attributes["note"] = value; }
         }
@@ -279,6 +294,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -289,6 +305,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
+            
             get { return (string) attributes["username"]; }
             set { attributes["username"] = value; }
         }
@@ -299,6 +316,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_id")]
         public Nullable<Int64> ClickwrapId
         {
+            
             get { return (Nullable<Int64>) attributes["clickwrap_id"]; }
             set { attributes["clickwrap_id"] = value; }
         }
@@ -309,6 +327,7 @@ namespace FilesCom.Models
         [JsonPropertyName("inbox_id")]
         public Nullable<Int64> InboxId
         {
+            
             get { return (Nullable<Int64>) attributes["inbox_id"]; }
             set { attributes["inbox_id"] = value; }
         }
@@ -319,6 +338,7 @@ namespace FilesCom.Models
         [JsonPropertyName("has_inbox")]
         public bool HasInbox
         {
+            
             get { return (bool) attributes["has_inbox"]; }
             set { attributes["has_inbox"] = value; }
         }
@@ -329,6 +349,7 @@ namespace FilesCom.Models
         [JsonPropertyName("paths")]
         public string[] Paths
         {
+            
             get { return (string[]) attributes["paths"]; }
             set { attributes["paths"] = value; }
         }
@@ -339,6 +360,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password")]
         public string Password
         {
+            
             get { return (string) attributes["password"]; }
             set { attributes["password"] = value; }
         }
@@ -349,6 +371,7 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_set_id")]
         public Nullable<Int64> FormFieldSetId
         {
+            
             get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
             set { attributes["form_field_set_id"] = value; }
         }

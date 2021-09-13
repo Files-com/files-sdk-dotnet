@@ -84,6 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -94,6 +95,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
+            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -104,6 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("attachment_url")]
         public string AttachmentUrl
         {
+            
             get { return (string) attributes["attachment_url"]; }
             set { attributes["attachment_url"] = value; }
         }
@@ -114,6 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("behavior")]
         public string BehaviorType
         {
+            
             get { return (string) attributes["behavior"]; }
             set { attributes["behavior"] = value; }
         }
@@ -124,6 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -134,6 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
+            
             get { return (string) attributes["description"]; }
             set { attributes["description"] = value; }
         }
@@ -144,6 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("value")]
         public object Value
         {
+            
             get { return (object) attributes["value"]; }
             set { attributes["value"] = value; }
         }
@@ -154,6 +161,7 @@ namespace FilesCom.Models
         [JsonPropertyName("attachment_file")]
         public System.Net.Http.ByteArrayContent AttachmentFile
         {
+            
             get { return (System.Net.Http.ByteArrayContent) attributes["attachment_file"]; }
             set { attributes["attachment_file"] = value; }
         }

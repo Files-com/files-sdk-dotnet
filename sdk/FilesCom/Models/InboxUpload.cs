@@ -63,7 +63,9 @@ namespace FilesCom.Models
         [JsonPropertyName("inbox_registration")]
         public object InboxRegistration
         {
-            get { return (object) attributes["inbox_registration"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -72,7 +74,9 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -81,7 +85,9 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            
+            get;
+            set;
         }
 
 

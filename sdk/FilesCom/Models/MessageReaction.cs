@@ -64,6 +64,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -74,6 +75,7 @@ namespace FilesCom.Models
         [JsonPropertyName("emoji")]
         public string Emoji
         {
+            
             get { return (string) attributes["emoji"]; }
             set { attributes["emoji"] = value; }
         }
@@ -84,6 +86,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }

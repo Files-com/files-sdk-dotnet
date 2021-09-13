@@ -68,7 +68,9 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -77,7 +79,9 @@ namespace FilesCom.Models
         [JsonPropertyName("date")]
         public Nullable<DateTime> Date
         {
-            get { return (Nullable<DateTime>) attributes["date"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -86,7 +90,9 @@ namespace FilesCom.Models
         [JsonPropertyName("current_storage")]
         public Nullable<Int64> CurrentStorage
         {
-            get { return (Nullable<Int64>) attributes["current_storage"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -95,7 +101,9 @@ namespace FilesCom.Models
         [JsonPropertyName("usage_by_top_level_dir")]
         public string[] UsageByTopLevelDir
         {
-            get { return (string[]) attributes["usage_by_top_level_dir"]; }
+            
+            get;
+            set;
         }
 
 

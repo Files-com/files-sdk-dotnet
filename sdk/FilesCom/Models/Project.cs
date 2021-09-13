@@ -60,6 +60,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -70,6 +71,7 @@ namespace FilesCom.Models
         [JsonPropertyName("global_access")]
         public string GlobalAccess
         {
+            
             get { return (string) attributes["global_access"]; }
             set { attributes["global_access"] = value; }
         }

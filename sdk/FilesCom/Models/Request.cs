@@ -84,6 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -94,6 +95,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
+            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -104,6 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("source")]
         public string Source
         {
+            
             get { return (string) attributes["source"]; }
             set { attributes["source"] = value; }
         }
@@ -114,6 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
+            
             get { return (string) attributes["destination"]; }
             set { attributes["destination"] = value; }
         }
@@ -124,6 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("automation_id")]
         public string AutomationId
         {
+            
             get { return (string) attributes["automation_id"]; }
             set { attributes["automation_id"] = value; }
         }
@@ -134,6 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_display_name")]
         public string UserDisplayName
         {
+            
             get { return (string) attributes["user_display_name"]; }
             set { attributes["user_display_name"] = value; }
         }
@@ -144,6 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_ids")]
         public string UserIds
         {
+            
             get { return (string) attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
@@ -154,6 +161,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_ids")]
         public string GroupIds
         {
+            
             get { return (string) attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
         }

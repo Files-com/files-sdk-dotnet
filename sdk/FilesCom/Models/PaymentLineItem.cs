@@ -72,7 +72,9 @@ namespace FilesCom.Models
         [JsonPropertyName("amount")]
         public double Amount
         {
-            get { return (double) attributes["amount"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -81,7 +83,9 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -90,7 +94,9 @@ namespace FilesCom.Models
         [JsonPropertyName("invoice_id")]
         public Nullable<Int64> InvoiceId
         {
-            get { return (Nullable<Int64>) attributes["invoice_id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -99,7 +105,9 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_id")]
         public Nullable<Int64> PaymentId
         {
-            get { return (Nullable<Int64>) attributes["payment_id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -108,7 +116,9 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            
+            get;
+            set;
         }
 
 

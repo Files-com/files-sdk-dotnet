@@ -244,6 +244,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -254,6 +255,7 @@ namespace FilesCom.Models
         [JsonPropertyName("authentication_method")]
         public string AuthenticationMethod
         {
+            
             get { return (string) attributes["authentication_method"]; }
             set { attributes["authentication_method"] = value; }
         }
@@ -264,6 +266,7 @@ namespace FilesCom.Models
         [JsonPropertyName("hostname")]
         public string Hostname
         {
+            
             get { return (string) attributes["hostname"]; }
             set { attributes["hostname"] = value; }
         }
@@ -274,6 +277,7 @@ namespace FilesCom.Models
         [JsonPropertyName("remote_home_path")]
         public string RemoteHomePath
         {
+            
             get { return (string) attributes["remote_home_path"]; }
             set { attributes["remote_home_path"] = value; }
         }
@@ -284,6 +288,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -294,6 +299,7 @@ namespace FilesCom.Models
         [JsonPropertyName("port")]
         public Nullable<Int64> Port
         {
+            
             get { return (Nullable<Int64>) attributes["port"]; }
             set { attributes["port"] = value; }
         }
@@ -304,6 +310,7 @@ namespace FilesCom.Models
         [JsonPropertyName("max_connections")]
         public Nullable<Int64> MaxConnections
         {
+            
             get { return (Nullable<Int64>) attributes["max_connections"]; }
             set { attributes["max_connections"] = value; }
         }
@@ -314,6 +321,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_bucket")]
         public string S3Bucket
         {
+            
             get { return (string) attributes["s3_bucket"]; }
             set { attributes["s3_bucket"] = value; }
         }
@@ -324,6 +332,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_region")]
         public string S3Region
         {
+            
             get { return (string) attributes["s3_region"]; }
             set { attributes["s3_region"] = value; }
         }
@@ -334,6 +343,7 @@ namespace FilesCom.Models
         [JsonPropertyName("server_certificate")]
         public string ServerCertificate
         {
+            
             get { return (string) attributes["server_certificate"]; }
             set { attributes["server_certificate"] = value; }
         }
@@ -344,6 +354,7 @@ namespace FilesCom.Models
         [JsonPropertyName("server_host_key")]
         public string ServerHostKey
         {
+            
             get { return (string) attributes["server_host_key"]; }
             set { attributes["server_host_key"] = value; }
         }
@@ -354,6 +365,7 @@ namespace FilesCom.Models
         [JsonPropertyName("server_type")]
         public string ServerType
         {
+            
             get { return (string) attributes["server_type"]; }
             set { attributes["server_type"] = value; }
         }
@@ -364,6 +376,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ssl")]
         public string Ssl
         {
+            
             get { return (string) attributes["ssl"]; }
             set { attributes["ssl"] = value; }
         }
@@ -374,6 +387,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
+            
             get { return (string) attributes["username"]; }
             set { attributes["username"] = value; }
         }
@@ -384,6 +398,7 @@ namespace FilesCom.Models
         [JsonPropertyName("google_cloud_storage_bucket")]
         public string GoogleCloudStorageBucket
         {
+            
             get { return (string) attributes["google_cloud_storage_bucket"]; }
             set { attributes["google_cloud_storage_bucket"] = value; }
         }
@@ -394,6 +409,7 @@ namespace FilesCom.Models
         [JsonPropertyName("google_cloud_storage_project_id")]
         public string GoogleCloudStorageProjectId
         {
+            
             get { return (string) attributes["google_cloud_storage_project_id"]; }
             set { attributes["google_cloud_storage_project_id"] = value; }
         }
@@ -404,6 +420,7 @@ namespace FilesCom.Models
         [JsonPropertyName("backblaze_b2_s3_endpoint")]
         public string BackblazeB2S3Endpoint
         {
+            
             get { return (string) attributes["backblaze_b2_s3_endpoint"]; }
             set { attributes["backblaze_b2_s3_endpoint"] = value; }
         }
@@ -414,6 +431,7 @@ namespace FilesCom.Models
         [JsonPropertyName("backblaze_b2_bucket")]
         public string BackblazeB2Bucket
         {
+            
             get { return (string) attributes["backblaze_b2_bucket"]; }
             set { attributes["backblaze_b2_bucket"] = value; }
         }
@@ -424,6 +442,7 @@ namespace FilesCom.Models
         [JsonPropertyName("wasabi_bucket")]
         public string WasabiBucket
         {
+            
             get { return (string) attributes["wasabi_bucket"]; }
             set { attributes["wasabi_bucket"] = value; }
         }
@@ -434,6 +453,7 @@ namespace FilesCom.Models
         [JsonPropertyName("wasabi_region")]
         public string WasabiRegion
         {
+            
             get { return (string) attributes["wasabi_region"]; }
             set { attributes["wasabi_region"] = value; }
         }
@@ -444,6 +464,7 @@ namespace FilesCom.Models
         [JsonPropertyName("rackspace_username")]
         public string RackspaceUsername
         {
+            
             get { return (string) attributes["rackspace_username"]; }
             set { attributes["rackspace_username"] = value; }
         }
@@ -454,6 +475,7 @@ namespace FilesCom.Models
         [JsonPropertyName("rackspace_region")]
         public string RackspaceRegion
         {
+            
             get { return (string) attributes["rackspace_region"]; }
             set { attributes["rackspace_region"] = value; }
         }
@@ -464,6 +486,7 @@ namespace FilesCom.Models
         [JsonPropertyName("rackspace_container")]
         public string RackspaceContainer
         {
+            
             get { return (string) attributes["rackspace_container"]; }
             set { attributes["rackspace_container"] = value; }
         }
@@ -474,6 +497,7 @@ namespace FilesCom.Models
         [JsonPropertyName("auth_setup_link")]
         public string AuthSetupLink
         {
+            
             get { return (string) attributes["auth_setup_link"]; }
             set { attributes["auth_setup_link"] = value; }
         }
@@ -484,6 +508,7 @@ namespace FilesCom.Models
         [JsonPropertyName("auth_status")]
         public string AuthStatus
         {
+            
             get { return (string) attributes["auth_status"]; }
             set { attributes["auth_status"] = value; }
         }
@@ -494,6 +519,7 @@ namespace FilesCom.Models
         [JsonPropertyName("auth_account_name")]
         public string AuthAccountName
         {
+            
             get { return (string) attributes["auth_account_name"]; }
             set { attributes["auth_account_name"] = value; }
         }
@@ -504,6 +530,7 @@ namespace FilesCom.Models
         [JsonPropertyName("one_drive_account_type")]
         public string OneDriveAccountType
         {
+            
             get { return (string) attributes["one_drive_account_type"]; }
             set { attributes["one_drive_account_type"] = value; }
         }
@@ -514,6 +541,7 @@ namespace FilesCom.Models
         [JsonPropertyName("azure_blob_storage_account")]
         public string AzureBlobStorageAccount
         {
+            
             get { return (string) attributes["azure_blob_storage_account"]; }
             set { attributes["azure_blob_storage_account"] = value; }
         }
@@ -524,6 +552,7 @@ namespace FilesCom.Models
         [JsonPropertyName("azure_blob_storage_container")]
         public string AzureBlobStorageContainer
         {
+            
             get { return (string) attributes["azure_blob_storage_container"]; }
             set { attributes["azure_blob_storage_container"] = value; }
         }
@@ -534,6 +563,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_compatible_bucket")]
         public string S3CompatibleBucket
         {
+            
             get { return (string) attributes["s3_compatible_bucket"]; }
             set { attributes["s3_compatible_bucket"] = value; }
         }
@@ -544,6 +574,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_compatible_region")]
         public string S3CompatibleRegion
         {
+            
             get { return (string) attributes["s3_compatible_region"]; }
             set { attributes["s3_compatible_region"] = value; }
         }
@@ -554,6 +585,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_compatible_endpoint")]
         public string S3CompatibleEndpoint
         {
+            
             get { return (string) attributes["s3_compatible_endpoint"]; }
             set { attributes["s3_compatible_endpoint"] = value; }
         }
@@ -564,6 +596,7 @@ namespace FilesCom.Models
         [JsonPropertyName("enable_dedicated_ips")]
         public bool EnableDedicatedIps
         {
+            
             get { return (bool) attributes["enable_dedicated_ips"]; }
             set { attributes["enable_dedicated_ips"] = value; }
         }
@@ -574,6 +607,7 @@ namespace FilesCom.Models
         [JsonPropertyName("aws_access_key")]
         public string AwsAccessKey
         {
+            
             get { return (string) attributes["aws_access_key"]; }
             set { attributes["aws_access_key"] = value; }
         }
@@ -584,6 +618,7 @@ namespace FilesCom.Models
         [JsonPropertyName("aws_secret_key")]
         public string AwsSecretKey
         {
+            
             get { return (string) attributes["aws_secret_key"]; }
             set { attributes["aws_secret_key"] = value; }
         }
@@ -594,6 +629,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password")]
         public string Password
         {
+            
             get { return (string) attributes["password"]; }
             set { attributes["password"] = value; }
         }
@@ -604,6 +640,7 @@ namespace FilesCom.Models
         [JsonPropertyName("private_key")]
         public string PrivateKey
         {
+            
             get { return (string) attributes["private_key"]; }
             set { attributes["private_key"] = value; }
         }
@@ -614,6 +651,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ssl_certificate")]
         public string SslCertificate
         {
+            
             get { return (string) attributes["ssl_certificate"]; }
             set { attributes["ssl_certificate"] = value; }
         }
@@ -624,6 +662,7 @@ namespace FilesCom.Models
         [JsonPropertyName("google_cloud_storage_credentials_json")]
         public string GoogleCloudStorageCredentialsJson
         {
+            
             get { return (string) attributes["google_cloud_storage_credentials_json"]; }
             set { attributes["google_cloud_storage_credentials_json"] = value; }
         }
@@ -634,6 +673,7 @@ namespace FilesCom.Models
         [JsonPropertyName("wasabi_access_key")]
         public string WasabiAccessKey
         {
+            
             get { return (string) attributes["wasabi_access_key"]; }
             set { attributes["wasabi_access_key"] = value; }
         }
@@ -644,6 +684,7 @@ namespace FilesCom.Models
         [JsonPropertyName("wasabi_secret_key")]
         public string WasabiSecretKey
         {
+            
             get { return (string) attributes["wasabi_secret_key"]; }
             set { attributes["wasabi_secret_key"] = value; }
         }
@@ -654,6 +695,7 @@ namespace FilesCom.Models
         [JsonPropertyName("backblaze_b2_key_id")]
         public string BackblazeB2KeyId
         {
+            
             get { return (string) attributes["backblaze_b2_key_id"]; }
             set { attributes["backblaze_b2_key_id"] = value; }
         }
@@ -664,6 +706,7 @@ namespace FilesCom.Models
         [JsonPropertyName("backblaze_b2_application_key")]
         public string BackblazeB2ApplicationKey
         {
+            
             get { return (string) attributes["backblaze_b2_application_key"]; }
             set { attributes["backblaze_b2_application_key"] = value; }
         }
@@ -674,6 +717,7 @@ namespace FilesCom.Models
         [JsonPropertyName("rackspace_api_key")]
         public string RackspaceApiKey
         {
+            
             get { return (string) attributes["rackspace_api_key"]; }
             set { attributes["rackspace_api_key"] = value; }
         }
@@ -684,6 +728,7 @@ namespace FilesCom.Models
         [JsonPropertyName("reset_authentication")]
         public bool ResetAuthentication
         {
+            
             get { return (bool) attributes["reset_authentication"]; }
             set { attributes["reset_authentication"] = value; }
         }
@@ -694,6 +739,7 @@ namespace FilesCom.Models
         [JsonPropertyName("azure_blob_storage_access_key")]
         public string AzureBlobStorageAccessKey
         {
+            
             get { return (string) attributes["azure_blob_storage_access_key"]; }
             set { attributes["azure_blob_storage_access_key"] = value; }
         }
@@ -704,6 +750,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_compatible_access_key")]
         public string S3CompatibleAccessKey
         {
+            
             get { return (string) attributes["s3_compatible_access_key"]; }
             set { attributes["s3_compatible_access_key"] = value; }
         }
@@ -714,6 +761,7 @@ namespace FilesCom.Models
         [JsonPropertyName("s3_compatible_secret_key")]
         public string S3CompatibleSecretKey
         {
+            
             get { return (string) attributes["s3_compatible_secret_key"]; }
             set { attributes["s3_compatible_secret_key"] = value; }
         }

@@ -156,6 +156,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -166,6 +167,7 @@ namespace FilesCom.Models
         [JsonPropertyName("history_version")]
         public string HistoryVersion
         {
+            
             get { return (string) attributes["history_version"]; }
             set { attributes["history_version"] = value; }
         }
@@ -176,6 +178,7 @@ namespace FilesCom.Models
         [JsonPropertyName("start_at")]
         public Nullable<DateTime> StartAt
         {
+            
             get { return (Nullable<DateTime>) attributes["start_at"]; }
             set { attributes["start_at"] = value; }
         }
@@ -186,6 +189,7 @@ namespace FilesCom.Models
         [JsonPropertyName("end_at")]
         public Nullable<DateTime> EndAt
         {
+            
             get { return (Nullable<DateTime>) attributes["end_at"]; }
             set { attributes["end_at"] = value; }
         }
@@ -196,6 +200,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
+            
             get { return (string) attributes["status"]; }
             set { attributes["status"] = value; }
         }
@@ -206,6 +211,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_action")]
         public string QueryAction
         {
+            
             get { return (string) attributes["query_action"]; }
             set { attributes["query_action"] = value; }
         }
@@ -216,6 +222,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_interface")]
         public string QueryInterface
         {
+            
             get { return (string) attributes["query_interface"]; }
             set { attributes["query_interface"] = value; }
         }
@@ -226,6 +233,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_user_id")]
         public string QueryUserId
         {
+            
             get { return (string) attributes["query_user_id"]; }
             set { attributes["query_user_id"] = value; }
         }
@@ -236,6 +244,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_file_id")]
         public string QueryFileId
         {
+            
             get { return (string) attributes["query_file_id"]; }
             set { attributes["query_file_id"] = value; }
         }
@@ -246,6 +255,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_parent_id")]
         public string QueryParentId
         {
+            
             get { return (string) attributes["query_parent_id"]; }
             set { attributes["query_parent_id"] = value; }
         }
@@ -256,6 +266,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_path")]
         public string QueryPath
         {
+            
             get { return (string) attributes["query_path"]; }
             set { attributes["query_path"] = value; }
         }
@@ -266,6 +277,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_folder")]
         public string QueryFolder
         {
+            
             get { return (string) attributes["query_folder"]; }
             set { attributes["query_folder"] = value; }
         }
@@ -276,6 +288,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_src")]
         public string QuerySrc
         {
+            
             get { return (string) attributes["query_src"]; }
             set { attributes["query_src"] = value; }
         }
@@ -286,6 +299,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_destination")]
         public string QueryDestination
         {
+            
             get { return (string) attributes["query_destination"]; }
             set { attributes["query_destination"] = value; }
         }
@@ -296,6 +310,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_ip")]
         public string QueryIp
         {
+            
             get { return (string) attributes["query_ip"]; }
             set { attributes["query_ip"] = value; }
         }
@@ -306,6 +321,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_username")]
         public string QueryUsername
         {
+            
             get { return (string) attributes["query_username"]; }
             set { attributes["query_username"] = value; }
         }
@@ -316,6 +332,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_failure_type")]
         public string QueryFailureType
         {
+            
             get { return (string) attributes["query_failure_type"]; }
             set { attributes["query_failure_type"] = value; }
         }
@@ -326,6 +343,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_id")]
         public string QueryTargetId
         {
+            
             get { return (string) attributes["query_target_id"]; }
             set { attributes["query_target_id"] = value; }
         }
@@ -336,6 +354,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_name")]
         public string QueryTargetName
         {
+            
             get { return (string) attributes["query_target_name"]; }
             set { attributes["query_target_name"] = value; }
         }
@@ -346,6 +365,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_permission")]
         public string QueryTargetPermission
         {
+            
             get { return (string) attributes["query_target_permission"]; }
             set { attributes["query_target_permission"] = value; }
         }
@@ -356,6 +376,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_user_id")]
         public string QueryTargetUserId
         {
+            
             get { return (string) attributes["query_target_user_id"]; }
             set { attributes["query_target_user_id"] = value; }
         }
@@ -366,6 +387,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_username")]
         public string QueryTargetUsername
         {
+            
             get { return (string) attributes["query_target_username"]; }
             set { attributes["query_target_username"] = value; }
         }
@@ -376,6 +398,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_platform")]
         public string QueryTargetPlatform
         {
+            
             get { return (string) attributes["query_target_platform"]; }
             set { attributes["query_target_platform"] = value; }
         }
@@ -386,6 +409,7 @@ namespace FilesCom.Models
         [JsonPropertyName("query_target_permission_set")]
         public string QueryTargetPermissionSet
         {
+            
             get { return (string) attributes["query_target_permission_set"]; }
             set { attributes["query_target_permission_set"] = value; }
         }
@@ -396,6 +420,7 @@ namespace FilesCom.Models
         [JsonPropertyName("results_url")]
         public string ResultsUrl
         {
+            
             get { return (string) attributes["results_url"]; }
             set { attributes["results_url"] = value; }
         }
@@ -406,6 +431,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }

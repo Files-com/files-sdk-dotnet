@@ -84,7 +84,9 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -93,7 +95,9 @@ namespace FilesCom.Models
         [JsonPropertyName("label")]
         public string Label
         {
-            get { return (string) attributes["label"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -102,7 +106,9 @@ namespace FilesCom.Models
         [JsonPropertyName("required")]
         public bool Required
         {
-            get { return (bool) attributes["required"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -111,7 +117,9 @@ namespace FilesCom.Models
         [JsonPropertyName("help_text")]
         public string HelpText
         {
-            get { return (string) attributes["help_text"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -120,7 +128,9 @@ namespace FilesCom.Models
         [JsonPropertyName("field_type")]
         public string FieldType
         {
-            get { return (string) attributes["field_type"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -129,7 +139,9 @@ namespace FilesCom.Models
         [JsonPropertyName("options_for_select")]
         public string OptionsForSelect
         {
-            get { return (string) attributes["options_for_select"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -138,7 +150,9 @@ namespace FilesCom.Models
         [JsonPropertyName("default_option")]
         public string DefaultOption
         {
-            get { return (string) attributes["default_option"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -147,7 +161,9 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_set_id")]
         public Nullable<Int64> FormFieldSetId
         {
-            get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
+            
+            get;
+            set;
         }
 
 

@@ -68,7 +68,9 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public string Id
         {
-            get { return (string) attributes["id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -77,7 +79,9 @@ namespace FilesCom.Models
         [JsonPropertyName("associated_with")]
         public string AssociatedWith
         {
-            get { return (string) attributes["associated_with"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -86,7 +90,9 @@ namespace FilesCom.Models
         [JsonPropertyName("group_id")]
         public Nullable<Int64> GroupId
         {
-            get { return (Nullable<Int64>) attributes["group_id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -95,7 +101,9 @@ namespace FilesCom.Models
         [JsonPropertyName("ip_addresses")]
         public string[] IpAddresses
         {
-            get { return (string[]) attributes["ip_addresses"]; }
+            
+            get;
+            set;
         }
 
 

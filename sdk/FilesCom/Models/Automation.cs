@@ -132,6 +132,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -142,6 +143,7 @@ namespace FilesCom.Models
         [JsonPropertyName("automation")]
         public string AutomationType
         {
+            
             get { return (string) attributes["automation"]; }
             set { attributes["automation"] = value; }
         }
@@ -152,6 +154,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger")]
         public string Trigger
         {
+            
             get { return (string) attributes["trigger"]; }
             set { attributes["trigger"] = value; }
         }
@@ -162,6 +165,7 @@ namespace FilesCom.Models
         [JsonPropertyName("interval")]
         public string Interval
         {
+            
             get { return (string) attributes["interval"]; }
             set { attributes["interval"] = value; }
         }
@@ -172,6 +176,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -182,6 +187,7 @@ namespace FilesCom.Models
         [JsonPropertyName("schedule")]
         public object Schedule
         {
+            
             get { return (object) attributes["schedule"]; }
             set { attributes["schedule"] = value; }
         }
@@ -192,6 +198,7 @@ namespace FilesCom.Models
         [JsonPropertyName("source")]
         public string Source
         {
+            
             get { return (string) attributes["source"]; }
             set { attributes["source"] = value; }
         }
@@ -202,6 +209,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destinations")]
         public string Destinations
         {
+            
             get { return (string) attributes["destinations"]; }
             set { attributes["destinations"] = value; }
         }
@@ -212,6 +220,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination_replace_from")]
         public string DestinationReplaceFrom
         {
+            
             get { return (string) attributes["destination_replace_from"]; }
             set { attributes["destination_replace_from"] = value; }
         }
@@ -222,6 +231,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination_replace_to")]
         public string DestinationReplaceTo
         {
+            
             get { return (string) attributes["destination_replace_to"]; }
             set { attributes["destination_replace_to"] = value; }
         }
@@ -232,6 +242,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
+            
             get { return (string) attributes["description"]; }
             set { attributes["description"] = value; }
         }
@@ -242,6 +253,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
+            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -252,6 +264,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -262,6 +275,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_ids")]
         public Nullable<Int64>[] UserIds
         {
+            
             get { return (Nullable<Int64>[]) attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
@@ -272,6 +286,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_ids")]
         public Nullable<Int64>[] GroupIds
         {
+            
             get { return (Nullable<Int64>[]) attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
         }
@@ -282,6 +297,7 @@ namespace FilesCom.Models
         [JsonPropertyName("webhook_url")]
         public string WebhookUrl
         {
+            
             get { return (string) attributes["webhook_url"]; }
             set { attributes["webhook_url"] = value; }
         }
@@ -292,6 +308,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger_actions")]
         public string TriggerActions
         {
+            
             get { return (string) attributes["trigger_actions"]; }
             set { attributes["trigger_actions"] = value; }
         }
@@ -302,6 +319,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger_action_path")]
         public string TriggerActionPath
         {
+            
             get { return (string) attributes["trigger_action_path"]; }
             set { attributes["trigger_action_path"] = value; }
         }
@@ -312,6 +330,7 @@ namespace FilesCom.Models
         [JsonPropertyName("value")]
         public object Value
         {
+            
             get { return (object) attributes["value"]; }
             set { attributes["value"] = value; }
         }
@@ -322,6 +341,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
+            
             get { return (string) attributes["destination"]; }
             set { attributes["destination"] = value; }
         }

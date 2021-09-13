@@ -88,7 +88,9 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public string Code
         {
-            get { return (string) attributes["code"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -97,7 +99,9 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -106,7 +110,9 @@ namespace FilesCom.Models
         [JsonPropertyName("company")]
         public string Company
         {
-            get { return (string) attributes["company"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -115,7 +121,9 @@ namespace FilesCom.Models
         [JsonPropertyName("email")]
         public string Email
         {
-            get { return (string) attributes["email"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -124,7 +132,9 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
-            get { return (string) attributes["clickwrap_body"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -133,7 +143,9 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_set_id")]
         public Nullable<Int64> FormFieldSetId
         {
-            get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -142,7 +154,9 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_data")]
         public string FormFieldData
         {
-            get { return (string) attributes["form_field_data"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -151,7 +165,9 @@ namespace FilesCom.Models
         [JsonPropertyName("inbox_id")]
         public Nullable<Int64> InboxId
         {
-            get { return (Nullable<Int64>) attributes["inbox_id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -160,7 +176,9 @@ namespace FilesCom.Models
         [JsonPropertyName("inbox_recipient_id")]
         public Nullable<Int64> InboxRecipientId
         {
-            get { return (Nullable<Int64>) attributes["inbox_recipient_id"]; }
+            
+            get;
+            set;
         }
 
 

@@ -96,6 +96,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -106,6 +107,7 @@ namespace FilesCom.Models
         [JsonPropertyName("descriptive_label")]
         public string DescriptiveLabel
         {
+            
             get { return (string) attributes["descriptive_label"]; }
             set { attributes["descriptive_label"] = value; }
         }
@@ -116,7 +118,9 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -125,6 +129,7 @@ namespace FilesCom.Models
         [JsonPropertyName("expires_at")]
         public Nullable<DateTime> ExpiresAt
         {
+            
             get { return (Nullable<DateTime>) attributes["expires_at"]; }
             set { attributes["expires_at"] = value; }
         }
@@ -135,6 +140,7 @@ namespace FilesCom.Models
         [JsonPropertyName("key")]
         public string Key
         {
+            
             get { return (string) attributes["key"]; }
             set { attributes["key"] = value; }
         }
@@ -145,6 +151,7 @@ namespace FilesCom.Models
         [JsonPropertyName("last_use_at")]
         public Nullable<DateTime> LastUseAt
         {
+            
             get { return (Nullable<DateTime>) attributes["last_use_at"]; }
             set { attributes["last_use_at"] = value; }
         }
@@ -155,6 +162,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -165,6 +173,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
+            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -175,6 +184,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permission_set")]
         public string PermissionSet
         {
+            
             get { return (string) attributes["permission_set"]; }
             set { attributes["permission_set"] = value; }
         }
@@ -185,6 +195,7 @@ namespace FilesCom.Models
         [JsonPropertyName("platform")]
         public string Platform
         {
+            
             get { return (string) attributes["platform"]; }
             set { attributes["platform"] = value; }
         }
@@ -195,6 +206,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }

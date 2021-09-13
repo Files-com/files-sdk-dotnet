@@ -116,7 +116,9 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -125,7 +127,9 @@ namespace FilesCom.Models
         [JsonPropertyName("extended_description")]
         public string ExtendedDescription
         {
-            get { return (string) attributes["extended_description"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -134,7 +138,9 @@ namespace FilesCom.Models
         [JsonPropertyName("short_description")]
         public string ShortDescription
         {
-            get { return (string) attributes["short_description"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -143,7 +149,9 @@ namespace FilesCom.Models
         [JsonPropertyName("documentation_links")]
         public string DocumentationLinks
         {
-            get { return (string) attributes["documentation_links"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -152,7 +160,9 @@ namespace FilesCom.Models
         [JsonPropertyName("icon_url")]
         public string IconUrl
         {
-            get { return (string) attributes["icon_url"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -161,7 +171,9 @@ namespace FilesCom.Models
         [JsonPropertyName("logo_url")]
         public string LogoUrl
         {
-            get { return (string) attributes["logo_url"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -170,7 +182,9 @@ namespace FilesCom.Models
         [JsonPropertyName("screenshot_list_urls")]
         public string ScreenshotListUrls
         {
-            get { return (string) attributes["screenshot_list_urls"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -179,7 +193,9 @@ namespace FilesCom.Models
         [JsonPropertyName("logo_thumbnail_url")]
         public string LogoThumbnailUrl
         {
-            get { return (string) attributes["logo_thumbnail_url"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -188,7 +204,9 @@ namespace FilesCom.Models
         [JsonPropertyName("sso_strategy_type")]
         public string SsoStrategyType
         {
-            get { return (string) attributes["sso_strategy_type"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -197,7 +215,9 @@ namespace FilesCom.Models
         [JsonPropertyName("remote_server_type")]
         public string RemoteServerType
         {
-            get { return (string) attributes["remote_server_type"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -206,7 +226,9 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_behavior_type")]
         public string FolderBehaviorType
         {
-            get { return (string) attributes["folder_behavior_type"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -215,7 +237,9 @@ namespace FilesCom.Models
         [JsonPropertyName("external_homepage_url")]
         public string ExternalHomepageUrl
         {
-            get { return (string) attributes["external_homepage_url"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -224,7 +248,9 @@ namespace FilesCom.Models
         [JsonPropertyName("marketing_youtube_url")]
         public string MarketingYoutubeUrl
         {
-            get { return (string) attributes["marketing_youtube_url"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -233,7 +259,9 @@ namespace FilesCom.Models
         [JsonPropertyName("tutorial_youtube_url")]
         public string TutorialYoutubeUrl
         {
-            get { return (string) attributes["tutorial_youtube_url"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -242,7 +270,9 @@ namespace FilesCom.Models
         [JsonPropertyName("app_type")]
         public string AppType
         {
-            get { return (string) attributes["app_type"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -251,7 +281,9 @@ namespace FilesCom.Models
         [JsonPropertyName("featured")]
         public bool Featured
         {
-            get { return (bool) attributes["featured"]; }
+            
+            get;
+            set;
         }
 
 

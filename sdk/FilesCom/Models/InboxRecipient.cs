@@ -84,6 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("company")]
         public string Company
         {
+            
             get { return (string) attributes["company"]; }
             set { attributes["company"] = value; }
         }
@@ -94,6 +95,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -104,6 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("note")]
         public string Note
         {
+            
             get { return (string) attributes["note"]; }
             set { attributes["note"] = value; }
         }
@@ -114,6 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("recipient")]
         public string Recipient
         {
+            
             get { return (string) attributes["recipient"]; }
             set { attributes["recipient"] = value; }
         }
@@ -124,6 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sent_at")]
         public Nullable<DateTime> SentAt
         {
+            
             get { return (Nullable<DateTime>) attributes["sent_at"]; }
             set { attributes["sent_at"] = value; }
         }
@@ -134,6 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -144,6 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("inbox_id")]
         public Nullable<Int64> InboxId
         {
+            
             get { return (Nullable<Int64>) attributes["inbox_id"]; }
             set { attributes["inbox_id"] = value; }
         }
@@ -154,6 +161,7 @@ namespace FilesCom.Models
         [JsonPropertyName("share_after_create")]
         public bool ShareAfterCreate
         {
+            
             get { return (bool) attributes["share_after_create"]; }
             set { attributes["share_after_create"] = value; }
         }

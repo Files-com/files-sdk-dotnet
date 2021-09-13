@@ -84,6 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -94,6 +95,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
+            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -104,6 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
+            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -114,6 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
+            
             get { return (string) attributes["username"]; }
             set { attributes["username"] = value; }
         }
@@ -124,6 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_id")]
         public Nullable<Int64> GroupId
         {
+            
             get { return (Nullable<Int64>) attributes["group_id"]; }
             set { attributes["group_id"] = value; }
         }
@@ -134,6 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_name")]
         public string GroupName
         {
+            
             get { return (string) attributes["group_name"]; }
             set { attributes["group_name"] = value; }
         }
@@ -144,6 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permission")]
         public string PermissionType
         {
+            
             get { return (string) attributes["permission"]; }
             set { attributes["permission"] = value; }
         }
@@ -154,6 +161,7 @@ namespace FilesCom.Models
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
+            
             get { return (bool) attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }

@@ -76,7 +76,9 @@ namespace FilesCom.Models
         [JsonPropertyName("queued_at")]
         public Nullable<DateTime> QueuedAt
         {
-            get { return (Nullable<DateTime>) attributes["queued_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -85,7 +87,9 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -94,7 +98,9 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            get { return (string) attributes["status"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -103,7 +109,9 @@ namespace FilesCom.Models
         [JsonPropertyName("regional_worker_status")]
         public string RegionalWorkerStatus
         {
-            get { return (string) attributes["regional_worker_status"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -111,7 +119,9 @@ namespace FilesCom.Models
         [JsonPropertyName("uuid")]
         public string Uuid
         {
-            get { return (string) attributes["uuid"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -119,7 +129,9 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_behavior_id")]
         public Nullable<Int64> FolderBehaviorId
         {
-            get { return (Nullable<Int64>) attributes["folder_behavior_id"]; }
+            
+            get;
+            set;
         }
 
 

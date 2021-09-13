@@ -108,7 +108,9 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -117,7 +119,9 @@ namespace FilesCom.Models
         [JsonPropertyName("start_at")]
         public Nullable<DateTime> StartAt
         {
-            get { return (Nullable<DateTime>) attributes["start_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -126,7 +130,9 @@ namespace FilesCom.Models
         [JsonPropertyName("end_at")]
         public Nullable<DateTime> EndAt
         {
-            get { return (Nullable<DateTime>) attributes["end_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -135,7 +141,9 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -144,7 +152,9 @@ namespace FilesCom.Models
         [JsonPropertyName("high_water_user_count")]
         public double HighWaterUserCount
         {
-            get { return (double) attributes["high_water_user_count"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -153,7 +163,9 @@ namespace FilesCom.Models
         [JsonPropertyName("current_storage")]
         public double CurrentStorage
         {
-            get { return (double) attributes["current_storage"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -162,7 +174,9 @@ namespace FilesCom.Models
         [JsonPropertyName("high_water_storage")]
         public double HighWaterStorage
         {
-            get { return (double) attributes["high_water_storage"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -171,7 +185,9 @@ namespace FilesCom.Models
         [JsonPropertyName("total_downloads")]
         public Nullable<Int64> TotalDownloads
         {
-            get { return (Nullable<Int64>) attributes["total_downloads"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -180,7 +196,9 @@ namespace FilesCom.Models
         [JsonPropertyName("total_uploads")]
         public Nullable<Int64> TotalUploads
         {
-            get { return (Nullable<Int64>) attributes["total_uploads"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -189,7 +207,9 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -198,7 +218,9 @@ namespace FilesCom.Models
         [JsonPropertyName("usage_by_top_level_dir")]
         public object UsageByTopLevelDir
         {
-            get { return (object) attributes["usage_by_top_level_dir"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -207,7 +229,9 @@ namespace FilesCom.Models
         [JsonPropertyName("root_storage")]
         public double RootStorage
         {
-            get { return (double) attributes["root_storage"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -216,7 +240,9 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted_files_counted_in_minimum")]
         public double DeletedFilesCountedInMinimum
         {
-            get { return (double) attributes["deleted_files_counted_in_minimum"]; }
+            
+            get;
+            set;
         }
 
         /// <summary>
@@ -225,7 +251,9 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted_files_storage")]
         public double DeletedFilesStorage
         {
-            get { return (double) attributes["deleted_files_storage"]; }
+            
+            get;
+            set;
         }
 
 

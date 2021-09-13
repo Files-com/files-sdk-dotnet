@@ -76,6 +76,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
+            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -86,6 +87,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
+            
             get { return (string) attributes["name"]; }
             set { attributes["name"] = value; }
         }
@@ -96,6 +98,7 @@ namespace FilesCom.Models
         [JsonPropertyName("admin_ids")]
         public string AdminIds
         {
+            
             get { return (string) attributes["admin_ids"]; }
             set { attributes["admin_ids"] = value; }
         }
@@ -106,6 +109,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notes")]
         public string Notes
         {
+            
             get { return (string) attributes["notes"]; }
             set { attributes["notes"] = value; }
         }
@@ -116,6 +120,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_ids")]
         public Nullable<Int64>[] UserIds
         {
+            
             get { return (Nullable<Int64>[]) attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
@@ -126,6 +131,7 @@ namespace FilesCom.Models
         [JsonPropertyName("usernames")]
         public string[] Usernames
         {
+            
             get { return (string[]) attributes["usernames"]; }
             set { attributes["usernames"] = value; }
         }
