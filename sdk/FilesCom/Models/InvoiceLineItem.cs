@@ -88,9 +88,7 @@ namespace FilesCom.Models
         [JsonPropertyName("amount")]
         public double Amount
         {
-            
-            get;
-            set;
+            get { return (double) attributes["amount"]; }
         }
 
         /// <summary>
@@ -99,9 +97,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -110,9 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
-            
-            get;
-            set;
+            get { return (string) attributes["description"]; }
         }
 
         /// <summary>
@@ -121,9 +115,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            
-            get;
-            set;
+            get { return (string) attributes["type"]; }
         }
 
         /// <summary>
@@ -132,9 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("service_end_at")]
         public Nullable<DateTime> ServiceEndAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["service_end_at"]; }
         }
 
         /// <summary>
@@ -143,9 +133,7 @@ namespace FilesCom.Models
         [JsonPropertyName("service_start_at")]
         public Nullable<DateTime> ServiceStartAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["service_start_at"]; }
         }
 
         /// <summary>
@@ -154,9 +142,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["updated_at"]; }
         }
 
         /// <summary>
@@ -165,9 +151,7 @@ namespace FilesCom.Models
         [JsonPropertyName("plan")]
         public string Plan
         {
-            
-            get;
-            set;
+            get { return (string) attributes["plan"]; }
         }
 
         /// <summary>
@@ -176,9 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site")]
         public string Site
         {
-            
-            get;
-            set;
+            get { return (string) attributes["site"]; }
         }
 
 

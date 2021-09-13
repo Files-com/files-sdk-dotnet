@@ -64,9 +64,7 @@ namespace FilesCom.Models
         [JsonPropertyName("change_details")]
         public object ChangeDetails
         {
-            
-            get;
-            set;
+            get { return (object) attributes["change_details"]; }
         }
 
         /// <summary>
@@ -75,9 +73,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -86,9 +82,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["user_id"]; }
         }
 
 

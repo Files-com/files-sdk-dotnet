@@ -67,9 +67,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_registration")]
         public object BundleRegistration
         {
-            
-            get;
-            set;
+            get { return (object) attributes["bundle_registration"]; }
         }
 
         /// <summary>
@@ -78,9 +76,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_method")]
         public string DownloadMethod
         {
-            
-            get;
-            set;
+            get { return (string) attributes["download_method"]; }
         }
 
         /// <summary>
@@ -89,9 +85,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
-            get;
-            set;
+            get { return (string) attributes["path"]; }
         }
 
         /// <summary>
@@ -100,9 +94,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
 

@@ -92,9 +92,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -103,9 +101,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<Int64> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -114,9 +110,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public Nullable<Int64> Status
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["status"]; }
         }
 
         /// <summary>
@@ -125,9 +119,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
-            
-            get;
-            set;
+            get { return (string) attributes["message"]; }
         }
 
         /// <summary>
@@ -136,9 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("success")]
         public bool Success
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["success"]; }
         }
 
         /// <summary>
@@ -147,9 +137,7 @@ namespace FilesCom.Models
         [JsonPropertyName("request_headers")]
         public string RequestHeaders
         {
-            
-            get;
-            set;
+            get { return (string) attributes["request_headers"]; }
         }
 
         /// <summary>
@@ -158,9 +146,7 @@ namespace FilesCom.Models
         [JsonPropertyName("request_method")]
         public string RequestMethod
         {
-            
-            get;
-            set;
+            get { return (string) attributes["request_method"]; }
         }
 
         /// <summary>
@@ -169,9 +155,7 @@ namespace FilesCom.Models
         [JsonPropertyName("request_url")]
         public string RequestUrl
         {
-            
-            get;
-            set;
+            get { return (string) attributes["request_url"]; }
         }
 
         /// <summary>
@@ -180,9 +164,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
-            get;
-            set;
+            get { return (string) attributes["path"]; }
         }
 
         /// <summary>
@@ -191,9 +173,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder")]
         public string Folder
         {
-            
-            get;
-            set;
+            get { return (string) attributes["folder"]; }
         }
 
 

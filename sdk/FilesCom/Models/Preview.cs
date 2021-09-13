@@ -72,9 +72,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -83,9 +81,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            
-            get;
-            set;
+            get { return (string) attributes["status"]; }
         }
 
         /// <summary>
@@ -94,9 +90,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
-            
-            get;
-            set;
+            get { return (string) attributes["download_uri"]; }
         }
 
         /// <summary>
@@ -105,9 +99,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            
-            get;
-            set;
+            get { return (string) attributes["type"]; }
         }
 
         /// <summary>
@@ -116,9 +108,7 @@ namespace FilesCom.Models
         [JsonPropertyName("size")]
         public Nullable<Int64> Size
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["size"]; }
         }
 
 

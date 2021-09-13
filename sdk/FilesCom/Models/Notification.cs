@@ -104,7 +104,6 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -115,7 +114,6 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -126,7 +124,6 @@ namespace FilesCom.Models
         [JsonPropertyName("group_id")]
         public Nullable<Int64> GroupId
         {
-            
             get { return (Nullable<Int64>) attributes["group_id"]; }
             set { attributes["group_id"] = value; }
         }
@@ -137,7 +134,6 @@ namespace FilesCom.Models
         [JsonPropertyName("group_name")]
         public string GroupName
         {
-            
             get { return (string) attributes["group_name"]; }
             set { attributes["group_name"] = value; }
         }
@@ -148,7 +144,6 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_user_actions")]
         public bool NotifyUserActions
         {
-            
             get { return (bool) attributes["notify_user_actions"]; }
             set { attributes["notify_user_actions"] = value; }
         }
@@ -159,7 +154,6 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_copy")]
         public bool NotifyOnCopy
         {
-            
             get { return (bool) attributes["notify_on_copy"]; }
             set { attributes["notify_on_copy"] = value; }
         }
@@ -170,7 +164,6 @@ namespace FilesCom.Models
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            
             get { return (bool) attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
@@ -181,7 +174,6 @@ namespace FilesCom.Models
         [JsonPropertyName("send_interval")]
         public string SendInterval
         {
-            
             get { return (string) attributes["send_interval"]; }
             set { attributes["send_interval"] = value; }
         }
@@ -192,7 +184,6 @@ namespace FilesCom.Models
         [JsonPropertyName("unsubscribed")]
         public bool Unsubscribed
         {
-            
             get { return (bool) attributes["unsubscribed"]; }
             set { attributes["unsubscribed"] = value; }
         }
@@ -203,7 +194,6 @@ namespace FilesCom.Models
         [JsonPropertyName("unsubscribed_reason")]
         public string UnsubscribedReason
         {
-            
             get { return (string) attributes["unsubscribed_reason"]; }
             set { attributes["unsubscribed_reason"] = value; }
         }
@@ -214,7 +204,6 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -225,7 +214,6 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            
             get { return (string) attributes["username"]; }
             set { attributes["username"] = value; }
         }
@@ -236,7 +224,6 @@ namespace FilesCom.Models
         [JsonPropertyName("suppressed_email")]
         public bool SuppressedEmail
         {
-            
             get { return (bool) attributes["suppressed_email"]; }
             set { attributes["suppressed_email"] = value; }
         }

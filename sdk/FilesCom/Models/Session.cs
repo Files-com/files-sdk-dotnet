@@ -140,7 +140,6 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public string Id
         {
-            
             get { return (string) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -151,7 +150,6 @@ namespace FilesCom.Models
         [JsonPropertyName("language")]
         public string Language
         {
-            
             get { return (string) attributes["language"]; }
             set { attributes["language"] = value; }
         }
@@ -162,7 +160,6 @@ namespace FilesCom.Models
         [JsonPropertyName("login_token")]
         public string LoginToken
         {
-            
             get { return (string) attributes["login_token"]; }
             set { attributes["login_token"] = value; }
         }
@@ -173,7 +170,6 @@ namespace FilesCom.Models
         [JsonPropertyName("login_token_domain")]
         public string LoginTokenDomain
         {
-            
             get { return (string) attributes["login_token_domain"]; }
             set { attributes["login_token_domain"] = value; }
         }
@@ -184,7 +180,6 @@ namespace FilesCom.Models
         [JsonPropertyName("max_dir_listing_size")]
         public Nullable<Int64> MaxDirListingSize
         {
-            
             get { return (Nullable<Int64>) attributes["max_dir_listing_size"]; }
             set { attributes["max_dir_listing_size"] = value; }
         }
@@ -195,7 +190,6 @@ namespace FilesCom.Models
         [JsonPropertyName("multiple_regions")]
         public bool MultipleRegions
         {
-            
             get { return (bool) attributes["multiple_regions"]; }
             set { attributes["multiple_regions"] = value; }
         }
@@ -206,7 +200,6 @@ namespace FilesCom.Models
         [JsonPropertyName("read_only")]
         public bool ReadOnly
         {
-            
             get { return (bool) attributes["read_only"]; }
             set { attributes["read_only"] = value; }
         }
@@ -217,7 +210,6 @@ namespace FilesCom.Models
         [JsonPropertyName("root_path")]
         public string RootPath
         {
-            
             get { return (string) attributes["root_path"]; }
             set { attributes["root_path"] = value; }
         }
@@ -228,7 +220,6 @@ namespace FilesCom.Models
         [JsonPropertyName("site_id")]
         public Nullable<Int64> SiteId
         {
-            
             get { return (Nullable<Int64>) attributes["site_id"]; }
             set { attributes["site_id"] = value; }
         }
@@ -239,7 +230,6 @@ namespace FilesCom.Models
         [JsonPropertyName("ssl_required")]
         public bool SslRequired
         {
-            
             get { return (bool) attributes["ssl_required"]; }
             set { attributes["ssl_required"] = value; }
         }
@@ -250,7 +240,6 @@ namespace FilesCom.Models
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled
         {
-            
             get { return (bool) attributes["tls_disabled"]; }
             set { attributes["tls_disabled"] = value; }
         }
@@ -261,7 +250,6 @@ namespace FilesCom.Models
         [JsonPropertyName("two_factor_setup_needed")]
         public bool TwoFactorSetupNeeded
         {
-            
             get { return (bool) attributes["two_factor_setup_needed"]; }
             set { attributes["two_factor_setup_needed"] = value; }
         }
@@ -272,7 +260,6 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_sms")]
         public bool Allowed2faMethodSms
         {
-            
             get { return (bool) attributes["allowed_2fa_method_sms"]; }
             set { attributes["allowed_2fa_method_sms"] = value; }
         }
@@ -283,7 +270,6 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_totp")]
         public bool Allowed2faMethodTotp
         {
-            
             get { return (bool) attributes["allowed_2fa_method_totp"]; }
             set { attributes["allowed_2fa_method_totp"] = value; }
         }
@@ -294,7 +280,6 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_u2f")]
         public bool Allowed2faMethodU2f
         {
-            
             get { return (bool) attributes["allowed_2fa_method_u2f"]; }
             set { attributes["allowed_2fa_method_u2f"] = value; }
         }
@@ -305,7 +290,6 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_yubi")]
         public bool Allowed2faMethodYubi
         {
-            
             get { return (bool) attributes["allowed_2fa_method_yubi"]; }
             set { attributes["allowed_2fa_method_yubi"] = value; }
         }
@@ -316,7 +300,6 @@ namespace FilesCom.Models
         [JsonPropertyName("use_provided_modified_at")]
         public bool UseProvidedModifiedAt
         {
-            
             get { return (bool) attributes["use_provided_modified_at"]; }
             set { attributes["use_provided_modified_at"] = value; }
         }
@@ -327,7 +310,6 @@ namespace FilesCom.Models
         [JsonPropertyName("windows_mode_ftp")]
         public bool WindowsModeFtp
         {
-            
             get { return (bool) attributes["windows_mode_ftp"]; }
             set { attributes["windows_mode_ftp"] = value; }
         }
@@ -338,7 +320,6 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            
             get { return (string) attributes["username"]; }
             set { attributes["username"] = value; }
         }
@@ -349,7 +330,6 @@ namespace FilesCom.Models
         [JsonPropertyName("password")]
         public string Password
         {
-            
             get { return (string) attributes["password"]; }
             set { attributes["password"] = value; }
         }
@@ -360,7 +340,6 @@ namespace FilesCom.Models
         [JsonPropertyName("otp")]
         public string Otp
         {
-            
             get { return (string) attributes["otp"]; }
             set { attributes["otp"] = value; }
         }
@@ -371,7 +350,6 @@ namespace FilesCom.Models
         [JsonPropertyName("partial_session_id")]
         public string PartialSessionId
         {
-            
             get { return (string) attributes["partial_session_id"]; }
             set { attributes["partial_session_id"] = value; }
         }

@@ -72,7 +72,6 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -83,7 +82,6 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -94,7 +92,6 @@ namespace FilesCom.Models
         [JsonPropertyName("logo")]
         public object Logo
         {
-            
             get { return (object) attributes["logo"]; }
             set { attributes["logo"] = value; }
         }
@@ -105,7 +102,6 @@ namespace FilesCom.Models
         [JsonPropertyName("thumbnail")]
         public object Thumbnail
         {
-            
             get { return (object) attributes["thumbnail"]; }
             set { attributes["thumbnail"] = value; }
         }
@@ -116,7 +112,6 @@ namespace FilesCom.Models
         [JsonPropertyName("file")]
         public System.Net.Http.ByteArrayContent File
         {
-            
             get { return (System.Net.Http.ByteArrayContent) attributes["file"]; }
             set { attributes["file"] = value; }
         }

@@ -76,9 +76,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -87,9 +85,7 @@ namespace FilesCom.Models
         [JsonPropertyName("protocol_cipher")]
         public string ProtocolCipher
         {
-            
-            get;
-            set;
+            get { return (string) attributes["protocol_cipher"]; }
         }
 
         /// <summary>
@@ -98,9 +94,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -109,9 +103,7 @@ namespace FilesCom.Models
         [JsonPropertyName("interface")]
         public string Interface
         {
-            
-            get;
-            set;
+            get { return (string) attributes["interface"]; }
         }
 
         /// <summary>
@@ -120,9 +112,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["updated_at"]; }
         }
 
         /// <summary>
@@ -131,9 +121,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["user_id"]; }
         }
 
 

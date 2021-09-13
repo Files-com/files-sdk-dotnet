@@ -224,9 +224,7 @@ namespace FilesCom.Models
         [JsonPropertyName("protocol")]
         public string Protocol
         {
-            
-            get;
-            set;
+            get { return (string) attributes["protocol"]; }
         }
 
         /// <summary>
@@ -235,9 +233,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provider")]
         public string Provider
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provider"]; }
         }
 
         /// <summary>
@@ -246,9 +242,7 @@ namespace FilesCom.Models
         [JsonPropertyName("label")]
         public string Label
         {
-            
-            get;
-            set;
+            get { return (string) attributes["label"]; }
         }
 
         /// <summary>
@@ -257,9 +251,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logo_url")]
         public string LogoUrl
         {
-            
-            get;
-            set;
+            get { return (string) attributes["logo_url"]; }
         }
 
         /// <summary>
@@ -268,9 +260,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -279,9 +269,7 @@ namespace FilesCom.Models
         [JsonPropertyName("saml_provider_cert_fingerprint")]
         public string SamlProviderCertFingerprint
         {
-            
-            get;
-            set;
+            get { return (string) attributes["saml_provider_cert_fingerprint"]; }
         }
 
         /// <summary>
@@ -290,9 +278,7 @@ namespace FilesCom.Models
         [JsonPropertyName("saml_provider_issuer_url")]
         public string SamlProviderIssuerUrl
         {
-            
-            get;
-            set;
+            get { return (string) attributes["saml_provider_issuer_url"]; }
         }
 
         /// <summary>
@@ -301,9 +287,7 @@ namespace FilesCom.Models
         [JsonPropertyName("saml_provider_metadata_content")]
         public string SamlProviderMetadataContent
         {
-            
-            get;
-            set;
+            get { return (string) attributes["saml_provider_metadata_content"]; }
         }
 
         /// <summary>
@@ -312,9 +296,7 @@ namespace FilesCom.Models
         [JsonPropertyName("saml_provider_metadata_url")]
         public string SamlProviderMetadataUrl
         {
-            
-            get;
-            set;
+            get { return (string) attributes["saml_provider_metadata_url"]; }
         }
 
         /// <summary>
@@ -323,9 +305,7 @@ namespace FilesCom.Models
         [JsonPropertyName("saml_provider_slo_target_url")]
         public string SamlProviderSloTargetUrl
         {
-            
-            get;
-            set;
+            get { return (string) attributes["saml_provider_slo_target_url"]; }
         }
 
         /// <summary>
@@ -334,9 +314,7 @@ namespace FilesCom.Models
         [JsonPropertyName("saml_provider_sso_target_url")]
         public string SamlProviderSsoTargetUrl
         {
-            
-            get;
-            set;
+            get { return (string) attributes["saml_provider_sso_target_url"]; }
         }
 
         /// <summary>
@@ -345,9 +323,7 @@ namespace FilesCom.Models
         [JsonPropertyName("scim_authentication_method")]
         public string ScimAuthenticationMethod
         {
-            
-            get;
-            set;
+            get { return (string) attributes["scim_authentication_method"]; }
         }
 
         /// <summary>
@@ -356,9 +332,7 @@ namespace FilesCom.Models
         [JsonPropertyName("scim_username")]
         public string ScimUsername
         {
-            
-            get;
-            set;
+            get { return (string) attributes["scim_username"]; }
         }
 
         /// <summary>
@@ -367,9 +341,7 @@ namespace FilesCom.Models
         [JsonPropertyName("scim_oauth_access_token")]
         public string ScimOauthAccessToken
         {
-            
-            get;
-            set;
+            get { return (string) attributes["scim_oauth_access_token"]; }
         }
 
         /// <summary>
@@ -378,9 +350,7 @@ namespace FilesCom.Models
         [JsonPropertyName("scim_oauth_access_token_expires_at")]
         public string ScimOauthAccessTokenExpiresAt
         {
-            
-            get;
-            set;
+            get { return (string) attributes["scim_oauth_access_token_expires_at"]; }
         }
 
         /// <summary>
@@ -389,9 +359,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subdomain")]
         public string Subdomain
         {
-            
-            get;
-            set;
+            get { return (string) attributes["subdomain"]; }
         }
 
         /// <summary>
@@ -400,9 +368,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_users")]
         public bool ProvisionUsers
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["provision_users"]; }
         }
 
         /// <summary>
@@ -411,9 +377,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_groups")]
         public bool ProvisionGroups
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["provision_groups"]; }
         }
 
         /// <summary>
@@ -422,9 +386,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deprovision_users")]
         public bool DeprovisionUsers
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["deprovision_users"]; }
         }
 
         /// <summary>
@@ -433,9 +395,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deprovision_groups")]
         public bool DeprovisionGroups
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["deprovision_groups"]; }
         }
 
         /// <summary>
@@ -444,9 +404,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deprovision_behavior")]
         public string DeprovisionBehavior
         {
-            
-            get;
-            set;
+            get { return (string) attributes["deprovision_behavior"]; }
         }
 
         /// <summary>
@@ -455,9 +413,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_group_default")]
         public string ProvisionGroupDefault
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_group_default"]; }
         }
 
         /// <summary>
@@ -466,9 +422,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_group_exclusion")]
         public string ProvisionGroupExclusion
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_group_exclusion"]; }
         }
 
         /// <summary>
@@ -477,9 +431,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_group_inclusion")]
         public string ProvisionGroupInclusion
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_group_inclusion"]; }
         }
 
         /// <summary>
@@ -488,9 +440,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_group_required")]
         public string ProvisionGroupRequired
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_group_required"]; }
         }
 
         /// <summary>
@@ -499,9 +449,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_email_signup_groups")]
         public string ProvisionEmailSignupGroups
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_email_signup_groups"]; }
         }
 
         /// <summary>
@@ -510,9 +458,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_site_admin_groups")]
         public string ProvisionSiteAdminGroups
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_site_admin_groups"]; }
         }
 
         /// <summary>
@@ -521,9 +467,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_attachments_permission")]
         public bool ProvisionAttachmentsPermission
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["provision_attachments_permission"]; }
         }
 
         /// <summary>
@@ -532,9 +476,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_dav_permission")]
         public bool ProvisionDavPermission
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["provision_dav_permission"]; }
         }
 
         /// <summary>
@@ -543,9 +485,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_ftp_permission")]
         public bool ProvisionFtpPermission
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["provision_ftp_permission"]; }
         }
 
         /// <summary>
@@ -554,9 +494,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_sftp_permission")]
         public bool ProvisionSftpPermission
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["provision_sftp_permission"]; }
         }
 
         /// <summary>
@@ -565,9 +503,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_time_zone")]
         public string ProvisionTimeZone
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_time_zone"]; }
         }
 
         /// <summary>
@@ -576,9 +512,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provision_company")]
         public string ProvisionCompany
         {
-            
-            get;
-            set;
+            get { return (string) attributes["provision_company"]; }
         }
 
         /// <summary>
@@ -587,9 +521,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_base_dn")]
         public string LdapBaseDn
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_base_dn"]; }
         }
 
         /// <summary>
@@ -598,9 +530,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_domain")]
         public string LdapDomain
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_domain"]; }
         }
 
         /// <summary>
@@ -609,9 +539,7 @@ namespace FilesCom.Models
         [JsonPropertyName("enabled")]
         public bool Enabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["enabled"]; }
         }
 
         /// <summary>
@@ -620,9 +548,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host")]
         public string LdapHost
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_host"]; }
         }
 
         /// <summary>
@@ -631,9 +557,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host_2")]
         public string LdapHost2
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_host_2"]; }
         }
 
         /// <summary>
@@ -642,9 +566,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host_3")]
         public string LdapHost3
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_host_3"]; }
         }
 
         /// <summary>
@@ -653,9 +575,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_port")]
         public Nullable<Int64> LdapPort
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["ldap_port"]; }
         }
 
         /// <summary>
@@ -664,9 +584,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_secure")]
         public bool LdapSecure
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ldap_secure"]; }
         }
 
         /// <summary>
@@ -675,9 +593,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_username")]
         public string LdapUsername
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_username"]; }
         }
 
         /// <summary>
@@ -686,9 +602,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_username_field")]
         public string LdapUsernameField
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_username_field"]; }
         }
 
 

@@ -112,9 +112,7 @@ namespace FilesCom.Models
         [JsonPropertyName("send")]
         public object Send
         {
-            
-            get;
-            set;
+            get { return (object) attributes["send"]; }
         }
 
         /// <summary>
@@ -123,9 +121,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
-            
-            get;
-            set;
+            get { return (string) attributes["action"]; }
         }
 
         /// <summary>
@@ -134,9 +130,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ask_about_overwrites"]; }
         }
 
         /// <summary>
@@ -145,9 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("available_parts")]
         public Nullable<Int64> AvailableParts
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["available_parts"]; }
         }
 
         /// <summary>
@@ -156,9 +148,7 @@ namespace FilesCom.Models
         [JsonPropertyName("expires")]
         public string Expires
         {
-            
-            get;
-            set;
+            get { return (string) attributes["expires"]; }
         }
 
         /// <summary>
@@ -167,9 +157,7 @@ namespace FilesCom.Models
         [JsonPropertyName("headers")]
         public object Headers
         {
-            
-            get;
-            set;
+            get { return (object) attributes["headers"]; }
         }
 
         /// <summary>
@@ -178,9 +166,7 @@ namespace FilesCom.Models
         [JsonPropertyName("http_method")]
         public string HttpMethod
         {
-            
-            get;
-            set;
+            get { return (string) attributes["http_method"]; }
         }
 
         /// <summary>
@@ -189,9 +175,7 @@ namespace FilesCom.Models
         [JsonPropertyName("next_partsize")]
         public Nullable<Int64> NextPartsize
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["next_partsize"]; }
         }
 
         /// <summary>
@@ -200,9 +184,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parallel_parts")]
         public bool ParallelParts
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["parallel_parts"]; }
         }
 
         /// <summary>
@@ -211,9 +193,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parameters")]
         public object Parameters
         {
-            
-            get;
-            set;
+            get { return (object) attributes["parameters"]; }
         }
 
         /// <summary>
@@ -222,9 +202,7 @@ namespace FilesCom.Models
         [JsonPropertyName("part_number")]
         public Nullable<Int64> PartNumber
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["part_number"]; }
         }
 
         /// <summary>
@@ -233,9 +211,7 @@ namespace FilesCom.Models
         [JsonPropertyName("partsize")]
         public Nullable<Int64> Partsize
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["partsize"]; }
         }
 
         /// <summary>
@@ -244,9 +220,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
-            get;
-            set;
+            get { return (string) attributes["path"]; }
         }
 
         /// <summary>
@@ -255,9 +229,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ref")]
         public string Ref
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ref"]; }
         }
 
         /// <summary>
@@ -266,9 +238,7 @@ namespace FilesCom.Models
         [JsonPropertyName("upload_uri")]
         public string UploadUri
         {
-            
-            get;
-            set;
+            get { return (string) attributes["upload_uri"]; }
         }
 
 

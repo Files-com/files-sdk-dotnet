@@ -76,7 +76,6 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -87,7 +86,6 @@ namespace FilesCom.Models
         [JsonPropertyName("title")]
         public string Title
         {
-            
             get { return (string) attributes["title"]; }
             set { attributes["title"] = value; }
         }
@@ -98,9 +96,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -109,7 +105,6 @@ namespace FilesCom.Models
         [JsonPropertyName("fingerprint")]
         public string Fingerprint
         {
-            
             get { return (string) attributes["fingerprint"]; }
             set { attributes["fingerprint"] = value; }
         }
@@ -120,7 +115,6 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -131,7 +125,6 @@ namespace FilesCom.Models
         [JsonPropertyName("public_key")]
         public string PublicKeyType
         {
-            
             get { return (string) attributes["public_key"]; }
             set { attributes["public_key"] = value; }
         }

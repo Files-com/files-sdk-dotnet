@@ -68,7 +68,6 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -79,7 +78,6 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public string Body
         {
-            
             get { return (string) attributes["body"]; }
             set { attributes["body"] = value; }
         }
@@ -90,7 +88,6 @@ namespace FilesCom.Models
         [JsonPropertyName("reactions")]
         public object Reactions
         {
-            
             get { return (object) attributes["reactions"]; }
             set { attributes["reactions"] = value; }
         }
@@ -101,7 +98,6 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }

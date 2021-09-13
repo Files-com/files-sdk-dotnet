@@ -60,9 +60,7 @@ namespace FilesCom.Models
         [JsonPropertyName("fields")]
         public string[] Fields
         {
-            
-            get;
-            set;
+            get { return (string[]) attributes["fields"]; }
         }
 
         /// <summary>
@@ -71,9 +69,7 @@ namespace FilesCom.Models
         [JsonPropertyName("messages")]
         public string[] Messages
         {
-            
-            get;
-            set;
+            get { return (string[]) attributes["messages"]; }
         }
 
 

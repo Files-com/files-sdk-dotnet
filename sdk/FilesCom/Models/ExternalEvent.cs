@@ -96,7 +96,6 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
         }
@@ -107,7 +106,6 @@ namespace FilesCom.Models
         [JsonPropertyName("event_type")]
         public string EventType
         {
-            
             get { return (string) attributes["event_type"]; }
             set { attributes["event_type"] = value; }
         }
@@ -118,7 +116,6 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            
             get { return (string) attributes["status"]; }
             set { attributes["status"] = value; }
         }
@@ -129,7 +126,6 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public string Body
         {
-            
             get { return (string) attributes["body"]; }
             set { attributes["body"] = value; }
         }
@@ -140,9 +136,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -151,7 +145,6 @@ namespace FilesCom.Models
         [JsonPropertyName("body_url")]
         public string BodyUrl
         {
-            
             get { return (string) attributes["body_url"]; }
             set { attributes["body_url"] = value; }
         }
@@ -162,7 +155,6 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_behavior_id")]
         public Nullable<Int64> FolderBehaviorId
         {
-            
             get { return (Nullable<Int64>) attributes["folder_behavior_id"]; }
             set { attributes["folder_behavior_id"] = value; }
         }
@@ -173,7 +165,6 @@ namespace FilesCom.Models
         [JsonPropertyName("successful_files")]
         public Nullable<Int64> SuccessfulFiles
         {
-            
             get { return (Nullable<Int64>) attributes["successful_files"]; }
             set { attributes["successful_files"] = value; }
         }
@@ -184,7 +175,6 @@ namespace FilesCom.Models
         [JsonPropertyName("errored_files")]
         public Nullable<Int64> ErroredFiles
         {
-            
             get { return (Nullable<Int64>) attributes["errored_files"]; }
             set { attributes["errored_files"] = value; }
         }
@@ -195,7 +185,6 @@ namespace FilesCom.Models
         [JsonPropertyName("bytes_synced")]
         public Nullable<Int64> BytesSynced
         {
-            
             get { return (Nullable<Int64>) attributes["bytes_synced"]; }
             set { attributes["bytes_synced"] = value; }
         }
@@ -206,7 +195,6 @@ namespace FilesCom.Models
         [JsonPropertyName("remote_server_type")]
         public string RemoteServerType
         {
-            
             get { return (string) attributes["remote_server_type"]; }
             set { attributes["remote_server_type"] = value; }
         }

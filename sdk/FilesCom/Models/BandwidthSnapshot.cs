@@ -96,9 +96,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -107,9 +105,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bytes_received")]
         public double BytesReceived
         {
-            
-            get;
-            set;
+            get { return (double) attributes["bytes_received"]; }
         }
 
         /// <summary>
@@ -118,9 +114,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bytes_sent")]
         public double BytesSent
         {
-            
-            get;
-            set;
+            get { return (double) attributes["bytes_sent"]; }
         }
 
         /// <summary>
@@ -129,9 +123,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sync_bytes_received")]
         public double SyncBytesReceived
         {
-            
-            get;
-            set;
+            get { return (double) attributes["sync_bytes_received"]; }
         }
 
         /// <summary>
@@ -140,9 +132,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sync_bytes_sent")]
         public double SyncBytesSent
         {
-            
-            get;
-            set;
+            get { return (double) attributes["sync_bytes_sent"]; }
         }
 
         /// <summary>
@@ -151,9 +141,7 @@ namespace FilesCom.Models
         [JsonPropertyName("requests_get")]
         public double RequestsGet
         {
-            
-            get;
-            set;
+            get { return (double) attributes["requests_get"]; }
         }
 
         /// <summary>
@@ -162,9 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("requests_put")]
         public double RequestsPut
         {
-            
-            get;
-            set;
+            get { return (double) attributes["requests_put"]; }
         }
 
         /// <summary>
@@ -173,9 +159,7 @@ namespace FilesCom.Models
         [JsonPropertyName("requests_other")]
         public double RequestsOther
         {
-            
-            get;
-            set;
+            get { return (double) attributes["requests_other"]; }
         }
 
         /// <summary>
@@ -184,9 +168,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logged_at")]
         public Nullable<DateTime> LoggedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["logged_at"]; }
         }
 
         /// <summary>
@@ -195,9 +177,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -206,9 +186,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["updated_at"]; }
         }
 
 

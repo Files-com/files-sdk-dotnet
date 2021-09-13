@@ -100,7 +100,6 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
             get { return (string) attributes["path"]; }
             set { attributes["path"] = value; }
         }
@@ -111,7 +110,6 @@ namespace FilesCom.Models
         [JsonPropertyName("timeout")]
         public Nullable<Int64> Timeout
         {
-            
             get { return (Nullable<Int64>) attributes["timeout"]; }
             set { attributes["timeout"] = value; }
         }
@@ -122,7 +120,6 @@ namespace FilesCom.Models
         [JsonPropertyName("depth")]
         public string Depth
         {
-            
             get { return (string) attributes["depth"]; }
             set { attributes["depth"] = value; }
         }
@@ -133,7 +130,6 @@ namespace FilesCom.Models
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            
             get { return (bool) attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
@@ -144,7 +140,6 @@ namespace FilesCom.Models
         [JsonPropertyName("owner")]
         public string Owner
         {
-            
             get { return (string) attributes["owner"]; }
             set { attributes["owner"] = value; }
         }
@@ -155,7 +150,6 @@ namespace FilesCom.Models
         [JsonPropertyName("scope")]
         public string Scope
         {
-            
             get { return (string) attributes["scope"]; }
             set { attributes["scope"] = value; }
         }
@@ -166,7 +160,6 @@ namespace FilesCom.Models
         [JsonPropertyName("exclusive")]
         public bool Exclusive
         {
-            
             get { return (bool) attributes["exclusive"]; }
             set { attributes["exclusive"] = value; }
         }
@@ -177,7 +170,6 @@ namespace FilesCom.Models
         [JsonPropertyName("token")]
         public string Token
         {
-            
             get { return (string) attributes["token"]; }
             set { attributes["token"] = value; }
         }
@@ -188,7 +180,6 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            
             get { return (string) attributes["type"]; }
             set { attributes["type"] = value; }
         }
@@ -199,7 +190,6 @@ namespace FilesCom.Models
         [JsonPropertyName("allow_access_by_any_user")]
         public bool AllowAccessByAnyUser
         {
-            
             get { return (bool) attributes["allow_access_by_any_user"]; }
             set { attributes["allow_access_by_any_user"] = value; }
         }
@@ -210,7 +200,6 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
@@ -221,7 +210,6 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            
             get { return (string) attributes["username"]; }
             set { attributes["username"] = value; }
         }

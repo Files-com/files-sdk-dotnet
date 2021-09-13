@@ -108,9 +108,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -119,9 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("amount")]
         public double Amount
         {
-            
-            get;
-            set;
+            get { return (double) attributes["amount"]; }
         }
 
         /// <summary>
@@ -130,9 +126,7 @@ namespace FilesCom.Models
         [JsonPropertyName("balance")]
         public double Balance
         {
-            
-            get;
-            set;
+            get { return (double) attributes["balance"]; }
         }
 
         /// <summary>
@@ -141,9 +135,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -152,9 +144,7 @@ namespace FilesCom.Models
         [JsonPropertyName("currency")]
         public string Currency
         {
-            
-            get;
-            set;
+            get { return (string) attributes["currency"]; }
         }
 
         /// <summary>
@@ -163,9 +153,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
-            
-            get;
-            set;
+            get { return (string) attributes["download_uri"]; }
         }
 
         /// <summary>
@@ -174,9 +162,7 @@ namespace FilesCom.Models
         [JsonPropertyName("invoice_line_items")]
         public object InvoiceLineItems
         {
-            
-            get;
-            set;
+            get { return (object) attributes["invoice_line_items"]; }
         }
 
         /// <summary>
@@ -185,9 +171,7 @@ namespace FilesCom.Models
         [JsonPropertyName("method")]
         public string Method
         {
-            
-            get;
-            set;
+            get { return (string) attributes["method"]; }
         }
 
         /// <summary>
@@ -196,9 +180,7 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_line_items")]
         public object PaymentLineItems
         {
-            
-            get;
-            set;
+            get { return (object) attributes["payment_line_items"]; }
         }
 
         /// <summary>
@@ -207,9 +189,7 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_reversed_at")]
         public Nullable<DateTime> PaymentReversedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["payment_reversed_at"]; }
         }
 
         /// <summary>
@@ -218,9 +198,7 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_type")]
         public string PaymentType
         {
-            
-            get;
-            set;
+            get { return (string) attributes["payment_type"]; }
         }
 
         /// <summary>
@@ -229,9 +207,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site_name")]
         public string SiteName
         {
-            
-            get;
-            set;
+            get { return (string) attributes["site_name"]; }
         }
 
         /// <summary>
@@ -240,9 +216,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            
-            get;
-            set;
+            get { return (string) attributes["type"]; }
         }
 
         /// <summary>
@@ -251,9 +225,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["updated_at"]; }
         }
 
 

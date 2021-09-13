@@ -104,9 +104,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["id"]; }
         }
 
         /// <summary>
@@ -115,9 +113,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            
-            get;
-            set;
+            get { return (string) attributes["path"]; }
         }
 
         /// <summary>
@@ -126,9 +122,7 @@ namespace FilesCom.Models
         [JsonPropertyName("when")]
         public Nullable<DateTime> When
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["when"]; }
         }
 
         /// <summary>
@@ -137,9 +131,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
-            
-            get;
-            set;
+            get { return (string) attributes["destination"]; }
         }
 
         /// <summary>
@@ -148,9 +140,7 @@ namespace FilesCom.Models
         [JsonPropertyName("display")]
         public string Display
         {
-            
-            get;
-            set;
+            get { return (string) attributes["display"]; }
         }
 
         /// <summary>
@@ -159,9 +149,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ip")]
         public string Ip
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ip"]; }
         }
 
         /// <summary>
@@ -170,9 +158,7 @@ namespace FilesCom.Models
         [JsonPropertyName("source")]
         public string Source
         {
-            
-            get;
-            set;
+            get { return (string) attributes["source"]; }
         }
 
         /// <summary>
@@ -181,9 +167,7 @@ namespace FilesCom.Models
         [JsonPropertyName("targets")]
         public string[] Targets
         {
-            
-            get;
-            set;
+            get { return (string[]) attributes["targets"]; }
         }
 
         /// <summary>
@@ -192,9 +176,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["user_id"]; }
         }
 
         /// <summary>
@@ -203,9 +185,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            
-            get;
-            set;
+            get { return (string) attributes["username"]; }
         }
 
         /// <summary>
@@ -214,9 +194,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string ActionType
         {
-            
-            get;
-            set;
+            get { return (string) attributes["action"]; }
         }
 
         /// <summary>
@@ -225,9 +203,7 @@ namespace FilesCom.Models
         [JsonPropertyName("failure_type")]
         public string FailureType
         {
-            
-            get;
-            set;
+            get { return (string) attributes["failure_type"]; }
         }
 
         /// <summary>
@@ -236,9 +212,7 @@ namespace FilesCom.Models
         [JsonPropertyName("interface")]
         public string Interface
         {
-            
-            get;
-            set;
+            get { return (string) attributes["interface"]; }
         }
 
 

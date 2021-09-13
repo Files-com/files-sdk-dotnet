@@ -536,9 +536,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            
-            get;
-            set;
+            get { return (string) attributes["name"]; }
         }
 
         /// <summary>
@@ -547,9 +545,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_sms")]
         public bool Allowed2faMethodSms
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["allowed_2fa_method_sms"]; }
         }
 
         /// <summary>
@@ -558,9 +554,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_totp")]
         public bool Allowed2faMethodTotp
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["allowed_2fa_method_totp"]; }
         }
 
         /// <summary>
@@ -569,9 +563,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_u2f")]
         public bool Allowed2faMethodU2f
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["allowed_2fa_method_u2f"]; }
         }
 
         /// <summary>
@@ -580,9 +572,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_yubi")]
         public bool Allowed2faMethodYubi
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["allowed_2fa_method_yubi"]; }
         }
 
         /// <summary>
@@ -591,9 +581,7 @@ namespace FilesCom.Models
         [JsonPropertyName("admin_user_id")]
         public Nullable<Int64> AdminUserId
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["admin_user_id"]; }
         }
 
         /// <summary>
@@ -602,9 +590,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allow_bundle_names")]
         public bool AllowBundleNames
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["allow_bundle_names"]; }
         }
 
         /// <summary>
@@ -613,9 +599,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_countries")]
         public string AllowedCountries
         {
-            
-            get;
-            set;
+            get { return (string) attributes["allowed_countries"]; }
         }
 
         /// <summary>
@@ -624,9 +608,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_ips")]
         public string AllowedIps
         {
-            
-            get;
-            set;
+            get { return (string) attributes["allowed_ips"]; }
         }
 
         /// <summary>
@@ -635,9 +617,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ask_about_overwrites"]; }
         }
 
         /// <summary>
@@ -646,9 +626,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_expiration")]
         public Nullable<Int64> BundleExpiration
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["bundle_expiration"]; }
         }
 
         /// <summary>
@@ -657,9 +635,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_password_required")]
         public bool BundlePasswordRequired
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["bundle_password_required"]; }
         }
 
         /// <summary>
@@ -668,9 +644,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_require_share_recipient")]
         public bool BundleRequireShareRecipient
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["bundle_require_share_recipient"]; }
         }
 
         /// <summary>
@@ -679,9 +653,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_left")]
         public string Color2Left
         {
-            
-            get;
-            set;
+            get { return (string) attributes["color2_left"]; }
         }
 
         /// <summary>
@@ -690,9 +662,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_link")]
         public string Color2Link
         {
-            
-            get;
-            set;
+            get { return (string) attributes["color2_link"]; }
         }
 
         /// <summary>
@@ -701,9 +671,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_text")]
         public string Color2Text
         {
-            
-            get;
-            set;
+            get { return (string) attributes["color2_text"]; }
         }
 
         /// <summary>
@@ -712,9 +680,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_top")]
         public string Color2Top
         {
-            
-            get;
-            set;
+            get { return (string) attributes["color2_top"]; }
         }
 
         /// <summary>
@@ -723,9 +689,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_top_text")]
         public string Color2TopText
         {
-            
-            get;
-            set;
+            get { return (string) attributes["color2_top_text"]; }
         }
 
         /// <summary>
@@ -734,9 +698,7 @@ namespace FilesCom.Models
         [JsonPropertyName("contact_name")]
         public string ContactName
         {
-            
-            get;
-            set;
+            get { return (string) attributes["contact_name"]; }
         }
 
         /// <summary>
@@ -745,9 +707,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
         }
 
         /// <summary>
@@ -756,9 +716,7 @@ namespace FilesCom.Models
         [JsonPropertyName("currency")]
         public string Currency
         {
-            
-            get;
-            set;
+            get { return (string) attributes["currency"]; }
         }
 
         /// <summary>
@@ -767,9 +725,7 @@ namespace FilesCom.Models
         [JsonPropertyName("custom_namespace")]
         public bool CustomNamespace
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["custom_namespace"]; }
         }
 
         /// <summary>
@@ -778,9 +734,7 @@ namespace FilesCom.Models
         [JsonPropertyName("days_to_retain_backups")]
         public Nullable<Int64> DaysToRetainBackups
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["days_to_retain_backups"]; }
         }
 
         /// <summary>
@@ -789,9 +743,7 @@ namespace FilesCom.Models
         [JsonPropertyName("default_time_zone")]
         public string DefaultTimeZone
         {
-            
-            get;
-            set;
+            get { return (string) attributes["default_time_zone"]; }
         }
 
         /// <summary>
@@ -800,9 +752,7 @@ namespace FilesCom.Models
         [JsonPropertyName("desktop_app")]
         public bool DesktopApp
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["desktop_app"]; }
         }
 
         /// <summary>
@@ -811,9 +761,7 @@ namespace FilesCom.Models
         [JsonPropertyName("desktop_app_session_ip_pinning")]
         public bool DesktopAppSessionIpPinning
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["desktop_app_session_ip_pinning"]; }
         }
 
         /// <summary>
@@ -822,9 +770,7 @@ namespace FilesCom.Models
         [JsonPropertyName("desktop_app_session_lifetime")]
         public Nullable<Int64> DesktopAppSessionLifetime
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["desktop_app_session_lifetime"]; }
         }
 
         /// <summary>
@@ -833,9 +779,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mobile_app")]
         public bool MobileApp
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["mobile_app"]; }
         }
 
         /// <summary>
@@ -844,9 +788,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mobile_app_session_ip_pinning")]
         public bool MobileAppSessionIpPinning
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["mobile_app_session_ip_pinning"]; }
         }
 
         /// <summary>
@@ -855,9 +797,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mobile_app_session_lifetime")]
         public Nullable<Int64> MobileAppSessionLifetime
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["mobile_app_session_lifetime"]; }
         }
 
         /// <summary>
@@ -866,9 +806,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disallowed_countries")]
         public string DisallowedCountries
         {
-            
-            get;
-            set;
+            get { return (string) attributes["disallowed_countries"]; }
         }
 
         /// <summary>
@@ -877,9 +815,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_notifications")]
         public bool DisableNotifications
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["disable_notifications"]; }
         }
 
         /// <summary>
@@ -888,9 +824,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_password_reset")]
         public bool DisablePasswordReset
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["disable_password_reset"]; }
         }
 
         /// <summary>
@@ -899,9 +833,7 @@ namespace FilesCom.Models
         [JsonPropertyName("domain")]
         public string Domain
         {
-            
-            get;
-            set;
+            get { return (string) attributes["domain"]; }
         }
 
         /// <summary>
@@ -910,9 +842,7 @@ namespace FilesCom.Models
         [JsonPropertyName("email")]
         public string Email
         {
-            
-            get;
-            set;
+            get { return (string) attributes["email"]; }
         }
 
         /// <summary>
@@ -921,9 +851,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ftp_enabled")]
         public bool FtpEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ftp_enabled"]; }
         }
 
         /// <summary>
@@ -932,9 +860,7 @@ namespace FilesCom.Models
         [JsonPropertyName("reply_to_email")]
         public string ReplyToEmail
         {
-            
-            get;
-            set;
+            get { return (string) attributes["reply_to_email"]; }
         }
 
         /// <summary>
@@ -943,9 +869,7 @@ namespace FilesCom.Models
         [JsonPropertyName("non_sso_groups_allowed")]
         public bool NonSsoGroupsAllowed
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["non_sso_groups_allowed"]; }
         }
 
         /// <summary>
@@ -954,9 +878,7 @@ namespace FilesCom.Models
         [JsonPropertyName("non_sso_users_allowed")]
         public bool NonSsoUsersAllowed
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["non_sso_users_allowed"]; }
         }
 
         /// <summary>
@@ -965,9 +887,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_permissions_groups_only")]
         public bool FolderPermissionsGroupsOnly
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["folder_permissions_groups_only"]; }
         }
 
         /// <summary>
@@ -976,9 +896,7 @@ namespace FilesCom.Models
         [JsonPropertyName("hipaa")]
         public bool Hipaa
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["hipaa"]; }
         }
 
         /// <summary>
@@ -987,9 +905,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon128")]
         public object Icon128
         {
-            
-            get;
-            set;
+            get { return (object) attributes["icon128"]; }
         }
 
         /// <summary>
@@ -998,9 +914,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon16")]
         public object Icon16
         {
-            
-            get;
-            set;
+            get { return (object) attributes["icon16"]; }
         }
 
         /// <summary>
@@ -1009,9 +923,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon32")]
         public object Icon32
         {
-            
-            get;
-            set;
+            get { return (object) attributes["icon32"]; }
         }
 
         /// <summary>
@@ -1020,9 +932,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon48")]
         public object Icon48
         {
-            
-            get;
-            set;
+            get { return (object) attributes["icon48"]; }
         }
 
         /// <summary>
@@ -1031,9 +941,7 @@ namespace FilesCom.Models
         [JsonPropertyName("immutable_files_set_at")]
         public Nullable<DateTime> ImmutableFilesSetAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["immutable_files_set_at"]; }
         }
 
         /// <summary>
@@ -1042,9 +950,7 @@ namespace FilesCom.Models
         [JsonPropertyName("include_password_in_welcome_email")]
         public bool IncludePasswordInWelcomeEmail
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["include_password_in_welcome_email"]; }
         }
 
         /// <summary>
@@ -1053,9 +959,7 @@ namespace FilesCom.Models
         [JsonPropertyName("language")]
         public string Language
         {
-            
-            get;
-            set;
+            get { return (string) attributes["language"]; }
         }
 
         /// <summary>
@@ -1064,9 +968,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_base_dn")]
         public string LdapBaseDn
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_base_dn"]; }
         }
 
         /// <summary>
@@ -1075,9 +977,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_domain")]
         public string LdapDomain
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_domain"]; }
         }
 
         /// <summary>
@@ -1086,9 +986,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_enabled")]
         public bool LdapEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ldap_enabled"]; }
         }
 
         /// <summary>
@@ -1097,9 +995,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_group_action")]
         public string LdapGroupAction
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_group_action"]; }
         }
 
         /// <summary>
@@ -1108,9 +1004,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_group_exclusion")]
         public string LdapGroupExclusion
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_group_exclusion"]; }
         }
 
         /// <summary>
@@ -1119,9 +1013,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_group_inclusion")]
         public string LdapGroupInclusion
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_group_inclusion"]; }
         }
 
         /// <summary>
@@ -1130,9 +1022,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host")]
         public string LdapHost
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_host"]; }
         }
 
         /// <summary>
@@ -1141,9 +1031,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host_2")]
         public string LdapHost2
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_host_2"]; }
         }
 
         /// <summary>
@@ -1152,9 +1040,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host_3")]
         public string LdapHost3
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_host_3"]; }
         }
 
         /// <summary>
@@ -1163,9 +1049,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_port")]
         public Nullable<Int64> LdapPort
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["ldap_port"]; }
         }
 
         /// <summary>
@@ -1174,9 +1058,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_secure")]
         public bool LdapSecure
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ldap_secure"]; }
         }
 
         /// <summary>
@@ -1185,9 +1067,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_type")]
         public string LdapType
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_type"]; }
         }
 
         /// <summary>
@@ -1196,9 +1076,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_user_action")]
         public string LdapUserAction
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_user_action"]; }
         }
 
         /// <summary>
@@ -1207,9 +1085,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_user_include_groups")]
         public string LdapUserIncludeGroups
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_user_include_groups"]; }
         }
 
         /// <summary>
@@ -1218,9 +1094,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_username")]
         public string LdapUsername
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_username"]; }
         }
 
         /// <summary>
@@ -1229,9 +1103,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_username_field")]
         public string LdapUsernameField
         {
-            
-            get;
-            set;
+            get { return (string) attributes["ldap_username_field"]; }
         }
 
         /// <summary>
@@ -1240,9 +1112,7 @@ namespace FilesCom.Models
         [JsonPropertyName("login_help_text")]
         public string LoginHelpText
         {
-            
-            get;
-            set;
+            get { return (string) attributes["login_help_text"]; }
         }
 
         /// <summary>
@@ -1251,9 +1121,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logo")]
         public object Logo
         {
-            
-            get;
-            set;
+            get { return (object) attributes["logo"]; }
         }
 
         /// <summary>
@@ -1262,9 +1130,7 @@ namespace FilesCom.Models
         [JsonPropertyName("max_prior_passwords")]
         public Nullable<Int64> MaxPriorPasswords
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["max_prior_passwords"]; }
         }
 
         /// <summary>
@@ -1273,9 +1139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("next_billing_amount")]
         public double NextBillingAmount
         {
-            
-            get;
-            set;
+            get { return (double) attributes["next_billing_amount"]; }
         }
 
         /// <summary>
@@ -1284,9 +1148,7 @@ namespace FilesCom.Models
         [JsonPropertyName("next_billing_date")]
         public string NextBillingDate
         {
-            
-            get;
-            set;
+            get { return (string) attributes["next_billing_date"]; }
         }
 
         /// <summary>
@@ -1295,9 +1157,7 @@ namespace FilesCom.Models
         [JsonPropertyName("office_integration_available")]
         public bool OfficeIntegrationAvailable
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["office_integration_available"]; }
         }
 
         /// <summary>
@@ -1306,9 +1166,7 @@ namespace FilesCom.Models
         [JsonPropertyName("oncehub_link")]
         public string OncehubLink
         {
-            
-            get;
-            set;
+            get { return (string) attributes["oncehub_link"]; }
         }
 
         /// <summary>
@@ -1317,9 +1175,7 @@ namespace FilesCom.Models
         [JsonPropertyName("opt_out_global")]
         public bool OptOutGlobal
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["opt_out_global"]; }
         }
 
         /// <summary>
@@ -1328,9 +1184,7 @@ namespace FilesCom.Models
         [JsonPropertyName("overage_notified_at")]
         public Nullable<DateTime> OverageNotifiedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["overage_notified_at"]; }
         }
 
         /// <summary>
@@ -1339,9 +1193,7 @@ namespace FilesCom.Models
         [JsonPropertyName("overage_notify")]
         public bool OverageNotify
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["overage_notify"]; }
         }
 
         /// <summary>
@@ -1350,9 +1202,7 @@ namespace FilesCom.Models
         [JsonPropertyName("overdue")]
         public bool Overdue
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["overdue"]; }
         }
 
         /// <summary>
@@ -1361,9 +1211,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_min_length")]
         public Nullable<Int64> PasswordMinLength
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["password_min_length"]; }
         }
 
         /// <summary>
@@ -1372,9 +1220,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_letter")]
         public bool PasswordRequireLetter
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["password_require_letter"]; }
         }
 
         /// <summary>
@@ -1383,9 +1229,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_mixed")]
         public bool PasswordRequireMixed
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["password_require_mixed"]; }
         }
 
         /// <summary>
@@ -1394,9 +1238,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_number")]
         public bool PasswordRequireNumber
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["password_require_number"]; }
         }
 
         /// <summary>
@@ -1405,9 +1247,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_special")]
         public bool PasswordRequireSpecial
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["password_require_special"]; }
         }
 
         /// <summary>
@@ -1416,9 +1256,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_unbreached")]
         public bool PasswordRequireUnbreached
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["password_require_unbreached"]; }
         }
 
         /// <summary>
@@ -1427,9 +1265,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_requirements_apply_to_bundles")]
         public bool PasswordRequirementsApplyToBundles
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["password_requirements_apply_to_bundles"]; }
         }
 
         /// <summary>
@@ -1438,9 +1274,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_validity_days")]
         public Nullable<Int64> PasswordValidityDays
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["password_validity_days"]; }
         }
 
         /// <summary>
@@ -1449,9 +1283,7 @@ namespace FilesCom.Models
         [JsonPropertyName("phone")]
         public string Phone
         {
-            
-            get;
-            set;
+            get { return (string) attributes["phone"]; }
         }
 
         /// <summary>
@@ -1460,9 +1292,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_2fa")]
         public bool Require2fa
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["require_2fa"]; }
         }
 
         /// <summary>
@@ -1471,9 +1301,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_2fa_stop_time")]
         public Nullable<DateTime> Require2faStopTime
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["require_2fa_stop_time"]; }
         }
 
         /// <summary>
@@ -1482,9 +1310,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_2fa_user_type")]
         public string Require2faUserType
         {
-            
-            get;
-            set;
+            get { return (string) attributes["require_2fa_user_type"]; }
         }
 
         /// <summary>
@@ -1493,9 +1319,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session")]
         public object Session
         {
-            
-            get;
-            set;
+            get { return (object) attributes["session"]; }
         }
 
         /// <summary>
@@ -1504,9 +1328,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session_pinned_by_ip")]
         public bool SessionPinnedByIp
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["session_pinned_by_ip"]; }
         }
 
         /// <summary>
@@ -1515,9 +1337,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_enabled")]
         public bool SftpEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["sftp_enabled"]; }
         }
 
         /// <summary>
@@ -1526,9 +1346,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_user_root_enabled")]
         public bool SftpUserRootEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["sftp_user_root_enabled"]; }
         }
 
         /// <summary>
@@ -1537,9 +1355,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sharing_enabled")]
         public bool SharingEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["sharing_enabled"]; }
         }
 
         /// <summary>
@@ -1548,9 +1364,7 @@ namespace FilesCom.Models
         [JsonPropertyName("show_request_access_link")]
         public bool ShowRequestAccessLink
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["show_request_access_link"]; }
         }
 
         /// <summary>
@@ -1559,9 +1373,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site_footer")]
         public string SiteFooter
         {
-            
-            get;
-            set;
+            get { return (string) attributes["site_footer"]; }
         }
 
         /// <summary>
@@ -1570,9 +1382,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site_header")]
         public string SiteHeader
         {
-            
-            get;
-            set;
+            get { return (string) attributes["site_header"]; }
         }
 
         /// <summary>
@@ -1581,9 +1391,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_address")]
         public string SmtpAddress
         {
-            
-            get;
-            set;
+            get { return (string) attributes["smtp_address"]; }
         }
 
         /// <summary>
@@ -1592,9 +1400,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_authentication")]
         public string SmtpAuthentication
         {
-            
-            get;
-            set;
+            get { return (string) attributes["smtp_authentication"]; }
         }
 
         /// <summary>
@@ -1603,9 +1409,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_from")]
         public string SmtpFrom
         {
-            
-            get;
-            set;
+            get { return (string) attributes["smtp_from"]; }
         }
 
         /// <summary>
@@ -1614,9 +1418,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_port")]
         public Nullable<Int64> SmtpPort
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["smtp_port"]; }
         }
 
         /// <summary>
@@ -1625,9 +1427,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_username")]
         public string SmtpUsername
         {
-            
-            get;
-            set;
+            get { return (string) attributes["smtp_username"]; }
         }
 
         /// <summary>
@@ -1636,9 +1436,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session_expiry")]
         public double SessionExpiry
         {
-            
-            get;
-            set;
+            get { return (double) attributes["session_expiry"]; }
         }
 
         /// <summary>
@@ -1647,9 +1445,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ssl_required")]
         public bool SslRequired
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["ssl_required"]; }
         }
 
         /// <summary>
@@ -1658,9 +1454,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subdomain")]
         public string Subdomain
         {
-            
-            get;
-            set;
+            get { return (string) attributes["subdomain"]; }
         }
 
         /// <summary>
@@ -1669,9 +1463,7 @@ namespace FilesCom.Models
         [JsonPropertyName("switch_to_plan_date")]
         public Nullable<DateTime> SwitchToPlanDate
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["switch_to_plan_date"]; }
         }
 
         /// <summary>
@@ -1680,9 +1472,7 @@ namespace FilesCom.Models
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["tls_disabled"]; }
         }
 
         /// <summary>
@@ -1691,9 +1481,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trial_days_left")]
         public Nullable<Int64> TrialDaysLeft
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["trial_days_left"]; }
         }
 
         /// <summary>
@@ -1702,9 +1490,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trial_until")]
         public Nullable<DateTime> TrialUntil
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["trial_until"]; }
         }
 
         /// <summary>
@@ -1713,9 +1499,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            
-            get;
-            set;
+            get { return (Nullable<DateTime>) attributes["updated_at"]; }
         }
 
         /// <summary>
@@ -1724,9 +1508,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_provided_modified_at")]
         public bool UseProvidedModifiedAt
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["use_provided_modified_at"]; }
         }
 
         /// <summary>
@@ -1735,9 +1517,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user")]
         public object User
         {
-            
-            get;
-            set;
+            get { return (object) attributes["user"]; }
         }
 
         /// <summary>
@@ -1746,9 +1526,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout")]
         public bool UserLockout
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["user_lockout"]; }
         }
 
         /// <summary>
@@ -1757,9 +1535,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout_lock_period")]
         public Nullable<Int64> UserLockoutLockPeriod
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["user_lockout_lock_period"]; }
         }
 
         /// <summary>
@@ -1768,9 +1544,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout_tries")]
         public Nullable<Int64> UserLockoutTries
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["user_lockout_tries"]; }
         }
 
         /// <summary>
@@ -1779,9 +1553,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout_within")]
         public Nullable<Int64> UserLockoutWithin
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["user_lockout_within"]; }
         }
 
         /// <summary>
@@ -1790,9 +1562,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_requests_enabled")]
         public bool UserRequestsEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["user_requests_enabled"]; }
         }
 
         /// <summary>
@@ -1801,9 +1571,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_custom_text")]
         public string WelcomeCustomText
         {
-            
-            get;
-            set;
+            get { return (string) attributes["welcome_custom_text"]; }
         }
 
         /// <summary>
@@ -1812,9 +1580,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_email_cc")]
         public string WelcomeEmailCc
         {
-            
-            get;
-            set;
+            get { return (string) attributes["welcome_email_cc"]; }
         }
 
         /// <summary>
@@ -1823,9 +1589,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_email_enabled")]
         public bool WelcomeEmailEnabled
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["welcome_email_enabled"]; }
         }
 
         /// <summary>
@@ -1834,9 +1598,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_screen")]
         public string WelcomeScreen
         {
-            
-            get;
-            set;
+            get { return (string) attributes["welcome_screen"]; }
         }
 
         /// <summary>
@@ -1845,9 +1607,7 @@ namespace FilesCom.Models
         [JsonPropertyName("windows_mode_ftp")]
         public bool WindowsModeFtp
         {
-            
-            get;
-            set;
+            get { return (bool) attributes["windows_mode_ftp"]; }
         }
 
         /// <summary>
@@ -1856,9 +1616,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_users_from_inactivity_period_days")]
         public Nullable<Int64> DisableUsersFromInactivityPeriodDays
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["disable_users_from_inactivity_period_days"]; }
         }
 
 

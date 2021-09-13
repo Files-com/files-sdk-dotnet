@@ -68,9 +68,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public string Id
         {
-            
-            get;
-            set;
+            get { return (string) attributes["id"]; }
         }
 
         /// <summary>
@@ -79,9 +77,7 @@ namespace FilesCom.Models
         [JsonPropertyName("domain")]
         public string Domain
         {
-            
-            get;
-            set;
+            get { return (string) attributes["domain"]; }
         }
 
         /// <summary>
@@ -90,9 +86,7 @@ namespace FilesCom.Models
         [JsonPropertyName("rrtype")]
         public string Rrtype
         {
-            
-            get;
-            set;
+            get { return (string) attributes["rrtype"]; }
         }
 
         /// <summary>
@@ -101,9 +95,7 @@ namespace FilesCom.Models
         [JsonPropertyName("value")]
         public string Value
         {
-            
-            get;
-            set;
+            get { return (string) attributes["value"]; }
         }
 
 

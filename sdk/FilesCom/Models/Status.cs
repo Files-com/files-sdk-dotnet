@@ -80,9 +80,7 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public Nullable<Int64> Code
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["code"]; }
         }
 
         /// <summary>
@@ -91,9 +89,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
-            
-            get;
-            set;
+            get { return (string) attributes["message"]; }
         }
 
         /// <summary>
@@ -102,9 +98,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string StatusType
         {
-            
-            get;
-            set;
+            get { return (string) attributes["status"]; }
         }
 
         /// <summary>
@@ -113,9 +107,7 @@ namespace FilesCom.Models
         [JsonPropertyName("data")]
         public object Data
         {
-            
-            get;
-            set;
+            get { return (object) attributes["data"]; }
         }
 
         /// <summary>
@@ -124,9 +116,7 @@ namespace FilesCom.Models
         [JsonPropertyName("errors")]
         public object Errors
         {
-            
-            get;
-            set;
+            get { return (object) attributes["errors"]; }
         }
 
         /// <summary>
@@ -135,9 +125,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_id")]
         public Nullable<Int64> ClickwrapId
         {
-            
-            get;
-            set;
+            get { return (Nullable<Int64>) attributes["clickwrap_id"]; }
         }
 
         /// <summary>
@@ -146,9 +134,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
-            
-            get;
-            set;
+            get { return (string) attributes["clickwrap_body"]; }
         }
 
 
