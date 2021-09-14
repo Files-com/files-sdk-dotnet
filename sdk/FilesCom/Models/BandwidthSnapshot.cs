@@ -93,100 +93,122 @@ namespace FilesCom.Models
         /// <summary>
         /// Site bandwidth ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Site bandwidth report bytes received
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("bytes_received")]
         public double BytesReceived
         {
             get { return (double) attributes["bytes_received"]; }
+            private set { attributes["bytes_received"] = value; }
         }
 
         /// <summary>
         /// Site bandwidth report bytes sent
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("bytes_sent")]
         public double BytesSent
         {
             get { return (double) attributes["bytes_sent"]; }
+            private set { attributes["bytes_sent"] = value; }
         }
 
         /// <summary>
         /// Site sync bandwidth report bytes received
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("sync_bytes_received")]
         public double SyncBytesReceived
         {
             get { return (double) attributes["sync_bytes_received"]; }
+            private set { attributes["sync_bytes_received"] = value; }
         }
 
         /// <summary>
         /// Site sync bandwidth report bytes sent
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("sync_bytes_sent")]
         public double SyncBytesSent
         {
             get { return (double) attributes["sync_bytes_sent"]; }
+            private set { attributes["sync_bytes_sent"] = value; }
         }
 
         /// <summary>
         /// Site bandwidth report get requests
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("requests_get")]
         public double RequestsGet
         {
             get { return (double) attributes["requests_get"]; }
+            private set { attributes["requests_get"] = value; }
         }
 
         /// <summary>
         /// Site bandwidth report put requests
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("requests_put")]
         public double RequestsPut
         {
             get { return (double) attributes["requests_put"]; }
+            private set { attributes["requests_put"] = value; }
         }
 
         /// <summary>
         /// Site bandwidth report other requests
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("requests_other")]
         public double RequestsOther
         {
             get { return (double) attributes["requests_other"]; }
+            private set { attributes["requests_other"] = value; }
         }
 
         /// <summary>
         /// Time the site bandwidth report was logged
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("logged_at")]
         public Nullable<DateTime> LoggedAt
         {
             get { return (Nullable<DateTime>) attributes["logged_at"]; }
+            private set { attributes["logged_at"] = value; }
         }
 
         /// <summary>
         /// Site bandwidth report created at date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// The last time this site bandwidth report was updated
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
 

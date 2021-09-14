@@ -77,64 +77,78 @@ namespace FilesCom.Models
         /// <summary>
         /// Status HTTP code
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("code")]
         public Nullable<Int64> Code
         {
             get { return (Nullable<Int64>) attributes["code"]; }
+            private set { attributes["code"] = value; }
         }
 
         /// <summary>
         /// Error message
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("message")]
         public string Message
         {
             get { return (string) attributes["message"]; }
+            private set { attributes["message"] = value; }
         }
 
         /// <summary>
         /// Status message
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("status")]
         public string StatusType
         {
             get { return (string) attributes["status"]; }
+            private set { attributes["status"] = value; }
         }
 
         /// <summary>
         /// Additional data
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("data")]
         public object Data
         {
             get { return (object) attributes["data"]; }
+            private set { attributes["data"] = value; }
         }
 
         /// <summary>
         /// A list of api errors
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("errors")]
         public object Errors
         {
             get { return (object) attributes["errors"]; }
+            private set { attributes["errors"] = value; }
         }
 
         /// <summary>
         /// Required Clickwrap id
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("clickwrap_id")]
         public Nullable<Int64> ClickwrapId
         {
             get { return (Nullable<Int64>) attributes["clickwrap_id"]; }
+            private set { attributes["clickwrap_id"] = value; }
         }
 
         /// <summary>
         /// Required Clickwrap body
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
             get { return (string) attributes["clickwrap_body"]; }
+            private set { attributes["clickwrap_body"] = value; }
         }
 
 

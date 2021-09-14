@@ -113,10 +113,12 @@ namespace FilesCom.Models
         /// <summary>
         /// Time which API Key was created
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>

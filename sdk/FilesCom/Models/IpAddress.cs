@@ -65,37 +65,45 @@ namespace FilesCom.Models
         /// <summary>
         /// Unique label for list; used by Zapier and other integrations.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public string Id
         {
             get { return (string) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// The object that this public IP address list is associated with.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("associated_with")]
         public string AssociatedWith
         {
             get { return (string) attributes["associated_with"]; }
+            private set { attributes["associated_with"] = value; }
         }
 
         /// <summary>
         /// Group ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("group_id")]
         public Nullable<Int64> GroupId
         {
             get { return (Nullable<Int64>) attributes["group_id"]; }
+            private set { attributes["group_id"] = value; }
         }
 
         /// <summary>
         /// A list of IP addresses.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ip_addresses")]
         public string[] IpAddresses
         {
             get { return (string[]) attributes["ip_addresses"]; }
+            private set { attributes["ip_addresses"] = value; }
         }
 
 

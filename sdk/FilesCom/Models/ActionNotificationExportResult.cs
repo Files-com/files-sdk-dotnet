@@ -89,91 +89,111 @@ namespace FilesCom.Models
         /// <summary>
         /// Notification ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// When the notification was sent.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<Int64> CreatedAt
         {
             get { return (Nullable<Int64>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// HTTP status code returned in the webhook response.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("status")]
         public Nullable<Int64> Status
         {
             get { return (Nullable<Int64>) attributes["status"]; }
+            private set { attributes["status"] = value; }
         }
 
         /// <summary>
         /// A message indicating the overall status of the webhook notification.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("message")]
         public string Message
         {
             get { return (string) attributes["message"]; }
+            private set { attributes["message"] = value; }
         }
 
         /// <summary>
         /// `true` if the webhook succeeded by receiving a 200 or 204 response.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("success")]
         public bool Success
         {
             get { return (bool) attributes["success"]; }
+            private set { attributes["success"] = value; }
         }
 
         /// <summary>
         /// A JSON-encoded string with headers that were sent with the webhook.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("request_headers")]
         public string RequestHeaders
         {
             get { return (string) attributes["request_headers"]; }
+            private set { attributes["request_headers"] = value; }
         }
 
         /// <summary>
         /// The HTTP verb used to perform the webhook.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("request_method")]
         public string RequestMethod
         {
             get { return (string) attributes["request_method"]; }
+            private set { attributes["request_method"] = value; }
         }
 
         /// <summary>
         /// The webhook request URL.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("request_url")]
         public string RequestUrl
         {
             get { return (string) attributes["request_url"]; }
+            private set { attributes["request_url"] = value; }
         }
 
         /// <summary>
         /// The path to the actual file that triggered this notification. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("path")]
         public string Path
         {
             get { return (string) attributes["path"]; }
+            private set { attributes["path"] = value; }
         }
 
         /// <summary>
         /// The folder associated with the triggering action for this notification.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("folder")]
         public string Folder
         {
             get { return (string) attributes["folder"]; }
+            private set { attributes["folder"] = value; }
         }
 
 

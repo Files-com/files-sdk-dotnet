@@ -533,1090 +533,1332 @@ namespace FilesCom.Models
         /// <summary>
         /// Site name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("name")]
         public string Name
         {
             get { return (string) attributes["name"]; }
+            private set { attributes["name"] = value; }
         }
 
         /// <summary>
         /// Is SMS two factor authentication allowed?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allowed_2fa_method_sms")]
         public bool Allowed2faMethodSms
         {
             get { return (bool) attributes["allowed_2fa_method_sms"]; }
+            private set { attributes["allowed_2fa_method_sms"] = value; }
         }
 
         /// <summary>
         /// Is TOTP two factor authentication allowed?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allowed_2fa_method_totp")]
         public bool Allowed2faMethodTotp
         {
             get { return (bool) attributes["allowed_2fa_method_totp"]; }
+            private set { attributes["allowed_2fa_method_totp"] = value; }
         }
 
         /// <summary>
         /// Is U2F two factor authentication allowed?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allowed_2fa_method_u2f")]
         public bool Allowed2faMethodU2f
         {
             get { return (bool) attributes["allowed_2fa_method_u2f"]; }
+            private set { attributes["allowed_2fa_method_u2f"] = value; }
         }
 
         /// <summary>
         /// Is yubikey two factor authentication allowed?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allowed_2fa_method_yubi")]
         public bool Allowed2faMethodYubi
         {
             get { return (bool) attributes["allowed_2fa_method_yubi"]; }
+            private set { attributes["allowed_2fa_method_yubi"] = value; }
         }
 
         /// <summary>
         /// User ID for the main site administrator
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("admin_user_id")]
         public Nullable<Int64> AdminUserId
         {
             get { return (Nullable<Int64>) attributes["admin_user_id"]; }
+            private set { attributes["admin_user_id"] = value; }
         }
 
         /// <summary>
         /// Are manual Bundle names allowed?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allow_bundle_names")]
         public bool AllowBundleNames
         {
             get { return (bool) attributes["allow_bundle_names"]; }
+            private set { attributes["allow_bundle_names"] = value; }
         }
 
         /// <summary>
         /// Comma seperated list of allowed Country codes
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allowed_countries")]
         public string AllowedCountries
         {
             get { return (string) attributes["allowed_countries"]; }
+            private set { attributes["allowed_countries"] = value; }
         }
 
         /// <summary>
         /// List of allowed IP addresses
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("allowed_ips")]
         public string AllowedIps
         {
             get { return (string) attributes["allowed_ips"]; }
+            private set { attributes["allowed_ips"] = value; }
         }
 
         /// <summary>
         /// If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
             get { return (bool) attributes["ask_about_overwrites"]; }
+            private set { attributes["ask_about_overwrites"] = value; }
         }
 
         /// <summary>
         /// Site-wide Bundle expiration in days
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("bundle_expiration")]
         public Nullable<Int64> BundleExpiration
         {
             get { return (Nullable<Int64>) attributes["bundle_expiration"]; }
+            private set { attributes["bundle_expiration"] = value; }
         }
 
         /// <summary>
         /// Do Bundles require password protection?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("bundle_password_required")]
         public bool BundlePasswordRequired
         {
             get { return (bool) attributes["bundle_password_required"]; }
+            private set { attributes["bundle_password_required"] = value; }
         }
 
         /// <summary>
         /// Do Bundles require recipients for sharing?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("bundle_require_share_recipient")]
         public bool BundleRequireShareRecipient
         {
             get { return (bool) attributes["bundle_require_share_recipient"]; }
+            private set { attributes["bundle_require_share_recipient"] = value; }
         }
 
         /// <summary>
         /// Page link and button color
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("color2_left")]
         public string Color2Left
         {
             get { return (string) attributes["color2_left"]; }
+            private set { attributes["color2_left"] = value; }
         }
 
         /// <summary>
         /// Top bar link color
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("color2_link")]
         public string Color2Link
         {
             get { return (string) attributes["color2_link"]; }
+            private set { attributes["color2_link"] = value; }
         }
 
         /// <summary>
         /// Page link and button color
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("color2_text")]
         public string Color2Text
         {
             get { return (string) attributes["color2_text"]; }
+            private set { attributes["color2_text"] = value; }
         }
 
         /// <summary>
         /// Top bar background color
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("color2_top")]
         public string Color2Top
         {
             get { return (string) attributes["color2_top"]; }
+            private set { attributes["color2_top"] = value; }
         }
 
         /// <summary>
         /// Top bar text color
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("color2_top_text")]
         public string Color2TopText
         {
             get { return (string) attributes["color2_top_text"]; }
+            private set { attributes["color2_top_text"] = value; }
         }
 
         /// <summary>
         /// Site main contact name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("contact_name")]
         public string ContactName
         {
             get { return (string) attributes["contact_name"]; }
+            private set { attributes["contact_name"] = value; }
         }
 
         /// <summary>
         /// Time this site was created
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// Preferred currency
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("currency")]
         public string Currency
         {
             get { return (string) attributes["currency"]; }
+            private set { attributes["currency"] = value; }
         }
 
         /// <summary>
         /// Is this site using a custom namespace for users?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("custom_namespace")]
         public bool CustomNamespace
         {
             get { return (bool) attributes["custom_namespace"]; }
+            private set { attributes["custom_namespace"] = value; }
         }
 
         /// <summary>
         /// Number of days to keep deleted files
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("days_to_retain_backups")]
         public Nullable<Int64> DaysToRetainBackups
         {
             get { return (Nullable<Int64>) attributes["days_to_retain_backups"]; }
+            private set { attributes["days_to_retain_backups"] = value; }
         }
 
         /// <summary>
         /// Site default time zone
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("default_time_zone")]
         public string DefaultTimeZone
         {
             get { return (string) attributes["default_time_zone"]; }
+            private set { attributes["default_time_zone"] = value; }
         }
 
         /// <summary>
         /// Is the desktop app enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("desktop_app")]
         public bool DesktopApp
         {
             get { return (bool) attributes["desktop_app"]; }
+            private set { attributes["desktop_app"] = value; }
         }
 
         /// <summary>
         /// Is desktop app session IP pinning enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("desktop_app_session_ip_pinning")]
         public bool DesktopAppSessionIpPinning
         {
             get { return (bool) attributes["desktop_app_session_ip_pinning"]; }
+            private set { attributes["desktop_app_session_ip_pinning"] = value; }
         }
 
         /// <summary>
         /// Desktop app session lifetime (in hours)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("desktop_app_session_lifetime")]
         public Nullable<Int64> DesktopAppSessionLifetime
         {
             get { return (Nullable<Int64>) attributes["desktop_app_session_lifetime"]; }
+            private set { attributes["desktop_app_session_lifetime"] = value; }
         }
 
         /// <summary>
         /// Is the mobile app enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("mobile_app")]
         public bool MobileApp
         {
             get { return (bool) attributes["mobile_app"]; }
+            private set { attributes["mobile_app"] = value; }
         }
 
         /// <summary>
         /// Is mobile app session IP pinning enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("mobile_app_session_ip_pinning")]
         public bool MobileAppSessionIpPinning
         {
             get { return (bool) attributes["mobile_app_session_ip_pinning"]; }
+            private set { attributes["mobile_app_session_ip_pinning"] = value; }
         }
 
         /// <summary>
         /// Mobile app session lifetime (in hours)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("mobile_app_session_lifetime")]
         public Nullable<Int64> MobileAppSessionLifetime
         {
             get { return (Nullable<Int64>) attributes["mobile_app_session_lifetime"]; }
+            private set { attributes["mobile_app_session_lifetime"] = value; }
         }
 
         /// <summary>
         /// Comma seperated list of disallowed Country codes
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("disallowed_countries")]
         public string DisallowedCountries
         {
             get { return (string) attributes["disallowed_countries"]; }
+            private set { attributes["disallowed_countries"] = value; }
         }
 
         /// <summary>
         /// Are notifications disabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("disable_notifications")]
         public bool DisableNotifications
         {
             get { return (bool) attributes["disable_notifications"]; }
+            private set { attributes["disable_notifications"] = value; }
         }
 
         /// <summary>
         /// Is password reset disabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("disable_password_reset")]
         public bool DisablePasswordReset
         {
             get { return (bool) attributes["disable_password_reset"]; }
+            private set { attributes["disable_password_reset"] = value; }
         }
 
         /// <summary>
         /// Custom domain
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("domain")]
         public string Domain
         {
             get { return (string) attributes["domain"]; }
+            private set { attributes["domain"] = value; }
         }
 
         /// <summary>
         /// Main email for this site
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("email")]
         public string Email
         {
             get { return (string) attributes["email"]; }
+            private set { attributes["email"] = value; }
         }
 
         /// <summary>
         /// Is FTP enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ftp_enabled")]
         public bool FtpEnabled
         {
             get { return (bool) attributes["ftp_enabled"]; }
+            private set { attributes["ftp_enabled"] = value; }
         }
 
         /// <summary>
         /// Reply-to email for this site
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("reply_to_email")]
         public string ReplyToEmail
         {
             get { return (string) attributes["reply_to_email"]; }
+            private set { attributes["reply_to_email"] = value; }
         }
 
         /// <summary>
         /// If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("non_sso_groups_allowed")]
         public bool NonSsoGroupsAllowed
         {
             get { return (bool) attributes["non_sso_groups_allowed"]; }
+            private set { attributes["non_sso_groups_allowed"] = value; }
         }
 
         /// <summary>
         /// If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("non_sso_users_allowed")]
         public bool NonSsoUsersAllowed
         {
             get { return (bool) attributes["non_sso_users_allowed"]; }
+            private set { attributes["non_sso_users_allowed"] = value; }
         }
 
         /// <summary>
         /// If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("folder_permissions_groups_only")]
         public bool FolderPermissionsGroupsOnly
         {
             get { return (bool) attributes["folder_permissions_groups_only"]; }
+            private set { attributes["folder_permissions_groups_only"] = value; }
         }
 
         /// <summary>
         /// Is there a signed HIPAA BAA between Files.com and this site?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("hipaa")]
         public bool Hipaa
         {
             get { return (bool) attributes["hipaa"]; }
+            private set { attributes["hipaa"] = value; }
         }
 
         /// <summary>
         /// Branded icon 128x128
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("icon128")]
         public object Icon128
         {
             get { return (object) attributes["icon128"]; }
+            private set { attributes["icon128"] = value; }
         }
 
         /// <summary>
         /// Branded icon 16x16
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("icon16")]
         public object Icon16
         {
             get { return (object) attributes["icon16"]; }
+            private set { attributes["icon16"] = value; }
         }
 
         /// <summary>
         /// Branded icon 32x32
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("icon32")]
         public object Icon32
         {
             get { return (object) attributes["icon32"]; }
+            private set { attributes["icon32"] = value; }
         }
 
         /// <summary>
         /// Branded icon 48x48
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("icon48")]
         public object Icon48
         {
             get { return (object) attributes["icon48"]; }
+            private set { attributes["icon48"] = value; }
         }
 
         /// <summary>
         /// Can files be modified?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("immutable_files_set_at")]
         public Nullable<DateTime> ImmutableFilesSetAt
         {
             get { return (Nullable<DateTime>) attributes["immutable_files_set_at"]; }
+            private set { attributes["immutable_files_set_at"] = value; }
         }
 
         /// <summary>
         /// Include password in emails to new users?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("include_password_in_welcome_email")]
         public bool IncludePasswordInWelcomeEmail
         {
             get { return (bool) attributes["include_password_in_welcome_email"]; }
+            private set { attributes["include_password_in_welcome_email"] = value; }
         }
 
         /// <summary>
         /// Site default language
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("language")]
         public string Language
         {
             get { return (string) attributes["language"]; }
+            private set { attributes["language"] = value; }
         }
 
         /// <summary>
         /// Base DN for looking up users in LDAP server
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_base_dn")]
         public string LdapBaseDn
         {
             get { return (string) attributes["ldap_base_dn"]; }
+            private set { attributes["ldap_base_dn"] = value; }
         }
 
         /// <summary>
         /// Domain name that will be appended to usernames
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_domain")]
         public string LdapDomain
         {
             get { return (string) attributes["ldap_domain"]; }
+            private set { attributes["ldap_domain"] = value; }
         }
 
         /// <summary>
         /// Main LDAP setting: is LDAP enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_enabled")]
         public bool LdapEnabled
         {
             get { return (bool) attributes["ldap_enabled"]; }
+            private set { attributes["ldap_enabled"] = value; }
         }
 
         /// <summary>
         /// Should we sync groups from LDAP server?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_group_action")]
         public string LdapGroupAction
         {
             get { return (string) attributes["ldap_group_action"]; }
+            private set { attributes["ldap_group_action"] = value; }
         }
 
         /// <summary>
         /// Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_group_exclusion")]
         public string LdapGroupExclusion
         {
             get { return (string) attributes["ldap_group_exclusion"]; }
+            private set { attributes["ldap_group_exclusion"] = value; }
         }
 
         /// <summary>
         /// Comma or newline separated list of group names (with optional wildcards) to include when syncing.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_group_inclusion")]
         public string LdapGroupInclusion
         {
             get { return (string) attributes["ldap_group_inclusion"]; }
+            private set { attributes["ldap_group_inclusion"] = value; }
         }
 
         /// <summary>
         /// LDAP host
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_host")]
         public string LdapHost
         {
             get { return (string) attributes["ldap_host"]; }
+            private set { attributes["ldap_host"] = value; }
         }
 
         /// <summary>
         /// LDAP backup host
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_host_2")]
         public string LdapHost2
         {
             get { return (string) attributes["ldap_host_2"]; }
+            private set { attributes["ldap_host_2"] = value; }
         }
 
         /// <summary>
         /// LDAP backup host
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_host_3")]
         public string LdapHost3
         {
             get { return (string) attributes["ldap_host_3"]; }
+            private set { attributes["ldap_host_3"] = value; }
         }
 
         /// <summary>
         /// LDAP port
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_port")]
         public Nullable<Int64> LdapPort
         {
             get { return (Nullable<Int64>) attributes["ldap_port"]; }
+            private set { attributes["ldap_port"] = value; }
         }
 
         /// <summary>
         /// Use secure LDAP?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_secure")]
         public bool LdapSecure
         {
             get { return (bool) attributes["ldap_secure"]; }
+            private set { attributes["ldap_secure"] = value; }
         }
 
         /// <summary>
         /// LDAP type
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_type")]
         public string LdapType
         {
             get { return (string) attributes["ldap_type"]; }
+            private set { attributes["ldap_type"] = value; }
         }
 
         /// <summary>
         /// Should we sync users from LDAP server?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_user_action")]
         public string LdapUserAction
         {
             get { return (string) attributes["ldap_user_action"]; }
+            private set { attributes["ldap_user_action"] = value; }
         }
 
         /// <summary>
         /// Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_user_include_groups")]
         public string LdapUserIncludeGroups
         {
             get { return (string) attributes["ldap_user_include_groups"]; }
+            private set { attributes["ldap_user_include_groups"] = value; }
         }
 
         /// <summary>
         /// Username for signing in to LDAP server.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_username")]
         public string LdapUsername
         {
             get { return (string) attributes["ldap_username"]; }
+            private set { attributes["ldap_username"] = value; }
         }
 
         /// <summary>
         /// LDAP username field
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ldap_username_field")]
         public string LdapUsernameField
         {
             get { return (string) attributes["ldap_username_field"]; }
+            private set { attributes["ldap_username_field"] = value; }
         }
 
         /// <summary>
         /// Login help text
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("login_help_text")]
         public string LoginHelpText
         {
             get { return (string) attributes["login_help_text"]; }
+            private set { attributes["login_help_text"] = value; }
         }
 
         /// <summary>
         /// Branded logo
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("logo")]
         public object Logo
         {
             get { return (object) attributes["logo"]; }
+            private set { attributes["logo"] = value; }
         }
 
         /// <summary>
         /// Number of prior passwords to disallow
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("max_prior_passwords")]
         public Nullable<Int64> MaxPriorPasswords
         {
             get { return (Nullable<Int64>) attributes["max_prior_passwords"]; }
+            private set { attributes["max_prior_passwords"] = value; }
         }
 
         /// <summary>
         /// Next billing amount
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("next_billing_amount")]
         public double NextBillingAmount
         {
             get { return (double) attributes["next_billing_amount"]; }
+            private set { attributes["next_billing_amount"] = value; }
         }
 
         /// <summary>
         /// Next billing date
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("next_billing_date")]
         public string NextBillingDate
         {
             get { return (string) attributes["next_billing_date"]; }
+            private set { attributes["next_billing_date"] = value; }
         }
 
         /// <summary>
         /// Allow users to use Office for the web?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("office_integration_available")]
         public bool OfficeIntegrationAvailable
         {
             get { return (bool) attributes["office_integration_available"]; }
+            private set { attributes["office_integration_available"] = value; }
         }
 
         /// <summary>
         /// Link to scheduling a meeting with our Sales team
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("oncehub_link")]
         public string OncehubLink
         {
             get { return (string) attributes["oncehub_link"]; }
+            private set { attributes["oncehub_link"] = value; }
         }
 
         /// <summary>
         /// Use servers in the USA only?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("opt_out_global")]
         public bool OptOutGlobal
         {
             get { return (bool) attributes["opt_out_global"]; }
+            private set { attributes["opt_out_global"] = value; }
         }
 
         /// <summary>
         /// Last time the site was notified about an overage
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("overage_notified_at")]
         public Nullable<DateTime> OverageNotifiedAt
         {
             get { return (Nullable<DateTime>) attributes["overage_notified_at"]; }
+            private set { attributes["overage_notified_at"] = value; }
         }
 
         /// <summary>
         /// Notify site email of overages?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("overage_notify")]
         public bool OverageNotify
         {
             get { return (bool) attributes["overage_notify"]; }
+            private set { attributes["overage_notify"] = value; }
         }
 
         /// <summary>
         /// Is this site's billing overdue?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("overdue")]
         public bool Overdue
         {
             get { return (bool) attributes["overdue"]; }
+            private set { attributes["overdue"] = value; }
         }
 
         /// <summary>
         /// Shortest password length for users
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_min_length")]
         public Nullable<Int64> PasswordMinLength
         {
             get { return (Nullable<Int64>) attributes["password_min_length"]; }
+            private set { attributes["password_min_length"] = value; }
         }
 
         /// <summary>
         /// Require a letter in passwords?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_require_letter")]
         public bool PasswordRequireLetter
         {
             get { return (bool) attributes["password_require_letter"]; }
+            private set { attributes["password_require_letter"] = value; }
         }
 
         /// <summary>
         /// Require lower and upper case letters in passwords?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_require_mixed")]
         public bool PasswordRequireMixed
         {
             get { return (bool) attributes["password_require_mixed"]; }
+            private set { attributes["password_require_mixed"] = value; }
         }
 
         /// <summary>
         /// Require a number in passwords?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_require_number")]
         public bool PasswordRequireNumber
         {
             get { return (bool) attributes["password_require_number"]; }
+            private set { attributes["password_require_number"] = value; }
         }
 
         /// <summary>
         /// Require special characters in password?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_require_special")]
         public bool PasswordRequireSpecial
         {
             get { return (bool) attributes["password_require_special"]; }
+            private set { attributes["password_require_special"] = value; }
         }
 
         /// <summary>
         /// Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_require_unbreached")]
         public bool PasswordRequireUnbreached
         {
             get { return (bool) attributes["password_require_unbreached"]; }
+            private set { attributes["password_require_unbreached"] = value; }
         }
 
         /// <summary>
         /// Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_requirements_apply_to_bundles")]
         public bool PasswordRequirementsApplyToBundles
         {
             get { return (bool) attributes["password_requirements_apply_to_bundles"]; }
+            private set { attributes["password_requirements_apply_to_bundles"] = value; }
         }
 
         /// <summary>
         /// Number of days password is valid
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("password_validity_days")]
         public Nullable<Int64> PasswordValidityDays
         {
             get { return (Nullable<Int64>) attributes["password_validity_days"]; }
+            private set { attributes["password_validity_days"] = value; }
         }
 
         /// <summary>
         /// Site phone number
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("phone")]
         public string Phone
         {
             get { return (string) attributes["phone"]; }
+            private set { attributes["phone"] = value; }
         }
 
         /// <summary>
         /// Require two-factor authentication for all users?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("require_2fa")]
         public bool Require2fa
         {
             get { return (bool) attributes["require_2fa"]; }
+            private set { attributes["require_2fa"] = value; }
         }
 
         /// <summary>
         /// If set, requirement for two-factor authentication has been scheduled to end on this date-time.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("require_2fa_stop_time")]
         public Nullable<DateTime> Require2faStopTime
         {
             get { return (Nullable<DateTime>) attributes["require_2fa_stop_time"]; }
+            private set { attributes["require_2fa_stop_time"] = value; }
         }
 
         /// <summary>
         /// What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("require_2fa_user_type")]
         public string Require2faUserType
         {
             get { return (string) attributes["require_2fa_user_type"]; }
+            private set { attributes["require_2fa_user_type"] = value; }
         }
 
         /// <summary>
         /// Current session
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("session")]
         public object Session
         {
             get { return (object) attributes["session"]; }
+            private set { attributes["session"] = value; }
         }
 
         /// <summary>
         /// Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("session_pinned_by_ip")]
         public bool SessionPinnedByIp
         {
             get { return (bool) attributes["session_pinned_by_ip"]; }
+            private set { attributes["session_pinned_by_ip"] = value; }
         }
 
         /// <summary>
         /// Is SFTP enabled?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("sftp_enabled")]
         public bool SftpEnabled
         {
             get { return (bool) attributes["sftp_enabled"]; }
+            private set { attributes["sftp_enabled"] = value; }
         }
 
         /// <summary>
         /// Use user FTP roots also for SFTP?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("sftp_user_root_enabled")]
         public bool SftpUserRootEnabled
         {
             get { return (bool) attributes["sftp_user_root_enabled"]; }
+            private set { attributes["sftp_user_root_enabled"] = value; }
         }
 
         /// <summary>
         /// Allow bundle creation
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("sharing_enabled")]
         public bool SharingEnabled
         {
             get { return (bool) attributes["sharing_enabled"]; }
+            private set { attributes["sharing_enabled"] = value; }
         }
 
         /// <summary>
         /// Show request access link for users without access?  Currently unused.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("show_request_access_link")]
         public bool ShowRequestAccessLink
         {
             get { return (bool) attributes["show_request_access_link"]; }
+            private set { attributes["show_request_access_link"] = value; }
         }
 
         /// <summary>
         /// Custom site footer text
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("site_footer")]
         public string SiteFooter
         {
             get { return (string) attributes["site_footer"]; }
+            private set { attributes["site_footer"] = value; }
         }
 
         /// <summary>
         /// Custom site header text
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("site_header")]
         public string SiteHeader
         {
             get { return (string) attributes["site_header"]; }
+            private set { attributes["site_header"] = value; }
         }
 
         /// <summary>
         /// SMTP server hostname or IP
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("smtp_address")]
         public string SmtpAddress
         {
             get { return (string) attributes["smtp_address"]; }
+            private set { attributes["smtp_address"] = value; }
         }
 
         /// <summary>
         /// SMTP server authentication type
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("smtp_authentication")]
         public string SmtpAuthentication
         {
             get { return (string) attributes["smtp_authentication"]; }
+            private set { attributes["smtp_authentication"] = value; }
         }
 
         /// <summary>
         /// From address to use when mailing through custom SMTP
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("smtp_from")]
         public string SmtpFrom
         {
             get { return (string) attributes["smtp_from"]; }
+            private set { attributes["smtp_from"] = value; }
         }
 
         /// <summary>
         /// SMTP server port
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("smtp_port")]
         public Nullable<Int64> SmtpPort
         {
             get { return (Nullable<Int64>) attributes["smtp_port"]; }
+            private set { attributes["smtp_port"] = value; }
         }
 
         /// <summary>
         /// SMTP server username
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("smtp_username")]
         public string SmtpUsername
         {
             get { return (string) attributes["smtp_username"]; }
+            private set { attributes["smtp_username"] = value; }
         }
 
         /// <summary>
         /// Session expiry in hours
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("session_expiry")]
         public double SessionExpiry
         {
             get { return (double) attributes["session_expiry"]; }
+            private set { attributes["session_expiry"] = value; }
         }
 
         /// <summary>
         /// Is SSL required?  Disabling this is insecure.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ssl_required")]
         public bool SslRequired
         {
             get { return (bool) attributes["ssl_required"]; }
+            private set { attributes["ssl_required"] = value; }
         }
 
         /// <summary>
         /// Site subdomain
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("subdomain")]
         public string Subdomain
         {
             get { return (string) attributes["subdomain"]; }
+            private set { attributes["subdomain"] = value; }
         }
 
         /// <summary>
         /// If switching plans, when does the new plan take effect?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("switch_to_plan_date")]
         public Nullable<DateTime> SwitchToPlanDate
         {
             get { return (Nullable<DateTime>) attributes["switch_to_plan_date"]; }
+            private set { attributes["switch_to_plan_date"] = value; }
         }
 
         /// <summary>
         /// Is TLS disabled(site setting)?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled
         {
             get { return (bool) attributes["tls_disabled"]; }
+            private set { attributes["tls_disabled"] = value; }
         }
 
         /// <summary>
         /// Number of days left in trial
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("trial_days_left")]
         public Nullable<Int64> TrialDaysLeft
         {
             get { return (Nullable<Int64>) attributes["trial_days_left"]; }
+            private set { attributes["trial_days_left"] = value; }
         }
 
         /// <summary>
         /// When does this Site trial expire?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("trial_until")]
         public Nullable<DateTime> TrialUntil
         {
             get { return (Nullable<DateTime>) attributes["trial_until"]; }
+            private set { attributes["trial_until"] = value; }
         }
 
         /// <summary>
         /// Last time this Site was updated
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
         /// Allow uploaders to set `provided_modified_at` for uploaded files?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("use_provided_modified_at")]
         public bool UseProvidedModifiedAt
         {
             get { return (bool) attributes["use_provided_modified_at"]; }
+            private set { attributes["use_provided_modified_at"] = value; }
         }
 
         /// <summary>
         /// User of current session
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user")]
         public object User
         {
             get { return (object) attributes["user"]; }
+            private set { attributes["user"] = value; }
         }
 
         /// <summary>
         /// Will users be locked out after incorrect login attempts?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_lockout")]
         public bool UserLockout
         {
             get { return (bool) attributes["user_lockout"]; }
+            private set { attributes["user_lockout"] = value; }
         }
 
         /// <summary>
         /// How many hours to lock user out for failed password?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_lockout_lock_period")]
         public Nullable<Int64> UserLockoutLockPeriod
         {
             get { return (Nullable<Int64>) attributes["user_lockout_lock_period"]; }
+            private set { attributes["user_lockout_lock_period"] = value; }
         }
 
         /// <summary>
         /// Number of login tries within `user_lockout_within` hours before users are locked out
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_lockout_tries")]
         public Nullable<Int64> UserLockoutTries
         {
             get { return (Nullable<Int64>) attributes["user_lockout_tries"]; }
+            private set { attributes["user_lockout_tries"] = value; }
         }
 
         /// <summary>
         /// Number of hours for user lockout window
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_lockout_within")]
         public Nullable<Int64> UserLockoutWithin
         {
             get { return (Nullable<Int64>) attributes["user_lockout_within"]; }
+            private set { attributes["user_lockout_within"] = value; }
         }
 
         /// <summary>
         /// Enable User Requests feature
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_requests_enabled")]
         public bool UserRequestsEnabled
         {
             get { return (bool) attributes["user_requests_enabled"]; }
+            private set { attributes["user_requests_enabled"] = value; }
         }
 
         /// <summary>
         /// Custom text send in user welcome email
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("welcome_custom_text")]
         public string WelcomeCustomText
         {
             get { return (string) attributes["welcome_custom_text"]; }
+            private set { attributes["welcome_custom_text"] = value; }
         }
 
         /// <summary>
         /// Include this email in welcome emails if enabled
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("welcome_email_cc")]
         public string WelcomeEmailCc
         {
             get { return (string) attributes["welcome_email_cc"]; }
+            private set { attributes["welcome_email_cc"] = value; }
         }
 
         /// <summary>
         /// Will the welcome email be sent to new users?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("welcome_email_enabled")]
         public bool WelcomeEmailEnabled
         {
             get { return (bool) attributes["welcome_email_enabled"]; }
+            private set { attributes["welcome_email_enabled"] = value; }
         }
 
         /// <summary>
         /// Does the welcome screen appear?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("welcome_screen")]
         public string WelcomeScreen
         {
             get { return (string) attributes["welcome_screen"]; }
+            private set { attributes["welcome_screen"] = value; }
         }
 
         /// <summary>
         /// Does FTP user Windows emulation mode?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("windows_mode_ftp")]
         public bool WindowsModeFtp
         {
             get { return (bool) attributes["windows_mode_ftp"]; }
+            private set { attributes["windows_mode_ftp"] = value; }
         }
 
         /// <summary>
         /// If greater than zero, users will unable to login if they do not show activity within this number of days.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("disable_users_from_inactivity_period_days")]
         public Nullable<Int64> DisableUsersFromInactivityPeriodDays
         {
             get { return (Nullable<Int64>) attributes["disable_users_from_inactivity_period_days"]; }
+            private set { attributes["disable_users_from_inactivity_period_days"] = value; }
         }
 
 

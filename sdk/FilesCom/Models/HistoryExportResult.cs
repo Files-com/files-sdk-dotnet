@@ -141,208 +141,254 @@ namespace FilesCom.Models
         /// <summary>
         /// Action ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// When the action happened
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<Int64> CreatedAt
         {
             get { return (Nullable<Int64>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// User ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>) attributes["user_id"]; }
+            private set { attributes["user_id"] = value; }
         }
 
         /// <summary>
         /// File ID related to the action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("file_id")]
         public Nullable<Int64> FileId
         {
             get { return (Nullable<Int64>) attributes["file_id"]; }
+            private set { attributes["file_id"] = value; }
         }
 
         /// <summary>
         /// ID of the parent folder
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("parent_id")]
         public Nullable<Int64> ParentId
         {
             get { return (Nullable<Int64>) attributes["parent_id"]; }
+            private set { attributes["parent_id"] = value; }
         }
 
         /// <summary>
         /// Path of the related action This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("path")]
         public string Path
         {
             get { return (string) attributes["path"]; }
+            private set { attributes["path"] = value; }
         }
 
         /// <summary>
         /// Folder in which the action occurred
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("folder")]
         public string Folder
         {
             get { return (string) attributes["folder"]; }
+            private set { attributes["folder"] = value; }
         }
 
         /// <summary>
         /// File move originated from this path
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("src")]
         public string Src
         {
             get { return (string) attributes["src"]; }
+            private set { attributes["src"] = value; }
         }
 
         /// <summary>
         /// File moved to this destination folder
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("destination")]
         public string Destination
         {
             get { return (string) attributes["destination"]; }
+            private set { attributes["destination"] = value; }
         }
 
         /// <summary>
         /// Client IP that performed the action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ip")]
         public string Ip
         {
             get { return (string) attributes["ip"]; }
+            private set { attributes["ip"] = value; }
         }
 
         /// <summary>
         /// Username of the user that performed the action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("username")]
         public string Username
         {
             get { return (string) attributes["username"]; }
+            private set { attributes["username"] = value; }
         }
 
         /// <summary>
         /// What action was taken. Valid values: `create`, `read`, `update`, `destroy`, `move`, `login`, `failedlogin`, `copy`, `user_create`, `user_update`, `user_destroy`, `group_create`, `group_update`, `group_destroy`, `permission_create`, `permission_destroy`, `api_key_create`, `api_key_update`, `api_key_destroy`
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("action")]
         public string Action
         {
             get { return (string) attributes["action"]; }
+            private set { attributes["action"] = value; }
         }
 
         /// <summary>
         /// The type of login failure, if applicable.  Valid values: `expired_trial`, `account_overdue`, `locked_out`, `ip_mismatch`, `password_mismatch`, `site_mismatch`, `username_not_found`, `none`, `no_ftp_permission`, `no_web_permission`, `no_directory`, `errno_enoent`, `no_sftp_permission`, `no_dav_permission`, `no_restapi_permission`, `key_mismatch`, `region_mismatch`, `expired_access`, `desktop_ip_mismatch`, `desktop_api_key_not_used_quickly_enough`, `disabled`, `country_mismatch`
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("failure_type")]
         public string FailureType
         {
             get { return (string) attributes["failure_type"]; }
+            private set { attributes["failure_type"] = value; }
         }
 
         /// <summary>
         /// Inteface through which the action was taken. Valid values: `web`, `ftp`, `robot`, `jsapi`, `webdesktopapi`, `sftp`, `dav`, `desktop`, `restapi`, `scim`, `office`, `mobile`
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("interface")]
         public string Interface
         {
             get { return (string) attributes["interface"]; }
+            private set { attributes["interface"] = value; }
         }
 
         /// <summary>
         /// ID of the object (such as Users, or API Keys) on which the action was taken
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_id")]
         public Nullable<Int64> TargetId
         {
             get { return (Nullable<Int64>) attributes["target_id"]; }
+            private set { attributes["target_id"] = value; }
         }
 
         /// <summary>
         /// Name of the User, Group or other object with a name related to this action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_name")]
         public string TargetName
         {
             get { return (string) attributes["target_name"]; }
+            private set { attributes["target_name"] = value; }
         }
 
         /// <summary>
         /// Permission level of the action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_permission")]
         public string TargetPermission
         {
             get { return (string) attributes["target_permission"]; }
+            private set { attributes["target_permission"] = value; }
         }
 
         /// <summary>
         /// Whether or not the action was recursive
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_recursive")]
         public bool TargetRecursive
         {
             get { return (bool) attributes["target_recursive"]; }
+            private set { attributes["target_recursive"] = value; }
         }
 
         /// <summary>
         /// If searching for Histories about API keys, this is when the API key will expire
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_expires_at")]
         public Nullable<Int64> TargetExpiresAt
         {
             get { return (Nullable<Int64>) attributes["target_expires_at"]; }
+            private set { attributes["target_expires_at"] = value; }
         }
 
         /// <summary>
         /// If searching for Histories about API keys, this represents the permission set of the associated  API key
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_permission_set")]
         public string TargetPermissionSet
         {
             get { return (string) attributes["target_permission_set"]; }
+            private set { attributes["target_permission_set"] = value; }
         }
 
         /// <summary>
         /// If searching for Histories about API keys, this is the platform on which the action was taken
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_platform")]
         public string TargetPlatform
         {
             get { return (string) attributes["target_platform"]; }
+            private set { attributes["target_platform"] = value; }
         }
 
         /// <summary>
         /// If searching for Histories about API keys, this is the username on which the action was taken
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_username")]
         public string TargetUsername
         {
             get { return (string) attributes["target_username"]; }
+            private set { attributes["target_username"] = value; }
         }
 
         /// <summary>
         /// If searching for Histories about API keys, this is the User ID on which the action was taken
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("target_user_id")]
         public Nullable<Int64> TargetUserId
         {
             get { return (Nullable<Int64>) attributes["target_user_id"]; }
+            private set { attributes["target_user_id"] = value; }
         }
 
 

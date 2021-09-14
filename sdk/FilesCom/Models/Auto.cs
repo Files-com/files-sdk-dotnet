@@ -52,10 +52,12 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("dynamic")]
         public object Dynamic
         {
             get { return (object) attributes["dynamic"]; }
+            private set { attributes["dynamic"] = value; }
         }
 
 

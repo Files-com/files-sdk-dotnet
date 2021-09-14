@@ -101,118 +101,144 @@ namespace FilesCom.Models
         /// <summary>
         /// Action ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("path")]
         public string Path
         {
             get { return (string) attributes["path"]; }
+            private set { attributes["path"] = value; }
         }
 
         /// <summary>
         /// Action occurrence date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("when")]
         public Nullable<DateTime> When
         {
             get { return (Nullable<DateTime>) attributes["when"]; }
+            private set { attributes["when"] = value; }
         }
 
         /// <summary>
         /// The destination path for this action, if applicable
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("destination")]
         public string Destination
         {
             get { return (string) attributes["destination"]; }
+            private set { attributes["destination"] = value; }
         }
 
         /// <summary>
         /// Friendly displayed output
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("display")]
         public string Display
         {
             get { return (string) attributes["display"]; }
+            private set { attributes["display"] = value; }
         }
 
         /// <summary>
         /// IP Address that performed this action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ip")]
         public string Ip
         {
             get { return (string) attributes["ip"]; }
+            private set { attributes["ip"] = value; }
         }
 
         /// <summary>
         /// The source path for this action, if applicable
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("source")]
         public string Source
         {
             get { return (string) attributes["source"]; }
+            private set { attributes["source"] = value; }
         }
 
         /// <summary>
         /// Targets
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("targets")]
         public string[] Targets
         {
             get { return (string[]) attributes["targets"]; }
+            private set { attributes["targets"] = value; }
         }
 
         /// <summary>
         /// User ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>) attributes["user_id"]; }
+            private set { attributes["user_id"] = value; }
         }
 
         /// <summary>
         /// Username
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("username")]
         public string Username
         {
             get { return (string) attributes["username"]; }
+            private set { attributes["username"] = value; }
         }
 
         /// <summary>
         /// Type of action
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("action")]
         public string Action
         {
             get { return (string) attributes["action"]; }
+            private set { attributes["action"] = value; }
         }
 
         /// <summary>
         /// Failure type.  If action was a user login or session failure, why did it fail?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("failure_type")]
         public string FailureType
         {
             get { return (string) attributes["failure_type"]; }
+            private set { attributes["failure_type"] = value; }
         }
 
         /// <summary>
         /// Interface on which this action occurred.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("interface")]
         public string Interface
         {
             get { return (string) attributes["interface"]; }
+            private set { attributes["interface"] = value; }
         }
 
 

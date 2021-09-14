@@ -85,82 +85,100 @@ namespace FilesCom.Models
         /// <summary>
         /// Invoice line item amount
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("amount")]
         public double Amount
         {
             get { return (double) attributes["amount"]; }
+            private set { attributes["amount"] = value; }
         }
 
         /// <summary>
         /// Invoice line item created at date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// Invoice line item description
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("description")]
         public string Description
         {
             get { return (string) attributes["description"]; }
+            private set { attributes["description"] = value; }
         }
 
         /// <summary>
         /// Invoice line item type
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("type")]
         public string Type
         {
             get { return (string) attributes["type"]; }
+            private set { attributes["type"] = value; }
         }
 
         /// <summary>
         /// Invoice line item service end date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("service_end_at")]
         public Nullable<DateTime> ServiceEndAt
         {
             get { return (Nullable<DateTime>) attributes["service_end_at"]; }
+            private set { attributes["service_end_at"] = value; }
         }
 
         /// <summary>
         /// Invoice line item service start date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("service_start_at")]
         public Nullable<DateTime> ServiceStartAt
         {
             get { return (Nullable<DateTime>) attributes["service_start_at"]; }
+            private set { attributes["service_start_at"] = value; }
         }
 
         /// <summary>
         /// Invoice line item updated date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
         /// Plan name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("plan")]
         public string Plan
         {
             get { return (string) attributes["plan"]; }
+            private set { attributes["plan"] = value; }
         }
 
         /// <summary>
         /// Site name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("site")]
         public string Site
         {
             get { return (string) attributes["site"]; }
+            private set { attributes["site"] = value; }
         }
 
 

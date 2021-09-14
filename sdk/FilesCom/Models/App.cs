@@ -113,145 +113,177 @@ namespace FilesCom.Models
         /// <summary>
         /// Name of the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("name")]
         public string Name
         {
             get { return (string) attributes["name"]; }
+            private set { attributes["name"] = value; }
         }
 
         /// <summary>
         /// Long form description of the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("extended_description")]
         public string ExtendedDescription
         {
             get { return (string) attributes["extended_description"]; }
+            private set { attributes["extended_description"] = value; }
         }
 
         /// <summary>
         /// Short description of the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("short_description")]
         public string ShortDescription
         {
             get { return (string) attributes["short_description"]; }
+            private set { attributes["short_description"] = value; }
         }
 
         /// <summary>
         /// Collection of named links to documentation
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("documentation_links")]
         public string DocumentationLinks
         {
             get { return (string) attributes["documentation_links"]; }
+            private set { attributes["documentation_links"] = value; }
         }
 
         /// <summary>
         /// App icon
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("icon_url")]
         public string IconUrl
         {
             get { return (string) attributes["icon_url"]; }
+            private set { attributes["icon_url"] = value; }
         }
 
         /// <summary>
         /// Full size logo for the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("logo_url")]
         public string LogoUrl
         {
             get { return (string) attributes["logo_url"]; }
+            private set { attributes["logo_url"] = value; }
         }
 
         /// <summary>
         /// Screenshots of the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("screenshot_list_urls")]
         public string ScreenshotListUrls
         {
             get { return (string) attributes["screenshot_list_urls"]; }
+            private set { attributes["screenshot_list_urls"] = value; }
         }
 
         /// <summary>
         /// Logo thumbnail for the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("logo_thumbnail_url")]
         public string LogoThumbnailUrl
         {
             get { return (string) attributes["logo_thumbnail_url"]; }
+            private set { attributes["logo_thumbnail_url"] = value; }
         }
 
         /// <summary>
         /// Associated SSO Strategy type, if any
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("sso_strategy_type")]
         public string SsoStrategyType
         {
             get { return (string) attributes["sso_strategy_type"]; }
+            private set { attributes["sso_strategy_type"] = value; }
         }
 
         /// <summary>
         /// Associated Remote Server type, if any
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("remote_server_type")]
         public string RemoteServerType
         {
             get { return (string) attributes["remote_server_type"]; }
+            private set { attributes["remote_server_type"] = value; }
         }
 
         /// <summary>
         /// Associated Folder Behavior type, if any
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("folder_behavior_type")]
         public string FolderBehaviorType
         {
             get { return (string) attributes["folder_behavior_type"]; }
+            private set { attributes["folder_behavior_type"] = value; }
         }
 
         /// <summary>
         /// Link to external homepage
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("external_homepage_url")]
         public string ExternalHomepageUrl
         {
             get { return (string) attributes["external_homepage_url"]; }
+            private set { attributes["external_homepage_url"] = value; }
         }
 
         /// <summary>
         /// Marketing video page
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("marketing_youtube_url")]
         public string MarketingYoutubeUrl
         {
             get { return (string) attributes["marketing_youtube_url"]; }
+            private set { attributes["marketing_youtube_url"] = value; }
         }
 
         /// <summary>
         /// Tutorial video page
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("tutorial_youtube_url")]
         public string TutorialYoutubeUrl
         {
             get { return (string) attributes["tutorial_youtube_url"]; }
+            private set { attributes["tutorial_youtube_url"] = value; }
         }
 
         /// <summary>
         /// The type of the App
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("app_type")]
         public string AppType
         {
             get { return (string) attributes["app_type"]; }
+            private set { attributes["app_type"] = value; }
         }
 
         /// <summary>
         /// Is featured on the App listing?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("featured")]
         public bool Featured
         {
             get { return (bool) attributes["featured"]; }
+            private set { attributes["featured"] = value; }
         }
 
 

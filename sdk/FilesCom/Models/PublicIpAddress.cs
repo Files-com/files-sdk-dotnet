@@ -57,19 +57,23 @@ namespace FilesCom.Models
         /// <summary>
         /// The public IP address.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("ip_address")]
         public string IpAddress
         {
             get { return (string) attributes["ip_address"]; }
+            private set { attributes["ip_address"] = value; }
         }
 
         /// <summary>
         /// The name of the frontend server.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("server_name")]
         public string ServerName
         {
             get { return (string) attributes["server_name"]; }
+            private set { attributes["server_name"] = value; }
         }
 
 

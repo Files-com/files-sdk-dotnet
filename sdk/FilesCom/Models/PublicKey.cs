@@ -93,10 +93,12 @@ namespace FilesCom.Models
         /// <summary>
         /// Public key created at date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>

@@ -57,19 +57,23 @@ namespace FilesCom.Models
         /// <summary>
         /// A list of fields where errors occur
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("fields")]
         public string[] Fields
         {
             get { return (string[]) attributes["fields"]; }
+            private set { attributes["fields"] = value; }
         }
 
         /// <summary>
         /// A list of error messages
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("messages")]
         public string[] Messages
         {
             get { return (string[]) attributes["messages"]; }
+            private set { attributes["messages"] = value; }
         }
 
 

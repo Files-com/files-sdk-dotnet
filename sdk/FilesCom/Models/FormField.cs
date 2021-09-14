@@ -81,73 +81,89 @@ namespace FilesCom.Models
         /// <summary>
         /// Form field id
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Label to be displayed
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("label")]
         public string Label
         {
             get { return (string) attributes["label"]; }
+            private set { attributes["label"] = value; }
         }
 
         /// <summary>
         /// Is this a required field?
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("required")]
         public bool Required
         {
             get { return (bool) attributes["required"]; }
+            private set { attributes["required"] = value; }
         }
 
         /// <summary>
         /// Help text to be displayed
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("help_text")]
         public string HelpText
         {
             get { return (string) attributes["help_text"]; }
+            private set { attributes["help_text"] = value; }
         }
 
         /// <summary>
         /// Type of Field
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("field_type")]
         public string FieldType
         {
             get { return (string) attributes["field_type"]; }
+            private set { attributes["field_type"] = value; }
         }
 
         /// <summary>
         /// Options to display for radio and dropdown
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("options_for_select")]
         public string OptionsForSelect
         {
             get { return (string) attributes["options_for_select"]; }
+            private set { attributes["options_for_select"] = value; }
         }
 
         /// <summary>
         /// Default option for radio and dropdown
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("default_option")]
         public string DefaultOption
         {
             get { return (string) attributes["default_option"]; }
+            private set { attributes["default_option"] = value; }
         }
 
         /// <summary>
         /// Form field set id
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("form_field_set_id")]
         public Nullable<Int64> FormFieldSetId
         {
             get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
+            private set { attributes["form_field_set_id"] = value; }
         }
 
 

@@ -85,82 +85,100 @@ namespace FilesCom.Models
         /// <summary>
         /// Registration cookie code
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("code")]
         public string Code
         {
             get { return (string) attributes["code"]; }
+            private set { attributes["code"] = value; }
         }
 
         /// <summary>
         /// Registrant name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("name")]
         public string Name
         {
             get { return (string) attributes["name"]; }
+            private set { attributes["name"] = value; }
         }
 
         /// <summary>
         /// Registrant company name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("company")]
         public string Company
         {
             get { return (string) attributes["company"]; }
+            private set { attributes["company"] = value; }
         }
 
         /// <summary>
         /// Registrant email address
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("email")]
         public string Email
         {
             get { return (string) attributes["email"]; }
+            private set { attributes["email"] = value; }
         }
 
         /// <summary>
         /// Clickwrap text that was shown to the registrant
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
             get { return (string) attributes["clickwrap_body"]; }
+            private set { attributes["clickwrap_body"] = value; }
         }
 
         /// <summary>
         /// Id of associated form field set
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("form_field_set_id")]
         public Nullable<Int64> FormFieldSetId
         {
             get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
+            private set { attributes["form_field_set_id"] = value; }
         }
 
         /// <summary>
         /// Data for form field set with form field ids as keys and user data as values
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("form_field_data")]
         public string FormFieldData
         {
             get { return (string) attributes["form_field_data"]; }
+            private set { attributes["form_field_data"] = value; }
         }
 
         /// <summary>
         /// Id of associated inbox
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("inbox_id")]
         public Nullable<Int64> InboxId
         {
             get { return (Nullable<Int64>) attributes["inbox_id"]; }
+            private set { attributes["inbox_id"] = value; }
         }
 
         /// <summary>
         /// Id of associated inbox recipient
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("inbox_recipient_id")]
         public Nullable<Int64> InboxRecipientId
         {
             get { return (Nullable<Int64>) attributes["inbox_recipient_id"]; }
+            private set { attributes["inbox_recipient_id"] = value; }
         }
 
 

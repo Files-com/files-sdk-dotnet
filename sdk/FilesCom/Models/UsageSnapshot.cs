@@ -105,127 +105,155 @@ namespace FilesCom.Models
         /// <summary>
         /// Site usage ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Site usage report start date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("start_at")]
         public Nullable<DateTime> StartAt
         {
             get { return (Nullable<DateTime>) attributes["start_at"]; }
+            private set { attributes["start_at"] = value; }
         }
 
         /// <summary>
         /// Site usage report end date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("end_at")]
         public Nullable<DateTime> EndAt
         {
             get { return (Nullable<DateTime>) attributes["end_at"]; }
+            private set { attributes["end_at"] = value; }
         }
 
         /// <summary>
         /// Site usage report created at date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// Site usage report highest usage in time period
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("high_water_user_count")]
         public double HighWaterUserCount
         {
             get { return (double) attributes["high_water_user_count"]; }
+            private set { attributes["high_water_user_count"] = value; }
         }
 
         /// <summary>
         /// Current site usage as of report
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("current_storage")]
         public double CurrentStorage
         {
             get { return (double) attributes["current_storage"]; }
+            private set { attributes["current_storage"] = value; }
         }
 
         /// <summary>
         /// Site usage report highest usage in time period
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("high_water_storage")]
         public double HighWaterStorage
         {
             get { return (double) attributes["high_water_storage"]; }
+            private set { attributes["high_water_storage"] = value; }
         }
 
         /// <summary>
         /// Number of downloads in report time period
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("total_downloads")]
         public Nullable<Int64> TotalDownloads
         {
             get { return (Nullable<Int64>) attributes["total_downloads"]; }
+            private set { attributes["total_downloads"] = value; }
         }
 
         /// <summary>
         /// Number of uploads in time period
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("total_uploads")]
         public Nullable<Int64> TotalUploads
         {
             get { return (Nullable<Int64>) attributes["total_uploads"]; }
+            private set { attributes["total_uploads"] = value; }
         }
 
         /// <summary>
         /// The last time this site usage report was updated
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
         /// A map of root folders to their total usage
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("usage_by_top_level_dir")]
         public object UsageByTopLevelDir
         {
             get { return (object) attributes["usage_by_top_level_dir"]; }
+            private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
         /// <summary>
         /// Usage for root folder
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("root_storage")]
         public double RootStorage
         {
             get { return (double) attributes["root_storage"]; }
+            private set { attributes["root_storage"] = value; }
         }
 
         /// <summary>
         /// Usage for files that are deleted but uploaded within last 30 days
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("deleted_files_counted_in_minimum")]
         public double DeletedFilesCountedInMinimum
         {
             get { return (double) attributes["deleted_files_counted_in_minimum"]; }
+            private set { attributes["deleted_files_counted_in_minimum"] = value; }
         }
 
         /// <summary>
         /// Usage for files that are deleted but retained as backups
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("deleted_files_storage")]
         public double DeletedFilesStorage
         {
             get { return (double) attributes["deleted_files_storage"]; }
+            private set { attributes["deleted_files_storage"] = value; }
         }
 
 

@@ -65,37 +65,45 @@ namespace FilesCom.Models
         /// <summary>
         /// ID of the usage record
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// The date of this usage record
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("date")]
         public Nullable<DateTime> Date
         {
             get { return (Nullable<DateTime>) attributes["date"]; }
+            private set { attributes["date"] = value; }
         }
 
         /// <summary>
         /// The quantity of storage held for this site
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("current_storage")]
         public Nullable<Int64> CurrentStorage
         {
             get { return (Nullable<Int64>) attributes["current_storage"]; }
+            private set { attributes["current_storage"] = value; }
         }
 
         /// <summary>
         /// Usage broken down by each top-level folder
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("usage_by_top_level_dir")]
         public string[] UsageByTopLevelDir
         {
             get { return (string[]) attributes["usage_by_top_level_dir"]; }
+            private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
 

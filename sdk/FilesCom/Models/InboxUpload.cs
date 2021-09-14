@@ -60,28 +60,34 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("inbox_registration")]
         public object InboxRegistration
         {
             get { return (object) attributes["inbox_registration"]; }
+            private set { attributes["inbox_registration"] = value; }
         }
 
         /// <summary>
         /// Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("path")]
         public string Path
         {
             get { return (string) attributes["path"]; }
+            private set { attributes["path"] = value; }
         }
 
         /// <summary>
         /// Upload date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
 

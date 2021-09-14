@@ -69,46 +69,56 @@ namespace FilesCom.Models
         /// <summary>
         /// Payment line item amount
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("amount")]
         public double Amount
         {
             get { return (double) attributes["amount"]; }
+            private set { attributes["amount"] = value; }
         }
 
         /// <summary>
         /// Payment line item created at date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// Invoice ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("invoice_id")]
         public Nullable<Int64> InvoiceId
         {
             get { return (Nullable<Int64>) attributes["invoice_id"]; }
+            private set { attributes["invoice_id"] = value; }
         }
 
         /// <summary>
         /// Payment ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("payment_id")]
         public Nullable<Int64> PaymentId
         {
             get { return (Nullable<Int64>) attributes["payment_id"]; }
+            private set { attributes["payment_id"] = value; }
         }
 
         /// <summary>
         /// Payment line item updated at date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
 

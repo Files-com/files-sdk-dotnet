@@ -85,82 +85,100 @@ namespace FilesCom.Models
         /// <summary>
         /// File migration ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Source path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("path")]
         public string Path
         {
             get { return (string) attributes["path"]; }
+            private set { attributes["path"] = value; }
         }
 
         /// <summary>
         /// Destination path
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("dest_path")]
         public string DestPath
         {
             get { return (string) attributes["dest_path"]; }
+            private set { attributes["dest_path"] = value; }
         }
 
         /// <summary>
         /// Number of files processed
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("files_moved")]
         public Nullable<Int64> FilesMoved
         {
             get { return (Nullable<Int64>) attributes["files_moved"]; }
+            private set { attributes["files_moved"] = value; }
         }
 
         /// <summary>
         /// Total number of files to process
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("files_total")]
         public Nullable<Int64> FilesTotal
         {
             get { return (Nullable<Int64>) attributes["files_total"]; }
+            private set { attributes["files_total"] = value; }
         }
 
         /// <summary>
         /// The type of operation
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("operation")]
         public string Operation
         {
             get { return (string) attributes["operation"]; }
+            private set { attributes["operation"] = value; }
         }
 
         /// <summary>
         /// Region
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("region")]
         public string Region
         {
             get { return (string) attributes["region"]; }
+            private set { attributes["region"] = value; }
         }
 
         /// <summary>
         /// Status
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("status")]
         public string Status
         {
             get { return (string) attributes["status"]; }
+            private set { attributes["status"] = value; }
         }
 
         /// <summary>
         /// Link to download the log file for this migration.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("log_url")]
         public string LogUrl
         {
             get { return (string) attributes["log_url"]; }
+            private set { attributes["log_url"] = value; }
         }
 
 

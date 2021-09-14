@@ -73,53 +73,65 @@ namespace FilesCom.Models
         /// <summary>
         /// Job enqueued at
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("queued_at")]
         public Nullable<DateTime> QueuedAt
         {
             get { return (Nullable<DateTime>) attributes["queued_at"]; }
+            private set { attributes["queued_at"] = value; }
         }
 
         /// <summary>
         /// Job updated at
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
         /// Status of the job
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("status")]
         public string Status
         {
             get { return (string) attributes["status"]; }
+            private set { attributes["status"] = value; }
         }
 
         /// <summary>
         /// Most recent reported status of sync worker
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("regional_worker_status")]
         public string RegionalWorkerStatus
         {
             get { return (string) attributes["regional_worker_status"]; }
+            private set { attributes["regional_worker_status"] = value; }
         }
 
         /// <summary>
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("uuid")]
         public string Uuid
         {
             get { return (string) attributes["uuid"]; }
+            private set { attributes["uuid"] = value; }
         }
 
         /// <summary>
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("folder_behavior_id")]
         public Nullable<Int64> FolderBehaviorId
         {
             get { return (Nullable<Int64>) attributes["folder_behavior_id"]; }
+            private set { attributes["folder_behavior_id"] = value; }
         }
 
 

@@ -57,19 +57,23 @@ namespace FilesCom.Models
         /// <summary>
         /// Image name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("name")]
         public string Name
         {
             get { return (string) attributes["name"]; }
+            private set { attributes["name"] = value; }
         }
 
         /// <summary>
         /// Image URI
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("uri")]
         public string Uri
         {
             get { return (string) attributes["uri"]; }
+            private set { attributes["uri"] = value; }
         }
 
 

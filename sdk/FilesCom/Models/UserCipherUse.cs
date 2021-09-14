@@ -73,55 +73,67 @@ namespace FilesCom.Models
         /// <summary>
         /// UserCipherUse ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// The protocol and cipher employed
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("protocol_cipher")]
         public string ProtocolCipher
         {
             get { return (string) attributes["protocol_cipher"]; }
+            private set { attributes["protocol_cipher"] = value; }
         }
 
         /// <summary>
         /// The earliest recorded use of this combination of interface and protocol and cipher (for this user)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// The interface accessed
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("interface")]
         public string Interface
         {
             get { return (string) attributes["interface"]; }
+            private set { attributes["interface"] = value; }
         }
 
         /// <summary>
         /// The most recent use of this combination of interface and protocol and cipher (for this user)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
             get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
         /// ID of the user who performed this access
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>) attributes["user_id"]; }
+            private set { attributes["user_id"] = value; }
         }
 
 

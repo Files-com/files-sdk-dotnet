@@ -69,46 +69,56 @@ namespace FilesCom.Models
         /// <summary>
         /// Preview ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Preview status.  Can be invalid, not_generated, generating, complete, or file_too_large
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("status")]
         public string Status
         {
             get { return (string) attributes["status"]; }
+            private set { attributes["status"] = value; }
         }
 
         /// <summary>
         /// Link to download preview
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
             get { return (string) attributes["download_uri"]; }
+            private set { attributes["download_uri"] = value; }
         }
 
         /// <summary>
         /// Preview status.  Can be invalid, not_generated, generating, complete, or file_too_large
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("type")]
         public string Type
         {
             get { return (string) attributes["type"]; }
+            private set { attributes["type"] = value; }
         }
 
         /// <summary>
         /// Preview size
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("size")]
         public Nullable<Int64> Size
         {
             get { return (Nullable<Int64>) attributes["size"]; }
+            private set { attributes["size"] = value; }
         }
 
 

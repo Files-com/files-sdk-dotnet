@@ -64,37 +64,45 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("bundle_registration")]
         public object BundleRegistration
         {
             get { return (object) attributes["bundle_registration"]; }
+            private set { attributes["bundle_registration"] = value; }
         }
 
         /// <summary>
         /// Download method (file or full_zip)
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("download_method")]
         public string DownloadMethod
         {
             get { return (string) attributes["download_method"]; }
+            private set { attributes["download_method"] = value; }
         }
 
         /// <summary>
         /// Download path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("path")]
         public string Path
         {
             get { return (string) attributes["path"]; }
+            private set { attributes["path"] = value; }
         }
 
         /// <summary>
         /// Download date/time
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
 

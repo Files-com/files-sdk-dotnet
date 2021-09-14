@@ -65,37 +65,45 @@ namespace FilesCom.Models
         /// <summary>
         /// Unique label for DNS record; used by Zapier and other integrations.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public string Id
         {
             get { return (string) attributes["id"]; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// DNS record domain name
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("domain")]
         public string Domain
         {
             get { return (string) attributes["domain"]; }
+            private set { attributes["domain"] = value; }
         }
 
         /// <summary>
         /// DNS record type
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("rrtype")]
         public string Rrtype
         {
             get { return (string) attributes["rrtype"]; }
+            private set { attributes["rrtype"] = value; }
         }
 
         /// <summary>
         /// DNS record value
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("value")]
         public string Value
         {
             get { return (string) attributes["value"]; }
+            private set { attributes["value"] = value; }
         }
 
 

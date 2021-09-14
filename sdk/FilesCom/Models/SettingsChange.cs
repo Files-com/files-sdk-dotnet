@@ -61,28 +61,34 @@ namespace FilesCom.Models
         /// <summary>
         /// Specifics on what changed.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("change_details")]
         public object ChangeDetails
         {
             get { return (object) attributes["change_details"]; }
+            private set { attributes["change_details"] = value; }
         }
 
         /// <summary>
         /// The time this change was made
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
         /// The user id responsible for this change
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>) attributes["user_id"]; }
+            private set { attributes["user_id"] = value; }
         }
 
 
