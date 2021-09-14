@@ -148,10 +148,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("s3_compatible_bucket", null);
             }
-            if (!this.attributes.ContainsKey("s3_compatible_region"))
-            {
-                this.attributes.Add("s3_compatible_region", null);
-            }
             if (!this.attributes.ContainsKey("s3_compatible_endpoint"))
             {
                 this.attributes.Add("s3_compatible_endpoint", null);
@@ -539,16 +535,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// S3-compatible Bucket name
-        /// </summary>
-        [JsonPropertyName("s3_compatible_region")]
-        public string S3CompatibleRegion
-        {
-            get { return (string) attributes["s3_compatible_region"]; }
-            set { attributes["s3_compatible_region"] = value; }
-        }
-
-        /// <summary>
         /// S3-compatible endpoint
         /// </summary>
         [JsonPropertyName("s3_compatible_endpoint")]
@@ -757,7 +743,6 @@ namespace FilesCom.Models
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
-        ///   s3_compatible_region - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible access key
@@ -922,10 +907,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
             }
             if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
             {
@@ -1110,7 +1091,6 @@ namespace FilesCom.Models
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
-        ///   s3_compatible_region - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible access key
@@ -1273,10 +1253,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
             }
-            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
-            }
             if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
@@ -1339,7 +1315,6 @@ namespace FilesCom.Models
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
-        ///   s3_compatible_region - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible access key
@@ -1506,10 +1481,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
             }
             if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string ))
             {
