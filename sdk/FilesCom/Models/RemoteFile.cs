@@ -632,49 +632,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Return metadata for file/folder
-        ///
-        /// Parameters:
-        ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
-        ///   with_previews - boolean - Include file preview information?
-        ///   with_priority_color - boolean - Include file priority color information?
-        /// </summary>
-        public async Task<RemoteFile> Metadata(Dictionary<string, object> parameters)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["path"] = attributes["path"];
-
-            if (!attributes.ContainsKey("path")) {
-                throw new ArgumentException("Current object doesn't have a path");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
-            }
-            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool ))
-            {
-                throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
-            }
-            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool ))
-            {
-                throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
-
-            string responseJson = await FilesClient.SendRequest($"/file_actions/metadata/{attributes["path"]}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
-        }
-
-
-        /// <summary>
         /// Copy file/folder
         ///
         /// Parameters:
@@ -1034,14 +991,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Return metadata for file/folder
-        ///
         /// Parameters:
+        ///   path (required) - string - Path to operate on.
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public static async Task<RemoteFile> Metadata(
+        public static async Task<RemoteFile> FindBy(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null

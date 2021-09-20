@@ -149,7 +149,7 @@ Task<RemoteFile> RemoteFile.Delete(
 ## Return metadata for file/folder
 
 ```
-Task<RemoteFile> RemoteFile.Metadata(
+Task<RemoteFile> RemoteFile.FindBy(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -288,29 +288,6 @@ File.Delete(parameters);
 
 * `path` (string): Required - Path to operate on.
 * `recursive` (bool): If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
-
-
----
-
-## Return metadata for file/folder
-
-```
-var File = RemoteFile.ListFor(path)[0];
-
-var parameters = new Dictionary<string, object>();
-
-parameters.Add("with_previews", true);
-parameters.Add("with_priority_color", true);
-
-File.Metadata(parameters);
-```
-
-### Parameters
-
-* `path` (string): Required - Path to operate on.
-* `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
-* `with_previews` (bool): Include file preview information?
-* `with_priority_color` (bool): Include file priority color information?
 
 
 ---
