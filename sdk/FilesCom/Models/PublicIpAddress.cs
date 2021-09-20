@@ -36,6 +36,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_name", null);
             }
+            if (!this.attributes.ContainsKey("ftp_enabled"))
+            {
+                this.attributes.Add("ftp_enabled", null);
+            }
+            if (!this.attributes.ContainsKey("sftp_enabled"))
+            {
+                this.attributes.Add("sftp_enabled", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -74,6 +82,26 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["server_name"]; }
             private set { attributes["server_name"] = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ftp_enabled")]
+        public string FtpEnabled
+        {
+            get { return (string) attributes["ftp_enabled"]; }
+            private set { attributes["ftp_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sftp_enabled")]
+        public string SftpEnabled
+        {
+            get { return (string) attributes["sftp_enabled"]; }
+            private set { attributes["sftp_enabled"] = value; }
         }
 
 

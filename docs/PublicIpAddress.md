@@ -5,9 +5,13 @@
 ```
 {
   "ip_address": "1.1.1.1",
-  "server_name": "server-1"
+  "server_name": "server-1",
+  "ftp_enabled": "",
+  "sftp_enabled": ""
 }
 ```
 
 * `ip_address` / `IpAddress`  (string): The public IP address.
 * `server_name` / `ServerName`  (string): The name of the frontend server.
+* `ftp_enabled` / `FtpEnabled`  (string): 
+* `sftp_enabled` / `SftpEnabled`  (string): 

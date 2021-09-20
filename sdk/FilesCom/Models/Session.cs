@@ -60,6 +60,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("root_path", null);
             }
+            if (!this.attributes.ContainsKey("sftp_insecure_ciphers"))
+            {
+                this.attributes.Add("sftp_insecure_ciphers", null);
+            }
             if (!this.attributes.ContainsKey("site_id"))
             {
                 this.attributes.Add("site_id", null);
@@ -215,6 +219,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Are insecure SFTP ciphers allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure SSH ciphers for this user.)
+        /// </summary>
+        [JsonPropertyName("sftp_insecure_ciphers")]
+        public bool SftpInsecureCiphers
+        {
+            get { return (bool) attributes["sftp_insecure_ciphers"]; }
+            set { attributes["sftp_insecure_ciphers"] = value; }
+        }
+
+        /// <summary>
         /// Site ID
         /// </summary>
         [JsonPropertyName("site_id")]
@@ -235,7 +249,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Is strong TLS disabled for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
+        /// Aee insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
         /// </summary>
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled

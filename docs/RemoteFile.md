@@ -146,10 +146,10 @@ Task<RemoteFile> RemoteFile.Delete(
 
 ---
 
-## Return metadata for file/folder
+## Find file/folder by path
 
 ```
-Task<RemoteFile> RemoteFile.FindBy(
+Task<RemoteFile> RemoteFile.Find(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

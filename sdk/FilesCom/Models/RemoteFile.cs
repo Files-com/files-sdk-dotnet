@@ -997,7 +997,7 @@ namespace FilesCom.Models
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public static async Task<RemoteFile> FindBy(
+        public static async Task<RemoteFile> Find(
             string path, 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1033,6 +1033,14 @@ namespace FilesCom.Models
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }
 
+        public static async Task<RemoteFile> Get(
+            string path, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return await Find(path, parameters, options);
+        }
 
         /// <summary>
         /// Copy file/folder

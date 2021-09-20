@@ -388,6 +388,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sftp_enabled", null);
             }
+            if (!this.attributes.ContainsKey("sftp_insecure_ciphers"))
+            {
+                this.attributes.Add("sftp_insecure_ciphers", null);
+            }
             if (!this.attributes.ContainsKey("sftp_user_root_enabled"))
             {
                 this.attributes.Add("sftp_user_root_enabled", null);
@@ -1521,6 +1525,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sftp_insecure_ciphers")]
+        public bool SftpInsecureCiphers
+        {
+            get { return (bool) attributes["sftp_insecure_ciphers"]; }
+            private set { attributes["sftp_insecure_ciphers"] = value; }
+        }
+
+        /// <summary>
         /// Use user FTP roots also for SFTP?
         /// </summary>
         [JsonInclude]
@@ -1675,7 +1690,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Is TLS disabled(site setting)?
+        /// Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("tls_disabled")]
@@ -1928,7 +1943,8 @@ namespace FilesCom.Models
         ///   office_integration_available - boolean - Allow users to use Office for the web?
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
-        ///   tls_disabled - boolean - Is TLS disabled(site setting)?
+        ///   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
+        ///   sftp_insecure_ciphers - boolean - Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
         ///   user_lockout - boolean - Will users be locked out after incorrect login attempts?
         ///   user_lockout_tries - int64 - Number of login tries within `user_lockout_within` hours before users are locked out
         ///   user_lockout_within - int64 - Number of hours for user lockout window
@@ -2133,6 +2149,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("tls_disabled") && !(parameters["tls_disabled"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: tls_disabled must be of type bool", "parameters[\"tls_disabled\"]");
+            }
+            if (parameters.ContainsKey("sftp_insecure_ciphers") && !(parameters["sftp_insecure_ciphers"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: sftp_insecure_ciphers must be of type bool", "parameters[\"sftp_insecure_ciphers\"]");
             }
             if (parameters.ContainsKey("user_lockout") && !(parameters["user_lockout"] is bool ))
             {
