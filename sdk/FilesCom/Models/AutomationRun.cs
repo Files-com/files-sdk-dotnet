@@ -98,6 +98,13 @@ namespace FilesCom.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `created_at` and `status`.
+        ///   filter - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `status`.
+        ///   filter_gt - object - If set, return records where the specifiied field is greater than the supplied value. Valid fields are `status`.
+        ///   filter_gteq - object - If set, return records where the specifiied field is greater than or equal to the supplied value. Valid fields are `status`.
+        ///   filter_like - object - If set, return records where the specifiied field is equal to the supplied value. Valid fields are `status`.
+        ///   filter_lt - object - If set, return records where the specifiied field is less than the supplied value. Valid fields are `status`.
+        ///   filter_lteq - object - If set, return records where the specifiied field is less than or equal to the supplied value. Valid fields are `status`.
         ///   automation_id (required) - int64 - ID of the associated Automation.
         /// </summary>
         public static async Task<AutomationRun[]> List(
@@ -120,6 +127,34 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
             if (parameters.ContainsKey("automation_id") && !(parameters["automation_id"] is Nullable<Int64> ))
             {
