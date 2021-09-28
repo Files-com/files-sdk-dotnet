@@ -43,6 +43,7 @@
   "disable_notifications": true,
   "disable_password_reset": true,
   "domain": "my-custom-domain.com",
+  "domain_hsts_header": true,
   "email": "john.doe@files.com",
   "ftp_enabled": true,
   "reply_to_email": "jane.doe@files.com",
@@ -256,6 +257,7 @@
 * `disable_notifications` / `DisableNotifications`  (bool): Are notifications disabled?
 * `disable_password_reset` / `DisablePasswordReset`  (bool): Is password reset disabled?
 * `domain` / `Domain`  (string): Custom domain
+* `domain_hsts_header` / `DomainHstsHeader`  (bool): Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
 * `email` / `Email`  (string): Main email for this site
 * `ftp_enabled` / `FtpEnabled`  (bool): Is FTP enabled?
 * `reply_to_email` / `ReplyToEmail`  (string): Reply-to email for this site
@@ -389,6 +391,7 @@ Task<Site> Site.Update(
 * `name` (string): Site name
 * `subdomain` (string): Site subdomain
 * `domain` (string): Custom domain
+* `domain_hsts_header` (bool): Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
 * `email` (string): Main email for this site
 * `reply_to_email` (string): Reply-to email for this site
 * `allow_bundle_names` (bool): Are manual Bundle names allowed?

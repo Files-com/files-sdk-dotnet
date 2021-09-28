@@ -172,6 +172,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("domain", null);
             }
+            if (!this.attributes.ContainsKey("domain_hsts_header"))
+            {
+                this.attributes.Add("domain_hsts_header", null);
+            }
             if (!this.attributes.ContainsKey("email"))
             {
                 this.attributes.Add("email", null);
@@ -936,6 +940,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["domain"]; }
             private set { attributes["domain"] = value; }
+        }
+
+        /// <summary>
+        /// Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("domain_hsts_header")]
+        public bool DomainHstsHeader
+        {
+            get { return (bool) attributes["domain_hsts_header"]; }
+            private set { attributes["domain_hsts_header"] = value; }
         }
 
         /// <summary>
@@ -1949,6 +1964,7 @@ namespace FilesCom.Models
         ///   name - string - Site name
         ///   subdomain - string - Site subdomain
         ///   domain - string - Custom domain
+        ///   domain_hsts_header - boolean - Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
         ///   email - string - Main email for this site
         ///   reply_to_email - string - Reply-to email for this site
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
@@ -2081,6 +2097,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("domain") && !(parameters["domain"] is string ))
             {
                 throw new ArgumentException("Bad parameter: domain must be of type string", "parameters[\"domain\"]");
+            }
+            if (parameters.ContainsKey("domain_hsts_header") && !(parameters["domain_hsts_header"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: domain_hsts_header must be of type bool", "parameters[\"domain_hsts_header\"]");
             }
             if (parameters.ContainsKey("email") && !(parameters["email"] is string ))
             {
