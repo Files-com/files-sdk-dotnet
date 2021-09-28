@@ -80,6 +80,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_require_share_recipient", null);
             }
+            if (!this.attributes.ContainsKey("bundle_watermark_attachment"))
+            {
+                this.attributes.Add("bundle_watermark_attachment", null);
+            }
+            if (!this.attributes.ContainsKey("bundle_watermark_value"))
+            {
+                this.attributes.Add("bundle_watermark_value", null);
+            }
             if (!this.attributes.ContainsKey("color2_left"))
             {
                 this.attributes.Add("color2_left", null);
@@ -675,6 +683,28 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["bundle_require_share_recipient"]; }
             private set { attributes["bundle_require_share_recipient"] = value; }
+        }
+
+        /// <summary>
+        /// Preview watermark image applied to all bundle items.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_watermark_attachment")]
+        public object BundleWatermarkAttachment
+        {
+            get { return (object) attributes["bundle_watermark_attachment"]; }
+            private set { attributes["bundle_watermark_attachment"] = value; }
+        }
+
+        /// <summary>
+        /// Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_watermark_value")]
+        public object BundleWatermarkValue
+        {
+            get { return (object) attributes["bundle_watermark_value"]; }
+            private set { attributes["bundle_watermark_value"] = value; }
         }
 
         /// <summary>
@@ -2024,6 +2054,8 @@ namespace FilesCom.Models
         ///   icon128_delete - boolean - If true, will delete the file stored in icon128
         ///   logo_file - file
         ///   logo_delete - boolean - If true, will delete the file stored in logo
+        ///   bundle_watermark_attachment_file - file
+        ///   bundle_watermark_attachment_delete - boolean - If true, will delete the file stored in bundle_watermark_attachment
         ///   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
         ///   ldap_password_change - string - New LDAP password.
         ///   ldap_password_change_confirmation - string - Confirm new LDAP password.
@@ -2469,6 +2501,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("logo_delete") && !(parameters["logo_delete"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: logo_delete must be of type bool", "parameters[\"logo_delete\"]");
+            }
+            if (parameters.ContainsKey("bundle_watermark_attachment_file") && !(parameters["bundle_watermark_attachment_file"] is System.Net.Http.ByteArrayContent ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"bundle_watermark_attachment_file\"]");
+            }
+            if (parameters.ContainsKey("bundle_watermark_attachment_delete") && !(parameters["bundle_watermark_attachment_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_watermark_attachment_delete must be of type bool", "parameters[\"bundle_watermark_attachment_delete\"]");
             }
             if (parameters.ContainsKey("disable_2fa_with_delay") && !(parameters["disable_2fa_with_delay"] is bool ))
             {

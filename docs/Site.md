@@ -17,6 +17,11 @@
   "bundle_expiration": 1,
   "bundle_password_required": true,
   "bundle_require_share_recipient": true,
+  "bundle_watermark_attachment": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
+  "bundle_watermark_value": "",
   "color2_left": "#0066a7",
   "color2_link": "#d34f5d",
   "color2_text": "#0066a7",
@@ -228,6 +233,8 @@
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
+* `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (object): Preview watermark image applied to all bundle items.
+* `bundle_watermark_value` / `BundleWatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `color2_left` / `Color2Left`  (string): Page link and button color
 * `color2_link` / `Color2Link`  (string): Top bar link color
 * `color2_text` / `Color2Text`  (string): Page link and button color
@@ -487,6 +494,8 @@ Task<Site> Site.Update(
 * `icon128_delete` (bool): If true, will delete the file stored in icon128
 * `logo_file` (System.Net.Http.ByteArrayContent): 
 * `logo_delete` (bool): If true, will delete the file stored in logo
+* `bundle_watermark_attachment_file` (System.Net.Http.ByteArrayContent): 
+* `bundle_watermark_attachment_delete` (bool): If true, will delete the file stored in bundle_watermark_attachment
 * `disable_2fa_with_delay` (bool): If set to true, we will begin the process of disabling 2FA on this site.
 * `ldap_password_change` (string): New LDAP password.
 * `ldap_password_change_confirmation` (string): Confirm new LDAP password.
