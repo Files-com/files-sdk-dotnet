@@ -176,6 +176,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("domain_hsts_header", null);
             }
+            if (!this.attributes.ContainsKey("domain_letsencrypt_chain"))
+            {
+                this.attributes.Add("domain_letsencrypt_chain", null);
+            }
             if (!this.attributes.ContainsKey("email"))
             {
                 this.attributes.Add("email", null);
@@ -951,6 +955,17 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["domain_hsts_header"]; }
             private set { attributes["domain_hsts_header"] = value; }
+        }
+
+        /// <summary>
+        /// Letsencrypt chain to use when registering SSL Certificate for domain.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("domain_letsencrypt_chain")]
+        public string DomainLetsencryptChain
+        {
+            get { return (string) attributes["domain_letsencrypt_chain"]; }
+            private set { attributes["domain_letsencrypt_chain"] = value; }
         }
 
         /// <summary>
@@ -1965,6 +1980,7 @@ namespace FilesCom.Models
         ///   subdomain - string - Site subdomain
         ///   domain - string - Custom domain
         ///   domain_hsts_header - boolean - Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
+        ///   domain_letsencrypt_chain - string - Letsencrypt chain to use when registering SSL Certificate for domain.
         ///   email - string - Main email for this site
         ///   reply_to_email - string - Reply-to email for this site
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
@@ -2101,6 +2117,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("domain_hsts_header") && !(parameters["domain_hsts_header"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: domain_hsts_header must be of type bool", "parameters[\"domain_hsts_header\"]");
+            }
+            if (parameters.ContainsKey("domain_letsencrypt_chain") && !(parameters["domain_letsencrypt_chain"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: domain_letsencrypt_chain must be of type string", "parameters[\"domain_letsencrypt_chain\"]");
             }
             if (parameters.ContainsKey("email") && !(parameters["email"] is string ))
             {
