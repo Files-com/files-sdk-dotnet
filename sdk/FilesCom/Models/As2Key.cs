@@ -160,7 +160,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: as2_partnership_name", "parameters[\"as2_partnership_name\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/as2_keys/{attributes["id"]}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/as2_keys/{Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<As2Key>(responseJson);
         }
@@ -185,7 +185,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/as2_keys/{attributes["id"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/as2_keys/{Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<As2Key>(responseJson);
         }
@@ -274,7 +274,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/as2_keys/{parameters["id"]}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/as2_keys/{Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<As2Key>(responseJson);
         }
@@ -361,7 +361,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: as2_partnership_name", "parameters[\"as2_partnership_name\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/as2_keys/{parameters["id"]}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/as2_keys/{Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<As2Key>(responseJson);
         }
@@ -388,7 +388,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/as2_keys/{parameters["id"]}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/as2_keys/{Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<As2Key>(responseJson);
         }
