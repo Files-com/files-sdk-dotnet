@@ -28,9 +28,21 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
             if (!this.attributes.ContainsKey("automation_id"))
             {
                 this.attributes.Add("automation_id", null);
+            }
+            if (!this.attributes.ContainsKey("completed_at"))
+            {
+                this.attributes.Add("completed_at", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
             }
             if (!this.attributes.ContainsKey("status"))
             {
@@ -59,6 +71,17 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// ID.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("id")]
+        public Nullable<Int64> Id
+        {
+            get { return (Nullable<Int64>) attributes["id"]; }
+            private set { attributes["id"] = value; }
+        }
+
+        /// <summary>
         /// ID of the associated Automation.
         /// </summary>
         [JsonInclude]
@@ -67,6 +90,28 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["automation_id"]; }
             private set { attributes["automation_id"] = value; }
+        }
+
+        /// <summary>
+        /// Automation run completion/failure date/time.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("completed_at")]
+        public Nullable<DateTime> CompletedAt
+        {
+            get { return (Nullable<DateTime>) attributes["completed_at"]; }
+            private set { attributes["completed_at"] = value; }
+        }
+
+        /// <summary>
+        /// Automation run start date/time.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
@@ -177,6 +222,43 @@ namespace FilesCom.Models
         )
         {
             return await List(parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Automation Run ID.
+        /// </summary>
+        public static async Task<AutomationRun> Find(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("id", id);
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/automation_runs/{Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<AutomationRun>(responseJson);
+        }
+
+        public static async Task<AutomationRun> Get(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return await Find(id, parameters, options);
         }
 
     }
