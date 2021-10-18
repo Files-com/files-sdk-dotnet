@@ -719,6 +719,7 @@ namespace FilesCom.Models
         ///   parts - int64 - How many parts to fetch?
         ///   ref - string -
         ///   restart - int64 - File byte offset to restart from.
+        ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         /// </summary>
         public async Task<FileUploadPart[]> BeginUpload(Dictionary<string, object> parameters)
@@ -752,6 +753,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: restart must be of type Nullable<Int64>", "parameters[\"restart\"]");
+            }
+            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: size must be of type Nullable<Int64>", "parameters[\"size\"]");
             }
             if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool ))
             {
@@ -1134,6 +1139,7 @@ namespace FilesCom.Models
         ///   parts - int64 - How many parts to fetch?
         ///   ref - string -
         ///   restart - int64 - File byte offset to restart from.
+        ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         /// </summary>
         public static async Task<FileUploadPart[]> BeginUpload(
@@ -1169,6 +1175,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: restart must be of type Nullable<Int64>", "parameters[\"restart\"]");
+            }
+            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: size must be of type Nullable<Int64>", "parameters[\"size\"]");
             }
             if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool ))
             {

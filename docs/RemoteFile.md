@@ -222,6 +222,7 @@ Task<FileUploadPart[]> RemoteFile.BeginUpload(
 * `parts` (Nullable<Int64>): How many parts to fetch?
 * `ref` (string): 
 * `restart` (Nullable<Int64>): File byte offset to restart from.
+* `size` (Nullable<Int64>): Total bytes of file being uploaded (include bytes being retained if appending/restarting).
 * `with_rename` (bool): Allow file rename instead of overwrite?
 
 
@@ -347,6 +348,7 @@ parameters.Add("part", 1);
 parameters.Add("parts", 1);
 parameters.Add("ref", "upload-1");
 parameters.Add("restart", 1);
+parameters.Add("size", 1);
 parameters.Add("with_rename", true);
 
 File.BeginUpload(parameters);
@@ -360,4 +362,5 @@ File.BeginUpload(parameters);
 * `parts` (Nullable<Int64>): How many parts to fetch?
 * `ref` (string): 
 * `restart` (Nullable<Int64>): File byte offset to restart from.
+* `size` (Nullable<Int64>): Total bytes of file being uploaded (include bytes being retained if appending/restarting).
 * `with_rename` (bool): Allow file rename instead of overwrite?
