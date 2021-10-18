@@ -12,7 +12,8 @@
   "form_field_set_id": 1,
   "form_field_data": "",
   "inbox_id": 1,
-  "inbox_recipient_id": 1
+  "inbox_recipient_id": 1,
+  "inbox_title": ""
 }
 ```
 
@@ -25,6 +26,7 @@
 * `form_field_data` / `FormFieldData`  (string): Data for form field set with form field ids as keys and user data as values
 * `inbox_id` / `InboxId`  (Nullable<Int64>): Id of associated inbox
 * `inbox_recipient_id` / `InboxRecipientId`  (Nullable<Int64>): Id of associated inbox recipient
+* `inbox_title` / `InboxTitle`  (string): Title of associated inbox
 
 
 ---

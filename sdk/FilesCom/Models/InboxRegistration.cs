@@ -64,6 +64,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("inbox_recipient_id", null);
             }
+            if (!this.attributes.ContainsKey("inbox_title"))
+            {
+                this.attributes.Add("inbox_title", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -179,6 +183,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["inbox_recipient_id"]; }
             private set { attributes["inbox_recipient_id"] = value; }
+        }
+
+        /// <summary>
+        /// Title of associated inbox
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("inbox_title")]
+        public string InboxTitle
+        {
+            get { return (string) attributes["inbox_title"]; }
+            private set { attributes["inbox_title"] = value; }
         }
 
 

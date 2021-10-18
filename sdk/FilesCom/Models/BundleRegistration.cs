@@ -64,6 +64,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("form_field_data", null);
             }
+            if (!this.attributes.ContainsKey("bundle_code"))
+            {
+                this.attributes.Add("bundle_code", null);
+            }
             if (!this.attributes.ContainsKey("bundle_id"))
             {
                 this.attributes.Add("bundle_id", null);
@@ -187,6 +191,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["form_field_data"]; }
             private set { attributes["form_field_data"] = value; }
+        }
+
+        /// <summary>
+        /// Bundle URL code
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_code")]
+        public string BundleCode
+        {
+            get { return (string) attributes["bundle_code"]; }
+            private set { attributes["bundle_code"] = value; }
         }
 
         /// <summary>
