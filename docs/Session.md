@@ -37,7 +37,7 @@
 * `sftp_insecure_ciphers` / `SftpInsecureCiphers`  (bool): Are insecure SFTP ciphers allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure SSH ciphers for this user.)
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `ssl_required` / `SslRequired`  (bool): Is SSL required for this user?  (If so, ensure all your communications with this user use SSL.)
-* `tls_disabled` / `TlsDisabled`  (bool): Aee insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
+* `tls_disabled` / `TlsDisabled`  (bool): Are insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
 * `two_factor_setup_needed` / `TwoFactorSetupNeeded`  (bool): If true, this user needs to add a Two Factor Authentication method before performing any further actions.
 * `allowed_2fa_method_sms` / `Allowed2faMethodSms`  (bool): Sent only if 2FA setup is needed. Is SMS two factor authentication allowed?
 * `allowed_2fa_method_totp` / `Allowed2faMethodTotp`  (bool): Sent only if 2FA setup is needed. Is TOTP two factor authentication allowed?

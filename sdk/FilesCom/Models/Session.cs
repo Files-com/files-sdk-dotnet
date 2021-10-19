@@ -249,7 +249,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Aee insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
+        /// Are insecure TLS versions allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure TLS versions for this user.)
         /// </summary>
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled
