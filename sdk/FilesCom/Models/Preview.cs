@@ -48,10 +48,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("size", null);
             }
-            if (!this.attributes.ContainsKey("status_message"))
-            {
-                this.attributes.Add("status_message", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -123,17 +119,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["size"]; }
             private set { attributes["size"] = value; }
-        }
-
-        /// <summary>
-        /// Preview status message. Addtional context from the preview generation process about the status
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("status_message")]
-        public string StatusMessage
-        {
-            get { return (string) attributes["status_message"]; }
-            private set { attributes["status_message"] = value; }
         }
 
 

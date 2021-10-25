@@ -8,8 +8,7 @@
   "status": "complete",
   "download_uri": "https://mysite.files.com/...",
   "type": "complete",
-  "size": 1024,
-  "status_message": ""
+  "size": 1024
 }
 ```
 
@@ -18,4 +17,3 @@
 * `download_uri` / `DownloadUri`  (string): Link to download preview
 * `type` / `Type`  (string): Preview status.  Can be invalid, not_generated, generating, complete, or file_too_large
 * `size` / `Size`  (Nullable<Int64>): Preview size
-* `status_message` / `StatusMessage`  (string): Preview status message. Addtional context from the preview generation process about the status
