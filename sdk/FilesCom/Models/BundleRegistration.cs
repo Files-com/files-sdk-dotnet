@@ -187,9 +187,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("form_field_data")]
-        public string FormFieldData
+        public object FormFieldData
         {
-            get { return (string) attributes["form_field_data"]; }
+            get { return (object) attributes["form_field_data"]; }
             private set { attributes["form_field_data"] = value; }
         }
 

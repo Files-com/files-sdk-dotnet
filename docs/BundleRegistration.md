@@ -27,7 +27,7 @@
 * `inbox_code` / `InboxCode`  (string): InboxRegistration cookie code, if there is an associated InboxRegistration
 * `clickwrap_body` / `ClickwrapBody`  (string): Clickwrap text that was shown to the registrant
 * `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of associated form field set
-* `form_field_data` / `FormFieldData`  (string): Data for form field set with form field ids as keys and user data as values
+* `form_field_data` / `FormFieldData`  (object): Data for form field set with form field ids as keys and user data as values
 * `bundle_code` / `BundleCode`  (string): Bundle URL code
 * `bundle_id` / `BundleId`  (Nullable<Int64>): Id of associated bundle
 * `bundle_recipient_id` / `BundleRecipientId`  (Nullable<Int64>): Id of associated bundle recipient
