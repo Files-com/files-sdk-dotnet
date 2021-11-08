@@ -100,6 +100,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("inbox_id", null);
             }
+            if (!this.attributes.ContainsKey("watermark_attachment"))
+            {
+                this.attributes.Add("watermark_attachment", null);
+            }
+            if (!this.attributes.ContainsKey("watermark_value"))
+            {
+                this.attributes.Add("watermark_value", null);
+            }
             if (!this.attributes.ContainsKey("has_inbox"))
             {
                 this.attributes.Add("has_inbox", null);
@@ -115,6 +123,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("form_field_set_id"))
             {
                 this.attributes.Add("form_field_set_id", null);
+            }
+            if (!this.attributes.ContainsKey("watermark_attachment_file"))
+            {
+                this.attributes.Add("watermark_attachment_file", null);
+            }
+            if (!this.attributes.ContainsKey("watermark_attachment_delete"))
+            {
+                this.attributes.Add("watermark_attachment_delete", null);
             }
         }
 
@@ -316,6 +332,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Preview watermark image applied to all bundle items.
+        /// </summary>
+        [JsonPropertyName("watermark_attachment")]
+        public object WatermarkAttachment
+        {
+            get { return (object) attributes["watermark_attachment"]; }
+            set { attributes["watermark_attachment"] = value; }
+        }
+
+        /// <summary>
+        /// Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+        /// </summary>
+        [JsonPropertyName("watermark_value")]
+        public object WatermarkValue
+        {
+            get { return (object) attributes["watermark_value"]; }
+            set { attributes["watermark_value"] = value; }
+        }
+
+        /// <summary>
         /// Does this bundle have an associated inbox?
         /// </summary>
         [JsonPropertyName("has_inbox")]
@@ -353,6 +389,26 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
             set { attributes["form_field_set_id"] = value; }
+        }
+
+        /// <summary>
+        /// Preview watermark image applied to all bundle items.
+        /// </summary>
+        [JsonPropertyName("watermark_attachment_file")]
+        public System.Net.Http.ByteArrayContent WatermarkAttachmentFile
+        {
+            get { return (System.Net.Http.ByteArrayContent) attributes["watermark_attachment_file"]; }
+            set { attributes["watermark_attachment_file"] = value; }
+        }
+
+        /// <summary>
+        /// If true, will delete the file stored in watermark_attachment
+        /// </summary>
+        [JsonPropertyName("watermark_attachment_delete")]
+        public bool WatermarkAttachmentDelete
+        {
+            get { return (bool) attributes["watermark_attachment_delete"]; }
+            set { attributes["watermark_attachment_delete"] = value; }
         }
 
         /// <summary>
@@ -413,6 +469,8 @@ namespace FilesCom.Models
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
+        ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
         public async Task<Bundle> Update(Dictionary<string, object> parameters)
         {
@@ -477,6 +535,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("watermark_attachment_delete") && !(parameters["watermark_attachment_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: watermark_attachment_delete must be of type bool", "parameters[\"watermark_attachment_delete\"]");
+            }
+            if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent ))
+            {
+                throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -662,6 +728,7 @@ namespace FilesCom.Models
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
         public static async Task<Bundle> Create(
             
@@ -727,6 +794,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent ))
+            {
+                throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
             }
             if (!parameters.ContainsKey("paths") || parameters["paths"] == null)
             {
@@ -799,6 +870,8 @@ namespace FilesCom.Models
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
+        ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
         public static async Task<Bundle> Update(
             Nullable<Int64> id, 
@@ -865,6 +938,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("watermark_attachment_delete") && !(parameters["watermark_attachment_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: watermark_attachment_delete must be of type bool", "parameters[\"watermark_attachment_delete\"]");
+            }
+            if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent ))
+            {
+                throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

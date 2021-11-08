@@ -48,6 +48,11 @@
   "username": "user",
   "clickwrap_id": 1,
   "inbox_id": 1,
+  "watermark_attachment": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
+  "watermark_value": "",
   "has_inbox": true,
   "paths": [
     "file.txt"
@@ -73,10 +78,14 @@
 * `username` / `Username`  (string): Bundle creator username
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` / `InboxId`  (Nullable<Int64>): ID of the associated inbox, if available.
+* `watermark_attachment` / `WatermarkAttachment`  (object): Preview watermark image applied to all bundle items.
+* `watermark_value` / `WatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
 * `paths` / `Paths`  (string[]): A list of paths in this bundle
 * `password` / `Password`  (string): Password for this bundle.
 * `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of Form Field Set to use with this bundle
+* `watermark_attachment_file` / `WatermarkAttachmentFile`  (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_attachment_delete` / `WatermarkAttachmentDelete`  (bool): If true, will delete the file stored in watermark_attachment
 
 
 ---
@@ -150,6 +159,7 @@ Task<Bundle> Bundle.Create(
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
 
 ---
@@ -200,6 +210,8 @@ Task<Bundle> Bundle.Update(
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
+* `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
 
 ---
@@ -265,6 +277,7 @@ parameters.Add("note", "The internal note on the bundle.");
 parameters.Add("preview_only", true);
 parameters.Add("require_registration", true);
 parameters.Add("require_share_recipient", true);
+parameters.Add("watermark_attachment_delete", true);
 
 Bundle.Update(parameters);
 ```
@@ -285,6 +298,8 @@ Bundle.Update(parameters);
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
+* `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
 
 ---

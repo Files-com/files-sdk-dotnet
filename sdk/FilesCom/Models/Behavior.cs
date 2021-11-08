@@ -60,6 +60,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("attachment_file", null);
             }
+            if (!this.attributes.ContainsKey("attachment_delete"))
+            {
+                this.attributes.Add("attachment_delete", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -159,6 +163,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, will delete the file stored in attachment
+        /// </summary>
+        [JsonPropertyName("attachment_delete")]
+        public bool AttachmentDelete
+        {
+            get { return (bool) attributes["attachment_delete"]; }
+            set { attributes["attachment_delete"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be a integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
@@ -166,6 +180,7 @@ namespace FilesCom.Models
         ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
         ///   path - string - Folder behaviors path.
+        ///   attachment_delete - boolean - If true, will delete the file stored in attachment
         /// </summary>
         public async Task<Behavior> Update(Dictionary<string, object> parameters)
         {
@@ -202,6 +217,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: attachment_delete must be of type bool", "parameters[\"attachment_delete\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -573,6 +592,7 @@ namespace FilesCom.Models
         ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
         ///   path - string - Folder behaviors path.
+        ///   attachment_delete - boolean - If true, will delete the file stored in attachment
         /// </summary>
         public static async Task<Behavior> Update(
             Nullable<Int64> id, 
@@ -611,6 +631,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: attachment_delete must be of type bool", "parameters[\"attachment_delete\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
