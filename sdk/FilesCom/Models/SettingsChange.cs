@@ -32,6 +32,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("change_details", null);
             }
+            if (!this.attributes.ContainsKey("changes"))
+            {
+                this.attributes.Add("changes", null);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -67,6 +71,17 @@ namespace FilesCom.Models
         {
             get { return (object) attributes["change_details"]; }
             private set { attributes["change_details"] = value; }
+        }
+
+        /// <summary>
+        /// Markdown-formatted change messages.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("changes")]
+        public string Changes
+        {
+            get { return (string) attributes["changes"]; }
+            private set { attributes["changes"] = value; }
         }
 
         /// <summary>
