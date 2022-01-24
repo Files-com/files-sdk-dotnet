@@ -40,7 +40,6 @@
   ],
   "webhook_url": "https://app.files.com/api/webhooks/abc123",
   "trigger_actions": "[ \"create\" ]",
-  "trigger_action_path": "path/to/file/or/folder",
   "value": "{\"limit\": \"1\"}"
 }
 ```
@@ -62,7 +61,6 @@
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): IDs of Groups for the Automation (i.e. who to Request File from)
 * `webhook_url` / `WebhookUrl`  (string): If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
 * `trigger_actions` / `TriggerActions`  (string): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-* `trigger_action_path` / `TriggerActionPath`  (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 * `value` / `Value`  (object): A Hash of attributes specific to the automation type.
 * `destination` / `Destination`  (string): DEPRECATED: Destination Path. Use `destinations` instead.
 
@@ -139,7 +137,6 @@ Task<Automation> Automation.Create(
 * `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-* `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 * `value` (object): A Hash of attributes specific to the automation type.
 
 
@@ -173,7 +170,6 @@ Task<Automation> Automation.Update(
 * `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-* `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 * `value` (object): A Hash of attributes specific to the automation type.
 
 
@@ -212,7 +208,6 @@ parameters.Add("group_ids", [1,2]);
 parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
 parameters.Add("trigger", "realtime");
 parameters.Add("trigger_actions", "[ \"create\" ]");
-parameters.Add("trigger_action_path", "path/to/file/or/folder");
 parameters.Add("value", "{\"limit\": \"1\"}");
 
 Automation.Update(parameters);
@@ -236,7 +231,6 @@ Automation.Update(parameters);
 * `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-* `trigger_action_path` (string): If trigger is `action`, this is the path to watch for the specified trigger actions.
 * `value` (object): A Hash of attributes specific to the automation type.
 
 

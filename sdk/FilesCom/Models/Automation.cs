@@ -96,10 +96,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("trigger_actions", null);
             }
-            if (!this.attributes.ContainsKey("trigger_action_path"))
-            {
-                this.attributes.Add("trigger_action_path", null);
-            }
             if (!this.attributes.ContainsKey("value"))
             {
                 this.attributes.Add("value", null);
@@ -297,16 +293,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `action`, this is the path to watch for the specified trigger actions.
-        /// </summary>
-        [JsonPropertyName("trigger_action_path")]
-        public string TriggerActionPath
-        {
-            get { return (string) attributes["trigger_action_path"]; }
-            set { attributes["trigger_action_path"] = value; }
-        }
-
-        /// <summary>
         /// A Hash of attributes specific to the automation type.
         /// </summary>
         [JsonPropertyName("value")]
@@ -343,7 +329,6 @@ namespace FilesCom.Models
         ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-        ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
         ///   value - object - A Hash of attributes specific to the automation type.
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
@@ -417,10 +402,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
             {
                 throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
-            }
-            if (parameters.ContainsKey("trigger_action_path") && !(parameters["trigger_action_path"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: trigger_action_path must be of type string", "parameters[\"trigger_action_path\"]");
             }
             if (parameters.ContainsKey("value") && !(parameters["value"] is object ))
             {
@@ -615,7 +596,6 @@ namespace FilesCom.Models
         ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-        ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
         ///   value - object - A Hash of attributes specific to the automation type.
         /// </summary>
         public static async Task<Automation> Create(
@@ -687,10 +667,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
             }
-            if (parameters.ContainsKey("trigger_action_path") && !(parameters["trigger_action_path"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: trigger_action_path must be of type string", "parameters[\"trigger_action_path\"]");
-            }
             if (parameters.ContainsKey("value") && !(parameters["value"] is object ))
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
@@ -723,7 +699,6 @@ namespace FilesCom.Models
         ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
-        ///   trigger_action_path - string - If trigger is `action`, this is the path to watch for the specified trigger actions.
         ///   value - object - A Hash of attributes specific to the automation type.
         /// </summary>
         public static async Task<Automation> Update(
@@ -799,10 +774,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
             {
                 throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
-            }
-            if (parameters.ContainsKey("trigger_action_path") && !(parameters["trigger_action_path"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: trigger_action_path must be of type string", "parameters[\"trigger_action_path\"]");
             }
             if (parameters.ContainsKey("value") && !(parameters["value"] is object ))
             {
