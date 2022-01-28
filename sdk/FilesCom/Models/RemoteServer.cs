@@ -32,6 +32,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("disabled"))
+            {
+                this.attributes.Add("disabled", null);
+            }
             if (!this.attributes.ContainsKey("authentication_method"))
             {
                 this.attributes.Add("authentication_method", null);
@@ -242,6 +246,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+        /// </summary>
+        [JsonPropertyName("disabled")]
+        public bool Disabled
+        {
+            get { return (bool) attributes["disabled"]; }
+            set { attributes["disabled"] = value; }
         }
 
         /// <summary>

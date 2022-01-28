@@ -604,7 +604,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Is strategy enabled?
+        /// Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("enabled")]
