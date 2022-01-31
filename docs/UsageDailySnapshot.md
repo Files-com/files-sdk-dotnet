@@ -6,7 +6,14 @@
 {
   "id": 1,
   "date": "2020-11-21",
+  "api_usage_available": true,
+  "read_api_usage": "100",
+  "write_api_usage": "50",
+  "user_count": "25",
   "current_storage": "65536",
+  "deleted_files_storage": "65536",
+  "deleted_files_counted_in_minimum": "65536",
+  "root_storage": "65536",
   "usage_by_top_level_dir": [
 
   ]
@@ -15,7 +22,14 @@
 
 * `id` / `Id`  (Nullable<Int64>): ID of the usage record
 * `date` / `Date`  (Nullable<DateTime>): The date of this usage record
-* `current_storage` / `CurrentStorage`  (Nullable<Int64>): The quantity of storage held for this site
+* `api_usage_available` / `ApiUsageAvailable`  (bool): True if the API usage fields `read_api_usage` and `write_api_usage` can be relied upon.  If this is false, we suggest hiding that value from any UI.
+* `read_api_usage` / `ReadApiUsage`  (Nullable<Int64>): Read API Calls used on this day. Note: only updated for days before the current day.
+* `write_api_usage` / `WriteApiUsage`  (Nullable<Int64>): Write API Calls used on this day. Note: only updated for days before the current day.
+* `user_count` / `UserCount`  (Nullable<Int64>): Number of billable users as of this day.
+* `current_storage` / `CurrentStorage`  (Nullable<Int64>): GB of Files Native Storage used on this day.
+* `deleted_files_storage` / `DeletedFilesStorage`  (Nullable<Int64>): GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
+* `deleted_files_counted_in_minimum` / `DeletedFilesCountedInMinimum`  (Nullable<Int64>): GB of Files Native Storage used on this day for files that have been permanently deleted but were uploaded less than 30 days ago, and are still billable.
+* `root_storage` / `RootStorage`  (Nullable<Int64>): GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
 * `usage_by_top_level_dir` / `UsageByTopLevelDir`  (string[]): Usage broken down by each top-level folder
 
 

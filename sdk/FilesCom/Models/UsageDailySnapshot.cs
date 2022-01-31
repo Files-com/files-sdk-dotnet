@@ -36,9 +36,37 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("date", null);
             }
+            if (!this.attributes.ContainsKey("api_usage_available"))
+            {
+                this.attributes.Add("api_usage_available", null);
+            }
+            if (!this.attributes.ContainsKey("read_api_usage"))
+            {
+                this.attributes.Add("read_api_usage", null);
+            }
+            if (!this.attributes.ContainsKey("write_api_usage"))
+            {
+                this.attributes.Add("write_api_usage", null);
+            }
+            if (!this.attributes.ContainsKey("user_count"))
+            {
+                this.attributes.Add("user_count", null);
+            }
             if (!this.attributes.ContainsKey("current_storage"))
             {
                 this.attributes.Add("current_storage", null);
+            }
+            if (!this.attributes.ContainsKey("deleted_files_storage"))
+            {
+                this.attributes.Add("deleted_files_storage", null);
+            }
+            if (!this.attributes.ContainsKey("deleted_files_counted_in_minimum"))
+            {
+                this.attributes.Add("deleted_files_counted_in_minimum", null);
+            }
+            if (!this.attributes.ContainsKey("root_storage"))
+            {
+                this.attributes.Add("root_storage", null);
             }
             if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
             {
@@ -85,7 +113,51 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The quantity of storage held for this site
+        /// True if the API usage fields `read_api_usage` and `write_api_usage` can be relied upon.  If this is false, we suggest hiding that value from any UI.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("api_usage_available")]
+        public bool ApiUsageAvailable
+        {
+            get { return (bool) attributes["api_usage_available"]; }
+            private set { attributes["api_usage_available"] = value; }
+        }
+
+        /// <summary>
+        /// Read API Calls used on this day. Note: only updated for days before the current day.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("read_api_usage")]
+        public Nullable<Int64> ReadApiUsage
+        {
+            get { return (Nullable<Int64>) attributes["read_api_usage"]; }
+            private set { attributes["read_api_usage"] = value; }
+        }
+
+        /// <summary>
+        /// Write API Calls used on this day. Note: only updated for days before the current day.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("write_api_usage")]
+        public Nullable<Int64> WriteApiUsage
+        {
+            get { return (Nullable<Int64>) attributes["write_api_usage"]; }
+            private set { attributes["write_api_usage"] = value; }
+        }
+
+        /// <summary>
+        /// Number of billable users as of this day.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("user_count")]
+        public Nullable<Int64> UserCount
+        {
+            get { return (Nullable<Int64>) attributes["user_count"]; }
+            private set { attributes["user_count"] = value; }
+        }
+
+        /// <summary>
+        /// GB of Files Native Storage used on this day.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("current_storage")]
@@ -93,6 +165,39 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["current_storage"]; }
             private set { attributes["current_storage"] = value; }
+        }
+
+        /// <summary>
+        /// GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("deleted_files_storage")]
+        public Nullable<Int64> DeletedFilesStorage
+        {
+            get { return (Nullable<Int64>) attributes["deleted_files_storage"]; }
+            private set { attributes["deleted_files_storage"] = value; }
+        }
+
+        /// <summary>
+        /// GB of Files Native Storage used on this day for files that have been permanently deleted but were uploaded less than 30 days ago, and are still billable.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("deleted_files_counted_in_minimum")]
+        public Nullable<Int64> DeletedFilesCountedInMinimum
+        {
+            get { return (Nullable<Int64>) attributes["deleted_files_counted_in_minimum"]; }
+            private set { attributes["deleted_files_counted_in_minimum"] = value; }
+        }
+
+        /// <summary>
+        /// GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("root_storage")]
+        public Nullable<Int64> RootStorage
+        {
+            get { return (Nullable<Int64>) attributes["root_storage"]; }
+            private set { attributes["root_storage"] = value; }
         }
 
         /// <summary>

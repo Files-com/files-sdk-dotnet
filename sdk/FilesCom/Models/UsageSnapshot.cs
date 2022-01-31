@@ -84,6 +84,26 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("deleted_files_storage", null);
             }
+            if (!this.attributes.ContainsKey("total_billable_usage"))
+            {
+                this.attributes.Add("total_billable_usage", null);
+            }
+            if (!this.attributes.ContainsKey("total_billable_transfer_usage"))
+            {
+                this.attributes.Add("total_billable_transfer_usage", null);
+            }
+            if (!this.attributes.ContainsKey("bytes_sent"))
+            {
+                this.attributes.Add("bytes_sent", null);
+            }
+            if (!this.attributes.ContainsKey("sync_bytes_received"))
+            {
+                this.attributes.Add("sync_bytes_received", null);
+            }
+            if (!this.attributes.ContainsKey("sync_bytes_sent"))
+            {
+                this.attributes.Add("sync_bytes_sent", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -103,7 +123,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Site usage ID
+        /// Usage snapshot ID
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("id")]
@@ -114,7 +134,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site usage report start date/time
+        /// Usage snapshot start date/time
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("start_at")]
@@ -125,7 +145,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site usage report end date/time
+        /// Usage snapshot end date/time
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("end_at")]
@@ -136,7 +156,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site usage report created at date/time
+        /// DEPRECATED: Usage snapshot created at date/time
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("created_at")]
@@ -147,7 +167,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site usage report highest usage in time period
+        /// Highest user count number in time period
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("high_water_user_count")]
@@ -158,7 +178,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Current site usage as of report
+        /// Current total Storage Usage GB as of end date (not necessarily high water mark, which is used for billing)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("current_storage")]
@@ -169,7 +189,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site usage report highest usage in time period
+        /// Highest Storage Usage GB recorded in time period (used for billing)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("high_water_storage")]
@@ -180,7 +200,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Number of downloads in report time period
+        /// DEPRECATED: Number of downloads in report time period
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("total_downloads")]
@@ -191,7 +211,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Number of uploads in time period
+        /// DEPRECATED: Number of uploads in time period
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("total_uploads")]
@@ -202,7 +222,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The last time this site usage report was updated
+        /// DEPRECATED: The last time this site usage report was updated
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("updated_at")]
@@ -213,7 +233,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// A map of root folders to their total usage
+        /// Storage Usage - map of root folders to their usage as of end date (not necessarily high water mark, which is used for billing)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("usage_by_top_level_dir")]
@@ -224,7 +244,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Usage for root folder
+        /// Storage Usage for root folder as of end date (not necessarily high water mark, which is used for billing)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("root_storage")]
@@ -235,7 +255,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Usage for files that are deleted but uploaded within last 30 days
+        /// Storage Usage for files that are deleted but uploaded within last 30 days as of end date (not necessarily high water mark, which is used for billing)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_counted_in_minimum")]
@@ -246,7 +266,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Usage for files that are deleted but retained as backups
+        /// Storage Usage for files that are deleted but retained as backups as of end date (not necessarily high water mark, which is used for billing)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_storage")]
@@ -254,6 +274,61 @@ namespace FilesCom.Models
         {
             get { return (double) attributes["deleted_files_storage"]; }
             private set { attributes["deleted_files_storage"] = value; }
+        }
+
+        /// <summary>
+        /// Storage + Transfer Usage - Total Billable amount
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("total_billable_usage")]
+        public double TotalBillableUsage
+        {
+            get { return (double) attributes["total_billable_usage"]; }
+            private set { attributes["total_billable_usage"] = value; }
+        }
+
+        /// <summary>
+        /// Transfer usage for period - Total Billable amount
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("total_billable_transfer_usage")]
+        public double TotalBillableTransferUsage
+        {
+            get { return (double) attributes["total_billable_transfer_usage"]; }
+            private set { attributes["total_billable_transfer_usage"] = value; }
+        }
+
+        /// <summary>
+        /// Transfer Usage for period - Outbound GB from Files Native Storage
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bytes_sent")]
+        public double BytesSent
+        {
+            get { return (double) attributes["bytes_sent"]; }
+            private set { attributes["bytes_sent"] = value; }
+        }
+
+        /// <summary>
+        /// Transfer Usage for period - Inbound GB to Remote Servers (Sync/Mount)
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sync_bytes_received")]
+        public double SyncBytesReceived
+        {
+            get { return (double) attributes["sync_bytes_received"]; }
+            private set { attributes["sync_bytes_received"] = value; }
+        }
+
+        /// <summary>
+        /// Transfer Usage for period - Outbound GB from Remote Servers (Sync/Mount)
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sync_bytes_sent")]
+        public double SyncBytesSent
+        {
+            get { return (double) attributes["sync_bytes_sent"]; }
+            private set { attributes["sync_bytes_sent"] = value; }
         }
 
 
