@@ -8,6 +8,7 @@
   "allowed_2fa_method_sms": true,
   "allowed_2fa_method_totp": true,
   "allowed_2fa_method_u2f": true,
+  "allowed_2fa_method_webauthn": true,
   "allowed_2fa_method_yubi": true,
   "admin_user_id": 1,
   "allow_bundle_names": true,
@@ -130,6 +131,7 @@
     "allowed_2fa_method_sms": true,
     "allowed_2fa_method_totp": true,
     "allowed_2fa_method_u2f": true,
+    "allowed_2fa_method_webauthn": true,
     "allowed_2fa_method_yubi": true,
     "use_provided_modified_at": true,
     "windows_mode_ftp": false
@@ -226,6 +228,7 @@
 * `allowed_2fa_method_sms` / `Allowed2faMethodSms`  (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_totp` / `Allowed2faMethodTotp`  (bool): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_u2f` / `Allowed2faMethodU2f`  (bool): Is U2F two factor authentication allowed?
+* `allowed_2fa_method_webauthn` / `Allowed2faMethodWebauthn`  (bool): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` / `Allowed2faMethodYubi`  (bool): Is yubikey two factor authentication allowed?
 * `admin_user_id` / `AdminUserId`  (Nullable<Int64>): User ID for the main site administrator
 * `allow_bundle_names` / `AllowBundleNames`  (bool): Are manual Bundle names allowed?
@@ -458,6 +461,7 @@ Task<Site> Site.Update(
 * `allowed_2fa_method_sms` (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_u2f` (bool): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_totp` (bool): Is TOTP two factor authentication allowed?
+* `allowed_2fa_method_webauthn` (bool): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` (bool): Is yubikey two factor authentication allowed?
 * `require_2fa` (bool): Require two-factor authentication for all users?
 * `require_2fa_user_type` (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?

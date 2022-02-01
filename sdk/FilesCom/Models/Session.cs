@@ -92,6 +92,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allowed_2fa_method_u2f", null);
             }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_webauthn"))
+            {
+                this.attributes.Add("allowed_2fa_method_webauthn", null);
+            }
             if (!this.attributes.ContainsKey("allowed_2fa_method_yubi"))
             {
                 this.attributes.Add("allowed_2fa_method_yubi", null);
@@ -296,6 +300,16 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["allowed_2fa_method_u2f"]; }
             set { attributes["allowed_2fa_method_u2f"] = value; }
+        }
+
+        /// <summary>
+        /// Sent only if 2FA setup is needed. Is WebAuthn two factor authentication allowed?
+        /// </summary>
+        [JsonPropertyName("allowed_2fa_method_webauthn")]
+        public bool Allowed2faMethodWebauthn
+        {
+            get { return (bool) attributes["allowed_2fa_method_webauthn"]; }
+            set { attributes["allowed_2fa_method_webauthn"] = value; }
         }
 
         /// <summary>

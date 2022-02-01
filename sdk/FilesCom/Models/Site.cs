@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allowed_2fa_method_u2f", null);
             }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_webauthn"))
+            {
+                this.attributes.Add("allowed_2fa_method_webauthn", null);
+            }
             if (!this.attributes.ContainsKey("allowed_2fa_method_yubi"))
             {
                 this.attributes.Add("allowed_2fa_method_yubi", null);
@@ -592,6 +596,17 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["allowed_2fa_method_u2f"]; }
             private set { attributes["allowed_2fa_method_u2f"] = value; }
+        }
+
+        /// <summary>
+        /// Is WebAuthn two factor authentication allowed?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("allowed_2fa_method_webauthn")]
+        public bool Allowed2faMethodWebauthn
+        {
+            get { return (bool) attributes["allowed_2fa_method_webauthn"]; }
+            private set { attributes["allowed_2fa_method_webauthn"] = value; }
         }
 
         /// <summary>
@@ -2044,6 +2059,7 @@ namespace FilesCom.Models
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
         ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
+        ///   allowed_2fa_method_webauthn - boolean - Is WebAuthn two factor authentication allowed?
         ///   allowed_2fa_method_yubi - boolean - Is yubikey two factor authentication allowed?
         ///   require_2fa - boolean - Require two-factor authentication for all users?
         ///   require_2fa_user_type - string - What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
@@ -2373,6 +2389,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allowed_2fa_method_totp") && !(parameters["allowed_2fa_method_totp"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_totp must be of type bool", "parameters[\"allowed_2fa_method_totp\"]");
+            }
+            if (parameters.ContainsKey("allowed_2fa_method_webauthn") && !(parameters["allowed_2fa_method_webauthn"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: allowed_2fa_method_webauthn must be of type bool", "parameters[\"allowed_2fa_method_webauthn\"]");
             }
             if (parameters.ContainsKey("allowed_2fa_method_yubi") && !(parameters["allowed_2fa_method_yubi"] is bool ))
             {
