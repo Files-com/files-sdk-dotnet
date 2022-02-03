@@ -364,7 +364,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// A short string representing the current user's permissions.  Can be `r`,`w`,`p`, or any combination
+        /// A short string representing the current user's permissions.  Can be `r`,`w`,`d`, `l` or any combination
         /// </summary>
         [JsonPropertyName("permissions")]
         public string Permissions

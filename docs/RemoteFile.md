@@ -14,7 +14,7 @@
   "md5": "17c54824e9931a4688ca032d03f6663c",
   "mime_type": "application/octet-stream",
   "region": "us-east-1",
-  "permissions": "rpw",
+  "permissions": "rwd",
   "subfolders_locked?": true,
   "download_uri": "https://mysite.files.com/...",
   "priority_color": "red",
@@ -39,7 +39,7 @@
 * `md5` / `Md5`  (string): File MD5 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
 * `mime_type` / `MimeType`  (string): MIME Type.  This is determined by the filename extension and is not stored separately internally.
 * `region` / `Region`  (string): Region location
-* `permissions` / `Permissions`  (string): A short string representing the current user's permissions.  Can be `r`,`w`,`p`, or any combination
+* `permissions` / `Permissions`  (string): A short string representing the current user's permissions.  Can be `r`,`w`,`d`, `l` or any combination
 * `subfolders_locked?` / `SubfoldersLocked`  (bool): Are subfolders locked and unable to be modified?
 * `download_uri` / `DownloadUri`  (string): Link to download file. Provided only in response to a download request.
 * `priority_color` / `PriorityColor`  (string): Bookmark/priority color of file/folder
