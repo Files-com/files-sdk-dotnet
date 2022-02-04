@@ -28,10 +28,6 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("change_details"))
-            {
-                this.attributes.Add("change_details", null);
-            }
             if (!this.attributes.ContainsKey("changes"))
             {
                 this.attributes.Add("changes", null);
@@ -61,17 +57,6 @@ namespace FilesCom.Models
             this.options[name] = value;
         }
 
-
-        /// <summary>
-        /// Specifics on what changed.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("change_details")]
-        public object ChangeDetails
-        {
-            get { return (object) attributes["change_details"]; }
-            private set { attributes["change_details"] = value; }
-        }
 
         /// <summary>
         /// Markdown-formatted change messages.
