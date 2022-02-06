@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class BandwidthSnapshot
+    public class RemoteBandwidthSnapshot
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public BandwidthSnapshot() : this(null, null) { }
+        public RemoteBandwidthSnapshot() : this(null, null) { }
 
-        public BandwidthSnapshot(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public RemoteBandwidthSnapshot(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -32,14 +32,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
-            if (!this.attributes.ContainsKey("bytes_received"))
-            {
-                this.attributes.Add("bytes_received", null);
-            }
-            if (!this.attributes.ContainsKey("bytes_sent"))
-            {
-                this.attributes.Add("bytes_sent", null);
-            }
             if (!this.attributes.ContainsKey("sync_bytes_received"))
             {
                 this.attributes.Add("sync_bytes_received", null);
@@ -48,21 +40,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sync_bytes_sent", null);
             }
-            if (!this.attributes.ContainsKey("requests_get"))
-            {
-                this.attributes.Add("requests_get", null);
-            }
-            if (!this.attributes.ContainsKey("requests_put"))
-            {
-                this.attributes.Add("requests_put", null);
-            }
-            if (!this.attributes.ContainsKey("requests_other"))
-            {
-                this.attributes.Add("requests_other", null);
-            }
             if (!this.attributes.ContainsKey("logged_at"))
             {
                 this.attributes.Add("logged_at", null);
+            }
+            if (!this.attributes.ContainsKey("remote_server_id"))
+            {
+                this.attributes.Add("remote_server_id", null);
             }
         }
 
@@ -94,28 +78,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site bandwidth report bytes received
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("bytes_received")]
-        public double BytesReceived
-        {
-            get { return (double) attributes["bytes_received"]; }
-            private set { attributes["bytes_received"] = value; }
-        }
-
-        /// <summary>
-        /// Site bandwidth report bytes sent
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("bytes_sent")]
-        public double BytesSent
-        {
-            get { return (double) attributes["bytes_sent"]; }
-            private set { attributes["bytes_sent"] = value; }
-        }
-
-        /// <summary>
         /// Site sync bandwidth report bytes received
         /// </summary>
         [JsonInclude]
@@ -138,39 +100,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site bandwidth report get requests
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("requests_get")]
-        public double RequestsGet
-        {
-            get { return (double) attributes["requests_get"]; }
-            private set { attributes["requests_get"] = value; }
-        }
-
-        /// <summary>
-        /// Site bandwidth report put requests
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("requests_put")]
-        public double RequestsPut
-        {
-            get { return (double) attributes["requests_put"]; }
-            private set { attributes["requests_put"] = value; }
-        }
-
-        /// <summary>
-        /// Site bandwidth report other requests
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("requests_other")]
-        public double RequestsOther
-        {
-            get { return (double) attributes["requests_other"]; }
-            private set { attributes["requests_other"] = value; }
-        }
-
-        /// <summary>
         /// Time the site bandwidth report was logged
         /// </summary>
         [JsonInclude]
@@ -179,6 +108,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>) attributes["logged_at"]; }
             private set { attributes["logged_at"] = value; }
+        }
+
+        /// <summary>
+        /// ID of related Remote Server
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("remote_server_id")]
+        public Nullable<Int64> RemoteServerId
+        {
+            get { return (Nullable<Int64>) attributes["remote_server_id"]; }
+            private set { attributes["remote_server_id"] = value; }
         }
 
 
@@ -195,7 +135,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `logged_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `logged_at`.
         /// </summary>
-        public static async Task<BandwidthSnapshot[]> List(
+        public static async Task<RemoteBandwidthSnapshot[]> List(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -241,12 +181,12 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bandwidth_snapshots", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/remote_bandwidth_snapshots", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<BandwidthSnapshot[]>(responseJson);
+            return JsonSerializer.Deserialize<RemoteBandwidthSnapshot[]>(responseJson);
         }
 
-        public static async Task<BandwidthSnapshot[]> All(
+        public static async Task<RemoteBandwidthSnapshot[]> All(
             
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null

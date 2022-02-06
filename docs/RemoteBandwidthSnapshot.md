@@ -1,38 +1,30 @@
-# FilesCom.Models.BandwidthSnapshot
+# FilesCom.Models.RemoteBandwidthSnapshot
 
-## Example BandwidthSnapshot Object
+## Example RemoteBandwidthSnapshot Object
 
 ```
 {
   "id": 1,
-  "bytes_received": 1.0,
-  "bytes_sent": 1.0,
   "sync_bytes_received": 1.0,
   "sync_bytes_sent": 1.0,
-  "requests_get": 1.0,
-  "requests_put": 1.0,
-  "requests_other": 1.0,
-  "logged_at": "2000-01-01T01:00:00Z"
+  "logged_at": "2000-01-01T01:00:00Z",
+  "remote_server_id": 1
 }
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Site bandwidth ID
-* `bytes_received` / `BytesReceived`  (double): Site bandwidth report bytes received
-* `bytes_sent` / `BytesSent`  (double): Site bandwidth report bytes sent
 * `sync_bytes_received` / `SyncBytesReceived`  (double): Site sync bandwidth report bytes received
 * `sync_bytes_sent` / `SyncBytesSent`  (double): Site sync bandwidth report bytes sent
-* `requests_get` / `RequestsGet`  (double): Site bandwidth report get requests
-* `requests_put` / `RequestsPut`  (double): Site bandwidth report put requests
-* `requests_other` / `RequestsOther`  (double): Site bandwidth report other requests
 * `logged_at` / `LoggedAt`  (Nullable<DateTime>): Time the site bandwidth report was logged
+* `remote_server_id` / `RemoteServerId`  (Nullable<Int64>): ID of related Remote Server
 
 
 ---
 
-## List Bandwidth Snapshots
+## List Remote Bandwidth Snapshots
 
 ```
-Task<BandwidthSnapshot[]> BandwidthSnapshot.List(
+Task<RemoteBandwidthSnapshot[]> RemoteBandwidthSnapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

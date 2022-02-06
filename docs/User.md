@@ -52,7 +52,7 @@
   "subscribe_to_newsletter": true,
   "externally_managed": true,
   "time_zone": "Pacific Time (US & Canada)",
-  "type_of_2fa": "",
+  "type_of_2fa": "yubi",
   "user_root": ""
 }
 ```
