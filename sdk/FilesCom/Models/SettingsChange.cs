@@ -40,6 +40,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("user_is_files_support"))
+            {
+                this.attributes.Add("user_is_files_support", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -89,6 +97,28 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["user_id"]; }
             private set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// true if this change was performed by Files.com support.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("user_is_files_support")]
+        public bool UserIsFilesSupport
+        {
+            get { return (bool) attributes["user_is_files_support"]; }
+            private set { attributes["user_is_files_support"] = value; }
+        }
+
+        /// <summary>
+        /// The username of the user responsible for this change
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("username")]
+        public string Username
+        {
+            get { return (string) attributes["username"]; }
+            private set { attributes["username"] = value; }
         }
 
 
