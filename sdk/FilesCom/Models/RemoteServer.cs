@@ -68,6 +68,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("s3_region", null);
             }
+            if (!this.attributes.ContainsKey("aws_access_key"))
+            {
+                this.attributes.Add("aws_access_key", null);
+            }
             if (!this.attributes.ContainsKey("server_certificate"))
             {
                 this.attributes.Add("server_certificate", null);
@@ -111,6 +115,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("wasabi_region"))
             {
                 this.attributes.Add("wasabi_region", null);
+            }
+            if (!this.attributes.ContainsKey("wasabi_access_key"))
+            {
+                this.attributes.Add("wasabi_access_key", null);
             }
             if (!this.attributes.ContainsKey("rackspace_username"))
             {
@@ -156,13 +164,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("s3_compatible_endpoint", null);
             }
+            if (!this.attributes.ContainsKey("s3_compatible_access_key"))
+            {
+                this.attributes.Add("s3_compatible_access_key", null);
+            }
             if (!this.attributes.ContainsKey("enable_dedicated_ips"))
             {
                 this.attributes.Add("enable_dedicated_ips", null);
-            }
-            if (!this.attributes.ContainsKey("aws_access_key"))
-            {
-                this.attributes.Add("aws_access_key", null);
             }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
@@ -183,10 +191,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("google_cloud_storage_credentials_json"))
             {
                 this.attributes.Add("google_cloud_storage_credentials_json", null);
-            }
-            if (!this.attributes.ContainsKey("wasabi_access_key"))
-            {
-                this.attributes.Add("wasabi_access_key", null);
             }
             if (!this.attributes.ContainsKey("wasabi_secret_key"))
             {
@@ -211,10 +215,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("azure_blob_storage_access_key"))
             {
                 this.attributes.Add("azure_blob_storage_access_key", null);
-            }
-            if (!this.attributes.ContainsKey("s3_compatible_access_key"))
-            {
-                this.attributes.Add("s3_compatible_access_key", null);
             }
             if (!this.attributes.ContainsKey("s3_compatible_secret_key"))
             {
@@ -339,6 +339,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// AWS Access Key.
+        /// </summary>
+        [JsonPropertyName("aws_access_key")]
+        public string AwsAccessKey
+        {
+            get { return (string) attributes["aws_access_key"]; }
+            set { attributes["aws_access_key"] = value; }
+        }
+
+        /// <summary>
         /// Remote server certificate
         /// </summary>
         [JsonPropertyName("server_certificate")]
@@ -446,6 +456,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["wasabi_region"]; }
             set { attributes["wasabi_region"] = value; }
+        }
+
+        /// <summary>
+        /// Wasabi access key.
+        /// </summary>
+        [JsonPropertyName("wasabi_access_key")]
+        public string WasabiAccessKey
+        {
+            get { return (string) attributes["wasabi_access_key"]; }
+            set { attributes["wasabi_access_key"] = value; }
         }
 
         /// <summary>
@@ -559,6 +579,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// S3-compatible Access Key.
+        /// </summary>
+        [JsonPropertyName("s3_compatible_access_key")]
+        public string S3CompatibleAccessKey
+        {
+            get { return (string) attributes["s3_compatible_access_key"]; }
+            set { attributes["s3_compatible_access_key"] = value; }
+        }
+
+        /// <summary>
         /// `true` if remote server only accepts connections from dedicated IPs
         /// </summary>
         [JsonPropertyName("enable_dedicated_ips")]
@@ -566,16 +596,6 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["enable_dedicated_ips"]; }
             set { attributes["enable_dedicated_ips"] = value; }
-        }
-
-        /// <summary>
-        /// AWS Access Key.
-        /// </summary>
-        [JsonPropertyName("aws_access_key")]
-        public string AwsAccessKey
-        {
-            get { return (string) attributes["aws_access_key"]; }
-            set { attributes["aws_access_key"] = value; }
         }
 
         /// <summary>
@@ -626,16 +646,6 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["google_cloud_storage_credentials_json"]; }
             set { attributes["google_cloud_storage_credentials_json"] = value; }
-        }
-
-        /// <summary>
-        /// Wasabi access key.
-        /// </summary>
-        [JsonPropertyName("wasabi_access_key")]
-        public string WasabiAccessKey
-        {
-            get { return (string) attributes["wasabi_access_key"]; }
-            set { attributes["wasabi_access_key"] = value; }
         }
 
         /// <summary>
@@ -699,16 +709,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// S3-compatible access key
-        /// </summary>
-        [JsonPropertyName("s3_compatible_access_key")]
-        public string S3CompatibleAccessKey
-        {
-            get { return (string) attributes["s3_compatible_access_key"]; }
-            set { attributes["s3_compatible_access_key"] = value; }
-        }
-
-        /// <summary>
         /// S3-compatible secret key
         /// </summary>
         [JsonPropertyName("s3_compatible_secret_key")]
@@ -759,7 +759,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
-        ///   s3_compatible_access_key - string - S3-compatible access key
+        ///   s3_compatible_access_key - string - S3-compatible Access Key.
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
@@ -1107,7 +1107,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
-        ///   s3_compatible_access_key - string - S3-compatible access key
+        ///   s3_compatible_access_key - string - S3-compatible Access Key.
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
         public static async Task<RemoteServer> Create(
@@ -1331,7 +1331,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
-        ///   s3_compatible_access_key - string - S3-compatible access key
+        ///   s3_compatible_access_key - string - S3-compatible Access Key.
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         /// </summary>
         public static async Task<RemoteServer> Update(

@@ -14,6 +14,7 @@
   "max_connections": 1,
   "s3_bucket": "my-bucket",
   "s3_region": "us-east-1",
+  "aws_access_key": "",
   "server_certificate": "require_match",
   "server_host_key": "[public key]",
   "server_type": "s3",
@@ -25,6 +26,7 @@
   "backblaze_b2_bucket": "my-bucket",
   "wasabi_bucket": "my-bucket",
   "wasabi_region": "us-west-1",
+  "wasabi_access_key": "",
   "rackspace_username": "rackspaceuser",
   "rackspace_region": "dfw",
   "rackspace_container": "my-container",
@@ -36,6 +38,7 @@
   "azure_blob_storage_container": "container-name",
   "s3_compatible_bucket": "my-bucket",
   "s3_compatible_endpoint": "mys3platform.com",
+  "s3_compatible_access_key": "",
   "enable_dedicated_ips": true
 }
 ```
@@ -50,6 +53,7 @@
 * `max_connections` / `MaxConnections`  (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
 * `s3_bucket` / `S3Bucket`  (string): S3 bucket name
 * `s3_region` / `S3Region`  (string): S3 region
+* `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
 * `server_certificate` / `ServerCertificate`  (string): Remote server certificate
 * `server_host_key` / `ServerHostKey`  (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` / `ServerType`  (string): Remote server type.
@@ -61,6 +65,7 @@
 * `backblaze_b2_bucket` / `BackblazeB2Bucket`  (string): Backblaze B2 Cloud Storage Bucket name
 * `wasabi_bucket` / `WasabiBucket`  (string): Wasabi Bucket name
 * `wasabi_region` / `WasabiRegion`  (string): Wasabi region
+* `wasabi_access_key` / `WasabiAccessKey`  (string): Wasabi access key.
 * `rackspace_username` / `RackspaceUsername`  (string): Rackspace username used to login to the Rackspace Cloud Control Panel.
 * `rackspace_region` / `RackspaceRegion`  (string): Three letter airport code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
 * `rackspace_container` / `RackspaceContainer`  (string): The name of the container (top level directory) where files will sync.
@@ -72,21 +77,19 @@
 * `azure_blob_storage_container` / `AzureBlobStorageContainer`  (string): Azure Blob Storage Container name
 * `s3_compatible_bucket` / `S3CompatibleBucket`  (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` / `S3CompatibleEndpoint`  (string): S3-compatible endpoint
+* `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible Access Key.
 * `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
-* `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
 * `password` / `Password`  (string): Password if needed.
 * `private_key` / `PrivateKey`  (string): Private key if needed.
 * `ssl_certificate` / `SslCertificate`  (string): SSL client certificate.
 * `google_cloud_storage_credentials_json` / `GoogleCloudStorageCredentialsJson`  (string): A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
-* `wasabi_access_key` / `WasabiAccessKey`  (string): Wasabi access key.
 * `wasabi_secret_key` / `WasabiSecretKey`  (string): Wasabi secret key.
 * `backblaze_b2_key_id` / `BackblazeB2KeyId`  (string): Backblaze B2 Cloud Storage keyID.
 * `backblaze_b2_application_key` / `BackblazeB2ApplicationKey`  (string): Backblaze B2 Cloud Storage applicationKey.
 * `rackspace_api_key` / `RackspaceApiKey`  (string): Rackspace API key from the Rackspace Cloud Control Panel.
 * `reset_authentication` / `ResetAuthentication`  (bool): Reset authenticated account
 * `azure_blob_storage_access_key` / `AzureBlobStorageAccessKey`  (string): Azure Blob Storage secret key.
-* `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible access key
 * `s3_compatible_secret_key` / `S3CompatibleSecretKey`  (string): S3-compatible secret key
 
 
@@ -178,7 +181,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
-* `s3_compatible_access_key` (string): S3-compatible access key
+* `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 
 
@@ -236,7 +239,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
-* `s3_compatible_access_key` (string): S3-compatible access key
+* `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 
 
@@ -339,7 +342,7 @@ RemoteServer.Update(parameters);
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
-* `s3_compatible_access_key` (string): S3-compatible access key
+* `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 
 
