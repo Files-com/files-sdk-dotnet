@@ -38,6 +38,7 @@
   "azure_blob_storage_container": "container-name",
   "s3_compatible_bucket": "my-bucket",
   "s3_compatible_endpoint": "mys3platform.com",
+  "s3_compatible_region": "us-east-1",
   "s3_compatible_access_key": "",
   "enable_dedicated_ips": true
 }
@@ -77,6 +78,7 @@
 * `azure_blob_storage_container` / `AzureBlobStorageContainer`  (string): Azure Blob Storage Container name
 * `s3_compatible_bucket` / `S3CompatibleBucket`  (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` / `S3CompatibleEndpoint`  (string): S3-compatible endpoint
+* `s3_compatible_region` / `S3CompatibleRegion`  (string): S3-compatible endpoint
 * `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible Access Key.
 * `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
@@ -180,6 +182,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `azure_blob_storage_container` (string): Azure Blob Storage Container name
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
+* `s3_compatible_region` (string): S3-compatible endpoint
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
@@ -238,6 +241,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `azure_blob_storage_container` (string): Azure Blob Storage Container name
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
+* `s3_compatible_region` (string): S3-compatible endpoint
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
@@ -295,6 +299,7 @@ parameters.Add("azure_blob_storage_account", "storage-account-name");
 parameters.Add("azure_blob_storage_container", "container-name");
 parameters.Add("s3_compatible_bucket", "my-bucket");
 parameters.Add("s3_compatible_endpoint", "mys3platform.com");
+parameters.Add("s3_compatible_region", "us-east-1");
 parameters.Add("enable_dedicated_ips", true);
 
 RemoteServer.Update(parameters);
@@ -341,6 +346,7 @@ RemoteServer.Update(parameters);
 * `azure_blob_storage_container` (string): Azure Blob Storage Container name
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
+* `s3_compatible_region` (string): S3-compatible endpoint
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
