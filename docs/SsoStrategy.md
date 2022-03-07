@@ -128,3 +128,38 @@ Task<SsoStrategy> SsoStrategy.Find(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Sso Strategy ID.
+
+
+---
+
+## Synchronize provisioning data with the SSO remote server
+
+```
+Task<SsoStrategy> SsoStrategy.Sync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Sso Strategy ID.
+
+
+---
+
+## Synchronize provisioning data with the SSO remote server
+
+```
+var SsoStrategy = SsoStrategy.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+SsoStrategy.Sync
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Sso Strategy ID.
