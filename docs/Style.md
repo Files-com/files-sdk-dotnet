@@ -13,8 +13,8 @@
 
 * `id` / `Id`  (Nullable<Int64>): Style ID
 * `path` / `Path`  (string): Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
-* `logo` / `Logo`  (object): Logo
-* `thumbnail` / `Thumbnail`  (object): Logo thumbnail
+* `logo` / `Logo`  (Image): Logo
+* `thumbnail` / `Thumbnail`  (Image): Logo thumbnail
 * `file` / `File`  (System.Net.Http.ByteArrayContent): Logo for custom branding.
 
 

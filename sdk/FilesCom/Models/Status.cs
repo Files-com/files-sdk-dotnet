@@ -112,9 +112,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("data")]
-        public object Data
+        public Auto Data
         {
-            get { return (object) attributes["data"]; }
+            get { return (Auto) attributes["data"]; }
             private set { attributes["data"] = value; }
         }
 
@@ -123,9 +123,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("errors")]
-        public object Errors
+        public Errors Errors
         {
-            get { return (object) attributes["errors"]; }
+            get { return (Errors) attributes["errors"]; }
             private set { attributes["errors"] = value; }
         }
 

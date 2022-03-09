@@ -62,9 +62,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("inbox_registration")]
-        public object InboxRegistration
+        public InboxRegistration InboxRegistration
         {
-            get { return (object) attributes["inbox_registration"]; }
+            get { return (InboxRegistration) attributes["inbox_registration"]; }
             private set { attributes["inbox_registration"] = value; }
         }
 

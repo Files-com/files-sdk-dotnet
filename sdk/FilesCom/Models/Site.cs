@@ -713,9 +713,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("bundle_watermark_attachment")]
-        public object BundleWatermarkAttachment
+        public Image BundleWatermarkAttachment
         {
-            get { return (object) attributes["bundle_watermark_attachment"]; }
+            get { return (Image) attributes["bundle_watermark_attachment"]; }
             private set { attributes["bundle_watermark_attachment"] = value; }
         }
 
@@ -1065,9 +1065,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("icon128")]
-        public object Icon128
+        public Image Icon128
         {
-            get { return (object) attributes["icon128"]; }
+            get { return (Image) attributes["icon128"]; }
             private set { attributes["icon128"] = value; }
         }
 
@@ -1076,9 +1076,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("icon16")]
-        public object Icon16
+        public Image Icon16
         {
-            get { return (object) attributes["icon16"]; }
+            get { return (Image) attributes["icon16"]; }
             private set { attributes["icon16"] = value; }
         }
 
@@ -1087,9 +1087,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("icon32")]
-        public object Icon32
+        public Image Icon32
         {
-            get { return (object) attributes["icon32"]; }
+            get { return (Image) attributes["icon32"]; }
             private set { attributes["icon32"] = value; }
         }
 
@@ -1098,9 +1098,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("icon48")]
-        public object Icon48
+        public Image Icon48
         {
-            get { return (object) attributes["icon48"]; }
+            get { return (Image) attributes["icon48"]; }
             private set { attributes["icon48"] = value; }
         }
 
@@ -1329,9 +1329,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("logo")]
-        public object Logo
+        public Image Logo
         {
-            get { return (object) attributes["logo"]; }
+            get { return (Image) attributes["logo"]; }
             private set { attributes["logo"] = value; }
         }
 
@@ -1571,9 +1571,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("session")]
-        public object Session
+        public Session Session
         {
-            get { return (object) attributes["session"]; }
+            get { return (Session) attributes["session"]; }
             private set { attributes["session"] = value; }
         }
 
@@ -1824,9 +1824,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("user")]
-        public object User
+        public User User
         {
-            get { return (object) attributes["user"]; }
+            get { return (User) attributes["user"]; }
             private set { attributes["user"] = value; }
         }
 

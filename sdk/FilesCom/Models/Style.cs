@@ -90,9 +90,9 @@ namespace FilesCom.Models
         /// Logo
         /// </summary>
         [JsonPropertyName("logo")]
-        public object Logo
+        public Image Logo
         {
-            get { return (object) attributes["logo"]; }
+            get { return (Image) attributes["logo"]; }
             set { attributes["logo"] = value; }
         }
 
@@ -100,9 +100,9 @@ namespace FilesCom.Models
         /// Logo thumbnail
         /// </summary>
         [JsonPropertyName("thumbnail")]
-        public object Thumbnail
+        public Image Thumbnail
         {
-            get { return (object) attributes["thumbnail"]; }
+            get { return (Image) attributes["thumbnail"]; }
             set { attributes["thumbnail"] = value; }
         }
 

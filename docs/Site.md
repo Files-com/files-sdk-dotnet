@@ -238,7 +238,7 @@
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
-* `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (object): Preview watermark image applied to all bundle items.
+* `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `bundle_watermark_value` / `BundleWatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `color2_left` / `Color2Left`  (string): Page link and button color
 * `color2_link` / `Color2Link`  (string): Top bar link color
@@ -270,10 +270,10 @@
 * `non_sso_users_allowed` / `NonSsoUsersAllowed`  (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
 * `folder_permissions_groups_only` / `FolderPermissionsGroupsOnly`  (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
 * `hipaa` / `Hipaa`  (bool): Is there a signed HIPAA BAA between Files.com and this site?
-* `icon128` / `Icon128`  (object): Branded icon 128x128
-* `icon16` / `Icon16`  (object): Branded icon 16x16
-* `icon32` / `Icon32`  (object): Branded icon 32x32
-* `icon48` / `Icon48`  (object): Branded icon 48x48
+* `icon128` / `Icon128`  (Image): Branded icon 128x128
+* `icon16` / `Icon16`  (Image): Branded icon 16x16
+* `icon32` / `Icon32`  (Image): Branded icon 32x32
+* `icon48` / `Icon48`  (Image): Branded icon 48x48
 * `immutable_files_set_at` / `ImmutableFilesSetAt`  (Nullable<DateTime>): Can files be modified?
 * `include_password_in_welcome_email` / `IncludePasswordInWelcomeEmail`  (bool): Include password in emails to new users?
 * `language` / `Language`  (string): Site default language
@@ -294,7 +294,7 @@
 * `ldap_username` / `LdapUsername`  (string): Username for signing in to LDAP server.
 * `ldap_username_field` / `LdapUsernameField`  (string): LDAP username field
 * `login_help_text` / `LoginHelpText`  (string): Login help text
-* `logo` / `Logo`  (object): Branded logo
+* `logo` / `Logo`  (Image): Branded logo
 * `max_prior_passwords` / `MaxPriorPasswords`  (Nullable<Int64>): Number of prior passwords to disallow
 * `next_billing_amount` / `NextBillingAmount`  (double): Next billing amount
 * `next_billing_date` / `NextBillingDate`  (string): Next billing date
@@ -316,7 +316,7 @@
 * `require_2fa` / `Require2fa`  (bool): Require two-factor authentication for all users?
 * `require_2fa_stop_time` / `Require2faStopTime`  (Nullable<DateTime>): If set, requirement for two-factor authentication has been scheduled to end on this date-time.
 * `require_2fa_user_type` / `Require2faUserType`  (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
-* `session` / `Session`  (object): Current session
+* `session` / `Session`  (Session): Current session
 * `session_pinned_by_ip` / `SessionPinnedByIp`  (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `sftp_enabled` / `SftpEnabled`  (bool): Is SFTP enabled?
 * `sftp_insecure_ciphers` / `SftpInsecureCiphers`  (bool): Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
@@ -339,7 +339,7 @@
 * `trial_until` / `TrialUntil`  (Nullable<DateTime>): When does this Site trial expire?
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Last time this Site was updated
 * `use_provided_modified_at` / `UseProvidedModifiedAt`  (bool): Allow uploaders to set `provided_modified_at` for uploaded files?
-* `user` / `User`  (object): User of current session
+* `user` / `User`  (User): User of current session
 * `user_lockout` / `UserLockout`  (bool): Will users be locked out after incorrect login attempts?
 * `user_lockout_lock_period` / `UserLockoutLockPeriod`  (Nullable<Int64>): How many hours to lock user out for failed password?
 * `user_lockout_tries` / `UserLockoutTries`  (Nullable<Int64>): Number of login tries within `user_lockout_within` hours before users are locked out

@@ -173,9 +173,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("invoice_line_items")]
-        public object InvoiceLineItems
+        public InvoiceLineItem InvoiceLineItems
         {
-            get { return (object) attributes["invoice_line_items"]; }
+            get { return (InvoiceLineItem) attributes["invoice_line_items"]; }
             private set { attributes["invoice_line_items"] = value; }
         }
 
@@ -195,9 +195,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("payment_line_items")]
-        public object PaymentLineItems
+        public PaymentLineItem PaymentLineItems
         {
-            get { return (object) attributes["payment_line_items"]; }
+            get { return (PaymentLineItem) attributes["payment_line_items"]; }
             private set { attributes["payment_line_items"] = value; }
         }
 

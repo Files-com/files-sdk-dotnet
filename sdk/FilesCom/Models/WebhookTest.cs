@@ -136,9 +136,9 @@ namespace FilesCom.Models
         /// Additional data
         /// </summary>
         [JsonPropertyName("data")]
-        public object Data
+        public Auto Data
         {
-            get { return (object) attributes["data"]; }
+            get { return (Auto) attributes["data"]; }
             set { attributes["data"] = value; }
         }
 

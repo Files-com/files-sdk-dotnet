@@ -417,9 +417,9 @@ namespace FilesCom.Models
         /// File preview
         /// </summary>
         [JsonPropertyName("preview")]
-        public object Preview
+        public Preview Preview
         {
-            get { return (object) attributes["preview"]; }
+            get { return (Preview) attributes["preview"]; }
             set { attributes["preview"] = value; }
         }
 

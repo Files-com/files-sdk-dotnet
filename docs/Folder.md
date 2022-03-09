@@ -44,7 +44,7 @@
 * `download_uri` / `DownloadUri`  (string): Link to download file. Provided only in response to a download request.
 * `priority_color` / `PriorityColor`  (string): Bookmark/priority color of file/folder
 * `preview_id` / `PreviewId`  (Nullable<Int64>): File preview ID
-* `preview` / `Preview`  (object): File preview
+* `preview` / `Preview`  (Preview): File preview
 
 
 ---

@@ -104,9 +104,9 @@ namespace FilesCom.Models
         /// Comments.
         /// </summary>
         [JsonPropertyName("comments")]
-        public object Comments
+        public MessageComment Comments
         {
-            get { return (object) attributes["comments"]; }
+            get { return (MessageComment) attributes["comments"]; }
             set { attributes["comments"] = value; }
         }
 

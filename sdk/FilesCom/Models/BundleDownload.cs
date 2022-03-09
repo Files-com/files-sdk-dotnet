@@ -66,9 +66,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("bundle_registration")]
-        public object BundleRegistration
+        public BundleRegistration BundleRegistration
         {
-            get { return (object) attributes["bundle_registration"]; }
+            get { return (BundleRegistration) attributes["bundle_registration"]; }
             private set { attributes["bundle_registration"] = value; }
         }
 

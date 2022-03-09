@@ -112,9 +112,9 @@ namespace FilesCom.Models
         /// Associated form fields
         /// </summary>
         [JsonPropertyName("form_fields")]
-        public object FormFields
+        public FormField FormFields
         {
-            get { return (object) attributes["form_fields"]; }
+            get { return (FormField) attributes["form_fields"]; }
             set { attributes["form_fields"] = value; }
         }
 

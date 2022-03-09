@@ -10,7 +10,7 @@
 }
 ```
 
-* `inbox_registration` / `InboxRegistration`  (object): 
+* `inbox_registration` / `InboxRegistration`  (InboxRegistration): 
 * `path` / `Path`  (string): Upload path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Upload date/time
 

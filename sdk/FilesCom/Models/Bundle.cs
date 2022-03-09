@@ -234,9 +234,9 @@ namespace FilesCom.Models
         /// Custom Form to use
         /// </summary>
         [JsonPropertyName("form_field_set")]
-        public object FormFieldSet
+        public FormFieldSet FormFieldSet
         {
-            get { return (object) attributes["form_field_set"]; }
+            get { return (FormFieldSet) attributes["form_field_set"]; }
             set { attributes["form_field_set"] = value; }
         }
 
@@ -335,9 +335,9 @@ namespace FilesCom.Models
         /// Preview watermark image applied to all bundle items.
         /// </summary>
         [JsonPropertyName("watermark_attachment")]
-        public object WatermarkAttachment
+        public Image WatermarkAttachment
         {
-            get { return (object) attributes["watermark_attachment"]; }
+            get { return (Image) attributes["watermark_attachment"]; }
             set { attributes["watermark_attachment"] = value; }
         }
 

@@ -86,9 +86,9 @@ namespace FilesCom.Models
         /// Reactions to this comment.
         /// </summary>
         [JsonPropertyName("reactions")]
-        public object Reactions
+        public FileCommentReaction Reactions
         {
-            get { return (object) attributes["reactions"]; }
+            get { return (FileCommentReaction) attributes["reactions"]; }
             set { attributes["reactions"] = value; }
         }
 

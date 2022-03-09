@@ -21,7 +21,7 @@
 * `id` / `Id`  (Nullable<Int64>): Message ID
 * `subject` / `Subject`  (string): Message subject.
 * `body` / `Body`  (string): Message body.
-* `comments` / `Comments`  (object): Comments.
+* `comments` / `Comments`  (MessageComment): Comments.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `project_id` / `ProjectId`  (Nullable<Int64>): Project to which the message should be attached.
 

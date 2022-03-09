@@ -15,7 +15,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Message Comment ID
 * `body` / `Body`  (string): Comment body.
-* `reactions` / `Reactions`  (object): Reactions to this comment.
+* `reactions` / `Reactions`  (MessageCommentReaction): Reactions to this comment.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 
 

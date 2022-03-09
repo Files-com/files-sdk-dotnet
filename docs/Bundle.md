@@ -68,7 +68,7 @@
 * `require_registration` / `RequireRegistration`  (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` / `RequireShareRecipient`  (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 * `clickwrap_body` / `ClickwrapBody`  (string): Legal text that must be agreed to prior to accessing Bundle.
-* `form_field_set` / `FormFieldSet`  (object): Custom Form to use
+* `form_field_set` / `FormFieldSet`  (FormFieldSet): Custom Form to use
 * `id` / `Id`  (Nullable<Int64>): Bundle ID
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
 * `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
@@ -78,7 +78,7 @@
 * `username` / `Username`  (string): Bundle creator username
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` / `InboxId`  (Nullable<Int64>): ID of the associated inbox, if available.
-* `watermark_attachment` / `WatermarkAttachment`  (object): Preview watermark image applied to all bundle items.
+* `watermark_attachment` / `WatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `watermark_value` / `WatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
 * `paths` / `Paths`  (string[]): A list of paths in this bundle
