@@ -48,6 +48,26 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("public_certificate_md5", null);
             }
+            if (!this.attributes.ContainsKey("public_certificate_subject"))
+            {
+                this.attributes.Add("public_certificate_subject", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_issuer"))
+            {
+                this.attributes.Add("public_certificate_issuer", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_serial"))
+            {
+                this.attributes.Add("public_certificate_serial", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_not_before"))
+            {
+                this.attributes.Add("public_certificate_not_before", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_not_after"))
+            {
+                this.attributes.Add("public_certificate_not_after", null);
+            }
             if (!this.attributes.ContainsKey("public_certificate"))
             {
                 this.attributes.Add("public_certificate", null);
@@ -118,6 +138,56 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["public_certificate_md5"]; }
             set { attributes["public_certificate_md5"] = value; }
+        }
+
+        /// <summary>
+        /// Subject of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_subject")]
+        public string PublicCertificateSubject
+        {
+            get { return (string) attributes["public_certificate_subject"]; }
+            set { attributes["public_certificate_subject"] = value; }
+        }
+
+        /// <summary>
+        /// Issuer of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_issuer")]
+        public string PublicCertificateIssuer
+        {
+            get { return (string) attributes["public_certificate_issuer"]; }
+            set { attributes["public_certificate_issuer"] = value; }
+        }
+
+        /// <summary>
+        /// Serial of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_serial")]
+        public string PublicCertificateSerial
+        {
+            get { return (string) attributes["public_certificate_serial"]; }
+            set { attributes["public_certificate_serial"] = value; }
+        }
+
+        /// <summary>
+        /// Not before value of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_not_before")]
+        public string PublicCertificateNotBefore
+        {
+            get { return (string) attributes["public_certificate_not_before"]; }
+            set { attributes["public_certificate_not_before"] = value; }
+        }
+
+        /// <summary>
+        /// Not after value of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_not_after")]
+        public string PublicCertificateNotAfter
+        {
+            get { return (string) attributes["public_certificate_not_after"]; }
+            set { attributes["public_certificate_not_after"] = value; }
         }
 
         /// <summary>

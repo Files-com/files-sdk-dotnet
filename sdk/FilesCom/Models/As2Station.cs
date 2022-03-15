@@ -44,10 +44,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("domain", null);
             }
-            if (!this.attributes.ContainsKey("public_certificate"))
-            {
-                this.attributes.Add("public_certificate", null);
-            }
             if (!this.attributes.ContainsKey("public_certificate_md5"))
             {
                 this.attributes.Add("public_certificate_md5", null);
@@ -55,6 +51,30 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("private_key_md5"))
             {
                 this.attributes.Add("private_key_md5", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_subject"))
+            {
+                this.attributes.Add("public_certificate_subject", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_issuer"))
+            {
+                this.attributes.Add("public_certificate_issuer", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_serial"))
+            {
+                this.attributes.Add("public_certificate_serial", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_not_before"))
+            {
+                this.attributes.Add("public_certificate_not_before", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate_not_after"))
+            {
+                this.attributes.Add("public_certificate_not_after", null);
+            }
+            if (!this.attributes.ContainsKey("public_certificate"))
+            {
+                this.attributes.Add("public_certificate", null);
             }
             if (!this.attributes.ContainsKey("private_key"))
             {
@@ -119,16 +139,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Public certificate used for message security.
-        /// </summary>
-        [JsonPropertyName("public_certificate")]
-        public string PublicCertificate
-        {
-            get { return (string) attributes["public_certificate"]; }
-            set { attributes["public_certificate"] = value; }
-        }
-
-        /// <summary>
         /// MD5 hash of public certificate used for message security.
         /// </summary>
         [JsonPropertyName("public_certificate_md5")]
@@ -149,6 +159,65 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Subject of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_subject")]
+        public string PublicCertificateSubject
+        {
+            get { return (string) attributes["public_certificate_subject"]; }
+            set { attributes["public_certificate_subject"] = value; }
+        }
+
+        /// <summary>
+        /// Issuer of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_issuer")]
+        public string PublicCertificateIssuer
+        {
+            get { return (string) attributes["public_certificate_issuer"]; }
+            set { attributes["public_certificate_issuer"] = value; }
+        }
+
+        /// <summary>
+        /// Serial of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_serial")]
+        public string PublicCertificateSerial
+        {
+            get { return (string) attributes["public_certificate_serial"]; }
+            set { attributes["public_certificate_serial"] = value; }
+        }
+
+        /// <summary>
+        /// Not before value of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_not_before")]
+        public string PublicCertificateNotBefore
+        {
+            get { return (string) attributes["public_certificate_not_before"]; }
+            set { attributes["public_certificate_not_before"] = value; }
+        }
+
+        /// <summary>
+        /// Not after value of public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate_not_after")]
+        public string PublicCertificateNotAfter
+        {
+            get { return (string) attributes["public_certificate_not_after"]; }
+            set { attributes["public_certificate_not_after"] = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [JsonPropertyName("public_certificate")]
+        public string PublicCertificate
+        {
+            get { return (string) attributes["public_certificate"]; }
+            set { attributes["public_certificate"] = value; }
+        }
+
+        /// <summary>
         /// </summary>
         [JsonPropertyName("private_key")]
         public string PrivateKey
@@ -160,8 +229,6 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - AS2 Name
-        ///   domain - string - AS2 Domain
-        ///   uri - string - URL base for AS2 responses
         ///   public_certificate - string
         ///   private_key - string
         /// </summary>
@@ -180,14 +247,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("domain") && !(parameters["domain"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: domain must be of type string", "parameters[\"domain\"]");
-            }
-            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
             {
@@ -328,8 +387,6 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name (required) - string - AS2 Name
-        ///   domain (required) - string - AS2 Domain
-        ///   uri (required) - string - URL base for AS2 responses
         ///   public_certificate (required) - string
         ///   private_key (required) - string
         /// </summary>
@@ -346,14 +403,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("domain") && !(parameters["domain"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: domain must be of type string", "parameters[\"domain\"]");
-            }
-            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
-            }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
@@ -365,14 +414,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
-            }
-            if (!parameters.ContainsKey("domain") || parameters["domain"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: domain", "parameters[\"domain\"]");
-            }
-            if (!parameters.ContainsKey("uri") || parameters["uri"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: uri", "parameters[\"uri\"]");
             }
             if (!parameters.ContainsKey("public_certificate") || parameters["public_certificate"] == null)
             {
@@ -392,8 +433,6 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - AS2 Name
-        ///   domain - string - AS2 Domain
-        ///   uri - string - URL base for AS2 responses
         ///   public_certificate - string
         ///   private_key - string
         /// </summary>
@@ -414,14 +453,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("domain") && !(parameters["domain"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: domain must be of type string", "parameters[\"domain\"]");
-            }
-            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
             {
