@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("uri", null);
             }
+            if (!this.attributes.ContainsKey("server_certificate"))
+            {
+                this.attributes.Add("server_certificate", null);
+            }
             if (!this.attributes.ContainsKey("public_certificate_md5"))
             {
                 this.attributes.Add("public_certificate_md5", null);
@@ -131,6 +135,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Remote server certificate security setting
+        /// </summary>
+        [JsonPropertyName("server_certificate")]
+        public string ServerCertificate
+        {
+            get { return (string) attributes["server_certificate"]; }
+            set { attributes["server_certificate"] = value; }
+        }
+
+        /// <summary>
         /// MD5 hash of public certificate used for message security.
         /// </summary>
         [JsonPropertyName("public_certificate_md5")]
@@ -203,6 +217,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   name - string - AS2 Name
         ///   uri - string - URL base for AS2 responses
+        ///   server_certificate - string - Remote server certificate security setting
         ///   public_certificate - string
         /// </summary>
         public async Task<As2Partner> Update(Dictionary<string, object> parameters)
@@ -224,6 +239,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
+            }
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
             {
@@ -363,6 +382,7 @@ namespace FilesCom.Models
         ///   uri (required) - string - URL base for AS2 responses
         ///   public_certificate (required) - string
         ///   as2_station_id (required) - int64 - Id of As2Station for this partner
+        ///   server_certificate - string - Remote server certificate security setting
         /// </summary>
         public static async Task<As2Partner> Create(
             
@@ -388,6 +408,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("as2_station_id") && !(parameters["as2_station_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: as2_station_id must be of type Nullable<Int64>", "parameters[\"as2_station_id\"]");
+            }
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
@@ -416,6 +440,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   name - string - AS2 Name
         ///   uri - string - URL base for AS2 responses
+        ///   server_certificate - string - Remote server certificate security setting
         ///   public_certificate - string
         /// </summary>
         public static async Task<As2Partner> Update(
@@ -439,6 +464,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
+            }
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
             {

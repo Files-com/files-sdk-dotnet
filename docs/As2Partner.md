@@ -8,6 +8,7 @@
   "as2_station_id": 1,
   "name": "AS2 Partner Name",
   "uri": "",
+  "server_certificate": "require_match",
   "public_certificate_md5": "",
   "public_certificate_subject": "",
   "public_certificate_issuer": "",
@@ -21,6 +22,7 @@
 * `as2_station_id` / `As2StationId`  (Nullable<Int64>): Id of the AS2 Station associated with this partner.
 * `name` / `Name`  (string): The partner's formal AS2 name.
 * `uri` / `Uri`  (string): Public URI for sending AS2 message to.
+* `server_certificate` / `ServerCertificate`  (string): Remote server certificate security setting
 * `public_certificate_md5` / `PublicCertificateMd5`  (string): MD5 hash of public certificate used for message security.
 * `public_certificate_subject` / `PublicCertificateSubject`  (string): Subject of public certificate used for message security.
 * `public_certificate_issuer` / `PublicCertificateIssuer`  (string): Issuer of public certificate used for message security.
@@ -83,6 +85,7 @@ Task<As2Partner> As2Partner.Create(
 * `uri` (string): Required - URL base for AS2 responses
 * `public_certificate` (string): Required - 
 * `as2_station_id` (Nullable<Int64>): Required - Id of As2Station for this partner
+* `server_certificate` (string): Remote server certificate security setting
 
 
 ---
@@ -102,6 +105,7 @@ Task<As2Partner> As2Partner.Update(
 * `id` (Nullable<Int64>): Required - As2 Partner ID.
 * `name` (string): AS2 Name
 * `uri` (string): URL base for AS2 responses
+* `server_certificate` (string): Remote server certificate security setting
 * `public_certificate` (string): 
 
 
@@ -132,6 +136,7 @@ var As2Partner = As2Partner.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "AS2 Partner Name");
+parameters.Add("server_certificate", "require_match");
 
 As2Partner.Update(parameters);
 ```
@@ -141,6 +146,7 @@ As2Partner.Update(parameters);
 * `id` (Nullable<Int64>): Required - As2 Partner ID.
 * `name` (string): AS2 Name
 * `uri` (string): URL base for AS2 responses
+* `server_certificate` (string): Remote server certificate security setting
 * `public_certificate` (string): 
 
 
