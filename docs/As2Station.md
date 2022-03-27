@@ -14,7 +14,8 @@
   "public_certificate_issuer": "",
   "public_certificate_serial": "",
   "public_certificate_not_before": "",
-  "public_certificate_not_after": ""
+  "public_certificate_not_after": "",
+  "private_key_password_md5": ""
 }
 ```
 
@@ -29,8 +30,10 @@
 * `public_certificate_serial` / `PublicCertificateSerial`  (string): Serial of public certificate used for message security.
 * `public_certificate_not_before` / `PublicCertificateNotBefore`  (string): Not before value of public certificate used for message security.
 * `public_certificate_not_after` / `PublicCertificateNotAfter`  (string): Not after value of public certificate used for message security.
+* `private_key_password_md5` / `PrivateKeyPasswordMd5`  (string): MD5 hash of private key password used for message security.
 * `public_certificate` / `PublicCertificate`  (string): 
 * `private_key` / `PrivateKey`  (string): 
+* `private_key_password` / `PrivateKeyPassword`  (string): 
 
 
 ---
@@ -85,6 +88,7 @@ Task<As2Station> As2Station.Create(
 * `name` (string): Required - AS2 Name
 * `public_certificate` (string): Required - 
 * `private_key` (string): Required - 
+* `private_key_password` (string): 
 
 
 ---
@@ -105,6 +109,7 @@ Task<As2Station> As2Station.Update(
 * `name` (string): AS2 Name
 * `public_certificate` (string): 
 * `private_key` (string): 
+* `private_key_password` (string): 
 
 
 ---
@@ -144,6 +149,7 @@ As2Station.Update(parameters);
 * `name` (string): AS2 Name
 * `public_certificate` (string): 
 * `private_key` (string): 
+* `private_key_password` (string): 
 
 
 ---

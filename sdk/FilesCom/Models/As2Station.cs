@@ -72,6 +72,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("public_certificate_not_after", null);
             }
+            if (!this.attributes.ContainsKey("private_key_password_md5"))
+            {
+                this.attributes.Add("private_key_password_md5", null);
+            }
             if (!this.attributes.ContainsKey("public_certificate"))
             {
                 this.attributes.Add("public_certificate", null);
@@ -79,6 +83,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("private_key"))
             {
                 this.attributes.Add("private_key", null);
+            }
+            if (!this.attributes.ContainsKey("private_key_password"))
+            {
+                this.attributes.Add("private_key_password", null);
             }
         }
 
@@ -209,6 +217,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// MD5 hash of private key password used for message security.
+        /// </summary>
+        [JsonPropertyName("private_key_password_md5")]
+        public string PrivateKeyPasswordMd5
+        {
+            get { return (string) attributes["private_key_password_md5"]; }
+            set { attributes["private_key_password_md5"] = value; }
+        }
+
+        /// <summary>
         /// </summary>
         [JsonPropertyName("public_certificate")]
         public string PublicCertificate
@@ -227,10 +245,20 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// </summary>
+        [JsonPropertyName("private_key_password")]
+        public string PrivateKeyPassword
+        {
+            get { return (string) attributes["private_key_password"]; }
+            set { attributes["private_key_password"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   name - string - AS2 Name
         ///   public_certificate - string
         ///   private_key - string
+        ///   private_key_password - string
         /// </summary>
         public async Task<As2Station> Update(Dictionary<string, object> parameters)
         {
@@ -255,6 +283,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -389,6 +421,7 @@ namespace FilesCom.Models
         ///   name (required) - string - AS2 Name
         ///   public_certificate (required) - string
         ///   private_key (required) - string
+        ///   private_key_password - string
         /// </summary>
         public static async Task<As2Station> Create(
             
@@ -410,6 +443,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
             }
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
@@ -435,6 +472,7 @@ namespace FilesCom.Models
         ///   name - string - AS2 Name
         ///   public_certificate - string
         ///   private_key - string
+        ///   private_key_password - string
         /// </summary>
         public static async Task<As2Station> Update(
             Nullable<Int64> id, 
@@ -461,6 +499,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
