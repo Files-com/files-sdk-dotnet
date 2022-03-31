@@ -146,7 +146,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Result of processing. Valid values: `send_failed`, `send_success`, `send_no_mdn`
+        /// Result of processing.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("processing_result")]

@@ -27,7 +27,7 @@
 * `content_type` / `ContentType`  (string): Content Type header of the incoming message.
 * `http_headers` / `HttpHeaders`  (object): HTTP Headers sent with this message.
 * `activity_log` / `ActivityLog`  (string): JSON Structure of the activity log.
-* `processing_result` / `ProcessingResult`  (string): Result of processing. Valid values: `unable_to_find_station`, `unable_to_find_partner`, `unable_to_validate_signature`, `decrypt_fail`, `file_save_fail`, `success`
+* `processing_result` / `ProcessingResult`  (string): Result of processing.
 * `as2_to` / `As2To`  (string): AS2 TO header of message
 * `as2_from` / `As2From`  (string): AS2 FROM header of message
 * `message_id` / `MessageId`  (string): AS2 Message Id

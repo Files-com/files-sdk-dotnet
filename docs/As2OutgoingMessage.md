@@ -23,7 +23,7 @@
 * `uuid` / `Uuid`  (string): UUID assigned to this message.
 * `http_headers` / `HttpHeaders`  (object): HTTP Headers sent with this message.
 * `activity_log` / `ActivityLog`  (string): JSON Structure of the activity log.
-* `processing_result` / `ProcessingResult`  (string): Result of processing. Valid values: `send_failed`, `send_success`, `send_no_mdn`
+* `processing_result` / `ProcessingResult`  (string): Result of processing.
 * `mic` / `Mic`  (string): AS2 Message Integrity Check
 * `message_id` / `MessageId`  (string): AS2 Message Id
 * `body_size` / `BodySize`  (string): Encrypted Payload Body Size

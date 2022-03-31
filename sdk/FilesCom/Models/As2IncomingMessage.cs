@@ -169,7 +169,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Result of processing. Valid values: `unable_to_find_station`, `unable_to_find_partner`, `unable_to_validate_signature`, `decrypt_fail`, `file_save_fail`, `success`
+        /// Result of processing.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("processing_result")]
