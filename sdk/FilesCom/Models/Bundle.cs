@@ -64,6 +64,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("form_field_set", null);
             }
+            if (!this.attributes.ContainsKey("skip_name"))
+            {
+                this.attributes.Add("skip_name", null);
+            }
+            if (!this.attributes.ContainsKey("skip_email"))
+            {
+                this.attributes.Add("skip_email", null);
+            }
+            if (!this.attributes.ContainsKey("skip_company"))
+            {
+                this.attributes.Add("skip_company", null);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -238,6 +250,36 @@ namespace FilesCom.Models
         {
             get { return (FormFieldSet) attributes["form_field_set"]; }
             set { attributes["form_field_set"] = value; }
+        }
+
+        /// <summary>
+        /// BundleRegistrations can be saved without providing name?
+        /// </summary>
+        [JsonPropertyName("skip_name")]
+        public bool SkipName
+        {
+            get { return (bool) attributes["skip_name"]; }
+            set { attributes["skip_name"] = value; }
+        }
+
+        /// <summary>
+        /// BundleRegistrations can be saved without providing email?
+        /// </summary>
+        [JsonPropertyName("skip_email")]
+        public bool SkipEmail
+        {
+            get { return (bool) attributes["skip_email"]; }
+            set { attributes["skip_email"] = value; }
+        }
+
+        /// <summary>
+        /// BundleRegistrations can be saved without providing company?
+        /// </summary>
+        [JsonPropertyName("skip_company")]
+        public bool SkipCompany
+        {
+            get { return (bool) attributes["skip_company"]; }
+            set { attributes["skip_company"] = value; }
         }
 
         /// <summary>
