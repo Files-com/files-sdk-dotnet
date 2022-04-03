@@ -165,6 +165,9 @@ Task<Bundle> Bundle.Create(
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `skip_email` (bool): BundleRegistrations can be saved without providing email?
+* `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
 
@@ -216,6 +219,9 @@ Task<Bundle> Bundle.Update(
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `skip_email` (bool): BundleRegistrations can be saved without providing email?
+* `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
@@ -283,6 +289,9 @@ parameters.Add("note", "The internal note on the bundle.");
 parameters.Add("preview_only", true);
 parameters.Add("require_registration", true);
 parameters.Add("require_share_recipient", true);
+parameters.Add("skip_email", true);
+parameters.Add("skip_name", true);
+parameters.Add("skip_company", true);
 parameters.Add("watermark_attachment_delete", true);
 
 Bundle.Update(parameters);
@@ -304,6 +313,9 @@ Bundle.Update(parameters);
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `skip_email` (bool): BundleRegistrations can be saved without providing email?
+* `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
