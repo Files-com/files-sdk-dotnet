@@ -6,6 +6,7 @@
 {
   "id": 1,
   "automation": "create_folder",
+  "disabled": true,
   "trigger": "realtime",
   "interval": "week",
   "name": "",
@@ -46,6 +47,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Automation ID
 * `automation` / `AutomationType`  (string): Automation type
+* `disabled` / `Disabled`  (bool): If true, this automation will not run.
 * `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `name` / `Name`  (string): Name for this automation.
@@ -134,6 +136,7 @@ Task<Automation> Automation.Create(
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
 * `description` (string): Description for the this Automation.
+* `disabled` (bool): If true, this automation will not run.
 * `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
@@ -167,6 +170,7 @@ Task<Automation> Automation.Update(
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
 * `description` (string): Description for the this Automation.
+* `disabled` (bool): If true, this automation will not run.
 * `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
@@ -206,6 +210,7 @@ parameters.Add("interval", "year");
 parameters.Add("user_ids", [1,2]);
 parameters.Add("group_ids", [1,2]);
 parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
+parameters.Add("disabled", true);
 parameters.Add("trigger", "realtime");
 parameters.Add("trigger_actions", "[ \"create\" ]");
 parameters.Add("value", "{\"limit\": \"1\"}");
@@ -228,6 +233,7 @@ Automation.Update(parameters);
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule` (object): Custom schedule for running this automation.
 * `description` (string): Description for the this Automation.
+* `disabled` (bool): If true, this automation will not run.
 * `name` (string): Name for this automation.
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy

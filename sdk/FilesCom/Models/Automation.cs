@@ -36,6 +36,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("automation", null);
             }
+            if (!this.attributes.ContainsKey("disabled"))
+            {
+                this.attributes.Add("disabled", null);
+            }
             if (!this.attributes.ContainsKey("trigger"))
             {
                 this.attributes.Add("trigger", null);
@@ -140,6 +144,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["automation"]; }
             set { attributes["automation"] = value; }
+        }
+
+        /// <summary>
+        /// If true, this automation will not run.
+        /// </summary>
+        [JsonPropertyName("disabled")]
+        public bool Disabled
+        {
+            get { return (bool) attributes["disabled"]; }
+            set { attributes["disabled"] = value; }
         }
 
         /// <summary>
@@ -326,6 +340,7 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
         ///   description - string - Description for the this Automation.
+        ///   disabled - boolean - If true, this automation will not run.
         ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
@@ -390,6 +405,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
@@ -593,6 +612,7 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
         ///   description - string - Description for the this Automation.
+        ///   disabled - boolean - If true, this automation will not run.
         ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
@@ -655,6 +675,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
+            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -696,6 +720,7 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
         ///   description - string - Description for the this Automation.
+        ///   disabled - boolean - If true, this automation will not run.
         ///   name - string - Name for this automation.
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
@@ -762,6 +787,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
