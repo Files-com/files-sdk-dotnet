@@ -9,6 +9,7 @@
   "name": "AS2 Partner Name",
   "uri": "",
   "server_certificate": "require_match",
+  "hex_public_certificate_serial": "A5:EB:C1:95:DC:D8:2B:E7",
   "public_certificate_md5": "",
   "public_certificate_subject": "",
   "public_certificate_issuer": "",
@@ -23,6 +24,7 @@
 * `name` / `Name`  (string): The partner's formal AS2 name.
 * `uri` / `Uri`  (string): Public URI for sending AS2 message to.
 * `server_certificate` / `ServerCertificate`  (string): Remote server certificate security setting
+* `hex_public_certificate_serial` / `HexPublicCertificateSerial`  (string): Serial of public certificate used for message security in hex format.
 * `public_certificate_md5` / `PublicCertificateMd5`  (string): MD5 hash of public certificate used for message security.
 * `public_certificate_subject` / `PublicCertificateSubject`  (string): Subject of public certificate used for message security.
 * `public_certificate_issuer` / `PublicCertificateIssuer`  (string): Issuer of public certificate used for message security.

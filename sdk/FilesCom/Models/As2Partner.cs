@@ -48,6 +48,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_certificate", null);
             }
+            if (!this.attributes.ContainsKey("hex_public_certificate_serial"))
+            {
+                this.attributes.Add("hex_public_certificate_serial", null);
+            }
             if (!this.attributes.ContainsKey("public_certificate_md5"))
             {
                 this.attributes.Add("public_certificate_md5", null);
@@ -142,6 +146,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["server_certificate"]; }
             set { attributes["server_certificate"] = value; }
+        }
+
+        /// <summary>
+        /// Serial of public certificate used for message security in hex format.
+        /// </summary>
+        [JsonPropertyName("hex_public_certificate_serial")]
+        public string HexPublicCertificateSerial
+        {
+            get { return (string) attributes["hex_public_certificate_serial"]; }
+            set { attributes["hex_public_certificate_serial"] = value; }
         }
 
         /// <summary>

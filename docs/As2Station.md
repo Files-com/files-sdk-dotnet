@@ -8,6 +8,7 @@
   "name": "AS2 Station Name",
   "uri": "",
   "domain": "domain.test",
+  "hex_public_certificate_serial": "A5:EB:C1:95:DC:D8:2B:E7",
   "public_certificate_md5": "",
   "private_key_md5": "",
   "public_certificate_subject": "",
@@ -23,6 +24,7 @@
 * `name` / `Name`  (string): The station's formal AS2 name.
 * `uri` / `Uri`  (string): Public URI for sending AS2 message to.
 * `domain` / `Domain`  (string): The station's AS2 domain name.
+* `hex_public_certificate_serial` / `HexPublicCertificateSerial`  (string): Serial of public certificate used for message security in hex format.
 * `public_certificate_md5` / `PublicCertificateMd5`  (string): MD5 hash of public certificate used for message security.
 * `private_key_md5` / `PrivateKeyMd5`  (string): MD5 hash of private key used for message security.
 * `public_certificate_subject` / `PublicCertificateSubject`  (string): Subject of public certificate used for message security.

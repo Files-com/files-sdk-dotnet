@@ -36,6 +36,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("as2_partner_id", null);
             }
+            if (!this.attributes.ContainsKey("as2_station_id"))
+            {
+                this.attributes.Add("as2_station_id", null);
+            }
             if (!this.attributes.ContainsKey("uuid"))
             {
                 this.attributes.Add("uuid", null);
@@ -56,6 +60,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("mic", null);
             }
+            if (!this.attributes.ContainsKey("mic_sha_256"))
+            {
+                this.attributes.Add("mic_sha_256", null);
+            }
+            if (!this.attributes.ContainsKey("as2_to"))
+            {
+                this.attributes.Add("as2_to", null);
+            }
+            if (!this.attributes.ContainsKey("as2_from"))
+            {
+                this.attributes.Add("as2_from", null);
+            }
             if (!this.attributes.ContainsKey("message_id"))
             {
                 this.attributes.Add("message_id", null);
@@ -71,6 +87,58 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("http_response_code"))
+            {
+                this.attributes.Add("http_response_code", null);
+            }
+            if (!this.attributes.ContainsKey("http_response_headers"))
+            {
+                this.attributes.Add("http_response_headers", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_received"))
+            {
+                this.attributes.Add("mdn_received", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_valid"))
+            {
+                this.attributes.Add("mdn_valid", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_signature_verified"))
+            {
+                this.attributes.Add("mdn_signature_verified", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_message_id_matched"))
+            {
+                this.attributes.Add("mdn_message_id_matched", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_mic_matched"))
+            {
+                this.attributes.Add("mdn_mic_matched", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_processing_success"))
+            {
+                this.attributes.Add("mdn_processing_success", null);
+            }
+            if (!this.attributes.ContainsKey("raw_uri"))
+            {
+                this.attributes.Add("raw_uri", null);
+            }
+            if (!this.attributes.ContainsKey("smime_uri"))
+            {
+                this.attributes.Add("smime_uri", null);
+            }
+            if (!this.attributes.ContainsKey("smime_signed_uri"))
+            {
+                this.attributes.Add("smime_signed_uri", null);
+            }
+            if (!this.attributes.ContainsKey("encrypted_uri"))
+            {
+                this.attributes.Add("encrypted_uri", null);
+            }
+            if (!this.attributes.ContainsKey("mdn_response_uri"))
+            {
+                this.attributes.Add("mdn_response_uri", null);
             }
         }
 
@@ -110,6 +178,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["as2_partner_id"]; }
             private set { attributes["as2_partner_id"] = value; }
+        }
+
+        /// <summary>
+        /// Id of the AS2 Station associated with this message.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("as2_station_id")]
+        public Nullable<Int64> As2StationId
+        {
+            get { return (Nullable<Int64>) attributes["as2_station_id"]; }
+            private set { attributes["as2_station_id"] = value; }
         }
 
         /// <summary>
@@ -157,7 +236,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// AS2 Message Integrity Check
+        /// AS2 Message Integrity Check SHA1
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("mic")]
@@ -165,6 +244,39 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["mic"]; }
             private set { attributes["mic"] = value; }
+        }
+
+        /// <summary>
+        /// AS2 Message Integrity Check SHA256
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mic_sha_256")]
+        public string MicSha256
+        {
+            get { return (string) attributes["mic_sha_256"]; }
+            private set { attributes["mic_sha_256"] = value; }
+        }
+
+        /// <summary>
+        /// AS2 TO
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("as2_to")]
+        public string As2To
+        {
+            get { return (string) attributes["as2_to"]; }
+            private set { attributes["as2_to"] = value; }
+        }
+
+        /// <summary>
+        /// AS2 FROM
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("as2_from")]
+        public string As2From
+        {
+            get { return (string) attributes["as2_from"]; }
+            private set { attributes["as2_from"] = value; }
         }
 
         /// <summary>
@@ -209,6 +321,149 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>) attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// HTTP Response Code received for this message
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("http_response_code")]
+        public string HttpResponseCode
+        {
+            get { return (string) attributes["http_response_code"]; }
+            private set { attributes["http_response_code"] = value; }
+        }
+
+        /// <summary>
+        /// HTTP Headers received for this message.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("http_response_headers")]
+        public object HttpResponseHeaders
+        {
+            get { return (object) attributes["http_response_headers"]; }
+            private set { attributes["http_response_headers"] = value; }
+        }
+
+        /// <summary>
+        /// Did the partner give a response body?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_received")]
+        public bool MdnReceived
+        {
+            get { return (bool) attributes["mdn_received"]; }
+            private set { attributes["mdn_received"] = value; }
+        }
+
+        /// <summary>
+        /// Is the response in MDN format?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_valid")]
+        public bool MdnValid
+        {
+            get { return (bool) attributes["mdn_valid"]; }
+            private set { attributes["mdn_valid"] = value; }
+        }
+
+        /// <summary>
+        /// MDN signature verified?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_signature_verified")]
+        public bool MdnSignatureVerified
+        {
+            get { return (bool) attributes["mdn_signature_verified"]; }
+            private set { attributes["mdn_signature_verified"] = value; }
+        }
+
+        /// <summary>
+        /// MDN message id matched?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_message_id_matched")]
+        public bool MdnMessageIdMatched
+        {
+            get { return (bool) attributes["mdn_message_id_matched"]; }
+            private set { attributes["mdn_message_id_matched"] = value; }
+        }
+
+        /// <summary>
+        /// MDN MIC matched?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_mic_matched")]
+        public bool MdnMicMatched
+        {
+            get { return (bool) attributes["mdn_mic_matched"]; }
+            private set { attributes["mdn_mic_matched"] = value; }
+        }
+
+        /// <summary>
+        /// MDN disposition indicate a successful processing?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_processing_success")]
+        public bool MdnProcessingSuccess
+        {
+            get { return (bool) attributes["mdn_processing_success"]; }
+            private set { attributes["mdn_processing_success"] = value; }
+        }
+
+        /// <summary>
+        /// URL to download the original file contents
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("raw_uri")]
+        public string RawUri
+        {
+            get { return (string) attributes["raw_uri"]; }
+            private set { attributes["raw_uri"] = value; }
+        }
+
+        /// <summary>
+        /// URL to download the file contents encoded as smime
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("smime_uri")]
+        public string SmimeUri
+        {
+            get { return (string) attributes["smime_uri"]; }
+            private set { attributes["smime_uri"] = value; }
+        }
+
+        /// <summary>
+        /// URL to download the file contents as smime with signature
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("smime_signed_uri")]
+        public string SmimeSignedUri
+        {
+            get { return (string) attributes["smime_signed_uri"]; }
+            private set { attributes["smime_signed_uri"] = value; }
+        }
+
+        /// <summary>
+        /// URL to download the encrypted signed smime that is to sent as AS2 body
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("encrypted_uri")]
+        public string EncryptedUri
+        {
+            get { return (string) attributes["encrypted_uri"]; }
+            private set { attributes["encrypted_uri"] = value; }
+        }
+
+        /// <summary>
+        /// URL to download the http response body
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("mdn_response_uri")]
+        public string MdnResponseUri
+        {
+            get { return (string) attributes["mdn_response_uri"]; }
+            private set { attributes["mdn_response_uri"] = value; }
         }
 
 
