@@ -108,6 +108,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("http_response_headers", null);
             }
+            if (!this.attributes.ContainsKey("recipient_serial"))
+            {
+                this.attributes.Add("recipient_serial", null);
+            }
+            if (!this.attributes.ContainsKey("hex_recipient_serial"))
+            {
+                this.attributes.Add("hex_recipient_serial", null);
+            }
+            if (!this.attributes.ContainsKey("recipient_issuer"))
+            {
+                this.attributes.Add("recipient_issuer", null);
+            }
             if (!this.attributes.ContainsKey("message_received"))
             {
                 this.attributes.Add("message_received", null);
@@ -384,6 +396,39 @@ namespace FilesCom.Models
         {
             get { return (object) attributes["http_response_headers"]; }
             private set { attributes["http_response_headers"] = value; }
+        }
+
+        /// <summary>
+        /// Incoming Message Recipient(the Client Cert used to encrypt this message)'s serial
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("recipient_serial")]
+        public string RecipientSerial
+        {
+            get { return (string) attributes["recipient_serial"]; }
+            private set { attributes["recipient_serial"] = value; }
+        }
+
+        /// <summary>
+        /// Incoming Message Recipient(the Client Cert used to encrypt this message)'s serial in hex format.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("hex_recipient_serial")]
+        public string HexRecipientSerial
+        {
+            get { return (string) attributes["hex_recipient_serial"]; }
+            private set { attributes["hex_recipient_serial"] = value; }
+        }
+
+        /// <summary>
+        /// Incoming Message Recipient(the Client Cert used to encrypt this message)'s issuer
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("recipient_issuer")]
+        public string RecipientIssuer
+        {
+            get { return (string) attributes["recipient_issuer"]; }
+            private set { attributes["recipient_issuer"] = value; }
         }
 
         /// <summary>
