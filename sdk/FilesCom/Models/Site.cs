@@ -520,6 +520,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("welcome_email_cc", null);
             }
+            if (!this.attributes.ContainsKey("welcome_email_subject"))
+            {
+                this.attributes.Add("welcome_email_subject", null);
+            }
             if (!this.attributes.ContainsKey("welcome_email_enabled"))
             {
                 this.attributes.Add("welcome_email_enabled", null);
@@ -1908,6 +1912,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Include this email subject in welcome emails if enabled
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("welcome_email_subject")]
+        public string WelcomeEmailSubject
+        {
+            get { return (string) attributes["welcome_email_subject"]; }
+            private set { attributes["welcome_email_subject"] = value; }
+        }
+
+        /// <summary>
         /// Will the welcome email be sent to new users?
         /// </summary>
         [JsonInclude]
@@ -2005,6 +2020,7 @@ namespace FilesCom.Models
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
         ///   welcome_email_cc - string - Include this email in welcome emails if enabled
+        ///   welcome_email_subject - string - Include this email subject in welcome emails if enabled
         ///   welcome_custom_text - string - Custom text send in user welcome email
         ///   language - string - Site default language
         ///   windows_mode_ftp - boolean - Does FTP user Windows emulation mode?
@@ -2173,6 +2189,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("welcome_email_cc") && !(parameters["welcome_email_cc"] is string ))
             {
                 throw new ArgumentException("Bad parameter: welcome_email_cc must be of type string", "parameters[\"welcome_email_cc\"]");
+            }
+            if (parameters.ContainsKey("welcome_email_subject") && !(parameters["welcome_email_subject"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: welcome_email_subject must be of type string", "parameters[\"welcome_email_subject\"]");
             }
             if (parameters.ContainsKey("welcome_custom_text") && !(parameters["welcome_custom_text"] is string ))
             {

@@ -217,6 +217,7 @@
   "user_requests_enabled": true,
   "welcome_custom_text": "Welcome to my site!",
   "welcome_email_cc": "",
+  "welcome_email_subject": "",
   "welcome_email_enabled": true,
   "welcome_screen": "user_controlled",
   "windows_mode_ftp": true,
@@ -347,6 +348,7 @@
 * `user_requests_enabled` / `UserRequestsEnabled`  (bool): Enable User Requests feature
 * `welcome_custom_text` / `WelcomeCustomText`  (string): Custom text send in user welcome email
 * `welcome_email_cc` / `WelcomeEmailCc`  (string): Include this email in welcome emails if enabled
+* `welcome_email_subject` / `WelcomeEmailSubject`  (string): Include this email subject in welcome emails if enabled
 * `welcome_email_enabled` / `WelcomeEmailEnabled`  (bool): Will the welcome email be sent to new users?
 * `welcome_screen` / `WelcomeScreen`  (string): Does the welcome screen appear?
 * `windows_mode_ftp` / `WindowsModeFtp`  (bool): Does FTP user Windows emulation mode?
@@ -407,6 +409,7 @@ Task<Site> Site.Update(
 * `ask_about_overwrites` (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `show_request_access_link` (bool): Show request access link for users without access?  Currently unused.
 * `welcome_email_cc` (string): Include this email in welcome emails if enabled
+* `welcome_email_subject` (string): Include this email subject in welcome emails if enabled
 * `welcome_custom_text` (string): Custom text send in user welcome email
 * `language` (string): Site default language
 * `windows_mode_ftp` (bool): Does FTP user Windows emulation mode?
