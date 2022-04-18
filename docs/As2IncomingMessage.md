@@ -18,6 +18,7 @@
   "as2_from": "",
   "message_id": "",
   "subject": "",
+  "date": "",
   "body_size": "",
   "attachment_filename": "",
   "ip": "",
@@ -54,6 +55,7 @@
 * `as2_from` / `As2From`  (string): AS2 FROM header of message
 * `message_id` / `MessageId`  (string): AS2 Message Id
 * `subject` / `Subject`  (string): AS2 Subject Header
+* `date` / `Date`  (string): Date Header
 * `body_size` / `BodySize`  (string): Encrypted Payload Body Size
 * `attachment_filename` / `AttachmentFilename`  (string): Filename of the file being received.
 * `ip` / `Ip`  (string): IP Address of the Sender

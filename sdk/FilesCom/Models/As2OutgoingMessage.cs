@@ -72,6 +72,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("as2_from", null);
             }
+            if (!this.attributes.ContainsKey("date"))
+            {
+                this.attributes.Add("date", null);
+            }
             if (!this.attributes.ContainsKey("message_id"))
             {
                 this.attributes.Add("message_id", null);
@@ -277,6 +281,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["as2_from"]; }
             private set { attributes["as2_from"] = value; }
+        }
+
+        /// <summary>
+        /// Date Header
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("date")]
+        public string Date
+        {
+            get { return (string) attributes["date"]; }
+            private set { attributes["date"] = value; }
         }
 
         /// <summary>

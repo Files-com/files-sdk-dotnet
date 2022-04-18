@@ -84,6 +84,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("subject", null);
             }
+            if (!this.attributes.ContainsKey("date"))
+            {
+                this.attributes.Add("date", null);
+            }
             if (!this.attributes.ContainsKey("body_size"))
             {
                 this.attributes.Add("body_size", null);
@@ -330,6 +334,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["subject"]; }
             private set { attributes["subject"] = value; }
+        }
+
+        /// <summary>
+        /// Date Header
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("date")]
+        public string Date
+        {
+            get { return (string) attributes["date"]; }
+            private set { attributes["date"] = value; }
         }
 
         /// <summary>
