@@ -45,6 +45,7 @@
 * `priority_color` / `PriorityColor`  (string): Bookmark/priority color of file/folder
 * `preview_id` / `PreviewId`  (Nullable<Int64>): File preview ID
 * `preview` / `Preview`  (Preview): File preview
+* `mkdir_parents` / `MkdirParents`  (bool): Create parent directories if they do not exist?
 
 
 ---
@@ -87,3 +88,4 @@ Task<RemoteFile> Folder.Create(
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
+* `mkdir_parents` (bool): Create parent directories if they do not exist?

@@ -92,6 +92,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("preview", null);
             }
+            if (!this.attributes.ContainsKey("mkdir_parents"))
+            {
+                this.attributes.Add("mkdir_parents", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -270,6 +274,16 @@ namespace FilesCom.Models
             set { attributes["preview"] = value; }
         }
 
+        /// <summary>
+        /// Create parent directories if they do not exist?
+        /// </summary>
+        [JsonPropertyName("mkdir_parents")]
+        public bool MkdirParents
+        {
+            get { return (bool) attributes["mkdir_parents"]; }
+            set { attributes["mkdir_parents"] = value; }
+        }
+
 
         public async Task Save()
         {
@@ -349,6 +363,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   path (required) - string - Path to operate on.
+        ///   mkdir_parents - boolean - Create parent directories if they do not exist?
         /// </summary>
         public static async Task<RemoteFile> Create(
             string path, 
@@ -363,6 +378,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
             }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
