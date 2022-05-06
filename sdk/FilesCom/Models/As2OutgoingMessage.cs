@@ -56,6 +56,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("processing_result", null);
             }
+            if (!this.attributes.ContainsKey("processing_result_description"))
+            {
+                this.attributes.Add("processing_result_description", null);
+            }
             if (!this.attributes.ContainsKey("mic"))
             {
                 this.attributes.Add("mic", null);
@@ -99,6 +103,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("http_response_headers"))
             {
                 this.attributes.Add("http_response_headers", null);
+            }
+            if (!this.attributes.ContainsKey("http_transmission_duration"))
+            {
+                this.attributes.Add("http_transmission_duration", null);
             }
             if (!this.attributes.ContainsKey("mdn_received"))
             {
@@ -240,6 +248,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Result of processing description.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("processing_result_description")]
+        public string ProcessingResultDescription
+        {
+            get { return (string) attributes["processing_result_description"]; }
+            private set { attributes["processing_result_description"] = value; }
+        }
+
+        /// <summary>
         /// AS2 Message Integrity Check SHA1
         /// </summary>
         [JsonInclude]
@@ -358,6 +377,17 @@ namespace FilesCom.Models
         {
             get { return (object) attributes["http_response_headers"]; }
             private set { attributes["http_response_headers"] = value; }
+        }
+
+        /// <summary>
+        /// HTTP transmission duration in seceonds
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("http_transmission_duration")]
+        public double HttpTransmissionDuration
+        {
+            get { return (double) attributes["http_transmission_duration"]; }
+            private set { attributes["http_transmission_duration"] = value; }
         }
 
         /// <summary>

@@ -12,6 +12,7 @@
   "http_headers": "",
   "activity_log": "",
   "processing_result": "",
+  "processing_result_description": "",
   "mic": "",
   "mic_algo": "",
   "as2_to": "",
@@ -49,6 +50,7 @@
 * `http_headers` / `HttpHeaders`  (object): HTTP Headers sent with this message.
 * `activity_log` / `ActivityLog`  (string): JSON Structure of the activity log.
 * `processing_result` / `ProcessingResult`  (string): Result of processing.
+* `processing_result_description` / `ProcessingResultDescription`  (string): Result of processing description.
 * `mic` / `Mic`  (string): AS2 Message Integrity Check
 * `mic_algo` / `MicAlgo`  (string): AS2 Message Integrity Check Algorithm Used
 * `as2_to` / `As2To`  (string): AS2 TO header of message

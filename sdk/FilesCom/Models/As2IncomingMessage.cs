@@ -60,6 +60,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("processing_result", null);
             }
+            if (!this.attributes.ContainsKey("processing_result_description"))
+            {
+                this.attributes.Add("processing_result_description", null);
+            }
             if (!this.attributes.ContainsKey("mic"))
             {
                 this.attributes.Add("mic", null);
@@ -268,6 +272,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["processing_result"]; }
             private set { attributes["processing_result"] = value; }
+        }
+
+        /// <summary>
+        /// Result of processing description.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("processing_result_description")]
+        public string ProcessingResultDescription
+        {
+            get { return (string) attributes["processing_result_description"]; }
+            private set { attributes["processing_result_description"] = value; }
         }
 
         /// <summary>
