@@ -56,9 +56,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("public_certificate_md5", null);
             }
-            if (!this.attributes.ContainsKey("public_certificate_subjec"))
+            if (!this.attributes.ContainsKey("public_certificate_subject"))
             {
-                this.attributes.Add("public_certificate_subjec", null);
+                this.attributes.Add("public_certificate_subject", null);
             }
             if (!this.attributes.ContainsKey("public_certificate_issuer"))
             {
@@ -171,11 +171,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Subject of public certificate used for message security.
         /// </summary>
-        [JsonPropertyName("public_certificate_subjec")]
-        public string PublicCertificateSubjec
+        [JsonPropertyName("public_certificate_subject")]
+        public string PublicCertificateSubject
         {
-            get { return (string) attributes["public_certificate_subjec"]; }
-            set { attributes["public_certificate_subjec"] = value; }
+            get { return (string) attributes["public_certificate_subject"]; }
+            set { attributes["public_certificate_subject"] = value; }
         }
 
         /// <summary>
