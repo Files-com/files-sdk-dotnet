@@ -12,6 +12,7 @@
   "notify_on_copy": true,
   "recursive": true,
   "send_interval": "fifteen_minutes",
+  "message": "custom notification email message",
   "unsubscribed": true,
   "unsubscribed_reason": "",
   "user_id": 1,
@@ -28,6 +29,7 @@
 * `notify_on_copy` / `NotifyOnCopy`  (bool): Triggers notification when moving or copying files to this path
 * `recursive` / `Recursive`  (bool): Enable notifications for each subfolder in this path
 * `send_interval` / `SendInterval`  (string): The time interval that notifications are aggregated to
+* `message` / `Message`  (string): Custom message to include in notification emails.
 * `unsubscribed` / `Unsubscribed`  (bool): Is the user unsubscribed from this notification?
 * `unsubscribed_reason` / `UnsubscribedReason`  (string): The reason that the user unsubscribed
 * `user_id` / `UserId`  (Nullable<Int64>): Notification user ID
@@ -100,6 +102,7 @@ Task<Notification> Notification.Create(
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
 * `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+* `message` (string): Custom message to include in notification emails.
 * `group_id` (Nullable<Int64>): The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
 * `path` (string): Path
 * `username` (string): The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
@@ -124,6 +127,7 @@ Task<Notification> Notification.Update(
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
 * `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+* `message` (string): Custom message to include in notification emails.
 
 
 ---
@@ -156,6 +160,7 @@ parameters.Add("notify_on_copy", true);
 parameters.Add("notify_user_actions", true);
 parameters.Add("recursive", true);
 parameters.Add("send_interval", "daily");
+parameters.Add("message", "custom notification email message");
 
 Notification.Update(parameters);
 ```
@@ -167,6 +172,7 @@ Notification.Update(parameters);
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
 * `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+* `message` (string): Custom message to include in notification emails.
 
 
 ---

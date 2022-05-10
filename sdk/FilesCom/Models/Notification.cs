@@ -60,6 +60,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("send_interval", null);
             }
+            if (!this.attributes.ContainsKey("message"))
+            {
+                this.attributes.Add("message", null);
+            }
             if (!this.attributes.ContainsKey("unsubscribed"))
             {
                 this.attributes.Add("unsubscribed", null);
@@ -179,6 +183,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Custom message to include in notification emails.
+        /// </summary>
+        [JsonPropertyName("message")]
+        public string Message
+        {
+            get { return (string) attributes["message"]; }
+            set { attributes["message"] = value; }
+        }
+
+        /// <summary>
         /// Is the user unsubscribed from this notification?
         /// </summary>
         [JsonPropertyName("unsubscribed")]
@@ -234,6 +248,7 @@ namespace FilesCom.Models
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   message - string - Custom message to include in notification emails.
         /// </summary>
         public async Task<Notification> Update(Dictionary<string, object> parameters)
         {
@@ -262,6 +277,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
+            }
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -453,6 +472,7 @@ namespace FilesCom.Models
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   message - string - Custom message to include in notification emails.
         ///   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
         ///   path - string - Path
         ///   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
@@ -486,6 +506,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
             }
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
+            }
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
@@ -511,6 +535,7 @@ namespace FilesCom.Models
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   message - string - Custom message to include in notification emails.
         /// </summary>
         public static async Task<Notification> Update(
             Nullable<Int64> id, 
@@ -541,6 +566,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
+            }
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
