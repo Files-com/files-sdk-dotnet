@@ -52,6 +52,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allowed_2fa_method_yubi", null);
             }
+            if (!this.attributes.ContainsKey("allowed_2fa_method_bypass_for_ftp_sftp_dav"))
+            {
+                this.attributes.Add("allowed_2fa_method_bypass_for_ftp_sftp_dav", null);
+            }
             if (!this.attributes.ContainsKey("admin_user_id"))
             {
                 this.attributes.Add("admin_user_id", null);
@@ -622,6 +626,17 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["allowed_2fa_method_yubi"]; }
             private set { attributes["allowed_2fa_method_yubi"] = value; }
+        }
+
+        /// <summary>
+        /// Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("allowed_2fa_method_bypass_for_ftp_sftp_dav")]
+        public bool Allowed2faMethodBypassForFtpSftpDav
+        {
+            get { return (bool) attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"]; }
+            private set { attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"] = value; }
         }
 
         /// <summary>
@@ -2077,6 +2092,7 @@ namespace FilesCom.Models
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
         ///   allowed_2fa_method_webauthn - boolean - Is WebAuthn two factor authentication allowed?
         ///   allowed_2fa_method_yubi - boolean - Is yubikey two factor authentication allowed?
+        ///   allowed_2fa_method_bypass_for_ftp_sftp_dav - boolean - Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
         ///   require_2fa - boolean - Require two-factor authentication for all users?
         ///   require_2fa_user_type - string - What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
         ///   color2_top - string - Top bar background color
@@ -2417,6 +2433,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allowed_2fa_method_yubi") && !(parameters["allowed_2fa_method_yubi"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_yubi must be of type bool", "parameters[\"allowed_2fa_method_yubi\"]");
+            }
+            if (parameters.ContainsKey("allowed_2fa_method_bypass_for_ftp_sftp_dav") && !(parameters["allowed_2fa_method_bypass_for_ftp_sftp_dav"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: allowed_2fa_method_bypass_for_ftp_sftp_dav must be of type bool", "parameters[\"allowed_2fa_method_bypass_for_ftp_sftp_dav\"]");
             }
             if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is bool ))
             {

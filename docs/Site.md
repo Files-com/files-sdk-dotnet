@@ -10,6 +10,7 @@
   "allowed_2fa_method_u2f": true,
   "allowed_2fa_method_webauthn": true,
   "allowed_2fa_method_yubi": true,
+  "allowed_2fa_method_bypass_for_ftp_sftp_dav": true,
   "admin_user_id": 1,
   "allow_bundle_names": true,
   "allowed_countries": "US,DE",
@@ -231,6 +232,7 @@
 * `allowed_2fa_method_u2f` / `Allowed2faMethodU2f`  (bool): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_webauthn` / `Allowed2faMethodWebauthn`  (bool): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` / `Allowed2faMethodYubi`  (bool): Is yubikey two factor authentication allowed?
+* `allowed_2fa_method_bypass_for_ftp_sftp_dav` / `Allowed2faMethodBypassForFtpSftpDav`  (bool): Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
 * `admin_user_id` / `AdminUserId`  (Nullable<Int64>): User ID for the main site administrator
 * `allow_bundle_names` / `AllowBundleNames`  (bool): Are manual Bundle names allowed?
 * `allowed_countries` / `AllowedCountries`  (string): Comma seperated list of allowed Country codes
@@ -466,6 +468,7 @@ Task<Site> Site.Update(
 * `allowed_2fa_method_totp` (bool): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_webauthn` (bool): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` (bool): Is yubikey two factor authentication allowed?
+* `allowed_2fa_method_bypass_for_ftp_sftp_dav` (bool): Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
 * `require_2fa` (bool): Require two-factor authentication for all users?
 * `require_2fa_user_type` (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
 * `color2_top` (string): Top bar background color
