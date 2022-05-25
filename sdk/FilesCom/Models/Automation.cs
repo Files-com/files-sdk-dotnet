@@ -36,6 +36,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("automation", null);
             }
+            if (!this.attributes.ContainsKey("deleted"))
+            {
+                this.attributes.Add("deleted", null);
+            }
             if (!this.attributes.ContainsKey("disabled"))
             {
                 this.attributes.Add("disabled", null);
@@ -47,6 +51,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("interval"))
             {
                 this.attributes.Add("interval", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_at"))
+            {
+                this.attributes.Add("last_modified_at", null);
             }
             if (!this.attributes.ContainsKey("name"))
             {
@@ -108,6 +116,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("destination", null);
             }
+            if (!this.attributes.ContainsKey("cloned_from"))
+            {
+                this.attributes.Add("cloned_from", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -147,6 +159,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Indicates if the automation has been deleted.
+        /// </summary>
+        [JsonPropertyName("deleted")]
+        public bool Deleted
+        {
+            get { return (bool) attributes["deleted"]; }
+            set { attributes["deleted"] = value; }
+        }
+
+        /// <summary>
         /// If true, this automation will not run.
         /// </summary>
         [JsonPropertyName("disabled")]
@@ -174,6 +196,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["interval"]; }
             set { attributes["interval"] = value; }
+        }
+
+        /// <summary>
+        /// Time when automation was last modified. Does not change for name or description updates.
+        /// </summary>
+        [JsonPropertyName("last_modified_at")]
+        public Nullable<DateTime> LastModifiedAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_modified_at"]; }
+            set { attributes["last_modified_at"] = value; }
         }
 
         /// <summary>
@@ -327,8 +359,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Set to the ID of automation used a clone template. For
+        /// </summary>
+        [JsonPropertyName("cloned_from")]
+        public Nullable<Int64> ClonedFrom
+        {
+            get { return (Nullable<Int64>) attributes["cloned_from"]; }
+            set { attributes["cloned_from"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
-        ///   automation (required) - string - Automation type
         ///   source - string - Source Path
         ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
@@ -345,6 +386,7 @@ namespace FilesCom.Models
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
+        ///   automation - string - Automation type
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
         {
@@ -357,10 +399,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
             }
             if (parameters.ContainsKey("source") && !(parameters["source"] is string ))
             {
@@ -426,13 +464,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/automations/{Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -488,13 +526,14 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`.
-        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`.
-        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`.
-        ///   filter_like - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`.
-        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `automation`.
-        ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `automation`.
+        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`, `last_modified_at` or `disabled`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+        ///   filter_like - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+        ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+        ///   with_deleted - boolean - Set to true to include deleted automations in the results.
         ///   automation - string - DEPRECATED: Type of automation to filter by. Use `filter[automation]` instead.
         /// </summary>
         public static async Task<Automation[]> List(
@@ -541,6 +580,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+            }
+            if (parameters.ContainsKey("with_deleted") && !(parameters["with_deleted"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: with_deleted must be of type bool", "parameters[\"with_deleted\"]");
             }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
             {
@@ -600,7 +643,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   automation (required) - string - Automation type
         ///   source - string - Source Path
         ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
@@ -617,6 +659,8 @@ namespace FilesCom.Models
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
+        ///   automation (required) - string - Automation type
+        ///   cloned_from - int64 - Set to the ID of automation used a clone template. For
         /// </summary>
         public static async Task<Automation> Create(
             
@@ -627,10 +671,6 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
-            }
             if (parameters.ContainsKey("source") && !(parameters["source"] is string ))
             {
                 throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
@@ -695,6 +735,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
+            }
+            if (parameters.ContainsKey("cloned_from") && !(parameters["cloned_from"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: cloned_from must be of type Nullable<Int64>", "parameters[\"cloned_from\"]");
+            }
             if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
@@ -708,7 +756,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   automation (required) - string - Automation type
         ///   source - string - Source Path
         ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
@@ -725,6 +772,7 @@ namespace FilesCom.Models
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
+        ///   automation - string - Automation type
         /// </summary>
         public static async Task<Automation> Update(
             Nullable<Int64> id, 
@@ -740,10 +788,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
-            {
-                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
-            }
             if (parameters.ContainsKey("source") && !(parameters["source"] is string ))
             {
                 throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
@@ -808,13 +852,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/automations/{Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);

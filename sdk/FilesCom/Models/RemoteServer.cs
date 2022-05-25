@@ -152,6 +152,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("azure_blob_storage_account", null);
             }
+            if (!this.attributes.ContainsKey("azure_blob_storage_sas_token"))
+            {
+                this.attributes.Add("azure_blob_storage_sas_token", null);
+            }
             if (!this.attributes.ContainsKey("azure_blob_storage_container"))
             {
                 this.attributes.Add("azure_blob_storage_container", null);
@@ -553,6 +557,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Shared Access Signature (SAS) token
+        /// </summary>
+        [JsonPropertyName("azure_blob_storage_sas_token")]
+        public string AzureBlobStorageSasToken
+        {
+            get { return (string) attributes["azure_blob_storage_sas_token"]; }
+            set { attributes["azure_blob_storage_sas_token"] = value; }
+        }
+
+        /// <summary>
         /// Azure Blob Storage Container name
         /// </summary>
         [JsonPropertyName("azure_blob_storage_container")]
@@ -770,6 +784,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -932,6 +947,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
@@ -1123,6 +1142,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1283,6 +1303,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
             }
+            if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+            }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
@@ -1352,6 +1376,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1516,6 +1541,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {

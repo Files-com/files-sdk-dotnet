@@ -44,6 +44,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_name", null);
             }
+            if (!this.attributes.ContainsKey("triggering_group_ids"))
+            {
+                this.attributes.Add("triggering_group_ids", null);
+            }
+            if (!this.attributes.ContainsKey("triggering_user_ids"))
+            {
+                this.attributes.Add("triggering_user_ids", null);
+            }
+            if (!this.attributes.ContainsKey("trigger_by_share_recipients"))
+            {
+                this.attributes.Add("trigger_by_share_recipients", null);
+            }
             if (!this.attributes.ContainsKey("notify_user_actions"))
             {
                 this.attributes.Add("notify_user_actions", null);
@@ -51,6 +63,22 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("notify_on_copy"))
             {
                 this.attributes.Add("notify_on_copy", null);
+            }
+            if (!this.attributes.ContainsKey("notify_on_delete"))
+            {
+                this.attributes.Add("notify_on_delete", null);
+            }
+            if (!this.attributes.ContainsKey("notify_on_download"))
+            {
+                this.attributes.Add("notify_on_download", null);
+            }
+            if (!this.attributes.ContainsKey("notify_on_move"))
+            {
+                this.attributes.Add("notify_on_move", null);
+            }
+            if (!this.attributes.ContainsKey("notify_on_upload"))
+            {
+                this.attributes.Add("notify_on_upload", null);
             }
             if (!this.attributes.ContainsKey("recursive"))
             {
@@ -63,6 +91,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("message"))
             {
                 this.attributes.Add("message", null);
+            }
+            if (!this.attributes.ContainsKey("triggering_filenames"))
+            {
+                this.attributes.Add("triggering_filenames", new string[0]);
             }
             if (!this.attributes.ContainsKey("unsubscribed"))
             {
@@ -143,6 +175,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Only notify on actions made by a member of one of the specified groups
+        /// </summary>
+        [JsonPropertyName("triggering_group_ids")]
+        public Nullable<Int64> TriggeringGroupIds
+        {
+            get { return (Nullable<Int64>) attributes["triggering_group_ids"]; }
+            set { attributes["triggering_group_ids"] = value; }
+        }
+
+        /// <summary>
+        /// Only notify on actions made one of the specified users
+        /// </summary>
+        [JsonPropertyName("triggering_user_ids")]
+        public Nullable<Int64> TriggeringUserIds
+        {
+            get { return (Nullable<Int64>) attributes["triggering_user_ids"]; }
+            set { attributes["triggering_user_ids"] = value; }
+        }
+
+        /// <summary>
+        /// Notify when actions are performed by a share recipient?
+        /// </summary>
+        [JsonPropertyName("trigger_by_share_recipients")]
+        public bool TriggerByShareRecipients
+        {
+            get { return (bool) attributes["trigger_by_share_recipients"]; }
+            set { attributes["trigger_by_share_recipients"] = value; }
+        }
+
+        /// <summary>
         /// Trigger notification on notification user actions?
         /// </summary>
         [JsonPropertyName("notify_user_actions")]
@@ -153,13 +215,53 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Triggers notification when moving or copying files to this path
+        /// Triggers notification when copying files to this path
         /// </summary>
         [JsonPropertyName("notify_on_copy")]
         public bool NotifyOnCopy
         {
             get { return (bool) attributes["notify_on_copy"]; }
             set { attributes["notify_on_copy"] = value; }
+        }
+
+        /// <summary>
+        /// Triggers notification when deleting files from this path
+        /// </summary>
+        [JsonPropertyName("notify_on_delete")]
+        public bool NotifyOnDelete
+        {
+            get { return (bool) attributes["notify_on_delete"]; }
+            set { attributes["notify_on_delete"] = value; }
+        }
+
+        /// <summary>
+        /// Triggers notification when downloading files from this path
+        /// </summary>
+        [JsonPropertyName("notify_on_download")]
+        public bool NotifyOnDownload
+        {
+            get { return (bool) attributes["notify_on_download"]; }
+            set { attributes["notify_on_download"] = value; }
+        }
+
+        /// <summary>
+        /// Triggers notification when moving files to this path
+        /// </summary>
+        [JsonPropertyName("notify_on_move")]
+        public bool NotifyOnMove
+        {
+            get { return (bool) attributes["notify_on_move"]; }
+            set { attributes["notify_on_move"] = value; }
+        }
+
+        /// <summary>
+        /// Triggers notification when uploading new files to this path
+        /// </summary>
+        [JsonPropertyName("notify_on_upload")]
+        public bool NotifyOnUpload
+        {
+            get { return (bool) attributes["notify_on_upload"]; }
+            set { attributes["notify_on_upload"] = value; }
         }
 
         /// <summary>
@@ -190,6 +292,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["message"]; }
             set { attributes["message"] = value; }
+        }
+
+        /// <summary>
+        /// Array of filenames (possibly with wildcards) to match for action path
+        /// </summary>
+        [JsonPropertyName("triggering_filenames")]
+        public string[] TriggeringFilenames
+        {
+            get { return (string[]) attributes["triggering_filenames"]; }
+            set { attributes["triggering_filenames"] = value; }
         }
 
         /// <summary>
@@ -245,10 +357,18 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
+        ///   notify_on_delete - boolean - Triggers notification when deleting files from this path
+        ///   notify_on_download - boolean - Triggers notification when downloading files from this path
+        ///   notify_on_move - boolean - Triggers notification when moving files to this path
+        ///   notify_on_upload - boolean - Triggers notification when uploading new files to this path
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
         ///   message - string - Custom message to include in notification emails.
+        ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to match for action path
+        ///   triggering_group_ids - array(int64) - Only notify on actions made by a member of one of the specified groups
+        ///   triggering_user_ids - array(int64) - Only notify on actions made one of the specified users
+        ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         /// </summary>
         public async Task<Notification> Update(Dictionary<string, object> parameters)
         {
@@ -266,6 +386,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notify_on_copy must be of type bool", "parameters[\"notify_on_copy\"]");
             }
+            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_delete must be of type bool", "parameters[\"notify_on_delete\"]");
+            }
+            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_download must be of type bool", "parameters[\"notify_on_download\"]");
+            }
+            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_move must be of type bool", "parameters[\"notify_on_move\"]");
+            }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
+            }
             if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
@@ -281,6 +417,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
+            }
+            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_filenames must be of type string[]", "parameters[\"triggering_filenames\"]");
+            }
+            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_group_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_group_ids\"]");
+            }
+            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_user_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_user_ids\"]");
+            }
+            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -469,10 +621,18 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - The id of the user to notify. Provide `user_id`, `username` or `group_id`.
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
+        ///   notify_on_delete - boolean - Triggers notification when deleting files from this path
+        ///   notify_on_download - boolean - Triggers notification when downloading files from this path
+        ///   notify_on_move - boolean - Triggers notification when moving files to this path
+        ///   notify_on_upload - boolean - Triggers notification when uploading new files to this path
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
         ///   message - string - Custom message to include in notification emails.
+        ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to match for action path
+        ///   triggering_group_ids - array(int64) - Only notify on actions made by a member of one of the specified groups
+        ///   triggering_user_ids - array(int64) - Only notify on actions made one of the specified users
+        ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         ///   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
         ///   path - string - Path
         ///   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
@@ -494,6 +654,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notify_on_copy must be of type bool", "parameters[\"notify_on_copy\"]");
             }
+            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_delete must be of type bool", "parameters[\"notify_on_delete\"]");
+            }
+            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_download must be of type bool", "parameters[\"notify_on_download\"]");
+            }
+            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_move must be of type bool", "parameters[\"notify_on_move\"]");
+            }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
+            }
             if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
@@ -509,6 +685,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
+            }
+            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_filenames must be of type string[]", "parameters[\"triggering_filenames\"]");
+            }
+            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_group_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_group_ids\"]");
+            }
+            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_user_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_user_ids\"]");
+            }
+            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
             {
@@ -532,10 +724,18 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
+        ///   notify_on_delete - boolean - Triggers notification when deleting files from this path
+        ///   notify_on_download - boolean - Triggers notification when downloading files from this path
+        ///   notify_on_move - boolean - Triggers notification when moving files to this path
+        ///   notify_on_upload - boolean - Triggers notification when uploading new files to this path
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
         ///   message - string - Custom message to include in notification emails.
+        ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to match for action path
+        ///   triggering_group_ids - array(int64) - Only notify on actions made by a member of one of the specified groups
+        ///   triggering_user_ids - array(int64) - Only notify on actions made one of the specified users
+        ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         /// </summary>
         public static async Task<Notification> Update(
             Nullable<Int64> id, 
@@ -555,6 +755,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notify_on_copy must be of type bool", "parameters[\"notify_on_copy\"]");
             }
+            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_delete must be of type bool", "parameters[\"notify_on_delete\"]");
+            }
+            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_download must be of type bool", "parameters[\"notify_on_download\"]");
+            }
+            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_move must be of type bool", "parameters[\"notify_on_move\"]");
+            }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
+            }
             if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
@@ -570,6 +786,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
+            }
+            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_filenames must be of type string[]", "parameters[\"triggering_filenames\"]");
+            }
+            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_group_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_group_ids\"]");
+            }
+            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[] ))
+            {
+                throw new ArgumentException("Bad parameter: triggering_user_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_user_ids\"]");
+            }
+            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

@@ -6,9 +6,11 @@
 {
   "id": 1,
   "automation": "create_folder",
+  "deleted": true,
   "disabled": true,
   "trigger": "realtime",
   "interval": "week",
+  "last_modified_at": "2000-01-01T01:00:00Z",
   "name": "",
   "schedule": {
     "days_of_week": [
@@ -47,9 +49,11 @@
 
 * `id` / `Id`  (Nullable<Int64>): Automation ID
 * `automation` / `AutomationType`  (string): Automation type
+* `deleted` / `Deleted`  (bool): Indicates if the automation has been deleted.
 * `disabled` / `Disabled`  (bool): If true, this automation will not run.
 * `trigger` / `Trigger`  (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+* `last_modified_at` / `LastModifiedAt`  (Nullable<DateTime>): Time when automation was last modified. Does not change for name or description updates.
 * `name` / `Name`  (string): Name for this automation.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
 * `source` / `Source`  (string): Source Path
@@ -65,6 +69,7 @@
 * `trigger_actions` / `TriggerActions`  (string): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` / `Value`  (object): A Hash of attributes specific to the automation type.
 * `destination` / `Destination`  (string): DEPRECATED: Destination Path. Use `destinations` instead.
+* `cloned_from` / `ClonedFrom`  (Nullable<Int64>): Set to the ID of automation used a clone template. For
 
 
 ---
@@ -83,13 +88,14 @@ Task<Automation[]> Automation.List(
 
 * `cursor` (string): Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`.
-* `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`.
-* `filter_gteq` (object): If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`.
-* `filter_like` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`.
-* `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `automation`.
-* `filter_lteq` (object): If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `automation`.
+* `sort_by` (object): If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`, `last_modified_at` or `disabled`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+* `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+* `filter_gteq` (object): If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+* `filter_like` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+* `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+* `filter_lteq` (object): If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ disabled, automation ]`.
+* `with_deleted` (bool): Set to true to include deleted automations in the results.
 * `automation` (string): DEPRECATED: Type of automation to filter by. Use `filter[automation]` instead.
 
 
@@ -124,7 +130,6 @@ Task<Automation> Automation.Create(
 
 ### Parameters
 
-* `automation` (string): Required - Automation type
 * `source` (string): Source Path
 * `destination` (string): DEPRECATED: Destination Path. Use `destinations` instead.
 * `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
@@ -141,6 +146,8 @@ Task<Automation> Automation.Create(
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
+* `automation` (string): Required - Automation type
+* `cloned_from` (Nullable<Int64>): Set to the ID of automation used a clone template. For
 
 
 ---
@@ -158,7 +165,6 @@ Task<Automation> Automation.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
-* `automation` (string): Required - Automation type
 * `source` (string): Source Path
 * `destination` (string): DEPRECATED: Destination Path. Use `destinations` instead.
 * `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
@@ -175,6 +181,7 @@ Task<Automation> Automation.Update(
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
+* `automation` (string): Automation type
 
 
 ---
@@ -203,7 +210,6 @@ var Automation = Automation.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("automation", "create_folder");
 parameters.Add("source", "source");
 parameters.Add("destinations", "[\"folder_a/file_a.txt\", {\"folder_path\":\"folder_b\", \"file_path\":\"file_b.txt\"}, {\"folder_path\":\"folder_c\"}]");
 parameters.Add("interval", "year");
@@ -214,6 +220,7 @@ parameters.Add("disabled", true);
 parameters.Add("trigger", "realtime");
 parameters.Add("trigger_actions", "[ \"create\" ]");
 parameters.Add("value", "{\"limit\": \"1\"}");
+parameters.Add("automation", "create_folder");
 
 Automation.Update(parameters);
 ```
@@ -221,7 +228,6 @@ Automation.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
-* `automation` (string): Required - Automation type
 * `source` (string): Source Path
 * `destination` (string): DEPRECATED: Destination Path. Use `destinations` instead.
 * `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
@@ -238,6 +244,7 @@ Automation.Update(parameters);
 * `trigger` (string): How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
+* `automation` (string): Automation type
 
 
 ---

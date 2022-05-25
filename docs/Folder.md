@@ -68,7 +68,7 @@ Task<RemoteFile[]> Folder.ListFor(
 * `filter` (string): If specified, will filter folders/files list by this string.  Wildcards of `*` and `?` are acceptable here.
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `search` (string): If `search_all` is `true`, provide the search string here.  Otherwise, this parameter acts like an alias of `filter`.
-* `search_all` (bool): Search entire site?
+* `search_all` (bool): Search entire site?  If set, we will ignore the folder path provided and search the entire site.  This is the same API used by the search bar in the UI.  Search results are a best effort, not real time, and not guaranteed to match every file.  This field should only be used for ad-hoc (human) searching, and not as part of an automated process.
 * `with_previews` (bool): Include file previews?
 * `with_priority_color` (bool): Include file priority color information?
 
