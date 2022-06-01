@@ -160,6 +160,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("azure_blob_storage_container", null);
             }
+            if (!this.attributes.ContainsKey("azure_files_storage_account"))
+            {
+                this.attributes.Add("azure_files_storage_account", null);
+            }
+            if (!this.attributes.ContainsKey("azure_files_sas_token"))
+            {
+                this.attributes.Add("azure_files_sas_token", null);
+            }
+            if (!this.attributes.ContainsKey("azure_files_share_name"))
+            {
+                this.attributes.Add("azure_files_share_name", null);
+            }
             if (!this.attributes.ContainsKey("s3_compatible_bucket"))
             {
                 this.attributes.Add("s3_compatible_bucket", null);
@@ -223,6 +235,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("azure_blob_storage_access_key"))
             {
                 this.attributes.Add("azure_blob_storage_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("azure_files_storage_access_key"))
+            {
+                this.attributes.Add("azure_files_storage_access_key", null);
             }
             if (!this.attributes.ContainsKey("s3_compatible_secret_key"))
             {
@@ -577,6 +593,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Azure File Storage Account name
+        /// </summary>
+        [JsonPropertyName("azure_files_storage_account")]
+        public string AzureFilesStorageAccount
+        {
+            get { return (string) attributes["azure_files_storage_account"]; }
+            set { attributes["azure_files_storage_account"] = value; }
+        }
+
+        /// <summary>
+        /// Shared Access Signature (SAS) token
+        /// </summary>
+        [JsonPropertyName("azure_files_sas_token")]
+        public string AzureFilesSasToken
+        {
+            get { return (string) attributes["azure_files_sas_token"]; }
+            set { attributes["azure_files_sas_token"] = value; }
+        }
+
+        /// <summary>
+        /// Azure File Storage Share name
+        /// </summary>
+        [JsonPropertyName("azure_files_share_name")]
+        public string AzureFilesShareName
+        {
+            get { return (string) attributes["azure_files_share_name"]; }
+            set { attributes["azure_files_share_name"] = value; }
+        }
+
+        /// <summary>
         /// S3-compatible Bucket name
         /// </summary>
         [JsonPropertyName("s3_compatible_bucket")]
@@ -737,6 +783,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Azure File Storage access key.
+        /// </summary>
+        [JsonPropertyName("azure_files_storage_access_key")]
+        public string AzureFilesStorageAccessKey
+        {
+            get { return (string) attributes["azure_files_storage_access_key"]; }
+            set { attributes["azure_files_storage_access_key"] = value; }
+        }
+
+        /// <summary>
         /// S3-compatible secret key
         /// </summary>
         [JsonPropertyName("s3_compatible_secret_key")]
@@ -761,6 +817,7 @@ namespace FilesCom.Models
         ///   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
         ///   reset_authentication - boolean - Reset authenticated account
         ///   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
+        ///   azure_files_storage_access_key - string - Azure File Storage access key.
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -785,6 +842,9 @@ namespace FilesCom.Models
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_files_storage_account - string - Azure File Storage Account name
+        ///   azure_files_share_name - string - Azure File Storage Share name
+        ///   azure_files_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -855,6 +915,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
+            }
+            if (parameters.ContainsKey("azure_files_storage_access_key") && !(parameters["azure_files_storage_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_storage_access_key must be of type string", "parameters[\"azure_files_storage_access_key\"]");
             }
             if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
             {
@@ -951,6 +1015,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+            }
+            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
+            }
+            if (parameters.ContainsKey("azure_files_share_name") && !(parameters["azure_files_share_name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_share_name must be of type string", "parameters[\"azure_files_share_name\"]");
+            }
+            if (parameters.ContainsKey("azure_files_sas_token") && !(parameters["azure_files_sas_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_sas_token must be of type string", "parameters[\"azure_files_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
@@ -1119,6 +1195,7 @@ namespace FilesCom.Models
         ///   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
         ///   reset_authentication - boolean - Reset authenticated account
         ///   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
+        ///   azure_files_storage_access_key - string - Azure File Storage access key.
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -1143,6 +1220,9 @@ namespace FilesCom.Models
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_files_storage_account - string - Azure File Storage Account name
+        ///   azure_files_share_name - string - Azure File Storage Share name
+        ///   azure_files_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1210,6 +1290,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
+            }
+            if (parameters.ContainsKey("azure_files_storage_access_key") && !(parameters["azure_files_storage_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_storage_access_key must be of type string", "parameters[\"azure_files_storage_access_key\"]");
             }
             if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
             {
@@ -1307,6 +1391,18 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
             }
+            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
+            }
+            if (parameters.ContainsKey("azure_files_share_name") && !(parameters["azure_files_share_name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_share_name must be of type string", "parameters[\"azure_files_share_name\"]");
+            }
+            if (parameters.ContainsKey("azure_files_sas_token") && !(parameters["azure_files_sas_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_sas_token must be of type string", "parameters[\"azure_files_sas_token\"]");
+            }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
@@ -1353,6 +1449,7 @@ namespace FilesCom.Models
         ///   rackspace_api_key - string - Rackspace API key from the Rackspace Cloud Control Panel.
         ///   reset_authentication - boolean - Reset authenticated account
         ///   azure_blob_storage_access_key - string - Azure Blob Storage secret key.
+        ///   azure_files_storage_access_key - string - Azure File Storage access key.
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
@@ -1377,6 +1474,9 @@ namespace FilesCom.Models
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_files_storage_account - string - Azure File Storage Account name
+        ///   azure_files_share_name - string - Azure File Storage Share name
+        ///   azure_files_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1450,6 +1550,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
             }
+            if (parameters.ContainsKey("azure_files_storage_access_key") && !(parameters["azure_files_storage_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_storage_access_key must be of type string", "parameters[\"azure_files_storage_access_key\"]");
+            }
             if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
             {
                 throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
@@ -1545,6 +1649,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string ))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+            }
+            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
+            }
+            if (parameters.ContainsKey("azure_files_share_name") && !(parameters["azure_files_share_name"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_share_name must be of type string", "parameters[\"azure_files_share_name\"]");
+            }
+            if (parameters.ContainsKey("azure_files_sas_token") && !(parameters["azure_files_sas_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: azure_files_sas_token must be of type string", "parameters[\"azure_files_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
