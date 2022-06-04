@@ -164,13 +164,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("azure_files_storage_account", null);
             }
-            if (!this.attributes.ContainsKey("azure_files_sas_token"))
+            if (!this.attributes.ContainsKey("azure_files_storage_sas_token"))
             {
-                this.attributes.Add("azure_files_sas_token", null);
+                this.attributes.Add("azure_files_storage_sas_token", null);
             }
-            if (!this.attributes.ContainsKey("azure_files_share_name"))
+            if (!this.attributes.ContainsKey("azure_files_storage_share_name"))
             {
-                this.attributes.Add("azure_files_share_name", null);
+                this.attributes.Add("azure_files_storage_share_name", null);
             }
             if (!this.attributes.ContainsKey("s3_compatible_bucket"))
             {
@@ -605,21 +605,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Shared Access Signature (SAS) token
         /// </summary>
-        [JsonPropertyName("azure_files_sas_token")]
-        public string AzureFilesSasToken
+        [JsonPropertyName("azure_files_storage_sas_token")]
+        public string AzureFilesStorageSasToken
         {
-            get { return (string) attributes["azure_files_sas_token"]; }
-            set { attributes["azure_files_sas_token"] = value; }
+            get { return (string) attributes["azure_files_storage_sas_token"]; }
+            set { attributes["azure_files_storage_sas_token"] = value; }
         }
 
         /// <summary>
         /// Azure File Storage Share name
         /// </summary>
-        [JsonPropertyName("azure_files_share_name")]
-        public string AzureFilesShareName
+        [JsonPropertyName("azure_files_storage_share_name")]
+        public string AzureFilesStorageShareName
         {
-            get { return (string) attributes["azure_files_share_name"]; }
-            set { attributes["azure_files_share_name"] = value; }
+            get { return (string) attributes["azure_files_storage_share_name"]; }
+            set { attributes["azure_files_storage_share_name"] = value; }
         }
 
         /// <summary>
@@ -843,8 +843,8 @@ namespace FilesCom.Models
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   azure_files_storage_account - string - Azure File Storage Account name
-        ///   azure_files_share_name - string - Azure File Storage Share name
-        ///   azure_files_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_files_storage_share_name - string - Azure File Storage Share name
+        ///   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1020,13 +1020,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
             }
-            if (parameters.ContainsKey("azure_files_share_name") && !(parameters["azure_files_share_name"] is string ))
+            if (parameters.ContainsKey("azure_files_storage_share_name") && !(parameters["azure_files_storage_share_name"] is string ))
             {
-                throw new ArgumentException("Bad parameter: azure_files_share_name must be of type string", "parameters[\"azure_files_share_name\"]");
+                throw new ArgumentException("Bad parameter: azure_files_storage_share_name must be of type string", "parameters[\"azure_files_storage_share_name\"]");
             }
-            if (parameters.ContainsKey("azure_files_sas_token") && !(parameters["azure_files_sas_token"] is string ))
+            if (parameters.ContainsKey("azure_files_storage_sas_token") && !(parameters["azure_files_storage_sas_token"] is string ))
             {
-                throw new ArgumentException("Bad parameter: azure_files_sas_token must be of type string", "parameters[\"azure_files_sas_token\"]");
+                throw new ArgumentException("Bad parameter: azure_files_storage_sas_token must be of type string", "parameters[\"azure_files_storage_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
@@ -1221,8 +1221,8 @@ namespace FilesCom.Models
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   azure_files_storage_account - string - Azure File Storage Account name
-        ///   azure_files_share_name - string - Azure File Storage Share name
-        ///   azure_files_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_files_storage_share_name - string - Azure File Storage Share name
+        ///   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1395,13 +1395,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
             }
-            if (parameters.ContainsKey("azure_files_share_name") && !(parameters["azure_files_share_name"] is string ))
+            if (parameters.ContainsKey("azure_files_storage_share_name") && !(parameters["azure_files_storage_share_name"] is string ))
             {
-                throw new ArgumentException("Bad parameter: azure_files_share_name must be of type string", "parameters[\"azure_files_share_name\"]");
+                throw new ArgumentException("Bad parameter: azure_files_storage_share_name must be of type string", "parameters[\"azure_files_storage_share_name\"]");
             }
-            if (parameters.ContainsKey("azure_files_sas_token") && !(parameters["azure_files_sas_token"] is string ))
+            if (parameters.ContainsKey("azure_files_storage_sas_token") && !(parameters["azure_files_storage_sas_token"] is string ))
             {
-                throw new ArgumentException("Bad parameter: azure_files_sas_token must be of type string", "parameters[\"azure_files_sas_token\"]");
+                throw new ArgumentException("Bad parameter: azure_files_storage_sas_token must be of type string", "parameters[\"azure_files_storage_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
@@ -1475,8 +1475,8 @@ namespace FilesCom.Models
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   azure_files_storage_account - string - Azure File Storage Account name
-        ///   azure_files_share_name - string - Azure File Storage Share name
-        ///   azure_files_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_files_storage_share_name - string - Azure File Storage Share name
+        ///   azure_files_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   s3_compatible_bucket - string - S3-compatible Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible endpoint
         ///   s3_compatible_region - string - S3-compatible endpoint
@@ -1654,13 +1654,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
             }
-            if (parameters.ContainsKey("azure_files_share_name") && !(parameters["azure_files_share_name"] is string ))
+            if (parameters.ContainsKey("azure_files_storage_share_name") && !(parameters["azure_files_storage_share_name"] is string ))
             {
-                throw new ArgumentException("Bad parameter: azure_files_share_name must be of type string", "parameters[\"azure_files_share_name\"]");
+                throw new ArgumentException("Bad parameter: azure_files_storage_share_name must be of type string", "parameters[\"azure_files_storage_share_name\"]");
             }
-            if (parameters.ContainsKey("azure_files_sas_token") && !(parameters["azure_files_sas_token"] is string ))
+            if (parameters.ContainsKey("azure_files_storage_sas_token") && !(parameters["azure_files_storage_sas_token"] is string ))
             {
-                throw new ArgumentException("Bad parameter: azure_files_sas_token must be of type string", "parameters[\"azure_files_sas_token\"]");
+                throw new ArgumentException("Bad parameter: azure_files_storage_sas_token must be of type string", "parameters[\"azure_files_storage_sas_token\"]");
             }
             if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string ))
             {
