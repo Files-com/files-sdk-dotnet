@@ -69,7 +69,6 @@
 * `trigger_actions` / `TriggerActions`  (string): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` / `Value`  (object): A Hash of attributes specific to the automation type.
 * `destination` / `Destination`  (string): DEPRECATED: Destination Path. Use `destinations` instead.
-* `cloned_from` / `ClonedFrom`  (Nullable<Int64>): Set to the ID of automation used a clone template. For
 
 
 ---
@@ -147,7 +146,6 @@ Task<Automation> Automation.Create(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `automation` (string): Required - Automation type
-* `cloned_from` (Nullable<Int64>): Set to the ID of automation used a clone template. For
 
 
 ---

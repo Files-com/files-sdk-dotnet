@@ -116,10 +116,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("destination", null);
             }
-            if (!this.attributes.ContainsKey("cloned_from"))
-            {
-                this.attributes.Add("cloned_from", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -356,16 +352,6 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["destination"]; }
             set { attributes["destination"] = value; }
-        }
-
-        /// <summary>
-        /// Set to the ID of automation used a clone template. For
-        /// </summary>
-        [JsonPropertyName("cloned_from")]
-        public Nullable<Int64> ClonedFrom
-        {
-            get { return (Nullable<Int64>) attributes["cloned_from"]; }
-            set { attributes["cloned_from"] = value; }
         }
 
         /// <summary>
@@ -660,7 +646,6 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
         ///   automation (required) - string - Automation type
-        ///   cloned_from - int64 - Set to the ID of automation used a clone template. For
         /// </summary>
         public static async Task<Automation> Create(
             
@@ -738,10 +723,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
-            }
-            if (parameters.ContainsKey("cloned_from") && !(parameters["cloned_from"] is Nullable<Int64> ))
-            {
-                throw new ArgumentException("Bad parameter: cloned_from must be of type Nullable<Int64>", "parameters[\"cloned_from\"]");
             }
             if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
             {

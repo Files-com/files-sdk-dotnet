@@ -100,7 +100,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Preview status.  Can be invalid, not_generated, generating, complete, or file_too_large
+        /// Preview type. Can be image, pdf, pdf_native, video, or audio
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("type")]
@@ -115,9 +115,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("size")]
-        public Nullable<Int64> Size
+        public string Size
         {
-            get { return (Nullable<Int64>) attributes["size"]; }
+            get { return (string) attributes["size"]; }
             private set { attributes["size"] = value; }
         }
 
