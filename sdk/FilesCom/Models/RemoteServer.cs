@@ -204,6 +204,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("private_key", null);
             }
+            if (!this.attributes.ContainsKey("private_key_passphrase"))
+            {
+                this.attributes.Add("private_key_passphrase", null);
+            }
             if (!this.attributes.ContainsKey("ssl_certificate"))
             {
                 this.attributes.Add("ssl_certificate", null);
@@ -703,6 +707,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Passphrase for private key if needed.
+        /// </summary>
+        [JsonPropertyName("private_key_passphrase")]
+        public string PrivateKeyPassphrase
+        {
+            get { return (string) attributes["private_key_passphrase"]; }
+            set { attributes["private_key_passphrase"] = value; }
+        }
+
+        /// <summary>
         /// SSL client certificate.
         /// </summary>
         [JsonPropertyName("ssl_certificate")]
@@ -808,6 +822,7 @@ namespace FilesCom.Models
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
         ///   private_key - string - Private key if needed.
+        ///   private_key_passphrase - string - Passphrase for private key if needed.
         ///   ssl_certificate - string - SSL client certificate.
         ///   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         ///   wasabi_access_key - string - Wasabi access key.
@@ -879,6 +894,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("private_key_passphrase") && !(parameters["private_key_passphrase"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key_passphrase must be of type string", "parameters[\"private_key_passphrase\"]");
             }
             if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string ))
             {
@@ -1186,6 +1205,7 @@ namespace FilesCom.Models
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
         ///   private_key - string - Private key if needed.
+        ///   private_key_passphrase - string - Passphrase for private key if needed.
         ///   ssl_certificate - string - SSL client certificate.
         ///   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         ///   wasabi_access_key - string - Wasabi access key.
@@ -1254,6 +1274,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("private_key_passphrase") && !(parameters["private_key_passphrase"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key_passphrase must be of type string", "parameters[\"private_key_passphrase\"]");
             }
             if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string ))
             {
@@ -1440,6 +1464,7 @@ namespace FilesCom.Models
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
         ///   private_key - string - Private key if needed.
+        ///   private_key_passphrase - string - Passphrase for private key if needed.
         ///   ssl_certificate - string - SSL client certificate.
         ///   google_cloud_storage_credentials_json - string - A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
         ///   wasabi_access_key - string - Wasabi access key.
@@ -1513,6 +1538,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("private_key_passphrase") && !(parameters["private_key_passphrase"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key_passphrase must be of type string", "parameters[\"private_key_passphrase\"]");
             }
             if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string ))
             {

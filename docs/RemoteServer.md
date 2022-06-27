@@ -92,6 +92,7 @@
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
 * `password` / `Password`  (string): Password if needed.
 * `private_key` / `PrivateKey`  (string): Private key if needed.
+* `private_key_passphrase` / `PrivateKeyPassphrase`  (string): Passphrase for private key if needed.
 * `ssl_certificate` / `SslCertificate`  (string): SSL client certificate.
 * `google_cloud_storage_credentials_json` / `GoogleCloudStorageCredentialsJson`  (string): A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `wasabi_secret_key` / `WasabiSecretKey`  (string): Wasabi secret key.
@@ -157,6 +158,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `aws_secret_key` (string): AWS secret key.
 * `password` (string): Password if needed.
 * `private_key` (string): Private key if needed.
+* `private_key_passphrase` (string): Passphrase for private key if needed.
 * `ssl_certificate` (string): SSL client certificate.
 * `google_cloud_storage_credentials_json` (string): A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `wasabi_access_key` (string): Wasabi access key.
@@ -221,6 +223,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `aws_secret_key` (string): AWS secret key.
 * `password` (string): Password if needed.
 * `private_key` (string): Private key if needed.
+* `private_key_passphrase` (string): Passphrase for private key if needed.
 * `ssl_certificate` (string): SSL client certificate.
 * `google_cloud_storage_credentials_json` (string): A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `wasabi_access_key` (string): Wasabi access key.
@@ -335,6 +338,7 @@ RemoteServer.Update(parameters);
 * `aws_secret_key` (string): AWS secret key.
 * `password` (string): Password if needed.
 * `private_key` (string): Private key if needed.
+* `private_key_passphrase` (string): Passphrase for private key if needed.
 * `ssl_certificate` (string): SSL client certificate.
 * `google_cloud_storage_credentials_json` (string): A JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `wasabi_access_key` (string): Wasabi access key.
