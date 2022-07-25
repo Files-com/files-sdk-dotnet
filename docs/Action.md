@@ -29,7 +29,7 @@
 * `display` / `Display`  (string): Friendly displayed output
 * `ip` / `Ip`  (string): IP Address that performed this action
 * `source` / `Source`  (string): The source path for this action, if applicable
-* `targets` / `Targets`  (string[]): Targets
+* `targets` / `Targets`  (object[]): Targets
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `username` / `Username`  (string): Username
 * `action` / `ActionType`  (string): Type of action

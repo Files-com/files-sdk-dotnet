@@ -58,7 +58,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("targets"))
             {
-                this.attributes.Add("targets", new string[0]);
+                this.attributes.Add("targets", new object[0]);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -180,9 +180,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("targets")]
-        public string[] Targets
+        public object[] Targets
         {
-            get { return (string[]) attributes["targets"]; }
+            get { return (object[]) attributes["targets"]; }
             private set { attributes["targets"] = value; }
         }
 
