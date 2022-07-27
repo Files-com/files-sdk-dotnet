@@ -178,6 +178,7 @@
     "dav_permission": true,
     "disabled": true,
     "email": "john.doe@files.com",
+    "first_login_at": "2000-01-01T01:00:00Z",
     "ftp_permission": true,
     "group_ids": "",
     "header_text": "User-specific message.",
@@ -209,6 +210,7 @@
     "externally_managed": true,
     "time_zone": "Pacific Time (US & Canada)",
     "type_of_2fa": "yubi",
+    "updated_at": "2000-01-01T01:00:00Z",
     "user_root": ""
   },
   "user_lockout": true,

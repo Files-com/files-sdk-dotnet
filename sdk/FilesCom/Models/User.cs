@@ -92,6 +92,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", null);
             }
+            if (!this.attributes.ContainsKey("first_login_at"))
+            {
+                this.attributes.Add("first_login_at", null);
+            }
             if (!this.attributes.ContainsKey("ftp_permission"))
             {
                 this.attributes.Add("ftp_permission", null);
@@ -215,6 +219,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("type_of_2fa"))
             {
                 this.attributes.Add("type_of_2fa", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
             }
             if (!this.attributes.ContainsKey("user_root"))
             {
@@ -437,6 +445,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["email"]; }
             set { attributes["email"] = value; }
+        }
+
+        /// <summary>
+        /// User's first login time
+        /// </summary>
+        [JsonPropertyName("first_login_at")]
+        public Nullable<DateTime> FirstLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["first_login_at"]; }
+            set { attributes["first_login_at"] = value; }
         }
 
         /// <summary>
@@ -747,6 +765,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["type_of_2fa"]; }
             set { attributes["type_of_2fa"] = value; }
+        }
+
+        /// <summary>
+        /// User record last updated at.  Note this may be incremented because of internal or external updates.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("updated_at")]
+        public Nullable<DateTime> UpdatedAt
+        {
+            get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
