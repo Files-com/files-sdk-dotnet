@@ -161,6 +161,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("size", null);
             }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
             if (!this.attributes.ContainsKey("mtime"))
             {
                 this.attributes.Add("mtime", null);
@@ -301,6 +305,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["size"]; }
             set { attributes["size"] = value; }
+        }
+
+        /// <summary>
+        /// File created date/time
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
