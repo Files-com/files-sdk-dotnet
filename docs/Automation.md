@@ -43,9 +43,11 @@
   ],
   "webhook_url": "https://app.files.com/api/webhooks/abc123",
   "trigger_actions": [
-    "[ \"create\" ]"
+    "create"
   ],
-  "value": "{\"limit\": \"1\"}"
+  "value": {
+    "limit": "1"
+  }
 }
 ```
 
@@ -218,8 +220,8 @@ parameters.Add("group_ids", [1,2]);
 parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
 parameters.Add("disabled", true);
 parameters.Add("trigger", "realtime");
-parameters.Add("trigger_actions", ["[ \"create\" ]"]);
-parameters.Add("value", "{\"limit\": \"1\"}");
+parameters.Add("trigger_actions", ["create"]);
+parameters.Add("value", {"limit":"1"});
 parameters.Add("automation", "create_folder");
 
 Automation.Update(parameters);
