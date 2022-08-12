@@ -70,7 +70,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("destinations"))
             {
-                this.attributes.Add("destinations", null);
+                this.attributes.Add("destinations", new string[0]);
             }
             if (!this.attributes.ContainsKey("destination_replace_from"))
             {
@@ -106,7 +106,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("trigger_actions"))
             {
-                this.attributes.Add("trigger_actions", null);
+                this.attributes.Add("trigger_actions", new string[0]);
             }
             if (!this.attributes.ContainsKey("value"))
             {
@@ -238,9 +238,9 @@ namespace FilesCom.Models
         /// Destination Path
         /// </summary>
         [JsonPropertyName("destinations")]
-        public string Destinations
+        public string[] Destinations
         {
-            get { return (string) attributes["destinations"]; }
+            get { return (string[]) attributes["destinations"]; }
             set { attributes["destinations"] = value; }
         }
 
@@ -328,9 +328,9 @@ namespace FilesCom.Models
         /// If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         /// </summary>
         [JsonPropertyName("trigger_actions")]
-        public string TriggerActions
+        public string[] TriggerActions
         {
-            get { return (string) attributes["trigger_actions"]; }
+            get { return (string[]) attributes["trigger_actions"]; }
             set { attributes["trigger_actions"] = value; }
         }
 

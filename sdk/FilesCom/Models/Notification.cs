@@ -46,11 +46,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("triggering_group_ids"))
             {
-                this.attributes.Add("triggering_group_ids", null);
+                this.attributes.Add("triggering_group_ids", new Nullable<Int64>[0]);
             }
             if (!this.attributes.ContainsKey("triggering_user_ids"))
             {
-                this.attributes.Add("triggering_user_ids", null);
+                this.attributes.Add("triggering_user_ids", new Nullable<Int64>[0]);
             }
             if (!this.attributes.ContainsKey("trigger_by_share_recipients"))
             {
@@ -178,9 +178,9 @@ namespace FilesCom.Models
         /// Only notify on actions made by a member of one of the specified groups
         /// </summary>
         [JsonPropertyName("triggering_group_ids")]
-        public Nullable<Int64> TriggeringGroupIds
+        public Nullable<Int64>[] TriggeringGroupIds
         {
-            get { return (Nullable<Int64>) attributes["triggering_group_ids"]; }
+            get { return (Nullable<Int64>[]) attributes["triggering_group_ids"]; }
             set { attributes["triggering_group_ids"] = value; }
         }
 
@@ -188,9 +188,9 @@ namespace FilesCom.Models
         /// Only notify on actions made one of the specified users
         /// </summary>
         [JsonPropertyName("triggering_user_ids")]
-        public Nullable<Int64> TriggeringUserIds
+        public Nullable<Int64>[] TriggeringUserIds
         {
-            get { return (Nullable<Int64>) attributes["triggering_user_ids"]; }
+            get { return (Nullable<Int64>[]) attributes["triggering_user_ids"]; }
             set { attributes["triggering_user_ids"] = value; }
         }
 

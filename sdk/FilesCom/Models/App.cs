@@ -54,7 +54,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("screenshot_list_urls"))
             {
-                this.attributes.Add("screenshot_list_urls", null);
+                this.attributes.Add("screenshot_list_urls", new string[0]);
             }
             if (!this.attributes.ContainsKey("logo_thumbnail_url"))
             {
@@ -181,9 +181,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("screenshot_list_urls")]
-        public string ScreenshotListUrls
+        public string[] ScreenshotListUrls
         {
-            get { return (string) attributes["screenshot_list_urls"]; }
+            get { return (string[]) attributes["screenshot_list_urls"]; }
             private set { attributes["screenshot_list_urls"] = value; }
         }
 

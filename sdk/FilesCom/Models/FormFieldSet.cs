@@ -38,11 +38,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("form_layout"))
             {
-                this.attributes.Add("form_layout", null);
+                this.attributes.Add("form_layout", new Nullable<Int64>[0]);
             }
             if (!this.attributes.ContainsKey("form_fields"))
             {
-                this.attributes.Add("form_fields", null);
+                this.attributes.Add("form_fields", new string[0]);
             }
             if (!this.attributes.ContainsKey("skip_name"))
             {
@@ -102,9 +102,9 @@ namespace FilesCom.Models
         /// Layout of the form
         /// </summary>
         [JsonPropertyName("form_layout")]
-        public Nullable<Int64> FormLayout
+        public Nullable<Int64>[] FormLayout
         {
-            get { return (Nullable<Int64>) attributes["form_layout"]; }
+            get { return (Nullable<Int64>[]) attributes["form_layout"]; }
             set { attributes["form_layout"] = value; }
         }
 
@@ -112,9 +112,9 @@ namespace FilesCom.Models
         /// Associated form fields
         /// </summary>
         [JsonPropertyName("form_fields")]
-        public FormField FormFields
+        public string[] FormFields
         {
-            get { return (FormField) attributes["form_fields"]; }
+            get { return (string[]) attributes["form_fields"]; }
             set { attributes["form_fields"] = value; }
         }
 

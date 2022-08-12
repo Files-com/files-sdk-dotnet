@@ -15,7 +15,7 @@
   "deleted_files_counted_in_minimum": "65536",
   "root_storage": "65536",
   "usage_by_top_level_dir": [
-
+    ""
   ]
 }
 ```
@@ -30,7 +30,7 @@
 * `deleted_files_storage` / `DeletedFilesStorage`  (Nullable<Int64>): GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
 * `deleted_files_counted_in_minimum` / `DeletedFilesCountedInMinimum`  (Nullable<Int64>): GB of Files Native Storage used on this day for files that have been permanently deleted but were uploaded less than 30 days ago, and are still billable.
 * `root_storage` / `RootStorage`  (Nullable<Int64>): GB of Files Native Storage used for the root folder.  Included here because this value will not be part of `usage_by_top_level_dir`
-* `usage_by_top_level_dir` / `UsageByTopLevelDir`  (string[]): Usage broken down by each top-level folder
+* `usage_by_top_level_dir` / `UsageByTopLevelDir`  (object[][]): Usage broken down by each top-level folder
 
 
 ---

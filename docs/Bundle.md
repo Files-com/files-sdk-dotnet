@@ -8,6 +8,7 @@
   "url": "https://subdomain.files.com/f/12345678",
   "description": "The public description of the bundle.",
   "password_protected": true,
+  "permissions": "read",
   "preview_only": true,
   "require_registration": true,
   "require_share_recipient": true,
@@ -21,20 +22,22 @@
       3,
       4
     ],
-    "form_fields": {
-      "id": 1,
-      "label": "Sample Label",
-      "required": true,
-      "help_text": "Help Text",
-      "field_type": "text",
-      "options_for_select": [
-        "red",
-        "green",
-        "blue"
-      ],
-      "default_option": "red",
-      "form_field_set_id": 1
-    },
+    "form_fields": [
+      {
+        "id": 1,
+        "label": "Sample Label",
+        "required": true,
+        "help_text": "Help Text",
+        "field_type": "text",
+        "options_for_select": [
+          "red",
+          "green",
+          "blue"
+        ],
+        "default_option": "red",
+        "form_field_set_id": 1
+      }
+    ],
     "skip_name": true,
     "skip_email": true,
     "skip_company": true
@@ -67,6 +70,7 @@
 * `url` / `Url`  (string): Public URL of Share Link
 * `description` / `Description`  (string): Public description
 * `password_protected` / `PasswordProtected`  (bool): Is this bundle password protected?
+* `permissions` / `Permissions`  (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` / `PreviewOnly`  (bool): Restrict users to previewing files only?
 * `require_registration` / `RequireRegistration`  (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` / `RequireShareRecipient`  (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
@@ -160,6 +164,7 @@ Task<Bundle> Bundle.Create(
 * `description` (string): Public description
 * `note` (string): Bundle internal note
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `permissions` (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
@@ -216,6 +221,7 @@ Task<Bundle> Bundle.Update(
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note
+* `permissions` (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
@@ -286,6 +292,7 @@ parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("inbox_id", 1);
 parameters.Add("max_uses", 1);
 parameters.Add("note", "The internal note on the bundle.");
+parameters.Add("permissions", "read");
 parameters.Add("preview_only", true);
 parameters.Add("require_registration", true);
 parameters.Add("require_share_recipient", true);
@@ -310,6 +317,7 @@ Bundle.Update(parameters);
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note
+* `permissions` (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?

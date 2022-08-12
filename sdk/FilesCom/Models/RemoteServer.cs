@@ -60,6 +60,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("max_connections", null);
             }
+            if (!this.attributes.ContainsKey("pin_to_site_region"))
+            {
+                this.attributes.Add("pin_to_site_region", null);
+            }
+            if (!this.attributes.ContainsKey("pinned_region"))
+            {
+                this.attributes.Add("pinned_region", null);
+            }
             if (!this.attributes.ContainsKey("s3_bucket"))
             {
                 this.attributes.Add("s3_bucket", null);
@@ -344,6 +352,26 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["max_connections"]; }
             set { attributes["max_connections"] = value; }
+        }
+
+        /// <summary>
+        /// If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
+        /// </summary>
+        [JsonPropertyName("pin_to_site_region")]
+        public bool PinToSiteRegion
+        {
+            get { return (bool) attributes["pin_to_site_region"]; }
+            set { attributes["pin_to_site_region"] = value; }
+        }
+
+        /// <summary>
+        /// If set, all communciations with this remote server are made through the provided region.
+        /// </summary>
+        [JsonPropertyName("pinned_region")]
+        public string PinnedRegion
+        {
+            get { return (string) attributes["pinned_region"]; }
+            set { attributes["pinned_region"] = value; }
         }
 
         /// <summary>
@@ -836,6 +864,7 @@ namespace FilesCom.Models
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
+        ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
         ///   port - int64 - Port for remote server.  Not needed for S3.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_region - string - S3 region
@@ -950,6 +979,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("max_connections") && !(parameters["max_connections"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: max_connections must be of type Nullable<Int64>", "parameters[\"max_connections\"]");
+            }
+            if (parameters.ContainsKey("pin_to_site_region") && !(parameters["pin_to_site_region"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: pin_to_site_region must be of type bool", "parameters[\"pin_to_site_region\"]");
             }
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64> ))
             {
@@ -1219,6 +1252,7 @@ namespace FilesCom.Models
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
+        ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
         ///   port - int64 - Port for remote server.  Not needed for S3.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_region - string - S3 region
@@ -1330,6 +1364,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("max_connections") && !(parameters["max_connections"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: max_connections must be of type Nullable<Int64>", "parameters[\"max_connections\"]");
+            }
+            if (parameters.ContainsKey("pin_to_site_region") && !(parameters["pin_to_site_region"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: pin_to_site_region must be of type bool", "parameters[\"pin_to_site_region\"]");
             }
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64> ))
             {
@@ -1478,6 +1516,7 @@ namespace FilesCom.Models
         ///   hostname - string - Hostname or IP address
         ///   name - string - Internal name for your reference
         ///   max_connections - int64 - Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
+        ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
         ///   port - int64 - Port for remote server.  Not needed for S3.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_region - string - S3 region
@@ -1594,6 +1633,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("max_connections") && !(parameters["max_connections"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: max_connections must be of type Nullable<Int64>", "parameters[\"max_connections\"]");
+            }
+            if (parameters.ContainsKey("pin_to_site_region") && !(parameters["pin_to_site_region"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: pin_to_site_region must be of type bool", "parameters[\"pin_to_site_region\"]");
             }
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64> ))
             {

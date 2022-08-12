@@ -10,25 +10,29 @@
   "created_at": "2000-01-01T01:00:00Z",
   "currency": "USD",
   "download_uri": "https://url...",
-  "invoice_line_items": {
-    "amount": 1.0,
-    "created_at": "2000-01-01T01:00:00Z",
-    "description": "Service from 2019-01-01 through 2019-12-31",
-    "type": "invoice",
-    "service_end_at": "2000-01-01T01:00:00Z",
-    "service_start_at": "2000-01-01T01:00:00Z",
-    "updated_at": "2000-01-01T01:00:00Z",
-    "plan": "Enterprise",
-    "site": "My site"
-  },
+  "invoice_line_items": [
+    {
+      "amount": 1.0,
+      "created_at": "2000-01-01T01:00:00Z",
+      "description": "Service from 2019-01-01 through 2019-12-31",
+      "type": "invoice",
+      "service_end_at": "2000-01-01T01:00:00Z",
+      "service_start_at": "2000-01-01T01:00:00Z",
+      "updated_at": "2000-01-01T01:00:00Z",
+      "plan": "Premier",
+      "site": "My site"
+    }
+  ],
   "method": "paypal",
-  "payment_line_items": {
-    "amount": 1.0,
-    "created_at": "2000-01-01T01:00:00Z",
-    "invoice_id": 1,
-    "payment_id": 1,
-    "updated_at": "2000-01-01T01:00:00Z"
-  },
+  "payment_line_items": [
+    {
+      "amount": 1.0,
+      "created_at": "2000-01-01T01:00:00Z",
+      "invoice_id": 1,
+      "payment_id": 1,
+      "updated_at": "2000-01-01T01:00:00Z"
+    }
+  ],
   "payment_reversed_at": "2000-01-01T01:00:00Z",
   "payment_type": "",
   "site_name": "My Site",
@@ -43,9 +47,9 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Line item created at
 * `currency` / `Currency`  (string): Line item currency
 * `download_uri` / `DownloadUri`  (string): Line item download uri
-* `invoice_line_items` / `InvoiceLineItems`  (InvoiceLineItem): Associated invoice line items
+* `invoice_line_items` / `InvoiceLineItems`  (string[]): Associated invoice line items
 * `method` / `Method`  (string): Line item payment method
-* `payment_line_items` / `PaymentLineItems`  (PaymentLineItem): Associated payment line items
+* `payment_line_items` / `PaymentLineItems`  (string[]): Associated payment line items
 * `payment_reversed_at` / `PaymentReversedAt`  (Nullable<DateTime>): Date/time payment was reversed if applicable
 * `payment_type` / `PaymentType`  (string): Type of payment if applicable
 * `site_name` / `SiteName`  (string): Site name this line item is for

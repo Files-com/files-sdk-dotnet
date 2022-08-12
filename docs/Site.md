@@ -112,6 +112,7 @@
   "password_requirements_apply_to_bundles": true,
   "password_validity_days": 1,
   "phone": "555-555-5555",
+  "pin_all_remote_servers_to_site_region": true,
   "require_2fa": true,
   "require_2fa_stop_time": "2000-01-01T01:00:00Z",
   "require_2fa_user_type": "`site_admins`",
@@ -218,6 +219,7 @@
   "user_lockout_tries": 1,
   "user_lockout_within": 6,
   "user_requests_enabled": true,
+  "user_requests_notify_admins": true,
   "welcome_custom_text": "Welcome to my site!",
   "welcome_email_cc": "",
   "welcome_email_subject": "",
@@ -318,6 +320,7 @@
 * `password_requirements_apply_to_bundles` / `PasswordRequirementsApplyToBundles`  (bool): Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
 * `password_validity_days` / `PasswordValidityDays`  (Nullable<Int64>): Number of days password is valid
 * `phone` / `Phone`  (string): Site phone number
+* `pin_all_remote_servers_to_site_region` / `PinAllRemoteServersToSiteRegion`  (bool): If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
 * `require_2fa` / `Require2fa`  (bool): Require two-factor authentication for all users?
 * `require_2fa_stop_time` / `Require2faStopTime`  (Nullable<DateTime>): If set, requirement for two-factor authentication has been scheduled to end on this date-time.
 * `require_2fa_user_type` / `Require2faUserType`  (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
@@ -350,6 +353,7 @@
 * `user_lockout_tries` / `UserLockoutTries`  (Nullable<Int64>): Number of login tries within `user_lockout_within` hours before users are locked out
 * `user_lockout_within` / `UserLockoutWithin`  (Nullable<Int64>): Number of hours for user lockout window
 * `user_requests_enabled` / `UserRequestsEnabled`  (bool): Enable User Requests feature
+* `user_requests_notify_admins` / `UserRequestsNotifyAdmins`  (bool): Send email to site admins when a user request is received?
 * `welcome_custom_text` / `WelcomeCustomText`  (string): Custom text send in user welcome email
 * `welcome_email_cc` / `WelcomeEmailCc`  (string): Include this email in welcome emails if enabled
 * `welcome_email_subject` / `WelcomeEmailSubject`  (string): Include this email subject in welcome emails if enabled
@@ -427,6 +431,7 @@ Task<Site> Site.Update(
 * `folder_permissions_groups_only` (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
 * `welcome_screen` (string): Does the welcome screen appear?
 * `office_integration_available` (bool): Allow users to use Office for the web?
+* `pin_all_remote_servers_to_site_region` (bool): If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
@@ -463,6 +468,7 @@ Task<Site> Site.Update(
 * `non_sso_users_allowed` (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
 * `sharing_enabled` (bool): Allow bundle creation
 * `user_requests_enabled` (bool): Enable User Requests feature
+* `user_requests_notify_admins` (bool): Send email to site admins when a user request is received?
 * `ftp_enabled` (bool): Is FTP enabled?
 * `sftp_enabled` (bool): Is SFTP enabled?
 * `allowed_2fa_method_sms` (bool): Is SMS two factor authentication allowed?

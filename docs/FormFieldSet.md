@@ -12,20 +12,22 @@
     3,
     4
   ],
-  "form_fields": {
-    "id": 1,
-    "label": "Sample Label",
-    "required": true,
-    "help_text": "Help Text",
-    "field_type": "text",
-    "options_for_select": [
-      "red",
-      "green",
-      "blue"
-    ],
-    "default_option": "red",
-    "form_field_set_id": 1
-  },
+  "form_fields": [
+    {
+      "id": 1,
+      "label": "Sample Label",
+      "required": true,
+      "help_text": "Help Text",
+      "field_type": "text",
+      "options_for_select": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "default_option": "red",
+      "form_field_set_id": 1
+    }
+  ],
   "skip_name": true,
   "skip_email": true,
   "skip_company": true
@@ -34,8 +36,8 @@
 
 * `id` / `Id`  (Nullable<Int64>): Form field set id
 * `title` / `Title`  (string): Title to be displayed
-* `form_layout` / `FormLayout`  (Nullable<Int64>): Layout of the form
-* `form_fields` / `FormFields`  (FormField): Associated form fields
+* `form_layout` / `FormLayout`  (Nullable<Int64>[]): Layout of the form
+* `form_fields` / `FormFields`  (string[]): Associated form fields
 * `skip_name` / `SkipName`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
 * `skip_email` / `SkipEmail`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing email
 * `skip_company` / `SkipCompany`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing company
@@ -152,7 +154,7 @@ parameters.Add("title", "Sample Form Title");
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
 parameters.Add("skip_company", true);
-parameters.Add("form_fields", {"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1});
+parameters.Add("form_fields", [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}]);
 
 FormFieldSet.Update(parameters);
 ```

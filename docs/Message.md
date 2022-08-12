@@ -7,21 +7,25 @@
   "id": 1,
   "subject": "Files.com Account Upgrade",
   "body": "We should upgrade our Files.com account!",
-  "comments": {
-    "id": 1,
-    "body": "What a great idea, thank you!",
-    "reactions": {
+  "comments": [
+    {
       "id": 1,
-      "emoji": "👍"
+      "body": "What a great idea, thank you!",
+      "reactions": [
+        {
+          "id": 1,
+          "emoji": "👍"
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Message ID
 * `subject` / `Subject`  (string): Message subject.
 * `body` / `Body`  (string): Message body.
-* `comments` / `Comments`  (MessageComment): Comments.
+* `comments` / `Comments`  (string[]): Comments.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `project_id` / `ProjectId`  (Nullable<Int64>): Project to which the message should be attached.
 

@@ -6,25 +6,19 @@
 {
   "id": 1,
   "name": "owners",
-  "admin_ids": [
-    1
-  ],
+  "admin_ids": "1",
   "notes": "",
-  "user_ids": [
-    1
-  ],
-  "usernames": [
-    "user"
-  ]
+  "user_ids": "1",
+  "usernames": "user"
 }
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Group ID
 * `name` / `Name`  (string): Group name
-* `admin_ids` / `AdminIds`  (string): List of user IDs who are group administrators (separated by commas)
+* `admin_ids` / `AdminIds`  (string): Comma-delimited list of user IDs who are group administrators (separated by commas)
 * `notes` / `Notes`  (string): Notes about this group
-* `user_ids` / `UserIds`  (Nullable<Int64>[]): List of user IDs who belong to this group (separated by commas)
-* `usernames` / `Usernames`  (string[]): List of usernames who belong to this group (separated by commas)
+* `user_ids` / `UserIds`  (string): Comma-delimited list of user IDs who belong to this group (separated by commas)
+* `usernames` / `Usernames`  (string): Comma-delimited list of usernames who belong to this group (separated by commas)
 
 
 ---
@@ -138,8 +132,8 @@ var Group = Group.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "owners");
-parameters.Add("user_ids", [1]);
-parameters.Add("admin_ids", [1]);
+parameters.Add("user_ids", "1");
+parameters.Add("admin_ids", "1");
 
 Group.Update(parameters);
 ```

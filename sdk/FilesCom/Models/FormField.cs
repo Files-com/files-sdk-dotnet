@@ -50,7 +50,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("options_for_select"))
             {
-                this.attributes.Add("options_for_select", null);
+                this.attributes.Add("options_for_select", new string[0]);
             }
             if (!this.attributes.ContainsKey("default_option"))
             {
@@ -138,9 +138,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("options_for_select")]
-        public string OptionsForSelect
+        public string[] OptionsForSelect
         {
-            get { return (string) attributes["options_for_select"]; }
+            get { return (string[]) attributes["options_for_select"]; }
             private set { attributes["options_for_select"] = value; }
         }
 

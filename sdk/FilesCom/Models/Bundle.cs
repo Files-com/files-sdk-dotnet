@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("password_protected", null);
             }
+            if (!this.attributes.ContainsKey("permissions"))
+            {
+                this.attributes.Add("permissions", null);
+            }
             if (!this.attributes.ContainsKey("preview_only"))
             {
                 this.attributes.Add("preview_only", null);
@@ -200,6 +204,16 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["password_protected"]; }
             set { attributes["password_protected"] = value; }
+        }
+
+        /// <summary>
+        /// Permissions that apply to Folders in this Share Link.
+        /// </summary>
+        [JsonPropertyName("permissions")]
+        public string Permissions
+        {
+            get { return (string) attributes["permissions"]; }
+            set { attributes["permissions"] = value; }
         }
 
         /// <summary>
@@ -508,6 +522,7 @@ namespace FilesCom.Models
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
+        ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
@@ -568,6 +583,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
             {
                 throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+            }
+            if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: permissions must be of type string", "parameters[\"permissions\"]");
             }
             if (parameters.ContainsKey("preview_only") && !(parameters["preview_only"] is bool ))
             {
@@ -780,6 +799,7 @@ namespace FilesCom.Models
         ///   description - string - Public description
         ///   note - string - Bundle internal note
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
@@ -834,6 +854,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("code") && !(parameters["code"] is string ))
             {
                 throw new ArgumentException("Bad parameter: code must be of type string", "parameters[\"code\"]");
+            }
+            if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: permissions must be of type string", "parameters[\"permissions\"]");
             }
             if (parameters.ContainsKey("preview_only") && !(parameters["preview_only"] is bool ))
             {
@@ -939,6 +963,7 @@ namespace FilesCom.Models
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
+        ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
@@ -1001,6 +1026,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
             {
                 throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+            }
+            if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: permissions must be of type string", "parameters[\"permissions\"]");
             }
             if (parameters.ContainsKey("preview_only") && !(parameters["preview_only"] is bool ))
             {

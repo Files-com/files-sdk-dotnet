@@ -14,7 +14,7 @@
 }
 ```
 
-* `changes` / `Changes`  (string): Markdown-formatted change messages.
+* `changes` / `Changes`  (string[]): Markdown-formatted change messages.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): The time this change was made
 * `user_id` / `UserId`  (Nullable<Int64>): The user id responsible for this change
 * `user_is_files_support` / `UserIsFilesSupport`  (bool): true if this change was performed by Files.com support.

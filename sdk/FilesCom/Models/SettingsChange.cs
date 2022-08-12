@@ -30,7 +30,7 @@ namespace FilesCom.Models
 
             if (!this.attributes.ContainsKey("changes"))
             {
-                this.attributes.Add("changes", null);
+                this.attributes.Add("changes", new string[0]);
             }
             if (!this.attributes.ContainsKey("created_at"))
             {
@@ -71,9 +71,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("changes")]
-        public string Changes
+        public string[] Changes
         {
-            get { return (string) attributes["changes"]; }
+            get { return (string[]) attributes["changes"]; }
             private set { attributes["changes"] = value; }
         }
 

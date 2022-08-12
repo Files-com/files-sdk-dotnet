@@ -46,11 +46,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("user_ids"))
             {
-                this.attributes.Add("user_ids", new Nullable<Int64>[0]);
+                this.attributes.Add("user_ids", null);
             }
             if (!this.attributes.ContainsKey("usernames"))
             {
-                this.attributes.Add("usernames", new string[0]);
+                this.attributes.Add("usernames", null);
             }
         }
 
@@ -91,7 +91,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// List of user IDs who are group administrators (separated by commas)
+        /// Comma-delimited list of user IDs who are group administrators (separated by commas)
         /// </summary>
         [JsonPropertyName("admin_ids")]
         public string AdminIds
@@ -111,22 +111,22 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// List of user IDs who belong to this group (separated by commas)
+        /// Comma-delimited list of user IDs who belong to this group (separated by commas)
         /// </summary>
         [JsonPropertyName("user_ids")]
-        public Nullable<Int64>[] UserIds
+        public string UserIds
         {
-            get { return (Nullable<Int64>[]) attributes["user_ids"]; }
+            get { return (string) attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
 
         /// <summary>
-        /// List of usernames who belong to this group (separated by commas)
+        /// Comma-delimited list of usernames who belong to this group (separated by commas)
         /// </summary>
         [JsonPropertyName("usernames")]
-        public string[] Usernames
+        public string Usernames
         {
-            get { return (string[]) attributes["usernames"]; }
+            get { return (string) attributes["usernames"]; }
             set { attributes["usernames"] = value; }
         }
 
