@@ -11,7 +11,7 @@ namespace files_cli
 
         public static IEnumerable<ConsoleCommand> GetCommands()
         {
-            return ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(FilesCom));
+            return ConsoleCommandDispatcher.FindCommandsInSameAssemblyAs(typeof(Files));
         }
 
         public static int Main(string[] args)
