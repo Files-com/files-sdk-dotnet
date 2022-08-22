@@ -27,7 +27,6 @@ We are open to adding support for additional frameworks where we can.  Please se
 
 ## Usage
 
-
 ### Authentication
 
 There are multiple ways to authenticate to the API.
