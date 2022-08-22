@@ -711,7 +711,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{Uri.EscapeDataString(attributes["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(attributes["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
         }
@@ -779,7 +779,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
         }
@@ -815,7 +815,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{Uri.EscapeDataString(parameters["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
         }

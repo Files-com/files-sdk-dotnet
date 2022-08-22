@@ -243,7 +243,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }
@@ -298,7 +298,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Lock[]>(responseJson);
         }
@@ -347,7 +347,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }
@@ -384,7 +384,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }

@@ -173,7 +173,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }
@@ -217,7 +217,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }
@@ -375,7 +375,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }
@@ -421,7 +421,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }

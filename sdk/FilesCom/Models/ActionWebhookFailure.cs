@@ -66,7 +66,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_webhook_failures/{Uri.EscapeDataString(attributes["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/action_webhook_failures/{System.Uri.EscapeDataString(attributes["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<ActionWebhookFailure>(responseJson);
         }
@@ -96,7 +96,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_webhook_failures/{Uri.EscapeDataString(parameters["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendRequest($"/action_webhook_failures/{System.Uri.EscapeDataString(parameters["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<ActionWebhookFailure>(responseJson);
         }

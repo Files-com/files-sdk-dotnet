@@ -70,7 +70,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
             {
-                this.attributes.Add("usage_by_top_level_dir", new object[][0]);
+                this.attributes.Add("usage_by_top_level_dir", null);
             }
         }
 
@@ -205,9 +205,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("usage_by_top_level_dir")]
-        public object[][] UsageByTopLevelDir
+        public object UsageByTopLevelDir
         {
-            get { return (object[][]) attributes["usage_by_top_level_dir"]; }
+            get { return (object) attributes["usage_by_top_level_dir"]; }
             private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
