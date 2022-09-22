@@ -36,6 +36,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("descriptive_label", null);
             }
+            if (!this.attributes.ContainsKey("description"))
+            {
+                this.attributes.Add("description", null);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -108,6 +112,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["descriptive_label"]; }
             set { attributes["descriptive_label"] = value; }
+        }
+
+        /// <summary>
+        /// User-supplied description of API key.
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description
+        {
+            get { return (string) attributes["description"]; }
+            set { attributes["description"] = value; }
         }
 
         /// <summary>
@@ -204,6 +218,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - Internal name for the API Key.  For your use.
+        ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
@@ -222,6 +237,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
@@ -421,6 +440,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   name - string - Internal name for the API Key.  For your use.
+        ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   path - string - Folder path restriction for this api key.
@@ -441,6 +461,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
@@ -498,6 +522,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - Internal name for the API Key.  For your use.
+        ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
@@ -518,6 +543,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
