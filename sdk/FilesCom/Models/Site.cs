@@ -324,6 +324,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("max_prior_passwords", null);
             }
+            if (!this.attributes.ContainsKey("motd_text"))
+            {
+                this.attributes.Add("motd_text", null);
+            }
+            if (!this.attributes.ContainsKey("motd_use_for_ftp"))
+            {
+                this.attributes.Add("motd_use_for_ftp", null);
+            }
+            if (!this.attributes.ContainsKey("motd_use_for_sftp"))
+            {
+                this.attributes.Add("motd_use_for_sftp", null);
+            }
             if (!this.attributes.ContainsKey("next_billing_amount"))
             {
                 this.attributes.Add("next_billing_amount", null);
@@ -1389,6 +1401,39 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// A message to show users when they connect via FTP or SFTP.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("motd_text")]
+        public string MotdText
+        {
+            get { return (string) attributes["motd_text"]; }
+            private set { attributes["motd_text"] = value; }
+        }
+
+        /// <summary>
+        /// Show message to users connecting via FTP
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("motd_use_for_ftp")]
+        public bool MotdUseForFtp
+        {
+            get { return (bool) attributes["motd_use_for_ftp"]; }
+            private set { attributes["motd_use_for_ftp"] = value; }
+        }
+
+        /// <summary>
+        /// Show message to users connecting via SFTP
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("motd_use_for_sftp")]
+        public bool MotdUseForSftp
+        {
+            get { return (bool) attributes["motd_use_for_sftp"]; }
+            private set { attributes["motd_use_for_sftp"] = value; }
+        }
+
+        /// <summary>
         /// Next billing amount
         /// </summary>
         [JsonInclude]
@@ -2095,6 +2140,9 @@ namespace FilesCom.Models
         ///   welcome_screen - string - Does the welcome screen appear?
         ///   office_integration_available - boolean - Allow users to use Office for the web?
         ///   pin_all_remote_servers_to_site_region - boolean - If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
+        ///   motd_text - string - A message to show users when they connect via FTP or SFTP.
+        ///   motd_use_for_ftp - boolean - Show message to users connecting via FTP
+        ///   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
@@ -2314,6 +2362,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("pin_all_remote_servers_to_site_region") && !(parameters["pin_all_remote_servers_to_site_region"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: pin_all_remote_servers_to_site_region must be of type bool", "parameters[\"pin_all_remote_servers_to_site_region\"]");
+            }
+            if (parameters.ContainsKey("motd_text") && !(parameters["motd_text"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: motd_text must be of type string", "parameters[\"motd_text\"]");
+            }
+            if (parameters.ContainsKey("motd_use_for_ftp") && !(parameters["motd_use_for_ftp"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: motd_use_for_ftp must be of type bool", "parameters[\"motd_use_for_ftp\"]");
+            }
+            if (parameters.ContainsKey("motd_use_for_sftp") && !(parameters["motd_use_for_sftp"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: motd_use_for_sftp must be of type bool", "parameters[\"motd_use_for_sftp\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double ))
             {

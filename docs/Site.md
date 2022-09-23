@@ -96,6 +96,9 @@
     "uri": "https://mysite.files.com/.../my_image.png"
   },
   "max_prior_passwords": 1,
+  "motd_text": "",
+  "motd_use_for_ftp": true,
+  "motd_use_for_sftp": true,
   "next_billing_amount": 1.0,
   "next_billing_date": "Apr 20",
   "office_integration_available": true,
@@ -305,6 +308,9 @@
 * `login_help_text` / `LoginHelpText`  (string): Login help text
 * `logo` / `Logo`  (Image): Branded logo
 * `max_prior_passwords` / `MaxPriorPasswords`  (Nullable<Int64>): Number of prior passwords to disallow
+* `motd_text` / `MotdText`  (string): A message to show users when they connect via FTP or SFTP.
+* `motd_use_for_ftp` / `MotdUseForFtp`  (bool): Show message to users connecting via FTP
+* `motd_use_for_sftp` / `MotdUseForSftp`  (bool): Show message to users connecting via SFTP
 * `next_billing_amount` / `NextBillingAmount`  (double): Next billing amount
 * `next_billing_date` / `NextBillingDate`  (string): Next billing date
 * `office_integration_available` / `OfficeIntegrationAvailable`  (bool): Allow users to use Office for the web?
@@ -434,6 +440,9 @@ Task<Site> Site.Update(
 * `welcome_screen` (string): Does the welcome screen appear?
 * `office_integration_available` (bool): Allow users to use Office for the web?
 * `pin_all_remote_servers_to_site_region` (bool): If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
+* `motd_text` (string): A message to show users when they connect via FTP or SFTP.
+* `motd_use_for_ftp` (bool): Show message to users connecting via FTP
+* `motd_use_for_sftp` (bool): Show message to users connecting via SFTP
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
