@@ -7,9 +7,9 @@
   "id": 1,
   "name": "owners",
   "admin_ids": "1",
-  "notes": "",
+  "notes": "example",
   "user_ids": "1",
-  "usernames": "user"
+  "usernames": "example"
 }
 ```
 
@@ -132,6 +132,7 @@ var Group = Group.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "owners");
+parameters.Add("notes", "example");
 parameters.Add("user_ids", "1");
 parameters.Add("admin_ids", "1");
 

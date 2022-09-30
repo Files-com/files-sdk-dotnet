@@ -7,7 +7,7 @@
   "code": 200,
   "message": "",
   "status": "",
-  "data": "",
+  "data": "example",
   "success": true
 }
 ```

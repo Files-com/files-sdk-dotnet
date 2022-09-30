@@ -16,7 +16,7 @@
   "pinned_region": "us-east-1",
   "s3_bucket": "my-bucket",
   "s3_region": "us-east-1",
-  "aws_access_key": "",
+  "aws_access_key": "example",
   "server_certificate": "require_match",
   "server_host_key": "[public key]",
   "server_type": "s3",
@@ -28,7 +28,7 @@
   "backblaze_b2_bucket": "my-bucket",
   "wasabi_bucket": "my-bucket",
   "wasabi_region": "us-west-1",
-  "wasabi_access_key": "",
+  "wasabi_access_key": "example",
   "rackspace_username": "rackspaceuser",
   "rackspace_region": "dfw",
   "rackspace_container": "my-container",
@@ -45,7 +45,7 @@
   "s3_compatible_bucket": "my-bucket",
   "s3_compatible_endpoint": "mys3platform.com",
   "s3_compatible_region": "us-east-1",
-  "s3_compatible_access_key": "",
+  "s3_compatible_access_key": "example",
   "enable_dedicated_ips": true
 }
 ```
@@ -301,6 +301,8 @@ var RemoteServer = RemoteServer.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("aws_access_key", "example");
+parameters.Add("wasabi_access_key", "example");
 parameters.Add("reset_authentication", true);
 parameters.Add("hostname", "remote-server.com");
 parameters.Add("name", "My Remote server");
@@ -334,6 +336,7 @@ parameters.Add("s3_compatible_bucket", "my-bucket");
 parameters.Add("s3_compatible_endpoint", "mys3platform.com");
 parameters.Add("s3_compatible_region", "us-east-1");
 parameters.Add("enable_dedicated_ips", true);
+parameters.Add("s3_compatible_access_key", "example");
 
 RemoteServer.Update(parameters);
 ```

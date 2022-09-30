@@ -5,11 +5,11 @@
 ```
 {
   "id": 1,
-  "path": "",
-  "source": "",
-  "destination": "",
-  "automation_id": "",
-  "user_display_name": ""
+  "path": "example",
+  "source": "example",
+  "destination": "example",
+  "automation_id": "example",
+  "user_display_name": "example"
 }
 ```
 

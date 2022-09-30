@@ -7,9 +7,9 @@
   "id": 1,
   "name": "Example Site NDA for Files.com Use",
   "body": "[Legal body text]",
-  "use_with_users": "",
-  "use_with_bundles": "",
-  "use_with_inboxes": ""
+  "use_with_users": "example",
+  "use_with_bundles": "example",
+  "use_with_inboxes": "example"
 }
 ```
 
@@ -127,6 +127,9 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Example Site NDA for Files.com Use");
 parameters.Add("body", "[Legal body text]");
+parameters.Add("use_with_bundles", "example");
+parameters.Add("use_with_inboxes", "example");
+parameters.Add("use_with_users", "example");
 
 Clickwrap.Update(parameters);
 ```

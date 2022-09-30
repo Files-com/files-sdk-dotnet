@@ -6,7 +6,7 @@
 {
   "id": 1,
   "descriptive_label": "Site-wide API key for https://site.files.com/ (key ID #1)",
-  "description": "",
+  "description": "example",
   "created_at": "2000-01-01T01:00:00Z",
   "expires_at": "2000-01-01T01:00:00Z",
   "key": "[key]",
@@ -191,6 +191,7 @@ var ApiKey = ApiKey.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "My Main API Key");
+parameters.Add("description", "example");
 parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("permission_set", "full");
 

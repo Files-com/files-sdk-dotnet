@@ -11,27 +11,16 @@
   "trigger": "realtime",
   "interval": "week",
   "last_modified_at": "2000-01-01T01:00:00Z",
-  "name": "",
-  "schedule": {
-    "days_of_week": [
-      0,
-      2,
-      4
-    ],
-    "times_of_day": [
-      "6:30",
-      "14:30"
-    ],
-    "time_zone": "Eastern Time (US & Canada)"
-  },
-  "source": "",
+  "name": "example",
+  "schedule": "example",
+  "source": "example",
   "destinations": [
     "destination"
   ],
-  "destination_replace_from": "",
-  "destination_replace_to": "",
-  "description": "",
-  "path": "",
+  "destination_replace_from": "example",
+  "destination_replace_to": "example",
+  "description": "example",
+  "path": "example",
   "user_id": 1,
   "user_ids": [
     1,
@@ -213,12 +202,17 @@ var Automation = Automation.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("source", "source");
-parameters.Add("destinations", "[\"folder_a/file_a.txt\", {\"folder_path\":\"folder_b\", \"file_path\":\"file_b.txt\"}, {\"folder_path\":\"folder_c\"}]");
+parameters.Add("destinations", ["folder_a/file_a.txt",{"folder_path":"folder_b","file_path":"file_b.txt"},{"folder_path":"folder_c"}]);
+parameters.Add("destination_replace_from", "example");
+parameters.Add("destination_replace_to", "example");
 parameters.Add("interval", "year");
+parameters.Add("path", "example");
 parameters.Add("user_ids", [1,2]);
 parameters.Add("group_ids", [1,2]);
-parameters.Add("schedule", "{\"days_of_week\": [ 0, 1, 3 ], \"times_of_day\": [ \"7:30\", \"11:30\" ], \"time_zone\": \"Eastern Time (US & Canada)\"}");
+parameters.Add("schedule", {"days_of_week":[0,1,3],"times_of_day":["7:30","11:30"],"time_zone":"Eastern Time (US & Canada)"});
+parameters.Add("description", "example");
 parameters.Add("disabled", true);
+parameters.Add("name", "example");
 parameters.Add("trigger", "realtime");
 parameters.Add("trigger_actions", ["create"]);
 parameters.Add("value", {"limit":"1"});

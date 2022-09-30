@@ -5,9 +5,9 @@
 ```
 {
   "id": 1,
-  "name": "",
-  "fingerprint_md5": "",
-  "fingerprint_sha256": ""
+  "name": "example",
+  "fingerprint_md5": "example",
+  "fingerprint_sha256": "example"
 }
 ```
 
@@ -116,8 +116,7 @@ var SftpHostKey = SftpHostKey.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("name", "");
-parameters.Add("private_key", "");
+parameters.Add("name", "example");
 
 SftpHostKey.Update(parameters);
 ```

@@ -5,13 +5,13 @@
 ```
 {
   "id": 1,
-  "path": "",
-  "attachment_url": "",
+  "path": "example",
+  "attachment_url": "example",
   "behavior": "webhook",
-  "name": "",
-  "description": "",
+  "name": "example",
+  "description": "example",
   "value": {
-    "method": "GET"
+    "key": "example value"
   }
 }
 ```
@@ -193,7 +193,10 @@ var Behavior = Behavior.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("value", "{\"method\": \"GET\"}");
+parameters.Add("name", "example");
+parameters.Add("description", "example");
 parameters.Add("behavior", "webhook");
+parameters.Add("path", "example");
 parameters.Add("attachment_delete", true);
 
 Behavior.Update(parameters);

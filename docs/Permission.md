@@ -5,11 +5,11 @@
 ```
 {
   "id": 1,
-  "path": "",
+  "path": "example",
   "user_id": 1,
   "username": "Sser",
   "group_id": 1,
-  "group_name": "",
+  "group_name": "example",
   "permission": "full",
   "recursive": true
 }
