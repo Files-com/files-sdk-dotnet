@@ -28,6 +28,14 @@
   "header_text": "User-specific message.",
   "language": "en",
   "last_login_at": "2000-01-01T01:00:00Z",
+  "last_web_login_at": "2000-01-01T01:00:00Z",
+  "last_ftp_login_at": "2000-01-01T01:00:00Z",
+  "last_sftp_login_at": "2000-01-01T01:00:00Z",
+  "last_dav_login_at": "2000-01-01T01:00:00Z",
+  "last_desktop_login_at": "2000-01-01T01:00:00Z",
+  "last_restapi_login_at": "2000-01-01T01:00:00Z",
+  "last_api_use_at": "2000-01-01T01:00:00Z",
+  "last_active_at": "2000-01-01T01:00:00Z",
   "last_protocol_cipher": "example",
   "lockout_expires": "2000-01-01T01:00:00Z",
   "name": "John Doe",
@@ -80,8 +88,16 @@
 * `group_ids` / `GroupIds`  (string): Comma-separated list of group IDs of which this user is a member
 * `header_text` / `HeaderText`  (string): Text to display to the user in the header of the UI
 * `language` / `Language`  (string): Preferred language
-* `last_login_at` / `LastLoginAt`  (Nullable<DateTime>): User's last login time
-* `last_protocol_cipher` / `LastProtocolCipher`  (string): The last protocol and cipher used
+* `last_login_at` / `LastLoginAt`  (Nullable<DateTime>): User's most recent login time via any protocol
+* `last_web_login_at` / `LastWebLoginAt`  (Nullable<DateTime>): User's most recent login time via web
+* `last_ftp_login_at` / `LastFtpLoginAt`  (Nullable<DateTime>): User's most recent login time via FTP
+* `last_sftp_login_at` / `LastSftpLoginAt`  (Nullable<DateTime>): User's most recent login time via SFTP
+* `last_dav_login_at` / `LastDavLoginAt`  (Nullable<DateTime>): User's most recent login time via WebDAV
+* `last_desktop_login_at` / `LastDesktopLoginAt`  (Nullable<DateTime>): User's most recent login time via Desktop app
+* `last_restapi_login_at` / `LastRestapiLoginAt`  (Nullable<DateTime>): User's most recent login time via Rest API
+* `last_api_use_at` / `LastApiUseAt`  (Nullable<DateTime>): User's most recent API use time
+* `last_active_at` / `LastActiveAt`  (Nullable<DateTime>): User's most recent activity time, which is the latest of most recent login, most recent API use, enablement, or creation
+* `last_protocol_cipher` / `LastProtocolCipher`  (string): The most recent protocol and cipher used
 * `lockout_expires` / `LockoutExpires`  (Nullable<DateTime>): Time in the future that the user will no longer be locked out if applicable
 * `name` / `Name`  (string): User's full name
 * `company` / `Company`  (string): User's company
@@ -107,7 +123,7 @@
 * `externally_managed` / `ExternallyManaged`  (bool): Is this user managed by a SsoStrategy?
 * `time_zone` / `TimeZone`  (string): User time zone
 * `type_of_2fa` / `TypeOf2fa`  (string): Type(s) of 2FA methods in use.  Will be either `sms`, `totp`, `u2f`, `yubi`, or multiple values sorted alphabetically and joined by an underscore.
-* `updated_at` / `UpdatedAt`  (Nullable<DateTime>): User record last updated at.  Note this may be incremented because of internal or external updates.
+* `updated_at` / `UpdatedAt`  (Nullable<DateTime>): User record most recently updated at.  Note this may be incremented because of internal or external updates.
 * `user_root` / `UserRoot`  (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
 * `avatar_file` / `AvatarFile`  (System.Net.Http.ByteArrayContent): An image file for your user avatar.
 * `avatar_delete` / `AvatarDelete`  (bool): If true, the avatar will be deleted.

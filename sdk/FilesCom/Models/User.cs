@@ -116,6 +116,38 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("last_login_at", null);
             }
+            if (!this.attributes.ContainsKey("last_web_login_at"))
+            {
+                this.attributes.Add("last_web_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_ftp_login_at"))
+            {
+                this.attributes.Add("last_ftp_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_sftp_login_at"))
+            {
+                this.attributes.Add("last_sftp_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_dav_login_at"))
+            {
+                this.attributes.Add("last_dav_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_desktop_login_at"))
+            {
+                this.attributes.Add("last_desktop_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_restapi_login_at"))
+            {
+                this.attributes.Add("last_restapi_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_api_use_at"))
+            {
+                this.attributes.Add("last_api_use_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_active_at"))
+            {
+                this.attributes.Add("last_active_at", null);
+            }
             if (!this.attributes.ContainsKey("last_protocol_cipher"))
             {
                 this.attributes.Add("last_protocol_cipher", null);
@@ -498,7 +530,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// User's last login time
+        /// User's most recent login time via any protocol
         /// </summary>
         [JsonPropertyName("last_login_at")]
         public Nullable<DateTime> LastLoginAt
@@ -508,7 +540,87 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The last protocol and cipher used
+        /// User's most recent login time via web
+        /// </summary>
+        [JsonPropertyName("last_web_login_at")]
+        public Nullable<DateTime> LastWebLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_web_login_at"]; }
+            set { attributes["last_web_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent login time via FTP
+        /// </summary>
+        [JsonPropertyName("last_ftp_login_at")]
+        public Nullable<DateTime> LastFtpLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_ftp_login_at"]; }
+            set { attributes["last_ftp_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent login time via SFTP
+        /// </summary>
+        [JsonPropertyName("last_sftp_login_at")]
+        public Nullable<DateTime> LastSftpLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_sftp_login_at"]; }
+            set { attributes["last_sftp_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent login time via WebDAV
+        /// </summary>
+        [JsonPropertyName("last_dav_login_at")]
+        public Nullable<DateTime> LastDavLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_dav_login_at"]; }
+            set { attributes["last_dav_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent login time via Desktop app
+        /// </summary>
+        [JsonPropertyName("last_desktop_login_at")]
+        public Nullable<DateTime> LastDesktopLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_desktop_login_at"]; }
+            set { attributes["last_desktop_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent login time via Rest API
+        /// </summary>
+        [JsonPropertyName("last_restapi_login_at")]
+        public Nullable<DateTime> LastRestapiLoginAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_restapi_login_at"]; }
+            set { attributes["last_restapi_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent API use time
+        /// </summary>
+        [JsonPropertyName("last_api_use_at")]
+        public Nullable<DateTime> LastApiUseAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_api_use_at"]; }
+            set { attributes["last_api_use_at"] = value; }
+        }
+
+        /// <summary>
+        /// User's most recent activity time, which is the latest of most recent login, most recent API use, enablement, or creation
+        /// </summary>
+        [JsonPropertyName("last_active_at")]
+        public Nullable<DateTime> LastActiveAt
+        {
+            get { return (Nullable<DateTime>) attributes["last_active_at"]; }
+            set { attributes["last_active_at"] = value; }
+        }
+
+        /// <summary>
+        /// The most recent protocol and cipher used
         /// </summary>
         [JsonPropertyName("last_protocol_cipher")]
         public string LastProtocolCipher
@@ -768,7 +880,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// User record last updated at.  Note this may be incremented because of internal or external updates.
+        /// User record most recently updated at.  Note this may be incremented because of internal or external updates.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("updated_at")]
