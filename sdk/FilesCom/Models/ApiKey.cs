@@ -72,6 +72,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("platform", null);
             }
+            if (!this.attributes.ContainsKey("url"))
+            {
+                this.attributes.Add("url", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -203,6 +207,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["platform"]; }
             set { attributes["platform"] = value; }
+        }
+
+        /// <summary>
+        /// URL for API host.
+        /// </summary>
+        [JsonPropertyName("url")]
+        public string Url
+        {
+            get { return (string) attributes["url"]; }
+            set { attributes["url"] = value; }
         }
 
         /// <summary>

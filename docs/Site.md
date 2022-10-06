@@ -107,6 +107,8 @@
   "session": "",
   "session_pinned_by_ip": true,
   "sftp_enabled": true,
+  "sftp_host_key_type": "default",
+  "active_sftp_host_key_id": 1,
   "sftp_insecure_ciphers": true,
   "sftp_user_root_enabled": true,
   "sharing_enabled": true,
@@ -245,6 +247,8 @@
 * `session` / `Session`  (Session): Current session
 * `session_pinned_by_ip` / `SessionPinnedByIp`  (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `sftp_enabled` / `SftpEnabled`  (bool): Is SFTP enabled?
+* `sftp_host_key_type` / `SftpHostKeyType`  (string): Sftp Host Key Type
+* `active_sftp_host_key_id` / `ActiveSftpHostKeyId`  (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
 * `sftp_insecure_ciphers` / `SftpInsecureCiphers`  (bool): Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
 * `sftp_user_root_enabled` / `SftpUserRootEnabled`  (bool): Use user FTP roots also for SFTP?
 * `sharing_enabled` / `SharingEnabled`  (bool): Allow bundle creation
@@ -393,6 +397,8 @@ Task<Site> Site.Update(
 * `user_requests_notify_admins` (bool): Send email to site admins when a user request is received?
 * `ftp_enabled` (bool): Is FTP enabled?
 * `sftp_enabled` (bool): Is SFTP enabled?
+* `sftp_host_key_type` (string): Sftp Host Key Type
+* `active_sftp_host_key_id` (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
 * `bundle_watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `allowed_2fa_method_sms` (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_u2f` (bool): Is U2F two factor authentication allowed?

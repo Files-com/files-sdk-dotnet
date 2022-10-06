@@ -432,6 +432,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sftp_enabled", null);
             }
+            if (!this.attributes.ContainsKey("sftp_host_key_type"))
+            {
+                this.attributes.Add("sftp_host_key_type", null);
+            }
+            if (!this.attributes.ContainsKey("active_sftp_host_key_id"))
+            {
+                this.attributes.Add("active_sftp_host_key_id", null);
+            }
             if (!this.attributes.ContainsKey("sftp_insecure_ciphers"))
             {
                 this.attributes.Add("sftp_insecure_ciphers", null);
@@ -1698,6 +1706,28 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Sftp Host Key Type
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sftp_host_key_type")]
+        public string SftpHostKeyType
+        {
+            get { return (string) attributes["sftp_host_key_type"]; }
+            private set { attributes["sftp_host_key_type"] = value; }
+        }
+
+        /// <summary>
+        /// Id of the currently selected custom SFTP Host Key
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("active_sftp_host_key_id")]
+        public Nullable<Int64> ActiveSftpHostKeyId
+        {
+            get { return (Nullable<Int64>) attributes["active_sftp_host_key_id"]; }
+            private set { attributes["active_sftp_host_key_id"] = value; }
+        }
+
+        /// <summary>
         /// Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
         /// </summary>
         [JsonInclude]
@@ -2183,6 +2213,8 @@ namespace FilesCom.Models
         ///   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
         ///   ftp_enabled - boolean - Is FTP enabled?
         ///   sftp_enabled - boolean - Is SFTP enabled?
+        ///   sftp_host_key_type - string - Sftp Host Key Type
+        ///   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
         ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
@@ -2534,6 +2566,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: sftp_enabled must be of type bool", "parameters[\"sftp_enabled\"]");
+            }
+            if (parameters.ContainsKey("sftp_host_key_type") && !(parameters["sftp_host_key_type"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: sftp_host_key_type must be of type string", "parameters[\"sftp_host_key_type\"]");
+            }
+            if (parameters.ContainsKey("active_sftp_host_key_id") && !(parameters["active_sftp_host_key_id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: active_sftp_host_key_id must be of type Nullable<Int64>", "parameters[\"active_sftp_host_key_id\"]");
             }
             if (parameters.ContainsKey("bundle_watermark_value") && !(parameters["bundle_watermark_value"] is object ))
             {
