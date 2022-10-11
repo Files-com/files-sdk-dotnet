@@ -88,6 +88,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("dont_separate_submissions_by_folder"))
+            {
+                this.attributes.Add("dont_separate_submissions_by_folder", null);
+            }
             if (!this.attributes.ContainsKey("expires_at"))
             {
                 this.attributes.Add("expires_at", null);
@@ -99,6 +103,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("note"))
             {
                 this.attributes.Add("note", null);
+            }
+            if (!this.attributes.ContainsKey("path_template"))
+            {
+                this.attributes.Add("path_template", null);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -318,6 +326,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
+        /// </summary>
+        [JsonPropertyName("dont_separate_submissions_by_folder")]
+        public bool DontSeparateSubmissionsByFolder
+        {
+            get { return (bool) attributes["dont_separate_submissions_by_folder"]; }
+            set { attributes["dont_separate_submissions_by_folder"] = value; }
+        }
+
+        /// <summary>
         /// Bundle expiration date/time
         /// </summary>
         [JsonPropertyName("expires_at")]
@@ -345,6 +363,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["note"]; }
             set { attributes["note"] = value; }
+        }
+
+        /// <summary>
+        /// Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
+        /// </summary>
+        [JsonPropertyName("path_template")]
+        public string PathTemplate
+        {
+            get { return (string) attributes["path_template"]; }
+            set { attributes["path_template"] = value; }
         }
 
         /// <summary>
@@ -518,10 +546,12 @@ namespace FilesCom.Models
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
         ///   description - string - Public description
+        ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         ///   expires_at - string - Bundle expiration date/time
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
@@ -568,6 +598,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
+            if (parameters.ContainsKey("dont_separate_submissions_by_folder") && !(parameters["dont_separate_submissions_by_folder"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: dont_separate_submissions_by_folder must be of type bool", "parameters[\"dont_separate_submissions_by_folder\"]");
+            }
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
@@ -583,6 +617,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
             {
                 throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+            }
+            if (parameters.ContainsKey("path_template") && !(parameters["path_template"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: path_template must be of type string", "parameters[\"path_template\"]");
             }
             if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string ))
             {
@@ -794,11 +832,13 @@ namespace FilesCom.Models
         ///   paths (required) - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
+        ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         ///   expires_at - string - Bundle expiration date/time
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   description - string - Public description
         ///   note - string - Bundle internal note
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
@@ -835,6 +875,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: form_field_set_id must be of type Nullable<Int64>", "parameters[\"form_field_set_id\"]");
             }
+            if (parameters.ContainsKey("dont_separate_submissions_by_folder") && !(parameters["dont_separate_submissions_by_folder"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: dont_separate_submissions_by_folder must be of type bool", "parameters[\"dont_separate_submissions_by_folder\"]");
+            }
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
@@ -854,6 +898,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("code") && !(parameters["code"] is string ))
             {
                 throw new ArgumentException("Bad parameter: code must be of type string", "parameters[\"code\"]");
+            }
+            if (parameters.ContainsKey("path_template") && !(parameters["path_template"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: path_template must be of type string", "parameters[\"path_template\"]");
             }
             if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string ))
             {
@@ -959,10 +1007,12 @@ namespace FilesCom.Models
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
         ///   description - string - Public description
+        ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         ///   expires_at - string - Bundle expiration date/time
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
@@ -1011,6 +1061,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
+            if (parameters.ContainsKey("dont_separate_submissions_by_folder") && !(parameters["dont_separate_submissions_by_folder"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: dont_separate_submissions_by_folder must be of type bool", "parameters[\"dont_separate_submissions_by_folder\"]");
+            }
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
@@ -1026,6 +1080,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("note") && !(parameters["note"] is string ))
             {
                 throw new ArgumentException("Bad parameter: note must be of type string", "parameters[\"note\"]");
+            }
+            if (parameters.ContainsKey("path_template") && !(parameters["path_template"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: path_template must be of type string", "parameters[\"path_template\"]");
             }
             if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string ))
             {

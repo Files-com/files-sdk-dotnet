@@ -19,9 +19,11 @@
   "skip_company": true,
   "id": 1,
   "created_at": "2000-01-01T01:00:00Z",
+  "dont_separate_submissions_by_folder": true,
   "expires_at": "2000-01-01T01:00:00Z",
   "max_uses": 1,
   "note": "The internal note on the bundle.",
+  "path_template": "{{name}}_{{ip}}",
   "user_id": 1,
   "username": "user",
   "clickwrap_id": 1,
@@ -52,9 +54,11 @@
 * `skip_company` / `SkipCompany`  (bool): BundleRegistrations can be saved without providing company?
 * `id` / `Id`  (Nullable<Int64>): Bundle ID
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
+* `dont_separate_submissions_by_folder` / `DontSeparateSubmissionsByFolder`  (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
 * `max_uses` / `MaxUses`  (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` / `Note`  (string): Bundle internal note
+* `path_template` / `PathTemplate`  (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
 * `user_id` / `UserId`  (Nullable<Int64>): Bundle creator user ID
 * `username` / `Username`  (string): Bundle creator username
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
@@ -130,11 +134,13 @@ Task<Bundle> Bundle.Create(
 * `paths` (string[]): Required - A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
 * `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
+* `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `description` (string): Public description
 * `note` (string): Bundle internal note
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
 * `permissions` (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
@@ -188,10 +194,12 @@ Task<Bundle> Bundle.Update(
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
 * `description` (string): Public description
+* `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note
+* `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
 * `permissions` (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
@@ -259,10 +267,12 @@ parameters.Add("form_field_set_id", 1);
 parameters.Add("clickwrap_id", 1);
 parameters.Add("code", "abc123");
 parameters.Add("description", "The public description of the bundle.");
+parameters.Add("dont_separate_submissions_by_folder", true);
 parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("inbox_id", 1);
 parameters.Add("max_uses", 1);
 parameters.Add("note", "The internal note on the bundle.");
+parameters.Add("path_template", "{{name}}_{{ip}}");
 parameters.Add("permissions", "read");
 parameters.Add("preview_only", true);
 parameters.Add("require_registration", true);
@@ -284,10 +294,12 @@ Bundle.Update(parameters);
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
 * `description` (string): Public description
+* `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note
+* `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
 * `permissions` (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
