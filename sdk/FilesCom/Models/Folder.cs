@@ -80,6 +80,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("subfolders_locked?", null);
             }
+            if (!this.attributes.ContainsKey("is_locked"))
+            {
+                this.attributes.Add("is_locked", null);
+            }
             if (!this.attributes.ContainsKey("download_uri"))
             {
                 this.attributes.Add("download_uri", null);
@@ -247,6 +251,16 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["subfolders_locked?"]; }
             set { attributes["subfolders_locked?"] = value; }
+        }
+
+        /// <summary>
+        /// Is this folder locked and unable to be modified?
+        /// </summary>
+        [JsonPropertyName("is_locked")]
+        public bool IsLocked
+        {
+            get { return (bool) attributes["is_locked"]; }
+            set { attributes["is_locked"] = value; }
         }
 
         /// <summary>
