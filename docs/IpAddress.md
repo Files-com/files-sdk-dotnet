@@ -39,6 +39,24 @@ Task<IpAddress[]> IpAddress.List(
 
 ---
 
+## List all possible public ExaVault IP addresses
+
+```
+Task<PublicIpAddress[]> IpAddress.GetExavaultReserved(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `cursor` (string): Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+
+
+---
+
 ## List all possible public IP addresses
 
 ```
