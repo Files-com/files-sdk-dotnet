@@ -127,7 +127,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Total number of files to process
+        /// Deprecated: used to return a count of the applicable files.  Currently returns 0 always.  On remote servers, it is not possible to reliably determine the number of affected files for every migration operation.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("files_total")]

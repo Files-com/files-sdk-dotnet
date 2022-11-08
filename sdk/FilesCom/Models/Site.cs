@@ -84,6 +84,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_password_required", null);
             }
+            if (!this.attributes.ContainsKey("bundle_registration_notifications"))
+            {
+                this.attributes.Add("bundle_registration_notifications", null);
+            }
             if (!this.attributes.ContainsKey("bundle_require_share_recipient"))
             {
                 this.attributes.Add("bundle_require_share_recipient", null);
@@ -746,6 +750,17 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["bundle_password_required"]; }
             private set { attributes["bundle_password_required"] = value; }
+        }
+
+        /// <summary>
+        /// Do Bundle owners receive registration notification?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_registration_notifications")]
+        public string BundleRegistrationNotifications
+        {
+            get { return (string) attributes["bundle_registration_notifications"]; }
+            private set { attributes["bundle_registration_notifications"] = value; }
         }
 
         /// <summary>
@@ -2201,6 +2216,7 @@ namespace FilesCom.Models
         ///   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
         ///   bundle_password_required - boolean - Do Bundles require password protection?
         ///   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
+        ///   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
         ///   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         ///   opt_out_global - boolean - Use servers in the USA only?
         ///   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
@@ -2518,6 +2534,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: bundle_require_share_recipient must be of type bool", "parameters[\"bundle_require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("bundle_registration_notifications") && !(parameters["bundle_registration_notifications"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_registration_notifications must be of type string", "parameters[\"bundle_registration_notifications\"]");
             }
             if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool ))
             {

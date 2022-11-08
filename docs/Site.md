@@ -18,6 +18,7 @@
   "ask_about_overwrites": true,
   "bundle_expiration": 1,
   "bundle_password_required": true,
+  "bundle_registration_notifications": "never",
   "bundle_require_share_recipient": true,
   "bundle_watermark_attachment": "",
   "bundle_watermark_value": {
@@ -160,6 +161,7 @@
 * `ask_about_overwrites` / `AskAboutOverwrites`  (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
+* `bundle_registration_notifications` / `BundleRegistrationNotifications`  (string): Do Bundle owners receive registration notification?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
 * `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `bundle_watermark_value` / `BundleWatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
@@ -385,6 +387,7 @@ Task<Site> Site.Update(
 * `session_pinned_by_ip` (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `bundle_password_required` (bool): Do Bundles require password protection?
 * `bundle_require_share_recipient` (bool): Do Bundles require recipients for sharing?
+* `bundle_registration_notifications` (string): Do Bundle owners receive registration notification?
 * `password_requirements_apply_to_bundles` (bool): Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
 * `opt_out_global` (bool): Use servers in the USA only?
 * `use_provided_modified_at` (bool): Allow uploaders to set `provided_modified_at` for uploaded files?

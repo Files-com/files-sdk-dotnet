@@ -46,7 +46,10 @@
   "s3_compatible_endpoint": "mys3platform.com",
   "s3_compatible_region": "us-east-1",
   "s3_compatible_access_key": "example",
-  "enable_dedicated_ips": true
+  "enable_dedicated_ips": true,
+  "files_agent_permission_set": "read_write",
+  "files_agent_root": "example",
+  "files_agent_api_token": "example"
 }
 ```
 
@@ -93,6 +96,9 @@
 * `s3_compatible_region` / `S3CompatibleRegion`  (string): S3-compatible endpoint
 * `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible Access Key.
 * `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
+* `files_agent_permission_set` / `FilesAgentPermissionSet`  (string): Local permissions for files agent. read_only, write_only, or read_write
+* `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
+* `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
 * `password` / `Password`  (string): Password if needed.
 * `private_key` / `PrivateKey`  (string): Private key if needed.
@@ -133,6 +139,23 @@ Task<RemoteServer[]> RemoteServer.List(
 
 ```
 Task<RemoteServer> RemoteServer.Find(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
+## Download configuration file (required for some Remote Server integrations, such as the Files.com Agent)
+
+```
+Task<RemoteServerConfigurationFile> RemoteServer.FindConfigurationFile(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -207,6 +230,34 @@ Task<RemoteServer> RemoteServer.Create(
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
+* `files_agent_root` (string): Agent local root path
+* `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+
+
+---
+
+## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
+
+```
+Task<RemoteServerConfigurationFile> RemoteServer.ConfigurationFile(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+* `api_token` (string): Files Agent API Token
+* `permission_set` (string): 
+* `root` (string): Agent local root path
+* `hostname` (string): 
+* `port` (Nullable<Int64>): Incoming port for files agent connections
+* `status` (string): either running or shutdown
+* `config_version` (string): agent config version
+* `private_key` (string): private key
+* `public_key` (string): public key
 
 
 ---
@@ -273,6 +324,8 @@ Task<RemoteServer> RemoteServer.Update(
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
+* `files_agent_root` (string): Agent local root path
+* `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 
 
 ---
@@ -290,6 +343,42 @@ Task<RemoteServer> RemoteServer.Delete(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
+## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
+
+```
+var RemoteServer = RemoteServer.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("api_token", "example");
+parameters.Add("permission_set", "full");
+parameters.Add("root", "example");
+parameters.Add("hostname", "example");
+parameters.Add("port", 1);
+parameters.Add("status", "example");
+parameters.Add("config_version", "example");
+parameters.Add("private_key", "example");
+parameters.Add("public_key", "example");
+
+RemoteServer.ConfigurationFile(parameters);
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+* `api_token` (string): Files Agent API Token
+* `permission_set` (string): 
+* `root` (string): Agent local root path
+* `hostname` (string): 
+* `port` (Nullable<Int64>): Incoming port for files agent connections
+* `status` (string): either running or shutdown
+* `config_version` (string): agent config version
+* `private_key` (string): private key
+* `public_key` (string): public key
 
 
 ---
@@ -337,6 +426,8 @@ parameters.Add("s3_compatible_endpoint", "mys3platform.com");
 parameters.Add("s3_compatible_region", "us-east-1");
 parameters.Add("enable_dedicated_ips", true);
 parameters.Add("s3_compatible_access_key", "example");
+parameters.Add("files_agent_root", "example");
+parameters.Add("files_agent_permission_set", "read_write");
 
 RemoteServer.Update(parameters);
 ```
@@ -393,6 +484,8 @@ RemoteServer.Update(parameters);
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `s3_compatible_access_key` (string): S3-compatible Access Key.
 * `s3_compatible_secret_key` (string): S3-compatible secret key
+* `files_agent_root` (string): Agent local root path
+* `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 
 
 ---

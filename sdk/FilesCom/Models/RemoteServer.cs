@@ -200,6 +200,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("enable_dedicated_ips", null);
             }
+            if (!this.attributes.ContainsKey("files_agent_permission_set"))
+            {
+                this.attributes.Add("files_agent_permission_set", null);
+            }
+            if (!this.attributes.ContainsKey("files_agent_root"))
+            {
+                this.attributes.Add("files_agent_root", null);
+            }
+            if (!this.attributes.ContainsKey("files_agent_api_token"))
+            {
+                this.attributes.Add("files_agent_api_token", null);
+            }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
                 this.attributes.Add("aws_secret_key", null);
@@ -705,6 +717,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Local permissions for files agent. read_only, write_only, or read_write
+        /// </summary>
+        [JsonPropertyName("files_agent_permission_set")]
+        public string FilesAgentPermissionSet
+        {
+            get { return (string) attributes["files_agent_permission_set"]; }
+            set { attributes["files_agent_permission_set"] = value; }
+        }
+
+        /// <summary>
+        /// Agent local root path
+        /// </summary>
+        [JsonPropertyName("files_agent_root")]
+        public string FilesAgentRoot
+        {
+            get { return (string) attributes["files_agent_root"]; }
+            set { attributes["files_agent_root"] = value; }
+        }
+
+        /// <summary>
+        /// Files Agent API Token
+        /// </summary>
+        [JsonPropertyName("files_agent_api_token")]
+        public string FilesAgentApiToken
+        {
+            get { return (string) attributes["files_agent_api_token"]; }
+            set { attributes["files_agent_api_token"] = value; }
+        }
+
+        /// <summary>
         /// AWS secret key.
         /// </summary>
         [JsonPropertyName("aws_secret_key")]
@@ -845,6 +887,79 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
+        ///
+        /// Parameters:
+        ///   api_token - string - Files Agent API Token
+        ///   permission_set - string -
+        ///   root - string - Agent local root path
+        ///   hostname - string
+        ///   port - int64 - Incoming port for files agent connections
+        ///   status - string - either running or shutdown
+        ///   config_version - string - agent config version
+        ///   private_key - string - private key
+        ///   public_key - string - public key
+        /// </summary>
+        public async Task<RemoteServerConfigurationFile> ConfigurationFile(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id")) {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("api_token") && !(parameters["api_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: api_token must be of type string", "parameters[\"api_token\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
+            }
+            if (parameters.ContainsKey("root") && !(parameters["root"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: root must be of type string", "parameters[\"root\"]");
+            }
+            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
+            }
+            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("status") && !(parameters["status"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
+            }
+            if (parameters.ContainsKey("config_version") && !(parameters["config_version"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: config_version must be of type string", "parameters[\"config_version\"]");
+            }
+            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+        }
+
+
+        /// <summary>
         /// Parameters:
         ///   aws_access_key - string - AWS Access Key.
         ///   aws_secret_key - string - AWS secret key.
@@ -895,6 +1010,8 @@ namespace FilesCom.Models
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible Access Key.
         ///   s3_compatible_secret_key - string - S3-compatible secret key
+        ///   files_agent_root - string - Agent local root path
+        ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -1104,6 +1221,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
             }
+            if (parameters.ContainsKey("files_agent_root") && !(parameters["files_agent_root"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_root must be of type string", "parameters[\"files_agent_root\"]");
+            }
+            if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -1234,6 +1359,35 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   id (required) - int64 - Remote Server ID.
+        /// </summary>
+        public static async Task<RemoteServerConfigurationFile> FindConfigurationFile(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("id", id);
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+        }
+
+
+        /// <summary>
+        /// Parameters:
         ///   aws_access_key - string - AWS Access Key.
         ///   aws_secret_key - string - AWS secret key.
         ///   password - string - Password if needed.
@@ -1283,6 +1437,8 @@ namespace FilesCom.Models
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible Access Key.
         ///   s3_compatible_secret_key - string - S3-compatible secret key
+        ///   files_agent_root - string - Agent local root path
+        ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         /// </summary>
         public static async Task<RemoteServer> Create(
             
@@ -1489,10 +1645,93 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
             }
+            if (parameters.ContainsKey("files_agent_root") && !(parameters["files_agent_root"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_root must be of type string", "parameters[\"files_agent_root\"]");
+            }
+            if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+        }
+
+
+        /// <summary>
+        /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
+        ///
+        /// Parameters:
+        ///   api_token - string - Files Agent API Token
+        ///   permission_set - string -
+        ///   root - string - Agent local root path
+        ///   hostname - string
+        ///   port - int64 - Incoming port for files agent connections
+        ///   status - string - either running or shutdown
+        ///   config_version - string - agent config version
+        ///   private_key - string - private key
+        ///   public_key - string - public key
+        /// </summary>
+        public static async Task<RemoteServerConfigurationFile> ConfigurationFile(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("id", id);
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("api_token") && !(parameters["api_token"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: api_token must be of type string", "parameters[\"api_token\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
+            }
+            if (parameters.ContainsKey("root") && !(parameters["root"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: root must be of type string", "parameters[\"root\"]");
+            }
+            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
+            }
+            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("status") && !(parameters["status"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
+            }
+            if (parameters.ContainsKey("config_version") && !(parameters["config_version"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: config_version must be of type string", "parameters[\"config_version\"]");
+            }
+            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+            }
+            if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
         }
 
 
@@ -1547,6 +1786,8 @@ namespace FilesCom.Models
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   s3_compatible_access_key - string - S3-compatible Access Key.
         ///   s3_compatible_secret_key - string - S3-compatible secret key
+        ///   files_agent_root - string - Agent local root path
+        ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id, 
@@ -1757,6 +1998,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
+            }
+            if (parameters.ContainsKey("files_agent_root") && !(parameters["files_agent_root"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_root must be of type string", "parameters[\"files_agent_root\"]");
+            }
+            if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
