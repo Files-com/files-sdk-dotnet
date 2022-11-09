@@ -6,12 +6,12 @@
 {
   "ip_address": "1.1.1.1",
   "server_name": "server-1",
-  "ftp_enabled": "example",
-  "sftp_enabled": "example"
+  "ftp_enabled": true,
+  "sftp_enabled": true
 }
 ```
 
 * `ip_address` / `IpAddress`  (string): The public IP address.
 * `server_name` / `ServerName`  (string): The name of the frontend server.
-* `ftp_enabled` / `FtpEnabled`  (string): 
-* `sftp_enabled` / `SftpEnabled`  (string): 
+* `ftp_enabled` / `FtpEnabled`  (bool): 
+* `sftp_enabled` / `SftpEnabled`  (bool): 

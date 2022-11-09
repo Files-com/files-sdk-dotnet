@@ -88,9 +88,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("ftp_enabled")]
-        public string FtpEnabled
+        public bool FtpEnabled
         {
-            get { return (string) attributes["ftp_enabled"]; }
+            get { return (bool) attributes["ftp_enabled"]; }
             private set { attributes["ftp_enabled"] = value; }
         }
 
@@ -98,9 +98,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sftp_enabled")]
-        public string SftpEnabled
+        public bool SftpEnabled
         {
-            get { return (string) attributes["sftp_enabled"]; }
+            get { return (bool) attributes["sftp_enabled"]; }
             private set { attributes["sftp_enabled"] = value; }
         }
 
