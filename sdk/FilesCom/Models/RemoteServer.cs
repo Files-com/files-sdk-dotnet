@@ -899,6 +899,7 @@ namespace FilesCom.Models
         ///   config_version - string - agent config version
         ///   private_key - string - private key
         ///   public_key - string - public key
+        ///   server_host_key - string
         /// </summary>
         public async Task<RemoteServerConfigurationFile> ConfigurationFile(Dictionary<string, object> parameters)
         {
@@ -947,6 +948,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
+            }
+            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -1673,6 +1678,7 @@ namespace FilesCom.Models
         ///   config_version - string - agent config version
         ///   private_key - string - private key
         ///   public_key - string - public key
+        ///   server_host_key - string
         /// </summary>
         public static async Task<RemoteServerConfigurationFile> ConfigurationFile(
             Nullable<Int64> id, 
@@ -1723,6 +1729,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
+            }
+            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

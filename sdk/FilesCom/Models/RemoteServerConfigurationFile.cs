@@ -68,6 +68,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("config_version", null);
             }
+            if (!this.attributes.ContainsKey("server_host_key"))
+            {
+                this.attributes.Add("server_host_key", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -192,6 +196,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["config_version"]; }
             private set { attributes["config_version"] = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("server_host_key")]
+        public string ServerHostKey
+        {
+            get { return (string) attributes["server_host_key"]; }
+            private set { attributes["server_host_key"] = value; }
         }
 
 

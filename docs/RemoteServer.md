@@ -258,6 +258,7 @@ Task<RemoteServerConfigurationFile> RemoteServer.ConfigurationFile(
 * `config_version` (string): agent config version
 * `private_key` (string): private key
 * `public_key` (string): public key
+* `server_host_key` (string): 
 
 
 ---
@@ -363,6 +364,7 @@ parameters.Add("status", "example");
 parameters.Add("config_version", "example");
 parameters.Add("private_key", "example");
 parameters.Add("public_key", "example");
+parameters.Add("server_host_key", "example");
 
 RemoteServer.ConfigurationFile(parameters);
 ```
@@ -379,6 +381,7 @@ RemoteServer.ConfigurationFile(parameters);
 * `config_version` (string): agent config version
 * `private_key` (string): private key
 * `public_key` (string): public key
+* `server_host_key` (string): 
 
 
 ---

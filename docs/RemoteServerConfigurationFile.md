@@ -13,7 +13,8 @@
   "public_key": "example",
   "private_key": "example",
   "status": "example",
-  "config_version": "example"
+  "config_version": "example",
+  "server_host_key": "example"
 }
 ```
 
@@ -27,3 +28,4 @@
 * `private_key` / `PrivateKey`  (string): private key
 * `status` / `Status`  (string): either running or shutdown
 * `config_version` / `ConfigVersion`  (string): agent config version
+* `server_host_key` / `ServerHostKey`  (string): 
