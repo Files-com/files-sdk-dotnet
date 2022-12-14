@@ -260,6 +260,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_root", null);
             }
+            if (!this.attributes.ContainsKey("days_remaining_until_password_expire"))
+            {
+                this.attributes.Add("days_remaining_until_password_expire", null);
+            }
+            if (!this.attributes.ContainsKey("password_expire_at"))
+            {
+                this.attributes.Add("password_expire_at", null);
+            }
             if (!this.attributes.ContainsKey("avatar_file"))
             {
                 this.attributes.Add("avatar_file", null);
@@ -898,6 +906,26 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["user_root"]; }
             set { attributes["user_root"] = value; }
+        }
+
+        /// <summary>
+        /// Number of days remaining until password expires
+        /// </summary>
+        [JsonPropertyName("days_remaining_until_password_expire")]
+        public Nullable<DateTime> DaysRemainingUntilPasswordExpire
+        {
+            get { return (Nullable<DateTime>) attributes["days_remaining_until_password_expire"]; }
+            set { attributes["days_remaining_until_password_expire"] = value; }
+        }
+
+        /// <summary>
+        /// Password expiration datetime
+        /// </summary>
+        [JsonPropertyName("password_expire_at")]
+        public Nullable<DateTime> PasswordExpireAt
+        {
+            get { return (Nullable<DateTime>) attributes["password_expire_at"]; }
+            set { attributes["password_expire_at"] = value; }
         }
 
         /// <summary>

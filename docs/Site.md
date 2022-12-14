@@ -16,10 +16,12 @@
   "allowed_countries": "US,DE",
   "allowed_ips": "example",
   "ask_about_overwrites": true,
+  "bundle_activity_notifications": "never",
   "bundle_expiration": 1,
   "bundle_password_required": true,
   "bundle_registration_notifications": "never",
   "bundle_require_share_recipient": true,
+  "bundle_upload_receipt_notifications": "never",
   "bundle_watermark_attachment": "",
   "bundle_watermark_value": {
     "key": "example value"
@@ -159,10 +161,12 @@
 * `allowed_countries` / `AllowedCountries`  (string): Comma seperated list of allowed Country codes
 * `allowed_ips` / `AllowedIps`  (string): List of allowed IP addresses
 * `ask_about_overwrites` / `AskAboutOverwrites`  (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
+* `bundle_activity_notifications` / `BundleActivityNotifications`  (string): Do Bundle owners receive activity notifications?
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
 * `bundle_registration_notifications` / `BundleRegistrationNotifications`  (string): Do Bundle owners receive registration notification?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
+* `bundle_upload_receipt_notifications` / `BundleUploadReceiptNotifications`  (string): Do Bundle uploaders receive upload confirmation notifications?
 * `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `bundle_watermark_value` / `BundleWatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `color2_left` / `Color2Left`  (string): Page link and button color
@@ -388,6 +392,8 @@ Task<Site> Site.Update(
 * `bundle_password_required` (bool): Do Bundles require password protection?
 * `bundle_require_share_recipient` (bool): Do Bundles require recipients for sharing?
 * `bundle_registration_notifications` (string): Do Bundle owners receive registration notification?
+* `bundle_activity_notifications` (string): Do Bundle owners receive activity notifications?
+* `bundle_upload_receipt_notifications` (string): Do Bundle uploaders receive upload confirmation notifications?
 * `password_requirements_apply_to_bundles` (bool): Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
 * `opt_out_global` (bool): Use servers in the USA only?
 * `use_provided_modified_at` (bool): Allow uploaders to set `provided_modified_at` for uploaded files?

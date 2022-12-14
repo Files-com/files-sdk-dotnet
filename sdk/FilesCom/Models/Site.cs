@@ -76,6 +76,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("ask_about_overwrites", null);
             }
+            if (!this.attributes.ContainsKey("bundle_activity_notifications"))
+            {
+                this.attributes.Add("bundle_activity_notifications", null);
+            }
             if (!this.attributes.ContainsKey("bundle_expiration"))
             {
                 this.attributes.Add("bundle_expiration", null);
@@ -91,6 +95,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("bundle_require_share_recipient"))
             {
                 this.attributes.Add("bundle_require_share_recipient", null);
+            }
+            if (!this.attributes.ContainsKey("bundle_upload_receipt_notifications"))
+            {
+                this.attributes.Add("bundle_upload_receipt_notifications", null);
             }
             if (!this.attributes.ContainsKey("bundle_watermark_attachment"))
             {
@@ -731,6 +739,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Do Bundle owners receive activity notifications?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_activity_notifications")]
+        public string BundleActivityNotifications
+        {
+            get { return (string) attributes["bundle_activity_notifications"]; }
+            private set { attributes["bundle_activity_notifications"] = value; }
+        }
+
+        /// <summary>
         /// Site-wide Bundle expiration in days
         /// </summary>
         [JsonInclude]
@@ -772,6 +791,17 @@ namespace FilesCom.Models
         {
             get { return (bool) attributes["bundle_require_share_recipient"]; }
             private set { attributes["bundle_require_share_recipient"] = value; }
+        }
+
+        /// <summary>
+        /// Do Bundle uploaders receive upload confirmation notifications?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_upload_receipt_notifications")]
+        public string BundleUploadReceiptNotifications
+        {
+            get { return (string) attributes["bundle_upload_receipt_notifications"]; }
+            private set { attributes["bundle_upload_receipt_notifications"] = value; }
         }
 
         /// <summary>
@@ -2217,6 +2247,8 @@ namespace FilesCom.Models
         ///   bundle_password_required - boolean - Do Bundles require password protection?
         ///   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
         ///   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
+        ///   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
+        ///   bundle_upload_receipt_notifications - string - Do Bundle uploaders receive upload confirmation notifications?
         ///   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         ///   opt_out_global - boolean - Use servers in the USA only?
         ///   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
@@ -2538,6 +2570,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_registration_notifications") && !(parameters["bundle_registration_notifications"] is string ))
             {
                 throw new ArgumentException("Bad parameter: bundle_registration_notifications must be of type string", "parameters[\"bundle_registration_notifications\"]");
+            }
+            if (parameters.ContainsKey("bundle_activity_notifications") && !(parameters["bundle_activity_notifications"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_activity_notifications must be of type string", "parameters[\"bundle_activity_notifications\"]");
+            }
+            if (parameters.ContainsKey("bundle_upload_receipt_notifications") && !(parameters["bundle_upload_receipt_notifications"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: bundle_upload_receipt_notifications must be of type string", "parameters[\"bundle_upload_receipt_notifications\"]");
             }
             if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool ))
             {
