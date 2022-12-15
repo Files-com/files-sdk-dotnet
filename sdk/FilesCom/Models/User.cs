@@ -912,9 +912,9 @@ namespace FilesCom.Models
         /// Number of days remaining until password expires
         /// </summary>
         [JsonPropertyName("days_remaining_until_password_expire")]
-        public Nullable<DateTime> DaysRemainingUntilPasswordExpire
+        public Nullable<Int64> DaysRemainingUntilPasswordExpire
         {
-            get { return (Nullable<DateTime>) attributes["days_remaining_until_password_expire"]; }
+            get { return (Nullable<Int64>) attributes["days_remaining_until_password_expire"]; }
             set { attributes["days_remaining_until_password_expire"] = value; }
         }
 
