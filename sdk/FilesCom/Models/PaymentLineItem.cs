@@ -44,10 +44,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("payment_id", null);
             }
-            if (!this.attributes.ContainsKey("updated_at"))
-            {
-                this.attributes.Add("updated_at", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -108,17 +104,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["payment_id"]; }
             private set { attributes["payment_id"] = value; }
-        }
-
-        /// <summary>
-        /// Payment line item updated at date/time
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("updated_at")]
-        public Nullable<DateTime> UpdatedAt
-        {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
-            private set { attributes["updated_at"] = value; }
         }
 
 

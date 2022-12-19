@@ -252,10 +252,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("type_of_2fa", null);
             }
-            if (!this.attributes.ContainsKey("updated_at"))
-            {
-                this.attributes.Add("updated_at", null);
-            }
             if (!this.attributes.ContainsKey("user_root"))
             {
                 this.attributes.Add("user_root", null);
@@ -885,17 +881,6 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["type_of_2fa"]; }
             set { attributes["type_of_2fa"] = value; }
-        }
-
-        /// <summary>
-        /// User record most recently updated at.  Note this may be incremented because of internal or external updates.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("updated_at")]
-        public Nullable<DateTime> UpdatedAt
-        {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
-            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>

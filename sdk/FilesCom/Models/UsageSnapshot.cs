@@ -40,10 +40,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("end_at", null);
             }
-            if (!this.attributes.ContainsKey("created_at"))
-            {
-                this.attributes.Add("created_at", null);
-            }
             if (!this.attributes.ContainsKey("high_water_user_count"))
             {
                 this.attributes.Add("high_water_user_count", null);
@@ -55,18 +51,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("high_water_storage"))
             {
                 this.attributes.Add("high_water_storage", null);
-            }
-            if (!this.attributes.ContainsKey("total_downloads"))
-            {
-                this.attributes.Add("total_downloads", null);
-            }
-            if (!this.attributes.ContainsKey("total_uploads"))
-            {
-                this.attributes.Add("total_uploads", null);
-            }
-            if (!this.attributes.ContainsKey("updated_at"))
-            {
-                this.attributes.Add("updated_at", null);
             }
             if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
             {
@@ -156,17 +140,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// DEPRECATED: Usage snapshot created at date/time
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("created_at")]
-        public Nullable<DateTime> CreatedAt
-        {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
-            private set { attributes["created_at"] = value; }
-        }
-
-        /// <summary>
         /// Highest user count number in time period
         /// </summary>
         [JsonInclude]
@@ -197,39 +170,6 @@ namespace FilesCom.Models
         {
             get { return (double) attributes["high_water_storage"]; }
             private set { attributes["high_water_storage"] = value; }
-        }
-
-        /// <summary>
-        /// DEPRECATED: Number of downloads in report time period
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("total_downloads")]
-        public Nullable<Int64> TotalDownloads
-        {
-            get { return (Nullable<Int64>) attributes["total_downloads"]; }
-            private set { attributes["total_downloads"] = value; }
-        }
-
-        /// <summary>
-        /// DEPRECATED: Number of uploads in time period
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("total_uploads")]
-        public Nullable<Int64> TotalUploads
-        {
-            get { return (Nullable<Int64>) attributes["total_uploads"]; }
-            private set { attributes["total_uploads"] = value; }
-        }
-
-        /// <summary>
-        /// DEPRECATED: The last time this site usage report was updated
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("updated_at")]
-        public Nullable<DateTime> UpdatedAt
-        {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
-            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>
