@@ -24,6 +24,7 @@
   "max_uses": 1,
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
+  "send_email_receipt_to_uploader": true,
   "user_id": 1,
   "username": "user",
   "clickwrap_id": 1,
@@ -59,6 +60,7 @@
 * `max_uses` / `MaxUses`  (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` / `Note`  (string): Bundle internal note
 * `path_template` / `PathTemplate`  (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
+* `send_email_receipt_to_uploader` / `SendEmailReceiptToUploader`  (bool): Send delivery receipt to the uploader. Note: For writable share only
 * `user_id` / `UserId`  (Nullable<Int64>): Bundle creator user ID
 * `username` / `Username`  (string): Bundle creator username
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
@@ -147,6 +149,7 @@ Task<Bundle> Bundle.Create(
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `send_email_receipt_to_uploader` (bool): Send delivery receipt to the uploader. Note: For writable share only
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `skip_company` (bool): BundleRegistrations can be saved without providing company?
@@ -204,9 +207,10 @@ Task<Bundle> Bundle.Update(
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `send_email_receipt_to_uploader` (bool): Send delivery receipt to the uploader. Note: For writable share only
+* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
-* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
@@ -277,9 +281,10 @@ parameters.Add("permissions", "read");
 parameters.Add("preview_only", true);
 parameters.Add("require_registration", true);
 parameters.Add("require_share_recipient", true);
+parameters.Add("send_email_receipt_to_uploader", true);
+parameters.Add("skip_company", true);
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
-parameters.Add("skip_company", true);
 parameters.Add("watermark_attachment_delete", true);
 
 Bundle.Update(parameters);
@@ -304,9 +309,10 @@ Bundle.Update(parameters);
 * `preview_only` (bool): Restrict users to previewing files only?
 * `require_registration` (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `send_email_receipt_to_uploader` (bool): Send delivery receipt to the uploader. Note: For writable share only
+* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
-* `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 

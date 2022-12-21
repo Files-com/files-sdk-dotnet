@@ -15,7 +15,8 @@
   },
   "inbox_id": 1,
   "inbox_recipient_id": 1,
-  "inbox_title": "example"
+  "inbox_title": "example",
+  "created_at": "2000-01-01T01:00:00Z"
 }
 ```
 
@@ -29,6 +30,7 @@
 * `inbox_id` / `InboxId`  (Nullable<Int64>): Id of associated inbox
 * `inbox_recipient_id` / `InboxRecipientId`  (Nullable<Int64>): Id of associated inbox recipient
 * `inbox_title` / `InboxTitle`  (string): Title of associated inbox
+* `created_at` / `CreatedAt`  (Nullable<DateTime>): Registration creation date/time
 
 
 ---

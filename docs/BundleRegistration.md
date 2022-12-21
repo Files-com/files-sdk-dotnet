@@ -17,7 +17,8 @@
   },
   "bundle_code": "example",
   "bundle_id": 1,
-  "bundle_recipient_id": 1
+  "bundle_recipient_id": 1,
+  "created_at": "2000-01-01T01:00:00Z"
 }
 ```
 
@@ -33,6 +34,7 @@
 * `bundle_code` / `BundleCode`  (string): Bundle URL code
 * `bundle_id` / `BundleId`  (Nullable<Int64>): Id of associated bundle
 * `bundle_recipient_id` / `BundleRecipientId`  (Nullable<Int64>): Id of associated bundle recipient
+* `created_at` / `CreatedAt`  (Nullable<DateTime>): Registration creation date/time
 
 
 ---

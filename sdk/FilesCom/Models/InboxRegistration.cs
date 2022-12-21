@@ -68,6 +68,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("inbox_title", null);
             }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -194,6 +198,17 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["inbox_title"]; }
             private set { attributes["inbox_title"] = value; }
+        }
+
+        /// <summary>
+        /// Registration creation date/time
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
 

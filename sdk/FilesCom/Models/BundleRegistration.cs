@@ -76,6 +76,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_recipient_id", null);
             }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -224,6 +228,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["bundle_recipient_id"]; }
             private set { attributes["bundle_recipient_id"] = value; }
+        }
+
+        /// <summary>
+        /// Registration creation date/time
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
 

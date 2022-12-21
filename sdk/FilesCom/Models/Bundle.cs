@@ -108,6 +108,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("path_template", null);
             }
+            if (!this.attributes.ContainsKey("send_email_receipt_to_uploader"))
+            {
+                this.attributes.Add("send_email_receipt_to_uploader", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -376,6 +380,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Send delivery receipt to the uploader. Note: For writable share only
+        /// </summary>
+        [JsonPropertyName("send_email_receipt_to_uploader")]
+        public bool SendEmailReceiptToUploader
+        {
+            get { return (bool) attributes["send_email_receipt_to_uploader"]; }
+            set { attributes["send_email_receipt_to_uploader"] = value; }
+        }
+
+        /// <summary>
         /// Bundle creator user ID
         /// </summary>
         [JsonPropertyName("user_id")]
@@ -556,9 +570,10 @@ namespace FilesCom.Models
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
+        ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
-        ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
@@ -638,6 +653,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
             }
+            if (parameters.ContainsKey("send_email_receipt_to_uploader") && !(parameters["send_email_receipt_to_uploader"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: send_email_receipt_to_uploader must be of type bool", "parameters[\"send_email_receipt_to_uploader\"]");
+            }
+            if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
+            }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: skip_email must be of type bool", "parameters[\"skip_email\"]");
@@ -645,10 +668,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_name") && !(parameters["skip_name"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: skip_name must be of type bool", "parameters[\"skip_name\"]");
-            }
-            if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool ))
-            {
-                throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
             }
             if (parameters.ContainsKey("watermark_attachment_delete") && !(parameters["watermark_attachment_delete"] is bool ))
             {
@@ -845,6 +864,7 @@ namespace FilesCom.Models
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
@@ -926,6 +946,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("send_email_receipt_to_uploader") && !(parameters["send_email_receipt_to_uploader"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: send_email_receipt_to_uploader must be of type bool", "parameters[\"send_email_receipt_to_uploader\"]");
             }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool ))
             {
@@ -1017,9 +1041,10 @@ namespace FilesCom.Models
         ///   preview_only - boolean - Restrict users to previewing files only?
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
+        ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
-        ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
@@ -1101,6 +1126,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
             }
+            if (parameters.ContainsKey("send_email_receipt_to_uploader") && !(parameters["send_email_receipt_to_uploader"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: send_email_receipt_to_uploader must be of type bool", "parameters[\"send_email_receipt_to_uploader\"]");
+            }
+            if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
+            }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: skip_email must be of type bool", "parameters[\"skip_email\"]");
@@ -1108,10 +1141,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_name") && !(parameters["skip_name"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: skip_name must be of type bool", "parameters[\"skip_name\"]");
-            }
-            if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool ))
-            {
-                throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
             }
             if (parameters.ContainsKey("watermark_attachment_delete") && !(parameters["watermark_attachment_delete"] is bool ))
             {

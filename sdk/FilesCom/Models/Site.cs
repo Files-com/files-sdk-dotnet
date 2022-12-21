@@ -500,6 +500,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("session_expiry", null);
             }
+            if (!this.attributes.ContainsKey("session_expiry_minutes"))
+            {
+                this.attributes.Add("session_expiry_minutes", null);
+            }
             if (!this.attributes.ContainsKey("ssl_required"))
             {
                 this.attributes.Add("ssl_required", null);
@@ -1902,6 +1906,17 @@ namespace FilesCom.Models
         {
             get { return (double) attributes["session_expiry"]; }
             private set { attributes["session_expiry"] = value; }
+        }
+
+        /// <summary>
+        /// Session expiry in minutes
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("session_expiry_minutes")]
+        public Nullable<Int64> SessionExpiryMinutes
+        {
+            get { return (Nullable<Int64>) attributes["session_expiry_minutes"]; }
+            private set { attributes["session_expiry_minutes"] = value; }
         }
 
         /// <summary>
