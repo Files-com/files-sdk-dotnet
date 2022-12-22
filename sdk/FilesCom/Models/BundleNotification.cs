@@ -40,6 +40,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("notify_on_registration", null);
             }
+            if (!this.attributes.ContainsKey("notify_on_upload"))
+            {
+                this.attributes.Add("notify_on_upload", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -93,6 +97,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Triggers bundle notification when a upload action occurs for it.
+        /// </summary>
+        [JsonPropertyName("notify_on_upload")]
+        public bool NotifyOnUpload
+        {
+            get { return (bool) attributes["notify_on_upload"]; }
+            set { attributes["notify_on_upload"] = value; }
+        }
+
+        /// <summary>
         /// The id of the user to notify.
         /// </summary>
         [JsonPropertyName("user_id")]
@@ -101,6 +115,42 @@ namespace FilesCom.Models
             get { return (Nullable<Int64>) attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
+
+        /// <summary>
+        /// Parameters:
+        ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+        ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
+        /// </summary>
+        public async Task<BundleNotification> Update(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id")) {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
+            }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+
+            return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+        }
+
 
         /// <summary>
         /// </summary>
@@ -136,7 +186,7 @@ namespace FilesCom.Models
         {
             if (this.attributes["id"] != null)
             {
-                throw new NotImplementedException("The BundleNotification object doesn't support updates.");
+                await this.Update(this.attributes);
             }
             else
             {
@@ -233,6 +283,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id (required) - int64 - The id of the user to notify.
         ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+        ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         ///   bundle_id (required) - int64 - Bundle ID to notify on
         /// </summary>
         public static async Task<BundleNotification> Create(
@@ -252,6 +303,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
             }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
+            }
             if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
             {
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
@@ -266,6 +321,44 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+        }
+
+
+        /// <summary>
+        /// Parameters:
+        ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+        ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
+        /// </summary>
+        public static async Task<BundleNotification> Update(
+            Nullable<Int64> id, 
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("id", id);
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
+            }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<BundleNotification>(responseJson);
         }
