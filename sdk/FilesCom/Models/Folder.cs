@@ -393,6 +393,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   path (required) - string - Path to operate on.
         ///   mkdir_parents - boolean - Create parent directories if they do not exist?
+        ///   provided_mtime - string - User provided modification time.
         /// </summary>
         public static async Task<RemoteFile> Create(
             string path, 
@@ -411,6 +412,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
+            }
+            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
             }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {

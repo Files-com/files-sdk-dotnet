@@ -87,3 +87,4 @@ Task<RemoteFile> Folder.Create(
 
 * `path` (string): Required - Path to operate on.
 * `mkdir_parents` (bool): Create parent directories if they do not exist?
+* `provided_mtime` (string): User provided modification time.
