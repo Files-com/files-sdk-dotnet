@@ -2332,6 +2332,7 @@ namespace FilesCom.Models
         ///   ldap_password_change - string - New LDAP password.
         ///   ldap_password_change_confirmation - string - Confirm new LDAP password.
         ///   smtp_password - string - Password for SMTP server.
+        ///   session_expiry_minutes - int64 - Session expiry in minutes
         /// </summary>
         public static async Task<Site> Update(
             
@@ -2865,6 +2866,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("smtp_password") && !(parameters["smtp_password"] is string ))
             {
                 throw new ArgumentException("Bad parameter: smtp_password must be of type string", "parameters[\"smtp_password\"]");
+            }
+            if (parameters.ContainsKey("session_expiry_minutes") && !(parameters["session_expiry_minutes"] is Nullable<Int64> ))
+            {
+                throw new ArgumentException("Bad parameter: session_expiry_minutes must be of type Nullable<Int64>", "parameters[\"session_expiry_minutes\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/site", new HttpMethod("PATCH"), parameters, options);

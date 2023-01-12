@@ -464,3 +464,4 @@ Task<Site> Site.Update(
 * `ldap_password_change` (string): New LDAP password.
 * `ldap_password_change_confirmation` (string): Confirm new LDAP password.
 * `smtp_password` (string): Password for SMTP server.
+* `session_expiry_minutes` (Nullable<Int64>): Session expiry in minutes
