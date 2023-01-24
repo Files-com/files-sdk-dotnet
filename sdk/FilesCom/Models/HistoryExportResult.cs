@@ -36,6 +36,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("created_at_iso8601"))
+            {
+                this.attributes.Add("created_at_iso8601", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -158,6 +162,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>) attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// When the action happened, in ISO8601 format.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at_iso8601")]
+        public Nullable<Int64> CreatedAtIso8601
+        {
+            get { return (Nullable<Int64>) attributes["created_at_iso8601"]; }
+            private set { attributes["created_at_iso8601"] = value; }
         }
 
         /// <summary>
