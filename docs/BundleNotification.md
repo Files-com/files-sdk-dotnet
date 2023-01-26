@@ -70,7 +70,7 @@ Task<BundleNotification> BundleNotification.Create(
 
 ### Parameters
 
-* `user_id` (Nullable<Int64>): Required - The id of the user to notify.
+* `user_id` (Nullable<Int64>): The id of the user to notify.
 * `notify_on_registration` (bool): Triggers bundle notification when a registration action occurs for it.
 * `notify_on_upload` (bool): Triggers bundle notification when a upload action occurs for it.
 * `bundle_id` (Nullable<Int64>): Required - Bundle ID to notify on
