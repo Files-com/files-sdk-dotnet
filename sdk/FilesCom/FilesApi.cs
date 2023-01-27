@@ -50,19 +50,41 @@ namespace FilesCom
 
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             string parsedPath = ParsePathParameters(path, parameters);
-            Uri uri = new Uri(httpClient.BaseAddress, $"api/rest/v1{parsedPath}");
-            string jsonString = await Task.Run(() => JsonSerializer.Serialize<Dictionary<string, object>>(parameters));
-            HttpContent httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            UriBuilder uri = new UriBuilder(httpClient.BaseAddress.ToString());
+            uri.Path = $"api/rest/v1{parsedPath}";
+            string jsonString = "";
+            HttpContent httpContent = null;
+
+            switch(verb.Method)
+            {
+                case "GET":
+                case "HEAD":
+                case "DELETE":
+                    Dictionary<string, string> queryParams = new Dictionary<string, string>();
+                    foreach(var k in parameters.Keys) {
+                        queryParams.Add((string) k, (string) parameters[k]);
+                    }
+                    uri.Query = new FormUrlEncodedContent(queryParams).ReadAsStringAsync().Result;
+                    break;
+                default:
+                    jsonString = await Task.Run(() => JsonSerializer.Serialize<Dictionary<string, object>>(parameters));
+                    httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                    break;
+            }
 
             var httpRequestMessage = new HttpRequestMessage
             {
                 Method = verb,
-                RequestUri = uri,
+                RequestUri = uri.Uri,
                 Headers = {
                     { HttpRequestHeader.Accept.ToString(), "application/json" },
                 },
-                Content = httpContent,
             };
+
+            if (httpContent != null)
+            {
+                httpRequestMessage.Content = httpContent;
+            }
 
             bool requiresAuth = !(path == "/sessions" && verb == HttpMethod.Post);
 
@@ -112,7 +134,6 @@ namespace FilesCom
                     response.EnsureSuccessStatusCode();
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
-
                 log.Debug(responseJson);
                 return responseJson;
             }
