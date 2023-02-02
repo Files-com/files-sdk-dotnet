@@ -82,7 +82,7 @@ namespace FilesCom.Models
                 string fileRef = null;
 
                 // TODO: Set up multiple parallel streams instead of looping serial uploads here.
-                while (bytesWritten < fileLength) {
+                while (bytesWritten < fileLength || parts == 0) {
                     parts++;
                     Tuple<Int64, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options);
                     bytesWritten += result.Item1;
