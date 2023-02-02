@@ -95,7 +95,7 @@ namespace FilesCom.Models
                 createParams["ref"] = fileRef;
                 createParams["size"] = fileLength;
 
-                await RemoteFile.Create(destinationPath, createParams);
+                await RemoteFile.Create(destinationPath, createParams, options);
                 success = true;
             }
             return success;
