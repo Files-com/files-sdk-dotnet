@@ -360,6 +360,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("office_integration_available", null);
             }
+            if (!this.attributes.ContainsKey("office_integration_type"))
+            {
+                this.attributes.Add("office_integration_type", null);
+            }
             if (!this.attributes.ContainsKey("oncehub_link"))
             {
                 this.attributes.Add("oncehub_link", null);
@@ -1524,6 +1528,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Office integration application used to edit and view the MS Office documents
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("office_integration_type")]
+        public string OfficeIntegrationType
+        {
+            get { return (string) attributes["office_integration_type"]; }
+            private set { attributes["office_integration_type"] = value; }
+        }
+
+        /// <summary>
         /// Link to scheduling a meeting with our Sales team
         /// </summary>
         [JsonInclude]
@@ -2229,6 +2244,7 @@ namespace FilesCom.Models
         ///   folder_permissions_groups_only - boolean - If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
         ///   welcome_screen - string - Does the welcome screen appear?
         ///   office_integration_available - boolean - Allow users to use Office for the web?
+        ///   office_integration_type - string - Office integration application used to edit and view the MS Office documents
         ///   pin_all_remote_servers_to_site_region - boolean - If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
         ///   motd_text - string - A message to show users when they connect via FTP or SFTP.
         ///   motd_use_for_ftp - boolean - Show message to users connecting via FTP
@@ -2454,6 +2470,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_available") && !(parameters["office_integration_available"] is bool ))
             {
                 throw new ArgumentException("Bad parameter: office_integration_available must be of type bool", "parameters[\"office_integration_available\"]");
+            }
+            if (parameters.ContainsKey("office_integration_type") && !(parameters["office_integration_type"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: office_integration_type must be of type string", "parameters[\"office_integration_type\"]");
             }
             if (parameters.ContainsKey("pin_all_remote_servers_to_site_region") && !(parameters["pin_all_remote_servers_to_site_region"] is bool ))
             {

@@ -89,6 +89,7 @@
   "next_billing_amount": 1.0,
   "next_billing_date": "Apr 20",
   "office_integration_available": true,
+  "office_integration_type": "example",
   "oncehub_link": "https://go.oncehub.com/files",
   "opt_out_global": true,
   "overage_notified_at": "2000-01-01T01:00:00Z",
@@ -233,6 +234,7 @@
 * `next_billing_amount` / `NextBillingAmount`  (double): Next billing amount
 * `next_billing_date` / `NextBillingDate`  (string): Next billing date
 * `office_integration_available` / `OfficeIntegrationAvailable`  (bool): Allow users to use Office for the web?
+* `office_integration_type` / `OfficeIntegrationType`  (string): Office integration application used to edit and view the MS Office documents
 * `oncehub_link` / `OncehubLink`  (string): Link to scheduling a meeting with our Sales team
 * `opt_out_global` / `OptOutGlobal`  (bool): Use servers in the USA only?
 * `overage_notified_at` / `OverageNotifiedAt`  (Nullable<DateTime>): Last time the site was notified about an overage
@@ -361,6 +363,7 @@ Task<Site> Site.Update(
 * `folder_permissions_groups_only` (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
 * `welcome_screen` (string): Does the welcome screen appear?
 * `office_integration_available` (bool): Allow users to use Office for the web?
+* `office_integration_type` (string): Office integration application used to edit and view the MS Office documents
 * `pin_all_remote_servers_to_site_region` (bool): If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
 * `motd_text` (string): A message to show users when they connect via FTP or SFTP.
 * `motd_use_for_ftp` (bool): Show message to users connecting via FTP
