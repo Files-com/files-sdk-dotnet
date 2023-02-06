@@ -259,6 +259,7 @@ Task<RemoteServerConfigurationFile> RemoteServer.ConfigurationFile(
 * `private_key` (string): private key
 * `public_key` (string): public key
 * `server_host_key` (string): 
+* `subdomain` (string): 
 
 
 ---
@@ -365,6 +366,7 @@ parameters.Add("config_version", "example");
 parameters.Add("private_key", "example");
 parameters.Add("public_key", "example");
 parameters.Add("server_host_key", "example");
+parameters.Add("subdomain", "example");
 
 RemoteServer.ConfigurationFile(parameters);
 ```
@@ -382,6 +384,7 @@ RemoteServer.ConfigurationFile(parameters);
 * `private_key` (string): private key
 * `public_key` (string): public key
 * `server_host_key` (string): 
+* `subdomain` (string): 
 
 
 ---

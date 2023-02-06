@@ -72,6 +72,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_host_key", null);
             }
+            if (!this.attributes.ContainsKey("subdomain"))
+            {
+                this.attributes.Add("subdomain", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -206,6 +210,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["server_host_key"]; }
             private set { attributes["server_host_key"] = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("subdomain")]
+        public string Subdomain
+        {
+            get { return (string) attributes["subdomain"]; }
+            private set { attributes["subdomain"] = value; }
         }
 
 

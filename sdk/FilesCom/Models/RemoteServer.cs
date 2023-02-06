@@ -900,6 +900,7 @@ namespace FilesCom.Models
         ///   private_key - string - private key
         ///   public_key - string - public key
         ///   server_host_key - string
+        ///   subdomain - string
         /// </summary>
         public async Task<RemoteServerConfigurationFile> ConfigurationFile(Dictionary<string, object> parameters)
         {
@@ -952,6 +953,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
+            }
+            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -1679,6 +1684,7 @@ namespace FilesCom.Models
         ///   private_key - string - private key
         ///   public_key - string - public key
         ///   server_host_key - string
+        ///   subdomain - string
         /// </summary>
         public static async Task<RemoteServerConfigurationFile> ConfigurationFile(
             Nullable<Int64> id, 
@@ -1733,6 +1739,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string ))
             {
                 throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
+            }
+            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
