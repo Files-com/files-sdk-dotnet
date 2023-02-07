@@ -62,7 +62,10 @@ namespace FilesCom
                 case "DELETE":
                     Dictionary<string, string> queryParams = new Dictionary<string, string>();
                     foreach(var k in parameters.Keys) {
-                        queryParams.Add((string) k, (string) parameters[k]);
+                        if (k.Length == 0) {
+                            continue;
+                        }
+                        queryParams.Add(k, parameters[k]?.ToString());
                     }
                     uri.Query = new FormUrlEncodedContent(queryParams).ReadAsStringAsync().Result;
                     break;

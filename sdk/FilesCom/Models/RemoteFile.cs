@@ -44,7 +44,6 @@ namespace FilesCom.Models
             }
             parameters["part"] = partNumber;
             parameters["mkdir_parents"] = true;
-            parameters["mkdir_parents"] = true;
 
             FileUploadPart[] uploadActions = await BeginUpload(path, parameters, options);
             FileUploadPart uploadAction = uploadActions[0];
