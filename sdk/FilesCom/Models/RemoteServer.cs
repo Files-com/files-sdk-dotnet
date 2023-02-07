@@ -212,6 +212,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("files_agent_api_token", null);
             }
+            if (!this.attributes.ContainsKey("filebase_bucket"))
+            {
+                this.attributes.Add("filebase_bucket", null);
+            }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
                 this.attributes.Add("aws_secret_key", null);
@@ -744,6 +748,16 @@ namespace FilesCom.Models
         {
             get { return (string) attributes["files_agent_api_token"]; }
             set { attributes["files_agent_api_token"] = value; }
+        }
+
+        /// <summary>
+        /// Filebase Bucket name
+        /// </summary>
+        [JsonPropertyName("filebase_bucket")]
+        public string FilebaseBucket
+        {
+            get { return (string) attributes["filebase_bucket"]; }
+            set { attributes["filebase_bucket"] = value; }
         }
 
         /// <summary>
