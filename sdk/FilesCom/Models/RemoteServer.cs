@@ -216,6 +216,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("filebase_bucket", null);
             }
+            if (!this.attributes.ContainsKey("filebase_access_key"))
+            {
+                this.attributes.Add("filebase_access_key", null);
+            }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
                 this.attributes.Add("aws_secret_key", null);
@@ -271,6 +275,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("s3_compatible_secret_key"))
             {
                 this.attributes.Add("s3_compatible_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("filebase_secret_key"))
+            {
+                this.attributes.Add("filebase_secret_key", null);
             }
         }
 
@@ -761,6 +769,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Filebase Access Key.
+        /// </summary>
+        [JsonPropertyName("filebase_access_key")]
+        public string FilebaseAccessKey
+        {
+            get { return (string) attributes["filebase_access_key"]; }
+            set { attributes["filebase_access_key"] = value; }
+        }
+
+        /// <summary>
         /// AWS secret key.
         /// </summary>
         [JsonPropertyName("aws_secret_key")]
@@ -901,6 +919,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Filebase secret key
+        /// </summary>
+        [JsonPropertyName("filebase_secret_key")]
+        public string FilebaseSecretKey
+        {
+            get { return (string) attributes["filebase_secret_key"]; }
+            set { attributes["filebase_secret_key"] = value; }
+        }
+
+        /// <summary>
         /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
         ///
         /// Parameters:
@@ -1036,6 +1064,9 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+        ///   filebase_access_key - string - Filebase Access Key.
+        ///   filebase_secret_key - string - Filebase secret key
+        ///   filebase_bucket - string - Filebase Bucket name
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -1253,6 +1284,18 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
             }
+            if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
+            }
+            if (parameters.ContainsKey("filebase_secret_key") && !(parameters["filebase_secret_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_secret_key must be of type string", "parameters[\"filebase_secret_key\"]");
+            }
+            if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -1463,6 +1506,9 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+        ///   filebase_access_key - string - Filebase Access Key.
+        ///   filebase_secret_key - string - Filebase secret key
+        ///   filebase_bucket - string - Filebase Bucket name
         /// </summary>
         public static async Task<RemoteServer> Create(
             
@@ -1677,6 +1723,18 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
             }
+            if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
+            }
+            if (parameters.ContainsKey("filebase_secret_key") && !(parameters["filebase_secret_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_secret_key must be of type string", "parameters[\"filebase_secret_key\"]");
+            }
+            if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1822,6 +1880,9 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+        ///   filebase_access_key - string - Filebase Access Key.
+        ///   filebase_secret_key - string - Filebase secret key
+        ///   filebase_bucket - string - Filebase Bucket name
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id, 
@@ -2040,6 +2101,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string ))
             {
                 throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+            }
+            if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
+            }
+            if (parameters.ContainsKey("filebase_secret_key") && !(parameters["filebase_secret_key"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_secret_key must be of type string", "parameters[\"filebase_secret_key\"]");
+            }
+            if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string ))
+            {
+                throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

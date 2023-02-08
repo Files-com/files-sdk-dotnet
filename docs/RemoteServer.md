@@ -50,7 +50,8 @@
   "files_agent_permission_set": "read_write",
   "files_agent_root": "example",
   "files_agent_api_token": "example",
-  "filebase_bucket": "my-bucket"
+  "filebase_bucket": "my-bucket",
+  "filebase_access_key": "example"
 }
 ```
 
@@ -101,6 +102,7 @@
 * `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
 * `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
 * `filebase_bucket` / `FilebaseBucket`  (string): Filebase Bucket name
+* `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase Access Key.
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
 * `password` / `Password`  (string): Password if needed.
 * `private_key` / `PrivateKey`  (string): Private key if needed.
@@ -115,6 +117,7 @@
 * `azure_blob_storage_access_key` / `AzureBlobStorageAccessKey`  (string): Azure Blob Storage secret key.
 * `azure_files_storage_access_key` / `AzureFilesStorageAccessKey`  (string): Azure File Storage access key.
 * `s3_compatible_secret_key` / `S3CompatibleSecretKey`  (string): S3-compatible secret key
+* `filebase_secret_key` / `FilebaseSecretKey`  (string): Filebase secret key
 
 
 ---
@@ -234,6 +237,9 @@ Task<RemoteServer> RemoteServer.Create(
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `files_agent_root` (string): Agent local root path
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+* `filebase_access_key` (string): Filebase Access Key.
+* `filebase_secret_key` (string): Filebase secret key
+* `filebase_bucket` (string): Filebase Bucket name
 
 
 ---
@@ -330,6 +336,9 @@ Task<RemoteServer> RemoteServer.Update(
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `files_agent_root` (string): Agent local root path
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+* `filebase_access_key` (string): Filebase Access Key.
+* `filebase_secret_key` (string): Filebase secret key
+* `filebase_bucket` (string): Filebase Bucket name
 
 
 ---
@@ -436,6 +445,8 @@ parameters.Add("enable_dedicated_ips", true);
 parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_permission_set", "read_write");
+parameters.Add("filebase_access_key", "example");
+parameters.Add("filebase_bucket", "my-bucket");
 
 RemoteServer.Update(parameters);
 ```
@@ -494,6 +505,9 @@ RemoteServer.Update(parameters);
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `files_agent_root` (string): Agent local root path
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+* `filebase_access_key` (string): Filebase Access Key.
+* `filebase_secret_key` (string): Filebase secret key
+* `filebase_bucket` (string): Filebase Bucket name
 
 
 ---
