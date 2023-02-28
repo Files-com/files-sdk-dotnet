@@ -108,6 +108,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_watermark_value", null);
             }
+            if (!this.attributes.ContainsKey("uploads_via_email_authentication"))
+            {
+                this.attributes.Add("uploads_via_email_authentication", null);
+            }
             if (!this.attributes.ContainsKey("color2_left"))
             {
                 this.attributes.Add("color2_left", null);
@@ -832,6 +836,17 @@ namespace FilesCom.Models
         {
             get { return (object) attributes["bundle_watermark_value"]; }
             private set { attributes["bundle_watermark_value"] = value; }
+        }
+
+        /// <summary>
+        /// Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("uploads_via_email_authentication")]
+        public bool UploadsViaEmailAuthentication
+        {
+            get { return (bool) attributes["uploads_via_email_authentication"]; }
+            private set { attributes["uploads_via_email_authentication"] = value; }
         }
 
         /// <summary>
@@ -2332,6 +2347,7 @@ namespace FilesCom.Models
         ///   ldap_group_exclusion - string - Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
         ///   ldap_group_inclusion - string - Comma or newline separated list of group names (with optional wildcards) to include when syncing.
         ///   ldap_base_dn - string - Base DN for looking up users in LDAP server
+        ///   uploads_via_email_authentication - boolean - Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?
         ///   icon16_file - file
         ///   icon16_delete - boolean - If true, will delete the file stored in icon16
         ///   icon32_file - file
@@ -2822,6 +2838,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ldap_base_dn") && !(parameters["ldap_base_dn"] is string ))
             {
                 throw new ArgumentException("Bad parameter: ldap_base_dn must be of type string", "parameters[\"ldap_base_dn\"]");
+            }
+            if (parameters.ContainsKey("uploads_via_email_authentication") && !(parameters["uploads_via_email_authentication"] is bool ))
+            {
+                throw new ArgumentException("Bad parameter: uploads_via_email_authentication must be of type bool", "parameters[\"uploads_via_email_authentication\"]");
             }
             if (parameters.ContainsKey("icon16_file") && !(parameters["icon16_file"] is System.Net.Http.ByteArrayContent ))
             {
