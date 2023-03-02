@@ -101,7 +101,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -111,7 +111,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permission_set")]
         public string PermissionSet
         {
-            get { return (string) attributes["permission_set"]; }
+            get { return (string)attributes["permission_set"]; }
             private set { attributes["permission_set"] = value; }
         }
 
@@ -122,7 +122,7 @@ namespace FilesCom.Models
         [JsonPropertyName("api_token")]
         public string ApiToken
         {
-            get { return (string) attributes["api_token"]; }
+            get { return (string)attributes["api_token"]; }
             private set { attributes["api_token"] = value; }
         }
 
@@ -133,7 +133,7 @@ namespace FilesCom.Models
         [JsonPropertyName("root")]
         public string Root
         {
-            get { return (string) attributes["root"]; }
+            get { return (string)attributes["root"]; }
             private set { attributes["root"] = value; }
         }
 
@@ -144,7 +144,7 @@ namespace FilesCom.Models
         [JsonPropertyName("port")]
         public Nullable<Int64> Port
         {
-            get { return (Nullable<Int64>) attributes["port"]; }
+            get { return (Nullable<Int64>)attributes["port"]; }
             private set { attributes["port"] = value; }
         }
 
@@ -154,7 +154,7 @@ namespace FilesCom.Models
         [JsonPropertyName("hostname")]
         public string Hostname
         {
-            get { return (string) attributes["hostname"]; }
+            get { return (string)attributes["hostname"]; }
             private set { attributes["hostname"] = value; }
         }
 
@@ -165,7 +165,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_key")]
         public string PublicKey
         {
-            get { return (string) attributes["public_key"]; }
+            get { return (string)attributes["public_key"]; }
             private set { attributes["public_key"] = value; }
         }
 
@@ -176,7 +176,7 @@ namespace FilesCom.Models
         [JsonPropertyName("private_key")]
         public string PrivateKey
         {
-            get { return (string) attributes["private_key"]; }
+            get { return (string)attributes["private_key"]; }
             private set { attributes["private_key"] = value; }
         }
 
@@ -187,7 +187,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            get { return (string) attributes["status"]; }
+            get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
         }
 
@@ -198,7 +198,7 @@ namespace FilesCom.Models
         [JsonPropertyName("config_version")]
         public string ConfigVersion
         {
-            get { return (string) attributes["config_version"]; }
+            get { return (string)attributes["config_version"]; }
             private set { attributes["config_version"] = value; }
         }
 
@@ -208,7 +208,7 @@ namespace FilesCom.Models
         [JsonPropertyName("server_host_key")]
         public string ServerHostKey
         {
-            get { return (string) attributes["server_host_key"]; }
+            get { return (string)attributes["server_host_key"]; }
             private set { attributes["server_host_key"] = value; }
         }
 
@@ -218,7 +218,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subdomain")]
         public string Subdomain
         {
-            get { return (string) attributes["subdomain"]; }
+            get { return (string)attributes["subdomain"]; }
             private set { attributes["subdomain"] = value; }
         }
 
@@ -226,4 +226,3 @@ namespace FilesCom.Models
 
     }
 }
-

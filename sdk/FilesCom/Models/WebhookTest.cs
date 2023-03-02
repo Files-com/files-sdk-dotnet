@@ -108,7 +108,7 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public Nullable<Int64> Code
         {
-            get { return (Nullable<Int64>) attributes["code"]; }
+            get { return (Nullable<Int64>)attributes["code"]; }
             set { attributes["code"] = value; }
         }
 
@@ -118,7 +118,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
-            get { return (string) attributes["message"]; }
+            get { return (string)attributes["message"]; }
             set { attributes["message"] = value; }
         }
 
@@ -128,7 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            get { return (string) attributes["status"]; }
+            get { return (string)attributes["status"]; }
             set { attributes["status"] = value; }
         }
 
@@ -138,7 +138,7 @@ namespace FilesCom.Models
         [JsonPropertyName("data")]
         public Auto Data
         {
-            get { return (Auto) attributes["data"]; }
+            get { return (Auto)attributes["data"]; }
             set { attributes["data"] = value; }
         }
 
@@ -148,7 +148,7 @@ namespace FilesCom.Models
         [JsonPropertyName("success")]
         public bool Success
         {
-            get { return (bool) attributes["success"]; }
+            get { return (bool)attributes["success"]; }
             set { attributes["success"] = value; }
         }
 
@@ -158,7 +158,7 @@ namespace FilesCom.Models
         [JsonPropertyName("url")]
         public string Url
         {
-            get { return (string) attributes["url"]; }
+            get { return (string)attributes["url"]; }
             set { attributes["url"] = value; }
         }
 
@@ -168,7 +168,7 @@ namespace FilesCom.Models
         [JsonPropertyName("method")]
         public string Method
         {
-            get { return (string) attributes["method"]; }
+            get { return (string)attributes["method"]; }
             set { attributes["method"] = value; }
         }
 
@@ -178,7 +178,7 @@ namespace FilesCom.Models
         [JsonPropertyName("encoding")]
         public string Encoding
         {
-            get { return (string) attributes["encoding"]; }
+            get { return (string)attributes["encoding"]; }
             set { attributes["encoding"] = value; }
         }
 
@@ -188,7 +188,7 @@ namespace FilesCom.Models
         [JsonPropertyName("headers")]
         public object Headers
         {
-            get { return (object) attributes["headers"]; }
+            get { return (object)attributes["headers"]; }
             set { attributes["headers"] = value; }
         }
 
@@ -198,7 +198,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public object Body
         {
-            get { return (object) attributes["body"]; }
+            get { return (object)attributes["body"]; }
             set { attributes["body"] = value; }
         }
 
@@ -208,7 +208,7 @@ namespace FilesCom.Models
         [JsonPropertyName("raw_body")]
         public string RawBody
         {
-            get { return (string) attributes["raw_body"]; }
+            get { return (string)attributes["raw_body"]; }
             set { attributes["raw_body"] = value; }
         }
 
@@ -218,7 +218,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file_as_body")]
         public bool FileAsBody
         {
-            get { return (bool) attributes["file_as_body"]; }
+            get { return (bool)attributes["file_as_body"]; }
             set { attributes["file_as_body"] = value; }
         }
 
@@ -228,7 +228,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file_form_field")]
         public string FileFormField
         {
-            get { return (string) attributes["file_form_field"]; }
+            get { return (string)attributes["file_form_field"]; }
             set { attributes["file_form_field"] = value; }
         }
 
@@ -238,7 +238,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
-            get { return (string) attributes["action"]; }
+            get { return (string)attributes["action"]; }
             set { attributes["action"] = value; }
         }
 
@@ -269,7 +269,7 @@ namespace FilesCom.Models
         ///   action - string - action for test body
         /// </summary>
         public static async Task<WebhookTest> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -277,39 +277,39 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("url") && !(parameters["url"] is string ))
+            if (parameters.ContainsKey("url") && !(parameters["url"] is string))
             {
                 throw new ArgumentException("Bad parameter: url must be of type string", "parameters[\"url\"]");
             }
-            if (parameters.ContainsKey("method") && !(parameters["method"] is string ))
+            if (parameters.ContainsKey("method") && !(parameters["method"] is string))
             {
                 throw new ArgumentException("Bad parameter: method must be of type string", "parameters[\"method\"]");
             }
-            if (parameters.ContainsKey("encoding") && !(parameters["encoding"] is string ))
+            if (parameters.ContainsKey("encoding") && !(parameters["encoding"] is string))
             {
                 throw new ArgumentException("Bad parameter: encoding must be of type string", "parameters[\"encoding\"]");
             }
-            if (parameters.ContainsKey("headers") && !(parameters["headers"] is object ))
+            if (parameters.ContainsKey("headers") && !(parameters["headers"] is object))
             {
                 throw new ArgumentException("Bad parameter: headers must be of type object", "parameters[\"headers\"]");
             }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is object ))
+            if (parameters.ContainsKey("body") && !(parameters["body"] is object))
             {
                 throw new ArgumentException("Bad parameter: body must be of type object", "parameters[\"body\"]");
             }
-            if (parameters.ContainsKey("raw_body") && !(parameters["raw_body"] is string ))
+            if (parameters.ContainsKey("raw_body") && !(parameters["raw_body"] is string))
             {
                 throw new ArgumentException("Bad parameter: raw_body must be of type string", "parameters[\"raw_body\"]");
             }
-            if (parameters.ContainsKey("file_as_body") && !(parameters["file_as_body"] is bool ))
+            if (parameters.ContainsKey("file_as_body") && !(parameters["file_as_body"] is bool))
             {
                 throw new ArgumentException("Bad parameter: file_as_body must be of type bool", "parameters[\"file_as_body\"]");
             }
-            if (parameters.ContainsKey("file_form_field") && !(parameters["file_form_field"] is string ))
+            if (parameters.ContainsKey("file_form_field") && !(parameters["file_form_field"] is string))
             {
                 throw new ArgumentException("Bad parameter: file_form_field must be of type string", "parameters[\"file_form_field\"]");
             }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
@@ -326,4 +326,3 @@ namespace FilesCom.Models
 
     }
 }
-

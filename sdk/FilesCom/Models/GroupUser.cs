@@ -76,7 +76,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_name")]
         public string GroupName
         {
-            get { return (string) attributes["group_name"]; }
+            get { return (string)attributes["group_name"]; }
             set { attributes["group_name"] = value; }
         }
 
@@ -86,7 +86,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_id")]
         public Nullable<Int64> GroupId
         {
-            get { return (Nullable<Int64>) attributes["group_id"]; }
+            get { return (Nullable<Int64>)attributes["group_id"]; }
             set { attributes["group_id"] = value; }
         }
 
@@ -96,7 +96,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -106,7 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("admin")]
         public bool Admin
         {
-            get { return (bool) attributes["admin"]; }
+            get { return (bool)attributes["admin"]; }
             set { attributes["admin"] = value; }
         }
 
@@ -116,7 +116,7 @@ namespace FilesCom.Models
         [JsonPropertyName("usernames")]
         public string[] Usernames
         {
-            get { return (string[]) attributes["usernames"]; }
+            get { return (string[])attributes["usernames"]; }
             set { attributes["usernames"] = value; }
         }
 
@@ -126,7 +126,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -141,22 +141,23 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool ))
+            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool))
             {
                 throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
             }
@@ -189,18 +190,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
@@ -249,7 +251,7 @@ namespace FilesCom.Models
         ///   group_id - int64 - Group ID.  If provided, will return group_users of this group.
         /// </summary>
         public static async Task<GroupUser[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -257,19 +259,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
@@ -280,7 +282,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<GroupUser[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -295,7 +297,7 @@ namespace FilesCom.Models
         ///   admin - boolean - Is the user a group administrator?
         /// </summary>
         public static async Task<GroupUser> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -303,15 +305,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool ))
+            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool))
             {
                 throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
             }
@@ -337,7 +339,7 @@ namespace FilesCom.Models
         ///   admin - boolean - Is the user a group administrator?
         /// </summary>
         public static async Task<GroupUser> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -346,19 +348,19 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool ))
+            if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool))
             {
                 throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
             }
@@ -387,7 +389,7 @@ namespace FilesCom.Models
         ///   user_id (required) - int64 - User ID to remove from group.
         /// </summary>
         public static async Task<GroupUser> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -396,15 +398,15 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
@@ -427,7 +429,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<GroupUser> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -437,4 +439,3 @@ namespace FilesCom.Models
 
     }
 }
-

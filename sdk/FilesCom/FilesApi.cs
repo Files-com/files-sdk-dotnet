@@ -55,14 +55,16 @@ namespace FilesCom
             string jsonString = "";
             HttpContent httpContent = null;
 
-            switch(verb.Method)
+            switch (verb.Method)
             {
                 case "GET":
                 case "HEAD":
                 case "DELETE":
                     Dictionary<string, string> queryParams = new Dictionary<string, string>();
-                    foreach(var k in parameters.Keys) {
-                        if (k.Length == 0) {
+                    foreach (var k in parameters.Keys)
+                    {
+                        if (k.Length == 0)
+                        {
                             continue;
                         }
                         queryParams.Add(k, parameters[k]?.ToString());
@@ -109,7 +111,7 @@ namespace FilesCom
                         throw new ArgumentException("Bad option: api_key must be of type string", "options[\"api_key\"]");
                     }
 
-                    httpRequestMessage.Headers.Add("X-FilesApi-Key", (string) options["api_key"]);
+                    httpRequestMessage.Headers.Add("X-FilesApi-Key", (string)options["api_key"]);
                 }
                 else if (filesClient.SessionId != null && filesClient.SessionId.Length > 0)
                 {
@@ -209,7 +211,8 @@ namespace FilesCom
                 string name = param.Value.Substring(1, param.Value.Length - 2);
                 object value = parameters[name];
 
-                if (value == null) {
+                if (value == null)
+                {
                     throw new InvalidOperationException($"Expected {name} parameter for path: {path}");
                 }
 
@@ -219,4 +222,3 @@ namespace FilesCom
         }
     }
 }
-

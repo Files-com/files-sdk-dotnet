@@ -61,7 +61,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             private set { attributes["path"] = value; }
         }
 
@@ -72,7 +72,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color")]
         public string Color
         {
-            get { return (string) attributes["color"]; }
+            get { return (string)attributes["color"]; }
             private set { attributes["color"] = value; }
         }
 
@@ -85,7 +85,7 @@ namespace FilesCom.Models
         ///   path (required) - string - The path to query for priorities
         /// </summary>
         public static async Task<Priority[]> List(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -94,15 +94,15 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -117,7 +117,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Priority[]> All(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -127,4 +127,3 @@ namespace FilesCom.Models
 
     }
 }
-

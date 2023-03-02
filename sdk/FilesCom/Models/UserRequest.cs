@@ -68,7 +68,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -78,7 +78,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
         }
 
@@ -88,7 +88,7 @@ namespace FilesCom.Models
         [JsonPropertyName("email")]
         public string Email
         {
-            get { return (string) attributes["email"]; }
+            get { return (string)attributes["email"]; }
             set { attributes["email"] = value; }
         }
 
@@ -98,7 +98,7 @@ namespace FilesCom.Models
         [JsonPropertyName("details")]
         public string Details
         {
-            get { return (string) attributes["details"]; }
+            get { return (string)attributes["details"]; }
             set { attributes["details"] = value; }
         }
 
@@ -109,10 +109,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -151,7 +152,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
         public static async Task<UserRequest[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -159,11 +160,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
@@ -174,7 +175,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<UserRequest[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -187,7 +188,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - User Request ID.
         /// </summary>
         public static async Task<UserRequest> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -196,7 +197,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -211,7 +212,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<UserRequest> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -226,7 +227,7 @@ namespace FilesCom.Models
         ///   details (required) - string - Details of the user request
         /// </summary>
         public static async Task<UserRequest> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -234,15 +235,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("email") && !(parameters["email"] is string ))
+            if (parameters.ContainsKey("email") && !(parameters["email"] is string))
             {
                 throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
             }
-            if (parameters.ContainsKey("details") && !(parameters["details"] is string ))
+            if (parameters.ContainsKey("details") && !(parameters["details"] is string))
             {
                 throw new ArgumentException("Bad parameter: details must be of type string", "parameters[\"details\"]");
             }
@@ -268,7 +269,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<UserRequest> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -277,7 +278,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -292,7 +293,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<UserRequest> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -302,4 +303,3 @@ namespace FilesCom.Models
 
     }
 }
-

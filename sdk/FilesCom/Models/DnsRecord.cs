@@ -69,7 +69,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public string Id
         {
-            get { return (string) attributes["id"]; }
+            get { return (string)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -80,7 +80,7 @@ namespace FilesCom.Models
         [JsonPropertyName("domain")]
         public string Domain
         {
-            get { return (string) attributes["domain"]; }
+            get { return (string)attributes["domain"]; }
             private set { attributes["domain"] = value; }
         }
 
@@ -91,7 +91,7 @@ namespace FilesCom.Models
         [JsonPropertyName("rrtype")]
         public string Rrtype
         {
-            get { return (string) attributes["rrtype"]; }
+            get { return (string)attributes["rrtype"]; }
             private set { attributes["rrtype"] = value; }
         }
 
@@ -102,7 +102,7 @@ namespace FilesCom.Models
         [JsonPropertyName("value")]
         public string Value
         {
-            get { return (string) attributes["value"]; }
+            get { return (string)attributes["value"]; }
             private set { attributes["value"] = value; }
         }
 
@@ -114,7 +114,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
         public static async Task<DnsRecord[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -122,11 +122,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
@@ -137,7 +137,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<DnsRecord[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -147,4 +147,3 @@ namespace FilesCom.Models
 
     }
 }
-

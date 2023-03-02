@@ -84,7 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public string Id
         {
-            get { return (string) attributes["id"]; }
+            get { return (string)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -94,7 +94,7 @@ namespace FilesCom.Models
         [JsonPropertyName("language")]
         public string Language
         {
-            get { return (string) attributes["language"]; }
+            get { return (string)attributes["language"]; }
             set { attributes["language"] = value; }
         }
 
@@ -104,7 +104,7 @@ namespace FilesCom.Models
         [JsonPropertyName("read_only")]
         public bool ReadOnly
         {
-            get { return (bool) attributes["read_only"]; }
+            get { return (bool)attributes["read_only"]; }
             set { attributes["read_only"] = value; }
         }
 
@@ -114,7 +114,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_insecure_ciphers")]
         public bool SftpInsecureCiphers
         {
-            get { return (bool) attributes["sftp_insecure_ciphers"]; }
+            get { return (bool)attributes["sftp_insecure_ciphers"]; }
             set { attributes["sftp_insecure_ciphers"] = value; }
         }
 
@@ -124,7 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            get { return (string) attributes["username"]; }
+            get { return (string)attributes["username"]; }
             set { attributes["username"] = value; }
         }
 
@@ -134,7 +134,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password")]
         public string Password
         {
-            get { return (string) attributes["password"]; }
+            get { return (string)attributes["password"]; }
             set { attributes["password"] = value; }
         }
 
@@ -144,7 +144,7 @@ namespace FilesCom.Models
         [JsonPropertyName("otp")]
         public string Otp
         {
-            get { return (string) attributes["otp"]; }
+            get { return (string)attributes["otp"]; }
             set { attributes["otp"] = value; }
         }
 
@@ -154,7 +154,7 @@ namespace FilesCom.Models
         [JsonPropertyName("partial_session_id")]
         public string PartialSessionId
         {
-            get { return (string) attributes["partial_session_id"]; }
+            get { return (string)attributes["partial_session_id"]; }
             set { attributes["partial_session_id"] = value; }
         }
 
@@ -180,7 +180,7 @@ namespace FilesCom.Models
         ///   partial_session_id - string - Identifier for a partially-completed login
         /// </summary>
         public static async Task<Session> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -188,19 +188,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string ))
+            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
             }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string ))
+            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
             {
                 throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
             }
-            if (parameters.ContainsKey("otp") && !(parameters["otp"] is string ))
+            if (parameters.ContainsKey("otp") && !(parameters["otp"] is string))
             {
                 throw new ArgumentException("Bad parameter: otp must be of type string", "parameters[\"otp\"]");
             }
-            if (parameters.ContainsKey("partial_session_id") && !(parameters["partial_session_id"] is string ))
+            if (parameters.ContainsKey("partial_session_id") && !(parameters["partial_session_id"] is string))
             {
                 throw new ArgumentException("Bad parameter: partial_session_id must be of type string", "parameters[\"partial_session_id\"]");
             }
@@ -214,7 +214,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Session> Delete(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -229,7 +229,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Session> Destroy(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -239,4 +239,3 @@ namespace FilesCom.Models
 
     }
 }
-

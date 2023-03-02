@@ -96,7 +96,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -106,7 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("event_type")]
         public string EventType
         {
-            get { return (string) attributes["event_type"]; }
+            get { return (string)attributes["event_type"]; }
             set { attributes["event_type"] = value; }
         }
 
@@ -116,7 +116,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            get { return (string) attributes["status"]; }
+            get { return (string)attributes["status"]; }
             set { attributes["status"] = value; }
         }
 
@@ -126,7 +126,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public string Body
         {
-            get { return (string) attributes["body"]; }
+            get { return (string)attributes["body"]; }
             set { attributes["body"] = value; }
         }
 
@@ -137,7 +137,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -147,7 +147,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body_url")]
         public string BodyUrl
         {
-            get { return (string) attributes["body_url"]; }
+            get { return (string)attributes["body_url"]; }
             set { attributes["body_url"] = value; }
         }
 
@@ -157,7 +157,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_behavior_id")]
         public Nullable<Int64> FolderBehaviorId
         {
-            get { return (Nullable<Int64>) attributes["folder_behavior_id"]; }
+            get { return (Nullable<Int64>)attributes["folder_behavior_id"]; }
             set { attributes["folder_behavior_id"] = value; }
         }
 
@@ -167,7 +167,7 @@ namespace FilesCom.Models
         [JsonPropertyName("successful_files")]
         public Nullable<Int64> SuccessfulFiles
         {
-            get { return (Nullable<Int64>) attributes["successful_files"]; }
+            get { return (Nullable<Int64>)attributes["successful_files"]; }
             set { attributes["successful_files"] = value; }
         }
 
@@ -177,7 +177,7 @@ namespace FilesCom.Models
         [JsonPropertyName("errored_files")]
         public Nullable<Int64> ErroredFiles
         {
-            get { return (Nullable<Int64>) attributes["errored_files"]; }
+            get { return (Nullable<Int64>)attributes["errored_files"]; }
             set { attributes["errored_files"] = value; }
         }
 
@@ -187,7 +187,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bytes_synced")]
         public Nullable<Int64> BytesSynced
         {
-            get { return (Nullable<Int64>) attributes["bytes_synced"]; }
+            get { return (Nullable<Int64>)attributes["bytes_synced"]; }
             set { attributes["bytes_synced"] = value; }
         }
 
@@ -197,7 +197,7 @@ namespace FilesCom.Models
         [JsonPropertyName("remote_server_type")]
         public string RemoteServerType
         {
-            get { return (string) attributes["remote_server_type"]; }
+            get { return (string)attributes["remote_server_type"]; }
             set { attributes["remote_server_type"] = value; }
         }
 
@@ -228,7 +228,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `created_at`, `event_type`, `remote_server_type`, `status` or `folder_behavior_id`. Valid field combinations are `[ event_type, status, created_at ]`, `[ event_type, created_at ]` or `[ status, created_at ]`.
         /// </summary>
         public static async Task<ExternalEvent[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -236,39 +236,39 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
@@ -279,7 +279,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ExternalEvent[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -292,7 +292,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - External Event ID.
         /// </summary>
         public static async Task<ExternalEvent> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -301,7 +301,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -316,7 +316,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ExternalEvent> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -330,7 +330,7 @@ namespace FilesCom.Models
         ///   body (required) - string - Event body
         /// </summary>
         public static async Task<ExternalEvent> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -338,11 +338,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("status") && !(parameters["status"] is string ))
+            if (parameters.ContainsKey("status") && !(parameters["status"] is string))
             {
                 throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
             }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is string ))
+            if (parameters.ContainsKey("body") && !(parameters["body"] is string))
             {
                 throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
             }
@@ -363,4 +363,3 @@ namespace FilesCom.Models
 
     }
 }
-

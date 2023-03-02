@@ -193,7 +193,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -204,7 +204,7 @@ namespace FilesCom.Models
         [JsonPropertyName("as2_partner_id")]
         public Nullable<Int64> As2PartnerId
         {
-            get { return (Nullable<Int64>) attributes["as2_partner_id"]; }
+            get { return (Nullable<Int64>)attributes["as2_partner_id"]; }
             private set { attributes["as2_partner_id"] = value; }
         }
 
@@ -215,7 +215,7 @@ namespace FilesCom.Models
         [JsonPropertyName("as2_station_id")]
         public Nullable<Int64> As2StationId
         {
-            get { return (Nullable<Int64>) attributes["as2_station_id"]; }
+            get { return (Nullable<Int64>)attributes["as2_station_id"]; }
             private set { attributes["as2_station_id"] = value; }
         }
 
@@ -226,7 +226,7 @@ namespace FilesCom.Models
         [JsonPropertyName("uuid")]
         public string Uuid
         {
-            get { return (string) attributes["uuid"]; }
+            get { return (string)attributes["uuid"]; }
             private set { attributes["uuid"] = value; }
         }
 
@@ -237,7 +237,7 @@ namespace FilesCom.Models
         [JsonPropertyName("content_type")]
         public string ContentType
         {
-            get { return (string) attributes["content_type"]; }
+            get { return (string)attributes["content_type"]; }
             private set { attributes["content_type"] = value; }
         }
 
@@ -248,7 +248,7 @@ namespace FilesCom.Models
         [JsonPropertyName("http_headers")]
         public object HttpHeaders
         {
-            get { return (object) attributes["http_headers"]; }
+            get { return (object)attributes["http_headers"]; }
             private set { attributes["http_headers"] = value; }
         }
 
@@ -259,7 +259,7 @@ namespace FilesCom.Models
         [JsonPropertyName("activity_log")]
         public string ActivityLog
         {
-            get { return (string) attributes["activity_log"]; }
+            get { return (string)attributes["activity_log"]; }
             private set { attributes["activity_log"] = value; }
         }
 
@@ -270,7 +270,7 @@ namespace FilesCom.Models
         [JsonPropertyName("processing_result")]
         public string ProcessingResult
         {
-            get { return (string) attributes["processing_result"]; }
+            get { return (string)attributes["processing_result"]; }
             private set { attributes["processing_result"] = value; }
         }
 
@@ -281,7 +281,7 @@ namespace FilesCom.Models
         [JsonPropertyName("processing_result_description")]
         public string ProcessingResultDescription
         {
-            get { return (string) attributes["processing_result_description"]; }
+            get { return (string)attributes["processing_result_description"]; }
             private set { attributes["processing_result_description"] = value; }
         }
 
@@ -292,7 +292,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mic")]
         public string Mic
         {
-            get { return (string) attributes["mic"]; }
+            get { return (string)attributes["mic"]; }
             private set { attributes["mic"] = value; }
         }
 
@@ -303,7 +303,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mic_algo")]
         public string MicAlgo
         {
-            get { return (string) attributes["mic_algo"]; }
+            get { return (string)attributes["mic_algo"]; }
             private set { attributes["mic_algo"] = value; }
         }
 
@@ -314,7 +314,7 @@ namespace FilesCom.Models
         [JsonPropertyName("as2_to")]
         public string As2To
         {
-            get { return (string) attributes["as2_to"]; }
+            get { return (string)attributes["as2_to"]; }
             private set { attributes["as2_to"] = value; }
         }
 
@@ -325,7 +325,7 @@ namespace FilesCom.Models
         [JsonPropertyName("as2_from")]
         public string As2From
         {
-            get { return (string) attributes["as2_from"]; }
+            get { return (string)attributes["as2_from"]; }
             private set { attributes["as2_from"] = value; }
         }
 
@@ -336,7 +336,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message_id")]
         public string MessageId
         {
-            get { return (string) attributes["message_id"]; }
+            get { return (string)attributes["message_id"]; }
             private set { attributes["message_id"] = value; }
         }
 
@@ -347,7 +347,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subject")]
         public string Subject
         {
-            get { return (string) attributes["subject"]; }
+            get { return (string)attributes["subject"]; }
             private set { attributes["subject"] = value; }
         }
 
@@ -358,7 +358,7 @@ namespace FilesCom.Models
         [JsonPropertyName("date")]
         public string Date
         {
-            get { return (string) attributes["date"]; }
+            get { return (string)attributes["date"]; }
             private set { attributes["date"] = value; }
         }
 
@@ -369,7 +369,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body_size")]
         public string BodySize
         {
-            get { return (string) attributes["body_size"]; }
+            get { return (string)attributes["body_size"]; }
             private set { attributes["body_size"] = value; }
         }
 
@@ -380,7 +380,7 @@ namespace FilesCom.Models
         [JsonPropertyName("attachment_filename")]
         public string AttachmentFilename
         {
-            get { return (string) attributes["attachment_filename"]; }
+            get { return (string)attributes["attachment_filename"]; }
             private set { attributes["attachment_filename"] = value; }
         }
 
@@ -391,7 +391,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ip")]
         public string Ip
         {
-            get { return (string) attributes["ip"]; }
+            get { return (string)attributes["ip"]; }
             private set { attributes["ip"] = value; }
         }
 
@@ -402,7 +402,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -413,7 +413,7 @@ namespace FilesCom.Models
         [JsonPropertyName("http_response_code")]
         public string HttpResponseCode
         {
-            get { return (string) attributes["http_response_code"]; }
+            get { return (string)attributes["http_response_code"]; }
             private set { attributes["http_response_code"] = value; }
         }
 
@@ -424,7 +424,7 @@ namespace FilesCom.Models
         [JsonPropertyName("http_response_headers")]
         public object HttpResponseHeaders
         {
-            get { return (object) attributes["http_response_headers"]; }
+            get { return (object)attributes["http_response_headers"]; }
             private set { attributes["http_response_headers"] = value; }
         }
 
@@ -435,7 +435,7 @@ namespace FilesCom.Models
         [JsonPropertyName("recipient_serial")]
         public string RecipientSerial
         {
-            get { return (string) attributes["recipient_serial"]; }
+            get { return (string)attributes["recipient_serial"]; }
             private set { attributes["recipient_serial"] = value; }
         }
 
@@ -446,7 +446,7 @@ namespace FilesCom.Models
         [JsonPropertyName("hex_recipient_serial")]
         public string HexRecipientSerial
         {
-            get { return (string) attributes["hex_recipient_serial"]; }
+            get { return (string)attributes["hex_recipient_serial"]; }
             private set { attributes["hex_recipient_serial"] = value; }
         }
 
@@ -457,7 +457,7 @@ namespace FilesCom.Models
         [JsonPropertyName("recipient_issuer")]
         public string RecipientIssuer
         {
-            get { return (string) attributes["recipient_issuer"]; }
+            get { return (string)attributes["recipient_issuer"]; }
             private set { attributes["recipient_issuer"] = value; }
         }
 
@@ -468,7 +468,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message_received")]
         public bool MessageReceived
         {
-            get { return (bool) attributes["message_received"]; }
+            get { return (bool)attributes["message_received"]; }
             private set { attributes["message_received"] = value; }
         }
 
@@ -479,7 +479,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message_decrypted")]
         public bool MessageDecrypted
         {
-            get { return (bool) attributes["message_decrypted"]; }
+            get { return (bool)attributes["message_decrypted"]; }
             private set { attributes["message_decrypted"] = value; }
         }
 
@@ -490,7 +490,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message_signature_verified")]
         public bool MessageSignatureVerified
         {
-            get { return (bool) attributes["message_signature_verified"]; }
+            get { return (bool)attributes["message_signature_verified"]; }
             private set { attributes["message_signature_verified"] = value; }
         }
 
@@ -501,7 +501,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message_processing_success")]
         public bool MessageProcessingSuccess
         {
-            get { return (bool) attributes["message_processing_success"]; }
+            get { return (bool)attributes["message_processing_success"]; }
             private set { attributes["message_processing_success"] = value; }
         }
 
@@ -512,7 +512,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message_mdn_returned")]
         public bool MessageMdnReturned
         {
-            get { return (bool) attributes["message_mdn_returned"]; }
+            get { return (bool)attributes["message_mdn_returned"]; }
             private set { attributes["message_mdn_returned"] = value; }
         }
 
@@ -523,7 +523,7 @@ namespace FilesCom.Models
         [JsonPropertyName("encrypted_uri")]
         public string EncryptedUri
         {
-            get { return (string) attributes["encrypted_uri"]; }
+            get { return (string)attributes["encrypted_uri"]; }
             private set { attributes["encrypted_uri"] = value; }
         }
 
@@ -534,7 +534,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smime_signed_uri")]
         public string SmimeSignedUri
         {
-            get { return (string) attributes["smime_signed_uri"]; }
+            get { return (string)attributes["smime_signed_uri"]; }
             private set { attributes["smime_signed_uri"] = value; }
         }
 
@@ -545,7 +545,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smime_uri")]
         public string SmimeUri
         {
-            get { return (string) attributes["smime_uri"]; }
+            get { return (string)attributes["smime_uri"]; }
             private set { attributes["smime_uri"] = value; }
         }
 
@@ -556,7 +556,7 @@ namespace FilesCom.Models
         [JsonPropertyName("raw_uri")]
         public string RawUri
         {
-            get { return (string) attributes["raw_uri"]; }
+            get { return (string)attributes["raw_uri"]; }
             private set { attributes["raw_uri"] = value; }
         }
 
@@ -567,7 +567,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mdn_response_uri")]
         public string MdnResponseUri
         {
-            get { return (string) attributes["mdn_response_uri"]; }
+            get { return (string)attributes["mdn_response_uri"]; }
             private set { attributes["mdn_response_uri"] = value; }
         }
 
@@ -587,7 +587,7 @@ namespace FilesCom.Models
         ///   as2_partner_id - int64 - As2 Partner ID.  If provided, will return message specific to that partner.
         /// </summary>
         public static async Task<As2IncomingMessage[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -595,43 +595,43 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
-            if (parameters.ContainsKey("as2_partner_id") && !(parameters["as2_partner_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("as2_partner_id") && !(parameters["as2_partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: as2_partner_id must be of type Nullable<Int64>", "parameters[\"as2_partner_id\"]");
             }
@@ -642,7 +642,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<As2IncomingMessage[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -652,4 +652,3 @@ namespace FilesCom.Models
 
     }
 }
-

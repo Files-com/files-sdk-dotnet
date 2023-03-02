@@ -93,7 +93,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -104,7 +104,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<Int64> CreatedAt
         {
-            get { return (Nullable<Int64>) attributes["created_at"]; }
+            get { return (Nullable<Int64>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -115,7 +115,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public Nullable<Int64> Status
         {
-            get { return (Nullable<Int64>) attributes["status"]; }
+            get { return (Nullable<Int64>)attributes["status"]; }
             private set { attributes["status"] = value; }
         }
 
@@ -126,7 +126,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
-            get { return (string) attributes["message"]; }
+            get { return (string)attributes["message"]; }
             private set { attributes["message"] = value; }
         }
 
@@ -137,7 +137,7 @@ namespace FilesCom.Models
         [JsonPropertyName("success")]
         public bool Success
         {
-            get { return (bool) attributes["success"]; }
+            get { return (bool)attributes["success"]; }
             private set { attributes["success"] = value; }
         }
 
@@ -148,7 +148,7 @@ namespace FilesCom.Models
         [JsonPropertyName("request_headers")]
         public string RequestHeaders
         {
-            get { return (string) attributes["request_headers"]; }
+            get { return (string)attributes["request_headers"]; }
             private set { attributes["request_headers"] = value; }
         }
 
@@ -159,7 +159,7 @@ namespace FilesCom.Models
         [JsonPropertyName("request_method")]
         public string RequestMethod
         {
-            get { return (string) attributes["request_method"]; }
+            get { return (string)attributes["request_method"]; }
             private set { attributes["request_method"] = value; }
         }
 
@@ -170,7 +170,7 @@ namespace FilesCom.Models
         [JsonPropertyName("request_url")]
         public string RequestUrl
         {
-            get { return (string) attributes["request_url"]; }
+            get { return (string)attributes["request_url"]; }
             private set { attributes["request_url"] = value; }
         }
 
@@ -181,7 +181,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             private set { attributes["path"] = value; }
         }
 
@@ -192,7 +192,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder")]
         public string Folder
         {
-            get { return (string) attributes["folder"]; }
+            get { return (string)attributes["folder"]; }
             private set { attributes["folder"] = value; }
         }
 
@@ -206,7 +206,7 @@ namespace FilesCom.Models
         ///   action_notification_export_id (required) - int64 - ID of the associated action notification export.
         /// </summary>
         public static async Task<ActionNotificationExportResult[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -214,19 +214,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("action_notification_export_id") && !(parameters["action_notification_export_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("action_notification_export_id") && !(parameters["action_notification_export_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: action_notification_export_id must be of type Nullable<Int64>", "parameters[\"action_notification_export_id\"]");
             }
@@ -241,7 +241,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ActionNotificationExportResult[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -251,4 +251,3 @@ namespace FilesCom.Models
 
     }
 }
-

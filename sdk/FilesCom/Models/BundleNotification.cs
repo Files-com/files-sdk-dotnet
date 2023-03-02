@@ -72,7 +72,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_id")]
         public Nullable<Int64> BundleId
         {
-            get { return (Nullable<Int64>) attributes["bundle_id"]; }
+            get { return (Nullable<Int64>)attributes["bundle_id"]; }
             set { attributes["bundle_id"] = value; }
         }
 
@@ -82,7 +82,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -92,7 +92,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_registration")]
         public bool NotifyOnRegistration
         {
-            get { return (bool) attributes["notify_on_registration"]; }
+            get { return (bool)attributes["notify_on_registration"]; }
             set { attributes["notify_on_registration"] = value; }
         }
 
@@ -102,7 +102,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_upload")]
         public bool NotifyOnUpload
         {
-            get { return (bool) attributes["notify_on_upload"]; }
+            get { return (bool)attributes["notify_on_upload"]; }
             set { attributes["notify_on_upload"] = value; }
         }
 
@@ -112,7 +112,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -126,18 +126,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool ))
+            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
             }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
@@ -159,10 +160,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -203,7 +205,7 @@ namespace FilesCom.Models
         ///   bundle_id - int64 - Bundle ID to notify on
         /// </summary>
         public static async Task<BundleNotification[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -211,19 +213,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
@@ -234,7 +236,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<BundleNotification[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -247,7 +249,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Bundle Notification ID.
         /// </summary>
         public static async Task<BundleNotification> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -256,7 +258,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -271,7 +273,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<BundleNotification> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -287,7 +289,7 @@ namespace FilesCom.Models
         ///   bundle_id (required) - int64 - Bundle ID to notify on
         /// </summary>
         public static async Task<BundleNotification> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -295,19 +297,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool ))
+            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
             }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
@@ -328,7 +330,7 @@ namespace FilesCom.Models
         ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         /// </summary>
         public static async Task<BundleNotification> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -337,15 +339,15 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool ))
+            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
             }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
@@ -363,7 +365,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<BundleNotification> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -372,7 +374,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -387,7 +389,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<BundleNotification> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -397,4 +399,3 @@ namespace FilesCom.Models
 
     }
 }
-

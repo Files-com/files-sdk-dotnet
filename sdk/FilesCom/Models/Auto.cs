@@ -56,7 +56,7 @@ namespace FilesCom.Models
         [JsonPropertyName("dynamic")]
         public object Dynamic
         {
-            get { return (object) attributes["dynamic"]; }
+            get { return (object)attributes["dynamic"]; }
             private set { attributes["dynamic"] = value; }
         }
 
@@ -64,4 +64,3 @@ namespace FilesCom.Models
 
     }
 }
-

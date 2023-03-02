@@ -84,7 +84,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -94,7 +94,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -104,7 +104,7 @@ namespace FilesCom.Models
         [JsonPropertyName("source")]
         public string Source
         {
-            get { return (string) attributes["source"]; }
+            get { return (string)attributes["source"]; }
             set { attributes["source"] = value; }
         }
 
@@ -114,7 +114,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
-            get { return (string) attributes["destination"]; }
+            get { return (string)attributes["destination"]; }
             set { attributes["destination"] = value; }
         }
 
@@ -124,7 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("automation_id")]
         public string AutomationId
         {
-            get { return (string) attributes["automation_id"]; }
+            get { return (string)attributes["automation_id"]; }
             set { attributes["automation_id"] = value; }
         }
 
@@ -134,7 +134,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_display_name")]
         public string UserDisplayName
         {
-            get { return (string) attributes["user_display_name"]; }
+            get { return (string)attributes["user_display_name"]; }
             set { attributes["user_display_name"] = value; }
         }
 
@@ -144,7 +144,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_ids")]
         public string UserIds
         {
-            get { return (string) attributes["user_ids"]; }
+            get { return (string)attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
 
@@ -154,7 +154,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_ids")]
         public string GroupIds
         {
-            get { return (string) attributes["group_ids"]; }
+            get { return (string)attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
         }
 
@@ -165,10 +165,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -210,7 +211,7 @@ namespace FilesCom.Models
         ///   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
         public static async Task<Request[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -218,23 +219,23 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool ))
+            if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mine must be of type bool", "parameters[\"mine\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -245,7 +246,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Request[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -262,7 +263,7 @@ namespace FilesCom.Models
         ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
         public static async Task<Request[]> GetFolder(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -271,23 +272,23 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool ))
+            if (parameters.ContainsKey("mine") && !(parameters["mine"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mine must be of type bool", "parameters[\"mine\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -310,7 +311,7 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs to request the file from. If sent as a string, it should be comma-delimited.
         /// </summary>
         public static async Task<Request> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -318,19 +319,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string ))
+            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
@@ -352,7 +353,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Request> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -361,7 +362,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -376,7 +377,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Request> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -386,4 +387,3 @@ namespace FilesCom.Models
 
     }
 }
-

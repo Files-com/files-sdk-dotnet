@@ -105,7 +105,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -116,7 +116,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             private set { attributes["path"] = value; }
         }
 
@@ -127,7 +127,7 @@ namespace FilesCom.Models
         [JsonPropertyName("when")]
         public Nullable<DateTime> When
         {
-            get { return (Nullable<DateTime>) attributes["when"]; }
+            get { return (Nullable<DateTime>)attributes["when"]; }
             private set { attributes["when"] = value; }
         }
 
@@ -138,7 +138,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
-            get { return (string) attributes["destination"]; }
+            get { return (string)attributes["destination"]; }
             private set { attributes["destination"] = value; }
         }
 
@@ -149,7 +149,7 @@ namespace FilesCom.Models
         [JsonPropertyName("display")]
         public string Display
         {
-            get { return (string) attributes["display"]; }
+            get { return (string)attributes["display"]; }
             private set { attributes["display"] = value; }
         }
 
@@ -160,7 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ip")]
         public string Ip
         {
-            get { return (string) attributes["ip"]; }
+            get { return (string)attributes["ip"]; }
             private set { attributes["ip"] = value; }
         }
 
@@ -171,7 +171,7 @@ namespace FilesCom.Models
         [JsonPropertyName("source")]
         public string Source
         {
-            get { return (string) attributes["source"]; }
+            get { return (string)attributes["source"]; }
             private set { attributes["source"] = value; }
         }
 
@@ -182,7 +182,7 @@ namespace FilesCom.Models
         [JsonPropertyName("targets")]
         public object[] Targets
         {
-            get { return (object[]) attributes["targets"]; }
+            get { return (object[])attributes["targets"]; }
             private set { attributes["targets"] = value; }
         }
 
@@ -193,7 +193,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             private set { attributes["user_id"] = value; }
         }
 
@@ -204,7 +204,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            get { return (string) attributes["username"]; }
+            get { return (string)attributes["username"]; }
             private set { attributes["username"] = value; }
         }
 
@@ -215,7 +215,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string ActionType
         {
-            get { return (string) attributes["action"]; }
+            get { return (string)attributes["action"]; }
             private set { attributes["action"] = value; }
         }
 
@@ -226,7 +226,7 @@ namespace FilesCom.Models
         [JsonPropertyName("failure_type")]
         public string FailureType
         {
-            get { return (string) attributes["failure_type"]; }
+            get { return (string)attributes["failure_type"]; }
             private set { attributes["failure_type"] = value; }
         }
 
@@ -237,7 +237,7 @@ namespace FilesCom.Models
         [JsonPropertyName("interface")]
         public string Interface
         {
-            get { return (string) attributes["interface"]; }
+            get { return (string)attributes["interface"]; }
             private set { attributes["interface"] = value; }
         }
 
@@ -245,4 +245,3 @@ namespace FilesCom.Models
 
     }
 }
-

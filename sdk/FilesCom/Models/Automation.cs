@@ -140,7 +140,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -150,7 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("automation")]
         public string AutomationType
         {
-            get { return (string) attributes["automation"]; }
+            get { return (string)attributes["automation"]; }
             set { attributes["automation"] = value; }
         }
 
@@ -160,7 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted")]
         public bool Deleted
         {
-            get { return (bool) attributes["deleted"]; }
+            get { return (bool)attributes["deleted"]; }
             set { attributes["deleted"] = value; }
         }
 
@@ -170,7 +170,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disabled")]
         public bool Disabled
         {
-            get { return (bool) attributes["disabled"]; }
+            get { return (bool)attributes["disabled"]; }
             set { attributes["disabled"] = value; }
         }
 
@@ -180,7 +180,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger")]
         public string Trigger
         {
-            get { return (string) attributes["trigger"]; }
+            get { return (string)attributes["trigger"]; }
             set { attributes["trigger"] = value; }
         }
 
@@ -190,7 +190,7 @@ namespace FilesCom.Models
         [JsonPropertyName("interval")]
         public string Interval
         {
-            get { return (string) attributes["interval"]; }
+            get { return (string)attributes["interval"]; }
             set { attributes["interval"] = value; }
         }
 
@@ -200,7 +200,7 @@ namespace FilesCom.Models
         [JsonPropertyName("last_modified_at")]
         public Nullable<DateTime> LastModifiedAt
         {
-            get { return (Nullable<DateTime>) attributes["last_modified_at"]; }
+            get { return (Nullable<DateTime>)attributes["last_modified_at"]; }
             set { attributes["last_modified_at"] = value; }
         }
 
@@ -210,7 +210,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
         }
 
@@ -220,7 +220,7 @@ namespace FilesCom.Models
         [JsonPropertyName("schedule")]
         public object Schedule
         {
-            get { return (object) attributes["schedule"]; }
+            get { return (object)attributes["schedule"]; }
             set { attributes["schedule"] = value; }
         }
 
@@ -230,7 +230,7 @@ namespace FilesCom.Models
         [JsonPropertyName("source")]
         public string Source
         {
-            get { return (string) attributes["source"]; }
+            get { return (string)attributes["source"]; }
             set { attributes["source"] = value; }
         }
 
@@ -240,7 +240,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destinations")]
         public string[] Destinations
         {
-            get { return (string[]) attributes["destinations"]; }
+            get { return (string[])attributes["destinations"]; }
             set { attributes["destinations"] = value; }
         }
 
@@ -250,7 +250,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination_replace_from")]
         public string DestinationReplaceFrom
         {
-            get { return (string) attributes["destination_replace_from"]; }
+            get { return (string)attributes["destination_replace_from"]; }
             set { attributes["destination_replace_from"] = value; }
         }
 
@@ -260,7 +260,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination_replace_to")]
         public string DestinationReplaceTo
         {
-            get { return (string) attributes["destination_replace_to"]; }
+            get { return (string)attributes["destination_replace_to"]; }
             set { attributes["destination_replace_to"] = value; }
         }
 
@@ -270,7 +270,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
-            get { return (string) attributes["description"]; }
+            get { return (string)attributes["description"]; }
             set { attributes["description"] = value; }
         }
 
@@ -280,7 +280,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -290,7 +290,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -300,7 +300,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_ids")]
         public Nullable<Int64>[] UserIds
         {
-            get { return (Nullable<Int64>[]) attributes["user_ids"]; }
+            get { return (Nullable<Int64>[])attributes["user_ids"]; }
             set { attributes["user_ids"] = value; }
         }
 
@@ -310,7 +310,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_ids")]
         public Nullable<Int64>[] GroupIds
         {
-            get { return (Nullable<Int64>[]) attributes["group_ids"]; }
+            get { return (Nullable<Int64>[])attributes["group_ids"]; }
             set { attributes["group_ids"] = value; }
         }
 
@@ -320,7 +320,7 @@ namespace FilesCom.Models
         [JsonPropertyName("webhook_url")]
         public string WebhookUrl
         {
-            get { return (string) attributes["webhook_url"]; }
+            get { return (string)attributes["webhook_url"]; }
             set { attributes["webhook_url"] = value; }
         }
 
@@ -330,7 +330,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger_actions")]
         public string[] TriggerActions
         {
-            get { return (string[]) attributes["trigger_actions"]; }
+            get { return (string[])attributes["trigger_actions"]; }
             set { attributes["trigger_actions"] = value; }
         }
 
@@ -340,7 +340,7 @@ namespace FilesCom.Models
         [JsonPropertyName("value")]
         public object Value
         {
-            get { return (object) attributes["value"]; }
+            get { return (object)attributes["value"]; }
             set { attributes["value"] = value; }
         }
 
@@ -350,7 +350,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
-            get { return (string) attributes["destination"]; }
+            get { return (string)attributes["destination"]; }
             set { attributes["destination"] = value; }
         }
 
@@ -379,78 +379,79 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("source") && !(parameters["source"] is string ))
+            if (parameters.ContainsKey("source") && !(parameters["source"] is string))
             {
                 throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
-            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[] ))
+            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: destinations must be of type string[]", "parameters[\"destinations\"]");
             }
-            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string ))
+            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_replace_from must be of type string", "parameters[\"destination_replace_from\"]");
             }
-            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string ))
+            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_replace_to must be of type string", "parameters[\"destination_replace_to\"]");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string ))
+            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string ))
+            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
-            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool ))
+            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
+            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
             }
-            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
+            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is object ))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
             }
@@ -472,10 +473,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -523,7 +525,7 @@ namespace FilesCom.Models
         ///   automation - string - DEPRECATED: Type of automation to filter by. Use `filter[automation]` instead.
         /// </summary>
         public static async Task<Automation[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -531,47 +533,47 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
-            if (parameters.ContainsKey("with_deleted") && !(parameters["with_deleted"] is bool ))
+            if (parameters.ContainsKey("with_deleted") && !(parameters["with_deleted"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_deleted must be of type bool", "parameters[\"with_deleted\"]");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
             }
@@ -582,7 +584,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Automation[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -595,7 +597,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Automation ID.
         /// </summary>
         public static async Task<Automation> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -604,7 +606,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -619,7 +621,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Automation> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -648,7 +650,7 @@ namespace FilesCom.Models
         ///   automation (required) - string - Automation type
         /// </summary>
         public static async Task<Automation> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -656,71 +658,71 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("source") && !(parameters["source"] is string ))
+            if (parameters.ContainsKey("source") && !(parameters["source"] is string))
             {
                 throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
-            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[] ))
+            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: destinations must be of type string[]", "parameters[\"destinations\"]");
             }
-            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string ))
+            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_replace_from must be of type string", "parameters[\"destination_replace_from\"]");
             }
-            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string ))
+            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_replace_to must be of type string", "parameters[\"destination_replace_to\"]");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string ))
+            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string ))
+            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
-            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool ))
+            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
+            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
             }
-            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
+            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is object ))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
             }
@@ -756,7 +758,7 @@ namespace FilesCom.Models
         ///   automation - string - Automation type
         /// </summary>
         public static async Task<Automation> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -765,75 +767,75 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("source") && !(parameters["source"] is string ))
+            if (parameters.ContainsKey("source") && !(parameters["source"] is string))
             {
                 throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
-            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[] ))
+            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: destinations must be of type string[]", "parameters[\"destinations\"]");
             }
-            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string ))
+            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_replace_from must be of type string", "parameters[\"destination_replace_from\"]");
             }
-            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string ))
+            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_replace_to must be of type string", "parameters[\"destination_replace_to\"]");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string ))
+            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string ))
+            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string ))
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
-            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object ))
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool ))
+            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string ))
+            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
             }
-            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[] ))
+            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is object ))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string ))
+            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
             }
@@ -851,7 +853,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Automation> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -860,7 +862,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -875,7 +877,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Automation> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -885,4 +887,3 @@ namespace FilesCom.Models
 
     }
 }
-

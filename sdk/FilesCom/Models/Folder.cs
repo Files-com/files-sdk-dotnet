@@ -128,7 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -138,7 +138,7 @@ namespace FilesCom.Models
         [JsonPropertyName("display_name")]
         public string DisplayName
         {
-            get { return (string) attributes["display_name"]; }
+            get { return (string)attributes["display_name"]; }
             set { attributes["display_name"] = value; }
         }
 
@@ -148,7 +148,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            get { return (string) attributes["type"]; }
+            get { return (string)attributes["type"]; }
             set { attributes["type"] = value; }
         }
 
@@ -158,7 +158,7 @@ namespace FilesCom.Models
         [JsonPropertyName("size")]
         public Nullable<Int64> Size
         {
-            get { return (Nullable<Int64>) attributes["size"]; }
+            get { return (Nullable<Int64>)attributes["size"]; }
             set { attributes["size"] = value; }
         }
 
@@ -169,7 +169,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -179,7 +179,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mtime")]
         public Nullable<DateTime> Mtime
         {
-            get { return (Nullable<DateTime>) attributes["mtime"]; }
+            get { return (Nullable<DateTime>)attributes["mtime"]; }
             set { attributes["mtime"] = value; }
         }
 
@@ -189,7 +189,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provided_mtime")]
         public Nullable<DateTime> ProvidedMtime
         {
-            get { return (Nullable<DateTime>) attributes["provided_mtime"]; }
+            get { return (Nullable<DateTime>)attributes["provided_mtime"]; }
             set { attributes["provided_mtime"] = value; }
         }
 
@@ -199,7 +199,7 @@ namespace FilesCom.Models
         [JsonPropertyName("crc32")]
         public string Crc32
         {
-            get { return (string) attributes["crc32"]; }
+            get { return (string)attributes["crc32"]; }
             set { attributes["crc32"] = value; }
         }
 
@@ -209,7 +209,7 @@ namespace FilesCom.Models
         [JsonPropertyName("md5")]
         public string Md5
         {
-            get { return (string) attributes["md5"]; }
+            get { return (string)attributes["md5"]; }
             set { attributes["md5"] = value; }
         }
 
@@ -219,7 +219,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mime_type")]
         public string MimeType
         {
-            get { return (string) attributes["mime_type"]; }
+            get { return (string)attributes["mime_type"]; }
             set { attributes["mime_type"] = value; }
         }
 
@@ -229,7 +229,7 @@ namespace FilesCom.Models
         [JsonPropertyName("region")]
         public string Region
         {
-            get { return (string) attributes["region"]; }
+            get { return (string)attributes["region"]; }
             set { attributes["region"] = value; }
         }
 
@@ -239,7 +239,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permissions")]
         public string Permissions
         {
-            get { return (string) attributes["permissions"]; }
+            get { return (string)attributes["permissions"]; }
             set { attributes["permissions"] = value; }
         }
 
@@ -249,7 +249,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subfolders_locked?")]
         public bool SubfoldersLocked
         {
-            get { return (bool) attributes["subfolders_locked?"]; }
+            get { return (bool)attributes["subfolders_locked?"]; }
             set { attributes["subfolders_locked?"] = value; }
         }
 
@@ -259,7 +259,7 @@ namespace FilesCom.Models
         [JsonPropertyName("is_locked")]
         public bool IsLocked
         {
-            get { return (bool) attributes["is_locked"]; }
+            get { return (bool)attributes["is_locked"]; }
             set { attributes["is_locked"] = value; }
         }
 
@@ -269,7 +269,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
-            get { return (string) attributes["download_uri"]; }
+            get { return (string)attributes["download_uri"]; }
             set { attributes["download_uri"] = value; }
         }
 
@@ -279,7 +279,7 @@ namespace FilesCom.Models
         [JsonPropertyName("priority_color")]
         public string PriorityColor
         {
-            get { return (string) attributes["priority_color"]; }
+            get { return (string)attributes["priority_color"]; }
             set { attributes["priority_color"] = value; }
         }
 
@@ -289,7 +289,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview_id")]
         public Nullable<Int64> PreviewId
         {
-            get { return (Nullable<Int64>) attributes["preview_id"]; }
+            get { return (Nullable<Int64>)attributes["preview_id"]; }
             set { attributes["preview_id"] = value; }
         }
 
@@ -299,7 +299,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview")]
         public Preview Preview
         {
-            get { return (Preview) attributes["preview"]; }
+            get { return (Preview)attributes["preview"]; }
             set { attributes["preview"] = value; }
         }
 
@@ -309,7 +309,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mkdir_parents")]
         public bool MkdirParents
         {
-            get { return (bool) attributes["mkdir_parents"]; }
+            get { return (bool)attributes["mkdir_parents"]; }
             set { attributes["mkdir_parents"] = value; }
         }
 
@@ -333,7 +333,7 @@ namespace FilesCom.Models
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
         public static async Task<RemoteFile[]> ListFor(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -342,39 +342,39 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is string ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is string))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type string", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
+            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string))
             {
                 throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
             }
-            if (parameters.ContainsKey("search") && !(parameters["search"] is string ))
+            if (parameters.ContainsKey("search") && !(parameters["search"] is string))
             {
                 throw new ArgumentException("Bad parameter: search must be of type string", "parameters[\"search\"]");
             }
-            if (parameters.ContainsKey("search_all") && !(parameters["search_all"] is bool ))
+            if (parameters.ContainsKey("search_all") && !(parameters["search_all"] is bool))
             {
                 throw new ArgumentException("Bad parameter: search_all must be of type bool", "parameters[\"search_all\"]");
             }
-            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool ))
+            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
             }
-            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool ))
+            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
             }
@@ -396,7 +396,7 @@ namespace FilesCom.Models
         ///   provided_mtime - string - User provided modification time.
         /// </summary>
         public static async Task<RemoteFile> Create(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -405,15 +405,15 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool ))
+            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
             }
-            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string ))
+            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string))
             {
                 throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
             }
@@ -430,4 +430,3 @@ namespace FilesCom.Models
 
     }
 }
-

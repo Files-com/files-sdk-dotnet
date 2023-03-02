@@ -61,7 +61,7 @@ namespace FilesCom.Models
         [JsonPropertyName("fields")]
         public string[] Fields
         {
-            get { return (string[]) attributes["fields"]; }
+            get { return (string[])attributes["fields"]; }
             private set { attributes["fields"] = value; }
         }
 
@@ -72,7 +72,7 @@ namespace FilesCom.Models
         [JsonPropertyName("messages")]
         public string[] Messages
         {
-            get { return (string[]) attributes["messages"]; }
+            get { return (string[])attributes["messages"]; }
             private set { attributes["messages"] = value; }
         }
 
@@ -80,4 +80,3 @@ namespace FilesCom.Models
 
     }
 }
-

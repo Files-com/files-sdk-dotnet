@@ -69,7 +69,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ip_address")]
         public string IpAddress
         {
-            get { return (string) attributes["ip_address"]; }
+            get { return (string)attributes["ip_address"]; }
             private set { attributes["ip_address"] = value; }
         }
 
@@ -80,7 +80,7 @@ namespace FilesCom.Models
         [JsonPropertyName("server_name")]
         public string ServerName
         {
-            get { return (string) attributes["server_name"]; }
+            get { return (string)attributes["server_name"]; }
             private set { attributes["server_name"] = value; }
         }
 
@@ -90,7 +90,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ftp_enabled")]
         public bool FtpEnabled
         {
-            get { return (bool) attributes["ftp_enabled"]; }
+            get { return (bool)attributes["ftp_enabled"]; }
             private set { attributes["ftp_enabled"] = value; }
         }
 
@@ -100,7 +100,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_enabled")]
         public bool SftpEnabled
         {
-            get { return (bool) attributes["sftp_enabled"]; }
+            get { return (bool)attributes["sftp_enabled"]; }
             private set { attributes["sftp_enabled"] = value; }
         }
 
@@ -108,4 +108,3 @@ namespace FilesCom.Models
 
     }
 }
-

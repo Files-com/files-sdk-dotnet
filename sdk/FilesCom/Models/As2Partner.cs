@@ -104,7 +104,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -114,7 +114,7 @@ namespace FilesCom.Models
         [JsonPropertyName("as2_station_id")]
         public Nullable<Int64> As2StationId
         {
-            get { return (Nullable<Int64>) attributes["as2_station_id"]; }
+            get { return (Nullable<Int64>)attributes["as2_station_id"]; }
             set { attributes["as2_station_id"] = value; }
         }
 
@@ -124,7 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
         }
 
@@ -134,7 +134,7 @@ namespace FilesCom.Models
         [JsonPropertyName("uri")]
         public string Uri
         {
-            get { return (string) attributes["uri"]; }
+            get { return (string)attributes["uri"]; }
             set { attributes["uri"] = value; }
         }
 
@@ -144,7 +144,7 @@ namespace FilesCom.Models
         [JsonPropertyName("server_certificate")]
         public string ServerCertificate
         {
-            get { return (string) attributes["server_certificate"]; }
+            get { return (string)attributes["server_certificate"]; }
             set { attributes["server_certificate"] = value; }
         }
 
@@ -154,7 +154,7 @@ namespace FilesCom.Models
         [JsonPropertyName("hex_public_certificate_serial")]
         public string HexPublicCertificateSerial
         {
-            get { return (string) attributes["hex_public_certificate_serial"]; }
+            get { return (string)attributes["hex_public_certificate_serial"]; }
             set { attributes["hex_public_certificate_serial"] = value; }
         }
 
@@ -164,7 +164,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate_md5")]
         public string PublicCertificateMd5
         {
-            get { return (string) attributes["public_certificate_md5"]; }
+            get { return (string)attributes["public_certificate_md5"]; }
             set { attributes["public_certificate_md5"] = value; }
         }
 
@@ -174,7 +174,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate_subject")]
         public string PublicCertificateSubject
         {
-            get { return (string) attributes["public_certificate_subject"]; }
+            get { return (string)attributes["public_certificate_subject"]; }
             set { attributes["public_certificate_subject"] = value; }
         }
 
@@ -184,7 +184,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate_issuer")]
         public string PublicCertificateIssuer
         {
-            get { return (string) attributes["public_certificate_issuer"]; }
+            get { return (string)attributes["public_certificate_issuer"]; }
             set { attributes["public_certificate_issuer"] = value; }
         }
 
@@ -194,7 +194,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate_serial")]
         public string PublicCertificateSerial
         {
-            get { return (string) attributes["public_certificate_serial"]; }
+            get { return (string)attributes["public_certificate_serial"]; }
             set { attributes["public_certificate_serial"] = value; }
         }
 
@@ -204,7 +204,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate_not_before")]
         public string PublicCertificateNotBefore
         {
-            get { return (string) attributes["public_certificate_not_before"]; }
+            get { return (string)attributes["public_certificate_not_before"]; }
             set { attributes["public_certificate_not_before"] = value; }
         }
 
@@ -214,7 +214,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate_not_after")]
         public string PublicCertificateNotAfter
         {
-            get { return (string) attributes["public_certificate_not_after"]; }
+            get { return (string)attributes["public_certificate_not_after"]; }
             set { attributes["public_certificate_not_after"] = value; }
         }
 
@@ -223,7 +223,7 @@ namespace FilesCom.Models
         [JsonPropertyName("public_certificate")]
         public string PublicCertificate
         {
-            get { return (string) attributes["public_certificate"]; }
+            get { return (string)attributes["public_certificate"]; }
             set { attributes["public_certificate"] = value; }
         }
 
@@ -239,26 +239,27 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
+            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string))
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string ))
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
-            if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
+            if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
             }
@@ -280,10 +281,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -322,7 +324,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
         public static async Task<As2Partner[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -330,11 +332,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
@@ -345,7 +347,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<As2Partner[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -358,7 +360,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - As2 Partner ID.
         /// </summary>
         public static async Task<As2Partner> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -367,7 +369,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -382,7 +384,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<As2Partner> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -399,7 +401,7 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate security setting
         /// </summary>
         public static async Task<As2Partner> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -407,23 +409,23 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
+            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string))
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
-            if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
+            if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
             }
-            if (parameters.ContainsKey("as2_station_id") && !(parameters["as2_station_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("as2_station_id") && !(parameters["as2_station_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: as2_station_id must be of type Nullable<Int64>", "parameters[\"as2_station_id\"]");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string ))
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
@@ -458,7 +460,7 @@ namespace FilesCom.Models
         ///   public_certificate - string
         /// </summary>
         public static async Task<As2Partner> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -467,23 +469,23 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string ))
+            if (parameters.ContainsKey("uri") && !(parameters["uri"] is string))
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string ))
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
-            if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string ))
+            if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
             }
@@ -501,7 +503,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<As2Partner> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -510,7 +512,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -525,7 +527,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<As2Partner> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -535,4 +537,3 @@ namespace FilesCom.Models
 
     }
 }
-

@@ -109,7 +109,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -120,7 +120,7 @@ namespace FilesCom.Models
         [JsonPropertyName("amount")]
         public double Amount
         {
-            get { return (double) attributes["amount"]; }
+            get { return (double)attributes["amount"]; }
             private set { attributes["amount"] = value; }
         }
 
@@ -131,7 +131,7 @@ namespace FilesCom.Models
         [JsonPropertyName("balance")]
         public double Balance
         {
-            get { return (double) attributes["balance"]; }
+            get { return (double)attributes["balance"]; }
             private set { attributes["balance"] = value; }
         }
 
@@ -142,7 +142,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -153,7 +153,7 @@ namespace FilesCom.Models
         [JsonPropertyName("currency")]
         public string Currency
         {
-            get { return (string) attributes["currency"]; }
+            get { return (string)attributes["currency"]; }
             private set { attributes["currency"] = value; }
         }
 
@@ -164,7 +164,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
-            get { return (string) attributes["download_uri"]; }
+            get { return (string)attributes["download_uri"]; }
             private set { attributes["download_uri"] = value; }
         }
 
@@ -175,7 +175,7 @@ namespace FilesCom.Models
         [JsonPropertyName("invoice_line_items")]
         public string[] InvoiceLineItems
         {
-            get { return (string[]) attributes["invoice_line_items"]; }
+            get { return (string[])attributes["invoice_line_items"]; }
             private set { attributes["invoice_line_items"] = value; }
         }
 
@@ -186,7 +186,7 @@ namespace FilesCom.Models
         [JsonPropertyName("method")]
         public string Method
         {
-            get { return (string) attributes["method"]; }
+            get { return (string)attributes["method"]; }
             private set { attributes["method"] = value; }
         }
 
@@ -197,7 +197,7 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_line_items")]
         public string[] PaymentLineItems
         {
-            get { return (string[]) attributes["payment_line_items"]; }
+            get { return (string[])attributes["payment_line_items"]; }
             private set { attributes["payment_line_items"] = value; }
         }
 
@@ -208,7 +208,7 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_reversed_at")]
         public Nullable<DateTime> PaymentReversedAt
         {
-            get { return (Nullable<DateTime>) attributes["payment_reversed_at"]; }
+            get { return (Nullable<DateTime>)attributes["payment_reversed_at"]; }
             private set { attributes["payment_reversed_at"] = value; }
         }
 
@@ -219,7 +219,7 @@ namespace FilesCom.Models
         [JsonPropertyName("payment_type")]
         public string PaymentType
         {
-            get { return (string) attributes["payment_type"]; }
+            get { return (string)attributes["payment_type"]; }
             private set { attributes["payment_type"] = value; }
         }
 
@@ -230,7 +230,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site_name")]
         public string SiteName
         {
-            get { return (string) attributes["site_name"]; }
+            get { return (string)attributes["site_name"]; }
             private set { attributes["site_name"] = value; }
         }
 
@@ -241,7 +241,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            get { return (string) attributes["type"]; }
+            get { return (string)attributes["type"]; }
             private set { attributes["type"] = value; }
         }
 
@@ -252,7 +252,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            get { return (Nullable<DateTime>)attributes["updated_at"]; }
             private set { attributes["updated_at"] = value; }
         }
 
@@ -260,4 +260,3 @@ namespace FilesCom.Models
 
     }
 }
-

@@ -104,7 +104,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -114,7 +114,7 @@ namespace FilesCom.Models
         [JsonPropertyName("descriptive_label")]
         public string DescriptiveLabel
         {
-            get { return (string) attributes["descriptive_label"]; }
+            get { return (string)attributes["descriptive_label"]; }
             set { attributes["descriptive_label"] = value; }
         }
 
@@ -124,7 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
-            get { return (string) attributes["description"]; }
+            get { return (string)attributes["description"]; }
             set { attributes["description"] = value; }
         }
 
@@ -135,7 +135,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -145,7 +145,7 @@ namespace FilesCom.Models
         [JsonPropertyName("expires_at")]
         public Nullable<DateTime> ExpiresAt
         {
-            get { return (Nullable<DateTime>) attributes["expires_at"]; }
+            get { return (Nullable<DateTime>)attributes["expires_at"]; }
             set { attributes["expires_at"] = value; }
         }
 
@@ -155,7 +155,7 @@ namespace FilesCom.Models
         [JsonPropertyName("key")]
         public string Key
         {
-            get { return (string) attributes["key"]; }
+            get { return (string)attributes["key"]; }
             set { attributes["key"] = value; }
         }
 
@@ -165,7 +165,7 @@ namespace FilesCom.Models
         [JsonPropertyName("last_use_at")]
         public Nullable<DateTime> LastUseAt
         {
-            get { return (Nullable<DateTime>) attributes["last_use_at"]; }
+            get { return (Nullable<DateTime>)attributes["last_use_at"]; }
             set { attributes["last_use_at"] = value; }
         }
 
@@ -175,7 +175,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
         }
 
@@ -185,7 +185,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -195,7 +195,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permission_set")]
         public string PermissionSet
         {
-            get { return (string) attributes["permission_set"]; }
+            get { return (string)attributes["permission_set"]; }
             set { attributes["permission_set"] = value; }
         }
 
@@ -205,7 +205,7 @@ namespace FilesCom.Models
         [JsonPropertyName("platform")]
         public string Platform
         {
-            get { return (string) attributes["platform"]; }
+            get { return (string)attributes["platform"]; }
             set { attributes["platform"] = value; }
         }
 
@@ -215,7 +215,7 @@ namespace FilesCom.Models
         [JsonPropertyName("url")]
         public string Url
         {
-            get { return (string) attributes["url"]; }
+            get { return (string)attributes["url"]; }
             set { attributes["url"] = value; }
         }
 
@@ -225,7 +225,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -241,26 +241,27 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
@@ -282,10 +283,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -332,7 +334,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `expires_at`.
         /// </summary>
         public static async Task<ApiKey[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -340,43 +342,43 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
@@ -387,7 +389,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ApiKey[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -398,7 +400,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<ApiKey> FindCurrent(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -418,7 +420,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Api Key ID.
         /// </summary>
         public static async Task<ApiKey> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -427,7 +429,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -442,7 +444,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ApiKey> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -460,7 +462,7 @@ namespace FilesCom.Models
         ///   path - string - Folder path restriction for this api key.
         /// </summary>
         public static async Task<ApiKey> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -468,27 +470,27 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -506,7 +508,7 @@ namespace FilesCom.Models
         ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public static async Task<ApiKey> UpdateCurrent(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -514,15 +516,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
@@ -541,7 +543,7 @@ namespace FilesCom.Models
         ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public static async Task<ApiKey> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -550,23 +552,23 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string ))
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string ))
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
@@ -584,7 +586,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<ApiKey> DeleteCurrent(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -602,7 +604,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<ApiKey> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -611,7 +613,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -626,7 +628,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ApiKey> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -636,4 +638,3 @@ namespace FilesCom.Models
 
     }
 }
-

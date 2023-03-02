@@ -61,7 +61,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             private set { attributes["name"] = value; }
         }
 
@@ -72,7 +72,7 @@ namespace FilesCom.Models
         [JsonPropertyName("uri")]
         public string Uri
         {
-            get { return (string) attributes["uri"]; }
+            get { return (string)attributes["uri"]; }
             private set { attributes["uri"] = value; }
         }
 
@@ -80,4 +80,3 @@ namespace FilesCom.Models
 
     }
 }
-

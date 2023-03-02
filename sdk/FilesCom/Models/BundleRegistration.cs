@@ -105,7 +105,7 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public string Code
         {
-            get { return (string) attributes["code"]; }
+            get { return (string)attributes["code"]; }
             private set { attributes["code"] = value; }
         }
 
@@ -116,7 +116,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             private set { attributes["name"] = value; }
         }
 
@@ -127,7 +127,7 @@ namespace FilesCom.Models
         [JsonPropertyName("company")]
         public string Company
         {
-            get { return (string) attributes["company"]; }
+            get { return (string)attributes["company"]; }
             private set { attributes["company"] = value; }
         }
 
@@ -138,7 +138,7 @@ namespace FilesCom.Models
         [JsonPropertyName("email")]
         public string Email
         {
-            get { return (string) attributes["email"]; }
+            get { return (string)attributes["email"]; }
             private set { attributes["email"] = value; }
         }
 
@@ -149,7 +149,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ip")]
         public string Ip
         {
-            get { return (string) attributes["ip"]; }
+            get { return (string)attributes["ip"]; }
             private set { attributes["ip"] = value; }
         }
 
@@ -160,7 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("inbox_code")]
         public string InboxCode
         {
-            get { return (string) attributes["inbox_code"]; }
+            get { return (string)attributes["inbox_code"]; }
             private set { attributes["inbox_code"] = value; }
         }
 
@@ -171,7 +171,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
-            get { return (string) attributes["clickwrap_body"]; }
+            get { return (string)attributes["clickwrap_body"]; }
             private set { attributes["clickwrap_body"] = value; }
         }
 
@@ -182,7 +182,7 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_set_id")]
         public Nullable<Int64> FormFieldSetId
         {
-            get { return (Nullable<Int64>) attributes["form_field_set_id"]; }
+            get { return (Nullable<Int64>)attributes["form_field_set_id"]; }
             private set { attributes["form_field_set_id"] = value; }
         }
 
@@ -193,7 +193,7 @@ namespace FilesCom.Models
         [JsonPropertyName("form_field_data")]
         public object FormFieldData
         {
-            get { return (object) attributes["form_field_data"]; }
+            get { return (object)attributes["form_field_data"]; }
             private set { attributes["form_field_data"] = value; }
         }
 
@@ -204,7 +204,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_code")]
         public string BundleCode
         {
-            get { return (string) attributes["bundle_code"]; }
+            get { return (string)attributes["bundle_code"]; }
             private set { attributes["bundle_code"] = value; }
         }
 
@@ -215,7 +215,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_id")]
         public Nullable<Int64> BundleId
         {
-            get { return (Nullable<Int64>) attributes["bundle_id"]; }
+            get { return (Nullable<Int64>)attributes["bundle_id"]; }
             private set { attributes["bundle_id"] = value; }
         }
 
@@ -226,7 +226,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_recipient_id")]
         public Nullable<Int64> BundleRecipientId
         {
-            get { return (Nullable<Int64>) attributes["bundle_recipient_id"]; }
+            get { return (Nullable<Int64>)attributes["bundle_recipient_id"]; }
             private set { attributes["bundle_recipient_id"] = value; }
         }
 
@@ -237,7 +237,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -251,7 +251,7 @@ namespace FilesCom.Models
         ///   bundle_id - int64 - ID of the associated Bundle
         /// </summary>
         public static async Task<BundleRegistration[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -259,19 +259,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
@@ -282,7 +282,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<BundleRegistration[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -292,4 +292,3 @@ namespace FilesCom.Models
 
     }
 }
-

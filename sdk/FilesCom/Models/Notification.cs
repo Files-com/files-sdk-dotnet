@@ -140,7 +140,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -150,7 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -160,7 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_id")]
         public Nullable<Int64> GroupId
         {
-            get { return (Nullable<Int64>) attributes["group_id"]; }
+            get { return (Nullable<Int64>)attributes["group_id"]; }
             set { attributes["group_id"] = value; }
         }
 
@@ -170,7 +170,7 @@ namespace FilesCom.Models
         [JsonPropertyName("group_name")]
         public string GroupName
         {
-            get { return (string) attributes["group_name"]; }
+            get { return (string)attributes["group_name"]; }
             set { attributes["group_name"] = value; }
         }
 
@@ -180,7 +180,7 @@ namespace FilesCom.Models
         [JsonPropertyName("triggering_group_ids")]
         public Nullable<Int64>[] TriggeringGroupIds
         {
-            get { return (Nullable<Int64>[]) attributes["triggering_group_ids"]; }
+            get { return (Nullable<Int64>[])attributes["triggering_group_ids"]; }
             set { attributes["triggering_group_ids"] = value; }
         }
 
@@ -190,7 +190,7 @@ namespace FilesCom.Models
         [JsonPropertyName("triggering_user_ids")]
         public Nullable<Int64>[] TriggeringUserIds
         {
-            get { return (Nullable<Int64>[]) attributes["triggering_user_ids"]; }
+            get { return (Nullable<Int64>[])attributes["triggering_user_ids"]; }
             set { attributes["triggering_user_ids"] = value; }
         }
 
@@ -200,7 +200,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger_by_share_recipients")]
         public bool TriggerByShareRecipients
         {
-            get { return (bool) attributes["trigger_by_share_recipients"]; }
+            get { return (bool)attributes["trigger_by_share_recipients"]; }
             set { attributes["trigger_by_share_recipients"] = value; }
         }
 
@@ -210,7 +210,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_user_actions")]
         public bool NotifyUserActions
         {
-            get { return (bool) attributes["notify_user_actions"]; }
+            get { return (bool)attributes["notify_user_actions"]; }
             set { attributes["notify_user_actions"] = value; }
         }
 
@@ -220,7 +220,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_copy")]
         public bool NotifyOnCopy
         {
-            get { return (bool) attributes["notify_on_copy"]; }
+            get { return (bool)attributes["notify_on_copy"]; }
             set { attributes["notify_on_copy"] = value; }
         }
 
@@ -230,7 +230,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_delete")]
         public bool NotifyOnDelete
         {
-            get { return (bool) attributes["notify_on_delete"]; }
+            get { return (bool)attributes["notify_on_delete"]; }
             set { attributes["notify_on_delete"] = value; }
         }
 
@@ -240,7 +240,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_download")]
         public bool NotifyOnDownload
         {
-            get { return (bool) attributes["notify_on_download"]; }
+            get { return (bool)attributes["notify_on_download"]; }
             set { attributes["notify_on_download"] = value; }
         }
 
@@ -250,7 +250,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_move")]
         public bool NotifyOnMove
         {
-            get { return (bool) attributes["notify_on_move"]; }
+            get { return (bool)attributes["notify_on_move"]; }
             set { attributes["notify_on_move"] = value; }
         }
 
@@ -260,7 +260,7 @@ namespace FilesCom.Models
         [JsonPropertyName("notify_on_upload")]
         public bool NotifyOnUpload
         {
-            get { return (bool) attributes["notify_on_upload"]; }
+            get { return (bool)attributes["notify_on_upload"]; }
             set { attributes["notify_on_upload"] = value; }
         }
 
@@ -270,7 +270,7 @@ namespace FilesCom.Models
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            get { return (bool) attributes["recursive"]; }
+            get { return (bool)attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
 
@@ -280,7 +280,7 @@ namespace FilesCom.Models
         [JsonPropertyName("send_interval")]
         public string SendInterval
         {
-            get { return (string) attributes["send_interval"]; }
+            get { return (string)attributes["send_interval"]; }
             set { attributes["send_interval"] = value; }
         }
 
@@ -290,7 +290,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
-            get { return (string) attributes["message"]; }
+            get { return (string)attributes["message"]; }
             set { attributes["message"] = value; }
         }
 
@@ -300,7 +300,7 @@ namespace FilesCom.Models
         [JsonPropertyName("triggering_filenames")]
         public string[] TriggeringFilenames
         {
-            get { return (string[]) attributes["triggering_filenames"]; }
+            get { return (string[])attributes["triggering_filenames"]; }
             set { attributes["triggering_filenames"] = value; }
         }
 
@@ -310,7 +310,7 @@ namespace FilesCom.Models
         [JsonPropertyName("unsubscribed")]
         public bool Unsubscribed
         {
-            get { return (bool) attributes["unsubscribed"]; }
+            get { return (bool)attributes["unsubscribed"]; }
             set { attributes["unsubscribed"] = value; }
         }
 
@@ -320,7 +320,7 @@ namespace FilesCom.Models
         [JsonPropertyName("unsubscribed_reason")]
         public string UnsubscribedReason
         {
-            get { return (string) attributes["unsubscribed_reason"]; }
+            get { return (string)attributes["unsubscribed_reason"]; }
             set { attributes["unsubscribed_reason"] = value; }
         }
 
@@ -330,7 +330,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -340,7 +340,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            get { return (string) attributes["username"]; }
+            get { return (string)attributes["username"]; }
             set { attributes["username"] = value; }
         }
 
@@ -350,7 +350,7 @@ namespace FilesCom.Models
         [JsonPropertyName("suppressed_email")]
         public bool SuppressedEmail
         {
-            get { return (bool) attributes["suppressed_email"]; }
+            get { return (bool)attributes["suppressed_email"]; }
             set { attributes["suppressed_email"] = value; }
         }
 
@@ -375,62 +375,63 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("notify_on_copy") && !(parameters["notify_on_copy"] is bool ))
+            if (parameters.ContainsKey("notify_on_copy") && !(parameters["notify_on_copy"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_copy must be of type bool", "parameters[\"notify_on_copy\"]");
             }
-            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool ))
+            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_delete must be of type bool", "parameters[\"notify_on_delete\"]");
             }
-            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool ))
+            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_download must be of type bool", "parameters[\"notify_on_download\"]");
             }
-            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool ))
+            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_move must be of type bool", "parameters[\"notify_on_move\"]");
             }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
-            if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
+            if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
-            if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
+            if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
             }
-            if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
-            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[] ))
+            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_filenames must be of type string[]", "parameters[\"triggering_filenames\"]");
             }
-            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[] ))
+            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_group_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_group_ids\"]");
             }
-            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[] ))
+            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_user_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_user_ids\"]");
             }
-            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool ))
+            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool))
             {
                 throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
@@ -452,10 +453,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -505,7 +507,7 @@ namespace FilesCom.Models
         ///   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
         /// </summary>
         public static async Task<Notification[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -513,55 +515,55 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("include_ancestors") && !(parameters["include_ancestors"] is bool ))
+            if (parameters.ContainsKey("include_ancestors") && !(parameters["include_ancestors"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_ancestors must be of type bool", "parameters[\"include_ancestors\"]");
             }
@@ -572,7 +574,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Notification[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -585,7 +587,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Notification ID.
         /// </summary>
         public static async Task<Notification> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -594,7 +596,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -609,7 +611,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Notification> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -638,7 +640,7 @@ namespace FilesCom.Models
         ///   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
         /// </summary>
         public static async Task<Notification> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -646,71 +648,71 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("notify_on_copy") && !(parameters["notify_on_copy"] is bool ))
+            if (parameters.ContainsKey("notify_on_copy") && !(parameters["notify_on_copy"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_copy must be of type bool", "parameters[\"notify_on_copy\"]");
             }
-            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool ))
+            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_delete must be of type bool", "parameters[\"notify_on_delete\"]");
             }
-            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool ))
+            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_download must be of type bool", "parameters[\"notify_on_download\"]");
             }
-            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool ))
+            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_move must be of type bool", "parameters[\"notify_on_move\"]");
             }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
-            if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
+            if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
-            if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
+            if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
             }
-            if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
-            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[] ))
+            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_filenames must be of type string[]", "parameters[\"triggering_filenames\"]");
             }
-            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[] ))
+            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_group_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_group_ids\"]");
             }
-            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[] ))
+            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_user_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_user_ids\"]");
             }
-            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool ))
+            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool))
             {
                 throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string ))
+            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
             }
@@ -738,7 +740,7 @@ namespace FilesCom.Models
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         /// </summary>
         public static async Task<Notification> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -747,59 +749,59 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("notify_on_copy") && !(parameters["notify_on_copy"] is bool ))
+            if (parameters.ContainsKey("notify_on_copy") && !(parameters["notify_on_copy"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_copy must be of type bool", "parameters[\"notify_on_copy\"]");
             }
-            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool ))
+            if (parameters.ContainsKey("notify_on_delete") && !(parameters["notify_on_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_delete must be of type bool", "parameters[\"notify_on_delete\"]");
             }
-            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool ))
+            if (parameters.ContainsKey("notify_on_download") && !(parameters["notify_on_download"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_download must be of type bool", "parameters[\"notify_on_download\"]");
             }
-            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool ))
+            if (parameters.ContainsKey("notify_on_move") && !(parameters["notify_on_move"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_move must be of type bool", "parameters[\"notify_on_move\"]");
             }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool ))
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
-            if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool ))
+            if (parameters.ContainsKey("notify_user_actions") && !(parameters["notify_user_actions"] is bool))
             {
                 throw new ArgumentException("Bad parameter: notify_user_actions must be of type bool", "parameters[\"notify_user_actions\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
-            if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string ))
+            if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
             }
-            if (parameters.ContainsKey("message") && !(parameters["message"] is string ))
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
-            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[] ))
+            if (parameters.ContainsKey("triggering_filenames") && !(parameters["triggering_filenames"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_filenames must be of type string[]", "parameters[\"triggering_filenames\"]");
             }
-            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[] ))
+            if (parameters.ContainsKey("triggering_group_ids") && !(parameters["triggering_group_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_group_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_group_ids\"]");
             }
-            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[] ))
+            if (parameters.ContainsKey("triggering_user_ids") && !(parameters["triggering_user_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: triggering_user_ids must be of type Nullable<Int64>[]", "parameters[\"triggering_user_ids\"]");
             }
-            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool ))
+            if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool))
             {
                 throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
@@ -817,7 +819,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Notification> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -826,7 +828,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -841,7 +843,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Notification> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -851,4 +853,3 @@ namespace FilesCom.Models
 
     }
 }
-

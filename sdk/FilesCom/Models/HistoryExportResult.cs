@@ -149,7 +149,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -160,7 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<Int64> CreatedAt
         {
-            get { return (Nullable<Int64>) attributes["created_at"]; }
+            get { return (Nullable<Int64>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -171,7 +171,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at_iso8601")]
         public Nullable<Int64> CreatedAtIso8601
         {
-            get { return (Nullable<Int64>) attributes["created_at_iso8601"]; }
+            get { return (Nullable<Int64>)attributes["created_at_iso8601"]; }
             private set { attributes["created_at_iso8601"] = value; }
         }
 
@@ -182,7 +182,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             private set { attributes["user_id"] = value; }
         }
 
@@ -193,7 +193,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file_id")]
         public Nullable<Int64> FileId
         {
-            get { return (Nullable<Int64>) attributes["file_id"]; }
+            get { return (Nullable<Int64>)attributes["file_id"]; }
             private set { attributes["file_id"] = value; }
         }
 
@@ -204,7 +204,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parent_id")]
         public Nullable<Int64> ParentId
         {
-            get { return (Nullable<Int64>) attributes["parent_id"]; }
+            get { return (Nullable<Int64>)attributes["parent_id"]; }
             private set { attributes["parent_id"] = value; }
         }
 
@@ -215,7 +215,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             private set { attributes["path"] = value; }
         }
 
@@ -226,7 +226,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder")]
         public string Folder
         {
-            get { return (string) attributes["folder"]; }
+            get { return (string)attributes["folder"]; }
             private set { attributes["folder"] = value; }
         }
 
@@ -237,7 +237,7 @@ namespace FilesCom.Models
         [JsonPropertyName("src")]
         public string Src
         {
-            get { return (string) attributes["src"]; }
+            get { return (string)attributes["src"]; }
             private set { attributes["src"] = value; }
         }
 
@@ -248,7 +248,7 @@ namespace FilesCom.Models
         [JsonPropertyName("destination")]
         public string Destination
         {
-            get { return (string) attributes["destination"]; }
+            get { return (string)attributes["destination"]; }
             private set { attributes["destination"] = value; }
         }
 
@@ -259,7 +259,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ip")]
         public string Ip
         {
-            get { return (string) attributes["ip"]; }
+            get { return (string)attributes["ip"]; }
             private set { attributes["ip"] = value; }
         }
 
@@ -270,7 +270,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            get { return (string) attributes["username"]; }
+            get { return (string)attributes["username"]; }
             private set { attributes["username"] = value; }
         }
 
@@ -281,7 +281,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
-            get { return (string) attributes["action"]; }
+            get { return (string)attributes["action"]; }
             private set { attributes["action"] = value; }
         }
 
@@ -292,7 +292,7 @@ namespace FilesCom.Models
         [JsonPropertyName("failure_type")]
         public string FailureType
         {
-            get { return (string) attributes["failure_type"]; }
+            get { return (string)attributes["failure_type"]; }
             private set { attributes["failure_type"] = value; }
         }
 
@@ -303,7 +303,7 @@ namespace FilesCom.Models
         [JsonPropertyName("interface")]
         public string Interface
         {
-            get { return (string) attributes["interface"]; }
+            get { return (string)attributes["interface"]; }
             private set { attributes["interface"] = value; }
         }
 
@@ -314,7 +314,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_id")]
         public Nullable<Int64> TargetId
         {
-            get { return (Nullable<Int64>) attributes["target_id"]; }
+            get { return (Nullable<Int64>)attributes["target_id"]; }
             private set { attributes["target_id"] = value; }
         }
 
@@ -325,7 +325,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_name")]
         public string TargetName
         {
-            get { return (string) attributes["target_name"]; }
+            get { return (string)attributes["target_name"]; }
             private set { attributes["target_name"] = value; }
         }
 
@@ -336,7 +336,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_permission")]
         public string TargetPermission
         {
-            get { return (string) attributes["target_permission"]; }
+            get { return (string)attributes["target_permission"]; }
             private set { attributes["target_permission"] = value; }
         }
 
@@ -347,7 +347,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_recursive")]
         public bool TargetRecursive
         {
-            get { return (bool) attributes["target_recursive"]; }
+            get { return (bool)attributes["target_recursive"]; }
             private set { attributes["target_recursive"] = value; }
         }
 
@@ -358,7 +358,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_expires_at")]
         public Nullable<Int64> TargetExpiresAt
         {
-            get { return (Nullable<Int64>) attributes["target_expires_at"]; }
+            get { return (Nullable<Int64>)attributes["target_expires_at"]; }
             private set { attributes["target_expires_at"] = value; }
         }
 
@@ -369,7 +369,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_permission_set")]
         public string TargetPermissionSet
         {
-            get { return (string) attributes["target_permission_set"]; }
+            get { return (string)attributes["target_permission_set"]; }
             private set { attributes["target_permission_set"] = value; }
         }
 
@@ -380,7 +380,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_platform")]
         public string TargetPlatform
         {
-            get { return (string) attributes["target_platform"]; }
+            get { return (string)attributes["target_platform"]; }
             private set { attributes["target_platform"] = value; }
         }
 
@@ -391,7 +391,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_username")]
         public string TargetUsername
         {
-            get { return (string) attributes["target_username"]; }
+            get { return (string)attributes["target_username"]; }
             private set { attributes["target_username"] = value; }
         }
 
@@ -402,7 +402,7 @@ namespace FilesCom.Models
         [JsonPropertyName("target_user_id")]
         public Nullable<Int64> TargetUserId
         {
-            get { return (Nullable<Int64>) attributes["target_user_id"]; }
+            get { return (Nullable<Int64>)attributes["target_user_id"]; }
             private set { attributes["target_user_id"] = value; }
         }
 
@@ -416,7 +416,7 @@ namespace FilesCom.Models
         ///   history_export_id (required) - int64 - ID of the associated history export.
         /// </summary>
         public static async Task<HistoryExportResult[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -424,19 +424,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("history_export_id") && !(parameters["history_export_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("history_export_id") && !(parameters["history_export_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: history_export_id must be of type Nullable<Int64>", "parameters[\"history_export_id\"]");
             }
@@ -451,7 +451,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<HistoryExportResult[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -461,4 +461,3 @@ namespace FilesCom.Models
 
     }
 }
-

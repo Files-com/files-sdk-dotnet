@@ -97,7 +97,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -108,7 +108,7 @@ namespace FilesCom.Models
         [JsonPropertyName("date")]
         public Nullable<DateTime> Date
         {
-            get { return (Nullable<DateTime>) attributes["date"]; }
+            get { return (Nullable<DateTime>)attributes["date"]; }
             private set { attributes["date"] = value; }
         }
 
@@ -119,7 +119,7 @@ namespace FilesCom.Models
         [JsonPropertyName("api_usage_available")]
         public bool ApiUsageAvailable
         {
-            get { return (bool) attributes["api_usage_available"]; }
+            get { return (bool)attributes["api_usage_available"]; }
             private set { attributes["api_usage_available"] = value; }
         }
 
@@ -130,7 +130,7 @@ namespace FilesCom.Models
         [JsonPropertyName("read_api_usage")]
         public Nullable<Int64> ReadApiUsage
         {
-            get { return (Nullable<Int64>) attributes["read_api_usage"]; }
+            get { return (Nullable<Int64>)attributes["read_api_usage"]; }
             private set { attributes["read_api_usage"] = value; }
         }
 
@@ -141,7 +141,7 @@ namespace FilesCom.Models
         [JsonPropertyName("write_api_usage")]
         public Nullable<Int64> WriteApiUsage
         {
-            get { return (Nullable<Int64>) attributes["write_api_usage"]; }
+            get { return (Nullable<Int64>)attributes["write_api_usage"]; }
             private set { attributes["write_api_usage"] = value; }
         }
 
@@ -152,7 +152,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_count")]
         public Nullable<Int64> UserCount
         {
-            get { return (Nullable<Int64>) attributes["user_count"]; }
+            get { return (Nullable<Int64>)attributes["user_count"]; }
             private set { attributes["user_count"] = value; }
         }
 
@@ -163,7 +163,7 @@ namespace FilesCom.Models
         [JsonPropertyName("current_storage")]
         public Nullable<Int64> CurrentStorage
         {
-            get { return (Nullable<Int64>) attributes["current_storage"]; }
+            get { return (Nullable<Int64>)attributes["current_storage"]; }
             private set { attributes["current_storage"] = value; }
         }
 
@@ -174,7 +174,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted_files_storage")]
         public Nullable<Int64> DeletedFilesStorage
         {
-            get { return (Nullable<Int64>) attributes["deleted_files_storage"]; }
+            get { return (Nullable<Int64>)attributes["deleted_files_storage"]; }
             private set { attributes["deleted_files_storage"] = value; }
         }
 
@@ -185,7 +185,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted_files_counted_in_minimum")]
         public Nullable<Int64> DeletedFilesCountedInMinimum
         {
-            get { return (Nullable<Int64>) attributes["deleted_files_counted_in_minimum"]; }
+            get { return (Nullable<Int64>)attributes["deleted_files_counted_in_minimum"]; }
             private set { attributes["deleted_files_counted_in_minimum"] = value; }
         }
 
@@ -196,7 +196,7 @@ namespace FilesCom.Models
         [JsonPropertyName("root_storage")]
         public Nullable<Int64> RootStorage
         {
-            get { return (Nullable<Int64>) attributes["root_storage"]; }
+            get { return (Nullable<Int64>)attributes["root_storage"]; }
             private set { attributes["root_storage"] = value; }
         }
 
@@ -207,7 +207,7 @@ namespace FilesCom.Models
         [JsonPropertyName("usage_by_top_level_dir")]
         public object UsageByTopLevelDir
         {
-            get { return (object) attributes["usage_by_top_level_dir"]; }
+            get { return (object)attributes["usage_by_top_level_dir"]; }
             private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
@@ -226,7 +226,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `date` and `usage_snapshot_id`. Valid field combinations are `[ usage_snapshot_id, date ]`.
         /// </summary>
         public static async Task<UsageDailySnapshot[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -234,39 +234,39 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
@@ -277,7 +277,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<UsageDailySnapshot[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -287,4 +287,3 @@ namespace FilesCom.Models
 
     }
 }
-

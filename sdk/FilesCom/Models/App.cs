@@ -117,7 +117,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             private set { attributes["name"] = value; }
         }
 
@@ -128,7 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("extended_description")]
         public string ExtendedDescription
         {
-            get { return (string) attributes["extended_description"]; }
+            get { return (string)attributes["extended_description"]; }
             private set { attributes["extended_description"] = value; }
         }
 
@@ -139,7 +139,7 @@ namespace FilesCom.Models
         [JsonPropertyName("short_description")]
         public string ShortDescription
         {
-            get { return (string) attributes["short_description"]; }
+            get { return (string)attributes["short_description"]; }
             private set { attributes["short_description"] = value; }
         }
 
@@ -150,7 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("documentation_links")]
         public object DocumentationLinks
         {
-            get { return (object) attributes["documentation_links"]; }
+            get { return (object)attributes["documentation_links"]; }
             private set { attributes["documentation_links"] = value; }
         }
 
@@ -161,7 +161,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon_url")]
         public string IconUrl
         {
-            get { return (string) attributes["icon_url"]; }
+            get { return (string)attributes["icon_url"]; }
             private set { attributes["icon_url"] = value; }
         }
 
@@ -172,7 +172,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logo_url")]
         public string LogoUrl
         {
-            get { return (string) attributes["logo_url"]; }
+            get { return (string)attributes["logo_url"]; }
             private set { attributes["logo_url"] = value; }
         }
 
@@ -183,7 +183,7 @@ namespace FilesCom.Models
         [JsonPropertyName("screenshot_list_urls")]
         public string[] ScreenshotListUrls
         {
-            get { return (string[]) attributes["screenshot_list_urls"]; }
+            get { return (string[])attributes["screenshot_list_urls"]; }
             private set { attributes["screenshot_list_urls"] = value; }
         }
 
@@ -194,7 +194,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logo_thumbnail_url")]
         public string LogoThumbnailUrl
         {
-            get { return (string) attributes["logo_thumbnail_url"]; }
+            get { return (string)attributes["logo_thumbnail_url"]; }
             private set { attributes["logo_thumbnail_url"] = value; }
         }
 
@@ -205,7 +205,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sso_strategy_type")]
         public string SsoStrategyType
         {
-            get { return (string) attributes["sso_strategy_type"]; }
+            get { return (string)attributes["sso_strategy_type"]; }
             private set { attributes["sso_strategy_type"] = value; }
         }
 
@@ -216,7 +216,7 @@ namespace FilesCom.Models
         [JsonPropertyName("remote_server_type")]
         public string RemoteServerType
         {
-            get { return (string) attributes["remote_server_type"]; }
+            get { return (string)attributes["remote_server_type"]; }
             private set { attributes["remote_server_type"] = value; }
         }
 
@@ -227,7 +227,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_behavior_type")]
         public string FolderBehaviorType
         {
-            get { return (string) attributes["folder_behavior_type"]; }
+            get { return (string)attributes["folder_behavior_type"]; }
             private set { attributes["folder_behavior_type"] = value; }
         }
 
@@ -238,7 +238,7 @@ namespace FilesCom.Models
         [JsonPropertyName("external_homepage_url")]
         public string ExternalHomepageUrl
         {
-            get { return (string) attributes["external_homepage_url"]; }
+            get { return (string)attributes["external_homepage_url"]; }
             private set { attributes["external_homepage_url"] = value; }
         }
 
@@ -249,7 +249,7 @@ namespace FilesCom.Models
         [JsonPropertyName("marketing_youtube_url")]
         public string MarketingYoutubeUrl
         {
-            get { return (string) attributes["marketing_youtube_url"]; }
+            get { return (string)attributes["marketing_youtube_url"]; }
             private set { attributes["marketing_youtube_url"] = value; }
         }
 
@@ -260,7 +260,7 @@ namespace FilesCom.Models
         [JsonPropertyName("tutorial_youtube_url")]
         public string TutorialYoutubeUrl
         {
-            get { return (string) attributes["tutorial_youtube_url"]; }
+            get { return (string)attributes["tutorial_youtube_url"]; }
             private set { attributes["tutorial_youtube_url"] = value; }
         }
 
@@ -271,7 +271,7 @@ namespace FilesCom.Models
         [JsonPropertyName("app_type")]
         public string AppType
         {
-            get { return (string) attributes["app_type"]; }
+            get { return (string)attributes["app_type"]; }
             private set { attributes["app_type"] = value; }
         }
 
@@ -282,7 +282,7 @@ namespace FilesCom.Models
         [JsonPropertyName("featured")]
         public bool Featured
         {
-            get { return (bool) attributes["featured"]; }
+            get { return (bool)attributes["featured"]; }
             private set { attributes["featured"] = value; }
         }
 
@@ -301,7 +301,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `name` and `app_type`. Valid field combinations are `[ name, app_type ]` and `[ app_type, name ]`.
         /// </summary>
         public static async Task<App[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -309,39 +309,39 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
@@ -352,7 +352,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<App[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -362,4 +362,3 @@ namespace FilesCom.Models
 
     }
 }
-

@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Polly;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Polly;
 
 namespace FilesCom
 {
@@ -28,7 +28,8 @@ namespace FilesCom
 
         public FilesClient(FilesConfiguration config = null)
         {
-            if (Instance != null) {
+            if (Instance != null)
+            {
                 log.Info("Files.com Client instance already exists, replacing instance with new one");
             }
 
@@ -125,7 +126,8 @@ namespace FilesCom
             Dictionary<string, object> options
         )
         {
-            if (Instance == null) {
+            if (Instance == null)
+            {
                 throw new InvalidOperationException("Instance must be created before sending API request");
             }
 
@@ -141,14 +143,15 @@ namespace FilesCom
                 catch (Exception ex)
                 {
                     log.Error($"Failed to send Files API Request to path: {path}", ex);
-                    throw ex;
+                    throw;
                 }
             }
         }
 
         public static async Task StreamDownload(string uri, Stream writeStream)
         {
-            if (Instance == null) {
+            if (Instance == null)
+            {
                 throw new InvalidOperationException("Instance must be created before streaming download");
             }
 
@@ -164,14 +167,15 @@ namespace FilesCom
                 catch (Exception ex)
                 {
                     log.Error($"Failed to stream download from {uri}", ex);
-                    throw ex;
+                    throw;
                 }
             }
         }
 
         public static async Task ChunkUpload(HttpMethod verb, string uri, Stream readStream, Int64 readLength)
         {
-            if (Instance == null) {
+            if (Instance == null)
+            {
                 throw new InvalidOperationException("Instance must be created before uploading chunk");
             }
 
@@ -187,10 +191,9 @@ namespace FilesCom
                 catch (Exception ex)
                 {
                     log.Error($"Failed to upload chunk to {uri}", ex);
-                    throw ex;
+                    throw;
                 }
             }
         }
     }
 }
-

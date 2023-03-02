@@ -100,7 +100,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -110,7 +110,7 @@ namespace FilesCom.Models
         [JsonPropertyName("timeout")]
         public Nullable<Int64> Timeout
         {
-            get { return (Nullable<Int64>) attributes["timeout"]; }
+            get { return (Nullable<Int64>)attributes["timeout"]; }
             set { attributes["timeout"] = value; }
         }
 
@@ -120,7 +120,7 @@ namespace FilesCom.Models
         [JsonPropertyName("depth")]
         public string Depth
         {
-            get { return (string) attributes["depth"]; }
+            get { return (string)attributes["depth"]; }
             set { attributes["depth"] = value; }
         }
 
@@ -130,7 +130,7 @@ namespace FilesCom.Models
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            get { return (bool) attributes["recursive"]; }
+            get { return (bool)attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
 
@@ -140,7 +140,7 @@ namespace FilesCom.Models
         [JsonPropertyName("owner")]
         public string Owner
         {
-            get { return (string) attributes["owner"]; }
+            get { return (string)attributes["owner"]; }
             set { attributes["owner"] = value; }
         }
 
@@ -150,7 +150,7 @@ namespace FilesCom.Models
         [JsonPropertyName("scope")]
         public string Scope
         {
-            get { return (string) attributes["scope"]; }
+            get { return (string)attributes["scope"]; }
             set { attributes["scope"] = value; }
         }
 
@@ -160,7 +160,7 @@ namespace FilesCom.Models
         [JsonPropertyName("exclusive")]
         public bool Exclusive
         {
-            get { return (bool) attributes["exclusive"]; }
+            get { return (bool)attributes["exclusive"]; }
             set { attributes["exclusive"] = value; }
         }
 
@@ -170,7 +170,7 @@ namespace FilesCom.Models
         [JsonPropertyName("token")]
         public string Token
         {
-            get { return (string) attributes["token"]; }
+            get { return (string)attributes["token"]; }
             set { attributes["token"] = value; }
         }
 
@@ -180,7 +180,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            get { return (string) attributes["type"]; }
+            get { return (string)attributes["type"]; }
             set { attributes["type"] = value; }
         }
 
@@ -190,7 +190,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allow_access_by_any_user")]
         public bool AllowAccessByAnyUser
         {
-            get { return (bool) attributes["allow_access_by_any_user"]; }
+            get { return (bool)attributes["allow_access_by_any_user"]; }
             set { attributes["allow_access_by_any_user"] = value; }
         }
 
@@ -200,7 +200,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -210,7 +210,7 @@ namespace FilesCom.Models
         [JsonPropertyName("username")]
         public string Username
         {
-            get { return (string) attributes["username"]; }
+            get { return (string)attributes["username"]; }
             set { attributes["username"] = value; }
         }
 
@@ -223,14 +223,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string ))
+            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
             {
                 throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
             }
@@ -268,7 +269,7 @@ namespace FilesCom.Models
         ///   include_children - boolean - Include locks from children objects?
         /// </summary>
         public static async Task<Lock[]> ListFor(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -277,19 +278,19 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("include_children") && !(parameters["include_children"] is bool ))
+            if (parameters.ContainsKey("include_children") && !(parameters["include_children"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_children must be of type bool", "parameters[\"include_children\"]");
             }
@@ -313,7 +314,7 @@ namespace FilesCom.Models
         ///   timeout - int64 - Lock timeout length
         /// </summary>
         public static async Task<Lock> Create(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -322,23 +323,23 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("allow_access_by_any_user") && !(parameters["allow_access_by_any_user"] is bool ))
+            if (parameters.ContainsKey("allow_access_by_any_user") && !(parameters["allow_access_by_any_user"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_access_by_any_user must be of type bool", "parameters[\"allow_access_by_any_user\"]");
             }
-            if (parameters.ContainsKey("exclusive") && !(parameters["exclusive"] is bool ))
+            if (parameters.ContainsKey("exclusive") && !(parameters["exclusive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: exclusive must be of type bool", "parameters[\"exclusive\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
             }
-            if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: timeout must be of type Nullable<Int64>", "parameters[\"timeout\"]");
             }
@@ -358,7 +359,7 @@ namespace FilesCom.Models
         ///   token (required) - string - Lock token
         /// </summary>
         public static async Task<Lock> Delete(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -367,11 +368,11 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string ))
+            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
             {
                 throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
             }
@@ -390,7 +391,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Lock> Destroy(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -400,4 +401,3 @@ namespace FilesCom.Models
 
     }
 }
-

@@ -625,7 +625,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             private set { attributes["name"] = value; }
         }
 
@@ -636,7 +636,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_sms")]
         public bool Allowed2faMethodSms
         {
-            get { return (bool) attributes["allowed_2fa_method_sms"]; }
+            get { return (bool)attributes["allowed_2fa_method_sms"]; }
             private set { attributes["allowed_2fa_method_sms"] = value; }
         }
 
@@ -647,7 +647,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_totp")]
         public bool Allowed2faMethodTotp
         {
-            get { return (bool) attributes["allowed_2fa_method_totp"]; }
+            get { return (bool)attributes["allowed_2fa_method_totp"]; }
             private set { attributes["allowed_2fa_method_totp"] = value; }
         }
 
@@ -658,7 +658,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_u2f")]
         public bool Allowed2faMethodU2f
         {
-            get { return (bool) attributes["allowed_2fa_method_u2f"]; }
+            get { return (bool)attributes["allowed_2fa_method_u2f"]; }
             private set { attributes["allowed_2fa_method_u2f"] = value; }
         }
 
@@ -669,7 +669,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_webauthn")]
         public bool Allowed2faMethodWebauthn
         {
-            get { return (bool) attributes["allowed_2fa_method_webauthn"]; }
+            get { return (bool)attributes["allowed_2fa_method_webauthn"]; }
             private set { attributes["allowed_2fa_method_webauthn"] = value; }
         }
 
@@ -680,7 +680,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_yubi")]
         public bool Allowed2faMethodYubi
         {
-            get { return (bool) attributes["allowed_2fa_method_yubi"]; }
+            get { return (bool)attributes["allowed_2fa_method_yubi"]; }
             private set { attributes["allowed_2fa_method_yubi"] = value; }
         }
 
@@ -691,7 +691,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_2fa_method_bypass_for_ftp_sftp_dav")]
         public bool Allowed2faMethodBypassForFtpSftpDav
         {
-            get { return (bool) attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"]; }
+            get { return (bool)attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"]; }
             private set { attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"] = value; }
         }
 
@@ -702,7 +702,7 @@ namespace FilesCom.Models
         [JsonPropertyName("admin_user_id")]
         public Nullable<Int64> AdminUserId
         {
-            get { return (Nullable<Int64>) attributes["admin_user_id"]; }
+            get { return (Nullable<Int64>)attributes["admin_user_id"]; }
             private set { attributes["admin_user_id"] = value; }
         }
 
@@ -713,7 +713,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allow_bundle_names")]
         public bool AllowBundleNames
         {
-            get { return (bool) attributes["allow_bundle_names"]; }
+            get { return (bool)attributes["allow_bundle_names"]; }
             private set { attributes["allow_bundle_names"] = value; }
         }
 
@@ -724,7 +724,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_countries")]
         public string AllowedCountries
         {
-            get { return (string) attributes["allowed_countries"]; }
+            get { return (string)attributes["allowed_countries"]; }
             private set { attributes["allowed_countries"] = value; }
         }
 
@@ -735,7 +735,7 @@ namespace FilesCom.Models
         [JsonPropertyName("allowed_ips")]
         public string AllowedIps
         {
-            get { return (string) attributes["allowed_ips"]; }
+            get { return (string)attributes["allowed_ips"]; }
             private set { attributes["allowed_ips"] = value; }
         }
 
@@ -746,7 +746,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
-            get { return (bool) attributes["ask_about_overwrites"]; }
+            get { return (bool)attributes["ask_about_overwrites"]; }
             private set { attributes["ask_about_overwrites"] = value; }
         }
 
@@ -757,7 +757,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_activity_notifications")]
         public string BundleActivityNotifications
         {
-            get { return (string) attributes["bundle_activity_notifications"]; }
+            get { return (string)attributes["bundle_activity_notifications"]; }
             private set { attributes["bundle_activity_notifications"] = value; }
         }
 
@@ -768,7 +768,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_expiration")]
         public Nullable<Int64> BundleExpiration
         {
-            get { return (Nullable<Int64>) attributes["bundle_expiration"]; }
+            get { return (Nullable<Int64>)attributes["bundle_expiration"]; }
             private set { attributes["bundle_expiration"] = value; }
         }
 
@@ -779,7 +779,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_password_required")]
         public bool BundlePasswordRequired
         {
-            get { return (bool) attributes["bundle_password_required"]; }
+            get { return (bool)attributes["bundle_password_required"]; }
             private set { attributes["bundle_password_required"] = value; }
         }
 
@@ -790,7 +790,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_registration_notifications")]
         public string BundleRegistrationNotifications
         {
-            get { return (string) attributes["bundle_registration_notifications"]; }
+            get { return (string)attributes["bundle_registration_notifications"]; }
             private set { attributes["bundle_registration_notifications"] = value; }
         }
 
@@ -801,7 +801,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_require_share_recipient")]
         public bool BundleRequireShareRecipient
         {
-            get { return (bool) attributes["bundle_require_share_recipient"]; }
+            get { return (bool)attributes["bundle_require_share_recipient"]; }
             private set { attributes["bundle_require_share_recipient"] = value; }
         }
 
@@ -812,7 +812,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_upload_receipt_notifications")]
         public string BundleUploadReceiptNotifications
         {
-            get { return (string) attributes["bundle_upload_receipt_notifications"]; }
+            get { return (string)attributes["bundle_upload_receipt_notifications"]; }
             private set { attributes["bundle_upload_receipt_notifications"] = value; }
         }
 
@@ -823,7 +823,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_watermark_attachment")]
         public Image BundleWatermarkAttachment
         {
-            get { return (Image) attributes["bundle_watermark_attachment"]; }
+            get { return (Image)attributes["bundle_watermark_attachment"]; }
             private set { attributes["bundle_watermark_attachment"] = value; }
         }
 
@@ -834,7 +834,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bundle_watermark_value")]
         public object BundleWatermarkValue
         {
-            get { return (object) attributes["bundle_watermark_value"]; }
+            get { return (object)attributes["bundle_watermark_value"]; }
             private set { attributes["bundle_watermark_value"] = value; }
         }
 
@@ -845,7 +845,7 @@ namespace FilesCom.Models
         [JsonPropertyName("uploads_via_email_authentication")]
         public bool UploadsViaEmailAuthentication
         {
-            get { return (bool) attributes["uploads_via_email_authentication"]; }
+            get { return (bool)attributes["uploads_via_email_authentication"]; }
             private set { attributes["uploads_via_email_authentication"] = value; }
         }
 
@@ -856,7 +856,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_left")]
         public string Color2Left
         {
-            get { return (string) attributes["color2_left"]; }
+            get { return (string)attributes["color2_left"]; }
             private set { attributes["color2_left"] = value; }
         }
 
@@ -867,7 +867,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_link")]
         public string Color2Link
         {
-            get { return (string) attributes["color2_link"]; }
+            get { return (string)attributes["color2_link"]; }
             private set { attributes["color2_link"] = value; }
         }
 
@@ -878,7 +878,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_text")]
         public string Color2Text
         {
-            get { return (string) attributes["color2_text"]; }
+            get { return (string)attributes["color2_text"]; }
             private set { attributes["color2_text"] = value; }
         }
 
@@ -889,7 +889,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_top")]
         public string Color2Top
         {
-            get { return (string) attributes["color2_top"]; }
+            get { return (string)attributes["color2_top"]; }
             private set { attributes["color2_top"] = value; }
         }
 
@@ -900,7 +900,7 @@ namespace FilesCom.Models
         [JsonPropertyName("color2_top_text")]
         public string Color2TopText
         {
-            get { return (string) attributes["color2_top_text"]; }
+            get { return (string)attributes["color2_top_text"]; }
             private set { attributes["color2_top_text"] = value; }
         }
 
@@ -911,7 +911,7 @@ namespace FilesCom.Models
         [JsonPropertyName("contact_name")]
         public string ContactName
         {
-            get { return (string) attributes["contact_name"]; }
+            get { return (string)attributes["contact_name"]; }
             private set { attributes["contact_name"] = value; }
         }
 
@@ -922,7 +922,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -933,7 +933,7 @@ namespace FilesCom.Models
         [JsonPropertyName("currency")]
         public string Currency
         {
-            get { return (string) attributes["currency"]; }
+            get { return (string)attributes["currency"]; }
             private set { attributes["currency"] = value; }
         }
 
@@ -944,7 +944,7 @@ namespace FilesCom.Models
         [JsonPropertyName("custom_namespace")]
         public bool CustomNamespace
         {
-            get { return (bool) attributes["custom_namespace"]; }
+            get { return (bool)attributes["custom_namespace"]; }
             private set { attributes["custom_namespace"] = value; }
         }
 
@@ -955,7 +955,7 @@ namespace FilesCom.Models
         [JsonPropertyName("days_to_retain_backups")]
         public Nullable<Int64> DaysToRetainBackups
         {
-            get { return (Nullable<Int64>) attributes["days_to_retain_backups"]; }
+            get { return (Nullable<Int64>)attributes["days_to_retain_backups"]; }
             private set { attributes["days_to_retain_backups"] = value; }
         }
 
@@ -966,7 +966,7 @@ namespace FilesCom.Models
         [JsonPropertyName("default_time_zone")]
         public string DefaultTimeZone
         {
-            get { return (string) attributes["default_time_zone"]; }
+            get { return (string)attributes["default_time_zone"]; }
             private set { attributes["default_time_zone"] = value; }
         }
 
@@ -977,7 +977,7 @@ namespace FilesCom.Models
         [JsonPropertyName("desktop_app")]
         public bool DesktopApp
         {
-            get { return (bool) attributes["desktop_app"]; }
+            get { return (bool)attributes["desktop_app"]; }
             private set { attributes["desktop_app"] = value; }
         }
 
@@ -988,7 +988,7 @@ namespace FilesCom.Models
         [JsonPropertyName("desktop_app_session_ip_pinning")]
         public bool DesktopAppSessionIpPinning
         {
-            get { return (bool) attributes["desktop_app_session_ip_pinning"]; }
+            get { return (bool)attributes["desktop_app_session_ip_pinning"]; }
             private set { attributes["desktop_app_session_ip_pinning"] = value; }
         }
 
@@ -999,7 +999,7 @@ namespace FilesCom.Models
         [JsonPropertyName("desktop_app_session_lifetime")]
         public Nullable<Int64> DesktopAppSessionLifetime
         {
-            get { return (Nullable<Int64>) attributes["desktop_app_session_lifetime"]; }
+            get { return (Nullable<Int64>)attributes["desktop_app_session_lifetime"]; }
             private set { attributes["desktop_app_session_lifetime"] = value; }
         }
 
@@ -1010,7 +1010,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mobile_app")]
         public bool MobileApp
         {
-            get { return (bool) attributes["mobile_app"]; }
+            get { return (bool)attributes["mobile_app"]; }
             private set { attributes["mobile_app"] = value; }
         }
 
@@ -1021,7 +1021,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mobile_app_session_ip_pinning")]
         public bool MobileAppSessionIpPinning
         {
-            get { return (bool) attributes["mobile_app_session_ip_pinning"]; }
+            get { return (bool)attributes["mobile_app_session_ip_pinning"]; }
             private set { attributes["mobile_app_session_ip_pinning"] = value; }
         }
 
@@ -1032,7 +1032,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mobile_app_session_lifetime")]
         public Nullable<Int64> MobileAppSessionLifetime
         {
-            get { return (Nullable<Int64>) attributes["mobile_app_session_lifetime"]; }
+            get { return (Nullable<Int64>)attributes["mobile_app_session_lifetime"]; }
             private set { attributes["mobile_app_session_lifetime"] = value; }
         }
 
@@ -1043,7 +1043,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disallowed_countries")]
         public string DisallowedCountries
         {
-            get { return (string) attributes["disallowed_countries"]; }
+            get { return (string)attributes["disallowed_countries"]; }
             private set { attributes["disallowed_countries"] = value; }
         }
 
@@ -1054,7 +1054,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_files_certificate_generation")]
         public bool DisableFilesCertificateGeneration
         {
-            get { return (bool) attributes["disable_files_certificate_generation"]; }
+            get { return (bool)attributes["disable_files_certificate_generation"]; }
             private set { attributes["disable_files_certificate_generation"] = value; }
         }
 
@@ -1065,7 +1065,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_notifications")]
         public bool DisableNotifications
         {
-            get { return (bool) attributes["disable_notifications"]; }
+            get { return (bool)attributes["disable_notifications"]; }
             private set { attributes["disable_notifications"] = value; }
         }
 
@@ -1076,7 +1076,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_password_reset")]
         public bool DisablePasswordReset
         {
-            get { return (bool) attributes["disable_password_reset"]; }
+            get { return (bool)attributes["disable_password_reset"]; }
             private set { attributes["disable_password_reset"] = value; }
         }
 
@@ -1087,7 +1087,7 @@ namespace FilesCom.Models
         [JsonPropertyName("domain")]
         public string Domain
         {
-            get { return (string) attributes["domain"]; }
+            get { return (string)attributes["domain"]; }
             private set { attributes["domain"] = value; }
         }
 
@@ -1098,7 +1098,7 @@ namespace FilesCom.Models
         [JsonPropertyName("domain_hsts_header")]
         public bool DomainHstsHeader
         {
-            get { return (bool) attributes["domain_hsts_header"]; }
+            get { return (bool)attributes["domain_hsts_header"]; }
             private set { attributes["domain_hsts_header"] = value; }
         }
 
@@ -1109,7 +1109,7 @@ namespace FilesCom.Models
         [JsonPropertyName("domain_letsencrypt_chain")]
         public string DomainLetsencryptChain
         {
-            get { return (string) attributes["domain_letsencrypt_chain"]; }
+            get { return (string)attributes["domain_letsencrypt_chain"]; }
             private set { attributes["domain_letsencrypt_chain"] = value; }
         }
 
@@ -1120,7 +1120,7 @@ namespace FilesCom.Models
         [JsonPropertyName("email")]
         public string Email
         {
-            get { return (string) attributes["email"]; }
+            get { return (string)attributes["email"]; }
             private set { attributes["email"] = value; }
         }
 
@@ -1131,7 +1131,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ftp_enabled")]
         public bool FtpEnabled
         {
-            get { return (bool) attributes["ftp_enabled"]; }
+            get { return (bool)attributes["ftp_enabled"]; }
             private set { attributes["ftp_enabled"] = value; }
         }
 
@@ -1142,7 +1142,7 @@ namespace FilesCom.Models
         [JsonPropertyName("reply_to_email")]
         public string ReplyToEmail
         {
-            get { return (string) attributes["reply_to_email"]; }
+            get { return (string)attributes["reply_to_email"]; }
             private set { attributes["reply_to_email"] = value; }
         }
 
@@ -1153,7 +1153,7 @@ namespace FilesCom.Models
         [JsonPropertyName("non_sso_groups_allowed")]
         public bool NonSsoGroupsAllowed
         {
-            get { return (bool) attributes["non_sso_groups_allowed"]; }
+            get { return (bool)attributes["non_sso_groups_allowed"]; }
             private set { attributes["non_sso_groups_allowed"] = value; }
         }
 
@@ -1164,7 +1164,7 @@ namespace FilesCom.Models
         [JsonPropertyName("non_sso_users_allowed")]
         public bool NonSsoUsersAllowed
         {
-            get { return (bool) attributes["non_sso_users_allowed"]; }
+            get { return (bool)attributes["non_sso_users_allowed"]; }
             private set { attributes["non_sso_users_allowed"] = value; }
         }
 
@@ -1175,7 +1175,7 @@ namespace FilesCom.Models
         [JsonPropertyName("folder_permissions_groups_only")]
         public bool FolderPermissionsGroupsOnly
         {
-            get { return (bool) attributes["folder_permissions_groups_only"]; }
+            get { return (bool)attributes["folder_permissions_groups_only"]; }
             private set { attributes["folder_permissions_groups_only"] = value; }
         }
 
@@ -1186,7 +1186,7 @@ namespace FilesCom.Models
         [JsonPropertyName("hipaa")]
         public bool Hipaa
         {
-            get { return (bool) attributes["hipaa"]; }
+            get { return (bool)attributes["hipaa"]; }
             private set { attributes["hipaa"] = value; }
         }
 
@@ -1197,7 +1197,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon128")]
         public Image Icon128
         {
-            get { return (Image) attributes["icon128"]; }
+            get { return (Image)attributes["icon128"]; }
             private set { attributes["icon128"] = value; }
         }
 
@@ -1208,7 +1208,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon16")]
         public Image Icon16
         {
-            get { return (Image) attributes["icon16"]; }
+            get { return (Image)attributes["icon16"]; }
             private set { attributes["icon16"] = value; }
         }
 
@@ -1219,7 +1219,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon32")]
         public Image Icon32
         {
-            get { return (Image) attributes["icon32"]; }
+            get { return (Image)attributes["icon32"]; }
             private set { attributes["icon32"] = value; }
         }
 
@@ -1230,7 +1230,7 @@ namespace FilesCom.Models
         [JsonPropertyName("icon48")]
         public Image Icon48
         {
-            get { return (Image) attributes["icon48"]; }
+            get { return (Image)attributes["icon48"]; }
             private set { attributes["icon48"] = value; }
         }
 
@@ -1241,7 +1241,7 @@ namespace FilesCom.Models
         [JsonPropertyName("immutable_files_set_at")]
         public Nullable<DateTime> ImmutableFilesSetAt
         {
-            get { return (Nullable<DateTime>) attributes["immutable_files_set_at"]; }
+            get { return (Nullable<DateTime>)attributes["immutable_files_set_at"]; }
             private set { attributes["immutable_files_set_at"] = value; }
         }
 
@@ -1252,7 +1252,7 @@ namespace FilesCom.Models
         [JsonPropertyName("include_password_in_welcome_email")]
         public bool IncludePasswordInWelcomeEmail
         {
-            get { return (bool) attributes["include_password_in_welcome_email"]; }
+            get { return (bool)attributes["include_password_in_welcome_email"]; }
             private set { attributes["include_password_in_welcome_email"] = value; }
         }
 
@@ -1263,7 +1263,7 @@ namespace FilesCom.Models
         [JsonPropertyName("language")]
         public string Language
         {
-            get { return (string) attributes["language"]; }
+            get { return (string)attributes["language"]; }
             private set { attributes["language"] = value; }
         }
 
@@ -1274,7 +1274,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_base_dn")]
         public string LdapBaseDn
         {
-            get { return (string) attributes["ldap_base_dn"]; }
+            get { return (string)attributes["ldap_base_dn"]; }
             private set { attributes["ldap_base_dn"] = value; }
         }
 
@@ -1285,7 +1285,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_domain")]
         public string LdapDomain
         {
-            get { return (string) attributes["ldap_domain"]; }
+            get { return (string)attributes["ldap_domain"]; }
             private set { attributes["ldap_domain"] = value; }
         }
 
@@ -1296,7 +1296,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_enabled")]
         public bool LdapEnabled
         {
-            get { return (bool) attributes["ldap_enabled"]; }
+            get { return (bool)attributes["ldap_enabled"]; }
             private set { attributes["ldap_enabled"] = value; }
         }
 
@@ -1307,7 +1307,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_group_action")]
         public string LdapGroupAction
         {
-            get { return (string) attributes["ldap_group_action"]; }
+            get { return (string)attributes["ldap_group_action"]; }
             private set { attributes["ldap_group_action"] = value; }
         }
 
@@ -1318,7 +1318,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_group_exclusion")]
         public string LdapGroupExclusion
         {
-            get { return (string) attributes["ldap_group_exclusion"]; }
+            get { return (string)attributes["ldap_group_exclusion"]; }
             private set { attributes["ldap_group_exclusion"] = value; }
         }
 
@@ -1329,7 +1329,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_group_inclusion")]
         public string LdapGroupInclusion
         {
-            get { return (string) attributes["ldap_group_inclusion"]; }
+            get { return (string)attributes["ldap_group_inclusion"]; }
             private set { attributes["ldap_group_inclusion"] = value; }
         }
 
@@ -1340,7 +1340,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host")]
         public string LdapHost
         {
-            get { return (string) attributes["ldap_host"]; }
+            get { return (string)attributes["ldap_host"]; }
             private set { attributes["ldap_host"] = value; }
         }
 
@@ -1351,7 +1351,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host_2")]
         public string LdapHost2
         {
-            get { return (string) attributes["ldap_host_2"]; }
+            get { return (string)attributes["ldap_host_2"]; }
             private set { attributes["ldap_host_2"] = value; }
         }
 
@@ -1362,7 +1362,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_host_3")]
         public string LdapHost3
         {
-            get { return (string) attributes["ldap_host_3"]; }
+            get { return (string)attributes["ldap_host_3"]; }
             private set { attributes["ldap_host_3"] = value; }
         }
 
@@ -1373,7 +1373,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_port")]
         public Nullable<Int64> LdapPort
         {
-            get { return (Nullable<Int64>) attributes["ldap_port"]; }
+            get { return (Nullable<Int64>)attributes["ldap_port"]; }
             private set { attributes["ldap_port"] = value; }
         }
 
@@ -1384,7 +1384,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_secure")]
         public bool LdapSecure
         {
-            get { return (bool) attributes["ldap_secure"]; }
+            get { return (bool)attributes["ldap_secure"]; }
             private set { attributes["ldap_secure"] = value; }
         }
 
@@ -1395,7 +1395,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_type")]
         public string LdapType
         {
-            get { return (string) attributes["ldap_type"]; }
+            get { return (string)attributes["ldap_type"]; }
             private set { attributes["ldap_type"] = value; }
         }
 
@@ -1406,7 +1406,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_user_action")]
         public string LdapUserAction
         {
-            get { return (string) attributes["ldap_user_action"]; }
+            get { return (string)attributes["ldap_user_action"]; }
             private set { attributes["ldap_user_action"] = value; }
         }
 
@@ -1417,7 +1417,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_user_include_groups")]
         public string LdapUserIncludeGroups
         {
-            get { return (string) attributes["ldap_user_include_groups"]; }
+            get { return (string)attributes["ldap_user_include_groups"]; }
             private set { attributes["ldap_user_include_groups"] = value; }
         }
 
@@ -1428,7 +1428,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_username")]
         public string LdapUsername
         {
-            get { return (string) attributes["ldap_username"]; }
+            get { return (string)attributes["ldap_username"]; }
             private set { attributes["ldap_username"] = value; }
         }
 
@@ -1439,7 +1439,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ldap_username_field")]
         public string LdapUsernameField
         {
-            get { return (string) attributes["ldap_username_field"]; }
+            get { return (string)attributes["ldap_username_field"]; }
             private set { attributes["ldap_username_field"] = value; }
         }
 
@@ -1450,7 +1450,7 @@ namespace FilesCom.Models
         [JsonPropertyName("login_help_text")]
         public string LoginHelpText
         {
-            get { return (string) attributes["login_help_text"]; }
+            get { return (string)attributes["login_help_text"]; }
             private set { attributes["login_help_text"] = value; }
         }
 
@@ -1461,7 +1461,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logo")]
         public Image Logo
         {
-            get { return (Image) attributes["logo"]; }
+            get { return (Image)attributes["logo"]; }
             private set { attributes["logo"] = value; }
         }
 
@@ -1472,7 +1472,7 @@ namespace FilesCom.Models
         [JsonPropertyName("max_prior_passwords")]
         public Nullable<Int64> MaxPriorPasswords
         {
-            get { return (Nullable<Int64>) attributes["max_prior_passwords"]; }
+            get { return (Nullable<Int64>)attributes["max_prior_passwords"]; }
             private set { attributes["max_prior_passwords"] = value; }
         }
 
@@ -1483,7 +1483,7 @@ namespace FilesCom.Models
         [JsonPropertyName("motd_text")]
         public string MotdText
         {
-            get { return (string) attributes["motd_text"]; }
+            get { return (string)attributes["motd_text"]; }
             private set { attributes["motd_text"] = value; }
         }
 
@@ -1494,7 +1494,7 @@ namespace FilesCom.Models
         [JsonPropertyName("motd_use_for_ftp")]
         public bool MotdUseForFtp
         {
-            get { return (bool) attributes["motd_use_for_ftp"]; }
+            get { return (bool)attributes["motd_use_for_ftp"]; }
             private set { attributes["motd_use_for_ftp"] = value; }
         }
 
@@ -1505,7 +1505,7 @@ namespace FilesCom.Models
         [JsonPropertyName("motd_use_for_sftp")]
         public bool MotdUseForSftp
         {
-            get { return (bool) attributes["motd_use_for_sftp"]; }
+            get { return (bool)attributes["motd_use_for_sftp"]; }
             private set { attributes["motd_use_for_sftp"] = value; }
         }
 
@@ -1516,7 +1516,7 @@ namespace FilesCom.Models
         [JsonPropertyName("next_billing_amount")]
         public double NextBillingAmount
         {
-            get { return (double) attributes["next_billing_amount"]; }
+            get { return (double)attributes["next_billing_amount"]; }
             private set { attributes["next_billing_amount"] = value; }
         }
 
@@ -1527,7 +1527,7 @@ namespace FilesCom.Models
         [JsonPropertyName("next_billing_date")]
         public string NextBillingDate
         {
-            get { return (string) attributes["next_billing_date"]; }
+            get { return (string)attributes["next_billing_date"]; }
             private set { attributes["next_billing_date"] = value; }
         }
 
@@ -1538,7 +1538,7 @@ namespace FilesCom.Models
         [JsonPropertyName("office_integration_available")]
         public bool OfficeIntegrationAvailable
         {
-            get { return (bool) attributes["office_integration_available"]; }
+            get { return (bool)attributes["office_integration_available"]; }
             private set { attributes["office_integration_available"] = value; }
         }
 
@@ -1549,7 +1549,7 @@ namespace FilesCom.Models
         [JsonPropertyName("office_integration_type")]
         public string OfficeIntegrationType
         {
-            get { return (string) attributes["office_integration_type"]; }
+            get { return (string)attributes["office_integration_type"]; }
             private set { attributes["office_integration_type"] = value; }
         }
 
@@ -1560,7 +1560,7 @@ namespace FilesCom.Models
         [JsonPropertyName("oncehub_link")]
         public string OncehubLink
         {
-            get { return (string) attributes["oncehub_link"]; }
+            get { return (string)attributes["oncehub_link"]; }
             private set { attributes["oncehub_link"] = value; }
         }
 
@@ -1571,7 +1571,7 @@ namespace FilesCom.Models
         [JsonPropertyName("opt_out_global")]
         public bool OptOutGlobal
         {
-            get { return (bool) attributes["opt_out_global"]; }
+            get { return (bool)attributes["opt_out_global"]; }
             private set { attributes["opt_out_global"] = value; }
         }
 
@@ -1582,7 +1582,7 @@ namespace FilesCom.Models
         [JsonPropertyName("overage_notified_at")]
         public Nullable<DateTime> OverageNotifiedAt
         {
-            get { return (Nullable<DateTime>) attributes["overage_notified_at"]; }
+            get { return (Nullable<DateTime>)attributes["overage_notified_at"]; }
             private set { attributes["overage_notified_at"] = value; }
         }
 
@@ -1593,7 +1593,7 @@ namespace FilesCom.Models
         [JsonPropertyName("overage_notify")]
         public bool OverageNotify
         {
-            get { return (bool) attributes["overage_notify"]; }
+            get { return (bool)attributes["overage_notify"]; }
             private set { attributes["overage_notify"] = value; }
         }
 
@@ -1604,7 +1604,7 @@ namespace FilesCom.Models
         [JsonPropertyName("overdue")]
         public bool Overdue
         {
-            get { return (bool) attributes["overdue"]; }
+            get { return (bool)attributes["overdue"]; }
             private set { attributes["overdue"] = value; }
         }
 
@@ -1615,7 +1615,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_min_length")]
         public Nullable<Int64> PasswordMinLength
         {
-            get { return (Nullable<Int64>) attributes["password_min_length"]; }
+            get { return (Nullable<Int64>)attributes["password_min_length"]; }
             private set { attributes["password_min_length"] = value; }
         }
 
@@ -1626,7 +1626,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_letter")]
         public bool PasswordRequireLetter
         {
-            get { return (bool) attributes["password_require_letter"]; }
+            get { return (bool)attributes["password_require_letter"]; }
             private set { attributes["password_require_letter"] = value; }
         }
 
@@ -1637,7 +1637,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_mixed")]
         public bool PasswordRequireMixed
         {
-            get { return (bool) attributes["password_require_mixed"]; }
+            get { return (bool)attributes["password_require_mixed"]; }
             private set { attributes["password_require_mixed"] = value; }
         }
 
@@ -1648,7 +1648,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_number")]
         public bool PasswordRequireNumber
         {
-            get { return (bool) attributes["password_require_number"]; }
+            get { return (bool)attributes["password_require_number"]; }
             private set { attributes["password_require_number"] = value; }
         }
 
@@ -1659,7 +1659,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_special")]
         public bool PasswordRequireSpecial
         {
-            get { return (bool) attributes["password_require_special"]; }
+            get { return (bool)attributes["password_require_special"]; }
             private set { attributes["password_require_special"] = value; }
         }
 
@@ -1670,7 +1670,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_require_unbreached")]
         public bool PasswordRequireUnbreached
         {
-            get { return (bool) attributes["password_require_unbreached"]; }
+            get { return (bool)attributes["password_require_unbreached"]; }
             private set { attributes["password_require_unbreached"] = value; }
         }
 
@@ -1681,7 +1681,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_requirements_apply_to_bundles")]
         public bool PasswordRequirementsApplyToBundles
         {
-            get { return (bool) attributes["password_requirements_apply_to_bundles"]; }
+            get { return (bool)attributes["password_requirements_apply_to_bundles"]; }
             private set { attributes["password_requirements_apply_to_bundles"] = value; }
         }
 
@@ -1692,7 +1692,7 @@ namespace FilesCom.Models
         [JsonPropertyName("password_validity_days")]
         public Nullable<Int64> PasswordValidityDays
         {
-            get { return (Nullable<Int64>) attributes["password_validity_days"]; }
+            get { return (Nullable<Int64>)attributes["password_validity_days"]; }
             private set { attributes["password_validity_days"] = value; }
         }
 
@@ -1703,7 +1703,7 @@ namespace FilesCom.Models
         [JsonPropertyName("phone")]
         public string Phone
         {
-            get { return (string) attributes["phone"]; }
+            get { return (string)attributes["phone"]; }
             private set { attributes["phone"] = value; }
         }
 
@@ -1714,7 +1714,7 @@ namespace FilesCom.Models
         [JsonPropertyName("pin_all_remote_servers_to_site_region")]
         public bool PinAllRemoteServersToSiteRegion
         {
-            get { return (bool) attributes["pin_all_remote_servers_to_site_region"]; }
+            get { return (bool)attributes["pin_all_remote_servers_to_site_region"]; }
             private set { attributes["pin_all_remote_servers_to_site_region"] = value; }
         }
 
@@ -1725,7 +1725,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_2fa")]
         public bool Require2fa
         {
-            get { return (bool) attributes["require_2fa"]; }
+            get { return (bool)attributes["require_2fa"]; }
             private set { attributes["require_2fa"] = value; }
         }
 
@@ -1736,7 +1736,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_2fa_stop_time")]
         public Nullable<DateTime> Require2faStopTime
         {
-            get { return (Nullable<DateTime>) attributes["require_2fa_stop_time"]; }
+            get { return (Nullable<DateTime>)attributes["require_2fa_stop_time"]; }
             private set { attributes["require_2fa_stop_time"] = value; }
         }
 
@@ -1747,7 +1747,7 @@ namespace FilesCom.Models
         [JsonPropertyName("require_2fa_user_type")]
         public string Require2faUserType
         {
-            get { return (string) attributes["require_2fa_user_type"]; }
+            get { return (string)attributes["require_2fa_user_type"]; }
             private set { attributes["require_2fa_user_type"] = value; }
         }
 
@@ -1758,7 +1758,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session")]
         public Session Session
         {
-            get { return (Session) attributes["session"]; }
+            get { return (Session)attributes["session"]; }
             private set { attributes["session"] = value; }
         }
 
@@ -1769,7 +1769,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session_pinned_by_ip")]
         public bool SessionPinnedByIp
         {
-            get { return (bool) attributes["session_pinned_by_ip"]; }
+            get { return (bool)attributes["session_pinned_by_ip"]; }
             private set { attributes["session_pinned_by_ip"] = value; }
         }
 
@@ -1780,7 +1780,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_enabled")]
         public bool SftpEnabled
         {
-            get { return (bool) attributes["sftp_enabled"]; }
+            get { return (bool)attributes["sftp_enabled"]; }
             private set { attributes["sftp_enabled"] = value; }
         }
 
@@ -1791,7 +1791,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_host_key_type")]
         public string SftpHostKeyType
         {
-            get { return (string) attributes["sftp_host_key_type"]; }
+            get { return (string)attributes["sftp_host_key_type"]; }
             private set { attributes["sftp_host_key_type"] = value; }
         }
 
@@ -1802,7 +1802,7 @@ namespace FilesCom.Models
         [JsonPropertyName("active_sftp_host_key_id")]
         public Nullable<Int64> ActiveSftpHostKeyId
         {
-            get { return (Nullable<Int64>) attributes["active_sftp_host_key_id"]; }
+            get { return (Nullable<Int64>)attributes["active_sftp_host_key_id"]; }
             private set { attributes["active_sftp_host_key_id"] = value; }
         }
 
@@ -1813,7 +1813,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_insecure_ciphers")]
         public bool SftpInsecureCiphers
         {
-            get { return (bool) attributes["sftp_insecure_ciphers"]; }
+            get { return (bool)attributes["sftp_insecure_ciphers"]; }
             private set { attributes["sftp_insecure_ciphers"] = value; }
         }
 
@@ -1824,7 +1824,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sftp_user_root_enabled")]
         public bool SftpUserRootEnabled
         {
-            get { return (bool) attributes["sftp_user_root_enabled"]; }
+            get { return (bool)attributes["sftp_user_root_enabled"]; }
             private set { attributes["sftp_user_root_enabled"] = value; }
         }
 
@@ -1835,7 +1835,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sharing_enabled")]
         public bool SharingEnabled
         {
-            get { return (bool) attributes["sharing_enabled"]; }
+            get { return (bool)attributes["sharing_enabled"]; }
             private set { attributes["sharing_enabled"] = value; }
         }
 
@@ -1846,7 +1846,7 @@ namespace FilesCom.Models
         [JsonPropertyName("show_request_access_link")]
         public bool ShowRequestAccessLink
         {
-            get { return (bool) attributes["show_request_access_link"]; }
+            get { return (bool)attributes["show_request_access_link"]; }
             private set { attributes["show_request_access_link"] = value; }
         }
 
@@ -1857,7 +1857,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site_footer")]
         public string SiteFooter
         {
-            get { return (string) attributes["site_footer"]; }
+            get { return (string)attributes["site_footer"]; }
             private set { attributes["site_footer"] = value; }
         }
 
@@ -1868,7 +1868,7 @@ namespace FilesCom.Models
         [JsonPropertyName("site_header")]
         public string SiteHeader
         {
-            get { return (string) attributes["site_header"]; }
+            get { return (string)attributes["site_header"]; }
             private set { attributes["site_header"] = value; }
         }
 
@@ -1879,7 +1879,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_address")]
         public string SmtpAddress
         {
-            get { return (string) attributes["smtp_address"]; }
+            get { return (string)attributes["smtp_address"]; }
             private set { attributes["smtp_address"] = value; }
         }
 
@@ -1890,7 +1890,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_authentication")]
         public string SmtpAuthentication
         {
-            get { return (string) attributes["smtp_authentication"]; }
+            get { return (string)attributes["smtp_authentication"]; }
             private set { attributes["smtp_authentication"] = value; }
         }
 
@@ -1901,7 +1901,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_from")]
         public string SmtpFrom
         {
-            get { return (string) attributes["smtp_from"]; }
+            get { return (string)attributes["smtp_from"]; }
             private set { attributes["smtp_from"] = value; }
         }
 
@@ -1912,7 +1912,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_port")]
         public Nullable<Int64> SmtpPort
         {
-            get { return (Nullable<Int64>) attributes["smtp_port"]; }
+            get { return (Nullable<Int64>)attributes["smtp_port"]; }
             private set { attributes["smtp_port"] = value; }
         }
 
@@ -1923,7 +1923,7 @@ namespace FilesCom.Models
         [JsonPropertyName("smtp_username")]
         public string SmtpUsername
         {
-            get { return (string) attributes["smtp_username"]; }
+            get { return (string)attributes["smtp_username"]; }
             private set { attributes["smtp_username"] = value; }
         }
 
@@ -1934,7 +1934,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session_expiry")]
         public double SessionExpiry
         {
-            get { return (double) attributes["session_expiry"]; }
+            get { return (double)attributes["session_expiry"]; }
             private set { attributes["session_expiry"] = value; }
         }
 
@@ -1945,7 +1945,7 @@ namespace FilesCom.Models
         [JsonPropertyName("session_expiry_minutes")]
         public Nullable<Int64> SessionExpiryMinutes
         {
-            get { return (Nullable<Int64>) attributes["session_expiry_minutes"]; }
+            get { return (Nullable<Int64>)attributes["session_expiry_minutes"]; }
             private set { attributes["session_expiry_minutes"] = value; }
         }
 
@@ -1956,7 +1956,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ssl_required")]
         public bool SslRequired
         {
-            get { return (bool) attributes["ssl_required"]; }
+            get { return (bool)attributes["ssl_required"]; }
             private set { attributes["ssl_required"] = value; }
         }
 
@@ -1967,7 +1967,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subdomain")]
         public string Subdomain
         {
-            get { return (string) attributes["subdomain"]; }
+            get { return (string)attributes["subdomain"]; }
             private set { attributes["subdomain"] = value; }
         }
 
@@ -1978,7 +1978,7 @@ namespace FilesCom.Models
         [JsonPropertyName("switch_to_plan_date")]
         public Nullable<DateTime> SwitchToPlanDate
         {
-            get { return (Nullable<DateTime>) attributes["switch_to_plan_date"]; }
+            get { return (Nullable<DateTime>)attributes["switch_to_plan_date"]; }
             private set { attributes["switch_to_plan_date"] = value; }
         }
 
@@ -1989,7 +1989,7 @@ namespace FilesCom.Models
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled
         {
-            get { return (bool) attributes["tls_disabled"]; }
+            get { return (bool)attributes["tls_disabled"]; }
             private set { attributes["tls_disabled"] = value; }
         }
 
@@ -2000,7 +2000,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trial_days_left")]
         public Nullable<Int64> TrialDaysLeft
         {
-            get { return (Nullable<Int64>) attributes["trial_days_left"]; }
+            get { return (Nullable<Int64>)attributes["trial_days_left"]; }
             private set { attributes["trial_days_left"] = value; }
         }
 
@@ -2011,7 +2011,7 @@ namespace FilesCom.Models
         [JsonPropertyName("trial_until")]
         public Nullable<DateTime> TrialUntil
         {
-            get { return (Nullable<DateTime>) attributes["trial_until"]; }
+            get { return (Nullable<DateTime>)attributes["trial_until"]; }
             private set { attributes["trial_until"] = value; }
         }
 
@@ -2022,7 +2022,7 @@ namespace FilesCom.Models
         [JsonPropertyName("updated_at")]
         public Nullable<DateTime> UpdatedAt
         {
-            get { return (Nullable<DateTime>) attributes["updated_at"]; }
+            get { return (Nullable<DateTime>)attributes["updated_at"]; }
             private set { attributes["updated_at"] = value; }
         }
 
@@ -2033,7 +2033,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_provided_modified_at")]
         public bool UseProvidedModifiedAt
         {
-            get { return (bool) attributes["use_provided_modified_at"]; }
+            get { return (bool)attributes["use_provided_modified_at"]; }
             private set { attributes["use_provided_modified_at"] = value; }
         }
 
@@ -2044,7 +2044,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user")]
         public User User
         {
-            get { return (User) attributes["user"]; }
+            get { return (User)attributes["user"]; }
             private set { attributes["user"] = value; }
         }
 
@@ -2055,7 +2055,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout")]
         public bool UserLockout
         {
-            get { return (bool) attributes["user_lockout"]; }
+            get { return (bool)attributes["user_lockout"]; }
             private set { attributes["user_lockout"] = value; }
         }
 
@@ -2066,7 +2066,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout_lock_period")]
         public Nullable<Int64> UserLockoutLockPeriod
         {
-            get { return (Nullable<Int64>) attributes["user_lockout_lock_period"]; }
+            get { return (Nullable<Int64>)attributes["user_lockout_lock_period"]; }
             private set { attributes["user_lockout_lock_period"] = value; }
         }
 
@@ -2077,7 +2077,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout_tries")]
         public Nullable<Int64> UserLockoutTries
         {
-            get { return (Nullable<Int64>) attributes["user_lockout_tries"]; }
+            get { return (Nullable<Int64>)attributes["user_lockout_tries"]; }
             private set { attributes["user_lockout_tries"] = value; }
         }
 
@@ -2088,7 +2088,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_lockout_within")]
         public Nullable<Int64> UserLockoutWithin
         {
-            get { return (Nullable<Int64>) attributes["user_lockout_within"]; }
+            get { return (Nullable<Int64>)attributes["user_lockout_within"]; }
             private set { attributes["user_lockout_within"] = value; }
         }
 
@@ -2099,7 +2099,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_requests_enabled")]
         public bool UserRequestsEnabled
         {
-            get { return (bool) attributes["user_requests_enabled"]; }
+            get { return (bool)attributes["user_requests_enabled"]; }
             private set { attributes["user_requests_enabled"] = value; }
         }
 
@@ -2110,7 +2110,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_requests_notify_admins")]
         public bool UserRequestsNotifyAdmins
         {
-            get { return (bool) attributes["user_requests_notify_admins"]; }
+            get { return (bool)attributes["user_requests_notify_admins"]; }
             private set { attributes["user_requests_notify_admins"] = value; }
         }
 
@@ -2121,7 +2121,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_custom_text")]
         public string WelcomeCustomText
         {
-            get { return (string) attributes["welcome_custom_text"]; }
+            get { return (string)attributes["welcome_custom_text"]; }
             private set { attributes["welcome_custom_text"] = value; }
         }
 
@@ -2132,7 +2132,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_email_cc")]
         public string WelcomeEmailCc
         {
-            get { return (string) attributes["welcome_email_cc"]; }
+            get { return (string)attributes["welcome_email_cc"]; }
             private set { attributes["welcome_email_cc"] = value; }
         }
 
@@ -2143,7 +2143,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_email_subject")]
         public string WelcomeEmailSubject
         {
-            get { return (string) attributes["welcome_email_subject"]; }
+            get { return (string)attributes["welcome_email_subject"]; }
             private set { attributes["welcome_email_subject"] = value; }
         }
 
@@ -2154,7 +2154,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_email_enabled")]
         public bool WelcomeEmailEnabled
         {
-            get { return (bool) attributes["welcome_email_enabled"]; }
+            get { return (bool)attributes["welcome_email_enabled"]; }
             private set { attributes["welcome_email_enabled"] = value; }
         }
 
@@ -2165,7 +2165,7 @@ namespace FilesCom.Models
         [JsonPropertyName("welcome_screen")]
         public string WelcomeScreen
         {
-            get { return (string) attributes["welcome_screen"]; }
+            get { return (string)attributes["welcome_screen"]; }
             private set { attributes["welcome_screen"] = value; }
         }
 
@@ -2176,7 +2176,7 @@ namespace FilesCom.Models
         [JsonPropertyName("windows_mode_ftp")]
         public bool WindowsModeFtp
         {
-            get { return (bool) attributes["windows_mode_ftp"]; }
+            get { return (bool)attributes["windows_mode_ftp"]; }
             private set { attributes["windows_mode_ftp"] = value; }
         }
 
@@ -2187,7 +2187,7 @@ namespace FilesCom.Models
         [JsonPropertyName("disable_users_from_inactivity_period_days")]
         public Nullable<Int64> DisableUsersFromInactivityPeriodDays
         {
-            get { return (Nullable<Int64>) attributes["disable_users_from_inactivity_period_days"]; }
+            get { return (Nullable<Int64>)attributes["disable_users_from_inactivity_period_days"]; }
             private set { attributes["disable_users_from_inactivity_period_days"] = value; }
         }
 
@@ -2196,7 +2196,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Site> Get(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -2214,7 +2214,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<UsageSnapshot> GetUsage(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -2367,7 +2367,7 @@ namespace FilesCom.Models
         ///   session_expiry_minutes - int64 - Session expiry in minutes
         /// </summary>
         public static async Task<Site> Update(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -2375,539 +2375,539 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string ))
+            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
             {
                 throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
             }
-            if (parameters.ContainsKey("domain") && !(parameters["domain"] is string ))
+            if (parameters.ContainsKey("domain") && !(parameters["domain"] is string))
             {
                 throw new ArgumentException("Bad parameter: domain must be of type string", "parameters[\"domain\"]");
             }
-            if (parameters.ContainsKey("domain_hsts_header") && !(parameters["domain_hsts_header"] is bool ))
+            if (parameters.ContainsKey("domain_hsts_header") && !(parameters["domain_hsts_header"] is bool))
             {
                 throw new ArgumentException("Bad parameter: domain_hsts_header must be of type bool", "parameters[\"domain_hsts_header\"]");
             }
-            if (parameters.ContainsKey("domain_letsencrypt_chain") && !(parameters["domain_letsencrypt_chain"] is string ))
+            if (parameters.ContainsKey("domain_letsencrypt_chain") && !(parameters["domain_letsencrypt_chain"] is string))
             {
                 throw new ArgumentException("Bad parameter: domain_letsencrypt_chain must be of type string", "parameters[\"domain_letsencrypt_chain\"]");
             }
-            if (parameters.ContainsKey("email") && !(parameters["email"] is string ))
+            if (parameters.ContainsKey("email") && !(parameters["email"] is string))
             {
                 throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
             }
-            if (parameters.ContainsKey("reply_to_email") && !(parameters["reply_to_email"] is string ))
+            if (parameters.ContainsKey("reply_to_email") && !(parameters["reply_to_email"] is string))
             {
                 throw new ArgumentException("Bad parameter: reply_to_email must be of type string", "parameters[\"reply_to_email\"]");
             }
-            if (parameters.ContainsKey("allow_bundle_names") && !(parameters["allow_bundle_names"] is bool ))
+            if (parameters.ContainsKey("allow_bundle_names") && !(parameters["allow_bundle_names"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_bundle_names must be of type bool", "parameters[\"allow_bundle_names\"]");
             }
-            if (parameters.ContainsKey("bundle_expiration") && !(parameters["bundle_expiration"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("bundle_expiration") && !(parameters["bundle_expiration"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: bundle_expiration must be of type Nullable<Int64>", "parameters[\"bundle_expiration\"]");
             }
-            if (parameters.ContainsKey("overage_notify") && !(parameters["overage_notify"] is bool ))
+            if (parameters.ContainsKey("overage_notify") && !(parameters["overage_notify"] is bool))
             {
                 throw new ArgumentException("Bad parameter: overage_notify must be of type bool", "parameters[\"overage_notify\"]");
             }
-            if (parameters.ContainsKey("welcome_email_enabled") && !(parameters["welcome_email_enabled"] is bool ))
+            if (parameters.ContainsKey("welcome_email_enabled") && !(parameters["welcome_email_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: welcome_email_enabled must be of type bool", "parameters[\"welcome_email_enabled\"]");
             }
-            if (parameters.ContainsKey("ask_about_overwrites") && !(parameters["ask_about_overwrites"] is bool ))
+            if (parameters.ContainsKey("ask_about_overwrites") && !(parameters["ask_about_overwrites"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ask_about_overwrites must be of type bool", "parameters[\"ask_about_overwrites\"]");
             }
-            if (parameters.ContainsKey("show_request_access_link") && !(parameters["show_request_access_link"] is bool ))
+            if (parameters.ContainsKey("show_request_access_link") && !(parameters["show_request_access_link"] is bool))
             {
                 throw new ArgumentException("Bad parameter: show_request_access_link must be of type bool", "parameters[\"show_request_access_link\"]");
             }
-            if (parameters.ContainsKey("welcome_email_cc") && !(parameters["welcome_email_cc"] is string ))
+            if (parameters.ContainsKey("welcome_email_cc") && !(parameters["welcome_email_cc"] is string))
             {
                 throw new ArgumentException("Bad parameter: welcome_email_cc must be of type string", "parameters[\"welcome_email_cc\"]");
             }
-            if (parameters.ContainsKey("welcome_email_subject") && !(parameters["welcome_email_subject"] is string ))
+            if (parameters.ContainsKey("welcome_email_subject") && !(parameters["welcome_email_subject"] is string))
             {
                 throw new ArgumentException("Bad parameter: welcome_email_subject must be of type string", "parameters[\"welcome_email_subject\"]");
             }
-            if (parameters.ContainsKey("welcome_custom_text") && !(parameters["welcome_custom_text"] is string ))
+            if (parameters.ContainsKey("welcome_custom_text") && !(parameters["welcome_custom_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: welcome_custom_text must be of type string", "parameters[\"welcome_custom_text\"]");
             }
-            if (parameters.ContainsKey("language") && !(parameters["language"] is string ))
+            if (parameters.ContainsKey("language") && !(parameters["language"] is string))
             {
                 throw new ArgumentException("Bad parameter: language must be of type string", "parameters[\"language\"]");
             }
-            if (parameters.ContainsKey("windows_mode_ftp") && !(parameters["windows_mode_ftp"] is bool ))
+            if (parameters.ContainsKey("windows_mode_ftp") && !(parameters["windows_mode_ftp"] is bool))
             {
                 throw new ArgumentException("Bad parameter: windows_mode_ftp must be of type bool", "parameters[\"windows_mode_ftp\"]");
             }
-            if (parameters.ContainsKey("default_time_zone") && !(parameters["default_time_zone"] is string ))
+            if (parameters.ContainsKey("default_time_zone") && !(parameters["default_time_zone"] is string))
             {
                 throw new ArgumentException("Bad parameter: default_time_zone must be of type string", "parameters[\"default_time_zone\"]");
             }
-            if (parameters.ContainsKey("desktop_app") && !(parameters["desktop_app"] is bool ))
+            if (parameters.ContainsKey("desktop_app") && !(parameters["desktop_app"] is bool))
             {
                 throw new ArgumentException("Bad parameter: desktop_app must be of type bool", "parameters[\"desktop_app\"]");
             }
-            if (parameters.ContainsKey("desktop_app_session_ip_pinning") && !(parameters["desktop_app_session_ip_pinning"] is bool ))
+            if (parameters.ContainsKey("desktop_app_session_ip_pinning") && !(parameters["desktop_app_session_ip_pinning"] is bool))
             {
                 throw new ArgumentException("Bad parameter: desktop_app_session_ip_pinning must be of type bool", "parameters[\"desktop_app_session_ip_pinning\"]");
             }
-            if (parameters.ContainsKey("desktop_app_session_lifetime") && !(parameters["desktop_app_session_lifetime"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("desktop_app_session_lifetime") && !(parameters["desktop_app_session_lifetime"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_app_session_lifetime must be of type Nullable<Int64>", "parameters[\"desktop_app_session_lifetime\"]");
             }
-            if (parameters.ContainsKey("mobile_app") && !(parameters["mobile_app"] is bool ))
+            if (parameters.ContainsKey("mobile_app") && !(parameters["mobile_app"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mobile_app must be of type bool", "parameters[\"mobile_app\"]");
             }
-            if (parameters.ContainsKey("mobile_app_session_ip_pinning") && !(parameters["mobile_app_session_ip_pinning"] is bool ))
+            if (parameters.ContainsKey("mobile_app_session_ip_pinning") && !(parameters["mobile_app_session_ip_pinning"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mobile_app_session_ip_pinning must be of type bool", "parameters[\"mobile_app_session_ip_pinning\"]");
             }
-            if (parameters.ContainsKey("mobile_app_session_lifetime") && !(parameters["mobile_app_session_lifetime"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("mobile_app_session_lifetime") && !(parameters["mobile_app_session_lifetime"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: mobile_app_session_lifetime must be of type Nullable<Int64>", "parameters[\"mobile_app_session_lifetime\"]");
             }
-            if (parameters.ContainsKey("folder_permissions_groups_only") && !(parameters["folder_permissions_groups_only"] is bool ))
+            if (parameters.ContainsKey("folder_permissions_groups_only") && !(parameters["folder_permissions_groups_only"] is bool))
             {
                 throw new ArgumentException("Bad parameter: folder_permissions_groups_only must be of type bool", "parameters[\"folder_permissions_groups_only\"]");
             }
-            if (parameters.ContainsKey("welcome_screen") && !(parameters["welcome_screen"] is string ))
+            if (parameters.ContainsKey("welcome_screen") && !(parameters["welcome_screen"] is string))
             {
                 throw new ArgumentException("Bad parameter: welcome_screen must be of type string", "parameters[\"welcome_screen\"]");
             }
-            if (parameters.ContainsKey("office_integration_available") && !(parameters["office_integration_available"] is bool ))
+            if (parameters.ContainsKey("office_integration_available") && !(parameters["office_integration_available"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_available must be of type bool", "parameters[\"office_integration_available\"]");
             }
-            if (parameters.ContainsKey("office_integration_type") && !(parameters["office_integration_type"] is string ))
+            if (parameters.ContainsKey("office_integration_type") && !(parameters["office_integration_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: office_integration_type must be of type string", "parameters[\"office_integration_type\"]");
             }
-            if (parameters.ContainsKey("pin_all_remote_servers_to_site_region") && !(parameters["pin_all_remote_servers_to_site_region"] is bool ))
+            if (parameters.ContainsKey("pin_all_remote_servers_to_site_region") && !(parameters["pin_all_remote_servers_to_site_region"] is bool))
             {
                 throw new ArgumentException("Bad parameter: pin_all_remote_servers_to_site_region must be of type bool", "parameters[\"pin_all_remote_servers_to_site_region\"]");
             }
-            if (parameters.ContainsKey("motd_text") && !(parameters["motd_text"] is string ))
+            if (parameters.ContainsKey("motd_text") && !(parameters["motd_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: motd_text must be of type string", "parameters[\"motd_text\"]");
             }
-            if (parameters.ContainsKey("motd_use_for_ftp") && !(parameters["motd_use_for_ftp"] is bool ))
+            if (parameters.ContainsKey("motd_use_for_ftp") && !(parameters["motd_use_for_ftp"] is bool))
             {
                 throw new ArgumentException("Bad parameter: motd_use_for_ftp must be of type bool", "parameters[\"motd_use_for_ftp\"]");
             }
-            if (parameters.ContainsKey("motd_use_for_sftp") && !(parameters["motd_use_for_sftp"] is bool ))
+            if (parameters.ContainsKey("motd_use_for_sftp") && !(parameters["motd_use_for_sftp"] is bool))
             {
                 throw new ArgumentException("Bad parameter: motd_use_for_sftp must be of type bool", "parameters[\"motd_use_for_sftp\"]");
             }
-            if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double ))
+            if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {
                 throw new ArgumentException("Bad parameter: session_expiry must be of type double", "parameters[\"session_expiry\"]");
             }
-            if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is bool ))
+            if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ssl_required must be of type bool", "parameters[\"ssl_required\"]");
             }
-            if (parameters.ContainsKey("tls_disabled") && !(parameters["tls_disabled"] is bool ))
+            if (parameters.ContainsKey("tls_disabled") && !(parameters["tls_disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: tls_disabled must be of type bool", "parameters[\"tls_disabled\"]");
             }
-            if (parameters.ContainsKey("sftp_insecure_ciphers") && !(parameters["sftp_insecure_ciphers"] is bool ))
+            if (parameters.ContainsKey("sftp_insecure_ciphers") && !(parameters["sftp_insecure_ciphers"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_insecure_ciphers must be of type bool", "parameters[\"sftp_insecure_ciphers\"]");
             }
-            if (parameters.ContainsKey("disable_files_certificate_generation") && !(parameters["disable_files_certificate_generation"] is bool ))
+            if (parameters.ContainsKey("disable_files_certificate_generation") && !(parameters["disable_files_certificate_generation"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_files_certificate_generation must be of type bool", "parameters[\"disable_files_certificate_generation\"]");
             }
-            if (parameters.ContainsKey("user_lockout") && !(parameters["user_lockout"] is bool ))
+            if (parameters.ContainsKey("user_lockout") && !(parameters["user_lockout"] is bool))
             {
                 throw new ArgumentException("Bad parameter: user_lockout must be of type bool", "parameters[\"user_lockout\"]");
             }
-            if (parameters.ContainsKey("user_lockout_tries") && !(parameters["user_lockout_tries"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_lockout_tries") && !(parameters["user_lockout_tries"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_lockout_tries must be of type Nullable<Int64>", "parameters[\"user_lockout_tries\"]");
             }
-            if (parameters.ContainsKey("user_lockout_within") && !(parameters["user_lockout_within"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_lockout_within") && !(parameters["user_lockout_within"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_lockout_within must be of type Nullable<Int64>", "parameters[\"user_lockout_within\"]");
             }
-            if (parameters.ContainsKey("user_lockout_lock_period") && !(parameters["user_lockout_lock_period"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_lockout_lock_period") && !(parameters["user_lockout_lock_period"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_lockout_lock_period must be of type Nullable<Int64>", "parameters[\"user_lockout_lock_period\"]");
             }
-            if (parameters.ContainsKey("include_password_in_welcome_email") && !(parameters["include_password_in_welcome_email"] is bool ))
+            if (parameters.ContainsKey("include_password_in_welcome_email") && !(parameters["include_password_in_welcome_email"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_password_in_welcome_email must be of type bool", "parameters[\"include_password_in_welcome_email\"]");
             }
-            if (parameters.ContainsKey("allowed_countries") && !(parameters["allowed_countries"] is string ))
+            if (parameters.ContainsKey("allowed_countries") && !(parameters["allowed_countries"] is string))
             {
                 throw new ArgumentException("Bad parameter: allowed_countries must be of type string", "parameters[\"allowed_countries\"]");
             }
-            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string ))
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
                 throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
             }
-            if (parameters.ContainsKey("disallowed_countries") && !(parameters["disallowed_countries"] is string ))
+            if (parameters.ContainsKey("disallowed_countries") && !(parameters["disallowed_countries"] is string))
             {
                 throw new ArgumentException("Bad parameter: disallowed_countries must be of type string", "parameters[\"disallowed_countries\"]");
             }
-            if (parameters.ContainsKey("days_to_retain_backups") && !(parameters["days_to_retain_backups"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("days_to_retain_backups") && !(parameters["days_to_retain_backups"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: days_to_retain_backups must be of type Nullable<Int64>", "parameters[\"days_to_retain_backups\"]");
             }
-            if (parameters.ContainsKey("max_prior_passwords") && !(parameters["max_prior_passwords"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("max_prior_passwords") && !(parameters["max_prior_passwords"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: max_prior_passwords must be of type Nullable<Int64>", "parameters[\"max_prior_passwords\"]");
             }
-            if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
             }
-            if (parameters.ContainsKey("password_min_length") && !(parameters["password_min_length"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("password_min_length") && !(parameters["password_min_length"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_min_length must be of type Nullable<Int64>", "parameters[\"password_min_length\"]");
             }
-            if (parameters.ContainsKey("password_require_letter") && !(parameters["password_require_letter"] is bool ))
+            if (parameters.ContainsKey("password_require_letter") && !(parameters["password_require_letter"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_require_letter must be of type bool", "parameters[\"password_require_letter\"]");
             }
-            if (parameters.ContainsKey("password_require_mixed") && !(parameters["password_require_mixed"] is bool ))
+            if (parameters.ContainsKey("password_require_mixed") && !(parameters["password_require_mixed"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_require_mixed must be of type bool", "parameters[\"password_require_mixed\"]");
             }
-            if (parameters.ContainsKey("password_require_special") && !(parameters["password_require_special"] is bool ))
+            if (parameters.ContainsKey("password_require_special") && !(parameters["password_require_special"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_require_special must be of type bool", "parameters[\"password_require_special\"]");
             }
-            if (parameters.ContainsKey("password_require_number") && !(parameters["password_require_number"] is bool ))
+            if (parameters.ContainsKey("password_require_number") && !(parameters["password_require_number"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_require_number must be of type bool", "parameters[\"password_require_number\"]");
             }
-            if (parameters.ContainsKey("password_require_unbreached") && !(parameters["password_require_unbreached"] is bool ))
+            if (parameters.ContainsKey("password_require_unbreached") && !(parameters["password_require_unbreached"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_require_unbreached must be of type bool", "parameters[\"password_require_unbreached\"]");
             }
-            if (parameters.ContainsKey("sftp_user_root_enabled") && !(parameters["sftp_user_root_enabled"] is bool ))
+            if (parameters.ContainsKey("sftp_user_root_enabled") && !(parameters["sftp_user_root_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_user_root_enabled must be of type bool", "parameters[\"sftp_user_root_enabled\"]");
             }
-            if (parameters.ContainsKey("disable_password_reset") && !(parameters["disable_password_reset"] is bool ))
+            if (parameters.ContainsKey("disable_password_reset") && !(parameters["disable_password_reset"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_password_reset must be of type bool", "parameters[\"disable_password_reset\"]");
             }
-            if (parameters.ContainsKey("immutable_files") && !(parameters["immutable_files"] is bool ))
+            if (parameters.ContainsKey("immutable_files") && !(parameters["immutable_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: immutable_files must be of type bool", "parameters[\"immutable_files\"]");
             }
-            if (parameters.ContainsKey("session_pinned_by_ip") && !(parameters["session_pinned_by_ip"] is bool ))
+            if (parameters.ContainsKey("session_pinned_by_ip") && !(parameters["session_pinned_by_ip"] is bool))
             {
                 throw new ArgumentException("Bad parameter: session_pinned_by_ip must be of type bool", "parameters[\"session_pinned_by_ip\"]");
             }
-            if (parameters.ContainsKey("bundle_password_required") && !(parameters["bundle_password_required"] is bool ))
+            if (parameters.ContainsKey("bundle_password_required") && !(parameters["bundle_password_required"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_password_required must be of type bool", "parameters[\"bundle_password_required\"]");
             }
-            if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool ))
+            if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_require_share_recipient must be of type bool", "parameters[\"bundle_require_share_recipient\"]");
             }
-            if (parameters.ContainsKey("bundle_registration_notifications") && !(parameters["bundle_registration_notifications"] is string ))
+            if (parameters.ContainsKey("bundle_registration_notifications") && !(parameters["bundle_registration_notifications"] is string))
             {
                 throw new ArgumentException("Bad parameter: bundle_registration_notifications must be of type string", "parameters[\"bundle_registration_notifications\"]");
             }
-            if (parameters.ContainsKey("bundle_activity_notifications") && !(parameters["bundle_activity_notifications"] is string ))
+            if (parameters.ContainsKey("bundle_activity_notifications") && !(parameters["bundle_activity_notifications"] is string))
             {
                 throw new ArgumentException("Bad parameter: bundle_activity_notifications must be of type string", "parameters[\"bundle_activity_notifications\"]");
             }
-            if (parameters.ContainsKey("bundle_upload_receipt_notifications") && !(parameters["bundle_upload_receipt_notifications"] is string ))
+            if (parameters.ContainsKey("bundle_upload_receipt_notifications") && !(parameters["bundle_upload_receipt_notifications"] is string))
             {
                 throw new ArgumentException("Bad parameter: bundle_upload_receipt_notifications must be of type string", "parameters[\"bundle_upload_receipt_notifications\"]");
             }
-            if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool ))
+            if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_requirements_apply_to_bundles must be of type bool", "parameters[\"password_requirements_apply_to_bundles\"]");
             }
-            if (parameters.ContainsKey("opt_out_global") && !(parameters["opt_out_global"] is bool ))
+            if (parameters.ContainsKey("opt_out_global") && !(parameters["opt_out_global"] is bool))
             {
                 throw new ArgumentException("Bad parameter: opt_out_global must be of type bool", "parameters[\"opt_out_global\"]");
             }
-            if (parameters.ContainsKey("use_provided_modified_at") && !(parameters["use_provided_modified_at"] is bool ))
+            if (parameters.ContainsKey("use_provided_modified_at") && !(parameters["use_provided_modified_at"] is bool))
             {
                 throw new ArgumentException("Bad parameter: use_provided_modified_at must be of type bool", "parameters[\"use_provided_modified_at\"]");
             }
-            if (parameters.ContainsKey("custom_namespace") && !(parameters["custom_namespace"] is bool ))
+            if (parameters.ContainsKey("custom_namespace") && !(parameters["custom_namespace"] is bool))
             {
                 throw new ArgumentException("Bad parameter: custom_namespace must be of type bool", "parameters[\"custom_namespace\"]");
             }
-            if (parameters.ContainsKey("disable_users_from_inactivity_period_days") && !(parameters["disable_users_from_inactivity_period_days"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("disable_users_from_inactivity_period_days") && !(parameters["disable_users_from_inactivity_period_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: disable_users_from_inactivity_period_days must be of type Nullable<Int64>", "parameters[\"disable_users_from_inactivity_period_days\"]");
             }
-            if (parameters.ContainsKey("non_sso_groups_allowed") && !(parameters["non_sso_groups_allowed"] is bool ))
+            if (parameters.ContainsKey("non_sso_groups_allowed") && !(parameters["non_sso_groups_allowed"] is bool))
             {
                 throw new ArgumentException("Bad parameter: non_sso_groups_allowed must be of type bool", "parameters[\"non_sso_groups_allowed\"]");
             }
-            if (parameters.ContainsKey("non_sso_users_allowed") && !(parameters["non_sso_users_allowed"] is bool ))
+            if (parameters.ContainsKey("non_sso_users_allowed") && !(parameters["non_sso_users_allowed"] is bool))
             {
                 throw new ArgumentException("Bad parameter: non_sso_users_allowed must be of type bool", "parameters[\"non_sso_users_allowed\"]");
             }
-            if (parameters.ContainsKey("sharing_enabled") && !(parameters["sharing_enabled"] is bool ))
+            if (parameters.ContainsKey("sharing_enabled") && !(parameters["sharing_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sharing_enabled must be of type bool", "parameters[\"sharing_enabled\"]");
             }
-            if (parameters.ContainsKey("user_requests_enabled") && !(parameters["user_requests_enabled"] is bool ))
+            if (parameters.ContainsKey("user_requests_enabled") && !(parameters["user_requests_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: user_requests_enabled must be of type bool", "parameters[\"user_requests_enabled\"]");
             }
-            if (parameters.ContainsKey("user_requests_notify_admins") && !(parameters["user_requests_notify_admins"] is bool ))
+            if (parameters.ContainsKey("user_requests_notify_admins") && !(parameters["user_requests_notify_admins"] is bool))
             {
                 throw new ArgumentException("Bad parameter: user_requests_notify_admins must be of type bool", "parameters[\"user_requests_notify_admins\"]");
             }
-            if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool ))
+            if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ftp_enabled must be of type bool", "parameters[\"ftp_enabled\"]");
             }
-            if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool ))
+            if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_enabled must be of type bool", "parameters[\"sftp_enabled\"]");
             }
-            if (parameters.ContainsKey("sftp_host_key_type") && !(parameters["sftp_host_key_type"] is string ))
+            if (parameters.ContainsKey("sftp_host_key_type") && !(parameters["sftp_host_key_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: sftp_host_key_type must be of type string", "parameters[\"sftp_host_key_type\"]");
             }
-            if (parameters.ContainsKey("active_sftp_host_key_id") && !(parameters["active_sftp_host_key_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("active_sftp_host_key_id") && !(parameters["active_sftp_host_key_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: active_sftp_host_key_id must be of type Nullable<Int64>", "parameters[\"active_sftp_host_key_id\"]");
             }
-            if (parameters.ContainsKey("bundle_watermark_value") && !(parameters["bundle_watermark_value"] is object ))
+            if (parameters.ContainsKey("bundle_watermark_value") && !(parameters["bundle_watermark_value"] is object))
             {
                 throw new ArgumentException("Bad parameter: bundle_watermark_value must be of type object", "parameters[\"bundle_watermark_value\"]");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool ))
+            if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_sms must be of type bool", "parameters[\"allowed_2fa_method_sms\"]");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_u2f") && !(parameters["allowed_2fa_method_u2f"] is bool ))
+            if (parameters.ContainsKey("allowed_2fa_method_u2f") && !(parameters["allowed_2fa_method_u2f"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_u2f must be of type bool", "parameters[\"allowed_2fa_method_u2f\"]");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_totp") && !(parameters["allowed_2fa_method_totp"] is bool ))
+            if (parameters.ContainsKey("allowed_2fa_method_totp") && !(parameters["allowed_2fa_method_totp"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_totp must be of type bool", "parameters[\"allowed_2fa_method_totp\"]");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_webauthn") && !(parameters["allowed_2fa_method_webauthn"] is bool ))
+            if (parameters.ContainsKey("allowed_2fa_method_webauthn") && !(parameters["allowed_2fa_method_webauthn"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_webauthn must be of type bool", "parameters[\"allowed_2fa_method_webauthn\"]");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_yubi") && !(parameters["allowed_2fa_method_yubi"] is bool ))
+            if (parameters.ContainsKey("allowed_2fa_method_yubi") && !(parameters["allowed_2fa_method_yubi"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_yubi must be of type bool", "parameters[\"allowed_2fa_method_yubi\"]");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_bypass_for_ftp_sftp_dav") && !(parameters["allowed_2fa_method_bypass_for_ftp_sftp_dav"] is bool ))
+            if (parameters.ContainsKey("allowed_2fa_method_bypass_for_ftp_sftp_dav") && !(parameters["allowed_2fa_method_bypass_for_ftp_sftp_dav"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_bypass_for_ftp_sftp_dav must be of type bool", "parameters[\"allowed_2fa_method_bypass_for_ftp_sftp_dav\"]");
             }
-            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is bool ))
+            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is bool))
             {
                 throw new ArgumentException("Bad parameter: require_2fa must be of type bool", "parameters[\"require_2fa\"]");
             }
-            if (parameters.ContainsKey("require_2fa_user_type") && !(parameters["require_2fa_user_type"] is string ))
+            if (parameters.ContainsKey("require_2fa_user_type") && !(parameters["require_2fa_user_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: require_2fa_user_type must be of type string", "parameters[\"require_2fa_user_type\"]");
             }
-            if (parameters.ContainsKey("color2_top") && !(parameters["color2_top"] is string ))
+            if (parameters.ContainsKey("color2_top") && !(parameters["color2_top"] is string))
             {
                 throw new ArgumentException("Bad parameter: color2_top must be of type string", "parameters[\"color2_top\"]");
             }
-            if (parameters.ContainsKey("color2_left") && !(parameters["color2_left"] is string ))
+            if (parameters.ContainsKey("color2_left") && !(parameters["color2_left"] is string))
             {
                 throw new ArgumentException("Bad parameter: color2_left must be of type string", "parameters[\"color2_left\"]");
             }
-            if (parameters.ContainsKey("color2_link") && !(parameters["color2_link"] is string ))
+            if (parameters.ContainsKey("color2_link") && !(parameters["color2_link"] is string))
             {
                 throw new ArgumentException("Bad parameter: color2_link must be of type string", "parameters[\"color2_link\"]");
             }
-            if (parameters.ContainsKey("color2_text") && !(parameters["color2_text"] is string ))
+            if (parameters.ContainsKey("color2_text") && !(parameters["color2_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: color2_text must be of type string", "parameters[\"color2_text\"]");
             }
-            if (parameters.ContainsKey("color2_top_text") && !(parameters["color2_top_text"] is string ))
+            if (parameters.ContainsKey("color2_top_text") && !(parameters["color2_top_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: color2_top_text must be of type string", "parameters[\"color2_top_text\"]");
             }
-            if (parameters.ContainsKey("site_header") && !(parameters["site_header"] is string ))
+            if (parameters.ContainsKey("site_header") && !(parameters["site_header"] is string))
             {
                 throw new ArgumentException("Bad parameter: site_header must be of type string", "parameters[\"site_header\"]");
             }
-            if (parameters.ContainsKey("site_footer") && !(parameters["site_footer"] is string ))
+            if (parameters.ContainsKey("site_footer") && !(parameters["site_footer"] is string))
             {
                 throw new ArgumentException("Bad parameter: site_footer must be of type string", "parameters[\"site_footer\"]");
             }
-            if (parameters.ContainsKey("login_help_text") && !(parameters["login_help_text"] is string ))
+            if (parameters.ContainsKey("login_help_text") && !(parameters["login_help_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: login_help_text must be of type string", "parameters[\"login_help_text\"]");
             }
-            if (parameters.ContainsKey("smtp_address") && !(parameters["smtp_address"] is string ))
+            if (parameters.ContainsKey("smtp_address") && !(parameters["smtp_address"] is string))
             {
                 throw new ArgumentException("Bad parameter: smtp_address must be of type string", "parameters[\"smtp_address\"]");
             }
-            if (parameters.ContainsKey("smtp_authentication") && !(parameters["smtp_authentication"] is string ))
+            if (parameters.ContainsKey("smtp_authentication") && !(parameters["smtp_authentication"] is string))
             {
                 throw new ArgumentException("Bad parameter: smtp_authentication must be of type string", "parameters[\"smtp_authentication\"]");
             }
-            if (parameters.ContainsKey("smtp_from") && !(parameters["smtp_from"] is string ))
+            if (parameters.ContainsKey("smtp_from") && !(parameters["smtp_from"] is string))
             {
                 throw new ArgumentException("Bad parameter: smtp_from must be of type string", "parameters[\"smtp_from\"]");
             }
-            if (parameters.ContainsKey("smtp_username") && !(parameters["smtp_username"] is string ))
+            if (parameters.ContainsKey("smtp_username") && !(parameters["smtp_username"] is string))
             {
                 throw new ArgumentException("Bad parameter: smtp_username must be of type string", "parameters[\"smtp_username\"]");
             }
-            if (parameters.ContainsKey("smtp_port") && !(parameters["smtp_port"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("smtp_port") && !(parameters["smtp_port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: smtp_port must be of type Nullable<Int64>", "parameters[\"smtp_port\"]");
             }
-            if (parameters.ContainsKey("ldap_enabled") && !(parameters["ldap_enabled"] is bool ))
+            if (parameters.ContainsKey("ldap_enabled") && !(parameters["ldap_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ldap_enabled must be of type bool", "parameters[\"ldap_enabled\"]");
             }
-            if (parameters.ContainsKey("ldap_type") && !(parameters["ldap_type"] is string ))
+            if (parameters.ContainsKey("ldap_type") && !(parameters["ldap_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_type must be of type string", "parameters[\"ldap_type\"]");
             }
-            if (parameters.ContainsKey("ldap_host") && !(parameters["ldap_host"] is string ))
+            if (parameters.ContainsKey("ldap_host") && !(parameters["ldap_host"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_host must be of type string", "parameters[\"ldap_host\"]");
             }
-            if (parameters.ContainsKey("ldap_host_2") && !(parameters["ldap_host_2"] is string ))
+            if (parameters.ContainsKey("ldap_host_2") && !(parameters["ldap_host_2"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_host_2 must be of type string", "parameters[\"ldap_host_2\"]");
             }
-            if (parameters.ContainsKey("ldap_host_3") && !(parameters["ldap_host_3"] is string ))
+            if (parameters.ContainsKey("ldap_host_3") && !(parameters["ldap_host_3"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_host_3 must be of type string", "parameters[\"ldap_host_3\"]");
             }
-            if (parameters.ContainsKey("ldap_port") && !(parameters["ldap_port"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("ldap_port") && !(parameters["ldap_port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: ldap_port must be of type Nullable<Int64>", "parameters[\"ldap_port\"]");
             }
-            if (parameters.ContainsKey("ldap_secure") && !(parameters["ldap_secure"] is bool ))
+            if (parameters.ContainsKey("ldap_secure") && !(parameters["ldap_secure"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ldap_secure must be of type bool", "parameters[\"ldap_secure\"]");
             }
-            if (parameters.ContainsKey("ldap_username") && !(parameters["ldap_username"] is string ))
+            if (parameters.ContainsKey("ldap_username") && !(parameters["ldap_username"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_username must be of type string", "parameters[\"ldap_username\"]");
             }
-            if (parameters.ContainsKey("ldap_username_field") && !(parameters["ldap_username_field"] is string ))
+            if (parameters.ContainsKey("ldap_username_field") && !(parameters["ldap_username_field"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_username_field must be of type string", "parameters[\"ldap_username_field\"]");
             }
-            if (parameters.ContainsKey("ldap_domain") && !(parameters["ldap_domain"] is string ))
+            if (parameters.ContainsKey("ldap_domain") && !(parameters["ldap_domain"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_domain must be of type string", "parameters[\"ldap_domain\"]");
             }
-            if (parameters.ContainsKey("ldap_user_action") && !(parameters["ldap_user_action"] is string ))
+            if (parameters.ContainsKey("ldap_user_action") && !(parameters["ldap_user_action"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_user_action must be of type string", "parameters[\"ldap_user_action\"]");
             }
-            if (parameters.ContainsKey("ldap_group_action") && !(parameters["ldap_group_action"] is string ))
+            if (parameters.ContainsKey("ldap_group_action") && !(parameters["ldap_group_action"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_group_action must be of type string", "parameters[\"ldap_group_action\"]");
             }
-            if (parameters.ContainsKey("ldap_user_include_groups") && !(parameters["ldap_user_include_groups"] is string ))
+            if (parameters.ContainsKey("ldap_user_include_groups") && !(parameters["ldap_user_include_groups"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_user_include_groups must be of type string", "parameters[\"ldap_user_include_groups\"]");
             }
-            if (parameters.ContainsKey("ldap_group_exclusion") && !(parameters["ldap_group_exclusion"] is string ))
+            if (parameters.ContainsKey("ldap_group_exclusion") && !(parameters["ldap_group_exclusion"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_group_exclusion must be of type string", "parameters[\"ldap_group_exclusion\"]");
             }
-            if (parameters.ContainsKey("ldap_group_inclusion") && !(parameters["ldap_group_inclusion"] is string ))
+            if (parameters.ContainsKey("ldap_group_inclusion") && !(parameters["ldap_group_inclusion"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_group_inclusion must be of type string", "parameters[\"ldap_group_inclusion\"]");
             }
-            if (parameters.ContainsKey("ldap_base_dn") && !(parameters["ldap_base_dn"] is string ))
+            if (parameters.ContainsKey("ldap_base_dn") && !(parameters["ldap_base_dn"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_base_dn must be of type string", "parameters[\"ldap_base_dn\"]");
             }
-            if (parameters.ContainsKey("uploads_via_email_authentication") && !(parameters["uploads_via_email_authentication"] is bool ))
+            if (parameters.ContainsKey("uploads_via_email_authentication") && !(parameters["uploads_via_email_authentication"] is bool))
             {
                 throw new ArgumentException("Bad parameter: uploads_via_email_authentication must be of type bool", "parameters[\"uploads_via_email_authentication\"]");
             }
-            if (parameters.ContainsKey("icon16_file") && !(parameters["icon16_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("icon16_file") && !(parameters["icon16_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: icon16_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon16_file\"]");
             }
-            if (parameters.ContainsKey("icon16_delete") && !(parameters["icon16_delete"] is bool ))
+            if (parameters.ContainsKey("icon16_delete") && !(parameters["icon16_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: icon16_delete must be of type bool", "parameters[\"icon16_delete\"]");
             }
-            if (parameters.ContainsKey("icon32_file") && !(parameters["icon32_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("icon32_file") && !(parameters["icon32_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: icon32_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon32_file\"]");
             }
-            if (parameters.ContainsKey("icon32_delete") && !(parameters["icon32_delete"] is bool ))
+            if (parameters.ContainsKey("icon32_delete") && !(parameters["icon32_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: icon32_delete must be of type bool", "parameters[\"icon32_delete\"]");
             }
-            if (parameters.ContainsKey("icon48_file") && !(parameters["icon48_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("icon48_file") && !(parameters["icon48_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: icon48_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon48_file\"]");
             }
-            if (parameters.ContainsKey("icon48_delete") && !(parameters["icon48_delete"] is bool ))
+            if (parameters.ContainsKey("icon48_delete") && !(parameters["icon48_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: icon48_delete must be of type bool", "parameters[\"icon48_delete\"]");
             }
-            if (parameters.ContainsKey("icon128_file") && !(parameters["icon128_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("icon128_file") && !(parameters["icon128_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: icon128_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon128_file\"]");
             }
-            if (parameters.ContainsKey("icon128_delete") && !(parameters["icon128_delete"] is bool ))
+            if (parameters.ContainsKey("icon128_delete") && !(parameters["icon128_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: icon128_delete must be of type bool", "parameters[\"icon128_delete\"]");
             }
-            if (parameters.ContainsKey("logo_file") && !(parameters["logo_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("logo_file") && !(parameters["logo_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: logo_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"logo_file\"]");
             }
-            if (parameters.ContainsKey("logo_delete") && !(parameters["logo_delete"] is bool ))
+            if (parameters.ContainsKey("logo_delete") && !(parameters["logo_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: logo_delete must be of type bool", "parameters[\"logo_delete\"]");
             }
-            if (parameters.ContainsKey("bundle_watermark_attachment_file") && !(parameters["bundle_watermark_attachment_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("bundle_watermark_attachment_file") && !(parameters["bundle_watermark_attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: bundle_watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"bundle_watermark_attachment_file\"]");
             }
-            if (parameters.ContainsKey("bundle_watermark_attachment_delete") && !(parameters["bundle_watermark_attachment_delete"] is bool ))
+            if (parameters.ContainsKey("bundle_watermark_attachment_delete") && !(parameters["bundle_watermark_attachment_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_watermark_attachment_delete must be of type bool", "parameters[\"bundle_watermark_attachment_delete\"]");
             }
-            if (parameters.ContainsKey("disable_2fa_with_delay") && !(parameters["disable_2fa_with_delay"] is bool ))
+            if (parameters.ContainsKey("disable_2fa_with_delay") && !(parameters["disable_2fa_with_delay"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_2fa_with_delay must be of type bool", "parameters[\"disable_2fa_with_delay\"]");
             }
-            if (parameters.ContainsKey("ldap_password_change") && !(parameters["ldap_password_change"] is string ))
+            if (parameters.ContainsKey("ldap_password_change") && !(parameters["ldap_password_change"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_password_change must be of type string", "parameters[\"ldap_password_change\"]");
             }
-            if (parameters.ContainsKey("ldap_password_change_confirmation") && !(parameters["ldap_password_change_confirmation"] is string ))
+            if (parameters.ContainsKey("ldap_password_change_confirmation") && !(parameters["ldap_password_change_confirmation"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_password_change_confirmation must be of type string", "parameters[\"ldap_password_change_confirmation\"]");
             }
-            if (parameters.ContainsKey("smtp_password") && !(parameters["smtp_password"] is string ))
+            if (parameters.ContainsKey("smtp_password") && !(parameters["smtp_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: smtp_password must be of type string", "parameters[\"smtp_password\"]");
             }
-            if (parameters.ContainsKey("session_expiry_minutes") && !(parameters["session_expiry_minutes"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("session_expiry_minutes") && !(parameters["session_expiry_minutes"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: session_expiry_minutes must be of type Nullable<Int64>", "parameters[\"session_expiry_minutes\"]");
             }
@@ -2920,4 +2920,3 @@ namespace FilesCom.Models
 
     }
 }
-

@@ -81,7 +81,7 @@ namespace FilesCom.Models
         [JsonPropertyName("code")]
         public Nullable<Int64> Code
         {
-            get { return (Nullable<Int64>) attributes["code"]; }
+            get { return (Nullable<Int64>)attributes["code"]; }
             private set { attributes["code"] = value; }
         }
 
@@ -92,7 +92,7 @@ namespace FilesCom.Models
         [JsonPropertyName("message")]
         public string Message
         {
-            get { return (string) attributes["message"]; }
+            get { return (string)attributes["message"]; }
             private set { attributes["message"] = value; }
         }
 
@@ -103,7 +103,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string StatusType
         {
-            get { return (string) attributes["status"]; }
+            get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
         }
 
@@ -114,7 +114,7 @@ namespace FilesCom.Models
         [JsonPropertyName("data")]
         public Auto Data
         {
-            get { return (Auto) attributes["data"]; }
+            get { return (Auto)attributes["data"]; }
             private set { attributes["data"] = value; }
         }
 
@@ -125,7 +125,7 @@ namespace FilesCom.Models
         [JsonPropertyName("errors")]
         public string[] Errors
         {
-            get { return (string[]) attributes["errors"]; }
+            get { return (string[])attributes["errors"]; }
             private set { attributes["errors"] = value; }
         }
 
@@ -136,7 +136,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_id")]
         public Nullable<Int64> ClickwrapId
         {
-            get { return (Nullable<Int64>) attributes["clickwrap_id"]; }
+            get { return (Nullable<Int64>)attributes["clickwrap_id"]; }
             private set { attributes["clickwrap_id"] = value; }
         }
 
@@ -147,7 +147,7 @@ namespace FilesCom.Models
         [JsonPropertyName("clickwrap_body")]
         public string ClickwrapBody
         {
-            get { return (string) attributes["clickwrap_body"]; }
+            get { return (string)attributes["clickwrap_body"]; }
             private set { attributes["clickwrap_body"] = value; }
         }
 
@@ -155,4 +155,3 @@ namespace FilesCom.Models
 
     }
 }
-

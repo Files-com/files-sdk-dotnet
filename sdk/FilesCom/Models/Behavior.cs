@@ -88,7 +88,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -98,7 +98,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -108,7 +108,7 @@ namespace FilesCom.Models
         [JsonPropertyName("attachment_url")]
         public string AttachmentUrl
         {
-            get { return (string) attributes["attachment_url"]; }
+            get { return (string)attributes["attachment_url"]; }
             set { attributes["attachment_url"] = value; }
         }
 
@@ -118,7 +118,7 @@ namespace FilesCom.Models
         [JsonPropertyName("behavior")]
         public string BehaviorType
         {
-            get { return (string) attributes["behavior"]; }
+            get { return (string)attributes["behavior"]; }
             set { attributes["behavior"] = value; }
         }
 
@@ -128,7 +128,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
         }
 
@@ -138,7 +138,7 @@ namespace FilesCom.Models
         [JsonPropertyName("description")]
         public string Description
         {
-            get { return (string) attributes["description"]; }
+            get { return (string)attributes["description"]; }
             set { attributes["description"] = value; }
         }
 
@@ -148,7 +148,7 @@ namespace FilesCom.Models
         [JsonPropertyName("value")]
         public object Value
         {
-            get { return (object) attributes["value"]; }
+            get { return (object)attributes["value"]; }
             set { attributes["value"] = value; }
         }
 
@@ -158,7 +158,7 @@ namespace FilesCom.Models
         [JsonPropertyName("attachment_file")]
         public System.Net.Http.ByteArrayContent AttachmentFile
         {
-            get { return (System.Net.Http.ByteArrayContent) attributes["attachment_file"]; }
+            get { return (System.Net.Http.ByteArrayContent)attributes["attachment_file"]; }
             set { attributes["attachment_file"] = value; }
         }
 
@@ -168,7 +168,7 @@ namespace FilesCom.Models
         [JsonPropertyName("attachment_delete")]
         public bool AttachmentDelete
         {
-            get { return (bool) attributes["attachment_delete"]; }
+            get { return (bool)attributes["attachment_delete"]; }
             set { attributes["attachment_delete"] = value; }
         }
 
@@ -187,38 +187,39 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is string ))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
             {
                 throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
             }
-            if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
                 throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool ))
+            if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: attachment_delete must be of type bool", "parameters[\"attachment_delete\"]");
             }
@@ -240,10 +241,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -290,7 +292,7 @@ namespace FilesCom.Models
         ///   behavior - string - If set, only shows folder behaviors matching this behavior type.
         /// </summary>
         public static async Task<Behavior[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -298,43 +300,43 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
                 throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
             }
@@ -345,7 +347,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Behavior[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -358,7 +360,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Behavior ID.
         /// </summary>
         public static async Task<Behavior> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -367,7 +369,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -382,7 +384,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Behavior> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -406,7 +408,7 @@ namespace FilesCom.Models
         ///   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
         /// </summary>
         public static async Task<Behavior[]> ListFor(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -415,51 +417,51 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object ))
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object ))
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object ))
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object ))
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object ))
+            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object ))
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object ))
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
             }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
                 throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
             }
@@ -484,7 +486,7 @@ namespace FilesCom.Models
         ///   behavior (required) - string - Behavior type.
         /// </summary>
         public static async Task<Behavior> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -492,27 +494,27 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("value") && !(parameters["value"] is string ))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
             {
                 throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
             }
-            if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
                 throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
             }
@@ -541,7 +543,7 @@ namespace FilesCom.Models
         ///   action - string - action for test body
         /// </summary>
         public static async Task<Behavior> WebhookTest(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -549,27 +551,27 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("url") && !(parameters["url"] is string ))
+            if (parameters.ContainsKey("url") && !(parameters["url"] is string))
             {
                 throw new ArgumentException("Bad parameter: url must be of type string", "parameters[\"url\"]");
             }
-            if (parameters.ContainsKey("method") && !(parameters["method"] is string ))
+            if (parameters.ContainsKey("method") && !(parameters["method"] is string))
             {
                 throw new ArgumentException("Bad parameter: method must be of type string", "parameters[\"method\"]");
             }
-            if (parameters.ContainsKey("encoding") && !(parameters["encoding"] is string ))
+            if (parameters.ContainsKey("encoding") && !(parameters["encoding"] is string))
             {
                 throw new ArgumentException("Bad parameter: encoding must be of type string", "parameters[\"encoding\"]");
             }
-            if (parameters.ContainsKey("headers") && !(parameters["headers"] is object ))
+            if (parameters.ContainsKey("headers") && !(parameters["headers"] is object))
             {
                 throw new ArgumentException("Bad parameter: headers must be of type object", "parameters[\"headers\"]");
             }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is object ))
+            if (parameters.ContainsKey("body") && !(parameters["body"] is object))
             {
                 throw new ArgumentException("Bad parameter: body must be of type object", "parameters[\"body\"]");
             }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
@@ -595,7 +597,7 @@ namespace FilesCom.Models
         ///   attachment_delete - boolean - If true, will delete the file stored in attachment
         /// </summary>
         public static async Task<Behavior> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -604,35 +606,35 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is string ))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
             {
                 throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
             }
-            if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string ))
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string ))
+            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
                 throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool ))
+            if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: attachment_delete must be of type bool", "parameters[\"attachment_delete\"]");
             }
@@ -650,7 +652,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Behavior> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -659,7 +661,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -674,7 +676,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Behavior> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -684,4 +686,3 @@ namespace FilesCom.Models
 
     }
 }
-

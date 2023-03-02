@@ -16,7 +16,7 @@ namespace FilesCom.Models
 
         public static async Task<RemoteFile> Create(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
-            return (RemoteFile) await RemoteFile.Create((string)attributes["path"], attributes, options);
+            return (RemoteFile)await RemoteFile.Create((string)attributes["path"], attributes, options);
         }
 
         public static async Task<RemoteFile> DownloadFile(string path, string localPath = null, Dictionary<string, object> options = null)
@@ -39,7 +39,8 @@ namespace FilesCom.Models
         private static async Task<Tuple<Int64, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options = null)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            if (fileRef != null) {
+            if (fileRef != null)
+            {
                 parameters["ref"] = fileRef;
             }
             parameters["part"] = partNumber;
@@ -59,7 +60,8 @@ namespace FilesCom.Models
         {
             System.IO.FileInfo fileInfo = new System.IO.FileInfo(localPath);
 
-            if (destinationPath == null) {
+            if (destinationPath == null)
+            {
                 destinationPath = localPath.Substring(localPath.LastIndexOf('/') + 1);
             }
 
@@ -81,7 +83,8 @@ namespace FilesCom.Models
                 string fileRef = null;
 
                 // TODO: Set up multiple parallel streams instead of looping serial uploads here.
-                while (bytesWritten < fileLength || parts == 0) {
+                while (bytesWritten < fileLength || parts == 0)
+                {
                     parts++;
                     Tuple<Int64, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options);
                     bytesWritten += result.Item1;
@@ -102,8 +105,9 @@ namespace FilesCom.Models
 
         public async Task<string> GetDownloadUriWithLoad()
         {
-            if (DownloadUri == null) {
-                RemoteFile f = (RemoteFile) await RemoteFile.Download(Path, null, options);
+            if (DownloadUri == null)
+            {
+                RemoteFile f = (RemoteFile)await RemoteFile.Download(Path, null, options);
                 attributes = f.attributes;
             }
             return DownloadUri;
@@ -276,7 +280,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -286,7 +290,7 @@ namespace FilesCom.Models
         [JsonPropertyName("display_name")]
         public string DisplayName
         {
-            get { return (string) attributes["display_name"]; }
+            get { return (string)attributes["display_name"]; }
             set { attributes["display_name"] = value; }
         }
 
@@ -296,7 +300,7 @@ namespace FilesCom.Models
         [JsonPropertyName("type")]
         public string Type
         {
-            get { return (string) attributes["type"]; }
+            get { return (string)attributes["type"]; }
             set { attributes["type"] = value; }
         }
 
@@ -306,7 +310,7 @@ namespace FilesCom.Models
         [JsonPropertyName("size")]
         public Nullable<Int64> Size
         {
-            get { return (Nullable<Int64>) attributes["size"]; }
+            get { return (Nullable<Int64>)attributes["size"]; }
             set { attributes["size"] = value; }
         }
 
@@ -317,7 +321,7 @@ namespace FilesCom.Models
         [JsonPropertyName("created_at")]
         public Nullable<DateTime> CreatedAt
         {
-            get { return (Nullable<DateTime>) attributes["created_at"]; }
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
         }
 
@@ -327,7 +331,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mtime")]
         public Nullable<DateTime> Mtime
         {
-            get { return (Nullable<DateTime>) attributes["mtime"]; }
+            get { return (Nullable<DateTime>)attributes["mtime"]; }
             set { attributes["mtime"] = value; }
         }
 
@@ -337,7 +341,7 @@ namespace FilesCom.Models
         [JsonPropertyName("provided_mtime")]
         public Nullable<DateTime> ProvidedMtime
         {
-            get { return (Nullable<DateTime>) attributes["provided_mtime"]; }
+            get { return (Nullable<DateTime>)attributes["provided_mtime"]; }
             set { attributes["provided_mtime"] = value; }
         }
 
@@ -347,7 +351,7 @@ namespace FilesCom.Models
         [JsonPropertyName("crc32")]
         public string Crc32
         {
-            get { return (string) attributes["crc32"]; }
+            get { return (string)attributes["crc32"]; }
             set { attributes["crc32"] = value; }
         }
 
@@ -357,7 +361,7 @@ namespace FilesCom.Models
         [JsonPropertyName("md5")]
         public string Md5
         {
-            get { return (string) attributes["md5"]; }
+            get { return (string)attributes["md5"]; }
             set { attributes["md5"] = value; }
         }
 
@@ -367,7 +371,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mime_type")]
         public string MimeType
         {
-            get { return (string) attributes["mime_type"]; }
+            get { return (string)attributes["mime_type"]; }
             set { attributes["mime_type"] = value; }
         }
 
@@ -377,7 +381,7 @@ namespace FilesCom.Models
         [JsonPropertyName("region")]
         public string Region
         {
-            get { return (string) attributes["region"]; }
+            get { return (string)attributes["region"]; }
             set { attributes["region"] = value; }
         }
 
@@ -387,7 +391,7 @@ namespace FilesCom.Models
         [JsonPropertyName("permissions")]
         public string Permissions
         {
-            get { return (string) attributes["permissions"]; }
+            get { return (string)attributes["permissions"]; }
             set { attributes["permissions"] = value; }
         }
 
@@ -397,7 +401,7 @@ namespace FilesCom.Models
         [JsonPropertyName("subfolders_locked?")]
         public bool SubfoldersLocked
         {
-            get { return (bool) attributes["subfolders_locked?"]; }
+            get { return (bool)attributes["subfolders_locked?"]; }
             set { attributes["subfolders_locked?"] = value; }
         }
 
@@ -407,7 +411,7 @@ namespace FilesCom.Models
         [JsonPropertyName("is_locked")]
         public bool IsLocked
         {
-            get { return (bool) attributes["is_locked"]; }
+            get { return (bool)attributes["is_locked"]; }
             set { attributes["is_locked"] = value; }
         }
 
@@ -417,7 +421,7 @@ namespace FilesCom.Models
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
-            get { return (string) attributes["download_uri"]; }
+            get { return (string)attributes["download_uri"]; }
             set { attributes["download_uri"] = value; }
         }
 
@@ -427,7 +431,7 @@ namespace FilesCom.Models
         [JsonPropertyName("priority_color")]
         public string PriorityColor
         {
-            get { return (string) attributes["priority_color"]; }
+            get { return (string)attributes["priority_color"]; }
             set { attributes["priority_color"] = value; }
         }
 
@@ -437,7 +441,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview_id")]
         public Nullable<Int64> PreviewId
         {
-            get { return (Nullable<Int64>) attributes["preview_id"]; }
+            get { return (Nullable<Int64>)attributes["preview_id"]; }
             set { attributes["preview_id"] = value; }
         }
 
@@ -447,7 +451,7 @@ namespace FilesCom.Models
         [JsonPropertyName("preview")]
         public Preview Preview
         {
-            get { return (Preview) attributes["preview"]; }
+            get { return (Preview)attributes["preview"]; }
             set { attributes["preview"] = value; }
         }
 
@@ -457,7 +461,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
-            get { return (string) attributes["action"]; }
+            get { return (string)attributes["action"]; }
             set { attributes["action"] = value; }
         }
 
@@ -467,7 +471,7 @@ namespace FilesCom.Models
         [JsonPropertyName("length")]
         public Nullable<Int64> Length
         {
-            get { return (Nullable<Int64>) attributes["length"]; }
+            get { return (Nullable<Int64>)attributes["length"]; }
             set { attributes["length"] = value; }
         }
 
@@ -477,7 +481,7 @@ namespace FilesCom.Models
         [JsonPropertyName("mkdir_parents")]
         public bool MkdirParents
         {
-            get { return (bool) attributes["mkdir_parents"]; }
+            get { return (bool)attributes["mkdir_parents"]; }
             set { attributes["mkdir_parents"] = value; }
         }
 
@@ -487,7 +491,7 @@ namespace FilesCom.Models
         [JsonPropertyName("part")]
         public Nullable<Int64> Part
         {
-            get { return (Nullable<Int64>) attributes["part"]; }
+            get { return (Nullable<Int64>)attributes["part"]; }
             set { attributes["part"] = value; }
         }
 
@@ -497,7 +501,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parts")]
         public Nullable<Int64> Parts
         {
-            get { return (Nullable<Int64>) attributes["parts"]; }
+            get { return (Nullable<Int64>)attributes["parts"]; }
             set { attributes["parts"] = value; }
         }
 
@@ -506,7 +510,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ref")]
         public string Ref
         {
-            get { return (string) attributes["ref"]; }
+            get { return (string)attributes["ref"]; }
             set { attributes["ref"] = value; }
         }
 
@@ -516,7 +520,7 @@ namespace FilesCom.Models
         [JsonPropertyName("restart")]
         public Nullable<Int64> Restart
         {
-            get { return (Nullable<Int64>) attributes["restart"]; }
+            get { return (Nullable<Int64>)attributes["restart"]; }
             set { attributes["restart"] = value; }
         }
 
@@ -526,7 +530,7 @@ namespace FilesCom.Models
         [JsonPropertyName("structure")]
         public string Structure
         {
-            get { return (string) attributes["structure"]; }
+            get { return (string)attributes["structure"]; }
             set { attributes["structure"] = value; }
         }
 
@@ -536,7 +540,7 @@ namespace FilesCom.Models
         [JsonPropertyName("with_rename")]
         public bool WithRename
         {
-            get { return (bool) attributes["with_rename"]; }
+            get { return (bool)attributes["with_rename"]; }
             set { attributes["with_rename"] = value; }
         }
 
@@ -554,26 +558,27 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
-            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
+            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string))
             {
                 throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
             }
-            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool ))
+            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
             }
-            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool ))
+            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
             }
@@ -598,18 +603,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string ))
+            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string))
             {
                 throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
             }
-            if (parameters.ContainsKey("priority_color") && !(parameters["priority_color"] is string ))
+            if (parameters.ContainsKey("priority_color") && !(parameters["priority_color"] is string))
             {
                 throw new ArgumentException("Bad parameter: priority_color must be of type string", "parameters[\"priority_color\"]");
             }
@@ -633,14 +639,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
@@ -671,18 +678,19 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
-            if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool ))
+            if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool))
             {
                 throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
             }
@@ -712,14 +720,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
@@ -755,38 +764,39 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool ))
+            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
             }
-            if (parameters.ContainsKey("part") && !(parameters["part"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("part") && !(parameters["part"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: part must be of type Nullable<Int64>", "parameters[\"part\"]");
             }
-            if (parameters.ContainsKey("parts") && !(parameters["parts"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("parts") && !(parameters["parts"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: parts must be of type Nullable<Int64>", "parameters[\"parts\"]");
             }
-            if (parameters.ContainsKey("ref") && !(parameters["ref"] is string ))
+            if (parameters.ContainsKey("ref") && !(parameters["ref"] is string))
             {
                 throw new ArgumentException("Bad parameter: ref must be of type string", "parameters[\"ref\"]");
             }
-            if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: restart must be of type Nullable<Int64>", "parameters[\"restart\"]");
             }
-            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: size must be of type Nullable<Int64>", "parameters[\"size\"]");
             }
-            if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool ))
+            if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
             }
@@ -818,7 +828,7 @@ namespace FilesCom.Models
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
         public static async Task<RemoteFile> Download(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -827,23 +837,23 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
-            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
+            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string))
             {
                 throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
             }
-            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool ))
+            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
             }
-            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool ))
+            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
             }
@@ -876,7 +886,7 @@ namespace FilesCom.Models
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         /// </summary>
         public static async Task<RemoteFile> Create(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -885,51 +895,51 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string ))
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
-            if (parameters.ContainsKey("length") && !(parameters["length"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("length") && !(parameters["length"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: length must be of type Nullable<Int64>", "parameters[\"length\"]");
             }
-            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool ))
+            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
             }
-            if (parameters.ContainsKey("part") && !(parameters["part"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("part") && !(parameters["part"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: part must be of type Nullable<Int64>", "parameters[\"part\"]");
             }
-            if (parameters.ContainsKey("parts") && !(parameters["parts"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("parts") && !(parameters["parts"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: parts must be of type Nullable<Int64>", "parameters[\"parts\"]");
             }
-            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string ))
+            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string))
             {
                 throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
             }
-            if (parameters.ContainsKey("ref") && !(parameters["ref"] is string ))
+            if (parameters.ContainsKey("ref") && !(parameters["ref"] is string))
             {
                 throw new ArgumentException("Bad parameter: ref must be of type string", "parameters[\"ref\"]");
             }
-            if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: restart must be of type Nullable<Int64>", "parameters[\"restart\"]");
             }
-            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: size must be of type Nullable<Int64>", "parameters[\"size\"]");
             }
-            if (parameters.ContainsKey("structure") && !(parameters["structure"] is string ))
+            if (parameters.ContainsKey("structure") && !(parameters["structure"] is string))
             {
                 throw new ArgumentException("Bad parameter: structure must be of type string", "parameters[\"structure\"]");
             }
-            if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool ))
+            if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
             }
@@ -950,7 +960,7 @@ namespace FilesCom.Models
         ///   priority_color - string - Priority/Bookmark color of file.
         /// </summary>
         public static async Task<RemoteFile> Update(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -959,15 +969,15 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string ))
+            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string))
             {
                 throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
             }
-            if (parameters.ContainsKey("priority_color") && !(parameters["priority_color"] is string ))
+            if (parameters.ContainsKey("priority_color") && !(parameters["priority_color"] is string))
             {
                 throw new ArgumentException("Bad parameter: priority_color must be of type string", "parameters[\"priority_color\"]");
             }
@@ -987,7 +997,7 @@ namespace FilesCom.Models
         ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
         /// </summary>
         public static async Task<RemoteFile> Delete(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -996,11 +1006,11 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool ))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
@@ -1015,7 +1025,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<RemoteFile> Destroy(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -1031,7 +1041,7 @@ namespace FilesCom.Models
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
         public static async Task<RemoteFile> Find(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -1040,19 +1050,19 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string ))
+            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string))
             {
                 throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
             }
-            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool ))
+            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
             }
-            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool ))
+            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
             }
@@ -1067,7 +1077,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<RemoteFile> Get(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -1083,7 +1093,7 @@ namespace FilesCom.Models
         ///   structure - boolean - Copy structure only?
         /// </summary>
         public static async Task<RemoteFile> Copy(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -1092,15 +1102,15 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
-            if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool ))
+            if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool))
             {
                 throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
             }
@@ -1126,7 +1136,7 @@ namespace FilesCom.Models
         ///   destination (required) - string - Move destination path.
         /// </summary>
         public static async Task<RemoteFile> Move(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -1135,11 +1145,11 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string ))
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
@@ -1171,7 +1181,7 @@ namespace FilesCom.Models
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         /// </summary>
         public static async Task<FileUploadPart[]> BeginUpload(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -1180,35 +1190,35 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool ))
+            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool))
             {
                 throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
             }
-            if (parameters.ContainsKey("part") && !(parameters["part"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("part") && !(parameters["part"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: part must be of type Nullable<Int64>", "parameters[\"part\"]");
             }
-            if (parameters.ContainsKey("parts") && !(parameters["parts"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("parts") && !(parameters["parts"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: parts must be of type Nullable<Int64>", "parameters[\"parts\"]");
             }
-            if (parameters.ContainsKey("ref") && !(parameters["ref"] is string ))
+            if (parameters.ContainsKey("ref") && !(parameters["ref"] is string))
             {
                 throw new ArgumentException("Bad parameter: ref must be of type string", "parameters[\"ref\"]");
             }
-            if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("restart") && !(parameters["restart"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: restart must be of type Nullable<Int64>", "parameters[\"restart\"]");
             }
-            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("size") && !(parameters["size"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: size must be of type Nullable<Int64>", "parameters[\"size\"]");
             }
-            if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool ))
+            if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
             }
@@ -1225,4 +1235,3 @@ namespace FilesCom.Models
 
     }
 }
-

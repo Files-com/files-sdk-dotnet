@@ -72,7 +72,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -82,7 +82,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             set { attributes["path"] = value; }
         }
 
@@ -92,7 +92,7 @@ namespace FilesCom.Models
         [JsonPropertyName("logo")]
         public Image Logo
         {
-            get { return (Image) attributes["logo"]; }
+            get { return (Image)attributes["logo"]; }
             set { attributes["logo"] = value; }
         }
 
@@ -102,7 +102,7 @@ namespace FilesCom.Models
         [JsonPropertyName("thumbnail")]
         public Image Thumbnail
         {
-            get { return (Image) attributes["thumbnail"]; }
+            get { return (Image)attributes["thumbnail"]; }
             set { attributes["thumbnail"] = value; }
         }
 
@@ -112,7 +112,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file")]
         public System.Net.Http.ByteArrayContent File
         {
-            get { return (System.Net.Http.ByteArrayContent) attributes["file"]; }
+            get { return (System.Net.Http.ByteArrayContent)attributes["file"]; }
             set { attributes["file"] = value; }
         }
 
@@ -125,14 +125,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
             }
@@ -158,10 +159,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
 
-            if (!attributes.ContainsKey("path")) {
+            if (!attributes.ContainsKey("path"))
+            {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -192,7 +194,7 @@ namespace FilesCom.Models
         ///   path (required) - string - Style path.
         /// </summary>
         public static async Task<Style> Find(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -201,7 +203,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -216,7 +218,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Style> Get(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -229,7 +231,7 @@ namespace FilesCom.Models
         ///   file (required) - file - Logo for custom branding.
         /// </summary>
         public static async Task<Style> Update(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -238,11 +240,11 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent ))
+            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
             }
@@ -264,7 +266,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Style> Delete(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -273,7 +275,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string ))
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
@@ -288,7 +290,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Style> Destroy(
-            string path, 
+            string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -298,4 +300,3 @@ namespace FilesCom.Models
 
     }
 }
-

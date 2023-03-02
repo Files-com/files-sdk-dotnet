@@ -113,7 +113,7 @@ namespace FilesCom.Models
         [JsonPropertyName("send")]
         public object Send
         {
-            get { return (object) attributes["send"]; }
+            get { return (object)attributes["send"]; }
             private set { attributes["send"] = value; }
         }
 
@@ -124,7 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("action")]
         public string Action
         {
-            get { return (string) attributes["action"]; }
+            get { return (string)attributes["action"]; }
             private set { attributes["action"] = value; }
         }
 
@@ -135,7 +135,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
-            get { return (bool) attributes["ask_about_overwrites"]; }
+            get { return (bool)attributes["ask_about_overwrites"]; }
             private set { attributes["ask_about_overwrites"] = value; }
         }
 
@@ -146,7 +146,7 @@ namespace FilesCom.Models
         [JsonPropertyName("available_parts")]
         public Nullable<Int64> AvailableParts
         {
-            get { return (Nullable<Int64>) attributes["available_parts"]; }
+            get { return (Nullable<Int64>)attributes["available_parts"]; }
             private set { attributes["available_parts"] = value; }
         }
 
@@ -157,7 +157,7 @@ namespace FilesCom.Models
         [JsonPropertyName("expires")]
         public string Expires
         {
-            get { return (string) attributes["expires"]; }
+            get { return (string)attributes["expires"]; }
             private set { attributes["expires"] = value; }
         }
 
@@ -168,7 +168,7 @@ namespace FilesCom.Models
         [JsonPropertyName("headers")]
         public object Headers
         {
-            get { return (object) attributes["headers"]; }
+            get { return (object)attributes["headers"]; }
             private set { attributes["headers"] = value; }
         }
 
@@ -179,7 +179,7 @@ namespace FilesCom.Models
         [JsonPropertyName("http_method")]
         public string HttpMethod
         {
-            get { return (string) attributes["http_method"]; }
+            get { return (string)attributes["http_method"]; }
             private set { attributes["http_method"] = value; }
         }
 
@@ -190,7 +190,7 @@ namespace FilesCom.Models
         [JsonPropertyName("next_partsize")]
         public Nullable<Int64> NextPartsize
         {
-            get { return (Nullable<Int64>) attributes["next_partsize"]; }
+            get { return (Nullable<Int64>)attributes["next_partsize"]; }
             private set { attributes["next_partsize"] = value; }
         }
 
@@ -201,7 +201,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parallel_parts")]
         public bool ParallelParts
         {
-            get { return (bool) attributes["parallel_parts"]; }
+            get { return (bool)attributes["parallel_parts"]; }
             private set { attributes["parallel_parts"] = value; }
         }
 
@@ -212,7 +212,7 @@ namespace FilesCom.Models
         [JsonPropertyName("parameters")]
         public object Parameters
         {
-            get { return (object) attributes["parameters"]; }
+            get { return (object)attributes["parameters"]; }
             private set { attributes["parameters"] = value; }
         }
 
@@ -223,7 +223,7 @@ namespace FilesCom.Models
         [JsonPropertyName("part_number")]
         public Nullable<Int64> PartNumber
         {
-            get { return (Nullable<Int64>) attributes["part_number"]; }
+            get { return (Nullable<Int64>)attributes["part_number"]; }
             private set { attributes["part_number"] = value; }
         }
 
@@ -234,7 +234,7 @@ namespace FilesCom.Models
         [JsonPropertyName("partsize")]
         public Nullable<Int64> Partsize
         {
-            get { return (Nullable<Int64>) attributes["partsize"]; }
+            get { return (Nullable<Int64>)attributes["partsize"]; }
             private set { attributes["partsize"] = value; }
         }
 
@@ -245,7 +245,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             private set { attributes["path"] = value; }
         }
 
@@ -256,7 +256,7 @@ namespace FilesCom.Models
         [JsonPropertyName("ref")]
         public string Ref
         {
-            get { return (string) attributes["ref"]; }
+            get { return (string)attributes["ref"]; }
             private set { attributes["ref"] = value; }
         }
 
@@ -267,7 +267,7 @@ namespace FilesCom.Models
         [JsonPropertyName("upload_uri")]
         public string UploadUri
         {
-            get { return (string) attributes["upload_uri"]; }
+            get { return (string)attributes["upload_uri"]; }
             private set { attributes["upload_uri"] = value; }
         }
 
@@ -275,4 +275,3 @@ namespace FilesCom.Models
 
     }
 }
-

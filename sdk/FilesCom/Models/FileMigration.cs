@@ -89,7 +89,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -100,7 +100,7 @@ namespace FilesCom.Models
         [JsonPropertyName("path")]
         public string Path
         {
-            get { return (string) attributes["path"]; }
+            get { return (string)attributes["path"]; }
             private set { attributes["path"] = value; }
         }
 
@@ -111,7 +111,7 @@ namespace FilesCom.Models
         [JsonPropertyName("dest_path")]
         public string DestPath
         {
-            get { return (string) attributes["dest_path"]; }
+            get { return (string)attributes["dest_path"]; }
             private set { attributes["dest_path"] = value; }
         }
 
@@ -122,7 +122,7 @@ namespace FilesCom.Models
         [JsonPropertyName("files_moved")]
         public Nullable<Int64> FilesMoved
         {
-            get { return (Nullable<Int64>) attributes["files_moved"]; }
+            get { return (Nullable<Int64>)attributes["files_moved"]; }
             private set { attributes["files_moved"] = value; }
         }
 
@@ -133,7 +133,7 @@ namespace FilesCom.Models
         [JsonPropertyName("files_total")]
         public Nullable<Int64> FilesTotal
         {
-            get { return (Nullable<Int64>) attributes["files_total"]; }
+            get { return (Nullable<Int64>)attributes["files_total"]; }
             private set { attributes["files_total"] = value; }
         }
 
@@ -144,7 +144,7 @@ namespace FilesCom.Models
         [JsonPropertyName("operation")]
         public string Operation
         {
-            get { return (string) attributes["operation"]; }
+            get { return (string)attributes["operation"]; }
             private set { attributes["operation"] = value; }
         }
 
@@ -155,7 +155,7 @@ namespace FilesCom.Models
         [JsonPropertyName("region")]
         public string Region
         {
-            get { return (string) attributes["region"]; }
+            get { return (string)attributes["region"]; }
             private set { attributes["region"] = value; }
         }
 
@@ -166,7 +166,7 @@ namespace FilesCom.Models
         [JsonPropertyName("status")]
         public string Status
         {
-            get { return (string) attributes["status"]; }
+            get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
         }
 
@@ -177,7 +177,7 @@ namespace FilesCom.Models
         [JsonPropertyName("log_url")]
         public string LogUrl
         {
-            get { return (string) attributes["log_url"]; }
+            get { return (string)attributes["log_url"]; }
             private set { attributes["log_url"] = value; }
         }
 
@@ -188,7 +188,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - File Migration ID.
         /// </summary>
         public static async Task<FileMigration> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -197,7 +197,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -212,7 +212,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<FileMigration> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -222,4 +222,3 @@ namespace FilesCom.Models
 
     }
 }
-

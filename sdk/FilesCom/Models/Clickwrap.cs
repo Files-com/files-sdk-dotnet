@@ -76,7 +76,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -86,7 +86,7 @@ namespace FilesCom.Models
         [JsonPropertyName("name")]
         public string Name
         {
-            get { return (string) attributes["name"]; }
+            get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
         }
 
@@ -96,7 +96,7 @@ namespace FilesCom.Models
         [JsonPropertyName("body")]
         public string Body
         {
-            get { return (string) attributes["body"]; }
+            get { return (string)attributes["body"]; }
             set { attributes["body"] = value; }
         }
 
@@ -106,7 +106,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_with_users")]
         public string UseWithUsers
         {
-            get { return (string) attributes["use_with_users"]; }
+            get { return (string)attributes["use_with_users"]; }
             set { attributes["use_with_users"] = value; }
         }
 
@@ -116,7 +116,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_with_bundles")]
         public string UseWithBundles
         {
-            get { return (string) attributes["use_with_bundles"]; }
+            get { return (string)attributes["use_with_bundles"]; }
             set { attributes["use_with_bundles"] = value; }
         }
 
@@ -126,7 +126,7 @@ namespace FilesCom.Models
         [JsonPropertyName("use_with_inboxes")]
         public string UseWithInboxes
         {
-            get { return (string) attributes["use_with_inboxes"]; }
+            get { return (string)attributes["use_with_inboxes"]; }
             set { attributes["use_with_inboxes"] = value; }
         }
 
@@ -143,30 +143,31 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is string ))
+            if (parameters.ContainsKey("body") && !(parameters["body"] is string))
             {
                 throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
             }
-            if (parameters.ContainsKey("use_with_bundles") && !(parameters["use_with_bundles"] is string ))
+            if (parameters.ContainsKey("use_with_bundles") && !(parameters["use_with_bundles"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_bundles must be of type string", "parameters[\"use_with_bundles\"]");
             }
-            if (parameters.ContainsKey("use_with_inboxes") && !(parameters["use_with_inboxes"] is string ))
+            if (parameters.ContainsKey("use_with_inboxes") && !(parameters["use_with_inboxes"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_inboxes must be of type string", "parameters[\"use_with_inboxes\"]");
             }
-            if (parameters.ContainsKey("use_with_users") && !(parameters["use_with_users"] is string ))
+            if (parameters.ContainsKey("use_with_users") && !(parameters["use_with_users"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_users must be of type string", "parameters[\"use_with_users\"]");
             }
@@ -188,10 +189,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -230,7 +232,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
         public static async Task<Clickwrap[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -238,11 +240,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
@@ -253,7 +255,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Clickwrap[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -266,7 +268,7 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Clickwrap ID.
         /// </summary>
         public static async Task<Clickwrap> Find(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -275,7 +277,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -290,7 +292,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Clickwrap> Get(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -307,7 +309,7 @@ namespace FilesCom.Models
         ///   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
         /// </summary>
         public static async Task<Clickwrap> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -315,23 +317,23 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is string ))
+            if (parameters.ContainsKey("body") && !(parameters["body"] is string))
             {
                 throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
             }
-            if (parameters.ContainsKey("use_with_bundles") && !(parameters["use_with_bundles"] is string ))
+            if (parameters.ContainsKey("use_with_bundles") && !(parameters["use_with_bundles"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_bundles must be of type string", "parameters[\"use_with_bundles\"]");
             }
-            if (parameters.ContainsKey("use_with_inboxes") && !(parameters["use_with_inboxes"] is string ))
+            if (parameters.ContainsKey("use_with_inboxes") && !(parameters["use_with_inboxes"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_inboxes must be of type string", "parameters[\"use_with_inboxes\"]");
             }
-            if (parameters.ContainsKey("use_with_users") && !(parameters["use_with_users"] is string ))
+            if (parameters.ContainsKey("use_with_users") && !(parameters["use_with_users"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_users must be of type string", "parameters[\"use_with_users\"]");
             }
@@ -351,7 +353,7 @@ namespace FilesCom.Models
         ///   use_with_users - string - Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
         /// </summary>
         public static async Task<Clickwrap> Update(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -360,27 +362,27 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string ))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is string ))
+            if (parameters.ContainsKey("body") && !(parameters["body"] is string))
             {
                 throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
             }
-            if (parameters.ContainsKey("use_with_bundles") && !(parameters["use_with_bundles"] is string ))
+            if (parameters.ContainsKey("use_with_bundles") && !(parameters["use_with_bundles"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_bundles must be of type string", "parameters[\"use_with_bundles\"]");
             }
-            if (parameters.ContainsKey("use_with_inboxes") && !(parameters["use_with_inboxes"] is string ))
+            if (parameters.ContainsKey("use_with_inboxes") && !(parameters["use_with_inboxes"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_inboxes must be of type string", "parameters[\"use_with_inboxes\"]");
             }
-            if (parameters.ContainsKey("use_with_users") && !(parameters["use_with_users"] is string ))
+            if (parameters.ContainsKey("use_with_users") && !(parameters["use_with_users"] is string))
             {
                 throw new ArgumentException("Bad parameter: use_with_users must be of type string", "parameters[\"use_with_users\"]");
             }
@@ -398,7 +400,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<Clickwrap> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -407,7 +409,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -422,7 +424,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<Clickwrap> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -432,4 +434,3 @@ namespace FilesCom.Models
 
     }
 }
-

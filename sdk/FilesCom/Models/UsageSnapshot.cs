@@ -113,7 +113,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -124,7 +124,7 @@ namespace FilesCom.Models
         [JsonPropertyName("start_at")]
         public Nullable<DateTime> StartAt
         {
-            get { return (Nullable<DateTime>) attributes["start_at"]; }
+            get { return (Nullable<DateTime>)attributes["start_at"]; }
             private set { attributes["start_at"] = value; }
         }
 
@@ -135,7 +135,7 @@ namespace FilesCom.Models
         [JsonPropertyName("end_at")]
         public Nullable<DateTime> EndAt
         {
-            get { return (Nullable<DateTime>) attributes["end_at"]; }
+            get { return (Nullable<DateTime>)attributes["end_at"]; }
             private set { attributes["end_at"] = value; }
         }
 
@@ -146,7 +146,7 @@ namespace FilesCom.Models
         [JsonPropertyName("high_water_user_count")]
         public double HighWaterUserCount
         {
-            get { return (double) attributes["high_water_user_count"]; }
+            get { return (double)attributes["high_water_user_count"]; }
             private set { attributes["high_water_user_count"] = value; }
         }
 
@@ -157,7 +157,7 @@ namespace FilesCom.Models
         [JsonPropertyName("current_storage")]
         public double CurrentStorage
         {
-            get { return (double) attributes["current_storage"]; }
+            get { return (double)attributes["current_storage"]; }
             private set { attributes["current_storage"] = value; }
         }
 
@@ -168,7 +168,7 @@ namespace FilesCom.Models
         [JsonPropertyName("high_water_storage")]
         public double HighWaterStorage
         {
-            get { return (double) attributes["high_water_storage"]; }
+            get { return (double)attributes["high_water_storage"]; }
             private set { attributes["high_water_storage"] = value; }
         }
 
@@ -179,7 +179,7 @@ namespace FilesCom.Models
         [JsonPropertyName("usage_by_top_level_dir")]
         public object UsageByTopLevelDir
         {
-            get { return (object) attributes["usage_by_top_level_dir"]; }
+            get { return (object)attributes["usage_by_top_level_dir"]; }
             private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
@@ -190,7 +190,7 @@ namespace FilesCom.Models
         [JsonPropertyName("root_storage")]
         public double RootStorage
         {
-            get { return (double) attributes["root_storage"]; }
+            get { return (double)attributes["root_storage"]; }
             private set { attributes["root_storage"] = value; }
         }
 
@@ -201,7 +201,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted_files_counted_in_minimum")]
         public double DeletedFilesCountedInMinimum
         {
-            get { return (double) attributes["deleted_files_counted_in_minimum"]; }
+            get { return (double)attributes["deleted_files_counted_in_minimum"]; }
             private set { attributes["deleted_files_counted_in_minimum"] = value; }
         }
 
@@ -212,7 +212,7 @@ namespace FilesCom.Models
         [JsonPropertyName("deleted_files_storage")]
         public double DeletedFilesStorage
         {
-            get { return (double) attributes["deleted_files_storage"]; }
+            get { return (double)attributes["deleted_files_storage"]; }
             private set { attributes["deleted_files_storage"] = value; }
         }
 
@@ -223,7 +223,7 @@ namespace FilesCom.Models
         [JsonPropertyName("total_billable_usage")]
         public double TotalBillableUsage
         {
-            get { return (double) attributes["total_billable_usage"]; }
+            get { return (double)attributes["total_billable_usage"]; }
             private set { attributes["total_billable_usage"] = value; }
         }
 
@@ -234,7 +234,7 @@ namespace FilesCom.Models
         [JsonPropertyName("total_billable_transfer_usage")]
         public double TotalBillableTransferUsage
         {
-            get { return (double) attributes["total_billable_transfer_usage"]; }
+            get { return (double)attributes["total_billable_transfer_usage"]; }
             private set { attributes["total_billable_transfer_usage"] = value; }
         }
 
@@ -245,7 +245,7 @@ namespace FilesCom.Models
         [JsonPropertyName("bytes_sent")]
         public double BytesSent
         {
-            get { return (double) attributes["bytes_sent"]; }
+            get { return (double)attributes["bytes_sent"]; }
             private set { attributes["bytes_sent"] = value; }
         }
 
@@ -256,7 +256,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sync_bytes_received")]
         public double SyncBytesReceived
         {
-            get { return (double) attributes["sync_bytes_received"]; }
+            get { return (double)attributes["sync_bytes_received"]; }
             private set { attributes["sync_bytes_received"] = value; }
         }
 
@@ -267,7 +267,7 @@ namespace FilesCom.Models
         [JsonPropertyName("sync_bytes_sent")]
         public double SyncBytesSent
         {
-            get { return (double) attributes["sync_bytes_sent"]; }
+            get { return (double)attributes["sync_bytes_sent"]; }
             private set { attributes["sync_bytes_sent"] = value; }
         }
 
@@ -279,7 +279,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
         public static async Task<UsageSnapshot[]> List(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -287,11 +287,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string ))
+            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
@@ -302,7 +302,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<UsageSnapshot[]> All(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -312,4 +312,3 @@ namespace FilesCom.Models
 
     }
 }
-

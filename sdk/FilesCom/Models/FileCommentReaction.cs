@@ -68,7 +68,7 @@ namespace FilesCom.Models
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
-            get { return (Nullable<Int64>) attributes["id"]; }
+            get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
         }
 
@@ -78,7 +78,7 @@ namespace FilesCom.Models
         [JsonPropertyName("emoji")]
         public string Emoji
         {
-            get { return (string) attributes["emoji"]; }
+            get { return (string)attributes["emoji"]; }
             set { attributes["emoji"] = value; }
         }
 
@@ -88,7 +88,7 @@ namespace FilesCom.Models
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
         {
-            get { return (Nullable<Int64>) attributes["user_id"]; }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
         }
 
@@ -98,7 +98,7 @@ namespace FilesCom.Models
         [JsonPropertyName("file_comment_id")]
         public Nullable<Int64> FileCommentId
         {
-            get { return (Nullable<Int64>) attributes["file_comment_id"]; }
+            get { return (Nullable<Int64>)attributes["file_comment_id"]; }
             set { attributes["file_comment_id"] = value; }
         }
 
@@ -109,10 +109,11 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
 
-            if (!attributes.ContainsKey("id")) {
+            if (!attributes.ContainsKey("id"))
+            {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -152,7 +153,7 @@ namespace FilesCom.Models
         ///   emoji (required) - string - Emoji to react with.
         /// </summary>
         public static async Task<FileCommentReaction> Create(
-            
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -160,15 +161,15 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("file_comment_id") && !(parameters["file_comment_id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("file_comment_id") && !(parameters["file_comment_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: file_comment_id must be of type Nullable<Int64>", "parameters[\"file_comment_id\"]");
             }
-            if (parameters.ContainsKey("emoji") && !(parameters["emoji"] is string ))
+            if (parameters.ContainsKey("emoji") && !(parameters["emoji"] is string))
             {
                 throw new ArgumentException("Bad parameter: emoji must be of type string", "parameters[\"emoji\"]");
             }
@@ -190,7 +191,7 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         public static async Task<FileCommentReaction> Delete(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -199,7 +200,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64> ))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
@@ -214,7 +215,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<FileCommentReaction> Destroy(
-            Nullable<Int64> id, 
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -224,4 +225,3 @@ namespace FilesCom.Models
 
     }
 }
-
