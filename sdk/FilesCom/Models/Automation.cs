@@ -92,6 +92,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("sync_ids"))
+            {
+                this.attributes.Add("sync_ids", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("user_ids"))
             {
                 this.attributes.Add("user_ids", new Nullable<Int64>[0]);
@@ -295,6 +299,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// IDs of remote sync folder behaviors to run by this Automation
+        /// </summary>
+        [JsonPropertyName("sync_ids")]
+        public Nullable<Int64>[] SyncIds
+        {
+            get { return (Nullable<Int64>[])attributes["sync_ids"]; }
+            set { attributes["sync_ids"] = value; }
+        }
+
+        /// <summary>
         /// IDs of Users for the Automation (i.e. who to Request File from)
         /// </summary>
         [JsonPropertyName("user_ids")]
@@ -363,6 +377,7 @@ namespace FilesCom.Models
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
         ///   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   path - string - Path on which this Automation runs.  Supports globs.
+        ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
@@ -414,6 +429,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sync_ids must be of type string", "parameters[\"sync_ids\"]");
             }
             if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
@@ -512,9 +531,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   cursor - string - Used for pagination.  Send a cursor value to resume an existing list from the point at which you left off.  Get a cursor from an existing list via either the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either 'asc' or 'desc' direction (e.g. sort_by[last_login_at]=desc). Valid fields are `automation`, `disabled` or `last_modified_at`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[automation]=desc`). Valid fields are `automation`, `disabled`, `last_modified_at` or `name`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ automation, disabled ]` and `[ disabled, automation ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ automation, disabled ]` and `[ disabled, automation ]`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `automation`, `last_modified_at` or `disabled`. Valid field combinations are `[ automation, disabled ]` and `[ disabled, automation ]`.
@@ -638,6 +657,7 @@ namespace FilesCom.Models
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
         ///   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   path - string - Path on which this Automation runs.  Supports globs.
+        ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
@@ -685,6 +705,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sync_ids must be of type string", "parameters[\"sync_ids\"]");
             }
             if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
@@ -746,6 +770,7 @@ namespace FilesCom.Models
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
         ///   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   path - string - Path on which this Automation runs.  Supports globs.
+        ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
@@ -798,6 +823,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sync_ids must be of type string", "parameters[\"sync_ids\"]");
             }
             if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
             {
