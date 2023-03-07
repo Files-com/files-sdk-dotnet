@@ -9,6 +9,7 @@
   "name": "AS2 Partner Name",
   "uri": "example",
   "server_certificate": "require_match",
+  "enable_dedicated_ips": true,
   "hex_public_certificate_serial": "A5:EB:C1:95:DC:D8:2B:E7",
   "public_certificate_md5": "example",
   "public_certificate_subject": "example",
@@ -24,6 +25,7 @@
 * `name` / `Name`  (string): The partner's formal AS2 name.
 * `uri` / `Uri`  (string): Public URI for sending AS2 message to.
 * `server_certificate` / `ServerCertificate`  (string): Remote server certificate security setting
+* `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
 * `hex_public_certificate_serial` / `HexPublicCertificateSerial`  (string): Serial of public certificate used for message security in hex format.
 * `public_certificate_md5` / `PublicCertificateMd5`  (string): MD5 hash of public certificate used for message security.
 * `public_certificate_subject` / `PublicCertificateSubject`  (string): Subject of public certificate used for message security.
@@ -88,6 +90,7 @@ Task<As2Partner> As2Partner.Create(
 * `public_certificate` (string): Required - 
 * `as2_station_id` (Nullable<Int64>): Required - Id of As2Station for this partner
 * `server_certificate` (string): Remote server certificate security setting
+* `enable_dedicated_ips` (bool): 
 
 
 ---
@@ -109,6 +112,7 @@ Task<As2Partner> As2Partner.Update(
 * `uri` (string): URL base for AS2 responses
 * `server_certificate` (string): Remote server certificate security setting
 * `public_certificate` (string): 
+* `enable_dedicated_ips` (bool): 
 
 
 ---
@@ -140,6 +144,7 @@ var parameters = new Dictionary<string, object>();
 parameters.Add("name", "AS2 Partner Name");
 parameters.Add("uri", "example");
 parameters.Add("server_certificate", "require_match");
+parameters.Add("enable_dedicated_ips", true);
 
 As2Partner.Update(parameters);
 ```
@@ -151,6 +156,7 @@ As2Partner.Update(parameters);
 * `uri` (string): URL base for AS2 responses
 * `server_certificate` (string): Remote server certificate security setting
 * `public_certificate` (string): 
+* `enable_dedicated_ips` (bool): 
 
 
 ---

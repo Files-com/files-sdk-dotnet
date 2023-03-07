@@ -48,6 +48,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_certificate", null);
             }
+            if (!this.attributes.ContainsKey("enable_dedicated_ips"))
+            {
+                this.attributes.Add("enable_dedicated_ips", null);
+            }
             if (!this.attributes.ContainsKey("hex_public_certificate_serial"))
             {
                 this.attributes.Add("hex_public_certificate_serial", null);
@@ -149,6 +153,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// `true` if remote server only accepts connections from dedicated IPs
+        /// </summary>
+        [JsonPropertyName("enable_dedicated_ips")]
+        public bool EnableDedicatedIps
+        {
+            get { return (bool)attributes["enable_dedicated_ips"]; }
+            set { attributes["enable_dedicated_ips"] = value; }
+        }
+
+        /// <summary>
         /// Serial of public certificate used for message security in hex format.
         /// </summary>
         [JsonPropertyName("hex_public_certificate_serial")]
@@ -233,6 +247,7 @@ namespace FilesCom.Models
         ///   uri - string - URL base for AS2 responses
         ///   server_certificate - string - Remote server certificate security setting
         ///   public_certificate - string
+        ///   enable_dedicated_ips - boolean
         /// </summary>
         public async Task<As2Partner> Update(Dictionary<string, object> parameters)
         {
@@ -262,6 +277,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
+            }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -399,6 +418,7 @@ namespace FilesCom.Models
         ///   public_certificate (required) - string
         ///   as2_station_id (required) - int64 - Id of As2Station for this partner
         ///   server_certificate - string - Remote server certificate security setting
+        ///   enable_dedicated_ips - boolean
         /// </summary>
         public static async Task<As2Partner> Create(
 
@@ -429,6 +449,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+            }
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
@@ -458,6 +482,7 @@ namespace FilesCom.Models
         ///   uri - string - URL base for AS2 responses
         ///   server_certificate - string - Remote server certificate security setting
         ///   public_certificate - string
+        ///   enable_dedicated_ips - boolean
         /// </summary>
         public static async Task<As2Partner> Update(
             Nullable<Int64> id,
@@ -488,6 +513,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
+            }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
