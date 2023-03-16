@@ -114,10 +114,9 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[created_at]=desc`). Valid fields are `created_at`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
-        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `created_at`.
-        ///   filter_like - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
+        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
-        ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `created_at`.
+        ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
         ///   bundle_id - int64 - Bundle ID
         ///   bundle_registration_id - int64 - BundleRegistration ID
         /// </summary>
@@ -153,10 +152,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
-            }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
             }
             if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {

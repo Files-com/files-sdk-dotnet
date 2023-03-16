@@ -44,13 +44,9 @@ Task<Behavior[]> Behavior.List(
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[behavior]=desc`). Valid fields are `behavior`.
+* `behavior` (string): If set, return records where the specified field is equal to the supplied value.
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
-* `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `behavior`.
-* `filter_gteq` (object): If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `behavior`.
-* `filter_like` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
-* `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `behavior`.
-* `filter_lteq` (object): If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `behavior`.
-* `behavior` (string): If set, only shows folder behaviors matching this behavior type.
+* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
 
 
 ---
@@ -88,11 +84,7 @@ Task<Behavior[]> Behavior.ListFor(
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[behavior]=desc`). Valid fields are `behavior`.
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
-* `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `behavior`.
-* `filter_gteq` (object): If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `behavior`.
-* `filter_like` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
-* `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `behavior`.
-* `filter_lteq` (object): If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `behavior`.
+* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
 * `path` (string): Required - Path to operate on.
 * `recursive` (string): Show behaviors above this path?
 * `behavior` (string): DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.

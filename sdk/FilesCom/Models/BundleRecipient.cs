@@ -179,11 +179,6 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[has_registrations]=desc`). Valid fields are `has_registrations`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
-        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `has_registrations`.
-        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal to the supplied value. Valid fields are `has_registrations`.
-        ///   filter_like - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
-        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `has_registrations`.
-        ///   filter_lteq - object - If set, return records where the specified field is less than or equal to the supplied value. Valid fields are `has_registrations`.
         ///   bundle_id (required) - int64 - List recipients for the bundle with this ID.
         /// </summary>
         public static async Task<BundleRecipient[]> List(
@@ -214,26 +209,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
-            }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
-            }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
-            }
-            if (parameters.ContainsKey("filter_like") && !(parameters["filter_like"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_like must be of type object", "parameters[\"filter_like\"]");
-            }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
-            }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
             if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
