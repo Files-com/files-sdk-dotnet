@@ -64,6 +64,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("parallel_parts", null);
             }
+            if (!this.attributes.ContainsKey("retry_parts"))
+            {
+                this.attributes.Add("retry_parts", null);
+            }
             if (!this.attributes.ContainsKey("parameters"))
             {
                 this.attributes.Add("parameters", null);
@@ -203,6 +207,17 @@ namespace FilesCom.Models
         {
             get { return (bool)attributes["parallel_parts"]; }
             private set { attributes["parallel_parts"] = value; }
+        }
+
+        /// <summary>
+        /// If `true`, parts may be retried. If `false`, a part cannot be retried and the upload should be restarted.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("retry_parts")]
+        public bool RetryParts
+        {
+            get { return (bool)attributes["retry_parts"]; }
+            private set { attributes["retry_parts"] = value; }
         }
 
         /// <summary>

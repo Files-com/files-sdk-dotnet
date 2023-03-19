@@ -17,7 +17,6 @@
 * `note` / `Note`  (string): A note sent to the recipient with the inbox.
 * `recipient` / `Recipient`  (string): The recipient's email address.
 * `sent_at` / `SentAt`  (Nullable<DateTime>): When the Inbox was shared with this recipient.
-* `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `inbox_id` / `InboxId`  (Nullable<Int64>): Inbox to share.
 * `share_after_create` / `ShareAfterCreate`  (bool): Set to true to share the link with the recipient upon creation.
 
@@ -36,7 +35,6 @@ Task<InboxRecipient[]> InboxRecipient.List(
 
 ### Parameters
 
-* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[has_registrations]=desc`). Valid fields are `has_registrations`.
@@ -58,7 +56,6 @@ Task<InboxRecipient> InboxRecipient.Create(
 
 ### Parameters
 
-* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `inbox_id` (Nullable<Int64>): Required - Inbox to share.
 * `recipient` (string): Required - Email address to share this inbox with.
 * `name` (string): Name of recipient.
