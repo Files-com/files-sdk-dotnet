@@ -13,6 +13,7 @@ Fetch the dependencies:
 
 
 ## Frameworks Supported 
+- .NET 6
 
 - .NET 5
 
@@ -151,6 +152,13 @@ or you may set them on a config object for per-session configuration.
     }
 ```
 
+#### Comparing Case insensitive files and paths
+For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/topics/file-system-semantics#case-sensitivity).
+```csharp
+    if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
+        Console.WriteLine("Paths are the same");
+    }
+```
 
 ## Getting Support
 
