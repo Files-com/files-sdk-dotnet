@@ -84,6 +84,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("description", null);
             }
+            if (!this.attributes.ContainsKey("recurring_day"))
+            {
+                this.attributes.Add("recurring_day", null);
+            }
             if (!this.attributes.ContainsKey("path"))
             {
                 this.attributes.Add("path", null);
@@ -279,6 +283,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        /// </summary>
+        [JsonPropertyName("recurring_day")]
+        public Nullable<Int64> RecurringDay
+        {
+            get { return (Nullable<Int64>)attributes["recurring_day"]; }
+            set { attributes["recurring_day"] = value; }
+        }
+
+        /// <summary>
         /// Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
@@ -387,6 +401,7 @@ namespace FilesCom.Models
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
+        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   automation - string - Automation type
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
@@ -469,6 +484,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
+            }
+            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
             }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
@@ -662,6 +681,7 @@ namespace FilesCom.Models
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
+        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   automation (required) - string - Automation type
         /// </summary>
         public static async Task<Automation> Create(
@@ -741,6 +761,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
+            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
@@ -775,6 +799,7 @@ namespace FilesCom.Models
         ///   trigger - string - How this automation is triggered to run. One of: `realtime`, `daily`, `custom_schedule`, `webhook`, `email`, or `action`.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
+        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   automation - string - Automation type
         /// </summary>
         public static async Task<Automation> Update(
@@ -858,6 +883,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
                 throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
+            }
+            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
             }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
