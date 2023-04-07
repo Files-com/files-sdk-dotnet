@@ -376,14 +376,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("opt_out_global", null);
             }
-            if (!this.attributes.ContainsKey("overage_notified_at"))
-            {
-                this.attributes.Add("overage_notified_at", null);
-            }
-            if (!this.attributes.ContainsKey("overage_notify"))
-            {
-                this.attributes.Add("overage_notify", null);
-            }
             if (!this.attributes.ContainsKey("overdue"))
             {
                 this.attributes.Add("overdue", null);
@@ -1576,28 +1568,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Last time the site was notified about an overage
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("overage_notified_at")]
-        public Nullable<DateTime> OverageNotifiedAt
-        {
-            get { return (Nullable<DateTime>)attributes["overage_notified_at"]; }
-            private set { attributes["overage_notified_at"] = value; }
-        }
-
-        /// <summary>
-        /// Notify site email of overages?
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("overage_notify")]
-        public bool OverageNotify
-        {
-            get { return (bool)attributes["overage_notify"]; }
-            private set { attributes["overage_notify"] = value; }
-        }
-
-        /// <summary>
         /// Is this site's billing overdue?
         /// </summary>
         [JsonInclude]
@@ -2240,7 +2210,6 @@ namespace FilesCom.Models
         ///   reply_to_email - string - Reply-to email for this site
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
         ///   bundle_expiration - int64 - Site-wide Bundle expiration in days
-        ///   overage_notify - boolean - Notify site email of overages?
         ///   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
@@ -2410,10 +2379,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_expiration") && !(parameters["bundle_expiration"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: bundle_expiration must be of type Nullable<Int64>", "parameters[\"bundle_expiration\"]");
-            }
-            if (parameters.ContainsKey("overage_notify") && !(parameters["overage_notify"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: overage_notify must be of type bool", "parameters[\"overage_notify\"]");
             }
             if (parameters.ContainsKey("welcome_email_enabled") && !(parameters["welcome_email_enabled"] is bool))
             {

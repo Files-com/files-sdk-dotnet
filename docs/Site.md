@@ -93,8 +93,6 @@
   "office_integration_type": "example",
   "oncehub_link": "https://go.oncehub.com/files",
   "opt_out_global": true,
-  "overage_notified_at": "2000-01-01T01:00:00Z",
-  "overage_notify": true,
   "overdue": true,
   "password_min_length": 1,
   "password_require_letter": true,
@@ -239,8 +237,6 @@
 * `office_integration_type` / `OfficeIntegrationType`  (string): Office integration application used to edit and view the MS Office documents
 * `oncehub_link` / `OncehubLink`  (string): Link to scheduling a meeting with our Sales team
 * `opt_out_global` / `OptOutGlobal`  (bool): Use servers in the USA only?
-* `overage_notified_at` / `OverageNotifiedAt`  (Nullable<DateTime>): Last time the site was notified about an overage
-* `overage_notify` / `OverageNotify`  (bool): Notify site email of overages?
 * `overdue` / `Overdue`  (bool): Is this site's billing overdue?
 * `password_min_length` / `PasswordMinLength`  (Nullable<Int64>): Shortest password length for users
 * `password_require_letter` / `PasswordRequireLetter`  (bool): Require a letter in passwords?
@@ -346,7 +342,6 @@ Task<Site> Site.Update(
 * `reply_to_email` (string): Reply-to email for this site
 * `allow_bundle_names` (bool): Are manual Bundle names allowed?
 * `bundle_expiration` (Nullable<Int64>): Site-wide Bundle expiration in days
-* `overage_notify` (bool): Notify site email of overages?
 * `welcome_email_enabled` (bool): Will the welcome email be sent to new users?
 * `ask_about_overwrites` (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `show_request_access_link` (bool): Show request access link for users without access?  Currently unused.
