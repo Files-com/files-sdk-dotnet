@@ -68,7 +68,7 @@
 * `watermark_attachment` / `WatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `watermark_value` / `WatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
-* `paths` / `Paths`  (string[]): A list of paths in this bundle
+* `paths` / `Paths`  (string[]): A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `password` / `Password`  (string): Password for this bundle.
 * `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `watermark_attachment_file` / `WatermarkAttachmentFile`  (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
