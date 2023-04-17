@@ -13,7 +13,22 @@
   "require_registration": true,
   "require_share_recipient": true,
   "clickwrap_body": "[Legal text]",
-  "form_field_set": "",
+  "form_field_set": {
+    "id": 1,
+    "title": "Sample Form Title",
+    "form_layout": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "form_fields": [
+      null
+    ],
+    "skip_name": true,
+    "skip_email": true,
+    "skip_company": true
+  },
   "skip_name": true,
   "skip_email": true,
   "skip_company": true,
@@ -29,7 +44,7 @@
   "username": "user",
   "clickwrap_id": 1,
   "inbox_id": 1,
-  "watermark_attachment": "",
+  "watermark_attachment": null,
   "watermark_value": {
     "key": "example value"
   },
