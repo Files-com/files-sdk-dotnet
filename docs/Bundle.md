@@ -40,6 +40,7 @@
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
   "send_email_receipt_to_uploader": true,
+  "snapshot_id": 1,
   "user_id": 1,
   "username": "user",
   "clickwrap_id": 1,
@@ -76,6 +77,7 @@
 * `note` / `Note`  (string): Bundle internal note
 * `path_template` / `PathTemplate`  (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
 * `send_email_receipt_to_uploader` / `SendEmailReceiptToUploader`  (bool): Send delivery receipt to the uploader. Note: For writable share only
+* `snapshot_id` / `SnapshotId`  (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
 * `user_id` / `UserId`  (Nullable<Int64>): Bundle creator user ID
 * `username` / `Username`  (string): Bundle creator username
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
@@ -86,6 +88,8 @@
 * `paths` / `Paths`  (string[]): A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `password` / `Password`  (string): Password for this bundle.
 * `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of Form Field Set to use with this bundle
+* `create_snapshot` / `CreateSnapshot`  (bool): If true, create a snapshot of this bundle's contents.
+* `finalize_snapshot` / `FinalizeSnapshot`  (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `watermark_attachment_file` / `WatermarkAttachmentFile`  (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 * `watermark_attachment_delete` / `WatermarkAttachmentDelete`  (bool): If true, will delete the file stored in watermark_attachment
 
@@ -150,8 +154,10 @@ Task<Bundle> Bundle.Create(
 * `paths` (string[]): Required - A list of paths to include in this bundle.
 * `password` (string): Password for this bundle.
 * `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
+* `create_snapshot` (bool): If true, create a snapshot of this bundle's contents.
 * `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
+* `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `description` (string): Public description
 * `note` (string): Bundle internal note
@@ -210,9 +216,11 @@ Task<Bundle> Bundle.Update(
 * `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `create_snapshot` (bool): If true, create a snapshot of this bundle's contents.
 * `description` (string): Public description
 * `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
+* `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note
@@ -284,9 +292,11 @@ parameters.Add("password", "Password");
 parameters.Add("form_field_set_id", 1);
 parameters.Add("clickwrap_id", 1);
 parameters.Add("code", "abc123");
+parameters.Add("create_snapshot", true);
 parameters.Add("description", "The public description of the bundle.");
 parameters.Add("dont_separate_submissions_by_folder", true);
 parameters.Add("expires_at", "2000-01-01T01:00:00Z");
+parameters.Add("finalize_snapshot", true);
 parameters.Add("inbox_id", 1);
 parameters.Add("max_uses", 1);
 parameters.Add("note", "The internal note on the bundle.");
@@ -312,9 +322,11 @@ Bundle.Update(parameters);
 * `form_field_set_id` (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `clickwrap_id` (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
+* `create_snapshot` (bool): If true, create a snapshot of this bundle's contents.
 * `description` (string): Public description
 * `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Bundle expiration date/time
+* `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` (string): Bundle internal note

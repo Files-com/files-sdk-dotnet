@@ -112,6 +112,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("send_email_receipt_to_uploader", null);
             }
+            if (!this.attributes.ContainsKey("snapshot_id"))
+            {
+                this.attributes.Add("snapshot_id", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -151,6 +155,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("form_field_set_id"))
             {
                 this.attributes.Add("form_field_set_id", null);
+            }
+            if (!this.attributes.ContainsKey("create_snapshot"))
+            {
+                this.attributes.Add("create_snapshot", null);
+            }
+            if (!this.attributes.ContainsKey("finalize_snapshot"))
+            {
+                this.attributes.Add("finalize_snapshot", null);
             }
             if (!this.attributes.ContainsKey("watermark_attachment_file"))
             {
@@ -390,6 +402,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// ID of the snapshot containing this bundle's contents.
+        /// </summary>
+        [JsonPropertyName("snapshot_id")]
+        public Nullable<Int64> SnapshotId
+        {
+            get { return (Nullable<Int64>)attributes["snapshot_id"]; }
+            set { attributes["snapshot_id"] = value; }
+        }
+
+        /// <summary>
         /// Bundle creator user ID
         /// </summary>
         [JsonPropertyName("user_id")]
@@ -490,6 +512,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, create a snapshot of this bundle's contents.
+        /// </summary>
+        [JsonPropertyName("create_snapshot")]
+        public bool CreateSnapshot
+        {
+            get { return (bool)attributes["create_snapshot"]; }
+            set { attributes["create_snapshot"] = value; }
+        }
+
+        /// <summary>
+        /// If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
+        /// </summary>
+        [JsonPropertyName("finalize_snapshot")]
+        public bool FinalizeSnapshot
+        {
+            get { return (bool)attributes["finalize_snapshot"]; }
+            set { attributes["finalize_snapshot"] = value; }
+        }
+
+        /// <summary>
         /// Preview watermark image applied to all bundle items.
         /// </summary>
         [JsonPropertyName("watermark_attachment_file")]
@@ -560,9 +602,11 @@ namespace FilesCom.Models
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   create_snapshot - boolean - If true, create a snapshot of this bundle's contents.
         ///   description - string - Public description
         ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         ///   expires_at - string - Bundle expiration date/time
+        ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
@@ -611,6 +655,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: code must be of type string", "parameters[\"code\"]");
             }
+            if (parameters.ContainsKey("create_snapshot") && !(parameters["create_snapshot"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: create_snapshot must be of type bool", "parameters[\"create_snapshot\"]");
+            }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
@@ -622,6 +670,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("finalize_snapshot") && !(parameters["finalize_snapshot"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: finalize_snapshot must be of type bool", "parameters[\"finalize_snapshot\"]");
             }
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64>))
             {
@@ -849,8 +901,10 @@ namespace FilesCom.Models
         ///   paths (required) - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
+        ///   create_snapshot - boolean - If true, create a snapshot of this bundle's contents.
         ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         ///   expires_at - string - Bundle expiration date/time
+        ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   description - string - Public description
         ///   note - string - Bundle internal note
@@ -893,6 +947,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: form_field_set_id must be of type Nullable<Int64>", "parameters[\"form_field_set_id\"]");
             }
+            if (parameters.ContainsKey("create_snapshot") && !(parameters["create_snapshot"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: create_snapshot must be of type bool", "parameters[\"create_snapshot\"]");
+            }
             if (parameters.ContainsKey("dont_separate_submissions_by_folder") && !(parameters["dont_separate_submissions_by_folder"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dont_separate_submissions_by_folder must be of type bool", "parameters[\"dont_separate_submissions_by_folder\"]");
@@ -900,6 +958,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("finalize_snapshot") && !(parameters["finalize_snapshot"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: finalize_snapshot must be of type bool", "parameters[\"finalize_snapshot\"]");
             }
             if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64>))
             {
@@ -1028,9 +1090,11 @@ namespace FilesCom.Models
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   create_snapshot - boolean - If true, create a snapshot of this bundle's contents.
         ///   description - string - Public description
         ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         ///   expires_at - string - Bundle expiration date/time
+        ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
@@ -1080,6 +1144,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: code must be of type string", "parameters[\"code\"]");
             }
+            if (parameters.ContainsKey("create_snapshot") && !(parameters["create_snapshot"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: create_snapshot must be of type bool", "parameters[\"create_snapshot\"]");
+            }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
@@ -1091,6 +1159,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("finalize_snapshot") && !(parameters["finalize_snapshot"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: finalize_snapshot must be of type bool", "parameters[\"finalize_snapshot\"]");
             }
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64>))
             {
