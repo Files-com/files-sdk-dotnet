@@ -1,5 +1,22 @@
 # FilesCom.Models.Snapshot
 
+## Example Snapshot Object
+
+```
+{
+  "expires_at": "2000-01-01T01:00:00Z",
+  "finalized_at": "2000-01-01T01:00:00Z",
+  "name": "My Snapshot",
+  "user_id": 1,
+  "bundle_id": 1
+}
+```
+
+* `expires_at` / `ExpiresAt`  (Nullable<DateTime>): When the snapshot expires.
+* `finalized_at` / `FinalizedAt`  (Nullable<DateTime>): When the snapshot was finalized.
+* `name` / `Name`  (string): A name for the snapshot.
+* `user_id` / `UserId`  (Nullable<Int64>): The user that created this snapshot, if applicable.
+* `bundle_id` / `BundleId`  (Nullable<Int64>): The bundle using this snapshot, if applicable.
 * `id` / `Id`  (Nullable<Int64>): Snapshot ID.
 
 
@@ -8,7 +25,7 @@
 ## List Snapshots
 
 ```
-Task<Snapshot> Snapshot.List(
+Task<Snapshot[]> Snapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

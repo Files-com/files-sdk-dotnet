@@ -28,6 +28,26 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("expires_at"))
+            {
+                this.attributes.Add("expires_at", null);
+            }
+            if (!this.attributes.ContainsKey("finalized_at"))
+            {
+                this.attributes.Add("finalized_at", null);
+            }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("bundle_id"))
+            {
+                this.attributes.Add("bundle_id", null);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -49,6 +69,56 @@ namespace FilesCom.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// When the snapshot expires.
+        /// </summary>
+        [JsonPropertyName("expires_at")]
+        public Nullable<DateTime> ExpiresAt
+        {
+            get { return (Nullable<DateTime>)attributes["expires_at"]; }
+            set { attributes["expires_at"] = value; }
+        }
+
+        /// <summary>
+        /// When the snapshot was finalized.
+        /// </summary>
+        [JsonPropertyName("finalized_at")]
+        public Nullable<DateTime> FinalizedAt
+        {
+            get { return (Nullable<DateTime>)attributes["finalized_at"]; }
+            set { attributes["finalized_at"] = value; }
+        }
+
+        /// <summary>
+        /// A name for the snapshot.
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name
+        {
+            get { return (string)attributes["name"]; }
+            set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// The user that created this snapshot, if applicable.
+        /// </summary>
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
+        {
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// The bundle using this snapshot, if applicable.
+        /// </summary>
+        [JsonPropertyName("bundle_id")]
+        public Nullable<Int64> BundleId
+        {
+            get { return (Nullable<Int64>)attributes["bundle_id"]; }
+            set { attributes["bundle_id"] = value; }
+        }
 
         /// <summary>
         /// Snapshot ID.
@@ -135,7 +205,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
-        public static async Task<Snapshot> List(
+        public static async Task<Snapshot[]> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -155,10 +225,10 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendRequest($"/snapshots", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Snapshot>(responseJson);
+            return JsonSerializer.Deserialize<Snapshot[]>(responseJson);
         }
 
-        public static async Task<Snapshot> All(
+        public static async Task<Snapshot[]> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
