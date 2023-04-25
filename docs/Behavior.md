@@ -17,7 +17,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Folder behavior ID
-* `path` / `Path`  (string): Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Folder path.  Note that Behavior paths cannot be updated once initially set.  You will need to remove and re-create the behavior on the new path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `attachment_url` / `AttachmentUrl`  (string): URL for attached file
 * `behavior` / `BehaviorType`  (string): Behavior type.
 * `name` / `Name`  (string): Name for this behavior.
