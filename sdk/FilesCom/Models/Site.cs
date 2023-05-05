@@ -592,6 +592,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disable_users_from_inactivity_period_days", null);
             }
+            if (!this.attributes.ContainsKey("group_admins_can_set_user_password"))
+            {
+                this.attributes.Add("group_admins_can_set_user_password", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -2161,6 +2165,17 @@ namespace FilesCom.Models
             private set { attributes["disable_users_from_inactivity_period_days"] = value; }
         }
 
+        /// <summary>
+        /// Allow group admins set password authentication method
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("group_admins_can_set_user_password")]
+        public bool GroupAdminsCanSetUserPassword
+        {
+            get { return (bool)attributes["group_admins_can_set_user_password"]; }
+            private set { attributes["group_admins_can_set_user_password"] = value; }
+        }
+
 
 
         /// <summary>
@@ -2279,6 +2294,7 @@ namespace FilesCom.Models
         ///   sftp_host_key_type - string - Sftp Host Key Type
         ///   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+        ///   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
         ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
@@ -2655,6 +2671,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_watermark_value") && !(parameters["bundle_watermark_value"] is object))
             {
                 throw new ArgumentException("Bad parameter: bundle_watermark_value must be of type object", "parameters[\"bundle_watermark_value\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_set_user_password") && !(parameters["group_admins_can_set_user_password"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_set_user_password must be of type bool", "parameters[\"group_admins_can_set_user_password\"]");
             }
             if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool))
             {
