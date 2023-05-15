@@ -48,6 +48,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_id", null);
             }
+            if (!this.attributes.ContainsKey("paths"))
+            {
+                this.attributes.Add("paths", null);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -121,6 +125,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// An array of paths to add to the snapshot.
+        /// </summary>
+        [JsonPropertyName("paths")]
+        public string[] Paths
+        {
+            get { return (string[])attributes["paths"]; }
+            set { attributes["paths"] = value; }
+        }
+
+        /// <summary>
         /// Snapshot ID.
         /// </summary>
         [JsonPropertyName("id")]
@@ -131,6 +145,10 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Parameters:
+        ///   expires_at - string - When the snapshot expires.
+        ///   name - string - A name for the snapshot.
+        ///   paths - array(string) - An array of paths to add to the snapshot.
         /// </summary>
         public async Task<Snapshot> Update(Dictionary<string, object> parameters)
         {
@@ -144,6 +162,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
+            {
+                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
@@ -275,6 +305,10 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Parameters:
+        ///   expires_at - string - When the snapshot expires.
+        ///   name - string - A name for the snapshot.
+        ///   paths - array(string) - An array of paths to add to the snapshot.
         /// </summary>
         public static async Task<Snapshot> Create(
 
@@ -285,6 +319,18 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
+            {
+                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/snapshots", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -293,6 +339,10 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   expires_at - string - When the snapshot expires.
+        ///   name - string - A name for the snapshot.
+        ///   paths - array(string) - An array of paths to add to the snapshot.
         /// </summary>
         public static async Task<Snapshot> Update(
             Nullable<Int64> id,
@@ -307,6 +357,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
+            {
+                throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

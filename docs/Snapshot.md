@@ -17,6 +17,7 @@
 * `name` / `Name`  (string): A name for the snapshot.
 * `user_id` / `UserId`  (Nullable<Int64>): The user that created this snapshot, if applicable.
 * `bundle_id` / `BundleId`  (Nullable<Int64>): The bundle using this snapshot, if applicable.
+* `paths` / `Paths`  (string[]): An array of paths to add to the snapshot.
 * `id` / `Id`  (Nullable<Int64>): Snapshot ID.
 
 
@@ -67,6 +68,12 @@ Task<Snapshot> Snapshot.Create(
 )
 ```
 
+### Parameters
+
+* `expires_at` (string): When the snapshot expires.
+* `name` (string): A name for the snapshot.
+* `paths` (string[]): An array of paths to add to the snapshot.
+
 
 ---
 
@@ -83,6 +90,9 @@ Task<Snapshot> Snapshot.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Snapshot ID.
+* `expires_at` (string): When the snapshot expires.
+* `name` (string): A name for the snapshot.
+* `paths` (string[]): An array of paths to add to the snapshot.
 
 
 ---
@@ -111,13 +121,18 @@ var Snapshot = Snapshot.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("expires_at", "2000-01-01T01:00:00Z");
+parameters.Add("name", "My Snapshot");
 
-Snapshot.Update
+Snapshot.Update(parameters);
 ```
 
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Snapshot ID.
+* `expires_at` (string): When the snapshot expires.
+* `name` (string): A name for the snapshot.
+* `paths` (string[]): An array of paths to add to the snapshot.
 
 
 ---

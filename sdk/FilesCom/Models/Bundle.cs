@@ -920,6 +920,7 @@ namespace FilesCom.Models
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
+        ///   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
         public static async Task<Bundle> Create(
@@ -1022,6 +1023,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
+            }
+            if (parameters.ContainsKey("snapshot_id") && !(parameters["snapshot_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: snapshot_id must be of type Nullable<Int64>", "parameters[\"snapshot_id\"]");
             }
             if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent))
             {

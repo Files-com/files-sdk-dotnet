@@ -173,6 +173,7 @@ Task<Bundle> Bundle.Create(
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `skip_company` (bool): BundleRegistrations can be saved without providing company?
+* `snapshot_id` (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
 
