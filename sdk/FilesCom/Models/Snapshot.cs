@@ -28,6 +28,10 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
             if (!this.attributes.ContainsKey("expires_at"))
             {
                 this.attributes.Add("expires_at", null);
@@ -52,10 +56,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("paths", null);
             }
-            if (!this.attributes.ContainsKey("id"))
-            {
-                this.attributes.Add("id", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -73,6 +73,16 @@ namespace FilesCom.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// The snapshot's unique ID.
+        /// </summary>
+        [JsonPropertyName("id")]
+        public Nullable<Int64> Id
+        {
+            get { return (Nullable<Int64>)attributes["id"]; }
+            set { attributes["id"] = value; }
+        }
 
         /// <summary>
         /// When the snapshot expires.
@@ -132,16 +142,6 @@ namespace FilesCom.Models
         {
             get { return (string[])attributes["paths"]; }
             set { attributes["paths"] = value; }
-        }
-
-        /// <summary>
-        /// Snapshot ID.
-        /// </summary>
-        [JsonPropertyName("id")]
-        public Nullable<Int64> Id
-        {
-            get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
         }
 
         /// <summary>

@@ -136,6 +136,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("provision_site_admin_groups", null);
             }
+            if (!this.attributes.ContainsKey("provision_group_admin_groups"))
+            {
+                this.attributes.Add("provision_group_admin_groups", null);
+            }
             if (!this.attributes.ContainsKey("provision_attachments_permission"))
             {
                 this.attributes.Add("provision_attachments_permission", null);
@@ -513,6 +517,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["provision_site_admin_groups"]; }
             private set { attributes["provision_site_admin_groups"] = value; }
+        }
+
+        /// <summary>
+        /// Comma-separated list of group names whose members will be provisioned as Group Admins.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("provision_group_admin_groups")]
+        public string ProvisionGroupAdminGroups
+        {
+            get { return (string)attributes["provision_group_admin_groups"]; }
+            private set { attributes["provision_group_admin_groups"] = value; }
         }
 
         /// <summary>
