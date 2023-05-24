@@ -436,6 +436,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("require_2fa_user_type", null);
             }
+            if (!this.attributes.ContainsKey("require_logout_from_bundles_and_inboxes"))
+            {
+                this.attributes.Add("require_logout_from_bundles_and_inboxes", null);
+            }
             if (!this.attributes.ContainsKey("session"))
             {
                 this.attributes.Add("session", null);
@@ -1741,6 +1745,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("require_logout_from_bundles_and_inboxes")]
+        public bool RequireLogoutFromBundlesAndInboxes
+        {
+            get { return (bool)attributes["require_logout_from_bundles_and_inboxes"]; }
+            private set { attributes["require_logout_from_bundles_and_inboxes"] = value; }
+        }
+
+        /// <summary>
         /// Current session
         /// </summary>
         [JsonInclude]
@@ -2285,6 +2300,7 @@ namespace FilesCom.Models
         ///   password_require_special - boolean - Require special characters in password?
         ///   password_require_number - boolean - Require a number in passwords?
         ///   password_require_unbreached - boolean - Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
+        ///   require_logout_from_bundles_and_inboxes - boolean - If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
         ///   sftp_user_root_enabled - boolean - Use user FTP roots also for SFTP?
         ///   disable_password_reset - boolean - Is password reset disabled?
         ///   immutable_files - boolean - Are files protected from modification?
@@ -2591,6 +2607,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_require_unbreached") && !(parameters["password_require_unbreached"] is bool))
             {
                 throw new ArgumentException("Bad parameter: password_require_unbreached must be of type bool", "parameters[\"password_require_unbreached\"]");
+            }
+            if (parameters.ContainsKey("require_logout_from_bundles_and_inboxes") && !(parameters["require_logout_from_bundles_and_inboxes"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: require_logout_from_bundles_and_inboxes must be of type bool", "parameters[\"require_logout_from_bundles_and_inboxes\"]");
             }
             if (parameters.ContainsKey("sftp_user_root_enabled") && !(parameters["sftp_user_root_enabled"] is bool))
             {
