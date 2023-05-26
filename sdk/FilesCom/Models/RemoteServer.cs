@@ -220,6 +220,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("filebase_access_key", null);
             }
+            if (!this.attributes.ContainsKey("dropbox_teams"))
+            {
+                this.attributes.Add("dropbox_teams", null);
+            }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
                 this.attributes.Add("aws_secret_key", null);
@@ -779,6 +783,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// List Team folders in root
+        /// </summary>
+        [JsonPropertyName("dropbox_teams")]
+        public bool DropboxTeams
+        {
+            get { return (bool)attributes["dropbox_teams"]; }
+            set { attributes["dropbox_teams"] = value; }
+        }
+
+        /// <summary>
         /// AWS secret key.
         /// </summary>
         [JsonPropertyName("aws_secret_key")]
@@ -1068,6 +1082,7 @@ namespace FilesCom.Models
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
+        ///   dropbox_teams - boolean - List Team folders in root
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -1298,6 +1313,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
             }
+            if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -1512,6 +1531,7 @@ namespace FilesCom.Models
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
+        ///   dropbox_teams - boolean - List Team folders in root
         /// </summary>
         public static async Task<RemoteServer> Create(
 
@@ -1738,6 +1758,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
             }
+            if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1886,6 +1910,7 @@ namespace FilesCom.Models
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
+        ///   dropbox_teams - boolean - List Team folders in root
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id,
@@ -2116,6 +2141,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
+            if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {

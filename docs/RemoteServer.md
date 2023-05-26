@@ -51,7 +51,8 @@
   "files_agent_root": "example",
   "files_agent_api_token": "example",
   "filebase_bucket": "my-bucket",
-  "filebase_access_key": "example"
+  "filebase_access_key": "example",
+  "dropbox_teams": true
 }
 ```
 
@@ -103,6 +104,7 @@
 * `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
 * `filebase_bucket` / `FilebaseBucket`  (string): Filebase Bucket name
 * `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase Access Key.
+* `dropbox_teams` / `DropboxTeams`  (bool): List Team folders in root
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS secret key.
 * `password` / `Password`  (string): Password if needed.
 * `private_key` / `PrivateKey`  (string): Private key if needed.
@@ -240,6 +242,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
+* `dropbox_teams` (bool): List Team folders in root
 
 
 ---
@@ -339,6 +342,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
+* `dropbox_teams` (bool): List Team folders in root
 
 
 ---
@@ -447,6 +451,7 @@ parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_permission_set", "read_write");
 parameters.Add("filebase_access_key", "example");
 parameters.Add("filebase_bucket", "my-bucket");
+parameters.Add("dropbox_teams", true);
 
 RemoteServer.Update(parameters);
 ```
@@ -508,6 +513,7 @@ RemoteServer.Update(parameters);
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
+* `dropbox_teams` (bool): List Team folders in root
 
 
 ---
