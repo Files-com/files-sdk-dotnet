@@ -51,7 +51,7 @@ namespace FilesCom
             {
                 log.Info("Files.com Client created with Session Id");
             }
-            else if (this.ApiKey != null && this.SessionId.Length > 0)
+            else if (this.ApiKey != null && this.ApiKey.Length > 0)
             {
                 log.Info("Files.com Client created with API Key");
             }

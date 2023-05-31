@@ -220,6 +220,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("filebase_access_key", null);
             }
+            if (!this.attributes.ContainsKey("cloudflare_bucket"))
+            {
+                this.attributes.Add("cloudflare_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("cloudflare_access_key"))
+            {
+                this.attributes.Add("cloudflare_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("cloudflare_endpoint"))
+            {
+                this.attributes.Add("cloudflare_endpoint", null);
+            }
             if (!this.attributes.ContainsKey("dropbox_teams"))
             {
                 this.attributes.Add("dropbox_teams", null);
@@ -283,6 +295,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("filebase_secret_key"))
             {
                 this.attributes.Add("filebase_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("cloudflare_secret_key"))
+            {
+                this.attributes.Add("cloudflare_secret_key", null);
             }
         }
 
@@ -783,6 +799,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Cloudflare Bucket name
+        /// </summary>
+        [JsonPropertyName("cloudflare_bucket")]
+        public string CloudflareBucket
+        {
+            get { return (string)attributes["cloudflare_bucket"]; }
+            set { attributes["cloudflare_bucket"] = value; }
+        }
+
+        /// <summary>
+        /// Cloudflare Access Key.
+        /// </summary>
+        [JsonPropertyName("cloudflare_access_key")]
+        public string CloudflareAccessKey
+        {
+            get { return (string)attributes["cloudflare_access_key"]; }
+            set { attributes["cloudflare_access_key"] = value; }
+        }
+
+        /// <summary>
+        /// Cloudflare endpoint
+        /// </summary>
+        [JsonPropertyName("cloudflare_endpoint")]
+        public string CloudflareEndpoint
+        {
+            get { return (string)attributes["cloudflare_endpoint"]; }
+            set { attributes["cloudflare_endpoint"] = value; }
+        }
+
+        /// <summary>
         /// List Team folders in root
         /// </summary>
         [JsonPropertyName("dropbox_teams")]
@@ -943,6 +989,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Cloudflare secret key
+        /// </summary>
+        [JsonPropertyName("cloudflare_secret_key")]
+        public string CloudflareSecretKey
+        {
+            get { return (string)attributes["cloudflare_secret_key"]; }
+            set { attributes["cloudflare_secret_key"] = value; }
+        }
+
+        /// <summary>
         /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
         ///
         /// Parameters:
@@ -1082,6 +1138,10 @@ namespace FilesCom.Models
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
+        ///   cloudflare_access_key - string - Cloudflare Access Key.
+        ///   cloudflare_secret_key - string - Cloudflare secret key
+        ///   cloudflare_bucket - string - Cloudflare Bucket name
+        ///   cloudflare_endpoint - string - Cloudflare endpoint
         ///   dropbox_teams - boolean - List Team folders in root
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
@@ -1313,6 +1373,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
             }
+            if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_access_key must be of type string", "parameters[\"cloudflare_access_key\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_secret_key") && !(parameters["cloudflare_secret_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_secret_key must be of type string", "parameters[\"cloudflare_secret_key\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_bucket") && !(parameters["cloudflare_bucket"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_bucket must be of type string", "parameters[\"cloudflare_bucket\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+            }
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
@@ -1531,6 +1607,10 @@ namespace FilesCom.Models
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
+        ///   cloudflare_access_key - string - Cloudflare Access Key.
+        ///   cloudflare_secret_key - string - Cloudflare secret key
+        ///   cloudflare_bucket - string - Cloudflare Bucket name
+        ///   cloudflare_endpoint - string - Cloudflare endpoint
         ///   dropbox_teams - boolean - List Team folders in root
         /// </summary>
         public static async Task<RemoteServer> Create(
@@ -1758,6 +1838,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
             }
+            if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_access_key must be of type string", "parameters[\"cloudflare_access_key\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_secret_key") && !(parameters["cloudflare_secret_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_secret_key must be of type string", "parameters[\"cloudflare_secret_key\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_bucket") && !(parameters["cloudflare_bucket"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_bucket must be of type string", "parameters[\"cloudflare_bucket\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+            }
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
@@ -1910,6 +2006,10 @@ namespace FilesCom.Models
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
+        ///   cloudflare_access_key - string - Cloudflare Access Key.
+        ///   cloudflare_secret_key - string - Cloudflare secret key
+        ///   cloudflare_bucket - string - Cloudflare Bucket name
+        ///   cloudflare_endpoint - string - Cloudflare endpoint
         ///   dropbox_teams - boolean - List Team folders in root
         /// </summary>
         public static async Task<RemoteServer> Update(
@@ -2141,6 +2241,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_access_key must be of type string", "parameters[\"cloudflare_access_key\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_secret_key") && !(parameters["cloudflare_secret_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_secret_key must be of type string", "parameters[\"cloudflare_secret_key\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_bucket") && !(parameters["cloudflare_bucket"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_bucket must be of type string", "parameters[\"cloudflare_bucket\"]");
+            }
+            if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
+            {
+                throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
             }
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
