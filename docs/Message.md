@@ -103,7 +103,7 @@ Task<Message> Message.Update(
 ## Delete Message
 
 ```
-Task<Message> Message.Delete(
+Task Message.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

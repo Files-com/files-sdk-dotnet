@@ -77,7 +77,7 @@ Task<Permission> Permission.Create(
 ## Delete Permission
 
 ```
-Task<Permission> Permission.Delete(
+Task Permission.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

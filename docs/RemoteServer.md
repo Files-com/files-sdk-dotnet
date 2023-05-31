@@ -365,7 +365,7 @@ Task<RemoteServer> RemoteServer.Update(
 ## Delete Remote Server
 
 ```
-Task<RemoteServer> RemoteServer.Delete(
+Task RemoteServer.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

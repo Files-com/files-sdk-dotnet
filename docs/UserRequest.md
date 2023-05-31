@@ -76,7 +76,7 @@ Task<UserRequest> UserRequest.Create(
 ## Delete User Request
 
 ```
-Task<UserRequest> UserRequest.Delete(
+Task UserRequest.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

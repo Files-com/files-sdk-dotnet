@@ -74,7 +74,7 @@ Task<MessageReaction> MessageReaction.Create(
 ## Delete Message Reaction
 
 ```
-Task<MessageReaction> MessageReaction.Delete(
+Task MessageReaction.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

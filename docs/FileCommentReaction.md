@@ -39,7 +39,7 @@ Task<FileCommentReaction> FileCommentReaction.Create(
 ## Delete File Comment Reaction
 
 ```
-Task<FileCommentReaction> FileCommentReaction.Delete(
+Task FileCommentReaction.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

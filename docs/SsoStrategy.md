@@ -137,7 +137,7 @@ Task<SsoStrategy> SsoStrategy.Find(
 ## Synchronize provisioning data with the SSO remote server
 
 ```
-Task<SsoStrategy> SsoStrategy.Sync(
+Task SsoStrategy.Sync(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

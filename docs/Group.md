@@ -106,7 +106,7 @@ Task<Group> Group.Update(
 ## Delete Group
 
 ```
-Task<Group> Group.Delete(
+Task Group.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

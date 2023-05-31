@@ -5,7 +5,7 @@
 ## retry Action Webhook Failure
 
 ```
-Task<ActionWebhookFailure> ActionWebhookFailure.Retry(
+Task ActionWebhookFailure.Retry(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

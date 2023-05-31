@@ -634,7 +634,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
         /// </summary>
-        public async Task<RemoteFile> Delete(Dictionary<string, object> parameters)
+        public async Task Delete(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -656,9 +656,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public async void Destroy(Dictionary<string, object> parameters)
@@ -996,7 +994,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
         /// </summary>
-        public static async Task<RemoteFile> Delete(
+        public static async Task Delete(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1019,18 +1017,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        public static async Task<RemoteFile> Destroy(
+        public static async Task Destroy(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Delete(path, parameters, options);
+            await Delete(path, parameters, options);
         }
 
         /// <summary>

@@ -102,7 +102,7 @@ Task<BundleNotification> BundleNotification.Update(
 ## Delete Bundle Notification
 
 ```
-Task<BundleNotification> BundleNotification.Delete(
+Task BundleNotification.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

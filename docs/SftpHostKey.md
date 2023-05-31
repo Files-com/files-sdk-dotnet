@@ -95,7 +95,7 @@ Task<SftpHostKey> SftpHostKey.Update(
 ## Delete Sftp Host Key
 
 ```
-Task<SftpHostKey> SftpHostKey.Delete(
+Task SftpHostKey.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -213,7 +213,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
-        public static async Task<Session> Delete(
+        public static async Task Delete(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -223,18 +223,16 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
 
-            string responseJson = await FilesClient.SendRequest($"/sessions", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Session>(responseJson);
+            await FilesClient.SendRequest($"/sessions", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        public static async Task<Session> Destroy(
+        public static async Task Destroy(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Delete(parameters, options);
+            await Delete(parameters, options);
         }
 
     }

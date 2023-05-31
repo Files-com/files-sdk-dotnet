@@ -709,7 +709,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Synchronize provisioning data with the SSO remote server
         /// </summary>
-        public async Task<SsoStrategy> Sync(Dictionary<string, object> parameters)
+        public async Task Sync(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -727,9 +727,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(attributes["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
+            await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(attributes["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 
@@ -812,7 +810,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Synchronize provisioning data with the SSO remote server
         /// </summary>
-        public static async Task<SsoStrategy> Sync(
+        public static async Task Sync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -831,9 +829,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
+            await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 

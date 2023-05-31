@@ -218,7 +218,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
-        public async Task<Lock> Delete(Dictionary<string, object> parameters)
+        public async Task Delete(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -244,9 +244,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Lock>(responseJson);
+            await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public async void Destroy(Dictionary<string, object> parameters)
@@ -358,7 +356,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
-        public static async Task<Lock> Delete(
+        public static async Task Delete(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -385,18 +383,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Lock>(responseJson);
+            await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        public static async Task<Lock> Destroy(
+        public static async Task Destroy(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Delete(path, parameters, options);
+            await Delete(path, parameters, options);
         }
 
     }

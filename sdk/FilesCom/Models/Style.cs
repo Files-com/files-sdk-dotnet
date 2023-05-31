@@ -154,7 +154,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
-        public async Task<Style> Delete(Dictionary<string, object> parameters)
+        public async Task Delete(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -172,9 +172,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Style>(responseJson);
+            await FilesClient.SendRequest($"/styles/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public async void Destroy(Dictionary<string, object> parameters)
@@ -265,7 +263,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
-        public static async Task<Style> Delete(
+        public static async Task Delete(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -284,18 +282,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Style>(responseJson);
+            await FilesClient.SendRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        public static async Task<Style> Destroy(
+        public static async Task Destroy(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Delete(path, parameters, options);
+            await Delete(path, parameters, options);
         }
 
     }

@@ -86,7 +86,7 @@ Task<GroupUser> GroupUser.Update(
 ## Delete Group User
 
 ```
-Task<GroupUser> GroupUser.Delete(
+Task GroupUser.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

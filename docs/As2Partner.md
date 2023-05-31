@@ -120,7 +120,7 @@ Task<As2Partner> As2Partner.Update(
 ## Delete As2 Partner
 
 ```
-Task<As2Partner> As2Partner.Delete(
+Task As2Partner.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

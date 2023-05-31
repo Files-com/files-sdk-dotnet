@@ -96,7 +96,7 @@ Task<MessageComment> MessageComment.Update(
 ## Delete Message Comment
 
 ```
-Task<MessageComment> MessageComment.Delete(
+Task MessageComment.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

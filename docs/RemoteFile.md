@@ -135,7 +135,7 @@ Task<RemoteFile> RemoteFile.Update(
 ## Delete file/folder
 
 ```
-Task<RemoteFile> RemoteFile.Delete(
+Task RemoteFile.Delete(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

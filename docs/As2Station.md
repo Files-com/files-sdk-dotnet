@@ -119,7 +119,7 @@ Task<As2Station> As2Station.Update(
 ## Delete As2 Station
 
 ```
-Task<As2Station> As2Station.Delete(
+Task As2Station.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

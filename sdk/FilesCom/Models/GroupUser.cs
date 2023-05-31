@@ -185,7 +185,7 @@ namespace FilesCom.Models
         ///   group_id (required) - int64 - Group ID from which to remove user.
         ///   user_id (required) - int64 - User ID to remove from group.
         /// </summary>
-        public async Task<GroupUser> Delete(Dictionary<string, object> parameters)
+        public async Task Delete(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -219,9 +219,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<GroupUser>(responseJson);
+            await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public async void Destroy(Dictionary<string, object> parameters)
@@ -388,7 +386,7 @@ namespace FilesCom.Models
         ///   group_id (required) - int64 - Group ID from which to remove user.
         ///   user_id (required) - int64 - User ID to remove from group.
         /// </summary>
-        public static async Task<GroupUser> Delete(
+        public static async Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -423,18 +421,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<GroupUser>(responseJson);
+            await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        public static async Task<GroupUser> Destroy(
+        public static async Task Destroy(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Delete(id, parameters, options);
+            await Delete(id, parameters, options);
         }
 
     }

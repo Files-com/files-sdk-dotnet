@@ -46,7 +46,7 @@ Task<Session> Session.Create(
 ## Delete user session (log out)
 
 ```
-Task<Session> Session.Delete(
+Task Session.Delete(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

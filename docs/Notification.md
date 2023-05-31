@@ -170,7 +170,7 @@ Task<Notification> Notification.Update(
 ## Delete Notification
 
 ```
-Task<Notification> Notification.Delete(
+Task Notification.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

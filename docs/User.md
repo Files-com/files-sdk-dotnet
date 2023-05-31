@@ -255,7 +255,7 @@ Task<User> User.Create(
 ## Unlock user who has been locked out due to failed logins
 
 ```
-Task<User> User.Unlock(
+Task User.Unlock(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -272,7 +272,7 @@ Task<User> User.Unlock(
 ## Resend user welcome email
 
 ```
-Task<User> User.ResendWelcomeEmail(
+Task User.ResendWelcomeEmail(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -289,7 +289,7 @@ Task<User> User.ResendWelcomeEmail(
 ## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
-Task<User> User.User2faReset(
+Task User.User2faReset(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -367,7 +367,7 @@ Task<User> User.Update(
 ## Delete User
 
 ```
-Task<User> User.Delete(
+Task User.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

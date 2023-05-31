@@ -101,7 +101,7 @@ Task<Snapshot> Snapshot.Update(
 ## Delete Snapshot
 
 ```
-Task<Snapshot> Snapshot.Delete(
+Task Snapshot.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -97,7 +97,7 @@ Task<PublicKey> PublicKey.Update(
 ## Delete Public Key
 
 ```
-Task<PublicKey> PublicKey.Delete(
+Task PublicKey.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

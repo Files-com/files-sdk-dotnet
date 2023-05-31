@@ -157,7 +157,7 @@ Task<ApiKey> ApiKey.Update(
 ## Delete current API key.  (Requires current API connection to be using an API key.)
 
 ```
-Task<ApiKey> ApiKey.DeleteCurrent(
+Task ApiKey.DeleteCurrent(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -170,7 +170,7 @@ Task<ApiKey> ApiKey.DeleteCurrent(
 ## Delete Api Key
 
 ```
-Task<ApiKey> ApiKey.Delete(
+Task ApiKey.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

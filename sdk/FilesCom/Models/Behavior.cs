@@ -236,7 +236,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
-        public async Task<Behavior> Delete(Dictionary<string, object> parameters)
+        public async Task Delete(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -254,9 +254,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Behavior>(responseJson);
+            await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public async void Destroy(Dictionary<string, object> parameters)
@@ -502,7 +500,7 @@ namespace FilesCom.Models
         ///   body - object - Additional body parameters.
         ///   action - string - action for test body
         /// </summary>
-        public static async Task<Behavior> WebhookTest(
+        public static async Task WebhookTest(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -540,9 +538,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: url", "parameters[\"url\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/webhook/test", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            return JsonSerializer.Deserialize<Behavior>(responseJson);
+            await FilesClient.SendRequest($"/behaviors/webhook/test", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 
@@ -611,7 +607,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
-        public static async Task<Behavior> Delete(
+        public static async Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -630,18 +626,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-
-            return JsonSerializer.Deserialize<Behavior>(responseJson);
+            await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        public static async Task<Behavior> Destroy(
+        public static async Task Destroy(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Delete(id, parameters, options);
+            await Delete(id, parameters, options);
         }
 
     }

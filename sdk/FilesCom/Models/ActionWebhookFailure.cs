@@ -49,7 +49,7 @@ namespace FilesCom.Models
         /// <summary>
         /// retry Action Webhook Failure
         /// </summary>
-        public async Task<ActionWebhookFailure> Retry(Dictionary<string, object> parameters)
+        public async Task Retry(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -67,9 +67,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_webhook_failures/{System.Uri.EscapeDataString(attributes["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            return JsonSerializer.Deserialize<ActionWebhookFailure>(responseJson);
+            await FilesClient.SendRequest($"/action_webhook_failures/{System.Uri.EscapeDataString(attributes["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 
@@ -78,7 +76,7 @@ namespace FilesCom.Models
         /// <summary>
         /// retry Action Webhook Failure
         /// </summary>
-        public static async Task<ActionWebhookFailure> Retry(
+        public static async Task Retry(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -97,9 +95,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_webhook_failures/{System.Uri.EscapeDataString(parameters["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            return JsonSerializer.Deserialize<ActionWebhookFailure>(responseJson);
+            await FilesClient.SendRequest($"/action_webhook_failures/{System.Uri.EscapeDataString(parameters["id"].ToString())}/retry", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 

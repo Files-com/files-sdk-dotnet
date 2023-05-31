@@ -104,7 +104,7 @@ Task<Clickwrap> Clickwrap.Update(
 ## Delete Clickwrap
 
 ```
-Task<Clickwrap> Clickwrap.Delete(
+Task Clickwrap.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

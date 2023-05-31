@@ -190,7 +190,7 @@ Task<Automation> Automation.Update(
 ## Delete Automation
 
 ```
-Task<Automation> Automation.Delete(
+Task Automation.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

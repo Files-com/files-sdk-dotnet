@@ -117,7 +117,7 @@ Task<Behavior> Behavior.Create(
 ## Test webhook
 
 ```
-Task<Behavior> Behavior.WebhookTest(
+Task Behavior.WebhookTest(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -163,7 +163,7 @@ Task<Behavior> Behavior.Update(
 ## Delete Behavior
 
 ```
-Task<Behavior> Behavior.Delete(
+Task Behavior.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

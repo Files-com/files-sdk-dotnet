@@ -58,7 +58,7 @@ Task<Style> Style.Update(
 ## Delete Style
 
 ```
-Task<Style> Style.Delete(
+Task Style.Delete(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

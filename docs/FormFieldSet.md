@@ -116,7 +116,7 @@ Task<FormFieldSet> FormFieldSet.Update(
 ## Delete Form Field Set
 
 ```
-Task<FormFieldSet> FormFieldSet.Delete(
+Task FormFieldSet.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

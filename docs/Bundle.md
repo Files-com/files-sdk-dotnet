@@ -182,7 +182,7 @@ Task<Bundle> Bundle.Create(
 ## Send email(s) with a link to bundle
 
 ```
-Task<Bundle> Bundle.Share(
+Task Bundle.Share(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -243,7 +243,7 @@ Task<Bundle> Bundle.Update(
 ## Delete Bundle
 
 ```
-Task<Bundle> Bundle.Delete(
+Task Bundle.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

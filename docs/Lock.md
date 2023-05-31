@@ -79,7 +79,7 @@ Task<Lock> Lock.Create(
 ## Delete Lock
 
 ```
-Task<Lock> Lock.Delete(
+Task Lock.Delete(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
