@@ -40,6 +40,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("description", null);
             }
+            if (!this.attributes.ContainsKey("expires_at"))
+            {
+                this.attributes.Add("expires_at", null);
+            }
             if (!this.attributes.ContainsKey("password_protected"))
             {
                 this.attributes.Add("password_protected", null);
@@ -91,10 +95,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("dont_separate_submissions_by_folder"))
             {
                 this.attributes.Add("dont_separate_submissions_by_folder", null);
-            }
-            if (!this.attributes.ContainsKey("expires_at"))
-            {
-                this.attributes.Add("expires_at", null);
             }
             if (!this.attributes.ContainsKey("max_uses"))
             {
@@ -218,6 +218,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["description"]; }
             set { attributes["description"] = value; }
+        }
+
+        /// <summary>
+        /// Bundle expiration date/time
+        /// </summary>
+        [JsonPropertyName("expires_at")]
+        public Nullable<DateTime> ExpiresAt
+        {
+            get { return (Nullable<DateTime>)attributes["expires_at"]; }
+            set { attributes["expires_at"] = value; }
         }
 
         /// <summary>
@@ -349,16 +359,6 @@ namespace FilesCom.Models
         {
             get { return (bool)attributes["dont_separate_submissions_by_folder"]; }
             set { attributes["dont_separate_submissions_by_folder"] = value; }
-        }
-
-        /// <summary>
-        /// Bundle expiration date/time
-        /// </summary>
-        [JsonPropertyName("expires_at")]
-        public Nullable<DateTime> ExpiresAt
-        {
-            get { return (Nullable<DateTime>)attributes["expires_at"]; }
-            set { attributes["expires_at"] = value; }
         }
 
         /// <summary>

@@ -7,6 +7,7 @@
   "code": "abc123",
   "url": "https://subdomain.files.com/f/12345678",
   "description": "The public description of the bundle.",
+  "expires_at": "2000-01-01T01:00:00Z",
   "password_protected": true,
   "permissions": "read",
   "preview_only": true,
@@ -35,7 +36,6 @@
   "id": 1,
   "created_at": "2000-01-01T01:00:00Z",
   "dont_separate_submissions_by_folder": true,
-  "expires_at": "2000-01-01T01:00:00Z",
   "max_uses": 1,
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
@@ -59,6 +59,7 @@
 * `code` / `Code`  (string): Bundle code.  This code forms the end part of the Public URL.
 * `url` / `Url`  (string): Public URL of Share Link
 * `description` / `Description`  (string): Public description
+* `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
 * `password_protected` / `PasswordProtected`  (bool): Is this bundle password protected?
 * `permissions` / `Permissions`  (string): Permissions that apply to Folders in this Share Link.
 * `preview_only` / `PreviewOnly`  (bool): DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
@@ -72,7 +73,6 @@
 * `id` / `Id`  (Nullable<Int64>): Bundle ID
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
 * `dont_separate_submissions_by_folder` / `DontSeparateSubmissionsByFolder`  (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
-* `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
 * `max_uses` / `MaxUses`  (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `note` / `Note`  (string): Bundle internal note
 * `path_template` / `PathTemplate`  (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
