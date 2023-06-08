@@ -110,9 +110,23 @@ or you may set them on a config object for per-session configuration.
     }
 ```
 
+#### Uploading a file from a Stream
+```csharp 
+    using(MemoryStream stream = new System.IO.MemoryStream())
+    {
+        byte[] firstString = System.Text.UTF8Encoding.UTF8.GetBytes("Example memory stream contents.");
+        stream.Write(firstString, 0, firstString.Length);
+        stream.Position = 0; // Reset stream pointer
+        var modifiedTime = DateTime.UtcNow;
+        Console.WriteLine("-- Uploaded File Size: {0}", stream.Length);
+        await RemoteFile.UploadFile("dotnet_upload_stream.txt", stream, stream.Length, modifiedTime, options);
+    }
+```
+
 #### Reading a file's text as a Stream
 ```csharp 
-    using(MemoryStream stream = new System.IO.MemoryStream()) {
+    using(MemoryStream stream = new System.IO.MemoryStream()) 
+    {
         RemoteFile f = await RemoteFile.Find("/remote_streamio.txt", null, null);
         Console.WriteLine("-- Downloaded File Path: {0}", f.Path);
         Console.WriteLine("-- Downloaded File Size: {0}", f.Size);
