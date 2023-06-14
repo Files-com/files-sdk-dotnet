@@ -494,11 +494,11 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[path]=desc`). Valid fields are `path`, `user_id` or `group_id`.
-        ///   group_id - string - If set, return records where the specified field is equal to the supplied value.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id` or `group_id`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
         ///   path - string - Show notifications for this Path.
         ///   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
+        ///   group_id - string
         /// </summary>
         public static async Task<Notification[]> List(
 
@@ -525,10 +525,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
-            }
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
@@ -544,6 +540,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("include_ancestors") && !(parameters["include_ancestors"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_ancestors must be of type bool", "parameters[\"include_ancestors\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
             }
 
             string responseJson = await FilesClient.SendRequest($"/notifications", System.Net.Http.HttpMethod.Get, parameters, options);

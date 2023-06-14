@@ -201,7 +201,6 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[bundle_id]=desc`). Valid fields are `bundle_id`.
-        ///   bundle_id - string - If set, return records where the specified field is equal to the supplied value.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
         /// </summary>
         public static async Task<BundleNotification[]> List(
@@ -228,10 +227,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
-            }
-            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: bundle_id must be of type string", "parameters[\"bundle_id\"]");
             }
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {

@@ -40,6 +40,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("api_key_id"))
+            {
+                this.attributes.Add("api_key_id", null);
+            }
             if (!this.attributes.ContainsKey("user_is_files_support"))
             {
                 this.attributes.Add("user_is_files_support", null);
@@ -100,6 +104,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// The api key id responsible for this change
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("api_key_id")]
+        public Nullable<Int64> ApiKeyId
+        {
+            get { return (Nullable<Int64>)attributes["api_key_id"]; }
+            private set { attributes["api_key_id"] = value; }
+        }
+
+        /// <summary>
         /// true if this change was performed by Files.com support.
         /// </summary>
         [JsonInclude]
@@ -128,8 +143,6 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[api_key_id]=desc`). Valid fields are `api_key_id`, `created_at` or `user_id`.
-        ///   api_key_id - string - If set, return records where the specified field is equal to the supplied value.
-        ///   user_id - string - If set, return records where the specified field is equal to the supplied value.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `api_key_id` and `user_id`.
         /// </summary>
         public static async Task<SettingsChange[]> List(
@@ -152,14 +165,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
-            }
-            if (parameters.ContainsKey("api_key_id") && !(parameters["api_key_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: api_key_id must be of type string", "parameters[\"api_key_id\"]");
-            }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type string", "parameters[\"user_id\"]");
             }
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
