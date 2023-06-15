@@ -236,6 +236,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("dropbox_teams", null);
             }
+            if (!this.attributes.ContainsKey("linode_bucket"))
+            {
+                this.attributes.Add("linode_bucket", null);
+            }
+            if (!this.attributes.ContainsKey("linode_access_key"))
+            {
+                this.attributes.Add("linode_access_key", null);
+            }
+            if (!this.attributes.ContainsKey("linode_region"))
+            {
+                this.attributes.Add("linode_region", null);
+            }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
                 this.attributes.Add("aws_secret_key", null);
@@ -299,6 +311,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("cloudflare_secret_key"))
             {
                 this.attributes.Add("cloudflare_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("linode_secret_key"))
+            {
+                this.attributes.Add("linode_secret_key", null);
             }
         }
 
@@ -839,6 +855,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Linode Bucket name
+        /// </summary>
+        [JsonPropertyName("linode_bucket")]
+        public string LinodeBucket
+        {
+            get { return (string)attributes["linode_bucket"]; }
+            set { attributes["linode_bucket"] = value; }
+        }
+
+        /// <summary>
+        /// Linode Access Key.
+        /// </summary>
+        [JsonPropertyName("linode_access_key")]
+        public string LinodeAccessKey
+        {
+            get { return (string)attributes["linode_access_key"]; }
+            set { attributes["linode_access_key"] = value; }
+        }
+
+        /// <summary>
+        /// Linode region
+        /// </summary>
+        [JsonPropertyName("linode_region")]
+        public string LinodeRegion
+        {
+            get { return (string)attributes["linode_region"]; }
+            set { attributes["linode_region"] = value; }
+        }
+
+        /// <summary>
         /// AWS secret key.
         /// </summary>
         [JsonPropertyName("aws_secret_key")]
@@ -999,6 +1045,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Linode secret key
+        /// </summary>
+        [JsonPropertyName("linode_secret_key")]
+        public string LinodeSecretKey
+        {
+            get { return (string)attributes["linode_secret_key"]; }
+            set { attributes["linode_secret_key"] = value; }
+        }
+
+        /// <summary>
         /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
         ///
         /// Parameters:
@@ -1143,6 +1199,10 @@ namespace FilesCom.Models
         ///   cloudflare_bucket - string - Cloudflare Bucket name
         ///   cloudflare_endpoint - string - Cloudflare endpoint
         ///   dropbox_teams - boolean - List Team folders in root
+        ///   linode_access_key - string - Linode Access Key.
+        ///   linode_secret_key - string - Linode secret key
+        ///   linode_bucket - string - Linode Bucket name
+        ///   linode_region - string - Linode region
         /// </summary>
         public async Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
@@ -1393,6 +1453,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
             }
+            if (parameters.ContainsKey("linode_access_key") && !(parameters["linode_access_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_access_key must be of type string", "parameters[\"linode_access_key\"]");
+            }
+            if (parameters.ContainsKey("linode_secret_key") && !(parameters["linode_secret_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_secret_key must be of type string", "parameters[\"linode_secret_key\"]");
+            }
+            if (parameters.ContainsKey("linode_bucket") && !(parameters["linode_bucket"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_bucket must be of type string", "parameters[\"linode_bucket\"]");
+            }
+            if (parameters.ContainsKey("linode_region") && !(parameters["linode_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -1610,6 +1686,10 @@ namespace FilesCom.Models
         ///   cloudflare_bucket - string - Cloudflare Bucket name
         ///   cloudflare_endpoint - string - Cloudflare endpoint
         ///   dropbox_teams - boolean - List Team folders in root
+        ///   linode_access_key - string - Linode Access Key.
+        ///   linode_secret_key - string - Linode secret key
+        ///   linode_bucket - string - Linode Bucket name
+        ///   linode_region - string - Linode region
         /// </summary>
         public static async Task<RemoteServer> Create(
 
@@ -1856,6 +1936,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
             }
+            if (parameters.ContainsKey("linode_access_key") && !(parameters["linode_access_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_access_key must be of type string", "parameters[\"linode_access_key\"]");
+            }
+            if (parameters.ContainsKey("linode_secret_key") && !(parameters["linode_secret_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_secret_key must be of type string", "parameters[\"linode_secret_key\"]");
+            }
+            if (parameters.ContainsKey("linode_bucket") && !(parameters["linode_bucket"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_bucket must be of type string", "parameters[\"linode_bucket\"]");
+            }
+            if (parameters.ContainsKey("linode_region") && !(parameters["linode_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
+            }
 
             string responseJson = await FilesClient.SendRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -2009,6 +2105,10 @@ namespace FilesCom.Models
         ///   cloudflare_bucket - string - Cloudflare Bucket name
         ///   cloudflare_endpoint - string - Cloudflare endpoint
         ///   dropbox_teams - boolean - List Team folders in root
+        ///   linode_access_key - string - Linode Access Key.
+        ///   linode_secret_key - string - Linode secret key
+        ///   linode_bucket - string - Linode Bucket name
+        ///   linode_region - string - Linode region
         /// </summary>
         public static async Task<RemoteServer> Update(
             Nullable<Int64> id,
@@ -2259,6 +2359,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
+            }
+            if (parameters.ContainsKey("linode_access_key") && !(parameters["linode_access_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_access_key must be of type string", "parameters[\"linode_access_key\"]");
+            }
+            if (parameters.ContainsKey("linode_secret_key") && !(parameters["linode_secret_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_secret_key must be of type string", "parameters[\"linode_secret_key\"]");
+            }
+            if (parameters.ContainsKey("linode_bucket") && !(parameters["linode_bucket"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_bucket must be of type string", "parameters[\"linode_bucket\"]");
+            }
+            if (parameters.ContainsKey("linode_region") && !(parameters["linode_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
             }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
