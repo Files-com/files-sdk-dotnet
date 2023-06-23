@@ -383,6 +383,31 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Manually run automation
+        /// </summary>
+        public async Task ManualRun(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options);
+        }
+
+
+        /// <summary>
         /// Parameters:
         ///   source - string - Source Path
         ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
@@ -770,6 +795,32 @@ namespace FilesCom.Models
             string responseJson = await FilesClient.SendRequest($"/automations", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
+        }
+
+
+        /// <summary>
+        /// Manually run automation
+        /// </summary>
+        public static async Task ManualRun(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            parameters.Add("id", id);
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 

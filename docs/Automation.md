@@ -150,6 +150,23 @@ Task<Automation> Automation.Create(
 
 ---
 
+## Manually run automation
+
+```
+Task Automation.ManualRun(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation ID.
+
+
+---
+
 ## Update Automation
 
 ```
@@ -194,6 +211,24 @@ Task Automation.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation ID.
+
+
+---
+
+## Manually run automation
+
+```
+var Automation = Automation.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+Automation.ManualRun
 ```
 
 ### Parameters
