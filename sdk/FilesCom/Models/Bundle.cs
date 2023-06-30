@@ -64,6 +64,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("require_share_recipient", null);
             }
+            if (!this.attributes.ContainsKey("require_logout"))
+            {
+                this.attributes.Add("require_logout", null);
+            }
             if (!this.attributes.ContainsKey("clickwrap_body"))
             {
                 this.attributes.Add("clickwrap_body", null);
@@ -278,6 +282,16 @@ namespace FilesCom.Models
         {
             get { return (bool)attributes["require_share_recipient"]; }
             set { attributes["require_share_recipient"] = value; }
+        }
+
+        /// <summary>
+        /// If true, we will hide the 'Remember Me' box on the Bundle registration page, requiring that the user logout and log back in every time they visit the page.
+        /// </summary>
+        [JsonPropertyName("require_logout")]
+        public bool RequireLogout
+        {
+            get { return (bool)attributes["require_logout"]; }
+            set { attributes["require_logout"] = value; }
         }
 
         /// <summary>

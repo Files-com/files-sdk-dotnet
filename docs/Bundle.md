@@ -13,6 +13,7 @@
   "preview_only": true,
   "require_registration": true,
   "require_share_recipient": true,
+  "require_logout": true,
   "clickwrap_body": "[Legal text]",
   "form_field_set": {
     "id": 1,
@@ -65,6 +66,7 @@
 * `preview_only` / `PreviewOnly`  (bool): DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
 * `require_registration` / `RequireRegistration`  (bool): Show a registration page that captures the downloader's name and email address?
 * `require_share_recipient` / `RequireShareRecipient`  (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+* `require_logout` / `RequireLogout`  (bool): If true, we will hide the 'Remember Me' box on the Bundle registration page, requiring that the user logout and log back in every time they visit the page.
 * `clickwrap_body` / `ClickwrapBody`  (string): Legal text that must be agreed to prior to accessing Bundle.
 * `form_field_set` / `FormFieldSet`  (FormFieldSet): Custom Form to use
 * `skip_name` / `SkipName`  (bool): BundleRegistrations can be saved without providing name?
