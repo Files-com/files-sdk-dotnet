@@ -32,6 +32,26 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("code", null);
             }
+            if (!this.attributes.ContainsKey("color_left"))
+            {
+                this.attributes.Add("color_left", null);
+            }
+            if (!this.attributes.ContainsKey("color_link"))
+            {
+                this.attributes.Add("color_link", null);
+            }
+            if (!this.attributes.ContainsKey("color_text"))
+            {
+                this.attributes.Add("color_text", null);
+            }
+            if (!this.attributes.ContainsKey("color_top"))
+            {
+                this.attributes.Add("color_top", null);
+            }
+            if (!this.attributes.ContainsKey("color_top_text"))
+            {
+                this.attributes.Add("color_top_text", null);
+            }
             if (!this.attributes.ContainsKey("url"))
             {
                 this.attributes.Add("url", null);
@@ -202,6 +222,56 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["code"]; }
             set { attributes["code"] = value; }
+        }
+
+        /// <summary>
+        /// Page link and button color
+        /// </summary>
+        [JsonPropertyName("color_left")]
+        public string ColorLeft
+        {
+            get { return (string)attributes["color_left"]; }
+            set { attributes["color_left"] = value; }
+        }
+
+        /// <summary>
+        /// Top bar link color
+        /// </summary>
+        [JsonPropertyName("color_link")]
+        public string ColorLink
+        {
+            get { return (string)attributes["color_link"]; }
+            set { attributes["color_link"] = value; }
+        }
+
+        /// <summary>
+        /// Page link and button color
+        /// </summary>
+        [JsonPropertyName("color_text")]
+        public string ColorText
+        {
+            get { return (string)attributes["color_text"]; }
+            set { attributes["color_text"] = value; }
+        }
+
+        /// <summary>
+        /// Top bar background color
+        /// </summary>
+        [JsonPropertyName("color_top")]
+        public string ColorTop
+        {
+            get { return (string)attributes["color_top"]; }
+            set { attributes["color_top"] = value; }
+        }
+
+        /// <summary>
+        /// Top bar text color
+        /// </summary>
+        [JsonPropertyName("color_top_text")]
+        public string ColorTopText
+        {
+            get { return (string)attributes["color_top_text"]; }
+            set { attributes["color_top_text"] = value; }
         }
 
         /// <summary>

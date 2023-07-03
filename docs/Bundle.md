@@ -5,6 +5,11 @@
 ```
 {
   "code": "abc123",
+  "color_left": "#0066a7",
+  "color_link": "#d34f5d",
+  "color_text": "#0066a7",
+  "color_top": "#000000",
+  "color_top_text": "#ffffff",
   "url": "https://subdomain.files.com/f/12345678",
   "description": "The public description of the bundle.",
   "expires_at": "2000-01-01T01:00:00Z",
@@ -58,6 +63,11 @@
 ```
 
 * `code` / `Code`  (string): Bundle code.  This code forms the end part of the Public URL.
+* `color_left` / `ColorLeft`  (string): Page link and button color
+* `color_link` / `ColorLink`  (string): Top bar link color
+* `color_text` / `ColorText`  (string): Page link and button color
+* `color_top` / `ColorTop`  (string): Top bar background color
+* `color_top_text` / `ColorTopText`  (string): Top bar text color
 * `url` / `Url`  (string): Public URL of Share Link
 * `description` / `Description`  (string): Public description
 * `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Bundle expiration date/time
