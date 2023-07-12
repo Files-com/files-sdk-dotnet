@@ -40,9 +40,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sender", null);
             }
+            if (!this.attributes.ContainsKey("sender_name"))
+            {
+                this.attributes.Add("sender_name", null);
+            }
             if (!this.attributes.ContainsKey("status"))
             {
                 this.attributes.Add("status", null);
+            }
+            if (!this.attributes.ContainsKey("body"))
+            {
+                this.attributes.Add("body", null);
             }
             if (!this.attributes.ContainsKey("message"))
             {
@@ -104,6 +112,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Sender name
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sender_name")]
+        public string SenderName
+        {
+            get { return (string)attributes["sender_name"]; }
+            private set { attributes["sender_name"] = value; }
+        }
+
+        /// <summary>
         /// Status of the message
         /// </summary>
         [JsonInclude]
@@ -112,6 +131,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
+        }
+
+        /// <summary>
+        /// Body of the email
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("body")]
+        public string Body
+        {
+            get { return (string)attributes["body"]; }
+            private set { attributes["body"] = value; }
         }
 
         /// <summary>
