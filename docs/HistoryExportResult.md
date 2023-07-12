@@ -6,7 +6,7 @@
 {
   "id": 1,
   "created_at": 1,
-  "created_at_iso8601": 1,
+  "created_at_iso8601": "example",
   "user_id": 1,
   "file_id": 1,
   "parent_id": 1,
@@ -33,7 +33,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Action ID
 * `created_at` / `CreatedAt`  (Nullable<Int64>): When the action happened
-* `created_at_iso8601` / `CreatedAtIso8601`  (Nullable<Int64>): When the action happened, in ISO8601 format.
+* `created_at_iso8601` / `CreatedAtIso8601`  (string): When the action happened, in ISO8601 format.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `file_id` / `FileId`  (Nullable<Int64>): File ID related to the action
 * `parent_id` / `ParentId`  (Nullable<Int64>): ID of the parent folder

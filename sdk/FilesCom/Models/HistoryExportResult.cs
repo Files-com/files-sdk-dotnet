@@ -169,9 +169,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("created_at_iso8601")]
-        public Nullable<Int64> CreatedAtIso8601
+        public string CreatedAtIso8601
         {
-            get { return (Nullable<Int64>)attributes["created_at_iso8601"]; }
+            get { return (string)attributes["created_at_iso8601"]; }
             private set { attributes["created_at_iso8601"] = value; }
         }
 
