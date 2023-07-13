@@ -108,6 +108,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("target_expires_at", null);
             }
+            if (!this.attributes.ContainsKey("target_expires_at_iso8601"))
+            {
+                this.attributes.Add("target_expires_at_iso8601", null);
+            }
             if (!this.attributes.ContainsKey("target_permission_set"))
             {
                 this.attributes.Add("target_permission_set", null);
@@ -352,7 +356,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If searching for Histories about API keys, this is when the API key will expire
+        /// If searching for Histories about API keys, this is when the API key will expire. Represented as a Unix timestamp.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("target_expires_at")]
@@ -360,6 +364,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["target_expires_at"]; }
             private set { attributes["target_expires_at"] = value; }
+        }
+
+        /// <summary>
+        /// If searching for Histories about API keys, this is when the API key will expire. Represented in ISO8601 format.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("target_expires_at_iso8601")]
+        public string TargetExpiresAtIso8601
+        {
+            get { return (string)attributes["target_expires_at_iso8601"]; }
+            private set { attributes["target_expires_at_iso8601"] = value; }
         }
 
         /// <summary>
