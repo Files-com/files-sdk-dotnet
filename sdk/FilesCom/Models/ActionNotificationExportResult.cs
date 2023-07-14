@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -46,7 +47,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("success"))
             {
-                this.attributes.Add("success", null);
+                this.attributes.Add("success", false);
             }
             if (!this.attributes.ContainsKey("request_headers"))
             {
@@ -134,10 +135,11 @@ namespace FilesCom.Models
         /// `true` if the webhook succeeded by receiving a 200 or 204 response.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("success")]
         public bool Success
         {
-            get { return (bool)attributes["success"]; }
+            get { return attributes["success"] == null ? false : (bool)attributes["success"]; }
             private set { attributes["success"] = value; }
         }
 

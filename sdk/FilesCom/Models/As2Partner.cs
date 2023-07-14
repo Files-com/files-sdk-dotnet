@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -50,7 +51,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("enable_dedicated_ips"))
             {
-                this.attributes.Add("enable_dedicated_ips", null);
+                this.attributes.Add("enable_dedicated_ips", false);
             }
             if (!this.attributes.ContainsKey("hex_public_certificate_serial"))
             {
@@ -155,10 +156,11 @@ namespace FilesCom.Models
         /// <summary>
         /// `true` if remote server only accepts connections from dedicated IPs
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("enable_dedicated_ips")]
         public bool EnableDedicatedIps
         {
-            get { return (bool)attributes["enable_dedicated_ips"]; }
+            get { return attributes["enable_dedicated_ips"] == null ? false : (bool)attributes["enable_dedicated_ips"]; }
             set { attributes["enable_dedicated_ips"] = value; }
         }
 

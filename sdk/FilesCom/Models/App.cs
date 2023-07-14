@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -90,7 +91,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("featured"))
             {
-                this.attributes.Add("featured", null);
+                this.attributes.Add("featured", false);
             }
         }
 
@@ -279,10 +280,11 @@ namespace FilesCom.Models
         /// Is featured on the App listing?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("featured")]
         public bool Featured
         {
-            get { return (bool)attributes["featured"]; }
+            get { return attributes["featured"] == null ? false : (bool)attributes["featured"]; }
             private set { attributes["featured"] = value; }
         }
 

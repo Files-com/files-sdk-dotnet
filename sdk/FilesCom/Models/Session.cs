@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,11 +39,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("read_only"))
             {
-                this.attributes.Add("read_only", null);
+                this.attributes.Add("read_only", false);
             }
             if (!this.attributes.ContainsKey("sftp_insecure_ciphers"))
             {
-                this.attributes.Add("sftp_insecure_ciphers", null);
+                this.attributes.Add("sftp_insecure_ciphers", false);
             }
             if (!this.attributes.ContainsKey("username"))
             {
@@ -101,20 +102,22 @@ namespace FilesCom.Models
         /// <summary>
         /// Is this session read only?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("read_only")]
         public bool ReadOnly
         {
-            get { return (bool)attributes["read_only"]; }
+            get { return attributes["read_only"] == null ? false : (bool)attributes["read_only"]; }
             set { attributes["read_only"] = value; }
         }
 
         /// <summary>
         /// Are insecure SFTP ciphers allowed for this user? (If this is set to true, the site administrator has signaled that it is ok to use less secure SSH ciphers for this user.)
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("sftp_insecure_ciphers")]
         public bool SftpInsecureCiphers
         {
-            get { return (bool)attributes["sftp_insecure_ciphers"]; }
+            get { return attributes["sftp_insecure_ciphers"] == null ? false : (bool)attributes["sftp_insecure_ciphers"]; }
             set { attributes["sftp_insecure_ciphers"] = value; }
         }
 

@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -66,7 +67,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("password_protected"))
             {
-                this.attributes.Add("password_protected", null);
+                this.attributes.Add("password_protected", false);
             }
             if (!this.attributes.ContainsKey("permissions"))
             {
@@ -74,19 +75,19 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("preview_only"))
             {
-                this.attributes.Add("preview_only", null);
+                this.attributes.Add("preview_only", false);
             }
             if (!this.attributes.ContainsKey("require_registration"))
             {
-                this.attributes.Add("require_registration", null);
+                this.attributes.Add("require_registration", false);
             }
             if (!this.attributes.ContainsKey("require_share_recipient"))
             {
-                this.attributes.Add("require_share_recipient", null);
+                this.attributes.Add("require_share_recipient", false);
             }
             if (!this.attributes.ContainsKey("require_logout"))
             {
-                this.attributes.Add("require_logout", null);
+                this.attributes.Add("require_logout", false);
             }
             if (!this.attributes.ContainsKey("clickwrap_body"))
             {
@@ -98,15 +99,15 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("skip_name"))
             {
-                this.attributes.Add("skip_name", null);
+                this.attributes.Add("skip_name", false);
             }
             if (!this.attributes.ContainsKey("skip_email"))
             {
-                this.attributes.Add("skip_email", null);
+                this.attributes.Add("skip_email", false);
             }
             if (!this.attributes.ContainsKey("skip_company"))
             {
-                this.attributes.Add("skip_company", null);
+                this.attributes.Add("skip_company", false);
             }
             if (!this.attributes.ContainsKey("id"))
             {
@@ -118,7 +119,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("dont_separate_submissions_by_folder"))
             {
-                this.attributes.Add("dont_separate_submissions_by_folder", null);
+                this.attributes.Add("dont_separate_submissions_by_folder", false);
             }
             if (!this.attributes.ContainsKey("max_uses"))
             {
@@ -134,7 +135,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("send_email_receipt_to_uploader"))
             {
-                this.attributes.Add("send_email_receipt_to_uploader", null);
+                this.attributes.Add("send_email_receipt_to_uploader", false);
             }
             if (!this.attributes.ContainsKey("snapshot_id"))
             {
@@ -166,7 +167,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("has_inbox"))
             {
-                this.attributes.Add("has_inbox", null);
+                this.attributes.Add("has_inbox", false);
             }
             if (!this.attributes.ContainsKey("paths"))
             {
@@ -182,11 +183,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("create_snapshot"))
             {
-                this.attributes.Add("create_snapshot", null);
+                this.attributes.Add("create_snapshot", false);
             }
             if (!this.attributes.ContainsKey("finalize_snapshot"))
             {
-                this.attributes.Add("finalize_snapshot", null);
+                this.attributes.Add("finalize_snapshot", false);
             }
             if (!this.attributes.ContainsKey("watermark_attachment_file"))
             {
@@ -194,7 +195,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("watermark_attachment_delete"))
             {
-                this.attributes.Add("watermark_attachment_delete", null);
+                this.attributes.Add("watermark_attachment_delete", false);
             }
         }
 
@@ -307,10 +308,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Is this bundle password protected?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_protected")]
         public bool PasswordProtected
         {
-            get { return (bool)attributes["password_protected"]; }
+            get { return attributes["password_protected"] == null ? false : (bool)attributes["password_protected"]; }
             set { attributes["password_protected"] = value; }
         }
 
@@ -327,40 +329,44 @@ namespace FilesCom.Models
         /// <summary>
         /// DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("preview_only")]
         public bool PreviewOnly
         {
-            get { return (bool)attributes["preview_only"]; }
+            get { return attributes["preview_only"] == null ? false : (bool)attributes["preview_only"]; }
             set { attributes["preview_only"] = value; }
         }
 
         /// <summary>
         /// Show a registration page that captures the downloader's name and email address?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("require_registration")]
         public bool RequireRegistration
         {
-            get { return (bool)attributes["require_registration"]; }
+            get { return attributes["require_registration"] == null ? false : (bool)attributes["require_registration"]; }
             set { attributes["require_registration"] = value; }
         }
 
         /// <summary>
         /// Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("require_share_recipient")]
         public bool RequireShareRecipient
         {
-            get { return (bool)attributes["require_share_recipient"]; }
+            get { return attributes["require_share_recipient"] == null ? false : (bool)attributes["require_share_recipient"]; }
             set { attributes["require_share_recipient"] = value; }
         }
 
         /// <summary>
         /// If true, we will hide the 'Remember Me' box on the Bundle registration page, requiring that the user logout and log back in every time they visit the page.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("require_logout")]
         public bool RequireLogout
         {
-            get { return (bool)attributes["require_logout"]; }
+            get { return attributes["require_logout"] == null ? false : (bool)attributes["require_logout"]; }
             set { attributes["require_logout"] = value; }
         }
 
@@ -387,30 +393,33 @@ namespace FilesCom.Models
         /// <summary>
         /// BundleRegistrations can be saved without providing name?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("skip_name")]
         public bool SkipName
         {
-            get { return (bool)attributes["skip_name"]; }
+            get { return attributes["skip_name"] == null ? false : (bool)attributes["skip_name"]; }
             set { attributes["skip_name"] = value; }
         }
 
         /// <summary>
         /// BundleRegistrations can be saved without providing email?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("skip_email")]
         public bool SkipEmail
         {
-            get { return (bool)attributes["skip_email"]; }
+            get { return attributes["skip_email"] == null ? false : (bool)attributes["skip_email"]; }
             set { attributes["skip_email"] = value; }
         }
 
         /// <summary>
         /// BundleRegistrations can be saved without providing company?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("skip_company")]
         public bool SkipCompany
         {
-            get { return (bool)attributes["skip_company"]; }
+            get { return attributes["skip_company"] == null ? false : (bool)attributes["skip_company"]; }
             set { attributes["skip_company"] = value; }
         }
 
@@ -438,10 +447,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("dont_separate_submissions_by_folder")]
         public bool DontSeparateSubmissionsByFolder
         {
-            get { return (bool)attributes["dont_separate_submissions_by_folder"]; }
+            get { return attributes["dont_separate_submissions_by_folder"] == null ? false : (bool)attributes["dont_separate_submissions_by_folder"]; }
             set { attributes["dont_separate_submissions_by_folder"] = value; }
         }
 
@@ -478,10 +488,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Send delivery receipt to the uploader. Note: For writable share only
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("send_email_receipt_to_uploader")]
         public bool SendEmailReceiptToUploader
         {
-            get { return (bool)attributes["send_email_receipt_to_uploader"]; }
+            get { return attributes["send_email_receipt_to_uploader"] == null ? false : (bool)attributes["send_email_receipt_to_uploader"]; }
             set { attributes["send_email_receipt_to_uploader"] = value; }
         }
 
@@ -558,10 +569,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Does this bundle have an associated inbox?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("has_inbox")]
         public bool HasInbox
         {
-            get { return (bool)attributes["has_inbox"]; }
+            get { return attributes["has_inbox"] == null ? false : (bool)attributes["has_inbox"]; }
             set { attributes["has_inbox"] = value; }
         }
 
@@ -598,20 +610,22 @@ namespace FilesCom.Models
         /// <summary>
         /// If true, create a snapshot of this bundle's contents.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("create_snapshot")]
         public bool CreateSnapshot
         {
-            get { return (bool)attributes["create_snapshot"]; }
+            get { return attributes["create_snapshot"] == null ? false : (bool)attributes["create_snapshot"]; }
             set { attributes["create_snapshot"] = value; }
         }
 
         /// <summary>
         /// If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("finalize_snapshot")]
         public bool FinalizeSnapshot
         {
-            get { return (bool)attributes["finalize_snapshot"]; }
+            get { return attributes["finalize_snapshot"] == null ? false : (bool)attributes["finalize_snapshot"]; }
             set { attributes["finalize_snapshot"] = value; }
         }
 
@@ -628,10 +642,11 @@ namespace FilesCom.Models
         /// <summary>
         /// If true, will delete the file stored in watermark_attachment
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("watermark_attachment_delete")]
         public bool WatermarkAttachmentDelete
         {
-            get { return (bool)attributes["watermark_attachment_delete"]; }
+            get { return attributes["watermark_attachment_delete"] == null ? false : (bool)attributes["watermark_attachment_delete"]; }
             set { attributes["watermark_attachment_delete"] = value; }
         }
 

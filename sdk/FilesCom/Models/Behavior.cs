@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -62,7 +63,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("attachment_delete"))
             {
-                this.attributes.Add("attachment_delete", null);
+                this.attributes.Add("attachment_delete", false);
             }
         }
 
@@ -165,10 +166,11 @@ namespace FilesCom.Models
         /// <summary>
         /// If true, will delete the file stored in attachment
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("attachment_delete")]
         public bool AttachmentDelete
         {
-            get { return (bool)attributes["attachment_delete"]; }
+            get { return attributes["attachment_delete"] == null ? false : (bool)attributes["attachment_delete"]; }
             set { attributes["attachment_delete"] = value; }
         }
 

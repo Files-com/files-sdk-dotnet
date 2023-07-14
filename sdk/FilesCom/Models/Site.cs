@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -34,27 +35,27 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("allowed_2fa_method_sms"))
             {
-                this.attributes.Add("allowed_2fa_method_sms", null);
+                this.attributes.Add("allowed_2fa_method_sms", false);
             }
             if (!this.attributes.ContainsKey("allowed_2fa_method_totp"))
             {
-                this.attributes.Add("allowed_2fa_method_totp", null);
+                this.attributes.Add("allowed_2fa_method_totp", false);
             }
             if (!this.attributes.ContainsKey("allowed_2fa_method_u2f"))
             {
-                this.attributes.Add("allowed_2fa_method_u2f", null);
+                this.attributes.Add("allowed_2fa_method_u2f", false);
             }
             if (!this.attributes.ContainsKey("allowed_2fa_method_webauthn"))
             {
-                this.attributes.Add("allowed_2fa_method_webauthn", null);
+                this.attributes.Add("allowed_2fa_method_webauthn", false);
             }
             if (!this.attributes.ContainsKey("allowed_2fa_method_yubi"))
             {
-                this.attributes.Add("allowed_2fa_method_yubi", null);
+                this.attributes.Add("allowed_2fa_method_yubi", false);
             }
             if (!this.attributes.ContainsKey("allowed_2fa_method_bypass_for_ftp_sftp_dav"))
             {
-                this.attributes.Add("allowed_2fa_method_bypass_for_ftp_sftp_dav", null);
+                this.attributes.Add("allowed_2fa_method_bypass_for_ftp_sftp_dav", false);
             }
             if (!this.attributes.ContainsKey("admin_user_id"))
             {
@@ -62,7 +63,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("allow_bundle_names"))
             {
-                this.attributes.Add("allow_bundle_names", null);
+                this.attributes.Add("allow_bundle_names", false);
             }
             if (!this.attributes.ContainsKey("allowed_countries"))
             {
@@ -74,7 +75,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ask_about_overwrites"))
             {
-                this.attributes.Add("ask_about_overwrites", null);
+                this.attributes.Add("ask_about_overwrites", false);
             }
             if (!this.attributes.ContainsKey("bundle_activity_notifications"))
             {
@@ -86,7 +87,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("bundle_password_required"))
             {
-                this.attributes.Add("bundle_password_required", null);
+                this.attributes.Add("bundle_password_required", false);
             }
             if (!this.attributes.ContainsKey("bundle_registration_notifications"))
             {
@@ -94,7 +95,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("bundle_require_share_recipient"))
             {
-                this.attributes.Add("bundle_require_share_recipient", null);
+                this.attributes.Add("bundle_require_share_recipient", false);
             }
             if (!this.attributes.ContainsKey("bundle_upload_receipt_notifications"))
             {
@@ -110,7 +111,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("uploads_via_email_authentication"))
             {
-                this.attributes.Add("uploads_via_email_authentication", null);
+                this.attributes.Add("uploads_via_email_authentication", false);
             }
             if (!this.attributes.ContainsKey("color2_left"))
             {
@@ -146,7 +147,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("custom_namespace"))
             {
-                this.attributes.Add("custom_namespace", null);
+                this.attributes.Add("custom_namespace", false);
             }
             if (!this.attributes.ContainsKey("days_to_retain_backups"))
             {
@@ -158,11 +159,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("desktop_app"))
             {
-                this.attributes.Add("desktop_app", null);
+                this.attributes.Add("desktop_app", false);
             }
             if (!this.attributes.ContainsKey("desktop_app_session_ip_pinning"))
             {
-                this.attributes.Add("desktop_app_session_ip_pinning", null);
+                this.attributes.Add("desktop_app_session_ip_pinning", false);
             }
             if (!this.attributes.ContainsKey("desktop_app_session_lifetime"))
             {
@@ -170,11 +171,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("mobile_app"))
             {
-                this.attributes.Add("mobile_app", null);
+                this.attributes.Add("mobile_app", false);
             }
             if (!this.attributes.ContainsKey("mobile_app_session_ip_pinning"))
             {
-                this.attributes.Add("mobile_app_session_ip_pinning", null);
+                this.attributes.Add("mobile_app_session_ip_pinning", false);
             }
             if (!this.attributes.ContainsKey("mobile_app_session_lifetime"))
             {
@@ -186,15 +187,15 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("disable_files_certificate_generation"))
             {
-                this.attributes.Add("disable_files_certificate_generation", null);
+                this.attributes.Add("disable_files_certificate_generation", false);
             }
             if (!this.attributes.ContainsKey("disable_notifications"))
             {
-                this.attributes.Add("disable_notifications", null);
+                this.attributes.Add("disable_notifications", false);
             }
             if (!this.attributes.ContainsKey("disable_password_reset"))
             {
-                this.attributes.Add("disable_password_reset", null);
+                this.attributes.Add("disable_password_reset", false);
             }
             if (!this.attributes.ContainsKey("domain"))
             {
@@ -202,7 +203,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("domain_hsts_header"))
             {
-                this.attributes.Add("domain_hsts_header", null);
+                this.attributes.Add("domain_hsts_header", false);
             }
             if (!this.attributes.ContainsKey("domain_letsencrypt_chain"))
             {
@@ -214,7 +215,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ftp_enabled"))
             {
-                this.attributes.Add("ftp_enabled", null);
+                this.attributes.Add("ftp_enabled", false);
             }
             if (!this.attributes.ContainsKey("reply_to_email"))
             {
@@ -222,19 +223,19 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("non_sso_groups_allowed"))
             {
-                this.attributes.Add("non_sso_groups_allowed", null);
+                this.attributes.Add("non_sso_groups_allowed", false);
             }
             if (!this.attributes.ContainsKey("non_sso_users_allowed"))
             {
-                this.attributes.Add("non_sso_users_allowed", null);
+                this.attributes.Add("non_sso_users_allowed", false);
             }
             if (!this.attributes.ContainsKey("folder_permissions_groups_only"))
             {
-                this.attributes.Add("folder_permissions_groups_only", null);
+                this.attributes.Add("folder_permissions_groups_only", false);
             }
             if (!this.attributes.ContainsKey("hipaa"))
             {
-                this.attributes.Add("hipaa", null);
+                this.attributes.Add("hipaa", false);
             }
             if (!this.attributes.ContainsKey("icon128"))
             {
@@ -258,7 +259,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("include_password_in_welcome_email"))
             {
-                this.attributes.Add("include_password_in_welcome_email", null);
+                this.attributes.Add("include_password_in_welcome_email", false);
             }
             if (!this.attributes.ContainsKey("language"))
             {
@@ -274,7 +275,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ldap_enabled"))
             {
-                this.attributes.Add("ldap_enabled", null);
+                this.attributes.Add("ldap_enabled", false);
             }
             if (!this.attributes.ContainsKey("ldap_group_action"))
             {
@@ -306,7 +307,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ldap_secure"))
             {
-                this.attributes.Add("ldap_secure", null);
+                this.attributes.Add("ldap_secure", false);
             }
             if (!this.attributes.ContainsKey("ldap_type"))
             {
@@ -346,11 +347,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("motd_use_for_ftp"))
             {
-                this.attributes.Add("motd_use_for_ftp", null);
+                this.attributes.Add("motd_use_for_ftp", false);
             }
             if (!this.attributes.ContainsKey("motd_use_for_sftp"))
             {
-                this.attributes.Add("motd_use_for_sftp", null);
+                this.attributes.Add("motd_use_for_sftp", false);
             }
             if (!this.attributes.ContainsKey("next_billing_amount"))
             {
@@ -362,7 +363,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("office_integration_available"))
             {
-                this.attributes.Add("office_integration_available", null);
+                this.attributes.Add("office_integration_available", false);
             }
             if (!this.attributes.ContainsKey("office_integration_type"))
             {
@@ -374,11 +375,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("opt_out_global"))
             {
-                this.attributes.Add("opt_out_global", null);
+                this.attributes.Add("opt_out_global", false);
             }
             if (!this.attributes.ContainsKey("overdue"))
             {
-                this.attributes.Add("overdue", null);
+                this.attributes.Add("overdue", false);
             }
             if (!this.attributes.ContainsKey("password_min_length"))
             {
@@ -386,27 +387,27 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("password_require_letter"))
             {
-                this.attributes.Add("password_require_letter", null);
+                this.attributes.Add("password_require_letter", false);
             }
             if (!this.attributes.ContainsKey("password_require_mixed"))
             {
-                this.attributes.Add("password_require_mixed", null);
+                this.attributes.Add("password_require_mixed", false);
             }
             if (!this.attributes.ContainsKey("password_require_number"))
             {
-                this.attributes.Add("password_require_number", null);
+                this.attributes.Add("password_require_number", false);
             }
             if (!this.attributes.ContainsKey("password_require_special"))
             {
-                this.attributes.Add("password_require_special", null);
+                this.attributes.Add("password_require_special", false);
             }
             if (!this.attributes.ContainsKey("password_require_unbreached"))
             {
-                this.attributes.Add("password_require_unbreached", null);
+                this.attributes.Add("password_require_unbreached", false);
             }
             if (!this.attributes.ContainsKey("password_requirements_apply_to_bundles"))
             {
-                this.attributes.Add("password_requirements_apply_to_bundles", null);
+                this.attributes.Add("password_requirements_apply_to_bundles", false);
             }
             if (!this.attributes.ContainsKey("password_validity_days"))
             {
@@ -418,15 +419,15 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("pin_all_remote_servers_to_site_region"))
             {
-                this.attributes.Add("pin_all_remote_servers_to_site_region", null);
+                this.attributes.Add("pin_all_remote_servers_to_site_region", false);
             }
             if (!this.attributes.ContainsKey("prevent_root_permissions_for_non_site_admins"))
             {
-                this.attributes.Add("prevent_root_permissions_for_non_site_admins", null);
+                this.attributes.Add("prevent_root_permissions_for_non_site_admins", false);
             }
             if (!this.attributes.ContainsKey("require_2fa"))
             {
-                this.attributes.Add("require_2fa", null);
+                this.attributes.Add("require_2fa", false);
             }
             if (!this.attributes.ContainsKey("require_2fa_stop_time"))
             {
@@ -438,7 +439,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("require_logout_from_bundles_and_inboxes"))
             {
-                this.attributes.Add("require_logout_from_bundles_and_inboxes", null);
+                this.attributes.Add("require_logout_from_bundles_and_inboxes", false);
             }
             if (!this.attributes.ContainsKey("session"))
             {
@@ -446,11 +447,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("session_pinned_by_ip"))
             {
-                this.attributes.Add("session_pinned_by_ip", null);
+                this.attributes.Add("session_pinned_by_ip", false);
             }
             if (!this.attributes.ContainsKey("sftp_enabled"))
             {
-                this.attributes.Add("sftp_enabled", null);
+                this.attributes.Add("sftp_enabled", false);
             }
             if (!this.attributes.ContainsKey("sftp_host_key_type"))
             {
@@ -462,19 +463,19 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("sftp_insecure_ciphers"))
             {
-                this.attributes.Add("sftp_insecure_ciphers", null);
+                this.attributes.Add("sftp_insecure_ciphers", false);
             }
             if (!this.attributes.ContainsKey("sftp_user_root_enabled"))
             {
-                this.attributes.Add("sftp_user_root_enabled", null);
+                this.attributes.Add("sftp_user_root_enabled", false);
             }
             if (!this.attributes.ContainsKey("sharing_enabled"))
             {
-                this.attributes.Add("sharing_enabled", null);
+                this.attributes.Add("sharing_enabled", false);
             }
             if (!this.attributes.ContainsKey("show_request_access_link"))
             {
-                this.attributes.Add("show_request_access_link", null);
+                this.attributes.Add("show_request_access_link", false);
             }
             if (!this.attributes.ContainsKey("site_footer"))
             {
@@ -514,7 +515,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ssl_required"))
             {
-                this.attributes.Add("ssl_required", null);
+                this.attributes.Add("ssl_required", false);
             }
             if (!this.attributes.ContainsKey("subdomain"))
             {
@@ -526,7 +527,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("tls_disabled"))
             {
-                this.attributes.Add("tls_disabled", null);
+                this.attributes.Add("tls_disabled", false);
             }
             if (!this.attributes.ContainsKey("trial_days_left"))
             {
@@ -542,7 +543,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("use_provided_modified_at"))
             {
-                this.attributes.Add("use_provided_modified_at", null);
+                this.attributes.Add("use_provided_modified_at", false);
             }
             if (!this.attributes.ContainsKey("user"))
             {
@@ -550,7 +551,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("user_lockout"))
             {
-                this.attributes.Add("user_lockout", null);
+                this.attributes.Add("user_lockout", false);
             }
             if (!this.attributes.ContainsKey("user_lockout_lock_period"))
             {
@@ -566,11 +567,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("user_requests_enabled"))
             {
-                this.attributes.Add("user_requests_enabled", null);
+                this.attributes.Add("user_requests_enabled", false);
             }
             if (!this.attributes.ContainsKey("user_requests_notify_admins"))
             {
-                this.attributes.Add("user_requests_notify_admins", null);
+                this.attributes.Add("user_requests_notify_admins", false);
             }
             if (!this.attributes.ContainsKey("welcome_custom_text"))
             {
@@ -586,7 +587,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("welcome_email_enabled"))
             {
-                this.attributes.Add("welcome_email_enabled", null);
+                this.attributes.Add("welcome_email_enabled", false);
             }
             if (!this.attributes.ContainsKey("welcome_screen"))
             {
@@ -594,7 +595,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("windows_mode_ftp"))
             {
-                this.attributes.Add("windows_mode_ftp", null);
+                this.attributes.Add("windows_mode_ftp", false);
             }
             if (!this.attributes.ContainsKey("disable_users_from_inactivity_period_days"))
             {
@@ -602,7 +603,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("group_admins_can_set_user_password"))
             {
-                this.attributes.Add("group_admins_can_set_user_password", null);
+                this.attributes.Add("group_admins_can_set_user_password", false);
             }
         }
 
@@ -637,10 +638,11 @@ namespace FilesCom.Models
         /// Is SMS two factor authentication allowed?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allowed_2fa_method_sms")]
         public bool Allowed2faMethodSms
         {
-            get { return (bool)attributes["allowed_2fa_method_sms"]; }
+            get { return attributes["allowed_2fa_method_sms"] == null ? false : (bool)attributes["allowed_2fa_method_sms"]; }
             private set { attributes["allowed_2fa_method_sms"] = value; }
         }
 
@@ -648,10 +650,11 @@ namespace FilesCom.Models
         /// Is TOTP two factor authentication allowed?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allowed_2fa_method_totp")]
         public bool Allowed2faMethodTotp
         {
-            get { return (bool)attributes["allowed_2fa_method_totp"]; }
+            get { return attributes["allowed_2fa_method_totp"] == null ? false : (bool)attributes["allowed_2fa_method_totp"]; }
             private set { attributes["allowed_2fa_method_totp"] = value; }
         }
 
@@ -659,10 +662,11 @@ namespace FilesCom.Models
         /// Is U2F two factor authentication allowed?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allowed_2fa_method_u2f")]
         public bool Allowed2faMethodU2f
         {
-            get { return (bool)attributes["allowed_2fa_method_u2f"]; }
+            get { return attributes["allowed_2fa_method_u2f"] == null ? false : (bool)attributes["allowed_2fa_method_u2f"]; }
             private set { attributes["allowed_2fa_method_u2f"] = value; }
         }
 
@@ -670,10 +674,11 @@ namespace FilesCom.Models
         /// Is WebAuthn two factor authentication allowed?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allowed_2fa_method_webauthn")]
         public bool Allowed2faMethodWebauthn
         {
-            get { return (bool)attributes["allowed_2fa_method_webauthn"]; }
+            get { return attributes["allowed_2fa_method_webauthn"] == null ? false : (bool)attributes["allowed_2fa_method_webauthn"]; }
             private set { attributes["allowed_2fa_method_webauthn"] = value; }
         }
 
@@ -681,10 +686,11 @@ namespace FilesCom.Models
         /// Is yubikey two factor authentication allowed?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allowed_2fa_method_yubi")]
         public bool Allowed2faMethodYubi
         {
-            get { return (bool)attributes["allowed_2fa_method_yubi"]; }
+            get { return attributes["allowed_2fa_method_yubi"] == null ? false : (bool)attributes["allowed_2fa_method_yubi"]; }
             private set { attributes["allowed_2fa_method_yubi"] = value; }
         }
 
@@ -692,10 +698,11 @@ namespace FilesCom.Models
         /// Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allowed_2fa_method_bypass_for_ftp_sftp_dav")]
         public bool Allowed2faMethodBypassForFtpSftpDav
         {
-            get { return (bool)attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"]; }
+            get { return attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"] == null ? false : (bool)attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"]; }
             private set { attributes["allowed_2fa_method_bypass_for_ftp_sftp_dav"] = value; }
         }
 
@@ -714,10 +721,11 @@ namespace FilesCom.Models
         /// Are manual Bundle names allowed?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allow_bundle_names")]
         public bool AllowBundleNames
         {
-            get { return (bool)attributes["allow_bundle_names"]; }
+            get { return attributes["allow_bundle_names"] == null ? false : (bool)attributes["allow_bundle_names"]; }
             private set { attributes["allow_bundle_names"] = value; }
         }
 
@@ -747,10 +755,11 @@ namespace FilesCom.Models
         /// If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
-            get { return (bool)attributes["ask_about_overwrites"]; }
+            get { return attributes["ask_about_overwrites"] == null ? false : (bool)attributes["ask_about_overwrites"]; }
             private set { attributes["ask_about_overwrites"] = value; }
         }
 
@@ -780,10 +789,11 @@ namespace FilesCom.Models
         /// Do Bundles require password protection?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("bundle_password_required")]
         public bool BundlePasswordRequired
         {
-            get { return (bool)attributes["bundle_password_required"]; }
+            get { return attributes["bundle_password_required"] == null ? false : (bool)attributes["bundle_password_required"]; }
             private set { attributes["bundle_password_required"] = value; }
         }
 
@@ -802,10 +812,11 @@ namespace FilesCom.Models
         /// Do Bundles require recipients for sharing?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("bundle_require_share_recipient")]
         public bool BundleRequireShareRecipient
         {
-            get { return (bool)attributes["bundle_require_share_recipient"]; }
+            get { return attributes["bundle_require_share_recipient"] == null ? false : (bool)attributes["bundle_require_share_recipient"]; }
             private set { attributes["bundle_require_share_recipient"] = value; }
         }
 
@@ -846,10 +857,11 @@ namespace FilesCom.Models
         /// Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("uploads_via_email_authentication")]
         public bool UploadsViaEmailAuthentication
         {
-            get { return (bool)attributes["uploads_via_email_authentication"]; }
+            get { return attributes["uploads_via_email_authentication"] == null ? false : (bool)attributes["uploads_via_email_authentication"]; }
             private set { attributes["uploads_via_email_authentication"] = value; }
         }
 
@@ -945,10 +957,11 @@ namespace FilesCom.Models
         /// Is this site using a custom namespace for users?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("custom_namespace")]
         public bool CustomNamespace
         {
-            get { return (bool)attributes["custom_namespace"]; }
+            get { return attributes["custom_namespace"] == null ? false : (bool)attributes["custom_namespace"]; }
             private set { attributes["custom_namespace"] = value; }
         }
 
@@ -978,10 +991,11 @@ namespace FilesCom.Models
         /// Is the desktop app enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("desktop_app")]
         public bool DesktopApp
         {
-            get { return (bool)attributes["desktop_app"]; }
+            get { return attributes["desktop_app"] == null ? false : (bool)attributes["desktop_app"]; }
             private set { attributes["desktop_app"] = value; }
         }
 
@@ -989,10 +1003,11 @@ namespace FilesCom.Models
         /// Is desktop app session IP pinning enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("desktop_app_session_ip_pinning")]
         public bool DesktopAppSessionIpPinning
         {
-            get { return (bool)attributes["desktop_app_session_ip_pinning"]; }
+            get { return attributes["desktop_app_session_ip_pinning"] == null ? false : (bool)attributes["desktop_app_session_ip_pinning"]; }
             private set { attributes["desktop_app_session_ip_pinning"] = value; }
         }
 
@@ -1011,10 +1026,11 @@ namespace FilesCom.Models
         /// Is the mobile app enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mobile_app")]
         public bool MobileApp
         {
-            get { return (bool)attributes["mobile_app"]; }
+            get { return attributes["mobile_app"] == null ? false : (bool)attributes["mobile_app"]; }
             private set { attributes["mobile_app"] = value; }
         }
 
@@ -1022,10 +1038,11 @@ namespace FilesCom.Models
         /// Is mobile app session IP pinning enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mobile_app_session_ip_pinning")]
         public bool MobileAppSessionIpPinning
         {
-            get { return (bool)attributes["mobile_app_session_ip_pinning"]; }
+            get { return attributes["mobile_app_session_ip_pinning"] == null ? false : (bool)attributes["mobile_app_session_ip_pinning"]; }
             private set { attributes["mobile_app_session_ip_pinning"] = value; }
         }
 
@@ -1055,10 +1072,11 @@ namespace FilesCom.Models
         /// If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disable_files_certificate_generation")]
         public bool DisableFilesCertificateGeneration
         {
-            get { return (bool)attributes["disable_files_certificate_generation"]; }
+            get { return attributes["disable_files_certificate_generation"] == null ? false : (bool)attributes["disable_files_certificate_generation"]; }
             private set { attributes["disable_files_certificate_generation"] = value; }
         }
 
@@ -1066,10 +1084,11 @@ namespace FilesCom.Models
         /// Are notifications disabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disable_notifications")]
         public bool DisableNotifications
         {
-            get { return (bool)attributes["disable_notifications"]; }
+            get { return attributes["disable_notifications"] == null ? false : (bool)attributes["disable_notifications"]; }
             private set { attributes["disable_notifications"] = value; }
         }
 
@@ -1077,10 +1096,11 @@ namespace FilesCom.Models
         /// Is password reset disabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disable_password_reset")]
         public bool DisablePasswordReset
         {
-            get { return (bool)attributes["disable_password_reset"]; }
+            get { return attributes["disable_password_reset"] == null ? false : (bool)attributes["disable_password_reset"]; }
             private set { attributes["disable_password_reset"] = value; }
         }
 
@@ -1099,10 +1119,11 @@ namespace FilesCom.Models
         /// Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("domain_hsts_header")]
         public bool DomainHstsHeader
         {
-            get { return (bool)attributes["domain_hsts_header"]; }
+            get { return attributes["domain_hsts_header"] == null ? false : (bool)attributes["domain_hsts_header"]; }
             private set { attributes["domain_hsts_header"] = value; }
         }
 
@@ -1132,10 +1153,11 @@ namespace FilesCom.Models
         /// Is FTP enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ftp_enabled")]
         public bool FtpEnabled
         {
-            get { return (bool)attributes["ftp_enabled"]; }
+            get { return attributes["ftp_enabled"] == null ? false : (bool)attributes["ftp_enabled"]; }
             private set { attributes["ftp_enabled"] = value; }
         }
 
@@ -1154,10 +1176,11 @@ namespace FilesCom.Models
         /// If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("non_sso_groups_allowed")]
         public bool NonSsoGroupsAllowed
         {
-            get { return (bool)attributes["non_sso_groups_allowed"]; }
+            get { return attributes["non_sso_groups_allowed"] == null ? false : (bool)attributes["non_sso_groups_allowed"]; }
             private set { attributes["non_sso_groups_allowed"] = value; }
         }
 
@@ -1165,10 +1188,11 @@ namespace FilesCom.Models
         /// If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("non_sso_users_allowed")]
         public bool NonSsoUsersAllowed
         {
-            get { return (bool)attributes["non_sso_users_allowed"]; }
+            get { return attributes["non_sso_users_allowed"] == null ? false : (bool)attributes["non_sso_users_allowed"]; }
             private set { attributes["non_sso_users_allowed"] = value; }
         }
 
@@ -1176,10 +1200,11 @@ namespace FilesCom.Models
         /// If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("folder_permissions_groups_only")]
         public bool FolderPermissionsGroupsOnly
         {
-            get { return (bool)attributes["folder_permissions_groups_only"]; }
+            get { return attributes["folder_permissions_groups_only"] == null ? false : (bool)attributes["folder_permissions_groups_only"]; }
             private set { attributes["folder_permissions_groups_only"] = value; }
         }
 
@@ -1187,10 +1212,11 @@ namespace FilesCom.Models
         /// Is there a signed HIPAA BAA between Files.com and this site?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("hipaa")]
         public bool Hipaa
         {
-            get { return (bool)attributes["hipaa"]; }
+            get { return attributes["hipaa"] == null ? false : (bool)attributes["hipaa"]; }
             private set { attributes["hipaa"] = value; }
         }
 
@@ -1253,10 +1279,11 @@ namespace FilesCom.Models
         /// Include password in emails to new users?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("include_password_in_welcome_email")]
         public bool IncludePasswordInWelcomeEmail
         {
-            get { return (bool)attributes["include_password_in_welcome_email"]; }
+            get { return attributes["include_password_in_welcome_email"] == null ? false : (bool)attributes["include_password_in_welcome_email"]; }
             private set { attributes["include_password_in_welcome_email"] = value; }
         }
 
@@ -1297,10 +1324,11 @@ namespace FilesCom.Models
         /// Main LDAP setting: is LDAP enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ldap_enabled")]
         public bool LdapEnabled
         {
-            get { return (bool)attributes["ldap_enabled"]; }
+            get { return attributes["ldap_enabled"] == null ? false : (bool)attributes["ldap_enabled"]; }
             private set { attributes["ldap_enabled"] = value; }
         }
 
@@ -1385,10 +1413,11 @@ namespace FilesCom.Models
         /// Use secure LDAP?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ldap_secure")]
         public bool LdapSecure
         {
-            get { return (bool)attributes["ldap_secure"]; }
+            get { return attributes["ldap_secure"] == null ? false : (bool)attributes["ldap_secure"]; }
             private set { attributes["ldap_secure"] = value; }
         }
 
@@ -1495,10 +1524,11 @@ namespace FilesCom.Models
         /// Show message to users connecting via FTP
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("motd_use_for_ftp")]
         public bool MotdUseForFtp
         {
-            get { return (bool)attributes["motd_use_for_ftp"]; }
+            get { return attributes["motd_use_for_ftp"] == null ? false : (bool)attributes["motd_use_for_ftp"]; }
             private set { attributes["motd_use_for_ftp"] = value; }
         }
 
@@ -1506,10 +1536,11 @@ namespace FilesCom.Models
         /// Show message to users connecting via SFTP
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("motd_use_for_sftp")]
         public bool MotdUseForSftp
         {
-            get { return (bool)attributes["motd_use_for_sftp"]; }
+            get { return attributes["motd_use_for_sftp"] == null ? false : (bool)attributes["motd_use_for_sftp"]; }
             private set { attributes["motd_use_for_sftp"] = value; }
         }
 
@@ -1539,10 +1570,11 @@ namespace FilesCom.Models
         /// Allow users to use Office for the web?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("office_integration_available")]
         public bool OfficeIntegrationAvailable
         {
-            get { return (bool)attributes["office_integration_available"]; }
+            get { return attributes["office_integration_available"] == null ? false : (bool)attributes["office_integration_available"]; }
             private set { attributes["office_integration_available"] = value; }
         }
 
@@ -1572,10 +1604,11 @@ namespace FilesCom.Models
         /// Use servers in the USA only?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("opt_out_global")]
         public bool OptOutGlobal
         {
-            get { return (bool)attributes["opt_out_global"]; }
+            get { return attributes["opt_out_global"] == null ? false : (bool)attributes["opt_out_global"]; }
             private set { attributes["opt_out_global"] = value; }
         }
 
@@ -1583,10 +1616,11 @@ namespace FilesCom.Models
         /// Is this site's billing overdue?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("overdue")]
         public bool Overdue
         {
-            get { return (bool)attributes["overdue"]; }
+            get { return attributes["overdue"] == null ? false : (bool)attributes["overdue"]; }
             private set { attributes["overdue"] = value; }
         }
 
@@ -1605,10 +1639,11 @@ namespace FilesCom.Models
         /// Require a letter in passwords?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_require_letter")]
         public bool PasswordRequireLetter
         {
-            get { return (bool)attributes["password_require_letter"]; }
+            get { return attributes["password_require_letter"] == null ? false : (bool)attributes["password_require_letter"]; }
             private set { attributes["password_require_letter"] = value; }
         }
 
@@ -1616,10 +1651,11 @@ namespace FilesCom.Models
         /// Require lower and upper case letters in passwords?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_require_mixed")]
         public bool PasswordRequireMixed
         {
-            get { return (bool)attributes["password_require_mixed"]; }
+            get { return attributes["password_require_mixed"] == null ? false : (bool)attributes["password_require_mixed"]; }
             private set { attributes["password_require_mixed"] = value; }
         }
 
@@ -1627,10 +1663,11 @@ namespace FilesCom.Models
         /// Require a number in passwords?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_require_number")]
         public bool PasswordRequireNumber
         {
-            get { return (bool)attributes["password_require_number"]; }
+            get { return attributes["password_require_number"] == null ? false : (bool)attributes["password_require_number"]; }
             private set { attributes["password_require_number"] = value; }
         }
 
@@ -1638,10 +1675,11 @@ namespace FilesCom.Models
         /// Require special characters in password?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_require_special")]
         public bool PasswordRequireSpecial
         {
-            get { return (bool)attributes["password_require_special"]; }
+            get { return attributes["password_require_special"] == null ? false : (bool)attributes["password_require_special"]; }
             private set { attributes["password_require_special"] = value; }
         }
 
@@ -1649,10 +1687,11 @@ namespace FilesCom.Models
         /// Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_require_unbreached")]
         public bool PasswordRequireUnbreached
         {
-            get { return (bool)attributes["password_require_unbreached"]; }
+            get { return attributes["password_require_unbreached"] == null ? false : (bool)attributes["password_require_unbreached"]; }
             private set { attributes["password_require_unbreached"] = value; }
         }
 
@@ -1660,10 +1699,11 @@ namespace FilesCom.Models
         /// Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("password_requirements_apply_to_bundles")]
         public bool PasswordRequirementsApplyToBundles
         {
-            get { return (bool)attributes["password_requirements_apply_to_bundles"]; }
+            get { return attributes["password_requirements_apply_to_bundles"] == null ? false : (bool)attributes["password_requirements_apply_to_bundles"]; }
             private set { attributes["password_requirements_apply_to_bundles"] = value; }
         }
 
@@ -1693,10 +1733,11 @@ namespace FilesCom.Models
         /// If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("pin_all_remote_servers_to_site_region")]
         public bool PinAllRemoteServersToSiteRegion
         {
-            get { return (bool)attributes["pin_all_remote_servers_to_site_region"]; }
+            get { return attributes["pin_all_remote_servers_to_site_region"] == null ? false : (bool)attributes["pin_all_remote_servers_to_site_region"]; }
             private set { attributes["pin_all_remote_servers_to_site_region"] = value; }
         }
 
@@ -1704,10 +1745,11 @@ namespace FilesCom.Models
         /// If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("prevent_root_permissions_for_non_site_admins")]
         public bool PreventRootPermissionsForNonSiteAdmins
         {
-            get { return (bool)attributes["prevent_root_permissions_for_non_site_admins"]; }
+            get { return attributes["prevent_root_permissions_for_non_site_admins"] == null ? false : (bool)attributes["prevent_root_permissions_for_non_site_admins"]; }
             private set { attributes["prevent_root_permissions_for_non_site_admins"] = value; }
         }
 
@@ -1715,10 +1757,11 @@ namespace FilesCom.Models
         /// Require two-factor authentication for all users?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("require_2fa")]
         public bool Require2fa
         {
-            get { return (bool)attributes["require_2fa"]; }
+            get { return attributes["require_2fa"] == null ? false : (bool)attributes["require_2fa"]; }
             private set { attributes["require_2fa"] = value; }
         }
 
@@ -1748,10 +1791,11 @@ namespace FilesCom.Models
         /// If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("require_logout_from_bundles_and_inboxes")]
         public bool RequireLogoutFromBundlesAndInboxes
         {
-            get { return (bool)attributes["require_logout_from_bundles_and_inboxes"]; }
+            get { return attributes["require_logout_from_bundles_and_inboxes"] == null ? false : (bool)attributes["require_logout_from_bundles_and_inboxes"]; }
             private set { attributes["require_logout_from_bundles_and_inboxes"] = value; }
         }
 
@@ -1770,10 +1814,11 @@ namespace FilesCom.Models
         /// Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("session_pinned_by_ip")]
         public bool SessionPinnedByIp
         {
-            get { return (bool)attributes["session_pinned_by_ip"]; }
+            get { return attributes["session_pinned_by_ip"] == null ? false : (bool)attributes["session_pinned_by_ip"]; }
             private set { attributes["session_pinned_by_ip"] = value; }
         }
 
@@ -1781,10 +1826,11 @@ namespace FilesCom.Models
         /// Is SFTP enabled?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("sftp_enabled")]
         public bool SftpEnabled
         {
-            get { return (bool)attributes["sftp_enabled"]; }
+            get { return attributes["sftp_enabled"] == null ? false : (bool)attributes["sftp_enabled"]; }
             private set { attributes["sftp_enabled"] = value; }
         }
 
@@ -1814,10 +1860,11 @@ namespace FilesCom.Models
         /// Are Insecure Ciphers allowed for SFTP?  Note:  Settting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("sftp_insecure_ciphers")]
         public bool SftpInsecureCiphers
         {
-            get { return (bool)attributes["sftp_insecure_ciphers"]; }
+            get { return attributes["sftp_insecure_ciphers"] == null ? false : (bool)attributes["sftp_insecure_ciphers"]; }
             private set { attributes["sftp_insecure_ciphers"] = value; }
         }
 
@@ -1825,10 +1872,11 @@ namespace FilesCom.Models
         /// Use user FTP roots also for SFTP?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("sftp_user_root_enabled")]
         public bool SftpUserRootEnabled
         {
-            get { return (bool)attributes["sftp_user_root_enabled"]; }
+            get { return attributes["sftp_user_root_enabled"] == null ? false : (bool)attributes["sftp_user_root_enabled"]; }
             private set { attributes["sftp_user_root_enabled"] = value; }
         }
 
@@ -1836,10 +1884,11 @@ namespace FilesCom.Models
         /// Allow bundle creation
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("sharing_enabled")]
         public bool SharingEnabled
         {
-            get { return (bool)attributes["sharing_enabled"]; }
+            get { return attributes["sharing_enabled"] == null ? false : (bool)attributes["sharing_enabled"]; }
             private set { attributes["sharing_enabled"] = value; }
         }
 
@@ -1847,10 +1896,11 @@ namespace FilesCom.Models
         /// Show request access link for users without access?  Currently unused.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("show_request_access_link")]
         public bool ShowRequestAccessLink
         {
-            get { return (bool)attributes["show_request_access_link"]; }
+            get { return attributes["show_request_access_link"] == null ? false : (bool)attributes["show_request_access_link"]; }
             private set { attributes["show_request_access_link"] = value; }
         }
 
@@ -1957,10 +2007,11 @@ namespace FilesCom.Models
         /// Is SSL required?  Disabling this is insecure.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ssl_required")]
         public bool SslRequired
         {
-            get { return (bool)attributes["ssl_required"]; }
+            get { return attributes["ssl_required"] == null ? false : (bool)attributes["ssl_required"]; }
             private set { attributes["ssl_required"] = value; }
         }
 
@@ -1990,10 +2041,11 @@ namespace FilesCom.Models
         /// Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("tls_disabled")]
         public bool TlsDisabled
         {
-            get { return (bool)attributes["tls_disabled"]; }
+            get { return attributes["tls_disabled"] == null ? false : (bool)attributes["tls_disabled"]; }
             private set { attributes["tls_disabled"] = value; }
         }
 
@@ -2034,10 +2086,11 @@ namespace FilesCom.Models
         /// Allow uploaders to set `provided_modified_at` for uploaded files?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("use_provided_modified_at")]
         public bool UseProvidedModifiedAt
         {
-            get { return (bool)attributes["use_provided_modified_at"]; }
+            get { return attributes["use_provided_modified_at"] == null ? false : (bool)attributes["use_provided_modified_at"]; }
             private set { attributes["use_provided_modified_at"] = value; }
         }
 
@@ -2056,10 +2109,11 @@ namespace FilesCom.Models
         /// Will users be locked out after incorrect login attempts?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("user_lockout")]
         public bool UserLockout
         {
-            get { return (bool)attributes["user_lockout"]; }
+            get { return attributes["user_lockout"] == null ? false : (bool)attributes["user_lockout"]; }
             private set { attributes["user_lockout"] = value; }
         }
 
@@ -2100,10 +2154,11 @@ namespace FilesCom.Models
         /// Enable User Requests feature
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("user_requests_enabled")]
         public bool UserRequestsEnabled
         {
-            get { return (bool)attributes["user_requests_enabled"]; }
+            get { return attributes["user_requests_enabled"] == null ? false : (bool)attributes["user_requests_enabled"]; }
             private set { attributes["user_requests_enabled"] = value; }
         }
 
@@ -2111,10 +2166,11 @@ namespace FilesCom.Models
         /// Send email to site admins when a user request is received?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("user_requests_notify_admins")]
         public bool UserRequestsNotifyAdmins
         {
-            get { return (bool)attributes["user_requests_notify_admins"]; }
+            get { return attributes["user_requests_notify_admins"] == null ? false : (bool)attributes["user_requests_notify_admins"]; }
             private set { attributes["user_requests_notify_admins"] = value; }
         }
 
@@ -2155,10 +2211,11 @@ namespace FilesCom.Models
         /// Will the welcome email be sent to new users?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("welcome_email_enabled")]
         public bool WelcomeEmailEnabled
         {
-            get { return (bool)attributes["welcome_email_enabled"]; }
+            get { return attributes["welcome_email_enabled"] == null ? false : (bool)attributes["welcome_email_enabled"]; }
             private set { attributes["welcome_email_enabled"] = value; }
         }
 
@@ -2177,10 +2234,11 @@ namespace FilesCom.Models
         /// Does FTP user Windows emulation mode?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("windows_mode_ftp")]
         public bool WindowsModeFtp
         {
-            get { return (bool)attributes["windows_mode_ftp"]; }
+            get { return attributes["windows_mode_ftp"] == null ? false : (bool)attributes["windows_mode_ftp"]; }
             private set { attributes["windows_mode_ftp"] = value; }
         }
 
@@ -2199,10 +2257,11 @@ namespace FilesCom.Models
         /// Allow group admins set password authentication method
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("group_admins_can_set_user_password")]
         public bool GroupAdminsCanSetUserPassword
         {
-            get { return (bool)attributes["group_admins_can_set_user_password"]; }
+            get { return attributes["group_admins_can_set_user_password"] == null ? false : (bool)attributes["group_admins_can_set_user_password"]; }
             private set { attributes["group_admins_can_set_user_password"] = value; }
         }
 

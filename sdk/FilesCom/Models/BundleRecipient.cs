@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -58,7 +59,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("share_after_create"))
             {
-                this.attributes.Add("share_after_create", null);
+                this.attributes.Add("share_after_create", false);
             }
         }
 
@@ -151,10 +152,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Set to true to share the link with the recipient upon creation.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("share_after_create")]
         public bool ShareAfterCreate
         {
-            get { return (bool)attributes["share_after_create"]; }
+            get { return attributes["share_after_create"] == null ? false : (bool)attributes["share_after_create"]; }
             set { attributes["share_after_create"] = value; }
         }
 

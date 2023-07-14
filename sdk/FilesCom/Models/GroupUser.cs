@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -42,7 +43,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("admin"))
             {
-                this.attributes.Add("admin", null);
+                this.attributes.Add("admin", false);
             }
             if (!this.attributes.ContainsKey("usernames"))
             {
@@ -103,10 +104,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Is this user an administrator of this group?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("admin")]
         public bool Admin
         {
-            get { return (bool)attributes["admin"]; }
+            get { return attributes["admin"] == null ? false : (bool)attributes["admin"]; }
             set { attributes["admin"] = value; }
         }
 

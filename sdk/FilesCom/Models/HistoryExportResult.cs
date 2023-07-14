@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -102,7 +103,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("target_recursive"))
             {
-                this.attributes.Add("target_recursive", null);
+                this.attributes.Add("target_recursive", false);
             }
             if (!this.attributes.ContainsKey("target_expires_at"))
             {
@@ -348,10 +349,11 @@ namespace FilesCom.Models
         /// Whether or not the action was recursive
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("target_recursive")]
         public bool TargetRecursive
         {
-            get { return (bool)attributes["target_recursive"]; }
+            get { return attributes["target_recursive"] == null ? false : (bool)attributes["target_recursive"]; }
             private set { attributes["target_recursive"] = value; }
         }
 

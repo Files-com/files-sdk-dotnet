@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,11 +39,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("deleted"))
             {
-                this.attributes.Add("deleted", null);
+                this.attributes.Add("deleted", false);
             }
             if (!this.attributes.ContainsKey("disabled"))
             {
-                this.attributes.Add("disabled", null);
+                this.attributes.Add("disabled", false);
             }
             if (!this.attributes.ContainsKey("trigger"))
             {
@@ -165,20 +166,22 @@ namespace FilesCom.Models
         /// <summary>
         /// Indicates if the automation has been deleted.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("deleted")]
         public bool Deleted
         {
-            get { return (bool)attributes["deleted"]; }
+            get { return attributes["deleted"] == null ? false : (bool)attributes["deleted"]; }
             set { attributes["deleted"] = value; }
         }
 
         /// <summary>
         /// If true, this automation will not run.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disabled")]
         public bool Disabled
         {
-            get { return (bool)attributes["disabled"]; }
+            get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
             set { attributes["disabled"] = value; }
         }
 

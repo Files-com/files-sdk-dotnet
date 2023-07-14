@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -94,19 +95,19 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("provision_users"))
             {
-                this.attributes.Add("provision_users", null);
+                this.attributes.Add("provision_users", false);
             }
             if (!this.attributes.ContainsKey("provision_groups"))
             {
-                this.attributes.Add("provision_groups", null);
+                this.attributes.Add("provision_groups", false);
             }
             if (!this.attributes.ContainsKey("deprovision_users"))
             {
-                this.attributes.Add("deprovision_users", null);
+                this.attributes.Add("deprovision_users", false);
             }
             if (!this.attributes.ContainsKey("deprovision_groups"))
             {
-                this.attributes.Add("deprovision_groups", null);
+                this.attributes.Add("deprovision_groups", false);
             }
             if (!this.attributes.ContainsKey("deprovision_behavior"))
             {
@@ -142,19 +143,19 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("provision_attachments_permission"))
             {
-                this.attributes.Add("provision_attachments_permission", null);
+                this.attributes.Add("provision_attachments_permission", false);
             }
             if (!this.attributes.ContainsKey("provision_dav_permission"))
             {
-                this.attributes.Add("provision_dav_permission", null);
+                this.attributes.Add("provision_dav_permission", false);
             }
             if (!this.attributes.ContainsKey("provision_ftp_permission"))
             {
-                this.attributes.Add("provision_ftp_permission", null);
+                this.attributes.Add("provision_ftp_permission", false);
             }
             if (!this.attributes.ContainsKey("provision_sftp_permission"))
             {
-                this.attributes.Add("provision_sftp_permission", null);
+                this.attributes.Add("provision_sftp_permission", false);
             }
             if (!this.attributes.ContainsKey("provision_time_zone"))
             {
@@ -174,7 +175,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("enabled"))
             {
-                this.attributes.Add("enabled", null);
+                this.attributes.Add("enabled", false);
             }
             if (!this.attributes.ContainsKey("ldap_host"))
             {
@@ -194,7 +195,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ldap_secure"))
             {
-                this.attributes.Add("ldap_secure", null);
+                this.attributes.Add("ldap_secure", false);
             }
             if (!this.attributes.ContainsKey("ldap_username"))
             {
@@ -402,10 +403,11 @@ namespace FilesCom.Models
         /// Auto-provision users?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("provision_users")]
         public bool ProvisionUsers
         {
-            get { return (bool)attributes["provision_users"]; }
+            get { return attributes["provision_users"] == null ? false : (bool)attributes["provision_users"]; }
             private set { attributes["provision_users"] = value; }
         }
 
@@ -413,10 +415,11 @@ namespace FilesCom.Models
         /// Auto-provision group membership based on group memberships on the SSO side?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("provision_groups")]
         public bool ProvisionGroups
         {
-            get { return (bool)attributes["provision_groups"]; }
+            get { return attributes["provision_groups"] == null ? false : (bool)attributes["provision_groups"]; }
             private set { attributes["provision_groups"] = value; }
         }
 
@@ -424,10 +427,11 @@ namespace FilesCom.Models
         /// Auto-deprovision users?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("deprovision_users")]
         public bool DeprovisionUsers
         {
-            get { return (bool)attributes["deprovision_users"]; }
+            get { return attributes["deprovision_users"] == null ? false : (bool)attributes["deprovision_users"]; }
             private set { attributes["deprovision_users"] = value; }
         }
 
@@ -435,10 +439,11 @@ namespace FilesCom.Models
         /// Auto-deprovision group membership based on group memberships on the SSO side?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("deprovision_groups")]
         public bool DeprovisionGroups
         {
-            get { return (bool)attributes["deprovision_groups"]; }
+            get { return attributes["deprovision_groups"] == null ? false : (bool)attributes["deprovision_groups"]; }
             private set { attributes["deprovision_groups"] = value; }
         }
 
@@ -534,10 +539,11 @@ namespace FilesCom.Models
         /// DEPRECATED: Auto-provisioned users get Sharing permission. Use a Group with the Bundle permission instead.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("provision_attachments_permission")]
         public bool ProvisionAttachmentsPermission
         {
-            get { return (bool)attributes["provision_attachments_permission"]; }
+            get { return attributes["provision_attachments_permission"] == null ? false : (bool)attributes["provision_attachments_permission"]; }
             private set { attributes["provision_attachments_permission"] = value; }
         }
 
@@ -545,10 +551,11 @@ namespace FilesCom.Models
         /// Auto-provisioned users get WebDAV permission?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("provision_dav_permission")]
         public bool ProvisionDavPermission
         {
-            get { return (bool)attributes["provision_dav_permission"]; }
+            get { return attributes["provision_dav_permission"] == null ? false : (bool)attributes["provision_dav_permission"]; }
             private set { attributes["provision_dav_permission"] = value; }
         }
 
@@ -556,10 +563,11 @@ namespace FilesCom.Models
         /// Auto-provisioned users get FTP permission?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("provision_ftp_permission")]
         public bool ProvisionFtpPermission
         {
-            get { return (bool)attributes["provision_ftp_permission"]; }
+            get { return attributes["provision_ftp_permission"] == null ? false : (bool)attributes["provision_ftp_permission"]; }
             private set { attributes["provision_ftp_permission"] = value; }
         }
 
@@ -567,10 +575,11 @@ namespace FilesCom.Models
         /// Auto-provisioned users get SFTP permission?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("provision_sftp_permission")]
         public bool ProvisionSftpPermission
         {
-            get { return (bool)attributes["provision_sftp_permission"]; }
+            get { return attributes["provision_sftp_permission"] == null ? false : (bool)attributes["provision_sftp_permission"]; }
             private set { attributes["provision_sftp_permission"] = value; }
         }
 
@@ -622,10 +631,11 @@ namespace FilesCom.Models
         /// Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("enabled")]
         public bool Enabled
         {
-            get { return (bool)attributes["enabled"]; }
+            get { return attributes["enabled"] == null ? false : (bool)attributes["enabled"]; }
             private set { attributes["enabled"] = value; }
         }
 
@@ -677,10 +687,11 @@ namespace FilesCom.Models
         /// Use secure LDAP?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ldap_secure")]
         public bool LdapSecure
         {
-            get { return (bool)attributes["ldap_secure"]; }
+            get { return attributes["ldap_secure"] == null ? false : (bool)attributes["ldap_secure"]; }
             private set { attributes["ldap_secure"] = value; }
         }
 

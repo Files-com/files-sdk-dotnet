@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,11 +39,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("notify_on_registration"))
             {
-                this.attributes.Add("notify_on_registration", null);
+                this.attributes.Add("notify_on_registration", false);
             }
             if (!this.attributes.ContainsKey("notify_on_upload"))
             {
-                this.attributes.Add("notify_on_upload", null);
+                this.attributes.Add("notify_on_upload", false);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -89,20 +90,22 @@ namespace FilesCom.Models
         /// <summary>
         /// Triggers bundle notification when a registration action occurs for it.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_registration")]
         public bool NotifyOnRegistration
         {
-            get { return (bool)attributes["notify_on_registration"]; }
+            get { return attributes["notify_on_registration"] == null ? false : (bool)attributes["notify_on_registration"]; }
             set { attributes["notify_on_registration"] = value; }
         }
 
         /// <summary>
         /// Triggers bundle notification when a upload action occurs for it.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_upload")]
         public bool NotifyOnUpload
         {
-            get { return (bool)attributes["notify_on_upload"]; }
+            get { return attributes["notify_on_upload"] == null ? false : (bool)attributes["notify_on_upload"]; }
             set { attributes["notify_on_upload"] = value; }
         }
 

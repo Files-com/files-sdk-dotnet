@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -42,7 +43,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("recursive"))
             {
-                this.attributes.Add("recursive", null);
+                this.attributes.Add("recursive", false);
             }
             if (!this.attributes.ContainsKey("owner"))
             {
@@ -54,7 +55,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("exclusive"))
             {
-                this.attributes.Add("exclusive", null);
+                this.attributes.Add("exclusive", false);
             }
             if (!this.attributes.ContainsKey("token"))
             {
@@ -66,7 +67,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("allow_access_by_any_user"))
             {
-                this.attributes.Add("allow_access_by_any_user", null);
+                this.attributes.Add("allow_access_by_any_user", false);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -127,10 +128,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Does lock apply to subfolders?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            get { return (bool)attributes["recursive"]; }
+            get { return attributes["recursive"] == null ? false : (bool)attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
 
@@ -157,10 +159,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Is lock exclusive?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("exclusive")]
         public bool Exclusive
         {
-            get { return (bool)attributes["exclusive"]; }
+            get { return attributes["exclusive"] == null ? false : (bool)attributes["exclusive"]; }
             set { attributes["exclusive"] = value; }
         }
 
@@ -187,10 +190,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Can lock be modified by users other than its creator?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("allow_access_by_any_user")]
         public bool AllowAccessByAnyUser
         {
-            get { return (bool)attributes["allow_access_by_any_user"]; }
+            get { return attributes["allow_access_by_any_user"] == null ? false : (bool)attributes["allow_access_by_any_user"]; }
             set { attributes["allow_access_by_any_user"] = value; }
         }
 

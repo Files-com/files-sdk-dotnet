@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -34,7 +35,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("disabled"))
             {
-                this.attributes.Add("disabled", null);
+                this.attributes.Add("disabled", false);
             }
             if (!this.attributes.ContainsKey("authentication_method"))
             {
@@ -62,7 +63,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("pin_to_site_region"))
             {
-                this.attributes.Add("pin_to_site_region", null);
+                this.attributes.Add("pin_to_site_region", false);
             }
             if (!this.attributes.ContainsKey("pinned_region"))
             {
@@ -198,7 +199,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("enable_dedicated_ips"))
             {
-                this.attributes.Add("enable_dedicated_ips", null);
+                this.attributes.Add("enable_dedicated_ips", false);
             }
             if (!this.attributes.ContainsKey("files_agent_permission_set"))
             {
@@ -234,7 +235,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("dropbox_teams"))
             {
-                this.attributes.Add("dropbox_teams", null);
+                this.attributes.Add("dropbox_teams", false);
             }
             if (!this.attributes.ContainsKey("linode_bucket"))
             {
@@ -290,7 +291,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("reset_authentication"))
             {
-                this.attributes.Add("reset_authentication", null);
+                this.attributes.Add("reset_authentication", false);
             }
             if (!this.attributes.ContainsKey("azure_blob_storage_access_key"))
             {
@@ -347,10 +348,11 @@ namespace FilesCom.Models
         /// <summary>
         /// If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disabled")]
         public bool Disabled
         {
-            get { return (bool)attributes["disabled"]; }
+            get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
             set { attributes["disabled"] = value; }
         }
 
@@ -417,10 +419,11 @@ namespace FilesCom.Models
         /// <summary>
         /// If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("pin_to_site_region")]
         public bool PinToSiteRegion
         {
-            get { return (bool)attributes["pin_to_site_region"]; }
+            get { return attributes["pin_to_site_region"] == null ? false : (bool)attributes["pin_to_site_region"]; }
             set { attributes["pin_to_site_region"] = value; }
         }
 
@@ -757,10 +760,11 @@ namespace FilesCom.Models
         /// <summary>
         /// `true` if remote server only accepts connections from dedicated IPs
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("enable_dedicated_ips")]
         public bool EnableDedicatedIps
         {
-            get { return (bool)attributes["enable_dedicated_ips"]; }
+            get { return attributes["enable_dedicated_ips"] == null ? false : (bool)attributes["enable_dedicated_ips"]; }
             set { attributes["enable_dedicated_ips"] = value; }
         }
 
@@ -847,10 +851,11 @@ namespace FilesCom.Models
         /// <summary>
         /// List Team folders in root
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("dropbox_teams")]
         public bool DropboxTeams
         {
-            get { return (bool)attributes["dropbox_teams"]; }
+            get { return attributes["dropbox_teams"] == null ? false : (bool)attributes["dropbox_teams"]; }
             set { attributes["dropbox_teams"] = value; }
         }
 
@@ -987,10 +992,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Reset authenticated account
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("reset_authentication")]
         public bool ResetAuthentication
         {
-            get { return (bool)attributes["reset_authentication"]; }
+            get { return attributes["reset_authentication"] == null ? false : (bool)attributes["reset_authentication"]; }
             set { attributes["reset_authentication"] = value; }
         }
 

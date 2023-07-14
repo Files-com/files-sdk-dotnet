@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,11 +39,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ftp_enabled"))
             {
-                this.attributes.Add("ftp_enabled", null);
+                this.attributes.Add("ftp_enabled", false);
             }
             if (!this.attributes.ContainsKey("sftp_enabled"))
             {
-                this.attributes.Add("sftp_enabled", null);
+                this.attributes.Add("sftp_enabled", false);
             }
         }
 
@@ -87,20 +88,22 @@ namespace FilesCom.Models
         /// <summary>
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ftp_enabled")]
         public bool FtpEnabled
         {
-            get { return (bool)attributes["ftp_enabled"]; }
+            get { return attributes["ftp_enabled"] == null ? false : (bool)attributes["ftp_enabled"]; }
             private set { attributes["ftp_enabled"] = value; }
         }
 
         /// <summary>
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("sftp_enabled")]
         public bool SftpEnabled
         {
-            get { return (bool)attributes["sftp_enabled"]; }
+            get { return attributes["sftp_enabled"] == null ? false : (bool)attributes["sftp_enabled"]; }
             private set { attributes["sftp_enabled"] = value; }
         }
 

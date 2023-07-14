@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -54,35 +55,35 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("trigger_by_share_recipients"))
             {
-                this.attributes.Add("trigger_by_share_recipients", null);
+                this.attributes.Add("trigger_by_share_recipients", false);
             }
             if (!this.attributes.ContainsKey("notify_user_actions"))
             {
-                this.attributes.Add("notify_user_actions", null);
+                this.attributes.Add("notify_user_actions", false);
             }
             if (!this.attributes.ContainsKey("notify_on_copy"))
             {
-                this.attributes.Add("notify_on_copy", null);
+                this.attributes.Add("notify_on_copy", false);
             }
             if (!this.attributes.ContainsKey("notify_on_delete"))
             {
-                this.attributes.Add("notify_on_delete", null);
+                this.attributes.Add("notify_on_delete", false);
             }
             if (!this.attributes.ContainsKey("notify_on_download"))
             {
-                this.attributes.Add("notify_on_download", null);
+                this.attributes.Add("notify_on_download", false);
             }
             if (!this.attributes.ContainsKey("notify_on_move"))
             {
-                this.attributes.Add("notify_on_move", null);
+                this.attributes.Add("notify_on_move", false);
             }
             if (!this.attributes.ContainsKey("notify_on_upload"))
             {
-                this.attributes.Add("notify_on_upload", null);
+                this.attributes.Add("notify_on_upload", false);
             }
             if (!this.attributes.ContainsKey("recursive"))
             {
-                this.attributes.Add("recursive", null);
+                this.attributes.Add("recursive", false);
             }
             if (!this.attributes.ContainsKey("send_interval"))
             {
@@ -98,7 +99,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("unsubscribed"))
             {
-                this.attributes.Add("unsubscribed", null);
+                this.attributes.Add("unsubscribed", false);
             }
             if (!this.attributes.ContainsKey("unsubscribed_reason"))
             {
@@ -114,7 +115,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("suppressed_email"))
             {
-                this.attributes.Add("suppressed_email", null);
+                this.attributes.Add("suppressed_email", false);
             }
         }
 
@@ -197,80 +198,88 @@ namespace FilesCom.Models
         /// <summary>
         /// Notify when actions are performed by a share recipient?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("trigger_by_share_recipients")]
         public bool TriggerByShareRecipients
         {
-            get { return (bool)attributes["trigger_by_share_recipients"]; }
+            get { return attributes["trigger_by_share_recipients"] == null ? false : (bool)attributes["trigger_by_share_recipients"]; }
             set { attributes["trigger_by_share_recipients"] = value; }
         }
 
         /// <summary>
         /// Trigger notification on notification user actions?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_user_actions")]
         public bool NotifyUserActions
         {
-            get { return (bool)attributes["notify_user_actions"]; }
+            get { return attributes["notify_user_actions"] == null ? false : (bool)attributes["notify_user_actions"]; }
             set { attributes["notify_user_actions"] = value; }
         }
 
         /// <summary>
         /// Triggers notification when copying files to this path
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_copy")]
         public bool NotifyOnCopy
         {
-            get { return (bool)attributes["notify_on_copy"]; }
+            get { return attributes["notify_on_copy"] == null ? false : (bool)attributes["notify_on_copy"]; }
             set { attributes["notify_on_copy"] = value; }
         }
 
         /// <summary>
         /// Triggers notification when deleting files from this path
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_delete")]
         public bool NotifyOnDelete
         {
-            get { return (bool)attributes["notify_on_delete"]; }
+            get { return attributes["notify_on_delete"] == null ? false : (bool)attributes["notify_on_delete"]; }
             set { attributes["notify_on_delete"] = value; }
         }
 
         /// <summary>
         /// Triggers notification when downloading files from this path
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_download")]
         public bool NotifyOnDownload
         {
-            get { return (bool)attributes["notify_on_download"]; }
+            get { return attributes["notify_on_download"] == null ? false : (bool)attributes["notify_on_download"]; }
             set { attributes["notify_on_download"] = value; }
         }
 
         /// <summary>
         /// Triggers notification when moving files to this path
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_move")]
         public bool NotifyOnMove
         {
-            get { return (bool)attributes["notify_on_move"]; }
+            get { return attributes["notify_on_move"] == null ? false : (bool)attributes["notify_on_move"]; }
             set { attributes["notify_on_move"] = value; }
         }
 
         /// <summary>
         /// Triggers notification when uploading new files to this path
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("notify_on_upload")]
         public bool NotifyOnUpload
         {
-            get { return (bool)attributes["notify_on_upload"]; }
+            get { return attributes["notify_on_upload"] == null ? false : (bool)attributes["notify_on_upload"]; }
             set { attributes["notify_on_upload"] = value; }
         }
 
         /// <summary>
         /// Enable notifications for each subfolder in this path
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            get { return (bool)attributes["recursive"]; }
+            get { return attributes["recursive"] == null ? false : (bool)attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
 
@@ -307,10 +316,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Is the user unsubscribed from this notification?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("unsubscribed")]
         public bool Unsubscribed
         {
-            get { return (bool)attributes["unsubscribed"]; }
+            get { return attributes["unsubscribed"] == null ? false : (bool)attributes["unsubscribed"]; }
             set { attributes["unsubscribed"] = value; }
         }
 
@@ -347,10 +357,11 @@ namespace FilesCom.Models
         /// <summary>
         /// If true, it means that the recipient at this user's email address has manually unsubscribed from all emails, or had their email "hard bounce", which means that we are unable to send mail to this user's current email address. Notifications will resume if the user changes their email address.
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("suppressed_email")]
         public bool SuppressedEmail
         {
-            get { return (bool)attributes["suppressed_email"]; }
+            get { return attributes["suppressed_email"] == null ? false : (bool)attributes["suppressed_email"]; }
             set { attributes["suppressed_email"] = value; }
         }
 

@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -46,15 +47,15 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("skip_name"))
             {
-                this.attributes.Add("skip_name", null);
+                this.attributes.Add("skip_name", false);
             }
             if (!this.attributes.ContainsKey("skip_email"))
             {
-                this.attributes.Add("skip_email", null);
+                this.attributes.Add("skip_email", false);
             }
             if (!this.attributes.ContainsKey("skip_company"))
             {
-                this.attributes.Add("skip_company", null);
+                this.attributes.Add("skip_company", false);
             }
             if (!this.attributes.ContainsKey("user_id"))
             {
@@ -121,30 +122,33 @@ namespace FilesCom.Models
         /// <summary>
         /// Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("skip_name")]
         public bool SkipName
         {
-            get { return (bool)attributes["skip_name"]; }
+            get { return attributes["skip_name"] == null ? false : (bool)attributes["skip_name"]; }
             set { attributes["skip_name"] = value; }
         }
 
         /// <summary>
         /// Any associated InboxRegistrations or BundleRegistrations can be saved without providing email
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("skip_email")]
         public bool SkipEmail
         {
-            get { return (bool)attributes["skip_email"]; }
+            get { return attributes["skip_email"] == null ? false : (bool)attributes["skip_email"]; }
             set { attributes["skip_email"] = value; }
         }
 
         /// <summary>
         /// Any associated InboxRegistrations or BundleRegistrations can be saved without providing company
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("skip_company")]
         public bool SkipCompany
         {
-            get { return (bool)attributes["skip_company"]; }
+            get { return attributes["skip_company"] == null ? false : (bool)attributes["skip_company"]; }
             set { attributes["skip_company"] = value; }
         }
 

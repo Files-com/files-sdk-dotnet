@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -58,7 +59,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("recursive"))
             {
-                this.attributes.Add("recursive", null);
+                this.attributes.Add("recursive", false);
             }
         }
 
@@ -151,10 +152,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Does this permission apply to subfolders?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("recursive")]
         public bool Recursive
         {
-            get { return (bool)attributes["recursive"]; }
+            get { return attributes["recursive"] == null ? false : (bool)attributes["recursive"]; }
             set { attributes["recursive"] = value; }
         }
 

@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,7 +39,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("ask_about_overwrites"))
             {
-                this.attributes.Add("ask_about_overwrites", null);
+                this.attributes.Add("ask_about_overwrites", false);
             }
             if (!this.attributes.ContainsKey("available_parts"))
             {
@@ -62,11 +63,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("parallel_parts"))
             {
-                this.attributes.Add("parallel_parts", null);
+                this.attributes.Add("parallel_parts", false);
             }
             if (!this.attributes.ContainsKey("retry_parts"))
             {
-                this.attributes.Add("retry_parts", null);
+                this.attributes.Add("retry_parts", false);
             }
             if (!this.attributes.ContainsKey("parameters"))
             {
@@ -136,10 +137,11 @@ namespace FilesCom.Models
         /// If `true`, this file exists and you may wish to ask the user for overwrite confirmation
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("ask_about_overwrites")]
         public bool AskAboutOverwrites
         {
-            get { return (bool)attributes["ask_about_overwrites"]; }
+            get { return attributes["ask_about_overwrites"] == null ? false : (bool)attributes["ask_about_overwrites"]; }
             private set { attributes["ask_about_overwrites"] = value; }
         }
 
@@ -202,10 +204,11 @@ namespace FilesCom.Models
         /// If `true`, multiple parts may be uploaded in parallel.  If `false`, be sure to only upload one part at a time, in order.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("parallel_parts")]
         public bool ParallelParts
         {
-            get { return (bool)attributes["parallel_parts"]; }
+            get { return attributes["parallel_parts"] == null ? false : (bool)attributes["parallel_parts"]; }
             private set { attributes["parallel_parts"] = value; }
         }
 
@@ -213,10 +216,11 @@ namespace FilesCom.Models
         /// If `true`, parts may be retried. If `false`, a part cannot be retried and the upload should be restarted.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("retry_parts")]
         public bool RetryParts
         {
-            get { return (bool)attributes["retry_parts"]; }
+            get { return attributes["retry_parts"] == null ? false : (bool)attributes["retry_parts"]; }
             private set { attributes["retry_parts"] = value; }
         }
 

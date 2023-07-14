@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -130,23 +131,23 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("message_received"))
             {
-                this.attributes.Add("message_received", null);
+                this.attributes.Add("message_received", false);
             }
             if (!this.attributes.ContainsKey("message_decrypted"))
             {
-                this.attributes.Add("message_decrypted", null);
+                this.attributes.Add("message_decrypted", false);
             }
             if (!this.attributes.ContainsKey("message_signature_verified"))
             {
-                this.attributes.Add("message_signature_verified", null);
+                this.attributes.Add("message_signature_verified", false);
             }
             if (!this.attributes.ContainsKey("message_processing_success"))
             {
-                this.attributes.Add("message_processing_success", null);
+                this.attributes.Add("message_processing_success", false);
             }
             if (!this.attributes.ContainsKey("message_mdn_returned"))
             {
-                this.attributes.Add("message_mdn_returned", null);
+                this.attributes.Add("message_mdn_returned", false);
             }
             if (!this.attributes.ContainsKey("encrypted_uri"))
             {
@@ -465,10 +466,11 @@ namespace FilesCom.Models
         /// Message body received?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("message_received")]
         public bool MessageReceived
         {
-            get { return (bool)attributes["message_received"]; }
+            get { return attributes["message_received"] == null ? false : (bool)attributes["message_received"]; }
             private set { attributes["message_received"] = value; }
         }
 
@@ -476,10 +478,11 @@ namespace FilesCom.Models
         /// Message decrypted successfully?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("message_decrypted")]
         public bool MessageDecrypted
         {
-            get { return (bool)attributes["message_decrypted"]; }
+            get { return attributes["message_decrypted"] == null ? false : (bool)attributes["message_decrypted"]; }
             private set { attributes["message_decrypted"] = value; }
         }
 
@@ -487,10 +490,11 @@ namespace FilesCom.Models
         /// Message signature verified?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("message_signature_verified")]
         public bool MessageSignatureVerified
         {
-            get { return (bool)attributes["message_signature_verified"]; }
+            get { return attributes["message_signature_verified"] == null ? false : (bool)attributes["message_signature_verified"]; }
             private set { attributes["message_signature_verified"] = value; }
         }
 
@@ -498,10 +502,11 @@ namespace FilesCom.Models
         /// Message processed successfully?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("message_processing_success")]
         public bool MessageProcessingSuccess
         {
-            get { return (bool)attributes["message_processing_success"]; }
+            get { return attributes["message_processing_success"] == null ? false : (bool)attributes["message_processing_success"]; }
             private set { attributes["message_processing_success"] = value; }
         }
 
@@ -509,10 +514,11 @@ namespace FilesCom.Models
         /// MDN returned?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("message_mdn_returned")]
         public bool MessageMdnReturned
         {
-            get { return (bool)attributes["message_mdn_returned"]; }
+            get { return attributes["message_mdn_returned"] == null ? false : (bool)attributes["message_mdn_returned"]; }
             private set { attributes["message_mdn_returned"] = value; }
         }
 

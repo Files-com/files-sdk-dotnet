@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -78,11 +79,11 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("subfolders_locked?"))
             {
-                this.attributes.Add("subfolders_locked?", null);
+                this.attributes.Add("subfolders_locked?", false);
             }
             if (!this.attributes.ContainsKey("is_locked"))
             {
-                this.attributes.Add("is_locked", null);
+                this.attributes.Add("is_locked", false);
             }
             if (!this.attributes.ContainsKey("download_uri"))
             {
@@ -102,7 +103,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("mkdir_parents"))
             {
-                this.attributes.Add("mkdir_parents", null);
+                this.attributes.Add("mkdir_parents", false);
             }
         }
 
@@ -246,20 +247,22 @@ namespace FilesCom.Models
         /// <summary>
         /// Are subfolders locked and unable to be modified?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("subfolders_locked?")]
         public bool SubfoldersLocked
         {
-            get { return (bool)attributes["subfolders_locked?"]; }
+            get { return attributes["subfolders_locked?"] == null ? false : (bool)attributes["subfolders_locked?"]; }
             set { attributes["subfolders_locked?"] = value; }
         }
 
         /// <summary>
         /// Is this folder locked and unable to be modified?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("is_locked")]
         public bool IsLocked
         {
-            get { return (bool)attributes["is_locked"]; }
+            get { return attributes["is_locked"] == null ? false : (bool)attributes["is_locked"]; }
             set { attributes["is_locked"] = value; }
         }
 
@@ -306,10 +309,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Create parent directories if they do not exist?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mkdir_parents")]
         public bool MkdirParents
         {
-            get { return (bool)attributes["mkdir_parents"]; }
+            get { return attributes["mkdir_parents"] == null ? false : (bool)attributes["mkdir_parents"]; }
             set { attributes["mkdir_parents"] = value; }
         }
 

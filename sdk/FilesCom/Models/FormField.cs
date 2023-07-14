@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,7 +39,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("required"))
             {
-                this.attributes.Add("required", null);
+                this.attributes.Add("required", false);
             }
             if (!this.attributes.ContainsKey("help_text"))
             {
@@ -104,10 +105,11 @@ namespace FilesCom.Models
         /// Is this a required field?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("required")]
         public bool Required
         {
-            get { return (bool)attributes["required"]; }
+            get { return attributes["required"] == null ? false : (bool)attributes["required"]; }
             private set { attributes["required"] = value; }
         }
 

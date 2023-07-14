@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -46,7 +47,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("success"))
             {
-                this.attributes.Add("success", null);
+                this.attributes.Add("success", false);
             }
             if (!this.attributes.ContainsKey("url"))
             {
@@ -74,7 +75,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("file_as_body"))
             {
-                this.attributes.Add("file_as_body", null);
+                this.attributes.Add("file_as_body", false);
             }
             if (!this.attributes.ContainsKey("file_form_field"))
             {
@@ -145,10 +146,11 @@ namespace FilesCom.Models
         /// <summary>
         /// The success status of the webhook test
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("success")]
         public bool Success
         {
-            get { return (bool)attributes["success"]; }
+            get { return attributes["success"] == null ? false : (bool)attributes["success"]; }
             set { attributes["success"] = value; }
         }
 
@@ -215,10 +217,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Send the file data as the request body?
         /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("file_as_body")]
         public bool FileAsBody
         {
-            get { return (bool)attributes["file_as_body"]; }
+            get { return attributes["file_as_body"] == null ? false : (bool)attributes["file_as_body"]; }
             set { attributes["file_as_body"] = value; }
         }
 

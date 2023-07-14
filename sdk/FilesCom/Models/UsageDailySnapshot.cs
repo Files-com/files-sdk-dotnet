@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,7 +39,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("api_usage_available"))
             {
-                this.attributes.Add("api_usage_available", null);
+                this.attributes.Add("api_usage_available", false);
             }
             if (!this.attributes.ContainsKey("read_api_usage"))
             {
@@ -116,10 +117,11 @@ namespace FilesCom.Models
         /// True if the API usage fields `read_api_usage` and `write_api_usage` can be relied upon.  If this is false, we suggest hiding that value from any UI.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("api_usage_available")]
         public bool ApiUsageAvailable
         {
-            get { return (bool)attributes["api_usage_available"]; }
+            get { return attributes["api_usage_available"] == null ? false : (bool)attributes["api_usage_available"]; }
             private set { attributes["api_usage_available"] = value; }
         }
 

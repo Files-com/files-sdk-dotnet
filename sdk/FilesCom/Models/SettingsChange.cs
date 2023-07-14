@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -46,7 +47,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("user_is_files_support"))
             {
-                this.attributes.Add("user_is_files_support", null);
+                this.attributes.Add("user_is_files_support", false);
             }
             if (!this.attributes.ContainsKey("username"))
             {
@@ -118,10 +119,11 @@ namespace FilesCom.Models
         /// true if this change was performed by Files.com support.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("user_is_files_support")]
         public bool UserIsFilesSupport
         {
-            get { return (bool)attributes["user_is_files_support"]; }
+            get { return attributes["user_is_files_support"] == null ? false : (bool)attributes["user_is_files_support"]; }
             private set { attributes["user_is_files_support"] = value; }
         }
 

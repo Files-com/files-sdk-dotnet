@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -110,27 +111,27 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("mdn_received"))
             {
-                this.attributes.Add("mdn_received", null);
+                this.attributes.Add("mdn_received", false);
             }
             if (!this.attributes.ContainsKey("mdn_valid"))
             {
-                this.attributes.Add("mdn_valid", null);
+                this.attributes.Add("mdn_valid", false);
             }
             if (!this.attributes.ContainsKey("mdn_signature_verified"))
             {
-                this.attributes.Add("mdn_signature_verified", null);
+                this.attributes.Add("mdn_signature_verified", false);
             }
             if (!this.attributes.ContainsKey("mdn_message_id_matched"))
             {
-                this.attributes.Add("mdn_message_id_matched", null);
+                this.attributes.Add("mdn_message_id_matched", false);
             }
             if (!this.attributes.ContainsKey("mdn_mic_matched"))
             {
-                this.attributes.Add("mdn_mic_matched", null);
+                this.attributes.Add("mdn_mic_matched", false);
             }
             if (!this.attributes.ContainsKey("mdn_processing_success"))
             {
-                this.attributes.Add("mdn_processing_success", null);
+                this.attributes.Add("mdn_processing_success", false);
             }
             if (!this.attributes.ContainsKey("raw_uri"))
             {
@@ -394,10 +395,11 @@ namespace FilesCom.Models
         /// Did the partner give a response body?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mdn_received")]
         public bool MdnReceived
         {
-            get { return (bool)attributes["mdn_received"]; }
+            get { return attributes["mdn_received"] == null ? false : (bool)attributes["mdn_received"]; }
             private set { attributes["mdn_received"] = value; }
         }
 
@@ -405,10 +407,11 @@ namespace FilesCom.Models
         /// Is the response in MDN format?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mdn_valid")]
         public bool MdnValid
         {
-            get { return (bool)attributes["mdn_valid"]; }
+            get { return attributes["mdn_valid"] == null ? false : (bool)attributes["mdn_valid"]; }
             private set { attributes["mdn_valid"] = value; }
         }
 
@@ -416,10 +419,11 @@ namespace FilesCom.Models
         /// MDN signature verified?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mdn_signature_verified")]
         public bool MdnSignatureVerified
         {
-            get { return (bool)attributes["mdn_signature_verified"]; }
+            get { return attributes["mdn_signature_verified"] == null ? false : (bool)attributes["mdn_signature_verified"]; }
             private set { attributes["mdn_signature_verified"] = value; }
         }
 
@@ -427,10 +431,11 @@ namespace FilesCom.Models
         /// MDN message id matched?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mdn_message_id_matched")]
         public bool MdnMessageIdMatched
         {
-            get { return (bool)attributes["mdn_message_id_matched"]; }
+            get { return attributes["mdn_message_id_matched"] == null ? false : (bool)attributes["mdn_message_id_matched"]; }
             private set { attributes["mdn_message_id_matched"] = value; }
         }
 
@@ -438,10 +443,11 @@ namespace FilesCom.Models
         /// MDN MIC matched?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mdn_mic_matched")]
         public bool MdnMicMatched
         {
-            get { return (bool)attributes["mdn_mic_matched"]; }
+            get { return attributes["mdn_mic_matched"] == null ? false : (bool)attributes["mdn_mic_matched"]; }
             private set { attributes["mdn_mic_matched"] = value; }
         }
 
@@ -449,10 +455,11 @@ namespace FilesCom.Models
         /// MDN disposition indicate a successful processing?
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("mdn_processing_success")]
         public bool MdnProcessingSuccess
         {
-            get { return (bool)attributes["mdn_processing_success"]; }
+            get { return attributes["mdn_processing_success"] == null ? false : (bool)attributes["mdn_processing_success"]; }
             private set { attributes["mdn_processing_success"] = value; }
         }
 
