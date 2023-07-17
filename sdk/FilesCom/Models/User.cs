@@ -197,6 +197,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("require_2fa", null);
             }
+            if (!this.attributes.ContainsKey("require_login_by"))
+            {
+                this.attributes.Add("require_login_by", null);
+            }
             if (!this.attributes.ContainsKey("active_2fa"))
             {
                 this.attributes.Add("active_2fa", false);
@@ -751,6 +755,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["require_2fa"]; }
             set { attributes["require_2fa"] = value; }
+        }
+
+        /// <summary>
+        /// Require user to login by specified date otherwise it will be disabled.
+        /// </summary>
+        [JsonPropertyName("require_login_by")]
+        public Nullable<DateTime> RequireLoginBy
+        {
+            get { return (Nullable<DateTime>)attributes["require_login_by"]; }
+            set { attributes["require_login_by"] = value; }
         }
 
         /// <summary>
