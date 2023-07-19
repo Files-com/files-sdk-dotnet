@@ -1157,6 +1157,7 @@ namespace FilesCom.Models
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+        ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
         ///   restapi_permission - boolean - Can this user access the REST API?
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
@@ -1307,6 +1308,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+            }
+            if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
+            {
+                throw new ArgumentException("Bad parameter: require_login_by must be of type string", "parameters[\"require_login_by\"]");
             }
             if (parameters.ContainsKey("require_password_change") && !(parameters["require_password_change"] is bool))
             {
@@ -1572,6 +1577,7 @@ namespace FilesCom.Models
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+        ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
         ///   restapi_permission - boolean - Can this user access the REST API?
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
@@ -1718,6 +1724,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+            }
+            if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
+            {
+                throw new ArgumentException("Bad parameter: require_login_by must be of type string", "parameters[\"require_login_by\"]");
             }
             if (parameters.ContainsKey("require_password_change") && !(parameters["require_password_change"] is bool))
             {
@@ -1889,6 +1899,7 @@ namespace FilesCom.Models
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+        ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
         ///   restapi_permission - boolean - Can this user access the REST API?
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
@@ -2040,6 +2051,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+            }
+            if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
+            {
+                throw new ArgumentException("Bad parameter: require_login_by must be of type string", "parameters[\"require_login_by\"]");
             }
             if (parameters.ContainsKey("require_password_change") && !(parameters["require_password_change"] is bool))
             {

@@ -237,6 +237,7 @@ Task<User> User.Create(
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
+* `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
 * `restapi_permission` (bool): Can this user access the REST API?
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
@@ -349,6 +350,7 @@ Task<User> User.Update(
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
+* `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
 * `restapi_permission` (bool): Can this user access the REST API?
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
@@ -468,6 +470,7 @@ parameters.Add("notes", "Internal notes on this user.");
 parameters.Add("office_integration_enabled", true);
 parameters.Add("password_validity_days", 1);
 parameters.Add("receive_admin_alerts", true);
+parameters.Add("require_login_by", "2000-01-01T01:00:00Z");
 parameters.Add("require_password_change", true);
 parameters.Add("restapi_permission", true);
 parameters.Add("self_managed", true);
@@ -519,6 +522,7 @@ User.Update(parameters);
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
+* `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
 * `restapi_permission` (bool): Can this user access the REST API?
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?

@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("fingerprint", null);
             }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -113,7 +117,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// User ID.  Provide a value of `0` to operate the current session's user.
+        /// Username of the user this public key is associated with
+        /// </summary>
+        [JsonPropertyName("username")]
+        public string Username
+        {
+            get { return (string)attributes["username"]; }
+            set { attributes["username"] = value; }
+        }
+
+        /// <summary>
+        /// User ID this public key is associated with
         /// </summary>
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
