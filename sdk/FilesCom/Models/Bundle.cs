@@ -105,6 +105,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("skip_email", false);
             }
+            if (!this.attributes.ContainsKey("start_access_on_date"))
+            {
+                this.attributes.Add("start_access_on_date", null);
+            }
             if (!this.attributes.ContainsKey("skip_company"))
             {
                 this.attributes.Add("skip_company", false);
@@ -410,6 +414,16 @@ namespace FilesCom.Models
         {
             get { return attributes["skip_email"] == null ? false : (bool)attributes["skip_email"]; }
             set { attributes["skip_email"] = value; }
+        }
+
+        /// <summary>
+        /// Date when share will start to be accessible. If `nil` access granted right after create.
+        /// </summary>
+        [JsonPropertyName("start_access_on_date")]
+        public Nullable<DateTime> StartAccessOnDate
+        {
+            get { return (Nullable<DateTime>)attributes["start_access_on_date"]; }
+            set { attributes["start_access_on_date"] = value; }
         }
 
         /// <summary>
@@ -1015,6 +1029,7 @@ namespace FilesCom.Models
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
+        ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
@@ -1118,6 +1133,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
+            }
+            if (parameters.ContainsKey("start_access_on_date") && !(parameters["start_access_on_date"] is string))
+            {
+                throw new ArgumentException("Bad parameter: start_access_on_date must be of type string", "parameters[\"start_access_on_date\"]");
             }
             if (parameters.ContainsKey("snapshot_id") && !(parameters["snapshot_id"] is Nullable<Int64>))
             {

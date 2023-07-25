@@ -20,6 +20,7 @@
   "bundle_expiration": 1,
   "bundle_password_required": true,
   "bundle_registration_notifications": "never",
+  "bundle_require_registration": true,
   "bundle_require_share_recipient": true,
   "bundle_upload_receipt_notifications": "never",
   "bundle_watermark_attachment": null,
@@ -237,6 +238,7 @@
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
 * `bundle_registration_notifications` / `BundleRegistrationNotifications`  (string): Do Bundle owners receive registration notification?
+* `bundle_require_registration` / `BundleRequireRegistration`  (bool): Do Bundles require registration?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
 * `bundle_upload_receipt_notifications` / `BundleUploadReceiptNotifications`  (string): Do Bundle uploaders receive upload confirmation notifications?
 * `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
@@ -467,6 +469,7 @@ Task<Site> Site.Update(
 * `immutable_files` (bool): Are files protected from modification?
 * `session_pinned_by_ip` (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `bundle_password_required` (bool): Do Bundles require password protection?
+* `bundle_require_registration` (bool): Do Bundles require registration?
 * `bundle_require_share_recipient` (bool): Do Bundles require recipients for sharing?
 * `bundle_registration_notifications` (string): Do Bundle owners receive registration notification?
 * `bundle_activity_notifications` (string): Do Bundle owners receive activity notifications?

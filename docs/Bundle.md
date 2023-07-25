@@ -38,6 +38,7 @@
   },
   "skip_name": true,
   "skip_email": true,
+  "start_access_on_date": "2000-01-01T01:00:00Z",
   "skip_company": true,
   "id": 1,
   "created_at": "2000-01-01T01:00:00Z",
@@ -81,6 +82,7 @@
 * `form_field_set` / `FormFieldSet`  (FormFieldSet): Custom Form to use
 * `skip_name` / `SkipName`  (bool): BundleRegistrations can be saved without providing name?
 * `skip_email` / `SkipEmail`  (bool): BundleRegistrations can be saved without providing email?
+* `start_access_on_date` / `StartAccessOnDate`  (Nullable<DateTime>): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_company` / `SkipCompany`  (bool): BundleRegistrations can be saved without providing company?
 * `id` / `Id`  (Nullable<Int64>): Bundle ID
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Bundle created at date/time
@@ -185,6 +187,7 @@ Task<Bundle> Bundle.Create(
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `skip_company` (bool): BundleRegistrations can be saved without providing company?
+* `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `snapshot_id` (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 

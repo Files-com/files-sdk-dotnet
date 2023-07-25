@@ -93,6 +93,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_registration_notifications", null);
             }
+            if (!this.attributes.ContainsKey("bundle_require_registration"))
+            {
+                this.attributes.Add("bundle_require_registration", false);
+            }
             if (!this.attributes.ContainsKey("bundle_require_share_recipient"))
             {
                 this.attributes.Add("bundle_require_share_recipient", false);
@@ -806,6 +810,18 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["bundle_registration_notifications"]; }
             private set { attributes["bundle_registration_notifications"] = value; }
+        }
+
+        /// <summary>
+        /// Do Bundles require registration?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bundle_require_registration")]
+        public bool BundleRequireRegistration
+        {
+            get { return attributes["bundle_require_registration"] == null ? false : (bool)attributes["bundle_require_registration"]; }
+            private set { attributes["bundle_require_registration"] = value; }
         }
 
         /// <summary>
@@ -2365,6 +2381,7 @@ namespace FilesCom.Models
         ///   immutable_files - boolean - Are files protected from modification?
         ///   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
         ///   bundle_password_required - boolean - Do Bundles require password protection?
+        ///   bundle_require_registration - boolean - Do Bundles require registration?
         ///   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
         ///   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
         ///   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
@@ -2690,6 +2707,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_password_required") && !(parameters["bundle_password_required"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_password_required must be of type bool", "parameters[\"bundle_password_required\"]");
+            }
+            if (parameters.ContainsKey("bundle_require_registration") && !(parameters["bundle_require_registration"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bundle_require_registration must be of type bool", "parameters[\"bundle_require_registration\"]");
             }
             if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool))
             {
