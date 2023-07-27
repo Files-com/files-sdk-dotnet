@@ -247,6 +247,7 @@ Task<Bundle> Bundle.Update(
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 * `send_email_receipt_to_uploader` (bool): Send delivery receipt to the uploader. Note: For writable share only
 * `skip_company` (bool): BundleRegistrations can be saved without providing company?
+* `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
@@ -323,6 +324,7 @@ parameters.Add("require_registration", true);
 parameters.Add("require_share_recipient", true);
 parameters.Add("send_email_receipt_to_uploader", true);
 parameters.Add("skip_company", true);
+parameters.Add("start_access_on_date", "2000-01-01T01:00:00Z");
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
 parameters.Add("watermark_attachment_delete", true);
@@ -353,6 +355,7 @@ Bundle.Update(parameters);
 * `require_share_recipient` (bool): Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
 * `send_email_receipt_to_uploader` (bool): Send delivery receipt to the uploader. Note: For writable share only
 * `skip_company` (bool): BundleRegistrations can be saved without providing company?
+* `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment

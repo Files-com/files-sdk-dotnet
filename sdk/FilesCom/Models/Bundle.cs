@@ -728,6 +728,7 @@ namespace FilesCom.Models
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
         ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
+        ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
@@ -825,6 +826,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
+            }
+            if (parameters.ContainsKey("start_access_on_date") && !(parameters["start_access_on_date"] is string))
+            {
+                throw new ArgumentException("Bad parameter: start_access_on_date must be of type string", "parameters[\"start_access_on_date\"]");
             }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool))
             {
@@ -1222,6 +1227,7 @@ namespace FilesCom.Models
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
         ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
+        ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
@@ -1320,6 +1326,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_company") && !(parameters["skip_company"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_company must be of type bool", "parameters[\"skip_company\"]");
+            }
+            if (parameters.ContainsKey("start_access_on_date") && !(parameters["start_access_on_date"] is string))
+            {
+                throw new ArgumentException("Bad parameter: start_access_on_date must be of type string", "parameters[\"start_access_on_date\"]");
             }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool))
             {
