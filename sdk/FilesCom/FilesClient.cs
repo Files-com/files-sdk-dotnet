@@ -16,7 +16,7 @@ namespace FilesCom
         public const string HttpFilesApi = "HttpFilesAPI";
         public const string HttpUpload = "HttpUpload";
 
-        private const string UserAgent = "Files-.NET-SDK";
+        private static string UserAgent = "Files.com DOTNET SDK v" + typeof(FilesClient).Assembly.GetName().Version.ToString(3);
         private const string ConfigManagerSectionName = "files.com/filesConfiguration";
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(FilesConfiguration));
@@ -88,13 +88,13 @@ namespace FilesCom
                     services.AddHttpClient(HttpFilesApi, client =>
                     {
                         client.BaseAddress = new Uri(BaseUrl);
-                        client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
+                        client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
                     })
                     .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
 
                     services.AddHttpClient(HttpUpload, client =>
                     {
-                        client.DefaultRequestHeaders.Add(HttpRequestHeader.UserAgent.ToString(), UserAgent);
+                        client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
                     })
                     .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
 
