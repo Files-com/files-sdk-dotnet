@@ -174,6 +174,27 @@ For related documentation see [Case Sensitivity Documentation](https://www.files
     }
 ```
 
+#### Logging
+To enable logging, create a file named `log4net.config` in the same directory as the application with the following contents:
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<log4net>
+  <root>
+    <level value="ALL" />
+    <appender-ref ref="console" />
+  </root>
+  <appender name="console" type="log4net.Appender.ConsoleAppender">
+    <layout type="log4net.Layout.PatternLayout">
+      <conversionPattern value="%date [%thread] %-5level %logger - %message%newline" />
+    </layout>
+  </appender>
+</log4net>
+```
+Then, in the application, use that file to configure `log4net`:
+```csharp
+log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(".\\log4net.config"));
+```
+
 ## Getting Support
 
 The Files.com team is happy to help with any SDK Integration challenges you may face.
