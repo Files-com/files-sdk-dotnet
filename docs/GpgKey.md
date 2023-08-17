@@ -28,7 +28,7 @@
 ## List Gpg Keys
 
 ```
-Task<GpgKey[]> GpgKey.List(
+Task<FilesList<GpgKey>> GpgKey.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

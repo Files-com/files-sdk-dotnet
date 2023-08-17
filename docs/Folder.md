@@ -57,7 +57,7 @@
 ## List Folders by path
 
 ```
-Task<RemoteFile[]> Folder.ListFor(
+Task<FilesList<RemoteFile>> Folder.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

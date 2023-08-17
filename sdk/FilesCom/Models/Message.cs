@@ -179,7 +179,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/messages/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/messages/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Message>(responseJson);
         }
@@ -234,7 +234,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   project_id (required) - int64 - Project for which to return messages.
         /// </summary>
-        public static async Task<Message[]> List(
+        public static FilesList<Message> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -264,18 +264,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: project_id", "parameters[\"project_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/messages", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Message[]>(responseJson);
+            return new FilesList<Message>($"/messages", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Message[]> All(
+        public static FilesList<Message> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -301,7 +299,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/messages/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/messages/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Message>(responseJson);
         }
@@ -360,7 +358,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/messages", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/messages", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Message>(responseJson);
         }
@@ -415,7 +413,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/messages/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/messages/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Message>(responseJson);
         }

@@ -448,7 +448,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/history_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<HistoryExport>(responseJson);
         }
@@ -585,7 +585,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: query_target_permission_set must be of type string", "parameters[\"query_target_permission_set\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history_exports", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/history_exports", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<HistoryExport>(responseJson);
         }

@@ -20,7 +20,7 @@
 ## List Inbox Uploads
 
 ```
-Task<InboxUpload[]> InboxUpload.List(
+Task<FilesList<InboxUpload>> InboxUpload.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

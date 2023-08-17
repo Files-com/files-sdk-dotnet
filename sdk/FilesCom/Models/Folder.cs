@@ -337,7 +337,7 @@ namespace FilesCom.Models
         ///   with_previews - boolean - Include file previews?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public static async Task<RemoteFile[]> ListFor(
+        public static FilesList<RemoteFile> ListFor(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -392,9 +392,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<RemoteFile[]>(responseJson);
+            return new FilesList<RemoteFile>($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -431,7 +429,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<RemoteFile>(responseJson);
         }

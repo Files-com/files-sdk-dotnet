@@ -26,7 +26,7 @@
 ## List Clickwraps
 
 ```
-Task<Clickwrap[]> Clickwrap.List(
+Task<FilesList<Clickwrap>> Clickwrap.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

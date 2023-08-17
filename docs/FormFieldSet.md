@@ -36,7 +36,7 @@
 ## List Form Field Sets
 
 ```
-Task<FormFieldSet[]> FormFieldSet.List(
+Task<FilesList<FormFieldSet>> FormFieldSet.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

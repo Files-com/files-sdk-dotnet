@@ -432,7 +432,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   history_export_id (required) - int64 - ID of the associated history export.
         /// </summary>
-        public static async Task<HistoryExportResult[]> List(
+        public static FilesList<HistoryExportResult> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -462,18 +462,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: history_export_id", "parameters[\"history_export_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<HistoryExportResult[]>(responseJson);
+            return new FilesList<HistoryExportResult>($"/history_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<HistoryExportResult[]> All(
+        public static FilesList<HistoryExportResult> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

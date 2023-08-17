@@ -64,7 +64,7 @@
 ## List History Export Results
 
 ```
-Task<HistoryExportResult[]> HistoryExportResult.List(
+Task<FilesList<HistoryExportResult>> HistoryExportResult.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

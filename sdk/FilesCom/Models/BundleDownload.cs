@@ -121,7 +121,7 @@ namespace FilesCom.Models
         ///   bundle_id - int64 - Bundle ID
         ///   bundle_registration_id - int64 - BundleRegistration ID
         /// </summary>
-        public static async Task<BundleDownload[]> List(
+        public static FilesList<BundleDownload> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -171,18 +171,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: bundle_registration_id must be of type Nullable<Int64>", "parameters[\"bundle_registration_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_downloads", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<BundleDownload[]>(responseJson);
+            return new FilesList<BundleDownload>($"/bundle_downloads", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<BundleDownload[]> All(
+        public static FilesList<BundleDownload> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

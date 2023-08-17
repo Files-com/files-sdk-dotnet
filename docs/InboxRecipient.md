@@ -26,7 +26,7 @@
 ## List Inbox Recipients
 
 ```
-Task<InboxRecipient[]> InboxRecipient.List(
+Task<FilesList<InboxRecipient>> InboxRecipient.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

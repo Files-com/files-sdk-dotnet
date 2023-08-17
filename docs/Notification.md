@@ -65,7 +65,7 @@
 ## List Notifications
 
 ```
-Task<Notification[]> Notification.List(
+Task<FilesList<Notification>> Notification.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

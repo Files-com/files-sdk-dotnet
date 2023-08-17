@@ -26,7 +26,7 @@
 ## List Messages
 
 ```
-Task<Message[]> Message.List(
+Task<FilesList<Message>> Message.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

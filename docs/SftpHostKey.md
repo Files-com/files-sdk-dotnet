@@ -23,7 +23,7 @@
 ## List Sftp Host Keys
 
 ```
-Task<SftpHostKey[]> SftpHostKey.List(
+Task<FilesList<SftpHostKey>> SftpHostKey.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

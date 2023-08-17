@@ -214,7 +214,7 @@ namespace FilesCom.Models
         ///   group_id - string
         ///   user_id - string
         /// </summary>
-        public static async Task<Permission[]> List(
+        public static FilesList<Permission> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -260,18 +260,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: user_id must be of type string", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/permissions", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Permission[]>(responseJson);
+            return new FilesList<Permission>($"/permissions", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Permission[]> All(
+        public static FilesList<Permission> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -317,7 +315,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/permissions", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/permissions", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Permission>(responseJson);
         }

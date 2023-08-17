@@ -114,7 +114,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
-        public static async Task<IpAddress[]> List(
+        public static FilesList<IpAddress> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -132,18 +132,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/ip_addresses", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<IpAddress[]>(responseJson);
+            return new FilesList<IpAddress>($"/ip_addresses", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<IpAddress[]> All(
+        public static FilesList<IpAddress> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -151,7 +149,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
-        public static async Task<PublicIpAddress[]> GetExavaultReserved(
+        public static FilesList<PublicIpAddress> GetExavaultReserved(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -169,9 +167,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/ip_addresses/exavault-reserved", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<PublicIpAddress[]>(responseJson);
+            return new FilesList<PublicIpAddress>($"/ip_addresses/exavault-reserved", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -180,7 +176,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         /// </summary>
-        public static async Task<PublicIpAddress[]> GetReserved(
+        public static FilesList<PublicIpAddress> GetReserved(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -198,9 +194,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/ip_addresses/reserved", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<PublicIpAddress[]>(responseJson);
+            return new FilesList<PublicIpAddress>($"/ip_addresses/reserved", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 

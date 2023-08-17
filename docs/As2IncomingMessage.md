@@ -88,7 +88,7 @@
 ## List As2 Incoming Messages
 
 ```
-Task<As2IncomingMessage[]> As2IncomingMessage.List(
+Task<FilesList<As2IncomingMessage>> As2IncomingMessage.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

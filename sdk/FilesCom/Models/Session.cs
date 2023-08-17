@@ -208,7 +208,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: partial_session_id must be of type string", "parameters[\"partial_session_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/sessions", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/sessions", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Session>(responseJson);
         }

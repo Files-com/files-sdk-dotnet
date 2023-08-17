@@ -41,7 +41,7 @@
 ## List As2 Partners
 
 ```
-Task<As2Partner[]> As2Partner.List(
+Task<FilesList<As2Partner>> As2Partner.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

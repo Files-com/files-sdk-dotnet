@@ -30,7 +30,7 @@
 ## List Email Incoming Messages
 
 ```
-Task<EmailIncomingMessage[]> EmailIncomingMessage.List(
+Task<FilesList<EmailIncomingMessage>> EmailIncomingMessage.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

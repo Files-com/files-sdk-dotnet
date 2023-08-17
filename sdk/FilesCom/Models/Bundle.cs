@@ -852,7 +852,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Bundle>(responseJson);
         }
@@ -912,7 +912,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
         /// </summary>
-        public static async Task<Bundle[]> List(
+        public static FilesList<Bundle> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -958,18 +958,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundles", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Bundle[]>(responseJson);
+            return new FilesList<Bundle>($"/bundles", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Bundle[]> All(
+        public static FilesList<Bundle> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -995,7 +993,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Bundle>(responseJson);
         }
@@ -1156,7 +1154,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: paths", "parameters[\"paths\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundles", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundles", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Bundle>(responseJson);
         }
@@ -1352,7 +1350,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Bundle>(responseJson);
         }

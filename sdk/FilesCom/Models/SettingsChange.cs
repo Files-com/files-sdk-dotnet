@@ -147,7 +147,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[api_key_id]=desc`). Valid fields are `api_key_id`, `created_at` or `user_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `api_key_id` and `user_id`.
         /// </summary>
-        public static async Task<SettingsChange[]> List(
+        public static FilesList<SettingsChange> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -173,18 +173,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/settings_changes", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<SettingsChange[]>(responseJson);
+            return new FilesList<SettingsChange>($"/settings_changes", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<SettingsChange[]> All(
+        public static FilesList<SettingsChange> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

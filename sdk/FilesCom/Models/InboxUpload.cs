@@ -106,7 +106,7 @@ namespace FilesCom.Models
         ///   inbox_registration_id - int64 - InboxRegistration ID
         ///   inbox_id - int64 - Inbox ID
         /// </summary>
-        public static async Task<InboxUpload[]> List(
+        public static FilesList<InboxUpload> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -156,18 +156,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/inbox_uploads", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<InboxUpload[]>(responseJson);
+            return new FilesList<InboxUpload>($"/inbox_uploads", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<InboxUpload[]> All(
+        public static FilesList<InboxUpload> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

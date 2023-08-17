@@ -28,7 +28,7 @@
 ## List Settings Changes
 
 ```
-Task<SettingsChange[]> SettingsChange.List(
+Task<FilesList<SettingsChange>> SettingsChange.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -207,7 +207,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   action_notification_export_id (required) - int64 - ID of the associated action notification export.
         /// </summary>
-        public static async Task<ActionNotificationExportResult[]> List(
+        public static FilesList<ActionNotificationExportResult> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -237,18 +237,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: action_notification_export_id", "parameters[\"action_notification_export_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_notification_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<ActionNotificationExportResult[]>(responseJson);
+            return new FilesList<ActionNotificationExportResult>($"/action_notification_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<ActionNotificationExportResult[]> All(
+        public static FilesList<ActionNotificationExportResult> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

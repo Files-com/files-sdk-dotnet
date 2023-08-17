@@ -23,7 +23,7 @@
 ## List Message Comments
 
 ```
-Task<MessageComment[]> MessageComment.List(
+Task<FilesList<MessageComment>> MessageComment.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -172,7 +172,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/groups/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Group>(responseJson);
         }
@@ -229,7 +229,7 @@ namespace FilesCom.Models
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
         ///   ids - string - Comma-separated list of group ids to include in results.
         /// </summary>
-        public static async Task<Group[]> List(
+        public static FilesList<Group> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -263,18 +263,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: ids must be of type string", "parameters[\"ids\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/groups", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Group[]>(responseJson);
+            return new FilesList<Group>($"/groups", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Group[]> All(
+        public static FilesList<Group> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -300,7 +298,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Group>(responseJson);
         }
@@ -347,7 +345,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/groups", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/groups", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Group>(responseJson);
         }
@@ -395,7 +393,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Group>(responseJson);
         }

@@ -26,7 +26,7 @@
 ## List User Cipher Uses
 
 ```
-Task<UserCipherUse[]> UserCipherUse.List(
+Task<FilesList<UserCipherUse>> UserCipherUse.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

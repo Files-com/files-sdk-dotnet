@@ -150,7 +150,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<BundleNotification>(responseJson);
         }
@@ -206,7 +206,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[bundle_id]=desc`). Valid fields are `bundle_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
         /// </summary>
-        public static async Task<BundleNotification[]> List(
+        public static FilesList<BundleNotification> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -236,18 +236,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<BundleNotification[]>(responseJson);
+            return new FilesList<BundleNotification>($"/bundle_notifications", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<BundleNotification[]> All(
+        public static FilesList<BundleNotification> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -273,7 +271,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<BundleNotification>(responseJson);
         }
@@ -324,7 +322,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<BundleNotification>(responseJson);
         }
@@ -362,7 +360,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<BundleNotification>(responseJson);
         }

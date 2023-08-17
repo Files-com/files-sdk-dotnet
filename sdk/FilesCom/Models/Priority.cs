@@ -85,7 +85,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   path (required) - string - The path to query for priorities
         /// </summary>
-        public static async Task<Priority[]> List(
+        public static FilesList<Priority> List(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -112,18 +112,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/priorities", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Priority[]>(responseJson);
+            return new FilesList<Priority>($"/priorities", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Priority[]> All(
+        public static FilesList<Priority> All(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(path, parameters, options);
+            return List(path, parameters, options);
         }
 
     }

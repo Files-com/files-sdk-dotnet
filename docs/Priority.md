@@ -18,7 +18,7 @@
 ## List Priorities
 
 ```
-Task<Priority[]> Priority.List(
+Task<FilesList<Priority>> Priority.List(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -24,7 +24,7 @@
 ## List Bundle Notifications
 
 ```
-Task<BundleNotification[]> BundleNotification.List(
+Task<FilesList<BundleNotification>> BundleNotification.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

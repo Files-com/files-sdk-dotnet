@@ -18,7 +18,7 @@
 ## List Projects
 
 ```
-Task<Project[]> Project.List(
+Task<FilesList<Project>> Project.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

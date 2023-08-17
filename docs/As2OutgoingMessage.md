@@ -80,7 +80,7 @@
 ## List As2 Outgoing Messages
 
 ```
-Task<As2OutgoingMessage[]> As2OutgoingMessage.List(
+Task<FilesList<As2OutgoingMessage>> As2OutgoingMessage.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

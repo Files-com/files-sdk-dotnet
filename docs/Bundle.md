@@ -113,7 +113,7 @@
 ## List Bundles
 
 ```
-Task<Bundle[]> Bundle.List(
+Task<FilesList<Bundle>> Bundle.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

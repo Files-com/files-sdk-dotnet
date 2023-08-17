@@ -27,7 +27,7 @@
 ## List Bundle Recipients
 
 ```
-Task<BundleRecipient[]> BundleRecipient.List(
+Task<FilesList<BundleRecipient>> BundleRecipient.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

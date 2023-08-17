@@ -38,7 +38,7 @@
 ## List Locks by path
 
 ```
-Task<Lock[]> Lock.ListFor(
+Task<FilesList<Lock>> Lock.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

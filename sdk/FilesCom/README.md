@@ -76,6 +76,10 @@ or you may set them on a config object for per-session configuration.
 * `MaxNetworkRetries` - max retries (default: 3)
 * `MaxNetworkRetryDelay` - max retry delay in seconds (default: 2)
 
+### Pagination
+
+For endpoints with pagination, operations such as `List` will return a `FilesList` object. This object allows for accessing pages of
+results asyncronously with `LoadNextPage()` and `All()` or with auto-pagination using `ListAutoPaging()`.
 
 #### Writing a file example
 ```csharp 
@@ -145,13 +149,33 @@ or you may set them on a config object for per-session configuration.
     }
 ```
 
-#### List root folder
+#### List root folder (loads all pages into memory)
 ```csharp 
-    var files = await Folder.ListFor("/", null, null);
-    foreach (var file in files)
+    var files = Folder.ListFor("/", null, null);
+    foreach (var file in await files.All())
     {
         Console.WriteLine("- Path: {0}", file.Path);
     }
+```
+
+#### List root folder with auto pagination (loads each page into memory)
+```csharp
+    foreach (var file in Folder.ListFor("/").ListAutoPaging())
+    {
+        Console.WriteLine("- Path: {0}", file.Path);
+    }
+```
+
+#### List root folder with manual pagination (loads each page into memory)
+```csharp
+    FilesList<RemoteFile> listing = Folder.ListFor("/");
+    do
+    {
+        foreach (var file in await listing.LoadNextPage())
+        {
+            Console.WriteLine("- Path: {0}", file.Path);
+        }
+    } while (listing.HasNextPage);
 ```
 
 #### List folder with a filter
@@ -159,8 +183,8 @@ or you may set them on a config object for per-session configuration.
     Dictionary<string, object> parameters = new Dictionary<string, object>(){
         { "filter", "*.png"},
     };
-    var files = await Folder.ListFor("/", parameters, null);
-    foreach (var file in files)
+    var files = Folder.ListFor("/", parameters, null);
+    foreach (var file in files.ListAutoPaging())
     {
         Console.WriteLine("- Path: {0}", file.Path);
     }
@@ -192,7 +216,7 @@ To enable logging, create a file named `log4net.config` in the same directory as
 ```
 Then, in the application, use that file to configure `log4net`:
 ```csharp
-log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(".\\log4net.config"));
+log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("./log4net.config"));
 ```
 
 ## Getting Support

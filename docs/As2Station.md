@@ -43,7 +43,7 @@
 ## List As2 Stations
 
 ```
-Task<As2Station[]> As2Station.List(
+Task<FilesList<As2Station>> As2Station.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

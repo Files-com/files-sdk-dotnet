@@ -19,7 +19,7 @@
 ## List Message Comment Reactions
 
 ```
-Task<MessageCommentReaction[]> MessageCommentReaction.List(
+Task<FilesList<MessageCommentReaction>> MessageCommentReaction.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -27,7 +27,7 @@
 ## List Snapshots
 
 ```
-Task<Snapshot[]> Snapshot.List(
+Task<FilesList<Snapshot>> Snapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

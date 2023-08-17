@@ -220,7 +220,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   folder_behavior_id - int64 - ID of the associated Inbox.
         /// </summary>
-        public static async Task<InboxRegistration[]> List(
+        public static FilesList<InboxRegistration> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -242,18 +242,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: folder_behavior_id must be of type Nullable<Int64>", "parameters[\"folder_behavior_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/inbox_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<InboxRegistration[]>(responseJson);
+            return new FilesList<InboxRegistration>($"/inbox_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<InboxRegistration[]> All(
+        public static FilesList<InboxRegistration> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

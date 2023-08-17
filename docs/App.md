@@ -50,7 +50,7 @@
 ## List Apps
 
 ```
-Task<App[]> App.List(
+Task<FilesList<App>> App.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -209,7 +209,7 @@ namespace FilesCom.Models
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
         ///   path - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
-        public static async Task<Request[]> List(
+        public static FilesList<Request> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -239,18 +239,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/requests", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Request[]>(responseJson);
+            return new FilesList<Request>($"/requests", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Request[]> All(
+        public static FilesList<Request> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -261,7 +259,7 @@ namespace FilesCom.Models
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
         ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
-        public static async Task<Request[]> GetFolder(
+        public static FilesList<Request> GetFolder(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -296,9 +294,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/requests/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Request[]>(responseJson);
+            return new FilesList<Request>($"/requests/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -343,7 +339,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/requests", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/requests", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Request>(responseJson);
         }

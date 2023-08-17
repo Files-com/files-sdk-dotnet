@@ -22,7 +22,7 @@
 ## List User Requests
 
 ```
-Task<UserRequest[]> UserRequest.List(
+Task<FilesList<UserRequest>> UserRequest.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

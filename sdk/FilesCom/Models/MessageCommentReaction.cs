@@ -138,7 +138,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   message_comment_id (required) - int64 - Message comment to return reactions for.
         /// </summary>
-        public static async Task<MessageCommentReaction[]> List(
+        public static FilesList<MessageCommentReaction> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -168,18 +168,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: message_comment_id", "parameters[\"message_comment_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/message_comment_reactions", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<MessageCommentReaction[]>(responseJson);
+            return new FilesList<MessageCommentReaction>($"/message_comment_reactions", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<MessageCommentReaction[]> All(
+        public static FilesList<MessageCommentReaction> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -205,7 +203,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/message_comment_reactions/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/message_comment_reactions/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<MessageCommentReaction>(responseJson);
         }
@@ -246,7 +244,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: emoji", "parameters[\"emoji\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/message_comment_reactions", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/message_comment_reactions", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<MessageCommentReaction>(responseJson);
         }

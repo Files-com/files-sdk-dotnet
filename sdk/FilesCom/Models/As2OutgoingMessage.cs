@@ -532,7 +532,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
         ///   as2_partner_id - int64 - As2 Partner ID.  If provided, will return message specific to that partner.
         /// </summary>
-        public static async Task<As2OutgoingMessage[]> List(
+        public static FilesList<As2OutgoingMessage> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -578,18 +578,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: as2_partner_id must be of type Nullable<Int64>", "parameters[\"as2_partner_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/as2_outgoing_messages", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<As2OutgoingMessage[]>(responseJson);
+            return new FilesList<As2OutgoingMessage>($"/as2_outgoing_messages", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<As2OutgoingMessage[]> All(
+        public static FilesList<As2OutgoingMessage> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

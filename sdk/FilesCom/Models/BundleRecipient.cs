@@ -183,7 +183,7 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
         ///   bundle_id (required) - int64 - List recipients for the bundle with this ID.
         /// </summary>
-        public static async Task<BundleRecipient[]> List(
+        public static FilesList<BundleRecipient> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -221,18 +221,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<BundleRecipient[]>(responseJson);
+            return new FilesList<BundleRecipient>($"/bundle_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<BundleRecipient[]> All(
+        public static FilesList<BundleRecipient> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -291,7 +289,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: recipient", "parameters[\"recipient\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<BundleRecipient>(responseJson);
         }

@@ -34,7 +34,7 @@
 ## List Action Notification Export Results
 
 ```
-Task<ActionNotificationExportResult[]> ActionNotificationExportResult.List(
+Task<FilesList<ActionNotificationExportResult>> ActionNotificationExportResult.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

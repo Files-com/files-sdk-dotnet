@@ -141,7 +141,7 @@
 ## List Remote Servers
 
 ```
-Task<RemoteServer[]> RemoteServer.List(
+Task<FilesList<RemoteServer>> RemoteServer.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

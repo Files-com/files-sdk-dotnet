@@ -30,7 +30,7 @@
 ## List Permissions
 
 ```
-Task<Permission[]> Permission.List(
+Task<FilesList<Permission>> Permission.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

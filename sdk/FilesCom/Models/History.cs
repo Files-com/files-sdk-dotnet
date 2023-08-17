@@ -254,7 +254,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
-        public static async Task<Action[]> ListForFile(
+        public static FilesList<Action> ListForFile(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -297,9 +297,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Action[]>(responseJson);
+            return new FilesList<Action>($"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -313,7 +311,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
-        public static async Task<Action[]> ListForFolder(
+        public static FilesList<Action> ListForFolder(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -356,9 +354,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Action[]>(responseJson);
+            return new FilesList<Action>($"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -372,7 +368,7 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
         ///   user_id (required) - int64 - User ID.
         /// </summary>
-        public static async Task<Action[]> ListForUser(
+        public static FilesList<Action> ListForUser(
             Nullable<Int64> user_id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -415,9 +411,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Action[]>(responseJson);
+            return new FilesList<Action>($"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -430,7 +424,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[user_id]=desc`). Valid fields are `user_id` and `created_at`.
         /// </summary>
-        public static async Task<Action[]> ListLogins(
+        public static FilesList<Action> ListLogins(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -464,9 +458,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Action[]>(responseJson);
+            return new FilesList<Action>($"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -481,7 +473,7 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
         /// </summary>
-        public static async Task<Action[]> List(
+        public static FilesList<Action> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -523,18 +515,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/history", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Action[]>(responseJson);
+            return new FilesList<Action>($"/history", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Action[]> All(
+        public static FilesList<Action> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

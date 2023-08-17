@@ -321,7 +321,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: url", "parameters[\"url\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/webhook_tests", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/webhook_tests", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<WebhookTest>(responseJson);
         }

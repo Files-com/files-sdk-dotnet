@@ -27,7 +27,7 @@
 ## List Group Users
 
 ```
-Task<GroupUser[]> GroupUser.List(
+Task<FilesList<GroupUser>> GroupUser.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

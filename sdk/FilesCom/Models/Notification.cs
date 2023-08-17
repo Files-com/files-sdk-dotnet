@@ -451,7 +451,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Notification>(responseJson);
         }
@@ -511,7 +511,7 @@ namespace FilesCom.Models
         ///   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
         ///   group_id - string
         /// </summary>
-        public static async Task<Notification[]> List(
+        public static FilesList<Notification> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -557,18 +557,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/notifications", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Notification[]>(responseJson);
+            return new FilesList<Notification>($"/notifications", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Notification[]> All(
+        public static FilesList<Notification> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -594,7 +592,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Notification>(responseJson);
         }
@@ -706,7 +704,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/notifications", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/notifications", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Notification>(responseJson);
         }
@@ -799,7 +797,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Notification>(responseJson);
         }

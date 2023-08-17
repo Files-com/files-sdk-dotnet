@@ -281,7 +281,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_notification_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/action_notification_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
         }
@@ -358,7 +358,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: query_folder must be of type string", "parameters[\"query_folder\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/action_notification_exports", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/action_notification_exports", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
         }

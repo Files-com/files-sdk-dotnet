@@ -526,7 +526,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
         }
@@ -586,7 +586,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `last_modified_at`.
         ///   with_deleted - boolean - Set to true to include deleted automations in the results.
         /// </summary>
-        public static async Task<Automation[]> List(
+        public static FilesList<Automation> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -632,18 +632,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_deleted must be of type bool", "parameters[\"with_deleted\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Automation[]>(responseJson);
+            return new FilesList<Automation>($"/automations", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Automation[]> All(
+        public static FilesList<Automation> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -669,7 +667,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
         }
@@ -795,7 +793,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/automations", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
         }
@@ -944,7 +942,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Automation>(responseJson);
         }

@@ -181,7 +181,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
         /// </summary>
-        public static async Task<EmailIncomingMessage[]> List(
+        public static FilesList<EmailIncomingMessage> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -227,18 +227,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/email_incoming_messages", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<EmailIncomingMessage[]>(responseJson);
+            return new FilesList<EmailIncomingMessage>($"/email_incoming_messages", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<EmailIncomingMessage[]> All(
+        public static FilesList<EmailIncomingMessage> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

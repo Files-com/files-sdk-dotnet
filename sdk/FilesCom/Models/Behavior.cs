@@ -230,7 +230,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/behaviors/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Behavior>(responseJson);
         }
@@ -286,7 +286,7 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         /// </summary>
-        public static async Task<Behavior[]> List(
+        public static FilesList<Behavior> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -316,18 +316,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Behavior[]>(responseJson);
+            return new FilesList<Behavior>($"/behaviors", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<Behavior[]> All(
+        public static FilesList<Behavior> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -353,7 +351,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/behaviors/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Behavior>(responseJson);
         }
@@ -378,7 +376,7 @@ namespace FilesCom.Models
         ///   recursive - string - Show behaviors above this path?
         ///   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
         /// </summary>
-        public static async Task<Behavior[]> ListFor(
+        public static FilesList<Behavior> ListFor(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -425,9 +423,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Behavior[]>(responseJson);
+            return new FilesList<Behavior>($"/behaviors/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -482,7 +478,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: behavior", "parameters[\"behavior\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/behaviors", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Behavior>(responseJson);
         }
@@ -596,7 +592,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/behaviors/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/behaviors/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Behavior>(responseJson);
         }

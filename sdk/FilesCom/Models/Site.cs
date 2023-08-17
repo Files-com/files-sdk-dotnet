@@ -2295,7 +2295,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
 
-            string responseJson = await FilesClient.SendRequest($"/site", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/site", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<Site>(responseJson);
         }
@@ -2313,7 +2313,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
 
-            string responseJson = await FilesClient.SendRequest($"/site/usage", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/site/usage", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<UsageSnapshot>(responseJson);
         }
@@ -3017,7 +3017,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: session_expiry_minutes must be of type Nullable<Int64>", "parameters[\"session_expiry_minutes\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/site", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/site", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<Site>(responseJson);
         }

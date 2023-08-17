@@ -38,7 +38,7 @@
 ## List Usage Daily Snapshots
 
 ```
-Task<UsageDailySnapshot[]> UsageDailySnapshot.List(
+Task<FilesList<UsageDailySnapshot>> UsageDailySnapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

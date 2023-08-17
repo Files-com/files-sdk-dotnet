@@ -40,7 +40,7 @@
 ## List Api Keys
 
 ```
-Task<ApiKey[]> ApiKey.List(
+Task<FilesList<ApiKey>> ApiKey.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

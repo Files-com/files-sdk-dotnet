@@ -26,7 +26,7 @@
 ## List Groups
 
 ```
-Task<Group[]> Group.List(
+Task<FilesList<Group>> Group.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

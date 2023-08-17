@@ -119,7 +119,7 @@ namespace FilesCom
             get { return config.SessionId; }
         }
 
-        public static async Task<string> SendRequest(
+        public static async Task<HttpResponseMessage> SendRequest(
             string path,
             HttpMethod verb,
             Dictionary<string, object> parameters,
@@ -146,6 +146,20 @@ namespace FilesCom
                     throw;
                 }
             }
+        }
+
+        public static async Task<string> SendStringRequest(
+            string path,
+            HttpMethod verb,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
+            HttpResponseMessage response = await SendRequest(path, verb, parameters, options);
+
+            string responseJson = await response.Content.ReadAsStringAsync();
+            log.Debug(responseJson);
+            return responseJson;
         }
 
         public static async Task StreamDownload(string uri, Stream writeStream)

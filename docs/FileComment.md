@@ -23,7 +23,7 @@
 ## List File Comments by path
 
 ```
-Task<FileComment[]> FileComment.ListFor(
+Task<FilesList<FileComment>> FileComment.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

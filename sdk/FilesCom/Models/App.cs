@@ -298,7 +298,7 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name` and `app_type`. Valid field combinations are `[ name, app_type ]` and `[ app_type, name ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
         /// </summary>
-        public static async Task<App[]> List(
+        public static FilesList<App> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -328,18 +328,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/apps", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<App[]>(responseJson);
+            return new FilesList<App>($"/apps", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<App[]> All(
+        public static FilesList<App> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

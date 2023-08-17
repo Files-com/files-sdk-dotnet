@@ -32,7 +32,7 @@
 ## List Behaviors
 
 ```
-Task<Behavior[]> Behavior.List(
+Task<FilesList<Behavior>> Behavior.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -70,7 +70,7 @@ Task<Behavior> Behavior.Find(
 ## List Behaviors by path
 
 ```
-Task<Behavior[]> Behavior.ListFor(
+Task<FilesList<Behavior>> Behavior.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

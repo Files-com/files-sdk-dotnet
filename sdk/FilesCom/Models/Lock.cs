@@ -270,7 +270,7 @@ namespace FilesCom.Models
         ///   path (required) - string - Path to operate on.
         ///   include_children - boolean - Include locks from children objects?
         /// </summary>
-        public static async Task<Lock[]> ListFor(
+        public static FilesList<Lock> ListFor(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -301,9 +301,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<Lock[]>(responseJson);
+            return new FilesList<Lock>($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
 
@@ -350,7 +348,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<Lock>(responseJson);
         }

@@ -38,7 +38,7 @@
 ## List Inbox Registrations
 
 ```
-Task<InboxRegistration[]> InboxRegistration.List(
+Task<FilesList<InboxRegistration>> InboxRegistration.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

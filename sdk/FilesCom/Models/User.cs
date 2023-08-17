@@ -1370,7 +1370,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<User>(responseJson);
         }
@@ -1439,7 +1439,7 @@ namespace FilesCom.Models
         ///   q[ssl_required] - string - If set, list only users with overridden SSL required setting.
         ///   search - string - Searches for partial matches of name, username, or email.
         /// </summary>
-        public static async Task<User[]> List(
+        public static FilesList<User> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1493,18 +1493,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: search must be of type string", "parameters[\"search\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<User[]>(responseJson);
+            return new FilesList<User>($"/users", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<User[]> All(
+        public static FilesList<User> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -1530,7 +1528,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<User>(responseJson);
         }
@@ -1782,7 +1780,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/users", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<User>(responseJson);
         }
@@ -2113,7 +2111,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<User>(responseJson);
         }

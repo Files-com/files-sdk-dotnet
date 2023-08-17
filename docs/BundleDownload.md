@@ -22,7 +22,7 @@
 ## List Bundle Downloads
 
 ```
-Task<BundleDownload[]> BundleDownload.List(
+Task<FilesList<BundleDownload>> BundleDownload.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

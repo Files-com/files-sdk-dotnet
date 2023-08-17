@@ -176,7 +176,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }
@@ -250,7 +250,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   group_id - int64 - Group ID.  If provided, will return group_users of this group.
         /// </summary>
-        public static async Task<GroupUser[]> List(
+        public static FilesList<GroupUser> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -276,18 +276,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<GroupUser[]>(responseJson);
+            return new FilesList<GroupUser>($"/group_users", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<GroupUser[]> All(
+        public static FilesList<GroupUser> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -326,7 +324,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/group_users", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }
@@ -377,7 +375,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<GroupUser>(responseJson);
         }

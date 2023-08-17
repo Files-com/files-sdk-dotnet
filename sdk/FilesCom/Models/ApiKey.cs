@@ -271,7 +271,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -331,7 +331,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `expires_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `expires_at`.
         /// </summary>
-        public static async Task<ApiKey[]> List(
+        public static FilesList<ApiKey> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -377,18 +377,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<ApiKey[]>(responseJson);
+            return new FilesList<ApiKey>($"/api_keys", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<ApiKey[]> All(
+        public static FilesList<ApiKey> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -403,7 +401,7 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
 
-            string responseJson = await FilesClient.SendRequest($"/api_key", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/api_key", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -432,7 +430,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -489,7 +487,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -523,7 +521,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_key", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/api_key", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }
@@ -571,7 +569,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             return JsonSerializer.Deserialize<ApiKey>(responseJson);
         }

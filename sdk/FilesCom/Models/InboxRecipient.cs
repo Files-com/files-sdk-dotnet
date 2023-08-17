@@ -168,7 +168,7 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
         ///   inbox_id (required) - int64 - List recipients for the inbox with this ID.
         /// </summary>
-        public static async Task<InboxRecipient[]> List(
+        public static FilesList<InboxRecipient> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -202,18 +202,16 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<InboxRecipient[]>(responseJson);
+            return new FilesList<InboxRecipient>($"/inbox_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<InboxRecipient[]> All(
+        public static FilesList<InboxRecipient> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -267,7 +265,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: recipient", "parameters[\"recipient\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<InboxRecipient>(responseJson);
         }

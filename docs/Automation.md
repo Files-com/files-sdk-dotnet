@@ -76,7 +76,7 @@
 ## List Automations
 
 ```
-Task<Automation[]> Automation.List(
+Task<FilesList<Automation>> Automation.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

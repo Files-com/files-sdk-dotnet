@@ -146,7 +146,7 @@
 ## List Users
 
 ```
-Task<User[]> User.List(
+Task<FilesList<User>> User.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

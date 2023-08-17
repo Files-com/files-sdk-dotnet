@@ -102,7 +102,7 @@
 ## List Sso Strategies
 
 ```
-Task<SsoStrategy[]> SsoStrategy.List(
+Task<FilesList<SsoStrategy>> SsoStrategy.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

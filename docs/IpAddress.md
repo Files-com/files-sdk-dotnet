@@ -24,7 +24,7 @@
 ## List IP Addresses associated with the current site
 
 ```
-Task<IpAddress[]> IpAddress.List(
+Task<FilesList<IpAddress>> IpAddress.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -42,7 +42,7 @@ Task<IpAddress[]> IpAddress.List(
 ## List all possible public ExaVault IP addresses
 
 ```
-Task<PublicIpAddress[]> IpAddress.GetExavaultReserved(
+Task<FilesList<PublicIpAddress>> IpAddress.GetExavaultReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -60,7 +60,7 @@ Task<PublicIpAddress[]> IpAddress.GetExavaultReserved(
 ## List all possible public IP addresses
 
 ```
-Task<PublicIpAddress[]> IpAddress.GetReserved(
+Task<FilesList<PublicIpAddress>> IpAddress.GetReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

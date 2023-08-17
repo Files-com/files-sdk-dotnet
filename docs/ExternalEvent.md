@@ -36,7 +36,7 @@
 ## List External Events
 
 ```
-Task<ExternalEvent[]> ExternalEvent.List(
+Task<FilesList<ExternalEvent>> ExternalEvent.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

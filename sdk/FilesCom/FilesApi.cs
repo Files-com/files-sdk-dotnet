@@ -12,7 +12,7 @@ namespace FilesCom
 {
     public interface IFilesApiService
     {
-        Task<string> SendRequest(
+        Task<HttpResponseMessage> SendRequest(
             string path,
             HttpMethod verb,
             Dictionary<string, object> parameters,
@@ -34,7 +34,7 @@ namespace FilesCom
             _clientFactory = clientFactory;
         }
 
-        public async Task<string> SendRequest(
+        public async Task<HttpResponseMessage> SendRequest(
             string path,
             HttpMethod verb,
             Dictionary<string, object> parameters,
@@ -130,18 +130,14 @@ namespace FilesCom
             log.Info($"Sending {verb} request: {uri}");
             log.Debug($"content: {jsonString}");
 
-            using (HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage))
+            HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
+            if (!response.IsSuccessStatusCode)
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    string message = await response.Content.ReadAsStringAsync();
-                    log.Error($"HTTP request failed with code {response.StatusCode}: {message}");
-                    response.EnsureSuccessStatusCode();
-                }
-                string responseJson = await response.Content.ReadAsStringAsync();
-                log.Debug(responseJson);
-                return responseJson;
+                string message = await response.Content.ReadAsStringAsync();
+                log.Error($"HTTP request failed with code {response.StatusCode}: {message}");
+                response.EnsureSuccessStatusCode();
             }
+            return response;
         }
 
         public async Task StreamDownload(string uriString, Stream writeStream)

@@ -27,7 +27,7 @@
 ## List Public Keys
 
 ```
-Task<PublicKey[]> PublicKey.List(
+Task<FilesList<PublicKey>> PublicKey.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

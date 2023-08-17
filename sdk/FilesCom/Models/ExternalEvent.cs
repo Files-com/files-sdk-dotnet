@@ -228,7 +228,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
         /// </summary>
-        public static async Task<ExternalEvent[]> List(
+        public static FilesList<ExternalEvent> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -274,18 +274,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/external_events", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<ExternalEvent[]>(responseJson);
+            return new FilesList<ExternalEvent>($"/external_events", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<ExternalEvent[]> All(
+        public static FilesList<ExternalEvent> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
         /// <summary>
@@ -311,7 +309,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/external_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/external_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
         }
@@ -356,7 +354,7 @@ namespace FilesCom.Models
                 throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/external_events", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/external_events", System.Net.Http.HttpMethod.Post, parameters, options);
 
             return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
         }

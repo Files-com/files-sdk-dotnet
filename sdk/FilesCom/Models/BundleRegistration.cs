@@ -251,7 +251,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   bundle_id - int64 - ID of the associated Bundle
         /// </summary>
-        public static async Task<BundleRegistration[]> List(
+        public static FilesList<BundleRegistration> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -277,18 +277,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/bundle_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<BundleRegistration[]>(responseJson);
+            return new FilesList<BundleRegistration>($"/bundle_registrations", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<BundleRegistration[]> All(
+        public static FilesList<BundleRegistration> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

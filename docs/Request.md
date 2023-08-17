@@ -28,7 +28,7 @@
 ## List Requests
 
 ```
-Task<Request[]> Request.List(
+Task<FilesList<Request>> Request.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -49,7 +49,7 @@ Task<Request[]> Request.List(
 ## List Requests
 
 ```
-Task<Request[]> Request.GetFolder(
+Task<FilesList<Request>> Request.GetFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

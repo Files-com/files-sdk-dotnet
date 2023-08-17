@@ -226,7 +226,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `date`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `date`.
         /// </summary>
-        public static async Task<UsageDailySnapshot[]> List(
+        public static FilesList<UsageDailySnapshot> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -268,18 +268,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            string responseJson = await FilesClient.SendRequest($"/usage_daily_snapshots", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            return JsonSerializer.Deserialize<UsageDailySnapshot[]>(responseJson);
+            return new FilesList<UsageDailySnapshot>($"/usage_daily_snapshots", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static async Task<UsageDailySnapshot[]> All(
+        public static FilesList<UsageDailySnapshot> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await List(parameters, options);
+            return List(parameters, options);
         }
 
     }

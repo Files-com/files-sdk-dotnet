@@ -26,7 +26,7 @@
 ## List Automation Runs
 
 ```
-Task<AutomationRun[]> AutomationRun.List(
+Task<FilesList<AutomationRun>> AutomationRun.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

@@ -24,7 +24,7 @@
 ## List Remote Bandwidth Snapshots
 
 ```
-Task<RemoteBandwidthSnapshot[]> RemoteBandwidthSnapshot.List(
+Task<FilesList<RemoteBandwidthSnapshot>> RemoteBandwidthSnapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

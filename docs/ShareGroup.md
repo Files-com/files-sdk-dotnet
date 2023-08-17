@@ -31,7 +31,7 @@
 ## List Share Groups
 
 ```
-Task<ShareGroup[]> ShareGroup.List(
+Task<FilesList<ShareGroup>> ShareGroup.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

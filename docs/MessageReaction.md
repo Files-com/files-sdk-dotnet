@@ -19,7 +19,7 @@
 ## List Message Reactions
 
 ```
-Task<MessageReaction[]> MessageReaction.List(
+Task<FilesList<MessageReaction>> MessageReaction.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
