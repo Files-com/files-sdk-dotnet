@@ -85,6 +85,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("action", null);
             }
+            if (!this.attributes.ContainsKey("use_dedicated_ips"))
+            {
+                this.attributes.Add("use_dedicated_ips", false);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -245,6 +249,17 @@ namespace FilesCom.Models
             set { attributes["action"] = value; }
         }
 
+        /// <summary>
+        /// Use dedicated IPs for sending the webhook?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("use_dedicated_ips")]
+        public bool UseDedicatedIps
+        {
+            get { return attributes["use_dedicated_ips"] == null ? false : (bool)attributes["use_dedicated_ips"]; }
+            set { attributes["use_dedicated_ips"] = value; }
+        }
+
 
         public async Task Save()
         {
@@ -270,6 +285,7 @@ namespace FilesCom.Models
         ///   file_as_body - boolean - Send the file data as the request body?
         ///   file_form_field - string - Send the file data as a named parameter in the request POST body
         ///   action - string - action for test body
+        ///   use_dedicated_ips - boolean - Use dedicated IPs for sending the webhook?
         /// </summary>
         public static async Task<WebhookTest> Create(
 
@@ -315,6 +331,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("use_dedicated_ips") && !(parameters["use_dedicated_ips"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_dedicated_ips must be of type bool", "parameters[\"use_dedicated_ips\"]");
             }
             if (!parameters.ContainsKey("url") || parameters["url"] == null)
             {

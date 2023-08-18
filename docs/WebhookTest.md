@@ -26,6 +26,7 @@
 * `file_as_body` / `FileAsBody`  (bool): Send the file data as the request body?
 * `file_form_field` / `FileFormField`  (string): Send the file data as a named parameter in the request POST body
 * `action` / `Action`  (string): action for test body
+* `use_dedicated_ips` / `UseDedicatedIps`  (bool): Use dedicated IPs for sending the webhook?
 
 
 ---
@@ -51,3 +52,4 @@ Task<WebhookTest> WebhookTest.Create(
 * `file_as_body` (bool): Send the file data as the request body?
 * `file_form_field` (string): Send the file data as a named parameter in the request POST body
 * `action` (string): action for test body
+* `use_dedicated_ips` (bool): Use dedicated IPs for sending the webhook?
