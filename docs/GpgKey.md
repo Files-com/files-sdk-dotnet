@@ -74,10 +74,10 @@ Task<GpgKey> GpgKey.Create(
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `name` (string): Required - Your GPG key name.
 * `public_key` (string): Your GPG public key
 * `private_key` (string): Your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
+* `name` (string): Required - Your GPG key name.
 
 
 ---
@@ -95,10 +95,10 @@ Task<GpgKey> GpgKey.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
-* `name` (string): Required - Your GPG key name.
 * `public_key` (string): Your GPG public key
 * `private_key` (string): Your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
+* `name` (string): Your GPG key name.
 
 
 ---
@@ -127,10 +127,10 @@ var GpgKey = GpgKey.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("name", "key name");
 parameters.Add("public_key", "7f8bc1210b09b9ddf469e6b6b8920e76");
 parameters.Add("private_key", "ab236cfe4a195f0226bc2e674afdd6b0");
 parameters.Add("private_key_password", "[your GPG private key password]");
+parameters.Add("name", "key name");
 
 GpgKey.Update(parameters);
 ```
@@ -138,10 +138,10 @@ GpgKey.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
-* `name` (string): Required - Your GPG key name.
 * `public_key` (string): Your GPG public key
 * `private_key` (string): Your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
+* `name` (string): Your GPG key name.
 
 
 ---

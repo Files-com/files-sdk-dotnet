@@ -147,10 +147,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name (required) - string - Your GPG key name.
         ///   public_key - string - Your GPG public key
         ///   private_key - string - Your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
+        ///   name - string - Your GPG key name.
         /// </summary>
         public async Task<GpgKey> Update(Dictionary<string, object> parameters)
         {
@@ -165,10 +165,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
@@ -181,13 +177,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("name") || parameters["name"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/gpg_keys/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -318,10 +314,10 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   name (required) - string - Your GPG key name.
         ///   public_key - string - Your GPG public key
         ///   private_key - string - Your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
+        ///   name (required) - string - Your GPG key name.
         /// </summary>
         public static async Task<GpgKey> Create(
 
@@ -336,10 +332,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
@@ -351,6 +343,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
@@ -365,10 +361,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name (required) - string - Your GPG key name.
         ///   public_key - string - Your GPG public key
         ///   private_key - string - Your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
+        ///   name - string - Your GPG key name.
         /// </summary>
         public static async Task<GpgKey> Update(
             Nullable<Int64> id,
@@ -384,10 +380,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
@@ -400,13 +392,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("name") || parameters["name"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/gpg_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
