@@ -291,7 +291,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<BundleRecipient>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<BundleRecipient>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

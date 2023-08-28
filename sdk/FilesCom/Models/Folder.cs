@@ -431,7 +431,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

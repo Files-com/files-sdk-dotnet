@@ -37,15 +37,17 @@ namespace FilesCom.Models
             return f;
         }
 
-        private static async Task<Tuple<Int64, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options = null)
+        private static async Task<Tuple<Int64, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
         {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            if (parameters == null)
+            {
+                parameters = new Dictionary<string, object>();
+            }
             if (fileRef != null)
             {
                 parameters["ref"] = fileRef;
             }
             parameters["part"] = partNumber;
-            parameters["mkdir_parents"] = true;
 
             FileUploadPart[] uploadActions = await BeginUpload(path, parameters, options);
             FileUploadPart uploadAction = uploadActions[0];
@@ -57,7 +59,7 @@ namespace FilesCom.Models
             return Tuple.Create(chunkLength, uploadAction.Ref);
         }
 
-        public static async Task<bool> UploadFile(string localPath, string destinationPath = null, Dictionary<string, object> options = null)
+        public static async Task<bool> UploadFile(string localPath, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
         {
             System.IO.FileInfo fileInfo = new System.IO.FileInfo(localPath);
 
@@ -70,10 +72,10 @@ namespace FilesCom.Models
             Int64 fileLength = fileInfo.Length;
 
             System.IO.Stream readStream = System.IO.File.OpenRead(localPath);
-            return await UploadFile(destinationPath, readStream, fileLength, mTime, options);
+            return await UploadFile(destinationPath, readStream, fileLength, mTime, options, parameters);
         }
 
-        public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null)
+        public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
         {
             bool success = false;
 
@@ -87,7 +89,7 @@ namespace FilesCom.Models
                 while (bytesWritten < fileLength || parts == 0)
                 {
                     parts++;
-                    Tuple<Int64, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options);
+                    Tuple<Int64, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options, parameters);
                     bytesWritten += result.Item1;
                     fileRef = result.Item2;
                 }
@@ -130,6 +132,7 @@ namespace FilesCom.Models
             catch (Exception e)
             {
                 log.Error($"DownloadFile failed for {Path}: {e.ToString()}");
+                throw;
             }
         }
         public RemoteFile() : this(null, null) { }
@@ -594,7 +597,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -631,7 +641,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -708,7 +725,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -746,7 +770,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -810,7 +841,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -867,7 +905,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -953,7 +998,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -991,7 +1043,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -1074,7 +1133,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/metadata/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<RemoteFile> Get(
@@ -1126,7 +1192,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -1165,7 +1238,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -1230,7 +1310,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

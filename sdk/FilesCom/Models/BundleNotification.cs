@@ -152,7 +152,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -273,7 +280,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<BundleNotification> Get(
@@ -324,7 +338,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -362,7 +383,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

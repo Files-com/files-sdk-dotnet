@@ -210,7 +210,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/form_field_sets/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -321,7 +328,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/form_field_sets/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<FormFieldSet> Get(
@@ -378,7 +392,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/form_field_sets", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -431,7 +452,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/form_field_sets/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

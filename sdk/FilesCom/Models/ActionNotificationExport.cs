@@ -283,7 +283,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/action_notification_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<ActionNotificationExport> Get(
@@ -360,7 +367,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/action_notification_exports", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

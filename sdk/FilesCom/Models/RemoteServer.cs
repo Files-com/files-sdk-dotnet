@@ -1140,7 +1140,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -1482,7 +1489,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -1588,7 +1602,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<RemoteServer> Get(
@@ -1625,7 +1646,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -1959,7 +1987,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -2044,7 +2079,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -2387,7 +2429,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

@@ -223,7 +223,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<AutomationRun>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<AutomationRun>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<AutomationRun> Get(

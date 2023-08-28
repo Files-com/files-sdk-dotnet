@@ -2297,7 +2297,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/site", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Site>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Site>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -2315,7 +2322,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/site/usage", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<UsageSnapshot>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<UsageSnapshot>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -3019,7 +3033,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/site", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Site>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Site>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

@@ -311,7 +311,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/external_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<ExternalEvent> Get(
@@ -356,7 +363,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/external_events", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

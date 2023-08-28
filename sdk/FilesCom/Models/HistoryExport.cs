@@ -450,7 +450,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/history_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<HistoryExport>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<HistoryExport>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<HistoryExport> Get(
@@ -587,7 +594,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/history_exports", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<HistoryExport>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<HistoryExport>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

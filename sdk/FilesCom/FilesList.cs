@@ -50,15 +50,25 @@ namespace FilesCom
             {
                 parameters["cursor"] = cursor;
             }
-            HttpResponseMessage response = await FilesClient.SendRequest(path, method, parameters, options);
-            data = JsonSerializer.Deserialize<List<T>>(await response.Content.ReadAsStringAsync());
-            if (response.Headers.Contains("X-Files-Cursor"))
+            using (HttpResponseMessage response = await FilesClient.SendRequest(path, method, parameters, options))
             {
-                cursor = new List<string>(response.Headers.GetValues("X-Files-Cursor"))[0];
-            }
-            else
-            {
-                cursor = null;
+                string body = await response.Content.ReadAsStringAsync();
+                try
+                {
+                    data = JsonSerializer.Deserialize<List<T>>(body);
+                }
+                catch (JsonException)
+                {
+                    throw new InvalidResponseException("Unexpected data received from uri: " + body);
+                }
+                if (response.Headers.Contains("X-Files-Cursor"))
+                {
+                    cursor = new List<string>(response.Headers.GetValues("X-Files-Cursor"))[0];
+                }
+                else
+                {
+                    cursor = null;
+                }
             }
             return this;
         }

@@ -528,7 +528,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Automation>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Automation>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -669,7 +676,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Automation>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Automation>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<Automation> Get(
@@ -795,7 +809,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/automations", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<Automation>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Automation>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -944,7 +965,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Automation>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Automation>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

@@ -319,7 +319,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/payments/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<AccountLineItem>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<AccountLineItem>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<AccountLineItem> Get(

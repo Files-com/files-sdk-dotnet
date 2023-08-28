@@ -149,7 +149,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Style>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Style>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -213,7 +220,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Style>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Style>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<Style> Get(
@@ -258,7 +272,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Style>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Style>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

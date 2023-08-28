@@ -267,7 +267,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<InboxRecipient>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<InboxRecipient>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

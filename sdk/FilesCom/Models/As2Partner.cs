@@ -291,7 +291,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -397,7 +404,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<As2Partner> Get(
@@ -470,7 +484,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -523,7 +544,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<As2Partner>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

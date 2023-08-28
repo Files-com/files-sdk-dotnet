@@ -81,6 +81,39 @@ or you may set them on a config object for per-session configuration.
 For endpoints with pagination, operations such as `List` will return a `FilesList` object. This object allows for accessing pages of
 results asyncronously with `LoadNextPage()` and `All()` or with auto-pagination using `ListAutoPaging()`.
 
+### Error Handling
+
+Unexpected errors when attempting to connect to the API inherit from the base level `SdkException` class. They all contain a `message`
+to describe what went wrong.
+
+#### Unable to connect to the API
+```csharp
+try
+{
+    await Folder.ListFor("/").All();
+}
+catch (ApiConnectionException e)
+{
+    Console.WriteLine("Unable to list root folder: " + e.message);
+}
+```
+
+Errors from the API inherit from `ApiException`. They all contain more parameters to describe the error such as `httpCode`, `error`, `detail`, etc.
+
+#### Path does not exist
+```csharp
+try
+{
+    await Folder.ListFor("/doesnotexist").All();
+}
+catch (NotFoundException e)
+{
+    Console.WriteLine($"Unable to list folder: <{e.httpStatus}> {e.error}");
+}
+```
+
+### Examples
+
 #### Writing a file example
 ```csharp 
     // Will upload a file called "test.txt"

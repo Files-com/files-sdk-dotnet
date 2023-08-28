@@ -350,7 +350,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<Lock>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Lock>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

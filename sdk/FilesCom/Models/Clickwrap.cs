@@ -179,7 +179,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/clickwraps/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -285,7 +292,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/clickwraps/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<Clickwrap> Get(
@@ -337,7 +351,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/clickwraps", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -390,7 +411,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/clickwraps/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

@@ -343,7 +343,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/webhook_tests", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<WebhookTest>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<WebhookTest>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

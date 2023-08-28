@@ -210,7 +210,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/sessions", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<Session>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Session>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

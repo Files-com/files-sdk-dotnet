@@ -183,7 +183,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_comment_reactions", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileCommentReaction>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FileCommentReaction>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

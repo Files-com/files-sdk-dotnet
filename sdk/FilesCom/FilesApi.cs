@@ -34,6 +34,35 @@ namespace FilesCom
             _clientFactory = clientFactory;
         }
 
+        private async Task HandleErrorResponse(HttpResponseMessage response)
+        {
+            ResponseError responseError;
+            string body = await response.Content.ReadAsStringAsync();
+            try
+            {
+                responseError = JsonSerializer.Deserialize<ResponseError>(body);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + body);
+            }
+            string message = $"HTTP request failed with code {(int)response.StatusCode}: {responseError.error}";
+            log.Error(message);
+            if (responseError.type == null)
+            {
+                throw new ApiException(message, (int)response.StatusCode, responseError, response.Headers);
+            }
+            else
+            {
+                string[] errorParts = responseError.type.Split('/');
+                string errorType = errorParts[errorParts.Length - 1];
+                string errorClassName = String.Join("", Array.ConvertAll(errorType.Split('-'), part => part[0].ToString().ToUpper() + part.Substring(1))) + "Exception";
+
+                Type type = Type.GetType("FilesCom." + errorClassName);
+                throw (ApiException)Activator.CreateInstance(type, new object[] { message, (int)response.StatusCode, responseError, response.Headers });
+            }
+        }
+
         public async Task<HttpResponseMessage> SendRequest(
             string path,
             HttpMethod verb,
@@ -130,12 +159,22 @@ namespace FilesCom
             log.Info($"Sending {verb} request: {uri}");
             log.Debug($"content: {jsonString}");
 
-            HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
+            HttpResponseMessage response;
+            try
+            {
+                response = await httpClient.SendAsync(httpRequestMessage);
+            }
+            catch (HttpRequestException e)
+            {
+                throw new ApiConnectionException(e.Message);
+            }
+            catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
+            {
+                throw new InvalidParameterException(e.Message);
+            }
             if (!response.IsSuccessStatusCode)
             {
-                string message = await response.Content.ReadAsStringAsync();
-                log.Error($"HTTP request failed with code {response.StatusCode}: {message}");
-                response.EnsureSuccessStatusCode();
+                await this.HandleErrorResponse(response);
             }
             return response;
         }
@@ -144,10 +183,26 @@ namespace FilesCom
         {
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             Uri uri = new Uri(uriString);
+            HttpResponseMessage response;
 
-            using (HttpResponseMessage response = await httpClient.GetAsync(uri))
+            try
             {
-                response.EnsureSuccessStatusCode();
+                response = await httpClient.GetAsync(uri);
+            }
+            catch (HttpRequestException e)
+            {
+                throw new ApiConnectionException(e.Message);
+            }
+            catch (Exception e) when (e is InvalidOperationException || e is UriFormatException)
+            {
+                throw new InvalidParameterException(e.Message);
+            }
+            using (response)
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    await this.HandleErrorResponse(response);
+                }
 
                 using (writeStream)
                 {
@@ -181,13 +236,24 @@ namespace FilesCom
             log.Info($"Sending {verb} request: {uri}");
             log.Debug($"content: {readLength} bytes");
 
-            using (HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage))
+            HttpResponseMessage response;
+            try
+            {
+                response = await httpClient.SendAsync(httpRequestMessage);
+            }
+            catch (HttpRequestException e)
+            {
+                throw new ApiConnectionException(e.Message);
+            }
+            catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
+            {
+                throw new InvalidParameterException(e.Message);
+            }
+            using (response)
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    string message = await response.Content.ReadAsStringAsync();
-                    log.Error($"HTTP request failed with code {response.StatusCode}: {message}");
-                    response.EnsureSuccessStatusCode();
+                    await this.HandleErrorResponse(response);
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
 

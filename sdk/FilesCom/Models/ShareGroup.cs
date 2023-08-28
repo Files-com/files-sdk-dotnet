@@ -169,7 +169,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/share_groups/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -280,7 +287,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/share_groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<ShareGroup> Get(
@@ -335,7 +349,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/share_groups", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -378,7 +399,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/share_groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

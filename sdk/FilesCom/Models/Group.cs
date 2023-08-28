@@ -174,7 +174,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Group>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Group>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -300,7 +307,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<Group>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Group>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<Group> Get(
@@ -347,7 +361,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/groups", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<Group>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Group>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -395,7 +416,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<Group>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Group>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

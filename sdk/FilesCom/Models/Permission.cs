@@ -317,7 +317,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/permissions", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<Permission>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<Permission>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

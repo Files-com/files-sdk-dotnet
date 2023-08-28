@@ -135,7 +135,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_comments/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<FileComment>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FileComment>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -251,7 +258,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_comments", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<FileComment>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FileComment>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -288,7 +302,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/file_comments/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<FileComment>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<FileComment>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 

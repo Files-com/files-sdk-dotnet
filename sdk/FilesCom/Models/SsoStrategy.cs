@@ -804,7 +804,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<SsoStrategy> Get(

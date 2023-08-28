@@ -273,7 +273,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -403,7 +410,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/api_key", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -432,7 +446,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
         public static async Task<ApiKey> Get(
@@ -489,7 +510,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
 
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -523,7 +551,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/api_key", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
@@ -571,7 +606,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
-            return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            try
+            {
+                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
         }
 
 
