@@ -296,7 +296,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Path on which this Automation runs.  Supports globs. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
         public string Path
