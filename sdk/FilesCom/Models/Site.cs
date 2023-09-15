@@ -341,6 +341,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("logo", null);
             }
+            if (!this.attributes.ContainsKey("login_page_background_image"))
+            {
+                this.attributes.Add("login_page_background_image", null);
+            }
             if (!this.attributes.ContainsKey("max_prior_passwords"))
             {
                 this.attributes.Add("max_prior_passwords", null);
@@ -1515,6 +1519,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Branded login page background
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("login_page_background_image")]
+        public Image LoginPageBackgroundImage
+        {
+            get { return (Image)attributes["login_page_background_image"]; }
+            private set { attributes["login_page_background_image"] = value; }
+        }
+
+        /// <summary>
         /// Number of prior passwords to disallow
         /// </summary>
         [JsonInclude]
@@ -2467,6 +2482,8 @@ namespace FilesCom.Models
         ///   logo_delete - boolean - If true, will delete the file stored in logo
         ///   bundle_watermark_attachment_file - file
         ///   bundle_watermark_attachment_delete - boolean - If true, will delete the file stored in bundle_watermark_attachment
+        ///   login_page_background_image_file - file
+        ///   login_page_background_image_delete - boolean - If true, will delete the file stored in login_page_background_image
         ///   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
         ///   ldap_password_change - string - New LDAP password.
         ///   ldap_password_change_confirmation - string - Confirm new LDAP password.
@@ -3009,6 +3026,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_watermark_attachment_delete") && !(parameters["bundle_watermark_attachment_delete"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_watermark_attachment_delete must be of type bool", "parameters[\"bundle_watermark_attachment_delete\"]");
+            }
+            if (parameters.ContainsKey("login_page_background_image_file") && !(parameters["login_page_background_image_file"] is System.Net.Http.ByteArrayContent))
+            {
+                throw new ArgumentException("Bad parameter: login_page_background_image_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"login_page_background_image_file\"]");
+            }
+            if (parameters.ContainsKey("login_page_background_image_delete") && !(parameters["login_page_background_image_delete"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: login_page_background_image_delete must be of type bool", "parameters[\"login_page_background_image_delete\"]");
             }
             if (parameters.ContainsKey("disable_2fa_with_delay") && !(parameters["disable_2fa_with_delay"] is bool))
             {

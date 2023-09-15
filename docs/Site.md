@@ -84,6 +84,7 @@
   "ldap_username_field": "sAMAccountName",
   "login_help_text": "Login page help text.",
   "logo": null,
+  "login_page_background_image": null,
   "max_prior_passwords": 1,
   "motd_text": "example",
   "motd_use_for_ftp": true,
@@ -300,6 +301,7 @@
 * `ldap_username_field` / `LdapUsernameField`  (string): LDAP username field
 * `login_help_text` / `LoginHelpText`  (string): Login help text
 * `logo` / `Logo`  (Image): Branded logo
+* `login_page_background_image` / `LoginPageBackgroundImage`  (Image): Branded login page background
 * `max_prior_passwords` / `MaxPriorPasswords`  (Nullable<Int64>): Number of prior passwords to disallow
 * `motd_text` / `MotdText`  (string): A message to show users when they connect via FTP or SFTP.
 * `motd_use_for_ftp` / `MotdUseForFtp`  (bool): Show message to users connecting via FTP
@@ -541,6 +543,8 @@ Task<Site> Site.Update(
 * `logo_delete` (bool): If true, will delete the file stored in logo
 * `bundle_watermark_attachment_file` (System.Net.Http.ByteArrayContent): 
 * `bundle_watermark_attachment_delete` (bool): If true, will delete the file stored in bundle_watermark_attachment
+* `login_page_background_image_file` (System.Net.Http.ByteArrayContent): 
+* `login_page_background_image_delete` (bool): If true, will delete the file stored in login_page_background_image
 * `disable_2fa_with_delay` (bool): If set to true, we will begin the process of disabling 2FA on this site.
 * `ldap_password_change` (string): New LDAP password.
 * `ldap_password_change_confirmation` (string): Confirm new LDAP password.
