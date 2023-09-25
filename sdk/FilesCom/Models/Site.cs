@@ -85,6 +85,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_expiration", null);
             }
+            if (!this.attributes.ContainsKey("bundle_not_found_message"))
+            {
+                this.attributes.Add("bundle_not_found_message", null);
+            }
             if (!this.attributes.ContainsKey("bundle_password_required"))
             {
                 this.attributes.Add("bundle_password_required", false);
@@ -791,6 +795,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["bundle_expiration"]; }
             private set { attributes["bundle_expiration"] = value; }
+        }
+
+        /// <summary>
+        /// Custom error message to show when bundle is not found.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_not_found_message")]
+        public string BundleNotFoundMessage
+        {
+            get { return (string)attributes["bundle_not_found_message"]; }
+            private set { attributes["bundle_not_found_message"] = value; }
         }
 
         /// <summary>
@@ -2409,6 +2424,7 @@ namespace FilesCom.Models
         ///   disable_password_reset - boolean - Is password reset disabled?
         ///   immutable_files - boolean - Are files protected from modification?
         ///   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
+        ///   bundle_not_found_message - string - Custom error message to show when bundle is not found.
         ///   bundle_password_required - boolean - Do Bundles require password protection?
         ///   bundle_require_registration - boolean - Do Bundles require registration?
         ///   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
@@ -2734,6 +2750,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("session_pinned_by_ip") && !(parameters["session_pinned_by_ip"] is bool))
             {
                 throw new ArgumentException("Bad parameter: session_pinned_by_ip must be of type bool", "parameters[\"session_pinned_by_ip\"]");
+            }
+            if (parameters.ContainsKey("bundle_not_found_message") && !(parameters["bundle_not_found_message"] is string))
+            {
+                throw new ArgumentException("Bad parameter: bundle_not_found_message must be of type string", "parameters[\"bundle_not_found_message\"]");
             }
             if (parameters.ContainsKey("bundle_password_required") && !(parameters["bundle_password_required"] is bool))
             {
