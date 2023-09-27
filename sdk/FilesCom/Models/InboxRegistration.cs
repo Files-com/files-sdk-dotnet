@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", null);
             }
+            if (!this.attributes.ContainsKey("ip"))
+            {
+                this.attributes.Add("ip", null);
+            }
             if (!this.attributes.ContainsKey("clickwrap_body"))
             {
                 this.attributes.Add("clickwrap_body", null);
@@ -133,6 +137,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["email"]; }
             private set { attributes["email"] = value; }
+        }
+
+        /// <summary>
+        /// Registrant IP Address
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ip")]
+        public string Ip
+        {
+            get { return (string)attributes["ip"]; }
+            private set { attributes["ip"] = value; }
         }
 
         /// <summary>
