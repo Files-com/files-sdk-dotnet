@@ -12,7 +12,7 @@ Fetch the dependencies:
     dotnet restore
 
 
-## Frameworks Supported 
+## Frameworks Supported
 - .NET 6
 
 - .NET 5
@@ -115,7 +115,7 @@ catch (NotFoundException e)
 ### Examples
 
 #### Writing a file example
-```csharp 
+```csharp
     // Will upload a file called "test.txt"
 
     using FilesCom;
@@ -148,7 +148,7 @@ catch (NotFoundException e)
 ```
 
 #### Uploading a file from a Stream
-```csharp 
+```csharp
     using(MemoryStream stream = new System.IO.MemoryStream())
     {
         byte[] firstString = System.Text.UTF8Encoding.UTF8.GetBytes("Example memory stream contents.");
@@ -161,8 +161,8 @@ catch (NotFoundException e)
 ```
 
 #### Reading a file's text as a Stream
-```csharp 
-    using(MemoryStream stream = new System.IO.MemoryStream()) 
+```csharp
+    using(MemoryStream stream = new System.IO.MemoryStream())
     {
         RemoteFile f = await RemoteFile.Find("/remote_streamio.txt", null, null);
         Console.WriteLine("-- Downloaded File Path: {0}", f.Path);
@@ -173,7 +173,7 @@ catch (NotFoundException e)
 ```
 
 #### Reading a file and writing it to your local drive.
-```csharp 
+```csharp
     var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
     if (downloadResponse) {
         Console.WriteLine("-- Download result: {0}" + downloadResponse+.ToString());
@@ -183,7 +183,7 @@ catch (NotFoundException e)
 ```
 
 #### List root folder (loads all pages into memory)
-```csharp 
+```csharp
     var files = Folder.ListFor("/", null, null);
     foreach (var file in await files.All())
     {
@@ -212,7 +212,7 @@ catch (NotFoundException e)
 ```
 
 #### List folder with a filter
-```csharp 
+```csharp
     Dictionary<string, object> parameters = new Dictionary<string, object>(){
         { "filter", "*.png"},
     };
@@ -257,5 +257,4 @@ log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("./log4net.confi
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
 Just email support@files.com and we'll get the process started.
-
 
