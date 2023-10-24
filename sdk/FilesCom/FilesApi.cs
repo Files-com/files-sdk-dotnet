@@ -46,7 +46,7 @@ namespace FilesCom
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + body);
             }
-            string message = $"HTTP request failed with code {(int)response.StatusCode}: {responseError.error}";
+            string message = $"HTTP request failed with code {(int)response.StatusCode}: {responseError.error} {responseError.type}";
             log.Error(message);
             if (responseError.type == null)
             {
@@ -59,6 +59,7 @@ namespace FilesCom
                 string errorClassName = String.Join("", Array.ConvertAll(errorType.Split('-'), part => part[0].ToString().ToUpper() + part.Substring(1))) + "Exception";
 
                 Type type = Type.GetType("FilesCom." + errorClassName);
+                message = responseError.error;
                 throw (ApiException)Activator.CreateInstance(type, new object[] { message, (int)response.StatusCode, responseError, response.Headers });
             }
         }

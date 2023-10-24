@@ -6,6 +6,7 @@ namespace FilesCom.Util
 {
     public class BooleanJsonConverter : JsonConverter<bool>
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(BooleanJsonConverter));
         public override bool Read(ref Utf8JsonReader reader,
             Type typeToConvert,
             JsonSerializerOptions options)
@@ -41,7 +42,7 @@ namespace FilesCom.Util
             }
             else
             {
-                Console.WriteLine($"Unsupported token type: {reader.TokenType}");
+                log.Error($"Unsupported token type: {reader.TokenType}");
                 throw new System.Text.Json.JsonException();
             }
         }
