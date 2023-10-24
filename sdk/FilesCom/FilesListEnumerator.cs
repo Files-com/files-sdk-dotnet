@@ -10,11 +10,11 @@ namespace FilesCom
         private FilesList<T> filesList;
         private int index = -1;
         private T current;
-        private int page = 0;
 
         public FilesListEnumerator(FilesList<T> filesList)
         {
             this.filesList = filesList;
+            Task.Run(() => filesList.LoadNextPage()).Wait();
         }
 
         public T Current { get { return current; } }
@@ -39,7 +39,7 @@ namespace FilesCom
         public void Reset()
         {
             filesList.Reset();
-            page = 0;
+            Task.Run(() => filesList.LoadNextPage()).Wait();
             index = -1;
         }
 
@@ -48,11 +48,10 @@ namespace FilesCom
             index++;
             if (index >= filesList.data.Count)
             {
-                if (filesList.HasNextPage || page == 0)
+                if (filesList.HasNextPage)
                 {
                     Task.Run(() => filesList.LoadNextPage()).Wait();
                     index = 0;
-                    page++;
                 }
                 else
                 {
