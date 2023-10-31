@@ -170,13 +170,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/requests/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -269,6 +269,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
@@ -288,10 +292,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             return new FilesList<Request>($"/requests/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -314,6 +314,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -329,14 +337,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/requests", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -364,13 +364,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/requests/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

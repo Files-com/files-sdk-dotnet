@@ -157,6 +157,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("automation_id") || parameters["automation_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: automation_id", "parameters[\"automation_id\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -180,10 +184,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("automation_id") && !(parameters["automation_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: automation_id must be of type Nullable<Int64>", "parameters[\"automation_id\"]");
-            }
-            if (!parameters.ContainsKey("automation_id") || parameters["automation_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: automation_id", "parameters[\"automation_id\"]");
             }
 
             return new FilesList<AutomationRun>($"/automation_runs", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -212,13 +212,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);

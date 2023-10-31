@@ -95,6 +95,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
@@ -106,10 +110,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             return new FilesList<Priority>($"/priorities", System.Net.Http.HttpMethod.Get, parameters, options);

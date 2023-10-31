@@ -441,6 +441,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("history_export_id") || parameters["history_export_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: history_export_id", "parameters[\"history_export_id\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -456,10 +460,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("history_export_id") && !(parameters["history_export_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: history_export_id must be of type Nullable<Int64>", "parameters[\"history_export_id\"]");
-            }
-            if (!parameters.ContainsKey("history_export_id") || parameters["history_export_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: history_export_id", "parameters[\"history_export_id\"]");
             }
 
             return new FilesList<HistoryExportResult>($"/history_export_results", System.Net.Http.HttpMethod.Get, parameters, options);

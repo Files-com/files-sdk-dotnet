@@ -231,14 +231,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -246,6 +238,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("token") || parameters["token"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
             }
 
             await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -280,6 +280,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
@@ -295,10 +299,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("include_children") && !(parameters["include_children"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_children must be of type bool", "parameters[\"include_children\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             return new FilesList<Lock>($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -323,6 +323,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -342,10 +346,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: timeout must be of type Nullable<Int64>", "parameters[\"timeout\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -375,14 +375,6 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -390,6 +382,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("token") || parameters["token"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
             }
 
             await FilesClient.SendRequest($"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

@@ -147,6 +147,18 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
+            }
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -162,18 +174,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool))
             {
                 throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
-            }
-            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -203,18 +203,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
-            }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -226,6 +214,18 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
 
             await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -310,6 +310,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
+            }
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
@@ -321,14 +329,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool))
             {
                 throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
-            }
-            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
-            }
-            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/group_users", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -360,6 +360,18 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
+            }
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -375,18 +387,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin") && !(parameters["admin"] is bool))
             {
                 throw new ArgumentException("Bad parameter: admin must be of type bool", "parameters[\"admin\"]");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("group_id") || parameters["group_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: group_id", "parameters[\"group_id\"]");
-            }
-            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -417,18 +417,6 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
-            }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -440,6 +428,18 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
 
             await FilesClient.SendRequest($"/group_users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

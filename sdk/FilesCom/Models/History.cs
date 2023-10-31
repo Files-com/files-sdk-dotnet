@@ -264,6 +264,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
@@ -291,10 +295,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             return new FilesList<Action>($"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -321,6 +321,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
@@ -349,10 +353,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
 
             return new FilesList<Action>($"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
@@ -378,6 +378,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("user_id", user_id);
+            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+            }
             if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
@@ -405,10 +409,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
             }
 
             return new FilesList<Action>($"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);

@@ -114,13 +114,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/file_comment_reactions/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -160,6 +160,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("file_comment_id") || parameters["file_comment_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: file_comment_id", "parameters[\"file_comment_id\"]");
+            }
+            if (!parameters.ContainsKey("emoji") || parameters["emoji"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: emoji", "parameters[\"emoji\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -171,14 +179,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("emoji") && !(parameters["emoji"] is string))
             {
                 throw new ArgumentException("Bad parameter: emoji must be of type string", "parameters[\"emoji\"]");
-            }
-            if (!parameters.ContainsKey("file_comment_id") || parameters["file_comment_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: file_comment_id", "parameters[\"file_comment_id\"]");
-            }
-            if (!parameters.ContainsKey("emoji") || parameters["emoji"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: emoji", "parameters[\"emoji\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_comment_reactions", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -206,13 +206,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/file_comment_reactions/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

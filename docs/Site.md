@@ -20,6 +20,10 @@
   "bundle_expiration": 1,
   "bundle_not_found_message": "example",
   "bundle_password_required": true,
+  "bundle_recipient_blacklist_domains": [
+    "example"
+  ],
+  "bundle_recipient_blacklist_free_email_domains": true,
   "bundle_registration_notifications": "never",
   "bundle_require_registration": true,
   "bundle_require_share_recipient": true,
@@ -240,6 +244,8 @@
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_not_found_message` / `BundleNotFoundMessage`  (string): Custom error message to show when bundle is not found.
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
+* `bundle_recipient_blacklist_domains` / `BundleRecipientBlacklistDomains`  (string[]): List of email domains to disallow when entering a Bundle/Inbox recipients
+* `bundle_recipient_blacklist_free_email_domains` / `BundleRecipientBlacklistFreeEmailDomains`  (bool): Disallow free email domains for Bundle/Inbox recipients?
 * `bundle_registration_notifications` / `BundleRegistrationNotifications`  (string): Do Bundle owners receive registration notification?
 * `bundle_require_registration` / `BundleRequireRegistration`  (bool): Do Bundles require registration?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
@@ -496,6 +502,8 @@ Task<Site> Site.Update(
 * `active_sftp_host_key_id` (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
 * `bundle_watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `group_admins_can_set_user_password` (bool): Allow group admins set password authentication method
+* `bundle_recipient_blacklist_free_email_domains` (bool): Disallow free email domains for Bundle/Inbox recipients?
+* `bundle_recipient_blacklist_domains` (string[]): List of email domains to disallow when entering a Bundle/Inbox recipients
 * `allowed_2fa_method_sms` (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_u2f` (bool): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_totp` (bool): Is TOTP two factor authentication allowed?

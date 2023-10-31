@@ -296,6 +296,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("url") || parameters["url"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: url", "parameters[\"url\"]");
+            }
             if (parameters.ContainsKey("url") && !(parameters["url"] is string))
             {
                 throw new ArgumentException("Bad parameter: url must be of type string", "parameters[\"url\"]");
@@ -335,10 +339,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("use_dedicated_ips") && !(parameters["use_dedicated_ips"] is bool))
             {
                 throw new ArgumentException("Bad parameter: use_dedicated_ips must be of type bool", "parameters[\"use_dedicated_ips\"]");
-            }
-            if (!parameters.ContainsKey("url") || parameters["url"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: url", "parameters[\"url\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/webhook_tests", System.Net.Http.HttpMethod.Post, parameters, options);

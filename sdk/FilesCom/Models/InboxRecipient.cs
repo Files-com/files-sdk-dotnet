@@ -177,6 +177,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("inbox_id") || parameters["inbox_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
+            }
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
@@ -196,10 +200,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
-            }
-            if (!parameters.ContainsKey("inbox_id") || parameters["inbox_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
             }
 
             return new FilesList<InboxRecipient>($"/inbox_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -232,6 +232,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("inbox_id") || parameters["inbox_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
+            }
+            if (!parameters.ContainsKey("recipient") || parameters["recipient"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: recipient", "parameters[\"recipient\"]");
+            }
             if (parameters.ContainsKey("inbox_id") && !(parameters["inbox_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: inbox_id must be of type Nullable<Int64>", "parameters[\"inbox_id\"]");
@@ -255,14 +263,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("share_after_create") && !(parameters["share_after_create"] is bool))
             {
                 throw new ArgumentException("Bad parameter: share_after_create must be of type bool", "parameters[\"share_after_create\"]");
-            }
-            if (!parameters.ContainsKey("inbox_id") || parameters["inbox_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: inbox_id", "parameters[\"inbox_id\"]");
-            }
-            if (!parameters.ContainsKey("recipient") || parameters["recipient"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: recipient", "parameters[\"recipient\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/inbox_recipients", System.Net.Http.HttpMethod.Post, parameters, options);

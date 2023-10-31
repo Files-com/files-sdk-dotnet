@@ -93,6 +93,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_password_required", false);
             }
+            if (!this.attributes.ContainsKey("bundle_recipient_blacklist_domains"))
+            {
+                this.attributes.Add("bundle_recipient_blacklist_domains", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("bundle_recipient_blacklist_free_email_domains"))
+            {
+                this.attributes.Add("bundle_recipient_blacklist_free_email_domains", false);
+            }
             if (!this.attributes.ContainsKey("bundle_registration_notifications"))
             {
                 this.attributes.Add("bundle_registration_notifications", null);
@@ -818,6 +826,29 @@ namespace FilesCom.Models
         {
             get { return attributes["bundle_password_required"] == null ? false : (bool)attributes["bundle_password_required"]; }
             private set { attributes["bundle_password_required"] = value; }
+        }
+
+        /// <summary>
+        /// List of email domains to disallow when entering a Bundle/Inbox recipients
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_recipient_blacklist_domains")]
+        public string[] BundleRecipientBlacklistDomains
+        {
+            get { return (string[])attributes["bundle_recipient_blacklist_domains"]; }
+            private set { attributes["bundle_recipient_blacklist_domains"] = value; }
+        }
+
+        /// <summary>
+        /// Disallow free email domains for Bundle/Inbox recipients?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bundle_recipient_blacklist_free_email_domains")]
+        public bool BundleRecipientBlacklistFreeEmailDomains
+        {
+            get { return attributes["bundle_recipient_blacklist_free_email_domains"] == null ? false : (bool)attributes["bundle_recipient_blacklist_free_email_domains"]; }
+            private set { attributes["bundle_recipient_blacklist_free_email_domains"] = value; }
         }
 
         /// <summary>
@@ -2448,6 +2479,8 @@ namespace FilesCom.Models
         ///   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
+        ///   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
+        ///   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
         ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
@@ -2846,6 +2879,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_admins_can_set_user_password") && !(parameters["group_admins_can_set_user_password"] is bool))
             {
                 throw new ArgumentException("Bad parameter: group_admins_can_set_user_password must be of type bool", "parameters[\"group_admins_can_set_user_password\"]");
+            }
+            if (parameters.ContainsKey("bundle_recipient_blacklist_free_email_domains") && !(parameters["bundle_recipient_blacklist_free_email_domains"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bundle_recipient_blacklist_free_email_domains must be of type bool", "parameters[\"bundle_recipient_blacklist_free_email_domains\"]");
+            }
+            if (parameters.ContainsKey("bundle_recipient_blacklist_domains") && !(parameters["bundle_recipient_blacklist_domains"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: bundle_recipient_blacklist_domains must be of type string[]", "parameters[\"bundle_recipient_blacklist_domains\"]");
             }
             if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool))
             {

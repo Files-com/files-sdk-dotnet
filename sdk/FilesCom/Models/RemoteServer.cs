@@ -1085,6 +1085,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -1132,10 +1136,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
             {
                 throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1225,6 +1225,10 @@ namespace FilesCom.Models
             if (!attributes.ContainsKey("id"))
             {
                 throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
@@ -1482,10 +1486,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
@@ -1511,13 +1511,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -1591,13 +1591,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -1635,13 +1635,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -2024,6 +2024,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -2071,10 +2075,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
             {
                 throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -2166,6 +2166,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -2422,10 +2426,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
@@ -2452,13 +2452,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

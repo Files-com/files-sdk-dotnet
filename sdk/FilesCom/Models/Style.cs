@@ -130,14 +130,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
-            {
-                throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -145,6 +137,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("file") || parameters["file"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: file", "parameters[\"file\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
+            {
+                throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -171,13 +171,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
             await FilesClient.SendRequest($"/styles/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -209,13 +209,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -253,14 +253,6 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
-            {
-                throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -268,6 +260,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("file") || parameters["file"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: file", "parameters[\"file\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
+            {
+                throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -295,13 +295,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
             await FilesClient.SendRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

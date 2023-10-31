@@ -570,6 +570,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -589,10 +593,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -622,6 +622,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -633,10 +637,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("priority_color") && !(parameters["priority_color"] is string))
             {
                 throw new ArgumentException("Bad parameter: priority_color must be of type string", "parameters[\"priority_color\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -665,6 +665,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -672,10 +676,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -702,6 +702,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -713,14 +721,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool))
             {
                 throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -751,14 +751,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
-            {
-                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -766,6 +758,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -802,6 +802,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a path");
             }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -833,10 +837,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -878,6 +878,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -897,10 +901,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -943,6 +943,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -991,10 +995,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1024,6 +1024,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -1035,10 +1039,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("priority_color") && !(parameters["priority_color"] is string))
             {
                 throw new ArgumentException("Bad parameter: priority_color must be of type string", "parameters[\"priority_color\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -1068,6 +1068,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -1075,10 +1079,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -1110,6 +1110,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -1125,10 +1129,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/metadata/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -1169,6 +1169,14 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -1180,14 +1188,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("structure") && !(parameters["structure"] is bool))
             {
                 throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1219,14 +1219,6 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
-            {
-                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
-            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1234,6 +1226,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1271,6 +1271,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("path", path);
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -1302,10 +1306,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);

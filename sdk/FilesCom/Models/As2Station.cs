@@ -284,6 +284,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -303,10 +307,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_stations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -333,13 +333,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Current object doesn't have a id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/as2_stations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -413,13 +413,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_stations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -459,6 +459,18 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("name") || parameters["name"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
+            }
+            if (!parameters.ContainsKey("public_certificate") || parameters["public_certificate"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: public_certificate", "parameters[\"public_certificate\"]");
+            }
+            if (!parameters.ContainsKey("private_key") || parameters["private_key"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: private_key", "parameters[\"private_key\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -474,18 +486,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
-            }
-            if (!parameters.ContainsKey("name") || parameters["name"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
-            }
-            if (!parameters.ContainsKey("public_certificate") || parameters["public_certificate"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: public_certificate", "parameters[\"public_certificate\"]");
-            }
-            if (!parameters.ContainsKey("private_key") || parameters["private_key"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: private_key", "parameters[\"private_key\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_stations", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -518,6 +518,10 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
@@ -537,10 +541,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_stations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -568,13 +568,13 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
 
             parameters.Add("id", id);
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
             await FilesClient.SendRequest($"/as2_stations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

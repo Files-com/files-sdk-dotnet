@@ -216,6 +216,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("action_notification_export_id") || parameters["action_notification_export_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: action_notification_export_id", "parameters[\"action_notification_export_id\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -231,10 +235,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("action_notification_export_id") && !(parameters["action_notification_export_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: action_notification_export_id must be of type Nullable<Int64>", "parameters[\"action_notification_export_id\"]");
-            }
-            if (!parameters.ContainsKey("action_notification_export_id") || parameters["action_notification_export_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: action_notification_export_id", "parameters[\"action_notification_export_id\"]");
             }
 
             return new FilesList<ActionNotificationExportResult>($"/action_notification_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
