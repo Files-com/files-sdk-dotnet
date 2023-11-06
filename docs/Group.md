@@ -74,10 +74,10 @@ Task<Group> Group.Create(
 
 ### Parameters
 
-* `name` (string): Group name.
 * `notes` (string): Group notes.
 * `user_ids` (string): A list of user ids. If sent as a string, should be comma-delimited.
 * `admin_ids` (string): A list of group admin user ids. If sent as a string, should be comma-delimited.
+* `name` (string): Required - Group name.
 
 
 ---
@@ -95,10 +95,10 @@ Task<Group> Group.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Group ID.
-* `name` (string): Group name.
 * `notes` (string): Group notes.
 * `user_ids` (string): A list of user ids. If sent as a string, should be comma-delimited.
 * `admin_ids` (string): A list of group admin user ids. If sent as a string, should be comma-delimited.
+* `name` (string): Group name.
 
 
 ---
@@ -127,10 +127,10 @@ var Group = Group.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("name", "owners");
 parameters.Add("notes", "example");
 parameters.Add("user_ids", "1");
 parameters.Add("admin_ids", "1");
+parameters.Add("name", "owners");
 
 Group.Update(parameters);
 ```
@@ -138,10 +138,10 @@ Group.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Group ID.
-* `name` (string): Group name.
 * `notes` (string): Group notes.
 * `user_ids` (string): A list of user ids. If sent as a string, should be comma-delimited.
 * `admin_ids` (string): A list of group admin user ids. If sent as a string, should be comma-delimited.
+* `name` (string): Group name.
 
 
 ---

@@ -1602,7 +1602,7 @@ namespace FilesCom.Models
         ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
-        ///   username - string - User's username
+        ///   username (required) - string - User's username
         /// </summary>
         public static async Task<User> Create(
 
@@ -1613,6 +1613,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("username") || parameters["username"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: username", "parameters[\"username\"]");
+            }
             if (parameters.ContainsKey("avatar_file") && !(parameters["avatar_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: avatar_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"avatar_file\"]");

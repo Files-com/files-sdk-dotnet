@@ -133,10 +133,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Group name.
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   name - string - Group name.
         /// </summary>
         public async Task<Group> Update(Dictionary<string, object> parameters)
         {
@@ -155,10 +155,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
@@ -170,6 +166,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -328,10 +328,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Group name.
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   name (required) - string - Group name.
         /// </summary>
         public static async Task<Group> Create(
 
@@ -342,9 +342,9 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
@@ -357,6 +357,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/groups", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -374,10 +378,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Group name.
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   name - string - Group name.
         /// </summary>
         public static async Task<Group> Update(
             Nullable<Int64> id,
@@ -397,10 +401,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
@@ -412,6 +412,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
