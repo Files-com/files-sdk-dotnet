@@ -29,69 +29,85 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("name"))
+            if (!this.attributes.ContainsKey("app_type"))
             {
-                this.attributes.Add("name", null);
-            }
-            if (!this.attributes.ContainsKey("extended_description"))
-            {
-                this.attributes.Add("extended_description", null);
-            }
-            if (!this.attributes.ContainsKey("short_description"))
-            {
-                this.attributes.Add("short_description", null);
+                this.attributes.Add("app_type", null);
             }
             if (!this.attributes.ContainsKey("documentation_links"))
             {
                 this.attributes.Add("documentation_links", null);
             }
-            if (!this.attributes.ContainsKey("icon_url"))
+            if (!this.attributes.ContainsKey("extended_description"))
             {
-                this.attributes.Add("icon_url", null);
+                this.attributes.Add("extended_description", null);
             }
-            if (!this.attributes.ContainsKey("logo_url"))
+            if (!this.attributes.ContainsKey("extended_description_for_marketing_site"))
             {
-                this.attributes.Add("logo_url", null);
-            }
-            if (!this.attributes.ContainsKey("screenshot_list_urls"))
-            {
-                this.attributes.Add("screenshot_list_urls", new string[0]);
-            }
-            if (!this.attributes.ContainsKey("logo_thumbnail_url"))
-            {
-                this.attributes.Add("logo_thumbnail_url", null);
-            }
-            if (!this.attributes.ContainsKey("sso_strategy_type"))
-            {
-                this.attributes.Add("sso_strategy_type", null);
-            }
-            if (!this.attributes.ContainsKey("remote_server_type"))
-            {
-                this.attributes.Add("remote_server_type", null);
-            }
-            if (!this.attributes.ContainsKey("folder_behavior_type"))
-            {
-                this.attributes.Add("folder_behavior_type", null);
+                this.attributes.Add("extended_description_for_marketing_site", null);
             }
             if (!this.attributes.ContainsKey("external_homepage_url"))
             {
                 this.attributes.Add("external_homepage_url", null);
             }
+            if (!this.attributes.ContainsKey("featured"))
+            {
+                this.attributes.Add("featured", false);
+            }
+            if (!this.attributes.ContainsKey("folder_behavior_type"))
+            {
+                this.attributes.Add("folder_behavior_type", null);
+            }
+            if (!this.attributes.ContainsKey("icon_url"))
+            {
+                this.attributes.Add("icon_url", null);
+            }
+            if (!this.attributes.ContainsKey("logo_thumbnail_url"))
+            {
+                this.attributes.Add("logo_thumbnail_url", null);
+            }
+            if (!this.attributes.ContainsKey("logo_url"))
+            {
+                this.attributes.Add("logo_url", null);
+            }
+            if (!this.attributes.ContainsKey("marketing_intro"))
+            {
+                this.attributes.Add("marketing_intro", null);
+            }
             if (!this.attributes.ContainsKey("marketing_youtube_url"))
             {
                 this.attributes.Add("marketing_youtube_url", null);
             }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("package_manager_install_command"))
+            {
+                this.attributes.Add("package_manager_install_command", null);
+            }
+            if (!this.attributes.ContainsKey("remote_server_type"))
+            {
+                this.attributes.Add("remote_server_type", null);
+            }
+            if (!this.attributes.ContainsKey("screenshot_list_urls"))
+            {
+                this.attributes.Add("screenshot_list_urls", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("sdk_installation_instructions_link"))
+            {
+                this.attributes.Add("sdk_installation_instructions_link", null);
+            }
+            if (!this.attributes.ContainsKey("short_description"))
+            {
+                this.attributes.Add("short_description", null);
+            }
+            if (!this.attributes.ContainsKey("sso_strategy_type"))
+            {
+                this.attributes.Add("sso_strategy_type", null);
+            }
             if (!this.attributes.ContainsKey("tutorial_youtube_url"))
             {
                 this.attributes.Add("tutorial_youtube_url", null);
-            }
-            if (!this.attributes.ContainsKey("app_type"))
-            {
-                this.attributes.Add("app_type", null);
-            }
-            if (!this.attributes.ContainsKey("featured"))
-            {
-                this.attributes.Add("featured", false);
             }
         }
 
@@ -112,36 +128,14 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Name of the App
+        /// The type of the App
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("name")]
-        public string Name
+        [JsonPropertyName("app_type")]
+        public string AppType
         {
-            get { return (string)attributes["name"]; }
-            private set { attributes["name"] = value; }
-        }
-
-        /// <summary>
-        /// Long form description of the App
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("extended_description")]
-        public string ExtendedDescription
-        {
-            get { return (string)attributes["extended_description"]; }
-            private set { attributes["extended_description"] = value; }
-        }
-
-        /// <summary>
-        /// Short description of the App
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("short_description")]
-        public string ShortDescription
-        {
-            get { return (string)attributes["short_description"]; }
-            private set { attributes["short_description"] = value; }
+            get { return (string)attributes["app_type"]; }
+            private set { attributes["app_type"] = value; }
         }
 
         /// <summary>
@@ -156,80 +150,25 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// App icon
+        /// Long description for the in-App landing page
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("icon_url")]
-        public string IconUrl
+        [JsonPropertyName("extended_description")]
+        public string ExtendedDescription
         {
-            get { return (string)attributes["icon_url"]; }
-            private set { attributes["icon_url"] = value; }
+            get { return (string)attributes["extended_description"]; }
+            private set { attributes["extended_description"] = value; }
         }
 
         /// <summary>
-        /// Full size logo for the App
+        /// Long form description of the App
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("logo_url")]
-        public string LogoUrl
+        [JsonPropertyName("extended_description_for_marketing_site")]
+        public string ExtendedDescriptionForMarketingSite
         {
-            get { return (string)attributes["logo_url"]; }
-            private set { attributes["logo_url"] = value; }
-        }
-
-        /// <summary>
-        /// Screenshots of the App
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("screenshot_list_urls")]
-        public string[] ScreenshotListUrls
-        {
-            get { return (string[])attributes["screenshot_list_urls"]; }
-            private set { attributes["screenshot_list_urls"] = value; }
-        }
-
-        /// <summary>
-        /// Logo thumbnail for the App
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("logo_thumbnail_url")]
-        public string LogoThumbnailUrl
-        {
-            get { return (string)attributes["logo_thumbnail_url"]; }
-            private set { attributes["logo_thumbnail_url"] = value; }
-        }
-
-        /// <summary>
-        /// Associated SSO Strategy type, if any
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("sso_strategy_type")]
-        public string SsoStrategyType
-        {
-            get { return (string)attributes["sso_strategy_type"]; }
-            private set { attributes["sso_strategy_type"] = value; }
-        }
-
-        /// <summary>
-        /// Associated Remote Server type, if any
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("remote_server_type")]
-        public string RemoteServerType
-        {
-            get { return (string)attributes["remote_server_type"]; }
-            private set { attributes["remote_server_type"] = value; }
-        }
-
-        /// <summary>
-        /// Associated Folder Behavior type, if any
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("folder_behavior_type")]
-        public string FolderBehaviorType
-        {
-            get { return (string)attributes["folder_behavior_type"]; }
-            private set { attributes["folder_behavior_type"] = value; }
+            get { return (string)attributes["extended_description_for_marketing_site"]; }
+            private set { attributes["extended_description_for_marketing_site"] = value; }
         }
 
         /// <summary>
@@ -244,6 +183,73 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Is featured on the App listing?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("featured")]
+        public bool Featured
+        {
+            get { return attributes["featured"] == null ? false : (bool)attributes["featured"]; }
+            private set { attributes["featured"] = value; }
+        }
+
+        /// <summary>
+        /// Associated Folder Behavior type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("folder_behavior_type")]
+        public string FolderBehaviorType
+        {
+            get { return (string)attributes["folder_behavior_type"]; }
+            private set { attributes["folder_behavior_type"] = value; }
+        }
+
+        /// <summary>
+        /// App icon
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("icon_url")]
+        public string IconUrl
+        {
+            get { return (string)attributes["icon_url"]; }
+            private set { attributes["icon_url"] = value; }
+        }
+
+        /// <summary>
+        /// Logo thumbnail for the App
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("logo_thumbnail_url")]
+        public string LogoThumbnailUrl
+        {
+            get { return (string)attributes["logo_thumbnail_url"]; }
+            private set { attributes["logo_thumbnail_url"] = value; }
+        }
+
+        /// <summary>
+        /// Full size logo for the App
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("logo_url")]
+        public string LogoUrl
+        {
+            get { return (string)attributes["logo_url"]; }
+            private set { attributes["logo_url"] = value; }
+        }
+
+        /// <summary>
+        /// Marketing introdution of the App
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("marketing_intro")]
+        public string MarketingIntro
+        {
+            get { return (string)attributes["marketing_intro"]; }
+            private set { attributes["marketing_intro"] = value; }
+        }
+
+        /// <summary>
         /// Marketing video page
         /// </summary>
         [JsonInclude]
@@ -255,6 +261,83 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Name of the App
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("name")]
+        public string Name
+        {
+            get { return (string)attributes["name"]; }
+            private set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// Package manager install command
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("package_manager_install_command")]
+        public string PackageManagerInstallCommand
+        {
+            get { return (string)attributes["package_manager_install_command"]; }
+            private set { attributes["package_manager_install_command"] = value; }
+        }
+
+        /// <summary>
+        /// Associated Remote Server type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("remote_server_type")]
+        public string RemoteServerType
+        {
+            get { return (string)attributes["remote_server_type"]; }
+            private set { attributes["remote_server_type"] = value; }
+        }
+
+        /// <summary>
+        /// Screenshots of the App
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("screenshot_list_urls")]
+        public string[] ScreenshotListUrls
+        {
+            get { return (string[])attributes["screenshot_list_urls"]; }
+            private set { attributes["screenshot_list_urls"] = value; }
+        }
+
+        /// <summary>
+        /// Link to SDK installation instructions
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sdk_installation_instructions_link")]
+        public string SdkInstallationInstructionsLink
+        {
+            get { return (string)attributes["sdk_installation_instructions_link"]; }
+            private set { attributes["sdk_installation_instructions_link"] = value; }
+        }
+
+        /// <summary>
+        /// Short description of the App
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("short_description")]
+        public string ShortDescription
+        {
+            get { return (string)attributes["short_description"]; }
+            private set { attributes["short_description"] = value; }
+        }
+
+        /// <summary>
+        /// Associated SSO Strategy type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sso_strategy_type")]
+        public string SsoStrategyType
+        {
+            get { return (string)attributes["sso_strategy_type"]; }
+            private set { attributes["sso_strategy_type"] = value; }
+        }
+
+        /// <summary>
         /// Tutorial video page
         /// </summary>
         [JsonInclude]
@@ -263,29 +346,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["tutorial_youtube_url"]; }
             private set { attributes["tutorial_youtube_url"] = value; }
-        }
-
-        /// <summary>
-        /// The type of the App
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("app_type")]
-        public string AppType
-        {
-            get { return (string)attributes["app_type"]; }
-            private set { attributes["app_type"] = value; }
-        }
-
-        /// <summary>
-        /// Is featured on the App listing?
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("featured")]
-        public bool Featured
-        {
-            get { return attributes["featured"] == null ? false : (bool)attributes["featured"]; }
-            private set { attributes["featured"] = value; }
         }
 
 
