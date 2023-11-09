@@ -97,7 +97,18 @@ namespace FilesCom
                         {
                             continue;
                         }
-                        queryParams.Add(k, parameters[k]?.ToString());
+                        if (parameters[k]?.GetType() == typeof(Dictionary<string, string>))
+                        {
+                            Dictionary<string, string> parameter = (Dictionary<string, string>)parameters[k];
+                            foreach (var k2 in parameter.Keys)
+                            {
+                                queryParams.Add(k + "[" + k2 + "]", parameter[k2]?.ToString());
+                            }
+                        }
+                        else
+                        {
+                            queryParams.Add(k, parameters[k]?.ToString());
+                        }
                     }
                     uri.Query = new FormUrlEncodedContent(queryParams).ReadAsStringAsync().Result;
                     break;
