@@ -11,7 +11,8 @@
   "status": "success",
   "body": "example",
   "message": "example",
-  "created_at": "2000-01-01T01:00:00Z"
+  "created_at": "2000-01-01T01:00:00Z",
+  "inbox_title": "Inbox Title"
 }
 ```
 
@@ -23,6 +24,7 @@
 * `body` / `Body`  (string): Body of the email
 * `message` / `Message`  (string): Message describing the failure
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Message creation date/time
+* `inbox_title` / `InboxTitle`  (string): Title of the Inbox associated with this message
 
 
 ---
