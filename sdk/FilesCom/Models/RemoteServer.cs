@@ -169,6 +169,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("azure_blob_storage_container", null);
             }
+            if (!this.attributes.ContainsKey("azure_blob_storage_hierarchical_namespace"))
+            {
+                this.attributes.Add("azure_blob_storage_hierarchical_namespace", false);
+            }
             if (!this.attributes.ContainsKey("azure_files_storage_account"))
             {
                 this.attributes.Add("azure_files_storage_account", null);
@@ -688,6 +692,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Enable when storage account has hierarchical namespace feature enabled
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("azure_blob_storage_hierarchical_namespace")]
+        public bool AzureBlobStorageHierarchicalNamespace
+        {
+            get { return attributes["azure_blob_storage_hierarchical_namespace"] == null ? false : (bool)attributes["azure_blob_storage_hierarchical_namespace"]; }
+            set { attributes["azure_blob_storage_hierarchical_namespace"] = value; }
+        }
+
+        /// <summary>
         /// Azure File Storage Account name
         /// </summary>
         [JsonPropertyName("azure_files_storage_account")]
@@ -1192,6 +1207,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   azure_files_storage_account - string - Azure File Storage Account name
         ///   azure_files_storage_share_name - string - Azure File Storage Share name
@@ -1389,6 +1405,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_hierarchical_namespace") && !(parameters["azure_blob_storage_hierarchical_namespace"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "parameters[\"azure_blob_storage_hierarchical_namespace\"]");
             }
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
             {
@@ -1698,6 +1718,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   azure_files_storage_account - string - Azure File Storage Account name
         ///   azure_files_storage_share_name - string - Azure File Storage Share name
@@ -1887,6 +1908,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_hierarchical_namespace") && !(parameters["azure_blob_storage_hierarchical_namespace"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "parameters[\"azure_blob_storage_hierarchical_namespace\"]");
             }
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
             {
@@ -2131,6 +2156,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - Either personal or business_other account types
         ///   azure_blob_storage_account - string - Azure Blob Storage Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
+        ///   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
         ///   azure_files_storage_account - string - Azure File Storage Account name
         ///   azure_files_storage_share_name - string - Azure File Storage Share name
@@ -2329,6 +2355,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_hierarchical_namespace") && !(parameters["azure_blob_storage_hierarchical_namespace"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "parameters[\"azure_blob_storage_hierarchical_namespace\"]");
             }
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
             {
