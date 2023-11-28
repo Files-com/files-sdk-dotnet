@@ -37,13 +37,21 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("permission_set", null);
             }
-            if (!this.attributes.ContainsKey("api_token"))
+            if (!this.attributes.ContainsKey("private_key"))
             {
-                this.attributes.Add("api_token", null);
+                this.attributes.Add("private_key", null);
+            }
+            if (!this.attributes.ContainsKey("subdomain"))
+            {
+                this.attributes.Add("subdomain", null);
             }
             if (!this.attributes.ContainsKey("root"))
             {
                 this.attributes.Add("root", null);
+            }
+            if (!this.attributes.ContainsKey("api_token"))
+            {
+                this.attributes.Add("api_token", null);
             }
             if (!this.attributes.ContainsKey("port"))
             {
@@ -57,25 +65,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("public_key", null);
             }
-            if (!this.attributes.ContainsKey("private_key"))
-            {
-                this.attributes.Add("private_key", null);
-            }
             if (!this.attributes.ContainsKey("status"))
             {
                 this.attributes.Add("status", null);
-            }
-            if (!this.attributes.ContainsKey("config_version"))
-            {
-                this.attributes.Add("config_version", null);
             }
             if (!this.attributes.ContainsKey("server_host_key"))
             {
                 this.attributes.Add("server_host_key", null);
             }
-            if (!this.attributes.ContainsKey("subdomain"))
+            if (!this.attributes.ContainsKey("config_version"))
             {
-                this.attributes.Add("subdomain", null);
+                this.attributes.Add("config_version", null);
             }
         }
 
@@ -117,14 +117,24 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Files Agent API Token
+        /// private key
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("api_token")]
-        public string ApiToken
+        [JsonPropertyName("private_key")]
+        public string PrivateKey
         {
-            get { return (string)attributes["api_token"]; }
-            private set { attributes["api_token"] = value; }
+            get { return (string)attributes["private_key"]; }
+            private set { attributes["private_key"] = value; }
+        }
+
+        /// <summary>
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("subdomain")]
+        public string Subdomain
+        {
+            get { return (string)attributes["subdomain"]; }
+            private set { attributes["subdomain"] = value; }
         }
 
         /// <summary>
@@ -136,6 +146,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["root"]; }
             private set { attributes["root"] = value; }
+        }
+
+        /// <summary>
+        /// Files Agent API Token
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("api_token")]
+        public string ApiToken
+        {
+            get { return (string)attributes["api_token"]; }
+            private set { attributes["api_token"] = value; }
         }
 
         /// <summary>
@@ -171,17 +192,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// private key
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("private_key")]
-        public string PrivateKey
-        {
-            get { return (string)attributes["private_key"]; }
-            private set { attributes["private_key"] = value; }
-        }
-
-        /// <summary>
         /// either running or shutdown
         /// </summary>
         [JsonInclude]
@@ -190,17 +200,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
-        }
-
-        /// <summary>
-        /// agent config version
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("config_version")]
-        public string ConfigVersion
-        {
-            get { return (string)attributes["config_version"]; }
-            private set { attributes["config_version"] = value; }
         }
 
         /// <summary>
@@ -214,13 +213,14 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// agent config version
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("subdomain")]
-        public string Subdomain
+        [JsonPropertyName("config_version")]
+        public string ConfigVersion
         {
-            get { return (string)attributes["subdomain"]; }
-            private set { attributes["subdomain"] = value; }
+            get { return (string)attributes["config_version"]; }
+            private set { attributes["config_version"] = value; }
         }
 
 

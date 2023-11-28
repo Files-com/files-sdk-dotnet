@@ -479,6 +479,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class FilesAgentFailedAuthorizationException : NotAuthorizedException
+    {
+        public FilesAgentFailedAuthorizationException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class FolderAdminOrBillingPermissionRequiredException : NotAuthorizedException
     {
         public FolderAdminOrBillingPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -984,6 +990,12 @@ namespace FilesCom
     public class ServiceUnavailableException : ApiException
     {
         public ServiceUnavailableException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class AgentUnavailableException : ServiceUnavailableException
+    {
+        public AgentUnavailableException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }

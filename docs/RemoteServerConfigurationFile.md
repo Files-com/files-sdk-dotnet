@@ -6,28 +6,28 @@
 {
   "id": 1,
   "permission_set": "full",
-  "api_token": "example",
+  "private_key": "example",
+  "subdomain": "example",
   "root": "example",
+  "api_token": "example",
   "port": 1,
   "hostname": "example",
   "public_key": "example",
-  "private_key": "example",
   "status": "example",
-  "config_version": "example",
   "server_host_key": "example",
-  "subdomain": "example"
+  "config_version": "example"
 }
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Agent ID
 * `permission_set` / `PermissionSet`  (string): 
-* `api_token` / `ApiToken`  (string): Files Agent API Token
+* `private_key` / `PrivateKey`  (string): private key
+* `subdomain` / `Subdomain`  (string): 
 * `root` / `Root`  (string): Agent local root path
+* `api_token` / `ApiToken`  (string): Files Agent API Token
 * `port` / `Port`  (Nullable<Int64>): Incoming port for files agent connections
 * `hostname` / `Hostname`  (string): 
 * `public_key` / `PublicKey`  (string): public key
-* `private_key` / `PrivateKey`  (string): private key
 * `status` / `Status`  (string): either running or shutdown
-* `config_version` / `ConfigVersion`  (string): agent config version
 * `server_host_key` / `ServerHostKey`  (string): 
-* `subdomain` / `Subdomain`  (string): 
+* `config_version` / `ConfigVersion`  (string): agent config version

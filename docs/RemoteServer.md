@@ -51,6 +51,7 @@
   "files_agent_permission_set": "read_write",
   "files_agent_root": "example",
   "files_agent_api_token": "example",
+  "files_agent_version": "example",
   "filebase_bucket": "my-bucket",
   "filebase_access_key": "example",
   "cloudflare_bucket": "my-bucket",
@@ -110,6 +111,7 @@
 * `files_agent_permission_set` / `FilesAgentPermissionSet`  (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
 * `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
+* `files_agent_version` / `FilesAgentVersion`  (string): Files Agent version
 * `filebase_bucket` / `FilebaseBucket`  (string): Filebase Bucket name
 * `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase Access Key.
 * `cloudflare_bucket` / `CloudflareBucket`  (string): Cloudflare Bucket name
@@ -256,6 +258,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `files_agent_root` (string): Agent local root path
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+* `files_agent_version` (string): Files Agent version
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
@@ -365,6 +368,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `files_agent_root` (string): Agent local root path
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+* `files_agent_version` (string): Files Agent version
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name
@@ -484,6 +488,7 @@ parameters.Add("enable_dedicated_ips", true);
 parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_permission_set", "read_write");
+parameters.Add("files_agent_version", "example");
 parameters.Add("filebase_access_key", "example");
 parameters.Add("filebase_bucket", "my-bucket");
 parameters.Add("cloudflare_access_key", "example");
@@ -552,6 +557,7 @@ RemoteServer.Update(parameters);
 * `s3_compatible_secret_key` (string): S3-compatible secret key
 * `files_agent_root` (string): Agent local root path
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
+* `files_agent_version` (string): Files Agent version
 * `filebase_access_key` (string): Filebase Access Key.
 * `filebase_secret_key` (string): Filebase secret key
 * `filebase_bucket` (string): Filebase Bucket name

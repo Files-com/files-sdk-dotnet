@@ -217,6 +217,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("files_agent_api_token", null);
             }
+            if (!this.attributes.ContainsKey("files_agent_version"))
+            {
+                this.attributes.Add("files_agent_version", null);
+            }
             if (!this.attributes.ContainsKey("filebase_bucket"))
             {
                 this.attributes.Add("filebase_bucket", null);
@@ -814,6 +818,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Files Agent version
+        /// </summary>
+        [JsonPropertyName("files_agent_version")]
+        public string FilesAgentVersion
+        {
+            get { return (string)attributes["files_agent_version"]; }
+            set { attributes["files_agent_version"] = value; }
+        }
+
+        /// <summary>
         /// Filebase Bucket name
         /// </summary>
         [JsonPropertyName("filebase_bucket")]
@@ -1220,6 +1234,7 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+        ///   files_agent_version - string - Files Agent version
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
@@ -1457,6 +1472,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+            }
+            if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
             }
             if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string))
             {
@@ -1731,6 +1750,7 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+        ///   files_agent_version - string - Files Agent version
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
@@ -1961,6 +1981,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
             }
+            if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
+            }
             if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
@@ -2169,6 +2193,7 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible secret key
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
+        ///   files_agent_version - string - Files Agent version
         ///   filebase_access_key - string - Filebase Access Key.
         ///   filebase_secret_key - string - Filebase secret key
         ///   filebase_bucket - string - Filebase Bucket name
@@ -2407,6 +2432,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+            }
+            if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
+            {
+                throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
             }
             if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string))
             {
