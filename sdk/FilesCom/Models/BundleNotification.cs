@@ -263,7 +263,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("id", id);
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -358,7 +365,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("id", id);
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
@@ -400,7 +414,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("id", id);
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");

@@ -15,9 +15,9 @@ namespace FilesCom.Models
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(RemoteFile));
 
-        public static async Task<RemoteFile> Create(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
+        public static async Task<RemoteFile> Create(Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
         {
-            return (RemoteFile)await RemoteFile.Create((string)attributes["path"], attributes, options);
+            return (RemoteFile)await RemoteFile.Create((string)parameters["path"], parameters, options);
         }
 
         public static async Task<RemoteFile> DownloadFile(string path, string localPath = null, Dictionary<string, object> options = null)
@@ -877,7 +877,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -942,7 +949,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1023,7 +1037,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1067,7 +1088,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1109,7 +1137,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1168,7 +1203,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1218,7 +1260,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -1270,7 +1319,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");

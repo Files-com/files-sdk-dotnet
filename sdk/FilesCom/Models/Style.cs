@@ -208,7 +208,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -252,7 +259,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
@@ -294,7 +308,14 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            parameters.Add("path", path);
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");

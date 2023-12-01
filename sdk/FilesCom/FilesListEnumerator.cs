@@ -59,6 +59,11 @@ namespace FilesCom
                 }
             }
 
+            if (filesList.data.Count == 0)
+            {
+                return false;
+            }
+
             current = filesList.data[index];
             return true;
         }
