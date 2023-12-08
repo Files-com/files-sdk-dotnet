@@ -15,5 +15,6 @@ namespace FilesCom
         public Dictionary<string, string[]> modelErrors { get; set; }
         public string title { get; set; }
         public string type { get; set; }
+        public Dictionary<string, object> data { get; set; }
     }
 }

@@ -85,6 +85,7 @@ namespace FilesCom
         public Dictionary<string, string[]> modelErrors => this.responseError.modelErrors;
         public string title => this.responseError.title;
         public string type => this.responseError.type;
+        public Dictionary<string, object> data => this.responseError.data;
     }
 
     public class BadRequestException : ApiException

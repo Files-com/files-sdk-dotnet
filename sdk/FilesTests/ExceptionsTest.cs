@@ -70,5 +70,34 @@ namespace FilesTests
             Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("TestHeader2"))[0], "TestValue2");
             Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("TestHeader2"))[1], "TestValue3");
         }
+
+        [TestMethod]
+        public void Exception_Data_ShouldBePopulatedForRegionMismatch()
+        {
+            const string body = @"{
+                ""error"": ""You have connected to a URL that has different security settings than those required for your site."",
+                ""http-code"": 403,
+                ""title"": ""Lockout Region Mismatch"",
+                ""type"": ""not-authenticated/lockout-region-mismatch"",
+                ""data"": {
+                    ""host"": ""test.host""
+                }
+            }";
+            ResponseError error = JsonSerializer.Deserialize<ResponseError>(body);
+
+            HttpResponseMessage message = new HttpResponseMessage();
+            HttpHeaders headers = message.Headers;
+            headers.Add("x-files-host", "test.host");
+
+            LockoutRegionMismatchException exception = new LockoutRegionMismatchException("Lockout Region Mismatch Error", 403, error, headers);
+
+            Assert.AreEqual(exception.error, "You have connected to a URL that has different security settings than those required for your site.");
+            Assert.AreEqual(exception.httpCode, 403);
+            Assert.AreEqual(exception.title, "Lockout Region Mismatch");
+            Assert.AreEqual(exception.type, "not-authenticated/lockout-region-mismatch");
+            Assert.AreEqual(exception.httpStatus, 403);
+            Assert.AreEqual(exception.data["host"].ToString(), "test.host");
+            Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("x-files-host"))[0], "test.host");
+        }
     }
 }
