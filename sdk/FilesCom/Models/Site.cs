@@ -61,6 +61,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("admin_user_id", null);
             }
+            if (!this.attributes.ContainsKey("admins_bypass_locked_subfolders"))
+            {
+                this.attributes.Add("admins_bypass_locked_subfolders", false);
+            }
             if (!this.attributes.ContainsKey("allow_bundle_names"))
             {
                 this.attributes.Add("allow_bundle_names", false);
@@ -735,6 +739,18 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["admin_user_id"]; }
             private set { attributes["admin_user_id"] = value; }
+        }
+
+        /// <summary>
+        /// Allow admins to bypass the locked subfolders setting.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("admins_bypass_locked_subfolders")]
+        public bool AdminsBypassLockedSubfolders
+        {
+            get { return attributes["admins_bypass_locked_subfolders"] == null ? false : (bool)attributes["admins_bypass_locked_subfolders"]; }
+            private set { attributes["admins_bypass_locked_subfolders"] = value; }
         }
 
         /// <summary>
@@ -2481,6 +2497,7 @@ namespace FilesCom.Models
         ///   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
         ///   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
         ///   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
+        ///   admins_bypass_locked_subfolders - boolean - Allow admins to bypass the locked subfolders setting.
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
         ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
@@ -2887,6 +2904,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_recipient_blacklist_domains") && !(parameters["bundle_recipient_blacklist_domains"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: bundle_recipient_blacklist_domains must be of type string[]", "parameters[\"bundle_recipient_blacklist_domains\"]");
+            }
+            if (parameters.ContainsKey("admins_bypass_locked_subfolders") && !(parameters["admins_bypass_locked_subfolders"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: admins_bypass_locked_subfolders must be of type bool", "parameters[\"admins_bypass_locked_subfolders\"]");
             }
             if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool))
             {
