@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("user_count"))
+            {
+                this.attributes.Add("user_count", null);
+            }
             if (!this.attributes.ContainsKey("saml_provider_cert_fingerprint"))
             {
                 this.attributes.Add("saml_provider_cert_fingerprint", null);
@@ -276,6 +280,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Count of users with this SSO Strategy
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("user_count")]
+        public Nullable<Int64> UserCount
+        {
+            get { return (Nullable<Int64>)attributes["user_count"]; }
+            private set { attributes["user_count"] = value; }
         }
 
         /// <summary>
