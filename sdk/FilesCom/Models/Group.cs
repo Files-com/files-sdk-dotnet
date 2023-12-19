@@ -53,6 +53,22 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("usernames", null);
             }
+            if (!this.attributes.ContainsKey("ftp_permission"))
+            {
+                this.attributes.Add("ftp_permission", false);
+            }
+            if (!this.attributes.ContainsKey("sftp_permission"))
+            {
+                this.attributes.Add("sftp_permission", false);
+            }
+            if (!this.attributes.ContainsKey("dav_permission"))
+            {
+                this.attributes.Add("dav_permission", false);
+            }
+            if (!this.attributes.ContainsKey("restapi_permission"))
+            {
+                this.attributes.Add("restapi_permission", false);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -132,10 +148,58 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("ftp_permission")]
+        public bool FtpPermission
+        {
+            get { return attributes["ftp_permission"] == null ? false : (bool)attributes["ftp_permission"]; }
+            set { attributes["ftp_permission"] = value; }
+        }
+
+        /// <summary>
+        /// If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("sftp_permission")]
+        public bool SftpPermission
+        {
+            get { return attributes["sftp_permission"] == null ? false : (bool)attributes["sftp_permission"]; }
+            set { attributes["sftp_permission"] = value; }
+        }
+
+        /// <summary>
+        /// If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("dav_permission")]
+        public bool DavPermission
+        {
+            get { return attributes["dav_permission"] == null ? false : (bool)attributes["dav_permission"]; }
+            set { attributes["dav_permission"] = value; }
+        }
+
+        /// <summary>
+        /// If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("restapi_permission")]
+        public bool RestapiPermission
+        {
+            get { return attributes["restapi_permission"] == null ? false : (bool)attributes["restapi_permission"]; }
+            set { attributes["restapi_permission"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+        ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+        ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+        ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   name - string - Group name.
         /// </summary>
         public async Task<Group> Update(Dictionary<string, object> parameters)
@@ -166,6 +230,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
+            }
+            if (parameters.ContainsKey("sftp_permission") && !(parameters["sftp_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: sftp_permission must be of type bool", "parameters[\"sftp_permission\"]");
+            }
+            if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+            }
+            if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -338,6 +418,10 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+        ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+        ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+        ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   name (required) - string - Group name.
         /// </summary>
         public static async Task<Group> Create(
@@ -365,6 +449,22 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
             }
+            if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
+            }
+            if (parameters.ContainsKey("sftp_permission") && !(parameters["sftp_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: sftp_permission must be of type bool", "parameters[\"sftp_permission\"]");
+            }
+            if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+            }
+            if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -388,6 +488,10 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
+        ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
+        ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
+        ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   name - string - Group name.
         /// </summary>
         public static async Task<Group> Update(
@@ -426,6 +530,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
+            }
+            if (parameters.ContainsKey("sftp_permission") && !(parameters["sftp_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: sftp_permission must be of type bool", "parameters[\"sftp_permission\"]");
+            }
+            if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+            }
+            if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
