@@ -61,10 +61,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
-            if (!this.attributes.ContainsKey("path"))
-            {
-                this.attributes.Add("path", null);
-            }
             if (!this.attributes.ContainsKey("permission_set"))
             {
                 this.attributes.Add("permission_set", null);
@@ -80,6 +76,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
             }
         }
 
@@ -181,16 +181,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Folder path restriction for this api key. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
-        /// </summary>
-        [JsonPropertyName("path")]
-        public string Path
-        {
-            get { return (string)attributes["path"]; }
-            set { attributes["path"] = value; }
-        }
-
-        /// <summary>
         /// Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         [JsonPropertyName("permission_set")]
@@ -228,6 +218,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// Folder path restriction for this api key.
+        /// </summary>
+        [JsonPropertyName("path")]
+        public string Path
+        {
+            get { return (string)attributes["path"]; }
+            set { attributes["path"] = value; }
         }
 
         /// <summary>
