@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("always_overwrite_size_matching_files"))
+            {
+                this.attributes.Add("always_overwrite_size_matching_files", false);
+            }
             if (!this.attributes.ContainsKey("automation"))
             {
                 this.attributes.Add("automation", null);
@@ -41,13 +45,29 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("deleted", false);
             }
+            if (!this.attributes.ContainsKey("description"))
+            {
+                this.attributes.Add("description", null);
+            }
+            if (!this.attributes.ContainsKey("destination_replace_from"))
+            {
+                this.attributes.Add("destination_replace_from", null);
+            }
+            if (!this.attributes.ContainsKey("destination_replace_to"))
+            {
+                this.attributes.Add("destination_replace_to", null);
+            }
+            if (!this.attributes.ContainsKey("destinations"))
+            {
+                this.attributes.Add("destinations", new string[0]);
+            }
             if (!this.attributes.ContainsKey("disabled"))
             {
                 this.attributes.Add("disabled", false);
             }
-            if (!this.attributes.ContainsKey("trigger"))
+            if (!this.attributes.ContainsKey("group_ids"))
             {
-                this.attributes.Add("trigger", null);
+                this.attributes.Add("group_ids", new Nullable<Int64>[0]);
             }
             if (!this.attributes.ContainsKey("interval"))
             {
@@ -61,6 +81,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
+            if (!this.attributes.ContainsKey("recurring_day"))
+            {
+                this.attributes.Add("recurring_day", null);
+            }
             if (!this.attributes.ContainsKey("schedule"))
             {
                 this.attributes.Add("schedule", null);
@@ -69,57 +97,33 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("source", null);
             }
-            if (!this.attributes.ContainsKey("destinations"))
-            {
-                this.attributes.Add("destinations", new string[0]);
-            }
-            if (!this.attributes.ContainsKey("destination_replace_from"))
-            {
-                this.attributes.Add("destination_replace_from", null);
-            }
-            if (!this.attributes.ContainsKey("destination_replace_to"))
-            {
-                this.attributes.Add("destination_replace_to", null);
-            }
-            if (!this.attributes.ContainsKey("description"))
-            {
-                this.attributes.Add("description", null);
-            }
-            if (!this.attributes.ContainsKey("recurring_day"))
-            {
-                this.attributes.Add("recurring_day", null);
-            }
-            if (!this.attributes.ContainsKey("path"))
-            {
-                this.attributes.Add("path", null);
-            }
-            if (!this.attributes.ContainsKey("user_id"))
-            {
-                this.attributes.Add("user_id", null);
-            }
             if (!this.attributes.ContainsKey("sync_ids"))
             {
                 this.attributes.Add("sync_ids", new Nullable<Int64>[0]);
-            }
-            if (!this.attributes.ContainsKey("user_ids"))
-            {
-                this.attributes.Add("user_ids", new Nullable<Int64>[0]);
-            }
-            if (!this.attributes.ContainsKey("group_ids"))
-            {
-                this.attributes.Add("group_ids", new Nullable<Int64>[0]);
-            }
-            if (!this.attributes.ContainsKey("webhook_url"))
-            {
-                this.attributes.Add("webhook_url", null);
             }
             if (!this.attributes.ContainsKey("trigger_actions"))
             {
                 this.attributes.Add("trigger_actions", new string[0]);
             }
+            if (!this.attributes.ContainsKey("trigger"))
+            {
+                this.attributes.Add("trigger", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("user_ids"))
+            {
+                this.attributes.Add("user_ids", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("value"))
             {
                 this.attributes.Add("value", null);
+            }
+            if (!this.attributes.ContainsKey("webhook_url"))
+            {
+                this.attributes.Add("webhook_url", null);
             }
             if (!this.attributes.ContainsKey("destination"))
             {
@@ -154,6 +158,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("always_overwrite_size_matching_files")]
+        public bool AlwaysOverwriteSizeMatchingFiles
+        {
+            get { return attributes["always_overwrite_size_matching_files"] == null ? false : (bool)attributes["always_overwrite_size_matching_files"]; }
+            set { attributes["always_overwrite_size_matching_files"] = value; }
+        }
+
+        /// <summary>
         /// Automation type
         /// </summary>
         [JsonPropertyName("automation")]
@@ -175,6 +190,46 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Description for the this Automation.
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description
+        {
+            get { return (string)attributes["description"]; }
+            set { attributes["description"] = value; }
+        }
+
+        /// <summary>
+        /// If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
+        /// </summary>
+        [JsonPropertyName("destination_replace_from")]
+        public string DestinationReplaceFrom
+        {
+            get { return (string)attributes["destination_replace_from"]; }
+            set { attributes["destination_replace_from"] = value; }
+        }
+
+        /// <summary>
+        /// If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
+        /// </summary>
+        [JsonPropertyName("destination_replace_to")]
+        public string DestinationReplaceTo
+        {
+            get { return (string)attributes["destination_replace_to"]; }
+            set { attributes["destination_replace_to"] = value; }
+        }
+
+        /// <summary>
+        /// Destination Paths
+        /// </summary>
+        [JsonPropertyName("destinations")]
+        public string[] Destinations
+        {
+            get { return (string[])attributes["destinations"]; }
+            set { attributes["destinations"] = value; }
+        }
+
+        /// <summary>
         /// If true, this automation will not run.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -186,13 +241,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// How this automation is triggered to run.
+        /// IDs of Groups for the Automation (i.e. who to Request File from)
         /// </summary>
-        [JsonPropertyName("trigger")]
-        public string Trigger
+        [JsonPropertyName("group_ids")]
+        public Nullable<Int64>[] GroupIds
         {
-            get { return (string)attributes["trigger"]; }
-            set { attributes["trigger"] = value; }
+            get { return (Nullable<Int64>[])attributes["group_ids"]; }
+            set { attributes["group_ids"] = value; }
         }
 
         /// <summary>
@@ -226,6 +281,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// </summary>
+        [JsonPropertyName("path")]
+        public string Path
+        {
+            get { return (string)attributes["path"]; }
+            set { attributes["path"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        /// </summary>
+        [JsonPropertyName("recurring_day")]
+        public Nullable<Int64> RecurringDay
+        {
+            get { return (Nullable<Int64>)attributes["recurring_day"]; }
+            set { attributes["recurring_day"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
         /// </summary>
         [JsonPropertyName("schedule")]
@@ -246,76 +321,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Destination Paths
-        /// </summary>
-        [JsonPropertyName("destinations")]
-        public string[] Destinations
-        {
-            get { return (string[])attributes["destinations"]; }
-            set { attributes["destinations"] = value; }
-        }
-
-        /// <summary>
-        /// If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
-        /// </summary>
-        [JsonPropertyName("destination_replace_from")]
-        public string DestinationReplaceFrom
-        {
-            get { return (string)attributes["destination_replace_from"]; }
-            set { attributes["destination_replace_from"] = value; }
-        }
-
-        /// <summary>
-        /// If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
-        /// </summary>
-        [JsonPropertyName("destination_replace_to")]
-        public string DestinationReplaceTo
-        {
-            get { return (string)attributes["destination_replace_to"]; }
-            set { attributes["destination_replace_to"] = value; }
-        }
-
-        /// <summary>
-        /// Description for the this Automation.
-        /// </summary>
-        [JsonPropertyName("description")]
-        public string Description
-        {
-            get { return (string)attributes["description"]; }
-            set { attributes["description"] = value; }
-        }
-
-        /// <summary>
-        /// If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        /// </summary>
-        [JsonPropertyName("recurring_day")]
-        public Nullable<Int64> RecurringDay
-        {
-            get { return (Nullable<Int64>)attributes["recurring_day"]; }
-            set { attributes["recurring_day"] = value; }
-        }
-
-        /// <summary>
-        /// Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
-        /// </summary>
-        [JsonPropertyName("path")]
-        public string Path
-        {
-            get { return (string)attributes["path"]; }
-            set { attributes["path"] = value; }
-        }
-
-        /// <summary>
-        /// User ID of the Automation's creator.
-        /// </summary>
-        [JsonPropertyName("user_id")]
-        public Nullable<Int64> UserId
-        {
-            get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
-        }
-
-        /// <summary>
         /// IDs of remote sync folder behaviors to run by this Automation
         /// </summary>
         [JsonPropertyName("sync_ids")]
@@ -323,36 +328,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>[])attributes["sync_ids"]; }
             set { attributes["sync_ids"] = value; }
-        }
-
-        /// <summary>
-        /// IDs of Users for the Automation (i.e. who to Request File from)
-        /// </summary>
-        [JsonPropertyName("user_ids")]
-        public Nullable<Int64>[] UserIds
-        {
-            get { return (Nullable<Int64>[])attributes["user_ids"]; }
-            set { attributes["user_ids"] = value; }
-        }
-
-        /// <summary>
-        /// IDs of Groups for the Automation (i.e. who to Request File from)
-        /// </summary>
-        [JsonPropertyName("group_ids")]
-        public Nullable<Int64>[] GroupIds
-        {
-            get { return (Nullable<Int64>[])attributes["group_ids"]; }
-            set { attributes["group_ids"] = value; }
-        }
-
-        /// <summary>
-        /// If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
-        /// </summary>
-        [JsonPropertyName("webhook_url")]
-        public string WebhookUrl
-        {
-            get { return (string)attributes["webhook_url"]; }
-            set { attributes["webhook_url"] = value; }
         }
 
         /// <summary>
@@ -366,6 +341,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// How this automation is triggered to run.
+        /// </summary>
+        [JsonPropertyName("trigger")]
+        public string Trigger
+        {
+            get { return (string)attributes["trigger"]; }
+            set { attributes["trigger"] = value; }
+        }
+
+        /// <summary>
+        /// User ID of the Automation's creator.
+        /// </summary>
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
+        {
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// IDs of Users for the Automation (i.e. who to Request File from)
+        /// </summary>
+        [JsonPropertyName("user_ids")]
+        public Nullable<Int64>[] UserIds
+        {
+            get { return (Nullable<Int64>[])attributes["user_ids"]; }
+            set { attributes["user_ids"] = value; }
+        }
+
+        /// <summary>
         /// A Hash of attributes specific to the automation type.
         /// </summary>
         [JsonPropertyName("value")]
@@ -373,6 +378,16 @@ namespace FilesCom.Models
         {
             get { return (object)attributes["value"]; }
             set { attributes["value"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
+        /// </summary>
+        [JsonPropertyName("webhook_url")]
+        public string WebhookUrl
+        {
+            get { return (string)attributes["webhook_url"]; }
+            set { attributes["webhook_url"] = value; }
         }
 
         /// <summary>
@@ -423,6 +438,7 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
+        ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   name - string - Name for this automation.
@@ -492,6 +508,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -715,6 +735,7 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
+        ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   name - string - Name for this automation.
@@ -780,6 +801,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -873,6 +898,7 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule - object - Custom schedule for running this automation.
+        ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   name - string - Name for this automation.
@@ -950,6 +976,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
             {
                 throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
+            if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
