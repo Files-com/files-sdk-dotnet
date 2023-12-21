@@ -77,10 +77,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
-            if (!this.attributes.ContainsKey("path"))
-            {
-                this.attributes.Add("path", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -181,7 +177,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        /// Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         [JsonPropertyName("permission_set")]
         public string PermissionSet
@@ -221,21 +217,11 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Folder path restriction for this api key.
-        /// </summary>
-        [JsonPropertyName("path")]
-        public string Path
-        {
-            get { return (string)attributes["path"]; }
-            set { attributes["path"] = value; }
-        }
-
-        /// <summary>
         /// Parameters:
         ///   name - string - Internal name for the API Key.  For your use.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
-        ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public async Task<ApiKey> Update(Dictionary<string, object> parameters)
         {
@@ -478,8 +464,7 @@ namespace FilesCom.Models
         ///   name - string - Internal name for the API Key.  For your use.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
-        ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
-        ///   path - string - Folder path restriction for this api key.
+        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public static async Task<ApiKey> Create(
 
@@ -510,10 +495,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -532,7 +513,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   expires_at - string - API Key expiration date
         ///   name - string - Internal name for the API Key.  For your use.
-        ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public static async Task<ApiKey> UpdateCurrent(
 
@@ -574,7 +555,7 @@ namespace FilesCom.Models
         ///   name - string - Internal name for the API Key.  For your use.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
-        ///   permission_set - string - Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public static async Task<ApiKey> Update(
             Nullable<Int64> id,

@@ -27,11 +27,10 @@
 * `key` / `Key`  (string): API Key actual key string
 * `last_use_at` / `LastUseAt`  (Nullable<DateTime>): API Key last used - note this value is only updated once per 3 hour period, so the 'actual' time of last use may be up to 3 hours later than this timestamp.
 * `name` / `Name`  (string): Internal name for the API Key.  For your use.
-* `permission_set` / `PermissionSet`  (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` / `PermissionSet`  (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 * `platform` / `Platform`  (string): If this API key represents a Desktop app, what platform was it created on?
 * `url` / `Url`  (string): URL for API host.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID for the owner of this API Key.  May be blank for Site-wide API Keys.
-* `path` / `Path`  (string): Folder path restriction for this api key.
 
 
 ---
@@ -107,8 +106,7 @@ Task<ApiKey> ApiKey.Create(
 * `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
-* `path` (string): Folder path restriction for this api key.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 
 ---
@@ -127,7 +125,7 @@ Task<ApiKey> ApiKey.UpdateCurrent(
 
 * `expires_at` (string): API Key expiration date
 * `name` (string): Internal name for the API Key.  For your use.
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 
 ---
@@ -148,7 +146,7 @@ Task<ApiKey> ApiKey.Update(
 * `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 
 ---
@@ -204,7 +202,7 @@ ApiKey.Update(parameters);
 * `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
-* `permission_set` (string): Permissions for this API Key.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 
 
 ---
