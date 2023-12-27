@@ -218,10 +218,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Internal name for the API Key.  For your use.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        ///   name - string - Internal name for the API Key.  For your use.
         /// </summary>
         public async Task<ApiKey> Update(Dictionary<string, object> parameters)
         {
@@ -240,10 +240,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
@@ -255,6 +251,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -461,10 +461,10 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   name - string - Internal name for the API Key.  For your use.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        ///   name (required) - string - Internal name for the API Key.  For your use.
         /// </summary>
         public static async Task<ApiKey> Create(
 
@@ -475,13 +475,13 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("name") || parameters["name"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -494,6 +494,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -552,10 +556,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Internal name for the API Key.  For your use.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+        ///   name - string - Internal name for the API Key.  For your use.
         /// </summary>
         public static async Task<ApiKey> Update(
             Nullable<Int64> id,
@@ -582,10 +586,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
@@ -597,6 +597,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);

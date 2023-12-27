@@ -103,10 +103,10 @@ Task<ApiKey> ApiKey.Create(
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
 * `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `name` (string): Required - Internal name for the API Key.  For your use.
 
 
 ---
@@ -143,10 +143,10 @@ Task<ApiKey> ApiKey.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Api Key ID.
-* `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
 * `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `name` (string): Internal name for the API Key.  For your use.
 
 
 ---
@@ -188,10 +188,10 @@ var ApiKey = ApiKey.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("name", "My Main API Key");
 parameters.Add("description", "example");
 parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("permission_set", "full");
+parameters.Add("name", "My Main API Key");
 
 ApiKey.Update(parameters);
 ```
@@ -199,10 +199,10 @@ ApiKey.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Api Key ID.
-* `name` (string): Internal name for the API Key.  For your use.
 * `description` (string): User-supplied description of API key.
 * `expires_at` (string): API Key expiration date
 * `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `name` (string): Internal name for the API Key.  For your use.
 
 
 ---
