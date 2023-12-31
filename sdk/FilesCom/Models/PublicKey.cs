@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("fingerprint", null);
             }
+            if (!this.attributes.ContainsKey("fingerprint_sha256"))
+            {
+                this.attributes.Add("fingerprint_sha256", null);
+            }
             if (!this.attributes.ContainsKey("username"))
             {
                 this.attributes.Add("username", null);
@@ -107,13 +111,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Public key fingerprint
+        /// Public key fingerprint (MD5)
         /// </summary>
         [JsonPropertyName("fingerprint")]
         public string Fingerprint
         {
             get { return (string)attributes["fingerprint"]; }
             set { attributes["fingerprint"] = value; }
+        }
+
+        /// <summary>
+        /// Public key fingerprint (SHA256)
+        /// </summary>
+        [JsonPropertyName("fingerprint_sha256")]
+        public string FingerprintSha256
+        {
+            get { return (string)attributes["fingerprint_sha256"]; }
+            set { attributes["fingerprint_sha256"] = value; }
         }
 
         /// <summary>
