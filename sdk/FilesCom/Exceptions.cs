@@ -944,6 +944,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class TwoFactorAuthenticationUnsubscribedRecipientException : ProcessingFailureException
+    {
+        public TwoFactorAuthenticationUnsubscribedRecipientException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class UpdatesNotAllowedForRemotesException : ProcessingFailureException
     {
         public UpdatesNotAllowedForRemotesException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
