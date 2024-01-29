@@ -169,6 +169,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("custom_namespace", false);
             }
+            if (!this.attributes.ContainsKey("dav_enabled"))
+            {
+                this.attributes.Add("dav_enabled", false);
+            }
+            if (!this.attributes.ContainsKey("dav_user_root_enabled"))
+            {
+                this.attributes.Add("dav_user_root_enabled", false);
+            }
             if (!this.attributes.ContainsKey("days_to_retain_backups"))
             {
                 this.attributes.Add("days_to_retain_backups", null);
@@ -1045,6 +1053,30 @@ namespace FilesCom.Models
         {
             get { return attributes["custom_namespace"] == null ? false : (bool)attributes["custom_namespace"]; }
             private set { attributes["custom_namespace"] = value; }
+        }
+
+        /// <summary>
+        /// Is WebDAV enabled?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("dav_enabled")]
+        public bool DavEnabled
+        {
+            get { return attributes["dav_enabled"] == null ? false : (bool)attributes["dav_enabled"]; }
+            private set { attributes["dav_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Use user FTP roots also for WebDAV?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("dav_user_root_enabled")]
+        public bool DavUserRootEnabled
+        {
+            get { return attributes["dav_user_root_enabled"] == null ? false : (bool)attributes["dav_user_root_enabled"]; }
+            private set { attributes["dav_user_root_enabled"] = value; }
         }
 
         /// <summary>
@@ -2467,6 +2499,7 @@ namespace FilesCom.Models
         ///   password_require_number - boolean - Require a number in passwords?
         ///   password_require_unbreached - boolean - Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
         ///   require_logout_from_bundles_and_inboxes - boolean - If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
+        ///   dav_user_root_enabled - boolean - Use user FTP roots also for WebDAV?
         ///   sftp_user_root_enabled - boolean - Use user FTP roots also for SFTP?
         ///   disable_password_reset - boolean - Is password reset disabled?
         ///   immutable_files - boolean - Are files protected from modification?
@@ -2489,6 +2522,7 @@ namespace FilesCom.Models
         ///   sharing_enabled - boolean - Allow bundle creation
         ///   user_requests_enabled - boolean - Enable User Requests feature
         ///   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
+        ///   dav_enabled - boolean - Is WebDAV enabled?
         ///   ftp_enabled - boolean - Is FTP enabled?
         ///   sftp_enabled - boolean - Is SFTP enabled?
         ///   sftp_host_key_type - string - Sftp Host Key Type
@@ -2786,6 +2820,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: require_logout_from_bundles_and_inboxes must be of type bool", "parameters[\"require_logout_from_bundles_and_inboxes\"]");
             }
+            if (parameters.ContainsKey("dav_user_root_enabled") && !(parameters["dav_user_root_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dav_user_root_enabled must be of type bool", "parameters[\"dav_user_root_enabled\"]");
+            }
             if (parameters.ContainsKey("sftp_user_root_enabled") && !(parameters["sftp_user_root_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_user_root_enabled must be of type bool", "parameters[\"sftp_user_root_enabled\"]");
@@ -2873,6 +2911,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_requests_notify_admins") && !(parameters["user_requests_notify_admins"] is bool))
             {
                 throw new ArgumentException("Bad parameter: user_requests_notify_admins must be of type bool", "parameters[\"user_requests_notify_admins\"]");
+            }
+            if (parameters.ContainsKey("dav_enabled") && !(parameters["dav_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: dav_enabled must be of type bool", "parameters[\"dav_enabled\"]");
             }
             if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool))
             {

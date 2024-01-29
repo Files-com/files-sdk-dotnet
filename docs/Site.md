@@ -43,6 +43,8 @@
   "created_at": "2000-01-01T01:00:00Z",
   "currency": "USD",
   "custom_namespace": true,
+  "dav_enabled": true,
+  "dav_user_root_enabled": true,
   "days_to_retain_backups": 30,
   "default_time_zone": "Pacific Time (US & Canada)",
   "desktop_app": true,
@@ -264,6 +266,8 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Time this site was created
 * `currency` / `Currency`  (string): Preferred currency
 * `custom_namespace` / `CustomNamespace`  (bool): Is this site using a custom namespace for users?
+* `dav_enabled` / `DavEnabled`  (bool): Is WebDAV enabled?
+* `dav_user_root_enabled` / `DavUserRootEnabled`  (bool): Use user FTP roots also for WebDAV?
 * `days_to_retain_backups` / `DaysToRetainBackups`  (Nullable<Int64>): Number of days to keep deleted files
 * `default_time_zone` / `DefaultTimeZone`  (string): Site default time zone
 * `desktop_app` / `DesktopApp`  (bool): Is the desktop app enabled?
@@ -476,6 +480,7 @@ Task<Site> Site.Update(
 * `password_require_number` (bool): Require a number in passwords?
 * `password_require_unbreached` (bool): Require passwords that have not been previously breached? (see https://haveibeenpwned.com/)
 * `require_logout_from_bundles_and_inboxes` (bool): If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
+* `dav_user_root_enabled` (bool): Use user FTP roots also for WebDAV?
 * `sftp_user_root_enabled` (bool): Use user FTP roots also for SFTP?
 * `disable_password_reset` (bool): Is password reset disabled?
 * `immutable_files` (bool): Are files protected from modification?
@@ -498,6 +503,7 @@ Task<Site> Site.Update(
 * `sharing_enabled` (bool): Allow bundle creation
 * `user_requests_enabled` (bool): Enable User Requests feature
 * `user_requests_notify_admins` (bool): Send email to site admins when a user request is received?
+* `dav_enabled` (bool): Is WebDAV enabled?
 * `ftp_enabled` (bool): Is FTP enabled?
 * `sftp_enabled` (bool): Is SFTP enabled?
 * `sftp_host_key_type` (string): Sftp Host Key Type
