@@ -303,10 +303,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
-        ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         ///   bundle_id (required) - int64 - Bundle ID to notify on
         ///   user_id - int64 - The id of the user to notify.
+        ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+        ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         /// </summary>
         public static async Task<BundleNotification> Create(
 
@@ -321,14 +321,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
             }
-            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
-            }
-            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
-            }
             if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
@@ -336,6 +328,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_registration must be of type bool", "parameters[\"notify_on_registration\"]");
+            }
+            if (parameters.ContainsKey("notify_on_upload") && !(parameters["notify_on_upload"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options);
