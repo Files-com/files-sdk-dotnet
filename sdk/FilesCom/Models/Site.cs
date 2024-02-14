@@ -2492,6 +2492,7 @@ namespace FilesCom.Models
         ///   motd_text - string - A message to show users when they connect via FTP or SFTP.
         ///   motd_use_for_ftp - boolean - Show message to users connecting via FTP
         ///   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
+        ///   left_navigation_visibility - object - Visibility settings for account navigation
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
@@ -2744,6 +2745,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("motd_use_for_sftp") && !(parameters["motd_use_for_sftp"] is bool))
             {
                 throw new ArgumentException("Bad parameter: motd_use_for_sftp must be of type bool", "parameters[\"motd_use_for_sftp\"]");
+            }
+            if (parameters.ContainsKey("left_navigation_visibility") && !(parameters["left_navigation_visibility"] is object))
+            {
+                throw new ArgumentException("Bad parameter: left_navigation_visibility must be of type object", "parameters[\"left_navigation_visibility\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {

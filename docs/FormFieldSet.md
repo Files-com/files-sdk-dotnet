@@ -13,7 +13,20 @@
     4
   ],
   "form_fields": [
-    null
+    {
+      "id": 1,
+      "label": "Sample Label",
+      "required": true,
+      "help_text": "Help Text",
+      "field_type": "text",
+      "options_for_select": [
+        "red",
+        "green",
+        "blue"
+      ],
+      "default_option": "red",
+      "form_field_set_id": 1
+    }
   ],
   "skip_name": true,
   "skip_email": true,
@@ -141,7 +154,7 @@ parameters.Add("title", "Sample Form Title");
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
 parameters.Add("skip_company", true);
-parameters.Add("form_fields", [null]);
+parameters.Add("form_fields", [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}]);
 
 FormFieldSet.Update(parameters);
 ```

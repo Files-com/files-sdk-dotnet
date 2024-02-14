@@ -30,7 +30,10 @@
   "bundle_require_registration": true,
   "bundle_require_share_recipient": true,
   "bundle_upload_receipt_notifications": "never",
-  "bundle_watermark_attachment": null,
+  "bundle_watermark_attachment": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
   "bundle_watermark_value": {
     "key": "example value"
   },
@@ -68,10 +71,22 @@
   "non_sso_users_allowed": true,
   "folder_permissions_groups_only": true,
   "hipaa": true,
-  "icon128": null,
-  "icon16": null,
-  "icon32": null,
-  "icon48": null,
+  "icon128": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
+  "icon16": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
+  "icon32": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
+  "icon48": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
   "immutable_files_set_at": "2000-01-01T01:00:00Z",
   "include_password_in_welcome_email": true,
   "language": "en",
@@ -92,8 +107,14 @@
   "ldap_username": "[ldap username]",
   "ldap_username_field": "sAMAccountName",
   "login_help_text": "Login page help text.",
-  "logo": null,
-  "login_page_background_image": null,
+  "logo": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
+  "login_page_background_image": {
+    "name": "My logo",
+    "uri": "https://mysite.files.com/.../my_image.png"
+  },
   "max_prior_passwords": 1,
   "motd_text": "example",
   "motd_use_for_ftp": true,
@@ -123,8 +144,24 @@
   "session": {
     "id": "60525f92e859c4c3d74cb02fd176b1525901b525",
     "language": "en",
+    "login_token": "@tok-randomcode",
+    "login_token_domain": "https://mysite.files.com",
+    "max_dir_listing_size": 1,
+    "multiple_regions": true,
     "read_only": true,
-    "sftp_insecure_ciphers": true
+    "root_path": "example",
+    "sftp_insecure_ciphers": false,
+    "site_id": 1,
+    "ssl_required": true,
+    "tls_disabled": false,
+    "two_factor_setup_needed": false,
+    "allowed_2fa_method_sms": true,
+    "allowed_2fa_method_totp": true,
+    "allowed_2fa_method_u2f": true,
+    "allowed_2fa_method_webauthn": true,
+    "allowed_2fa_method_yubi": true,
+    "use_provided_modified_at": true,
+    "windows_mode_ftp": false
   },
   "session_pinned_by_ip": true,
   "sftp_enabled": true,
@@ -163,9 +200,9 @@
     "authenticate_until": "2000-01-01T01:00:00Z",
     "authentication_method": "password",
     "avatar_url": "example",
-    "billing_permission": true,
-    "bypass_site_allowed_ips": true,
-    "bypass_inactive_disable": true,
+    "billing_permission": false,
+    "bypass_site_allowed_ips": false,
+    "bypass_inactive_disable": false,
     "created_at": "2000-01-01T01:00:00Z",
     "dav_permission": true,
     "disabled": true,
@@ -211,6 +248,7 @@
     "externally_managed": true,
     "time_zone": "Pacific Time (US & Canada)",
     "type_of_2fa": "yubi",
+    "updated_at": "2000-01-01T01:00:00Z",
     "user_root": "example",
     "days_remaining_until_password_expire": 1,
     "password_expire_at": "2000-01-01T01:00:00Z"
@@ -459,6 +497,7 @@ Task<Site> Site.Update(
 * `motd_text` (string): A message to show users when they connect via FTP or SFTP.
 * `motd_use_for_ftp` (bool): Show message to users connecting via FTP
 * `motd_use_for_sftp` (bool): Show message to users connecting via SFTP
+* `left_navigation_visibility` (object): Visibility settings for account navigation
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.

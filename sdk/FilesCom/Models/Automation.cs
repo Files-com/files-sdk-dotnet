@@ -89,9 +89,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
-            if (!this.attributes.ContainsKey("schedule"))
+            if (!this.attributes.ContainsKey("schedule_days_of_week"))
             {
-                this.attributes.Add("schedule", null);
+                this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("schedule_times_of_day"))
+            {
+                this.attributes.Add("schedule_times_of_day", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("schedule_time_zone"))
+            {
+                this.attributes.Add("schedule_time_zone", null);
             }
             if (!this.attributes.ContainsKey("source"))
             {
@@ -303,11 +311,31 @@ namespace FilesCom.Models
         /// <summary>
         /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
         /// </summary>
-        [JsonPropertyName("schedule")]
-        public object Schedule
+        [JsonPropertyName("schedule_days_of_week")]
+        public Nullable<Int64>[] ScheduleDaysOfWeek
         {
-            get { return (object)attributes["schedule"]; }
-            set { attributes["schedule"] = value; }
+            get { return (Nullable<Int64>[])attributes["schedule_days_of_week"]; }
+            set { attributes["schedule_days_of_week"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+        /// </summary>
+        [JsonPropertyName("schedule_times_of_day")]
+        public string[] ScheduleTimesOfDay
+        {
+            get { return (string[])attributes["schedule_times_of_day"]; }
+            set { attributes["schedule_times_of_day"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+        /// </summary>
+        [JsonPropertyName("schedule_time_zone")]
+        public string ScheduleTimeZone
+        {
+            get { return (string)attributes["schedule_time_zone"]; }
+            set { attributes["schedule_time_zone"] = value; }
         }
 
         /// <summary>
@@ -437,7 +465,9 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-        ///   schedule - object - Custom schedule for running this automation.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
+        ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
@@ -505,9 +535,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
-            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
+            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+            }
+            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
             }
             if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
             {
@@ -734,7 +772,9 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-        ///   schedule - object - Custom schedule for running this automation.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
+        ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
@@ -798,9 +838,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
-            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
+            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+            }
+            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
             }
             if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
             {
@@ -897,7 +945,9 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-        ///   schedule - object - Custom schedule for running this automation.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
+        ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
@@ -973,9 +1023,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
-            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
+            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+            }
+            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
             }
             if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
             {
