@@ -573,10 +573,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("trial_until", null);
             }
-            if (!this.attributes.ContainsKey("updated_at"))
-            {
-                this.attributes.Add("updated_at", null);
-            }
             if (!this.attributes.ContainsKey("use_provided_modified_at"))
             {
                 this.attributes.Add("use_provided_modified_at", false);
@@ -2210,17 +2206,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["trial_until"]; }
             private set { attributes["trial_until"] = value; }
-        }
-
-        /// <summary>
-        /// Last time this Site was updated
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("updated_at")]
-        public Nullable<DateTime> UpdatedAt
-        {
-            get { return (Nullable<DateTime>)attributes["updated_at"]; }
-            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>

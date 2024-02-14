@@ -186,7 +186,6 @@
   "tls_disabled": true,
   "trial_days_left": 1,
   "trial_until": "2000-01-01T01:00:00Z",
-  "updated_at": "2000-01-01T01:00:00Z",
   "use_provided_modified_at": true,
   "user": {
     "id": 1,
@@ -406,7 +405,6 @@
 * `tls_disabled` / `TlsDisabled`  (bool): Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
 * `trial_days_left` / `TrialDaysLeft`  (Nullable<Int64>): Number of days left in trial
 * `trial_until` / `TrialUntil`  (Nullable<DateTime>): When does this Site trial expire?
-* `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Last time this Site was updated
 * `use_provided_modified_at` / `UseProvidedModifiedAt`  (bool): Allow uploaders to set `provided_modified_at` for uploaded files?
 * `user` / `User`  (User): User of current session
 * `user_lockout` / `UserLockout`  (bool): Will users be locked out after incorrect login attempts?

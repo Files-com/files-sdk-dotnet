@@ -53,10 +53,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("service_start_at", null);
             }
-            if (!this.attributes.ContainsKey("updated_at"))
-            {
-                this.attributes.Add("updated_at", null);
-            }
             if (!this.attributes.ContainsKey("plan"))
             {
                 this.attributes.Add("plan", null);
@@ -147,17 +143,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["service_start_at"]; }
             private set { attributes["service_start_at"] = value; }
-        }
-
-        /// <summary>
-        /// Invoice line item updated date/time
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("updated_at")]
-        public Nullable<DateTime> UpdatedAt
-        {
-            get { return (Nullable<DateTime>)attributes["updated_at"]; }
-            private set { attributes["updated_at"] = value; }
         }
 
         /// <summary>

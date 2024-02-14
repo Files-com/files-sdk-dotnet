@@ -10,7 +10,6 @@
   "type": "invoice",
   "service_end_at": "2000-01-01T01:00:00Z",
   "service_start_at": "2000-01-01T01:00:00Z",
-  "updated_at": "2000-01-01T01:00:00Z",
   "plan": "Premier",
   "site": "My site"
 }
@@ -22,6 +21,5 @@
 * `type` / `Type`  (string): Invoice line item type
 * `service_end_at` / `ServiceEndAt`  (Nullable<DateTime>): Invoice line item service end date/time
 * `service_start_at` / `ServiceStartAt`  (Nullable<DateTime>): Invoice line item service start date/time
-* `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Invoice line item updated date/time
 * `plan` / `Plan`  (string): Plan name
 * `site` / `Site`  (string): Site name

@@ -81,10 +81,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("type", null);
             }
-            if (!this.attributes.ContainsKey("updated_at"))
-            {
-                this.attributes.Add("updated_at", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -244,17 +240,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["type"]; }
             private set { attributes["type"] = value; }
-        }
-
-        /// <summary>
-        /// Line item updated at
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("updated_at")]
-        public Nullable<DateTime> UpdatedAt
-        {
-            get { return (Nullable<DateTime>)attributes["updated_at"]; }
-            private set { attributes["updated_at"] = value; }
         }
 
 
