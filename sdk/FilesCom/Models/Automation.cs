@@ -89,6 +89,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("schedule"))
+            {
+                this.attributes.Add("schedule", null);
+            }
+            if (!this.attributes.ContainsKey("human_readable_schedule"))
+            {
+                this.attributes.Add("human_readable_schedule", null);
+            }
             if (!this.attributes.ContainsKey("schedule_days_of_week"))
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
@@ -309,7 +317,27 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run in json format.
+        /// </summary>
+        [JsonPropertyName("schedule")]
+        public object Schedule
+        {
+            get { return (object)attributes["schedule"]; }
+            set { attributes["schedule"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `custom_schedule`, Human readable Custom schedule description for when the automation should be run.
+        /// </summary>
+        [JsonPropertyName("human_readable_schedule")]
+        public string HumanReadableSchedule
+        {
+            get { return (string)attributes["human_readable_schedule"]; }
+            set { attributes["human_readable_schedule"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
         /// </summary>
         [JsonPropertyName("schedule_days_of_week")]
         public Nullable<Int64>[] ScheduleDaysOfWeek
@@ -319,7 +347,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. Times of day in HH:MM format.
         /// </summary>
         [JsonPropertyName("schedule_times_of_day")]
         public string[] ScheduleTimesOfDay
@@ -329,7 +357,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run.
+        /// If trigger is `custom_schedule`, Custom schedule Time Zone for when the automation should be run.
         /// </summary>
         [JsonPropertyName("schedule_time_zone")]
         public string ScheduleTimeZone
