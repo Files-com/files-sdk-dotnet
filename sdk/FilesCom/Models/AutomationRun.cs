@@ -45,9 +45,25 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("runtime"))
+            {
+                this.attributes.Add("runtime", null);
+            }
             if (!this.attributes.ContainsKey("status"))
             {
                 this.attributes.Add("status", null);
+            }
+            if (!this.attributes.ContainsKey("run_stage"))
+            {
+                this.attributes.Add("run_stage", null);
+            }
+            if (!this.attributes.ContainsKey("successful_operations"))
+            {
+                this.attributes.Add("successful_operations", null);
+            }
+            if (!this.attributes.ContainsKey("failed_operations"))
+            {
+                this.attributes.Add("failed_operations", null);
             }
             if (!this.attributes.ContainsKey("status_messages_url"))
             {
@@ -116,6 +132,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Automation run runtime.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("runtime")]
+        public Nullable<DateTime> Runtime
+        {
+            get { return (Nullable<DateTime>)attributes["runtime"]; }
+            private set { attributes["runtime"] = value; }
+        }
+
+        /// <summary>
         /// The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
         /// </summary>
         [JsonInclude]
@@ -124,6 +151,39 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
+        }
+
+        /// <summary>
+        /// The stage currently being executed in the execution environment.  One of `queued_for_planning`, `planning`, `queued_for_execution`, `executing`, or `finished`.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("run_stage")]
+        public string RunStage
+        {
+            get { return (string)attributes["run_stage"]; }
+            private set { attributes["run_stage"] = value; }
+        }
+
+        /// <summary>
+        /// Count of successful operations.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("successful_operations")]
+        public Nullable<Int64> SuccessfulOperations
+        {
+            get { return (Nullable<Int64>)attributes["successful_operations"]; }
+            private set { attributes["successful_operations"] = value; }
+        }
+
+        /// <summary>
+        /// Count of failed operations.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("failed_operations")]
+        public Nullable<Int64> FailedOperations
+        {
+            get { return (Nullable<Int64>)attributes["failed_operations"]; }
+            private set { attributes["failed_operations"] = value; }
         }
 
         /// <summary>
