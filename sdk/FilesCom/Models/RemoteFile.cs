@@ -693,7 +693,7 @@ namespace FilesCom.Models
         ///   destination (required) - string - Copy destination path.
         ///   structure - boolean - Copy structure only?
         /// </summary>
-        public async Task<RemoteFile> Copy(Dictionary<string, object> parameters)
+        public async Task<FileAction> Copy(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -727,7 +727,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
             }
             catch (JsonException)
             {
@@ -742,7 +742,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   destination (required) - string - Move destination path.
         /// </summary>
-        public async Task<RemoteFile> Move(Dictionary<string, object> parameters)
+        public async Task<FileAction> Move(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -772,7 +772,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
             }
             catch (JsonException)
             {
@@ -1194,7 +1194,7 @@ namespace FilesCom.Models
         ///   destination (required) - string - Copy destination path.
         ///   structure - boolean - Copy structure only?
         /// </summary>
-        public static async Task<RemoteFile> Copy(
+        public static async Task<FileAction> Copy(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1236,7 +1236,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
             }
             catch (JsonException)
             {
@@ -1251,7 +1251,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   destination (required) - string - Move destination path.
         /// </summary>
-        public static async Task<RemoteFile> Move(
+        public static async Task<FileAction> Move(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -1289,7 +1289,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
             }
             catch (JsonException)
             {

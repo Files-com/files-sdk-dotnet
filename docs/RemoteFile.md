@@ -173,7 +173,7 @@ Task<RemoteFile> RemoteFile.Find(
 ## Copy file/folder
 
 ```
-Task<RemoteFile> RemoteFile.Copy(
+Task<FileAction> RemoteFile.Copy(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -192,7 +192,7 @@ Task<RemoteFile> RemoteFile.Copy(
 ## Move file/folder
 
 ```
-Task<RemoteFile> RemoteFile.Move(
+Task<FileAction> RemoteFile.Move(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
