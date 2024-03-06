@@ -137,6 +137,7 @@
   "phone": "555-555-5555",
   "pin_all_remote_servers_to_site_region": true,
   "prevent_root_permissions_for_non_site_admins": true,
+  "protocol_access_groups_only": true,
   "require_2fa": true,
   "require_2fa_stop_time": "2000-01-01T01:00:00Z",
   "require_2fa_user_type": "`site_admins`",
@@ -377,6 +378,7 @@
 * `phone` / `Phone`  (string): Site phone number
 * `pin_all_remote_servers_to_site_region` / `PinAllRemoteServersToSiteRegion`  (bool): If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
 * `prevent_root_permissions_for_non_site_admins` / `PreventRootPermissionsForNonSiteAdmins`  (bool): If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
+* `protocol_access_groups_only` / `ProtocolAccessGroupsOnly`  (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
 * `require_2fa` / `Require2fa`  (bool): Require two-factor authentication for all users?
 * `require_2fa_stop_time` / `Require2faStopTime`  (Nullable<DateTime>): If set, requirement for two-factor authentication has been scheduled to end on this date-time.
 * `require_2fa_user_type` / `Require2faUserType`  (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
@@ -547,7 +549,7 @@ Task<Site> Site.Update(
 * `sftp_enabled` (bool): Is SFTP enabled?
 * `sftp_host_key_type` (string): Sftp Host Key Type
 * `active_sftp_host_key_id` (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
-* `protocol_access_groups_only` (bool): If `true`, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
+* `protocol_access_groups_only` (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
 * `bundle_watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `group_admins_can_set_user_password` (bool): Allow group admins set password authentication method
 * `bundle_recipient_blacklist_free_email_domains` (bool): Disallow free email domains for Bundle/Inbox recipients?
