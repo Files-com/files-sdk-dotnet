@@ -13,6 +13,7 @@ Fetch the dependencies:
 
 
 ## Frameworks Supported
+
 - .NET 6
 
 - .NET 5
@@ -23,14 +24,16 @@ Fetch the dependencies:
 
 - .NET Framework 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8
 
-We are open to adding support for additional frameworks where we can.  Please send us your requests.
+.NET Framework versions below 4.6.1 are officially in end-of-life status according to Microsoft.  As a policy, Files.com does not support integrations which are considered end-of-life by their vendor.
+
+If you need support for a newer framework version, please ask, and we'll be happy to add it.  It will most likely work out of the box anyway.
 
 
 ## Usage
 
 ### Authentication
 
-There are multiple ways to authenticate to the API.
+There are multiple ways to authenticate in the Files.com SDK.
 
 
 ### app.config/web.config
@@ -49,7 +52,7 @@ In the app.config or web.config of a .NET application, add the following section
 
 ### appsettings.json
 
-TODO: Add appsettings.json support for .NET CORE
+You can also use `appsettings.json` from .NET CORE to set the `ApiKey` property.
 
 
 ### Per-Instance API Key
@@ -63,9 +66,10 @@ When instantiating a client, FilesConfiguration can be set directly:
     FilesClient client = new FilesClient(filesConfig);
 ```
 
-### Files Configuration
 
-You can set configuration for default client sessions by adding them to the app.config or appsettings.json as with the ApiKey above,
+### Files.com Configuration
+
+You can set configuration for default client sessions by adding them to the `app.config` or `appsettings.json` as with the ApiKey above,
 or you may set them on a config object for per-session configuration.
 
 * `ApiKey` - Required. Must be set in either app.config, appsettings.json, or per-session.
@@ -76,17 +80,21 @@ or you may set them on a config object for per-session configuration.
 * `MaxNetworkRetries` - max retries (default: 3)
 * `MaxNetworkRetryDelay` - max retry delay in seconds (default: 2)
 
+
 ### Pagination
 
 For endpoints with pagination, operations such as `List` will return a `FilesList` object. This object allows for accessing pages of
 results asyncronously with `LoadNextPage()` and `All()` or with auto-pagination using `ListAutoPaging()`.
+
 
 ### Error Handling
 
 Unexpected errors when attempting to connect to the API inherit from the base level `SdkException` class. They all contain a `message`
 to describe what went wrong.
 
+
 #### Unable to connect to the API
+
 ```csharp
 try
 {
@@ -100,7 +108,9 @@ catch (ApiConnectionException e)
 
 Errors from the API inherit from `ApiException`. They all contain more parameters to describe the error such as `httpCode`, `error`, `detail`, etc.
 
+
 #### Path does not exist
+
 ```csharp
 try
 {
@@ -112,9 +122,11 @@ catch (NotFoundException e)
 }
 ```
 
+
 ### Examples
 
 #### Writing a file example
+
 ```csharp
     // Will upload a file called "test.txt"
 
@@ -147,7 +159,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### Uploading a file from a Stream
+
 ```csharp
     using(MemoryStream stream = new System.IO.MemoryStream())
     {
@@ -160,7 +174,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### Reading a file's text as a Stream
+
 ```csharp
     using(MemoryStream stream = new System.IO.MemoryStream())
     {
@@ -172,7 +188,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### Reading a file and writing it to your local drive.
+
 ```csharp
     var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
     if (downloadResponse) {
@@ -182,7 +200,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### List root folder (loads all pages into memory)
+
 ```csharp
     var files = Folder.ListFor("/", null, null);
     foreach (var file in await files.All())
@@ -191,7 +211,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### List root folder with auto pagination (loads each page into memory)
+
 ```csharp
     foreach (var file in Folder.ListFor("/").ListAutoPaging())
     {
@@ -199,7 +221,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### List root folder with manual pagination (loads each page into memory)
+
 ```csharp
     FilesList<RemoteFile> listing = Folder.ListFor("/");
     do
@@ -211,7 +235,9 @@ catch (NotFoundException e)
     } while (listing.HasNextPage);
 ```
 
+
 #### List folder with a filter
+
 ```csharp
     Dictionary<string, object> parameters = new Dictionary<string, object>(){
         { "filter", "*.png"},
@@ -223,7 +249,9 @@ catch (NotFoundException e)
     }
 ```
 
+
 #### Comparing Case insensitive files and paths
+
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 ```csharp
     if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
@@ -252,9 +280,9 @@ Then, in the application, use that file to configure `log4net`:
 log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("./log4net.config"));
 ```
 
+
 ## Getting Support
 
 The Files.com team is happy to help with any SDK Integration challenges you may face.
 
 Just email support@files.com and we'll get the process started.
-
