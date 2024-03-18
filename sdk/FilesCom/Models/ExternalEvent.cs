@@ -69,6 +69,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bytes_synced", null);
             }
+            if (!this.attributes.ContainsKey("compared_files"))
+            {
+                this.attributes.Add("compared_files", null);
+            }
+            if (!this.attributes.ContainsKey("compared_folders"))
+            {
+                this.attributes.Add("compared_folders", null);
+            }
             if (!this.attributes.ContainsKey("remote_server_type"))
             {
                 this.attributes.Add("remote_server_type", null);
@@ -190,6 +198,26 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["bytes_synced"]; }
             set { attributes["bytes_synced"] = value; }
+        }
+
+        /// <summary>
+        /// For sync events, the number of files considered for the sync.
+        /// </summary>
+        [JsonPropertyName("compared_files")]
+        public Nullable<Int64> ComparedFiles
+        {
+            get { return (Nullable<Int64>)attributes["compared_files"]; }
+            set { attributes["compared_files"] = value; }
+        }
+
+        /// <summary>
+        /// For sync events, the number of folders listed and considered for the sync.
+        /// </summary>
+        [JsonPropertyName("compared_folders")]
+        public Nullable<Int64> ComparedFolders
+        {
+            get { return (Nullable<Int64>)attributes["compared_folders"]; }
+            set { attributes["compared_folders"] = value; }
         }
 
         /// <summary>
