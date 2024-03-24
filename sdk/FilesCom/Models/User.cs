@@ -801,7 +801,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Can this user access the REST API?
+        /// Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("restapi_permission")]
@@ -1159,7 +1159,7 @@ namespace FilesCom.Models
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
-        ///   restapi_permission - boolean - Can this user access the REST API?
+        ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
         ///   sftp_permission - boolean - Can the user access with SFTP?
         ///   site_admin - boolean - Is the user an administrator for this site?
@@ -1591,7 +1591,7 @@ namespace FilesCom.Models
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
-        ///   restapi_permission - boolean - Can this user access the REST API?
+        ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
         ///   sftp_permission - boolean - Can the user access with SFTP?
         ///   site_admin - boolean - Is the user an administrator for this site?
@@ -1945,7 +1945,7 @@ namespace FilesCom.Models
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
-        ///   restapi_permission - boolean - Can this user access the REST API?
+        ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
         ///   sftp_permission - boolean - Can the user access with SFTP?
         ///   site_admin - boolean - Is the user an administrator for this site?
