@@ -588,6 +588,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class RecaptchaFailedException : NotAuthorizedException
+    {
+        public RecaptchaFailedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class SelfManagedRequiredException : NotAuthorizedException
     {
         public SelfManagedRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
