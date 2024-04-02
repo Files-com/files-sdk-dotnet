@@ -9,7 +9,7 @@
   "admin_group_ids": [
     1
   ],
-  "allowed_ips": "127.0.0.1",
+  "allowed_ips": "10.0.0.0/8\n127.0.0.1",
   "attachments_permission": true,
   "api_keys_count": 1,
   "authenticate_until": "2000-01-01T01:00:00Z",
@@ -444,7 +444,7 @@ parameters.Add("email", "example");
 parameters.Add("group_id", 1);
 parameters.Add("group_ids", "example");
 parameters.Add("announcements_read", true);
-parameters.Add("allowed_ips", "127.0.0.1");
+parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("attachments_permission", true);
 parameters.Add("authenticate_until", "2000-01-01T01:00:00Z");
 parameters.Add("authentication_method", "password");

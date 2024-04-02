@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("allowed_ips"))
+            {
+                this.attributes.Add("allowed_ips", null);
+            }
             if (!this.attributes.ContainsKey("admin_ids"))
             {
                 this.attributes.Add("admin_ids", null);
@@ -105,6 +109,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// A list of allowed IPs if applicable.  Newline delimited
+        /// </summary>
+        [JsonPropertyName("allowed_ips")]
+        public string AllowedIps
+        {
+            get { return (string)attributes["allowed_ips"]; }
+            set { attributes["allowed_ips"] = value; }
         }
 
         /// <summary>
@@ -200,6 +214,7 @@ namespace FilesCom.Models
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
         /// </summary>
         public async Task<Group> Update(Dictionary<string, object> parameters)
@@ -246,6 +261,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            {
+                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -422,6 +441,7 @@ namespace FilesCom.Models
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name (required) - string - Group name.
         /// </summary>
         public static async Task<Group> Create(
@@ -465,6 +485,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
             }
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            {
+                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -492,6 +516,7 @@ namespace FilesCom.Models
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
         /// </summary>
         public static async Task<Group> Update(
@@ -546,6 +571,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            {
+                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
