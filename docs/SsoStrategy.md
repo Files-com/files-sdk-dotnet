@@ -39,6 +39,7 @@
   "provision_sftp_permission": true,
   "provision_time_zone": "Eastern Time (US & Canada)",
   "provision_company": "ACME Corp.",
+  "provision_require_2fa": "always_require",
   "ldap_base_dn": "example",
   "ldap_domain": "mysite.com",
   "enabled": true,
@@ -87,6 +88,7 @@
 * `provision_sftp_permission` / `ProvisionSftpPermission`  (bool): Auto-provisioned users get SFTP permission?
 * `provision_time_zone` / `ProvisionTimeZone`  (string): Default time zone for auto provisioned users.
 * `provision_company` / `ProvisionCompany`  (string): Default company for auto provisioned users.
+* `provision_require_2fa` / `ProvisionRequire2fa`  (string): 2FA required setting for auto provisioned users.
 * `ldap_base_dn` / `LdapBaseDn`  (string): Base DN for looking up users in LDAP server
 * `ldap_domain` / `LdapDomain`  (string): Domain name that will be appended to LDAP usernames
 * `enabled` / `Enabled`  (bool): Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.

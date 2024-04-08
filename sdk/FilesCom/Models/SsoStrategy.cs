@@ -169,6 +169,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("provision_company", null);
             }
+            if (!this.attributes.ContainsKey("provision_require_2fa"))
+            {
+                this.attributes.Add("provision_require_2fa", null);
+            }
             if (!this.attributes.ContainsKey("ldap_base_dn"))
             {
                 this.attributes.Add("ldap_base_dn", null);
@@ -618,6 +622,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["provision_company"]; }
             private set { attributes["provision_company"] = value; }
+        }
+
+        /// <summary>
+        /// 2FA required setting for auto provisioned users.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("provision_require_2fa")]
+        public string ProvisionRequire2fa
+        {
+            get { return (string)attributes["provision_require_2fa"]; }
+            private set { attributes["provision_require_2fa"] = value; }
         }
 
         /// <summary>
