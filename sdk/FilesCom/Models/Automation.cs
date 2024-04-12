@@ -69,6 +69,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_ids", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("ignore_locked_folders"))
+            {
+                this.attributes.Add("ignore_locked_folders", false);
+            }
             if (!this.attributes.ContainsKey("interval"))
             {
                 this.attributes.Add("interval", null);
@@ -80,6 +84,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("overwrite_files"))
+            {
+                this.attributes.Add("overwrite_files", false);
             }
             if (!this.attributes.ContainsKey("path"))
             {
@@ -267,6 +275,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, the Lock Folders behavior will be disregarded for automated actions.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("ignore_locked_folders")]
+        public bool IgnoreLockedFolders
+        {
+            get { return attributes["ignore_locked_folders"] == null ? false : (bool)attributes["ignore_locked_folders"]; }
+            set { attributes["ignore_locked_folders"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         /// </summary>
         [JsonPropertyName("interval")]
@@ -294,6 +313,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("overwrite_files")]
+        public bool OverwriteFiles
+        {
+            get { return attributes["overwrite_files"] == null ? false : (bool)attributes["overwrite_files"]; }
+            set { attributes["overwrite_files"] = value; }
         }
 
         /// <summary>
@@ -499,7 +529,9 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
+        ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -587,9 +619,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
+            if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -806,7 +846,9 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
+        ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -890,9 +932,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
+            if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -979,7 +1029,9 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
+        ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -1075,9 +1127,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
+            if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
