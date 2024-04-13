@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_certificate", null);
             }
+            if (!this.attributes.ContainsKey("mdn_validation_level"))
+            {
+                this.attributes.Add("mdn_validation_level", null);
+            }
             if (!this.attributes.ContainsKey("enable_dedicated_ips"))
             {
                 this.attributes.Add("enable_dedicated_ips", false);
@@ -154,6 +158,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// MDN Validation Level
+        /// </summary>
+        [JsonPropertyName("mdn_validation_level")]
+        public string MdnValidationLevel
+        {
+            get { return (string)attributes["mdn_validation_level"]; }
+            set { attributes["mdn_validation_level"] = value; }
+        }
+
+        /// <summary>
         /// `true` if remote server only accepts connections from dedicated IPs
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -248,6 +262,7 @@ namespace FilesCom.Models
         ///   name - string - AS2 Name
         ///   uri - string - URL base for AS2 responses
         ///   server_certificate - string - Remote server certificate security setting
+        ///   mdn_validation_level - string - MDN Validation Level
         ///   public_certificate - string
         ///   enable_dedicated_ips - boolean
         /// </summary>
@@ -279,6 +294,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
+            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
+            {
+                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
             }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
@@ -437,6 +456,7 @@ namespace FilesCom.Models
         ///   public_certificate (required) - string
         ///   as2_station_id (required) - int64 - Id of As2Station for this partner
         ///   server_certificate - string - Remote server certificate security setting
+        ///   mdn_validation_level - string - MDN Validation Level
         ///   enable_dedicated_ips - boolean
         /// </summary>
         public static async Task<As2Partner> Create(
@@ -484,6 +504,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
+            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
+            {
+                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
+            }
             if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
             {
                 throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
@@ -507,6 +531,7 @@ namespace FilesCom.Models
         ///   name - string - AS2 Name
         ///   uri - string - URL base for AS2 responses
         ///   server_certificate - string - Remote server certificate security setting
+        ///   mdn_validation_level - string - MDN Validation Level
         ///   public_certificate - string
         ///   enable_dedicated_ips - boolean
         /// </summary>
@@ -546,6 +571,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
+            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
+            {
+                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
             }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
