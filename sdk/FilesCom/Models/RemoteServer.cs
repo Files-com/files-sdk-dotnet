@@ -1093,17 +1093,10 @@ namespace FilesCom.Models
         /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
         ///
         /// Parameters:
-        ///   api_token - string - Files Agent API Token
-        ///   permission_set - string -
-        ///   root - string - Agent local root path
-        ///   hostname - string
-        ///   port - int64 - Incoming port for files agent connections
-        ///   status - string - either running or shutdown
-        ///   config_version - string - agent config version
-        ///   private_key - string - private key
-        ///   public_key - string - public key
-        ///   server_host_key - string
-        ///   subdomain - string
+        ///   permission_set - string - The permission set for the agent ['read_write', 'read_only', 'write_only']
+        ///   root - string - The root directory for the agent
+        ///   private_key - string - The private key for the agent
+        ///   subdomain - string - Files.com subdomain site name
         /// </summary>
         public async Task<RemoteServerConfigurationFile> ConfigurationFile(Dictionary<string, object> parameters)
         {
@@ -1122,10 +1115,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("api_token") && !(parameters["api_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: api_token must be of type string", "parameters[\"api_token\"]");
-            }
             if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
@@ -1134,33 +1123,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: root must be of type string", "parameters[\"root\"]");
             }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
-            {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
-            }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
-            }
-            if (parameters.ContainsKey("status") && !(parameters["status"] is string))
-            {
-                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
-            }
-            if (parameters.ContainsKey("config_version") && !(parameters["config_version"] is string))
-            {
-                throw new ArgumentException("Bad parameter: config_version must be of type string", "parameters[\"config_version\"]");
-            }
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
-            }
-            if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
-            }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
             }
             if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
             {
@@ -2065,17 +2030,10 @@ namespace FilesCom.Models
         /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
         ///
         /// Parameters:
-        ///   api_token - string - Files Agent API Token
-        ///   permission_set - string -
-        ///   root - string - Agent local root path
-        ///   hostname - string
-        ///   port - int64 - Incoming port for files agent connections
-        ///   status - string - either running or shutdown
-        ///   config_version - string - agent config version
-        ///   private_key - string - private key
-        ///   public_key - string - public key
-        ///   server_host_key - string
-        ///   subdomain - string
+        ///   permission_set - string - The permission set for the agent ['read_write', 'read_only', 'write_only']
+        ///   root - string - The root directory for the agent
+        ///   private_key - string - The private key for the agent
+        ///   subdomain - string - Files.com subdomain site name
         /// </summary>
         public static async Task<RemoteServerConfigurationFile> ConfigurationFile(
             Nullable<Int64> id,
@@ -2102,10 +2060,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("api_token") && !(parameters["api_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: api_token must be of type string", "parameters[\"api_token\"]");
-            }
             if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
             {
                 throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
@@ -2114,33 +2068,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: root must be of type string", "parameters[\"root\"]");
             }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
-            {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
-            }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
-            }
-            if (parameters.ContainsKey("status") && !(parameters["status"] is string))
-            {
-                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
-            }
-            if (parameters.ContainsKey("config_version") && !(parameters["config_version"] is string))
-            {
-                throw new ArgumentException("Bad parameter: config_version must be of type string", "parameters[\"config_version\"]");
-            }
             if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
-            }
-            if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
-            }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
             }
             if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
             {

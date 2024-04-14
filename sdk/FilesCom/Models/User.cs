@@ -257,6 +257,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("type_of_2fa", null);
             }
+            if (!this.attributes.ContainsKey("type_of_2fa_for_display"))
+            {
+                this.attributes.Add("type_of_2fa_for_display", null);
+            }
             if (!this.attributes.ContainsKey("user_root"))
             {
                 this.attributes.Add("user_root", null);
@@ -908,13 +912,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Type(s) of 2FA methods in use.  Will be either `sms`, `totp`, `u2f`, `yubi`, or multiple values sorted alphabetically and joined by an underscore.
+        /// Type(s) of 2FA methods in use, for programmatic use.  Will be either `sms`, `totp`, `u2f`, `yubi`, or multiple values sorted alphabetically and joined by an underscore.  Does not specify whether user has more than one of a given method.
         /// </summary>
         [JsonPropertyName("type_of_2fa")]
         public string TypeOf2fa
         {
             get { return (string)attributes["type_of_2fa"]; }
             set { attributes["type_of_2fa"] = value; }
+        }
+
+        /// <summary>
+        /// Type(s) of 2FA methods in use, formatted for displaying in the UI.  Unlike `type_of_2fa`, this value will make clear when a user has more than 1 of the same type of method.
+        /// </summary>
+        [JsonPropertyName("type_of_2fa_for_display")]
+        public string TypeOf2faForDisplay
+        {
+            get { return (string)attributes["type_of_2fa_for_display"]; }
+            set { attributes["type_of_2fa_for_display"] = value; }
         }
 
         /// <summary>
