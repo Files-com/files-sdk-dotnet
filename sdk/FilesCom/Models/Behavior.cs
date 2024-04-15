@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("value", null);
             }
+            if (!this.attributes.ContainsKey("disable_parent_folder_behavior"))
+            {
+                this.attributes.Add("disable_parent_folder_behavior", false);
+            }
             if (!this.attributes.ContainsKey("attachment_file"))
             {
                 this.attributes.Add("attachment_file", null);
@@ -151,6 +155,17 @@ namespace FilesCom.Models
         {
             get { return (object)attributes["value"]; }
             set { attributes["value"] = value; }
+        }
+
+        /// <summary>
+        /// If true, the parent folder's behavior will be disabled for this folder.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("disable_parent_folder_behavior")]
+        public bool DisableParentFolderBehavior
+        {
+            get { return attributes["disable_parent_folder_behavior"] == null ? false : (bool)attributes["disable_parent_folder_behavior"]; }
+            set { attributes["disable_parent_folder_behavior"] = value; }
         }
 
         /// <summary>

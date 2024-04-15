@@ -12,7 +12,8 @@
   "description": "example",
   "value": {
     "key": "example value"
-  }
+  },
+  "disable_parent_folder_behavior": true
 }
 ```
 
@@ -23,6 +24,7 @@
 * `name` / `Name`  (string): Name for this behavior.
 * `description` / `Description`  (string): Description for this behavior.
 * `value` / `Value`  (object): Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
+* `disable_parent_folder_behavior` / `DisableParentFolderBehavior`  (bool): If true, the parent folder's behavior will be disabled for this folder.
 * `attachment_file` / `AttachmentFile`  (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `attachment_delete` / `AttachmentDelete`  (bool): If true, will delete the file stored in attachment
 
