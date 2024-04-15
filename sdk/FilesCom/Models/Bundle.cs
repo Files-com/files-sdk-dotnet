@@ -137,6 +137,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("path_template", null);
             }
+            if (!this.attributes.ContainsKey("path_template_time_zone"))
+            {
+                this.attributes.Add("path_template_time_zone", null);
+            }
             if (!this.attributes.ContainsKey("send_email_receipt_to_uploader"))
             {
                 this.attributes.Add("send_email_receipt_to_uploader", false);
@@ -490,13 +494,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
+        /// Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
         /// </summary>
         [JsonPropertyName("path_template")]
         public string PathTemplate
         {
             get { return (string)attributes["path_template"]; }
             set { attributes["path_template"] = value; }
+        }
+
+        /// <summary>
+        /// Timezone to use when rendering timestamps in path templates.
+        /// </summary>
+        [JsonPropertyName("path_template_time_zone")]
+        public string PathTemplateTimeZone
+        {
+            get { return (string)attributes["path_template_time_zone"]; }
+            set { attributes["path_template_time_zone"] = value; }
         }
 
         /// <summary>
@@ -721,7 +735,8 @@ namespace FilesCom.Models
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
-        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
+        ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
@@ -806,6 +821,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path_template") && !(parameters["path_template"] is string))
             {
                 throw new ArgumentException("Bad parameter: path_template must be of type string", "parameters[\"path_template\"]");
+            }
+            if (parameters.ContainsKey("path_template_time_zone") && !(parameters["path_template_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path_template_time_zone must be of type string", "parameters[\"path_template_time_zone\"]");
             }
             if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string))
             {
@@ -1042,7 +1061,8 @@ namespace FilesCom.Models
         ///   description - string - Public description
         ///   note - string - Bundle internal note
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
-        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
+        ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
@@ -1121,6 +1141,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path_template") && !(parameters["path_template"] is string))
             {
                 throw new ArgumentException("Bad parameter: path_template must be of type string", "parameters[\"path_template\"]");
+            }
+            if (parameters.ContainsKey("path_template_time_zone") && !(parameters["path_template_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path_template_time_zone must be of type string", "parameters[\"path_template_time_zone\"]");
             }
             if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string))
             {
@@ -1253,7 +1277,8 @@ namespace FilesCom.Models
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   note - string - Bundle internal note
-        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, and any custom form data.
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
+        ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   preview_only - boolean - DEPRECATED: Restrict users to previewing files only. Use `permissions` instead.
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
@@ -1346,6 +1371,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path_template") && !(parameters["path_template"] is string))
             {
                 throw new ArgumentException("Bad parameter: path_template must be of type string", "parameters[\"path_template\"]");
+            }
+            if (parameters.ContainsKey("path_template_time_zone") && !(parameters["path_template_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path_template_time_zone must be of type string", "parameters[\"path_template_time_zone\"]");
             }
             if (parameters.ContainsKey("permissions") && !(parameters["permissions"] is string))
             {
