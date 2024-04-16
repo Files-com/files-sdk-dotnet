@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("details", null);
             }
+            if (!this.attributes.ContainsKey("company"))
+            {
+                this.attributes.Add("company", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -101,6 +105,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["details"]; }
             set { attributes["details"] = value; }
+        }
+
+        /// <summary>
+        /// User's company name
+        /// </summary>
+        [JsonPropertyName("company")]
+        public string Company
+        {
+            get { return (string)attributes["company"]; }
+            set { attributes["company"] = value; }
         }
 
         /// <summary>
@@ -236,6 +250,7 @@ namespace FilesCom.Models
         ///   name (required) - string - Name of user requested
         ///   email (required) - string - Email of user requested
         ///   details (required) - string - Details of the user request
+        ///   company - string - Company of the user requested
         /// </summary>
         public static async Task<UserRequest> Create(
 
@@ -269,6 +284,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("details") && !(parameters["details"] is string))
             {
                 throw new ArgumentException("Bad parameter: details must be of type string", "parameters[\"details\"]");
+            }
+            if (parameters.ContainsKey("company") && !(parameters["company"] is string))
+            {
+                throw new ArgumentException("Bad parameter: company must be of type string", "parameters[\"company\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_requests", System.Net.Http.HttpMethod.Post, parameters, options);

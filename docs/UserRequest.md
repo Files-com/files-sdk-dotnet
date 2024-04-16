@@ -7,7 +7,8 @@
   "id": 1,
   "name": "John Doe",
   "email": "example",
-  "details": "Changed Departments"
+  "details": "Changed Departments",
+  "company": "Acme Inc."
 }
 ```
 
@@ -15,6 +16,7 @@
 * `name` / `Name`  (string): User's full name
 * `email` / `Email`  (string): User email address
 * `details` / `Details`  (string): Details of the user's request
+* `company` / `Company`  (string): User's company name
 
 
 ---
@@ -69,6 +71,7 @@ Task<UserRequest> UserRequest.Create(
 * `name` (string): Required - Name of user requested
 * `email` (string): Required - Email of user requested
 * `details` (string): Required - Details of the user request
+* `company` (string): Company of the user requested
 
 
 ---
