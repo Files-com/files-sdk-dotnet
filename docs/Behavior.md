@@ -107,6 +107,7 @@ Task<Behavior> Behavior.Create(
 
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
 * `path` (string): Required - Folder behaviors path.
@@ -152,6 +153,7 @@ Task<Behavior> Behavior.Update(
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
 * `behavior` (string): Behavior type.
@@ -186,6 +188,7 @@ var Behavior = Behavior.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("value", "{\"method\": \"GET\"}");
+parameters.Add("disable_parent_folder_behavior", true);
 parameters.Add("name", "example");
 parameters.Add("description", "example");
 parameters.Add("behavior", "webhook");
@@ -200,6 +203,7 @@ Behavior.Update(parameters);
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
 * `behavior` (string): Behavior type.

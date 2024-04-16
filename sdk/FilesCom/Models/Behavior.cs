@@ -193,6 +193,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
@@ -223,6 +224,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("disable_parent_folder_behavior") && !(parameters["disable_parent_folder_behavior"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_parent_folder_behavior must be of type bool", "parameters[\"disable_parent_folder_behavior\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -474,6 +479,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
         ///   path (required) - string - Folder behaviors path.
@@ -503,6 +509,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("disable_parent_folder_behavior") && !(parameters["disable_parent_folder_behavior"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_parent_folder_behavior must be of type bool", "parameters[\"disable_parent_folder_behavior\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -589,6 +599,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
@@ -627,6 +638,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("attachment_file") && !(parameters["attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"attachment_file\"]");
+            }
+            if (parameters.ContainsKey("disable_parent_folder_behavior") && !(parameters["disable_parent_folder_behavior"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_parent_folder_behavior must be of type bool", "parameters[\"disable_parent_folder_behavior\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
