@@ -288,9 +288,16 @@ Task<RemoteServerConfigurationFile> RemoteServer.ConfigurationFile(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
+* `api_token` (string): Files Agent API Token
 * `permission_set` (string): The permission set for the agent ['read_write', 'read_only', 'write_only']
 * `root` (string): The root directory for the agent
+* `hostname` (string): 
+* `port` (Nullable<Int64>): Incoming port for files agent connections
+* `status` (string): either running or shutdown
+* `config_version` (string): agent config version
 * `private_key` (string): The private key for the agent
+* `public_key` (string): public key
+* `server_host_key` (string): 
 * `subdomain` (string): Files.com subdomain site name
 
 
@@ -402,9 +409,16 @@ var RemoteServer = RemoteServer.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("api_token", "example");
 parameters.Add("permission_set", "example");
 parameters.Add("root", "C:\\Users\\");
+parameters.Add("hostname", "example");
+parameters.Add("port", 1);
+parameters.Add("status", "example");
+parameters.Add("config_version", "example");
 parameters.Add("private_key", "example");
+parameters.Add("public_key", "example");
+parameters.Add("server_host_key", "example");
 parameters.Add("subdomain", "example");
 
 RemoteServer.ConfigurationFile(parameters);
@@ -413,9 +427,16 @@ RemoteServer.ConfigurationFile(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
+* `api_token` (string): Files Agent API Token
 * `permission_set` (string): The permission set for the agent ['read_write', 'read_only', 'write_only']
 * `root` (string): The root directory for the agent
+* `hostname` (string): 
+* `port` (Nullable<Int64>): Incoming port for files agent connections
+* `status` (string): either running or shutdown
+* `config_version` (string): agent config version
 * `private_key` (string): The private key for the agent
+* `public_key` (string): public key
+* `server_host_key` (string): 
 * `subdomain` (string): Files.com subdomain site name
 
 
