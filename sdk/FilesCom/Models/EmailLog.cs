@@ -53,6 +53,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("cc", null);
             }
+            if (!this.attributes.ContainsKey("delivery_method"))
+            {
+                this.attributes.Add("delivery_method", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_hostname"))
+            {
+                this.attributes.Add("smtp_hostname", null);
+            }
+            if (!this.attributes.ContainsKey("smtp_ip"))
+            {
+                this.attributes.Add("smtp_ip", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -135,6 +147,39 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["cc"]; }
             private set { attributes["cc"] = value; }
+        }
+
+        /// <summary>
+        /// How was email deliered?  `customer_smtp` or `files.com`
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("delivery_method")]
+        public string DeliveryMethod
+        {
+            get { return (string)attributes["delivery_method"]; }
+            private set { attributes["delivery_method"] = value; }
+        }
+
+        /// <summary>
+        /// Customer SMTP Hostname used.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("smtp_hostname")]
+        public string SmtpHostname
+        {
+            get { return (string)attributes["smtp_hostname"]; }
+            private set { attributes["smtp_hostname"] = value; }
+        }
+
+        /// <summary>
+        /// Customer SMTP IP address as resolved for use (useful for troubleshooting DNS issues with customer SMTP).
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("smtp_ip")]
+        public string SmtpIp
+        {
+            get { return (string)attributes["smtp_ip"]; }
+            private set { attributes["smtp_ip"] = value; }
         }
 
 
