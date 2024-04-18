@@ -609,6 +609,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_requests_notify_admins", false);
             }
+            if (!this.attributes.ContainsKey("users_can_create_api_keys"))
+            {
+                this.attributes.Add("users_can_create_api_keys", false);
+            }
+            if (!this.attributes.ContainsKey("users_can_create_ssh_keys"))
+            {
+                this.attributes.Add("users_can_create_ssh_keys", false);
+            }
             if (!this.attributes.ContainsKey("welcome_custom_text"))
             {
                 this.attributes.Add("welcome_custom_text", null);
@@ -2317,6 +2325,30 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Allow users to create their own API keys?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("users_can_create_api_keys")]
+        public bool UsersCanCreateApiKeys
+        {
+            get { return attributes["users_can_create_api_keys"] == null ? false : (bool)attributes["users_can_create_api_keys"]; }
+            private set { attributes["users_can_create_api_keys"] = value; }
+        }
+
+        /// <summary>
+        /// Allow users to create their own SSH keys?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("users_can_create_ssh_keys")]
+        public bool UsersCanCreateSshKeys
+        {
+            get { return attributes["users_can_create_ssh_keys"] == null ? false : (bool)attributes["users_can_create_ssh_keys"]; }
+            private set { attributes["users_can_create_ssh_keys"] = value; }
+        }
+
+        /// <summary>
         /// Custom text send in user welcome email
         /// </summary>
         [JsonInclude]
@@ -2543,6 +2575,8 @@ namespace FilesCom.Models
         ///   dav_enabled - boolean - Is WebDAV enabled?
         ///   ftp_enabled - boolean - Is FTP enabled?
         ///   sftp_enabled - boolean - Is SFTP enabled?
+        ///   users_can_create_api_keys - boolean - Allow users to create their own API keys?
+        ///   users_can_create_ssh_keys - boolean - Allow users to create their own SSH keys?
         ///   sftp_host_key_type - string - Sftp Host Key Type
         ///   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
         ///   protocol_access_groups_only - boolean - If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
@@ -2946,6 +2980,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_enabled must be of type bool", "parameters[\"sftp_enabled\"]");
+            }
+            if (parameters.ContainsKey("users_can_create_api_keys") && !(parameters["users_can_create_api_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: users_can_create_api_keys must be of type bool", "parameters[\"users_can_create_api_keys\"]");
+            }
+            if (parameters.ContainsKey("users_can_create_ssh_keys") && !(parameters["users_can_create_ssh_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: users_can_create_ssh_keys must be of type bool", "parameters[\"users_can_create_ssh_keys\"]");
             }
             if (parameters.ContainsKey("sftp_host_key_type") && !(parameters["sftp_host_key_type"] is string))
             {

@@ -260,6 +260,8 @@
   "user_lockout_within": 6,
   "user_requests_enabled": true,
   "user_requests_notify_admins": true,
+  "users_can_create_api_keys": true,
+  "users_can_create_ssh_keys": true,
   "welcome_custom_text": "Welcome to my site!",
   "welcome_email_cc": "example",
   "welcome_email_subject": "example",
@@ -416,6 +418,8 @@
 * `user_lockout_within` / `UserLockoutWithin`  (Nullable<Int64>): Number of hours for user lockout window
 * `user_requests_enabled` / `UserRequestsEnabled`  (bool): Enable User Requests feature
 * `user_requests_notify_admins` / `UserRequestsNotifyAdmins`  (bool): Send email to site admins when a user request is received?
+* `users_can_create_api_keys` / `UsersCanCreateApiKeys`  (bool): Allow users to create their own API keys?
+* `users_can_create_ssh_keys` / `UsersCanCreateSshKeys`  (bool): Allow users to create their own SSH keys?
 * `welcome_custom_text` / `WelcomeCustomText`  (string): Custom text send in user welcome email
 * `welcome_email_cc` / `WelcomeEmailCc`  (string): Include this email in welcome emails if enabled
 * `welcome_email_subject` / `WelcomeEmailSubject`  (string): Include this email subject in welcome emails if enabled
@@ -548,6 +552,8 @@ Task<Site> Site.Update(
 * `dav_enabled` (bool): Is WebDAV enabled?
 * `ftp_enabled` (bool): Is FTP enabled?
 * `sftp_enabled` (bool): Is SFTP enabled?
+* `users_can_create_api_keys` (bool): Allow users to create their own API keys?
+* `users_can_create_ssh_keys` (bool): Allow users to create their own SSH keys?
 * `sftp_host_key_type` (string): Sftp Host Key Type
 * `active_sftp_host_key_id` (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
 * `protocol_access_groups_only` (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
