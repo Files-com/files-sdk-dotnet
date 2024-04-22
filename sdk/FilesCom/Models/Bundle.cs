@@ -181,6 +181,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("paths", new string[0]);
             }
+            if (!this.attributes.ContainsKey("bundlepaths"))
+            {
+                this.attributes.Add("bundlepaths", null);
+            }
             if (!this.attributes.ContainsKey("password"))
             {
                 this.attributes.Add("password", null);
@@ -613,6 +617,16 @@ namespace FilesCom.Models
         {
             get { return (string[])attributes["paths"]; }
             set { attributes["paths"] = value; }
+        }
+
+        /// <summary>
+        /// A list of bundlepaths in this bundle.  For performance reasons, this is not provided when listing bundles.
+        /// </summary>
+        [JsonPropertyName("bundlepaths")]
+        public BundlePath Bundlepaths
+        {
+            get { return (BundlePath)attributes["bundlepaths"]; }
+            set { attributes["bundlepaths"] = value; }
         }
 
         /// <summary>
