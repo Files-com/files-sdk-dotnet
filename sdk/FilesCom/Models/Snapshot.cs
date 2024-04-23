@@ -146,6 +146,31 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Finalize Snapshot
+        /// </summary>
+        public async Task Finalize(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/snapshots/{System.Uri.EscapeDataString(attributes["id"].ToString())}/finalize", System.Net.Http.HttpMethod.Post, parameters, options);
+        }
+
+
+        /// <summary>
         /// Parameters:
         ///   expires_at - string - When the snapshot expires.
         ///   name - string - A name for the snapshot.
@@ -360,6 +385,39 @@ namespace FilesCom.Models
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
+        }
+
+
+        /// <summary>
+        /// Finalize Snapshot
+        /// </summary>
+        public static async Task Finalize(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/snapshots/{System.Uri.EscapeDataString(parameters["id"].ToString())}/finalize", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 

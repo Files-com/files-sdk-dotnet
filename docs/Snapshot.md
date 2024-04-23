@@ -78,6 +78,23 @@ Task<Snapshot> Snapshot.Create(
 
 ---
 
+## Finalize Snapshot
+
+```
+Task Snapshot.Finalize(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Snapshot ID.
+
+
+---
+
 ## Update Snapshot
 
 ```
@@ -106,6 +123,24 @@ Task Snapshot.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Snapshot ID.
+
+
+---
+
+## Finalize Snapshot
+
+```
+var Snapshot = Snapshot.ListFor(path)[0];
+
+var parameters = new Dictionary<string, object>();
+
+
+Snapshot.Finalize
 ```
 
 ### Parameters
