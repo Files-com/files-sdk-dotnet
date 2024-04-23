@@ -505,6 +505,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sftp_insecure_ciphers", false);
             }
+            if (!this.attributes.ContainsKey("sftp_insecure_diffie_hellman"))
+            {
+                this.attributes.Add("sftp_insecure_diffie_hellman", false);
+            }
             if (!this.attributes.ContainsKey("sftp_user_root_enabled"))
             {
                 this.attributes.Add("sftp_user_root_enabled", false);
@@ -2018,7 +2022,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Are Insecure Ciphers allowed for SFTP?  Note:  Setting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
+        /// If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severly weakens the security of your site and it is not recommend, except as a last resort for compatibility.
         /// </summary>
         [JsonInclude]
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -2027,6 +2031,18 @@ namespace FilesCom.Models
         {
             get { return attributes["sftp_insecure_ciphers"] == null ? false : (bool)attributes["sftp_insecure_ciphers"]; }
             private set { attributes["sftp_insecure_ciphers"] = value; }
+        }
+
+        /// <summary>
+        /// If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("sftp_insecure_diffie_hellman")]
+        public bool SftpInsecureDiffieHellman
+        {
+            get { return attributes["sftp_insecure_diffie_hellman"] == null ? false : (bool)attributes["sftp_insecure_diffie_hellman"]; }
+            private set { attributes["sftp_insecure_diffie_hellman"] = value; }
         }
 
         /// <summary>
@@ -2199,7 +2215,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
+        /// DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
         /// </summary>
         [JsonInclude]
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -2528,8 +2544,9 @@ namespace FilesCom.Models
         ///   left_navigation_visibility - object - Visibility settings for account navigation
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
-        ///   tls_disabled - boolean - Are Insecure TLS and SFTP Ciphers allowed?  Enabling this is insecure.
-        ///   sftp_insecure_ciphers - boolean - Are Insecure Ciphers allowed for SFTP?  Note:  Setting TLS Disabled -> True will always allow insecure ciphers for SFTP as well.  Enabling this is insecure.
+        ///   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
+        ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severly weakens the security of your site and it is not recommend, except as a last resort for compatibility.
+        ///   sftp_insecure_diffie_hellman - boolean - If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
         ///   disable_files_certificate_generation - boolean - If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
         ///   user_lockout - boolean - Will users be locked out after incorrect login attempts?
         ///   user_lockout_tries - int64 - Number of login tries within `user_lockout_within` hours before users are locked out
@@ -2800,6 +2817,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sftp_insecure_ciphers") && !(parameters["sftp_insecure_ciphers"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_insecure_ciphers must be of type bool", "parameters[\"sftp_insecure_ciphers\"]");
+            }
+            if (parameters.ContainsKey("sftp_insecure_diffie_hellman") && !(parameters["sftp_insecure_diffie_hellman"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: sftp_insecure_diffie_hellman must be of type bool", "parameters[\"sftp_insecure_diffie_hellman\"]");
             }
             if (parameters.ContainsKey("disable_files_certificate_generation") && !(parameters["disable_files_certificate_generation"] is bool))
             {
