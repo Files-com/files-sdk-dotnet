@@ -25,6 +25,7 @@
   "name": "example",
   "overwrite_files": true,
   "path": "example",
+  "path_time_zone": "Eastern Time (US & Canada)",
   "recurring_day": 25,
   "schedule": "example",
   "human_readable_schedule": "Triggered every Monday, Wednesday at 6:30 AM,\n  2:30 PM Eastern Time (US & Canada) TZ",
@@ -75,6 +76,7 @@
 * `name` / `Name`  (string): Name for this automation.
 * `overwrite_files` / `OverwriteFiles`  (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
 * `path` / `Path`  (string): Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path_time_zone` / `PathTimeZone`  (string): Timezone to use when rendering timestamps in paths.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run in json format.
 * `human_readable_schedule` / `HumanReadableSchedule`  (string): If trigger is `custom_schedule`, Human readable Custom schedule description for when the automation should be run.
@@ -167,6 +169,7 @@ Task<Automation> Automation.Create(
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+* `path_time_zone` (string): Timezone to use when rendering timestamps in paths.
 * `trigger` (string): How this automation is triggered to run.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
@@ -225,6 +228,7 @@ Task<Automation> Automation.Update(
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+* `path_time_zone` (string): Timezone to use when rendering timestamps in paths.
 * `trigger` (string): How this automation is triggered to run.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
@@ -294,6 +298,7 @@ parameters.Add("disabled", true);
 parameters.Add("ignore_locked_folders", true);
 parameters.Add("name", "example");
 parameters.Add("overwrite_files", true);
+parameters.Add("path_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("trigger", "daily");
 parameters.Add("trigger_actions", ["create"]);
 parameters.Add("value", {"limit":"1"});
@@ -325,6 +330,7 @@ Automation.Update(parameters);
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+* `path_time_zone` (string): Timezone to use when rendering timestamps in paths.
 * `trigger` (string): How this automation is triggered to run.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.

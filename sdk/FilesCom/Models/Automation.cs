@@ -93,6 +93,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("path", null);
             }
+            if (!this.attributes.ContainsKey("path_time_zone"))
+            {
+                this.attributes.Add("path_time_zone", null);
+            }
             if (!this.attributes.ContainsKey("recurring_day"))
             {
                 this.attributes.Add("recurring_day", null);
@@ -337,6 +341,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Timezone to use when rendering timestamps in paths.
+        /// </summary>
+        [JsonPropertyName("path_time_zone")]
+        public string PathTimeZone
+        {
+            get { return (string)attributes["path_time_zone"]; }
+            set { attributes["path_time_zone"] = value; }
+        }
+
+        /// <summary>
         /// If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         /// </summary>
         [JsonPropertyName("recurring_day")]
@@ -532,6 +546,7 @@ namespace FilesCom.Models
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+        ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -630,6 +645,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
+            }
+            if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -849,6 +868,7 @@ namespace FilesCom.Models
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+        ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -944,6 +964,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
             }
+            if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
+            }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
@@ -1032,6 +1056,7 @@ namespace FilesCom.Models
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
+        ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -1138,6 +1163,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
+            }
+            if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
