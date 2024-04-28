@@ -185,6 +185,7 @@ Task<FileAction> RemoteFile.Copy(
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Copy destination path.
 * `structure` (bool): Copy structure only?
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---
@@ -203,6 +204,7 @@ Task<FileAction> RemoteFile.Move(
 
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---
@@ -306,6 +308,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
 parameters.Add("structure", true);
+parameters.Add("overwrite", true);
 
 File.Copy(parameters);
 ```
@@ -315,6 +318,7 @@ File.Copy(parameters);
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Copy destination path.
 * `structure` (bool): Copy structure only?
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---
@@ -327,6 +331,7 @@ var File = RemoteFile.ListFor(path)[0];
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
+parameters.Add("overwrite", true);
 
 File.Move(parameters);
 ```
@@ -335,6 +340,7 @@ File.Move(parameters);
 
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---

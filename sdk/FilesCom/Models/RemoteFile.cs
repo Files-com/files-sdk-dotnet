@@ -692,6 +692,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   destination (required) - string - Copy destination path.
         ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         public async Task<FileAction> Copy(Dictionary<string, object> parameters)
         {
@@ -722,6 +723,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
             }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -741,6 +746,7 @@ namespace FilesCom.Models
         ///
         /// Parameters:
         ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         public async Task<FileAction> Move(Dictionary<string, object> parameters)
         {
@@ -766,6 +772,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1193,6 +1203,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   destination (required) - string - Copy destination path.
         ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         public static async Task<FileAction> Copy(
             string path,
@@ -1231,6 +1242,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: structure must be of type bool", "parameters[\"structure\"]");
             }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1250,6 +1265,7 @@ namespace FilesCom.Models
         ///
         /// Parameters:
         ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         public static async Task<FileAction> Move(
             string path,
@@ -1283,6 +1299,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
