@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("additional_text_file_types"))
+            {
+                this.attributes.Add("additional_text_file_types", new string[0]);
+            }
             if (!this.attributes.ContainsKey("allowed_2fa_method_sms"))
             {
                 this.attributes.Add("allowed_2fa_method_sms", false);
@@ -680,6 +684,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["name"]; }
             private set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// Additional extensions that are considered text files
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("additional_text_file_types")]
+        public string[] AdditionalTextFileTypes
+        {
+            get { return (string[])attributes["additional_text_file_types"]; }
+            private set { attributes["additional_text_file_types"] = value; }
         }
 
         /// <summary>
@@ -2542,6 +2557,7 @@ namespace FilesCom.Models
         ///   motd_use_for_ftp - boolean - Show message to users connecting via FTP
         ///   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
         ///   left_navigation_visibility - object - Visibility settings for account navigation
+        ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
@@ -2801,6 +2817,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("left_navigation_visibility") && !(parameters["left_navigation_visibility"] is object))
             {
                 throw new ArgumentException("Bad parameter: left_navigation_visibility must be of type object", "parameters[\"left_navigation_visibility\"]");
+            }
+            if (parameters.ContainsKey("additional_text_file_types") && !(parameters["additional_text_file_types"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: additional_text_file_types must be of type string[]", "parameters[\"additional_text_file_types\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {

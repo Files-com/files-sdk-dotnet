@@ -5,6 +5,9 @@
 ```
 {
   "name": "My Site",
+  "additional_text_file_types": [
+    "example"
+  ],
   "allowed_2fa_method_sms": true,
   "allowed_2fa_method_totp": true,
   "allowed_2fa_method_u2f": true,
@@ -275,6 +278,7 @@
 ```
 
 * `name` / `Name`  (string): Site name
+* `additional_text_file_types` / `AdditionalTextFileTypes`  (string[]): Additional extensions that are considered text files
 * `allowed_2fa_method_sms` / `Allowed2faMethodSms`  (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_totp` / `Allowed2faMethodTotp`  (bool): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_u2f` / `Allowed2faMethodU2f`  (bool): Is U2F two factor authentication allowed?
@@ -505,6 +509,7 @@ Task<Site> Site.Update(
 * `motd_use_for_ftp` (bool): Show message to users connecting via FTP
 * `motd_use_for_sftp` (bool): Show message to users connecting via SFTP
 * `left_navigation_visibility` (object): Visibility settings for account navigation
+* `additional_text_file_types` (string[]): Additional extensions that are considered text files
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
