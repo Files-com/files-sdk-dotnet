@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("response_code", null);
             }
+            if (!this.attributes.ContainsKey("success"))
+            {
+                this.attributes.Add("success", false);
+            }
             if (!this.attributes.ContainsKey("duration_ms"))
             {
                 this.attributes.Add("duration_ms", null);
@@ -184,6 +188,18 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["response_code"]; }
             private set { attributes["response_code"] = value; }
+        }
+
+        /// <summary>
+        /// `false` if HTTP Response Code is 4xx or 5xx
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("success")]
+        public bool Success
+        {
+            get { return attributes["success"] == null ? false : (bool)attributes["success"]; }
+            private set { attributes["success"] = value; }
         }
 
         /// <summary>
