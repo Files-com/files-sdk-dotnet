@@ -61,6 +61,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disable_parent_folder_behavior", false);
             }
+            if (!this.attributes.ContainsKey("recursive"))
+            {
+                this.attributes.Add("recursive", false);
+            }
             if (!this.attributes.ContainsKey("attachment_file"))
             {
                 this.attributes.Add("attachment_file", null);
@@ -169,6 +173,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Is behavior recursive?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("recursive")]
+        public bool Recursive
+        {
+            get { return attributes["recursive"] == null ? false : (bool)attributes["recursive"]; }
+            set { attributes["recursive"] = value; }
+        }
+
+        /// <summary>
         /// Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
         /// </summary>
         [JsonPropertyName("attachment_file")]
@@ -194,6 +209,7 @@ namespace FilesCom.Models
         ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
         ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+        ///   recursive - boolean - Is behavior recursive?
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
@@ -228,6 +244,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disable_parent_folder_behavior") && !(parameters["disable_parent_folder_behavior"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_parent_folder_behavior must be of type bool", "parameters[\"disable_parent_folder_behavior\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -414,7 +434,7 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         ///   path (required) - string - Path to operate on.
-        ///   recursive - string - Show behaviors above this path?
+        ///   ancestor_behaviors - string - Show behaviors above this path?
         ///   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
         /// </summary>
         public static FilesList<Behavior> ListFor(
@@ -462,9 +482,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string))
+            if (parameters.ContainsKey("ancestor_behaviors") && !(parameters["ancestor_behaviors"] is string))
             {
-                throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
+                throw new ArgumentException("Bad parameter: ancestor_behaviors must be of type string", "parameters[\"ancestor_behaviors\"]");
             }
             if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
@@ -480,6 +500,7 @@ namespace FilesCom.Models
         ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
         ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+        ///   recursive - boolean - Is behavior recursive?
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
         ///   path (required) - string - Folder behaviors path.
@@ -513,6 +534,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disable_parent_folder_behavior") && !(parameters["disable_parent_folder_behavior"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_parent_folder_behavior must be of type bool", "parameters[\"disable_parent_folder_behavior\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -600,6 +625,7 @@ namespace FilesCom.Models
         ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
         ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
         ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder.
+        ///   recursive - boolean - Is behavior recursive?
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
         ///   behavior - string - Behavior type.
@@ -642,6 +668,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disable_parent_folder_behavior") && !(parameters["disable_parent_folder_behavior"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_parent_folder_behavior must be of type bool", "parameters[\"disable_parent_folder_behavior\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {

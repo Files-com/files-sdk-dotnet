@@ -13,7 +13,8 @@
   "value": {
     "key": "example value"
   },
-  "disable_parent_folder_behavior": true
+  "disable_parent_folder_behavior": true,
+  "recursive": true
 }
 ```
 
@@ -25,6 +26,7 @@
 * `description` / `Description`  (string): Description for this behavior.
 * `value` / `Value`  (object): Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
 * `disable_parent_folder_behavior` / `DisableParentFolderBehavior`  (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `recursive` / `Recursive`  (bool): Is behavior recursive?
 * `attachment_file` / `AttachmentFile`  (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `attachment_delete` / `AttachmentDelete`  (bool): If true, will delete the file stored in attachment
 
@@ -87,7 +89,7 @@ Task<FilesList<Behavior>> Behavior.ListFor(
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `behavior`.
 * `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
 * `path` (string): Required - Path to operate on.
-* `recursive` (string): Show behaviors above this path?
+* `ancestor_behaviors` (string): Show behaviors above this path?
 * `behavior` (string): DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
 
 
@@ -108,6 +110,7 @@ Task<Behavior> Behavior.Create(
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
 * `path` (string): Required - Folder behaviors path.
@@ -154,6 +157,7 @@ Task<Behavior> Behavior.Update(
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
 * `behavior` (string): Behavior type.
@@ -189,6 +193,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("value", "{\"method\": \"GET\"}");
 parameters.Add("disable_parent_folder_behavior", true);
+parameters.Add("recursive", true);
 parameters.Add("name", "example");
 parameters.Add("description", "example");
 parameters.Add("behavior", "webhook");
@@ -204,6 +209,7 @@ Behavior.Update(parameters);
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
 * `behavior` (string): Behavior type.
