@@ -8,7 +8,7 @@
   "automation_id": 1,
   "completed_at": "2000-01-01T01:00:00Z",
   "created_at": "2000-01-01T01:00:00Z",
-  "runtime": "2000-01-01T01:00:00Z",
+  "runtime": 1.0,
   "status": "success",
   "run_stage": "planning",
   "successful_operations": 1,
@@ -21,7 +21,7 @@
 * `automation_id` / `AutomationId`  (Nullable<Int64>): ID of the associated Automation.
 * `completed_at` / `CompletedAt`  (Nullable<DateTime>): Automation run completion/failure date/time.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Automation run start date/time.
-* `runtime` / `Runtime`  (Nullable<DateTime>): Automation run runtime.
+* `runtime` / `Runtime`  (double): Automation run runtime.
 * `status` / `Status`  (string): The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
 * `run_stage` / `RunStage`  (string): The stage currently being executed in the execution environment.  One of `queued_for_planning`, `planning`, `queued_for_execution`, `executing`, or `finished`.
 * `successful_operations` / `SuccessfulOperations`  (Nullable<Int64>): Count of successful operations.
