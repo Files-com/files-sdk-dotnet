@@ -15,6 +15,7 @@
     "destination"
   ],
   "disabled": true,
+  "flatten_destination_structure": true,
   "group_ids": [
     1,
     2
@@ -69,6 +70,7 @@
 * `destination_replace_to` / `DestinationReplaceTo`  (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `destinations` / `Destinations`  (string[]): Destination Paths
 * `disabled` / `Disabled`  (bool): If true, this automation will not run.
+* `flatten_destination_structure` / `FlattenDestinationStructure`  (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): IDs of Groups for the Automation (i.e. who to Request File from)
 * `ignore_locked_folders` / `IgnoreLockedFolders`  (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this automation.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -166,6 +168,7 @@ Task<Automation> Automation.Create(
 * `always_overwrite_size_matching_files` (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
 * `description` (string): Description for the this Automation.
 * `disabled` (bool): If true, this automation will not run.
+* `flatten_destination_structure` (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
@@ -225,6 +228,7 @@ Task<Automation> Automation.Update(
 * `always_overwrite_size_matching_files` (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
 * `description` (string): Description for the this Automation.
 * `disabled` (bool): If true, this automation will not run.
+* `flatten_destination_structure` (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
@@ -295,6 +299,7 @@ parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("always_overwrite_size_matching_files", true);
 parameters.Add("description", "example");
 parameters.Add("disabled", true);
+parameters.Add("flatten_destination_structure", true);
 parameters.Add("ignore_locked_folders", true);
 parameters.Add("name", "example");
 parameters.Add("overwrite_files", true);
@@ -327,6 +332,7 @@ Automation.Update(parameters);
 * `always_overwrite_size_matching_files` (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
 * `description` (string): Description for the this Automation.
 * `disabled` (bool): If true, this automation will not run.
+* `flatten_destination_structure` (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.

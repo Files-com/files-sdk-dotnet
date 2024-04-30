@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disabled", false);
             }
+            if (!this.attributes.ContainsKey("flatten_destination_structure"))
+            {
+                this.attributes.Add("flatten_destination_structure", false);
+            }
             if (!this.attributes.ContainsKey("group_ids"))
             {
                 this.attributes.Add("group_ids", new Nullable<Int64>[0]);
@@ -266,6 +270,17 @@ namespace FilesCom.Models
         {
             get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
             set { attributes["disabled"] = value; }
+        }
+
+        /// <summary>
+        /// Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("flatten_destination_structure")]
+        public bool FlattenDestinationStructure
+        {
+            get { return attributes["flatten_destination_structure"] == null ? false : (bool)attributes["flatten_destination_structure"]; }
+            set { attributes["flatten_destination_structure"] = value; }
         }
 
         /// <summary>
@@ -543,6 +558,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
@@ -633,6 +649,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: flatten_destination_structure must be of type bool", "parameters[\"flatten_destination_structure\"]");
             }
             if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
             {
@@ -865,6 +885,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
@@ -951,6 +972,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: flatten_destination_structure must be of type bool", "parameters[\"flatten_destination_structure\"]");
             }
             if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
             {
@@ -1053,6 +1078,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
@@ -1151,6 +1177,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: flatten_destination_structure must be of type bool", "parameters[\"flatten_destination_structure\"]");
             }
             if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
             {
