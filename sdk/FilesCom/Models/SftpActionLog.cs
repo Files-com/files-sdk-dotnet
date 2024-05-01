@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("remote_ip", null);
             }
+            if (!this.attributes.ContainsKey("server_ip"))
+            {
+                this.attributes.Add("server_ip", null);
+            }
             if (!this.attributes.ContainsKey("username"))
             {
                 this.attributes.Add("username", null);
@@ -167,6 +171,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["remote_ip"]; }
             private set { attributes["remote_ip"] = value; }
+        }
+
+        /// <summary>
+        /// IP Address of SFTP Server
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("server_ip")]
+        public string ServerIp
+        {
+            get { return (string)attributes["server_ip"]; }
+            private set { attributes["server_ip"] = value; }
         }
 
         /// <summary>
