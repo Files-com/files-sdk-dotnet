@@ -89,6 +89,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disabled", false);
             }
+            if (!this.attributes.ContainsKey("disabled_expired_or_inactive"))
+            {
+                this.attributes.Add("disabled_expired_or_inactive", false);
+            }
             if (!this.attributes.ContainsKey("email"))
             {
                 this.attributes.Add("email", null);
@@ -478,7 +482,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+        /// Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disabled")]
@@ -486,6 +490,17 @@ namespace FilesCom.Models
         {
             get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
             set { attributes["disabled"] = value; }
+        }
+
+        /// <summary>
+        /// Computed property that returns true if user disabled or expired or inactive.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("disabled_expired_or_inactive")]
+        public bool DisabledExpiredOrInactive
+        {
+            get { return attributes["disabled_expired_or_inactive"] == null ? false : (bool)attributes["disabled_expired_or_inactive"]; }
+            set { attributes["disabled_expired_or_inactive"] = value; }
         }
 
         /// <summary>
@@ -1160,7 +1175,7 @@ namespace FilesCom.Models
         ///   bypass_inactive_disable - boolean - Exempt this user from being disabled based on inactivity?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
-        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
         ///   language - string - Preferred language
@@ -1592,7 +1607,7 @@ namespace FilesCom.Models
         ///   bypass_inactive_disable - boolean - Exempt this user from being disabled based on inactivity?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
-        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
         ///   language - string - Preferred language
@@ -1946,7 +1961,7 @@ namespace FilesCom.Models
         ///   bypass_inactive_disable - boolean - Exempt this user from being disabled based on inactivity?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
-        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
         ///   language - string - Preferred language

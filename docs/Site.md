@@ -210,6 +210,7 @@
     "created_at": "2000-01-01T01:00:00Z",
     "dav_permission": true,
     "disabled": true,
+    "disabled_expired_or_inactive": true,
     "email": "example",
     "first_login_at": "2000-01-01T01:00:00Z",
     "ftp_permission": true,

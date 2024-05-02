@@ -21,6 +21,7 @@
   "created_at": "2000-01-01T01:00:00Z",
   "dav_permission": true,
   "disabled": true,
+  "disabled_expired_or_inactive": true,
   "email": "example",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
@@ -84,7 +85,8 @@
 * `bypass_inactive_disable` / `BypassInactiveDisable`  (bool): Exempt this user from being disabled based on inactivity?
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): When this user was created
 * `dav_permission` / `DavPermission`  (bool): Can the user connect with WebDAV?
-* `disabled` / `Disabled`  (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+* `disabled` / `Disabled`  (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+* `disabled_expired_or_inactive` / `DisabledExpiredOrInactive`  (bool): Computed property that returns true if user disabled or expired or inactive.
 * `email` / `Email`  (string): User email address
 * `first_login_at` / `FirstLoginAt`  (Nullable<DateTime>): User's first login time
 * `ftp_permission` / `FtpPermission`  (bool): Can the user access with FTP/FTPS?
@@ -221,7 +223,7 @@ Task<User> User.Create(
 * `bypass_inactive_disable` (bool): Exempt this user from being disabled based on inactivity?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
-* `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+* `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
@@ -334,7 +336,7 @@ Task<User> User.Update(
 * `bypass_inactive_disable` (bool): Exempt this user from being disabled based on inactivity?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
-* `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+* `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
@@ -506,7 +508,7 @@ User.Update(parameters);
 * `bypass_inactive_disable` (bool): Exempt this user from being disabled based on inactivity?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
-* `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes.  Users can be automatically disabled after an inactivity period via a Site setting.
+* `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
