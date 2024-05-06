@@ -262,15 +262,15 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class ReauthenticationNeededFieldsException : BadRequestException
+    public class PathCannotHaveTrailingWhitespaceException : BadRequestException
     {
-        public ReauthenticationNeededFieldsException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+        public PathCannotHaveTrailingWhitespaceException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class RequestParamPathCannotHaveTrailingWhitespaceException : BadRequestException
+    public class ReauthenticationNeededFieldsException : BadRequestException
     {
-        public RequestParamPathCannotHaveTrailingWhitespaceException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+        public ReauthenticationNeededFieldsException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
@@ -839,6 +839,12 @@ namespace FilesCom
     public class FilePendingProcessingException : ProcessingFailureException
     {
         public FilePendingProcessingException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class FileProcessingErrorException : ProcessingFailureException
+    {
+        public FileProcessingErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
