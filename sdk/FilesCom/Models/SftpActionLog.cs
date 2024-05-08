@@ -45,9 +45,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("username", null);
             }
-            if (!this.attributes.ContainsKey("session_uid"))
+            if (!this.attributes.ContainsKey("session_uuid"))
             {
-                this.attributes.Add("session_uid", null);
+                this.attributes.Add("session_uuid", null);
             }
             if (!this.attributes.ContainsKey("seq_id"))
             {
@@ -199,11 +199,11 @@ namespace FilesCom.Models
         /// Unique ID of the Session
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("session_uid")]
-        public string SessionUid
+        [JsonPropertyName("session_uuid")]
+        public string SessionUuid
         {
-            get { return (string)attributes["session_uid"]; }
-            private set { attributes["session_uid"] = value; }
+            get { return (string)attributes["session_uuid"]; }
+            private set { attributes["session_uuid"] = value; }
         }
 
         /// <summary>

@@ -752,6 +752,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class BehaviorNotAllowedOnRemoteServerException : ProcessingFailureException
+    {
+        public BehaviorNotAllowedOnRemoteServerException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class BundleOnlyAllowsPreviewsException : ProcessingFailureException
     {
         public BundleOnlyAllowsPreviewsException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
