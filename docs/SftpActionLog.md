@@ -16,16 +16,10 @@
   "path": "example",
   "true_path": "example",
   "name": "example",
-  "message": "example",
-  "failure_reason_type": "example",
-  "failure_reason_message": "example",
+  "sftp_response_code": "example",
+  "sftp_response_message": "example",
   "md5": "example",
-  "flags": "example",
-  "handle": "example",
-  "attrs": "example",
   "size": "example",
-  "offset": "example",
-  "length": "example",
   "data_length": "example",
   "entries_returned": 1,
   "success": "example",
@@ -42,19 +36,13 @@
 * `auth_method` / `AuthMethod`  (string): Authentication Method
 * `auth_ciphers` / `AuthCiphers`  (string): Authentication Ciphers
 * `action_type` / `ActionType`  (string): Action Type
-* `path` / `Path`  (string): Path as sent by the Client (may not match Files.com path due to user root folders for SFTP) This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Path as sent by the Client (may not match Files.com path due to user root folders for SFTP). This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `true_path` / `TruePath`  (string): Path on Files.com
 * `name` / `Name`  (string): Name of File
-* `message` / `Message`  (string): Log Message
-* `failure_reason_type` / `FailureReasonType`  (string): Failure Reason Type
-* `failure_reason_message` / `FailureReasonMessage`  (string): Failure Reason Message
+* `sftp_response_code` / `SftpResponseCode`  (string): SFTP Response Code Returned to the Client.
+* `sftp_response_message` / `SftpResponseMessage`  (string): SFTP Response Message Returned to the Client.
 * `md5` / `Md5`  (string): MD5 Hash of the file. Not always available.
-* `flags` / `Flags`  (string): SFTP Command Flags. Present for actions which involve flags.
-* `handle` / `Handle`  (string): SFTP Command Handle. Present for actions which involve handles.
-* `attrs` / `Attrs`  (string): SFTP Command Attrs. Present for action which involve attrs.
-* `size` / `Size`  (string): Size. Present for action which involve size.
-* `offset` / `Offset`  (string): Offset. Present for actions which involve offset.
-* `length` / `Length`  (string): Length. Present for actions which involve length.
+* `size` / `Size`  (string): Size of File That was Uploaded or Downloaded.
 * `data_length` / `DataLength`  (string): Data Length in Bytes. Present for actions that transfer data.
 * `entries_returned` / `EntriesReturned`  (Nullable<Int64>): Number of entries returned when listing files and folders
 * `success` / `Success`  (string): Whether SFTP Action was successful.

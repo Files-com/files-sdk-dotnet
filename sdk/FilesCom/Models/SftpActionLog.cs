@@ -77,45 +77,21 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
-            if (!this.attributes.ContainsKey("message"))
+            if (!this.attributes.ContainsKey("sftp_response_code"))
             {
-                this.attributes.Add("message", null);
+                this.attributes.Add("sftp_response_code", null);
             }
-            if (!this.attributes.ContainsKey("failure_reason_type"))
+            if (!this.attributes.ContainsKey("sftp_response_message"))
             {
-                this.attributes.Add("failure_reason_type", null);
-            }
-            if (!this.attributes.ContainsKey("failure_reason_message"))
-            {
-                this.attributes.Add("failure_reason_message", null);
+                this.attributes.Add("sftp_response_message", null);
             }
             if (!this.attributes.ContainsKey("md5"))
             {
                 this.attributes.Add("md5", null);
             }
-            if (!this.attributes.ContainsKey("flags"))
-            {
-                this.attributes.Add("flags", null);
-            }
-            if (!this.attributes.ContainsKey("handle"))
-            {
-                this.attributes.Add("handle", null);
-            }
-            if (!this.attributes.ContainsKey("attrs"))
-            {
-                this.attributes.Add("attrs", null);
-            }
             if (!this.attributes.ContainsKey("size"))
             {
                 this.attributes.Add("size", null);
-            }
-            if (!this.attributes.ContainsKey("offset"))
-            {
-                this.attributes.Add("offset", null);
-            }
-            if (!this.attributes.ContainsKey("length"))
-            {
-                this.attributes.Add("length", null);
             }
             if (!this.attributes.ContainsKey("data_length"))
             {
@@ -251,7 +227,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Path as sent by the Client (may not match Files.com path due to user root folders for SFTP) This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// Path as sent by the Client (may not match Files.com path due to user root folders for SFTP). This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("path")]
@@ -284,36 +260,25 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Log Message
+        /// SFTP Response Code Returned to the Client.
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("message")]
-        public string Message
+        [JsonPropertyName("sftp_response_code")]
+        public string SftpResponseCode
         {
-            get { return (string)attributes["message"]; }
-            private set { attributes["message"] = value; }
+            get { return (string)attributes["sftp_response_code"]; }
+            private set { attributes["sftp_response_code"] = value; }
         }
 
         /// <summary>
-        /// Failure Reason Type
+        /// SFTP Response Message Returned to the Client.
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("failure_reason_type")]
-        public string FailureReasonType
+        [JsonPropertyName("sftp_response_message")]
+        public string SftpResponseMessage
         {
-            get { return (string)attributes["failure_reason_type"]; }
-            private set { attributes["failure_reason_type"] = value; }
-        }
-
-        /// <summary>
-        /// Failure Reason Message
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("failure_reason_message")]
-        public string FailureReasonMessage
-        {
-            get { return (string)attributes["failure_reason_message"]; }
-            private set { attributes["failure_reason_message"] = value; }
+            get { return (string)attributes["sftp_response_message"]; }
+            private set { attributes["sftp_response_message"] = value; }
         }
 
         /// <summary>
@@ -328,40 +293,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// SFTP Command Flags. Present for actions which involve flags.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("flags")]
-        public string Flags
-        {
-            get { return (string)attributes["flags"]; }
-            private set { attributes["flags"] = value; }
-        }
-
-        /// <summary>
-        /// SFTP Command Handle. Present for actions which involve handles.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("handle")]
-        public string Handle
-        {
-            get { return (string)attributes["handle"]; }
-            private set { attributes["handle"] = value; }
-        }
-
-        /// <summary>
-        /// SFTP Command Attrs. Present for action which involve attrs.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("attrs")]
-        public string Attrs
-        {
-            get { return (string)attributes["attrs"]; }
-            private set { attributes["attrs"] = value; }
-        }
-
-        /// <summary>
-        /// Size. Present for action which involve size.
+        /// Size of File That was Uploaded or Downloaded.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("size")]
@@ -369,28 +301,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["size"]; }
             private set { attributes["size"] = value; }
-        }
-
-        /// <summary>
-        /// Offset. Present for actions which involve offset.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("offset")]
-        public string Offset
-        {
-            get { return (string)attributes["offset"]; }
-            private set { attributes["offset"] = value; }
-        }
-
-        /// <summary>
-        /// Length. Present for actions which involve length.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("length")]
-        public string Length
-        {
-            get { return (string)attributes["length"]; }
-            private set { attributes["length"] = value; }
         }
 
         /// <summary>
