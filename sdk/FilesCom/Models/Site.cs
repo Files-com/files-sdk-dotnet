@@ -89,6 +89,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allowed_ips", null);
             }
+            if (!this.attributes.ContainsKey("always_mkdir_parents"))
+            {
+                this.attributes.Add("always_mkdir_parents", false);
+            }
             if (!this.attributes.ContainsKey("ask_about_overwrites"))
             {
                 this.attributes.Add("ask_about_overwrites", false);
@@ -852,6 +856,18 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["allowed_ips"]; }
             private set { attributes["allowed_ips"] = value; }
+        }
+
+        /// <summary>
+        /// Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("always_mkdir_parents")]
+        public bool AlwaysMkdirParents
+        {
+            get { return attributes["always_mkdir_parents"] == null ? false : (bool)attributes["always_mkdir_parents"]; }
+            private set { attributes["always_mkdir_parents"] = value; }
         }
 
         /// <summary>
@@ -2552,6 +2568,7 @@ namespace FilesCom.Models
         ///   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
+        ///   always_mkdir_parents - boolean - Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
         ///   welcome_email_cc - string - Include this email in welcome emails if enabled
         ///   welcome_email_subject - string - Include this email subject in welcome emails if enabled
         ///   welcome_custom_text - string - Custom text send in user welcome email
@@ -2750,6 +2767,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("show_request_access_link") && !(parameters["show_request_access_link"] is bool))
             {
                 throw new ArgumentException("Bad parameter: show_request_access_link must be of type bool", "parameters[\"show_request_access_link\"]");
+            }
+            if (parameters.ContainsKey("always_mkdir_parents") && !(parameters["always_mkdir_parents"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_mkdir_parents must be of type bool", "parameters[\"always_mkdir_parents\"]");
             }
             if (parameters.ContainsKey("welcome_email_cc") && !(parameters["welcome_email_cc"] is string))
             {

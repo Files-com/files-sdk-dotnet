@@ -138,7 +138,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// IP Address of SFTP Server
+        /// IP Address of FTP Server
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("server_ip")]

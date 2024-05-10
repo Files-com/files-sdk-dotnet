@@ -21,6 +21,7 @@
   "allow_bundle_names": true,
   "allowed_countries": "US,DE",
   "allowed_ips": "example",
+  "always_mkdir_parents": true,
   "ask_about_overwrites": true,
   "bundle_activity_notifications": "never",
   "bundle_expiration": 1,
@@ -294,6 +295,7 @@
 * `allow_bundle_names` / `AllowBundleNames`  (bool): Are manual Bundle names allowed?
 * `allowed_countries` / `AllowedCountries`  (string): Comma seperated list of allowed Country codes
 * `allowed_ips` / `AllowedIps`  (string): List of allowed IP addresses
+* `always_mkdir_parents` / `AlwaysMkdirParents`  (bool): Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
 * `ask_about_overwrites` / `AskAboutOverwrites`  (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `bundle_activity_notifications` / `BundleActivityNotifications`  (string): Do Bundle owners receive activity notifications?
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
@@ -491,6 +493,7 @@ Task<Site> Site.Update(
 * `welcome_email_enabled` (bool): Will the welcome email be sent to new users?
 * `ask_about_overwrites` (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `show_request_access_link` (bool): Show request access link for users without access?  Currently unused.
+* `always_mkdir_parents` (bool): Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
 * `welcome_email_cc` (string): Include this email in welcome emails if enabled
 * `welcome_email_subject` (string): Include this email subject in welcome emails if enabled
 * `welcome_custom_text` (string): Custom text send in user welcome email
