@@ -53,10 +53,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("status", null);
             }
-            if (!this.attributes.ContainsKey("run_stage"))
-            {
-                this.attributes.Add("run_stage", null);
-            }
             if (!this.attributes.ContainsKey("successful_operations"))
             {
                 this.attributes.Add("successful_operations", null);
@@ -151,17 +147,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["status"]; }
             private set { attributes["status"] = value; }
-        }
-
-        /// <summary>
-        /// The stage currently being executed in the execution environment.  One of `queued_for_planning`, `planning`, `queued_for_execution`, `executing`, or `finished`.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("run_stage")]
-        public string RunStage
-        {
-            get { return (string)attributes["run_stage"]; }
-            private set { attributes["run_stage"] = value; }
         }
 
         /// <summary>

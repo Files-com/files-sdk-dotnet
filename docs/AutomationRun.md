@@ -10,7 +10,6 @@
   "created_at": "2000-01-01T01:00:00Z",
   "runtime": 1.0,
   "status": "success",
-  "run_stage": "planning",
   "successful_operations": 1,
   "failed_operations": 1,
   "status_messages_url": "https://www.example.com/log_file.txt"
@@ -23,7 +22,6 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Automation run start date/time.
 * `runtime` / `Runtime`  (double): Automation run runtime.
 * `status` / `Status`  (string): The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
-* `run_stage` / `RunStage`  (string): The stage currently being executed in the execution environment.  One of `queued_for_planning`, `planning`, `queued_for_execution`, `executing`, or `finished`.
 * `successful_operations` / `SuccessfulOperations`  (Nullable<Int64>): Count of successful operations.
 * `failed_operations` / `FailedOperations`  (Nullable<Int64>): Count of failed operations.
 * `status_messages_url` / `StatusMessagesUrl`  (string): Link to status messages log file.
