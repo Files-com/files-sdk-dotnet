@@ -85,6 +85,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("error_type", null);
             }
+            if (!this.attributes.ContainsKey("error_message"))
+            {
+                this.attributes.Add("error_message", null);
+            }
             if (!this.attributes.ContainsKey("response_code"))
             {
                 this.attributes.Add("response_code", null);
@@ -267,6 +271,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["error_type"]; }
             private set { attributes["error_type"] = value; }
+        }
+
+        /// <summary>
+        /// Error message, if applicable
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("error_message")]
+        public string ErrorMessage
+        {
+            get { return (string)attributes["error_message"]; }
+            private set { attributes["error_message"] = value; }
         }
 
         /// <summary>

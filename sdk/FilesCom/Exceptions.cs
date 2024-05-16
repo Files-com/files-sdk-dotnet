@@ -1060,6 +1060,18 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class MigrationInProgressException : ServiceUnavailableException
+    {
+        public MigrationInProgressException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SiteDisabledException : ServiceUnavailableException
+    {
+        public SiteDisabledException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class UploadsUnavailableException : ServiceUnavailableException
     {
         public UploadsUnavailableException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
