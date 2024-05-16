@@ -33,6 +33,42 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("path", null);
             }
+            if (!this.attributes.ContainsKey("created_by_id"))
+            {
+                this.attributes.Add("created_by_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_api_key_id"))
+            {
+                this.attributes.Add("created_by_api_key_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_as2_incoming_message_id"))
+            {
+                this.attributes.Add("created_by_as2_incoming_message_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_automation_id"))
+            {
+                this.attributes.Add("created_by_automation_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_bundle_registration_id"))
+            {
+                this.attributes.Add("created_by_bundle_registration_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_inbox_id"))
+            {
+                this.attributes.Add("created_by_inbox_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_remote_server_id"))
+            {
+                this.attributes.Add("created_by_remote_server_id", null);
+            }
+            if (!this.attributes.ContainsKey("created_by_remote_server_sync_id"))
+            {
+                this.attributes.Add("created_by_remote_server_sync_id", null);
+            }
+            if (!this.attributes.ContainsKey("custom_metadata"))
+            {
+                this.attributes.Add("custom_metadata", null);
+            }
             if (!this.attributes.ContainsKey("display_name"))
             {
                 this.attributes.Add("display_name", null);
@@ -48,6 +84,30 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_by_id"))
+            {
+                this.attributes.Add("last_modified_by_id", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_by_api_key_id"))
+            {
+                this.attributes.Add("last_modified_by_api_key_id", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_by_automation_id"))
+            {
+                this.attributes.Add("last_modified_by_automation_id", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_by_bundle_registration_id"))
+            {
+                this.attributes.Add("last_modified_by_bundle_registration_id", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_by_remote_server_id"))
+            {
+                this.attributes.Add("last_modified_by_remote_server_id", null);
+            }
+            if (!this.attributes.ContainsKey("last_modified_by_remote_server_sync_id"))
+            {
+                this.attributes.Add("last_modified_by_remote_server_sync_id", null);
             }
             if (!this.attributes.ContainsKey("mtime"))
             {
@@ -134,6 +194,96 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// User ID of the User who created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_id")]
+        public Nullable<Int64> CreatedById
+        {
+            get { return (Nullable<Int64>)attributes["created_by_id"]; }
+            set { attributes["created_by_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the API key that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_api_key_id")]
+        public Nullable<Int64> CreatedByApiKeyId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_api_key_id"]; }
+            set { attributes["created_by_api_key_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the AS2 Incoming Message that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_as2_incoming_message_id")]
+        public Nullable<Int64> CreatedByAs2IncomingMessageId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_as2_incoming_message_id"]; }
+            set { attributes["created_by_as2_incoming_message_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Automation that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_automation_id")]
+        public Nullable<Int64> CreatedByAutomationId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_automation_id"]; }
+            set { attributes["created_by_automation_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Bundle Registration that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_bundle_registration_id")]
+        public Nullable<Int64> CreatedByBundleRegistrationId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_bundle_registration_id"]; }
+            set { attributes["created_by_bundle_registration_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Inbox that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_inbox_id")]
+        public Nullable<Int64> CreatedByInboxId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_inbox_id"]; }
+            set { attributes["created_by_inbox_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Remote Server that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_remote_server_id")]
+        public Nullable<Int64> CreatedByRemoteServerId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_remote_server_id"]; }
+            set { attributes["created_by_remote_server_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Remote Server Sync that created the file/folder
+        /// </summary>
+        [JsonPropertyName("created_by_remote_server_sync_id")]
+        public Nullable<Int64> CreatedByRemoteServerSyncId
+        {
+            get { return (Nullable<Int64>)attributes["created_by_remote_server_sync_id"]; }
+            set { attributes["created_by_remote_server_sync_id"] = value; }
+        }
+
+        /// <summary>
+        /// Custom metadata map of keys and values. Limited to 32 keys, 256 characters per key and 1024 characters per value.
+        /// </summary>
+        [JsonPropertyName("custom_metadata")]
+        public object CustomMetadata
+        {
+            get { return (object)attributes["custom_metadata"]; }
+            set { attributes["custom_metadata"] = value; }
+        }
+
+        /// <summary>
         /// File/Folder display name
         /// </summary>
         [JsonPropertyName("display_name")]
@@ -172,6 +322,66 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// User ID of the User who last modified the file/folder
+        /// </summary>
+        [JsonPropertyName("last_modified_by_id")]
+        public Nullable<Int64> LastModifiedById
+        {
+            get { return (Nullable<Int64>)attributes["last_modified_by_id"]; }
+            set { attributes["last_modified_by_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the API key that last modified the file/folder
+        /// </summary>
+        [JsonPropertyName("last_modified_by_api_key_id")]
+        public Nullable<Int64> LastModifiedByApiKeyId
+        {
+            get { return (Nullable<Int64>)attributes["last_modified_by_api_key_id"]; }
+            set { attributes["last_modified_by_api_key_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Automation that last modified the file/folder
+        /// </summary>
+        [JsonPropertyName("last_modified_by_automation_id")]
+        public Nullable<Int64> LastModifiedByAutomationId
+        {
+            get { return (Nullable<Int64>)attributes["last_modified_by_automation_id"]; }
+            set { attributes["last_modified_by_automation_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Bundle Registration that last modified the file/folder
+        /// </summary>
+        [JsonPropertyName("last_modified_by_bundle_registration_id")]
+        public Nullable<Int64> LastModifiedByBundleRegistrationId
+        {
+            get { return (Nullable<Int64>)attributes["last_modified_by_bundle_registration_id"]; }
+            set { attributes["last_modified_by_bundle_registration_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Remote Server that last modified the file/folder
+        /// </summary>
+        [JsonPropertyName("last_modified_by_remote_server_id")]
+        public Nullable<Int64> LastModifiedByRemoteServerId
+        {
+            get { return (Nullable<Int64>)attributes["last_modified_by_remote_server_id"]; }
+            set { attributes["last_modified_by_remote_server_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Remote Server Sync that last modified the file/folder
+        /// </summary>
+        [JsonPropertyName("last_modified_by_remote_server_sync_id")]
+        public Nullable<Int64> LastModifiedByRemoteServerSyncId
+        {
+            get { return (Nullable<Int64>)attributes["last_modified_by_remote_server_sync_id"]; }
+            set { attributes["last_modified_by_remote_server_sync_id"] = value; }
         }
 
         /// <summary>
