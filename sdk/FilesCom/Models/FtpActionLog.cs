@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("seq_id", null);
             }
+            if (!this.attributes.ContainsKey("auth_ciphers"))
+            {
+                this.attributes.Add("auth_ciphers", null);
+            }
             if (!this.attributes.ContainsKey("action_type"))
             {
                 this.attributes.Add("action_type", null);
@@ -179,6 +183,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["seq_id"]; }
             private set { attributes["seq_id"] = value; }
+        }
+
+        /// <summary>
+        /// Authentication Ciphers
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("auth_ciphers")]
+        public string AuthCiphers
+        {
+            get { return (string)attributes["auth_ciphers"]; }
+            private set { attributes["auth_ciphers"] = value; }
         }
 
         /// <summary>
