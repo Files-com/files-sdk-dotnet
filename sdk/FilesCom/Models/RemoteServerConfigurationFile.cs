@@ -323,7 +323,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// File transfer (upload/download) rate limit
-        ///  <limit>-<period>, with the given periods:
+        ///  `<limit>-<period>`, with the given periods:
         /// * 'S': second
         /// * 'M': minute
         /// * 'H': hour
