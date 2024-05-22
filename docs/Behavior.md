@@ -25,7 +25,7 @@
 * `name` / `Name`  (string): Name for this behavior.
 * `description` / `Description`  (string): Description for this behavior.
 * `value` / `Value`  (object): Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
-* `disable_parent_folder_behavior` / `DisableParentFolderBehavior`  (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `disable_parent_folder_behavior` / `DisableParentFolderBehavior`  (bool): If true, the parent folder's behavior will be disabled for this folder and its children.
 * `recursive` / `Recursive`  (bool): Is behavior recursive?
 * `attachment_file` / `AttachmentFile`  (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
 * `attachment_delete` / `AttachmentDelete`  (bool): If true, will delete the file stored in attachment
@@ -109,7 +109,7 @@ Task<Behavior> Behavior.Create(
 
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder and its children.
 * `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
@@ -156,7 +156,7 @@ Task<Behavior> Behavior.Update(
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder and its children.
 * `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
@@ -208,7 +208,7 @@ Behavior.Update(parameters);
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (string): The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder.
+* `disable_parent_folder_behavior` (bool): If true, the parent folder's behavior will be disabled for this folder and its children.
 * `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
