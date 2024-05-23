@@ -91,7 +91,7 @@ Task MessageReaction.Delete(
 ## Delete Message Reaction
 
 ```
-var MessageReaction = MessageReaction.ListFor(path)[0];
+var MessageReaction = MessageReaction.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

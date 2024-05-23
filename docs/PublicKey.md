@@ -119,7 +119,7 @@ Task PublicKey.Delete(
 ## Update Public Key
 
 ```
-var PublicKey = PublicKey.ListFor(path)[0];
+var PublicKey = PublicKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -139,7 +139,7 @@ PublicKey.Update(parameters);
 ## Delete Public Key
 
 ```
-var PublicKey = PublicKey.ListFor(path)[0];
+var PublicKey = PublicKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

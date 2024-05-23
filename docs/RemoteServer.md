@@ -400,7 +400,7 @@ Task RemoteServer.Delete(
 ## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
 
 ```
-var RemoteServer = RemoteServer.ListFor(path)[0];
+var RemoteServer = RemoteServer.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -440,7 +440,7 @@ RemoteServer.ConfigurationFile(parameters);
 ## Update Remote Server
 
 ```
-var RemoteServer = RemoteServer.ListFor(path)[0];
+var RemoteServer = RemoteServer.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -569,7 +569,7 @@ RemoteServer.Update(parameters);
 ## Delete Remote Server
 
 ```
-var RemoteServer = RemoteServer.ListFor(path)[0];
+var RemoteServer = RemoteServer.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

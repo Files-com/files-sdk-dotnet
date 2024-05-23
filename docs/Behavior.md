@@ -187,7 +187,7 @@ Task Behavior.Delete(
 ## Update Behavior
 
 ```
-var Behavior = Behavior.ListFor(path)[0];
+var Behavior = Behavior.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -222,7 +222,7 @@ Behavior.Update(parameters);
 ## Delete Behavior
 
 ```
-var Behavior = Behavior.ListFor(path)[0];
+var Behavior = Behavior.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

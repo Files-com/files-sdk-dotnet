@@ -184,7 +184,7 @@ Task ApiKey.Delete(
 ## Update Api Key
 
 ```
-var ApiKey = ApiKey.ListFor(path)[0];
+var ApiKey = ApiKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -210,7 +210,7 @@ ApiKey.Update(parameters);
 ## Delete Api Key
 
 ```
-var ApiKey = ApiKey.ListFor(path)[0];
+var ApiKey = ApiKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

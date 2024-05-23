@@ -146,7 +146,7 @@ Task FormFieldSet.Delete(
 ## Update Form Field Set
 
 ```
-var FormFieldSet = FormFieldSet.ListFor(path)[0];
+var FormFieldSet = FormFieldSet.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -174,7 +174,7 @@ FormFieldSet.Update(parameters);
 ## Delete Form Field Set
 
 ```
-var FormFieldSet = FormFieldSet.ListFor(path)[0];
+var FormFieldSet = FormFieldSet.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

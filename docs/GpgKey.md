@@ -124,7 +124,7 @@ Task GpgKey.Delete(
 ## Update Gpg Key
 
 ```
-var GpgKey = GpgKey.ListFor(path)[0];
+var GpgKey = GpgKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -150,7 +150,7 @@ GpgKey.Update(parameters);
 ## Delete Gpg Key
 
 ```
-var GpgKey = GpgKey.ListFor(path)[0];
+var GpgKey = GpgKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

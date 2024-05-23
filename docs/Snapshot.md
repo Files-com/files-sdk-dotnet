@@ -135,7 +135,7 @@ Task Snapshot.Delete(
 ## Finalize Snapshot
 
 ```
-var Snapshot = Snapshot.ListFor(path)[0];
+var Snapshot = Snapshot.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -153,7 +153,7 @@ Snapshot.Finalize
 ## Update Snapshot
 
 ```
-var Snapshot = Snapshot.ListFor(path)[0];
+var Snapshot = Snapshot.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -176,7 +176,7 @@ Snapshot.Update(parameters);
 ## Delete Snapshot
 
 ```
-var Snapshot = Snapshot.ListFor(path)[0];
+var Snapshot = Snapshot.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

@@ -121,7 +121,7 @@ Task Clickwrap.Delete(
 ## Update Clickwrap
 
 ```
-var Clickwrap = Clickwrap.ListFor(path)[0];
+var Clickwrap = Clickwrap.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -149,7 +149,7 @@ Clickwrap.Update(parameters);
 ## Delete Clickwrap
 
 ```
-var Clickwrap = Clickwrap.ListFor(path)[0];
+var Clickwrap = Clickwrap.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

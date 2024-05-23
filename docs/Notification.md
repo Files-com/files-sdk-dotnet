@@ -187,7 +187,7 @@ Task Notification.Delete(
 ## Update Notification
 
 ```
-var Notification = Notification.ListFor(path)[0];
+var Notification = Notification.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -231,7 +231,7 @@ Notification.Update(parameters);
 ## Delete Notification
 
 ```
-var Notification = Notification.ListFor(path)[0];
+var Notification = Notification.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

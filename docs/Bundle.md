@@ -303,7 +303,7 @@ Task Bundle.Delete(
 ## Send email(s) with a link to bundle
 
 ```
-var Bundle = Bundle.ListFor(path)[0];
+var Bundle = Bundle.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -327,7 +327,7 @@ Bundle.Share(parameters);
 ## Update Bundle
 
 ```
-var Bundle = Bundle.ListFor(path)[0];
+var Bundle = Bundle.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -396,7 +396,7 @@ Bundle.Update(parameters);
 ## Delete Bundle
 
 ```
-var Bundle = Bundle.ListFor(path)[0];
+var Bundle = Bundle.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

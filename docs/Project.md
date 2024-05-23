@@ -105,7 +105,7 @@ Task Project.Delete(
 ## Update Project
 
 ```
-var Project = Project.ListFor(path)[0];
+var Project = Project.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -125,7 +125,7 @@ Project.Update(parameters);
 ## Delete Project
 
 ```
-var Project = Project.ListFor(path)[0];
+var Project = Project.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

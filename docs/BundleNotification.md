@@ -117,7 +117,7 @@ Task BundleNotification.Delete(
 ## Update Bundle Notification
 
 ```
-var BundleNotification = BundleNotification.ListFor(path)[0];
+var BundleNotification = BundleNotification.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -139,7 +139,7 @@ BundleNotification.Update(parameters);
 ## Delete Bundle Notification
 
 ```
-var BundleNotification = BundleNotification.ListFor(path)[0];
+var BundleNotification = BundleNotification.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

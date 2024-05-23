@@ -116,7 +116,7 @@ Task MessageComment.Delete(
 ## Update Message Comment
 
 ```
-var MessageComment = MessageComment.ListFor(path)[0];
+var MessageComment = MessageComment.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -136,7 +136,7 @@ MessageComment.Update(parameters);
 ## Delete Message Comment
 
 ```
-var MessageComment = MessageComment.ListFor(path)[0];
+var MessageComment = MessageComment.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

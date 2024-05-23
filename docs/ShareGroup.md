@@ -123,7 +123,7 @@ Task ShareGroup.Delete(
 ## Update Share Group
 
 ```
-var ShareGroup = ShareGroup.ListFor(path)[0];
+var ShareGroup = ShareGroup.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -147,7 +147,7 @@ ShareGroup.Update(parameters);
 ## Delete Share Group
 
 ```
-var ShareGroup = ShareGroup.ListFor(path)[0];
+var ShareGroup = ShareGroup.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

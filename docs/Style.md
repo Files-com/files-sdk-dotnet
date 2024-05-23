@@ -75,7 +75,7 @@ Task Style.Delete(
 ## Update Style
 
 ```
-var Style = Style.ListFor(path)[0];
+var Style = Style.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -95,7 +95,7 @@ Style.Update(parameters);
 ## Delete Style
 
 ```
-var Style = Style.ListFor(path)[0];
+var Style = Style.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

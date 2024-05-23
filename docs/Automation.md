@@ -262,7 +262,7 @@ Task Automation.Delete(
 ## Manually run automation
 
 ```
-var Automation = Automation.ListFor(path)[0];
+var Automation = Automation.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -280,7 +280,7 @@ Automation.ManualRun
 ## Update Automation
 
 ```
-var Automation = Automation.ListFor(path)[0];
+var Automation = Automation.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -349,7 +349,7 @@ Automation.Update(parameters);
 ## Delete Automation
 
 ```
-var Automation = Automation.ListFor(path)[0];
+var Automation = Automation.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

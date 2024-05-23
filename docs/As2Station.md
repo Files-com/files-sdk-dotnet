@@ -136,7 +136,7 @@ Task As2Station.Delete(
 ## Update As2 Station
 
 ```
-var As2Station = As2Station.ListFor(path)[0];
+var As2Station = As2Station.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -159,7 +159,7 @@ As2Station.Update(parameters);
 ## Delete As2 Station
 
 ```
-var As2Station = As2Station.ListFor(path)[0];
+var As2Station = As2Station.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

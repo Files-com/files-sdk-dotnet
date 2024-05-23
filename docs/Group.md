@@ -143,7 +143,7 @@ Task Group.Delete(
 ## Update Group
 
 ```
-var Group = Group.ListFor(path)[0];
+var Group = Group.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -179,7 +179,7 @@ Group.Update(parameters);
 ## Delete Group
 
 ```
-var Group = Group.ListFor(path)[0];
+var Group = Group.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

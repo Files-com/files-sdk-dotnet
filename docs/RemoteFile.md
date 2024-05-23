@@ -269,7 +269,7 @@ Task<FileUploadPart[]> RemoteFile.BeginUpload(
 ## Download file
 
 ```
-var File = RemoteFile.ListFor(path)[0];
+var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -293,7 +293,7 @@ File.Download(parameters);
 ## Update file/folder metadata
 
 ```
-var File = RemoteFile.ListFor(path)[0];
+var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -317,7 +317,7 @@ File.Update(parameters);
 ## Delete file/folder
 
 ```
-var File = RemoteFile.ListFor(path)[0];
+var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -337,7 +337,7 @@ File.Delete(parameters);
 ## Copy file/folder
 
 ```
-var File = RemoteFile.ListFor(path)[0];
+var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -361,7 +361,7 @@ File.Copy(parameters);
 ## Move file/folder
 
 ```
-var File = RemoteFile.ListFor(path)[0];
+var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -383,7 +383,7 @@ File.Move(parameters);
 ## Begin file upload
 
 ```
-var File = RemoteFile.ListFor(path)[0];
+var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

@@ -112,7 +112,7 @@ Task SftpHostKey.Delete(
 ## Update Sftp Host Key
 
 ```
-var SftpHostKey = SftpHostKey.ListFor(path)[0];
+var SftpHostKey = SftpHostKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -133,7 +133,7 @@ SftpHostKey.Update(parameters);
 ## Delete Sftp Host Key
 
 ```
-var SftpHostKey = SftpHostKey.ListFor(path)[0];
+var SftpHostKey = SftpHostKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

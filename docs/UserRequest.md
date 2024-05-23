@@ -96,7 +96,7 @@ Task UserRequest.Delete(
 ## Delete User Request
 
 ```
-var UserRequest = UserRequest.ListFor(path)[0];
+var UserRequest = UserRequest.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

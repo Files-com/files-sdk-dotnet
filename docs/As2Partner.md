@@ -141,7 +141,7 @@ Task As2Partner.Delete(
 ## Update As2 Partner
 
 ```
-var As2Partner = As2Partner.ListFor(path)[0];
+var As2Partner = As2Partner.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -170,7 +170,7 @@ As2Partner.Update(parameters);
 ## Delete As2 Partner
 
 ```
-var As2Partner = As2Partner.ListFor(path)[0];
+var As2Partner = As2Partner.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

@@ -158,7 +158,7 @@ Task SsoStrategy.Sync(
 ## Synchronize provisioning data with the SSO remote server
 
 ```
-var SsoStrategy = SsoStrategy.ListFor(path)[0];
+var SsoStrategy = SsoStrategy.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

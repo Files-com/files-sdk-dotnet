@@ -385,7 +385,7 @@ Task User.Delete(
 ## Unlock user who has been locked out due to failed logins
 
 ```
-var User = User.ListFor(path)[0];
+var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -403,7 +403,7 @@ User.Unlock
 ## Resend user welcome email
 
 ```
-var User = User.ListFor(path)[0];
+var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -421,7 +421,7 @@ User.ResendWelcomeEmail
 ## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
-var User = User.ListFor(path)[0];
+var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -439,7 +439,7 @@ User.User2faReset
 ## Update User
 
 ```
-var User = User.ListFor(path)[0];
+var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -540,7 +540,7 @@ User.Update(parameters);
 ## Delete User
 
 ```
-var User = User.ListFor(path)[0];
+var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 

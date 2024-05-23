@@ -129,7 +129,7 @@ Task Message.Delete(
 ## Update Message
 
 ```
-var Message = Message.ListFor(path)[0];
+var Message = Message.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
@@ -153,7 +153,7 @@ Message.Update(parameters);
 ## Delete Message
 
 ```
-var Message = Message.ListFor(path)[0];
+var Message = Message.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
