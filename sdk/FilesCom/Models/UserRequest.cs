@@ -39,7 +39,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("email"))
             {
-                this.attributes.Add("email", null);
+                this.attributes.Add("email", "");
             }
             if (!this.attributes.ContainsKey("details"))
             {

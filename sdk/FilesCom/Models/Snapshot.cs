@@ -55,7 +55,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("paths"))
             {
-                this.attributes.Add("paths", null);
+                this.attributes.Add("paths", new string[0]);
             }
         }
 

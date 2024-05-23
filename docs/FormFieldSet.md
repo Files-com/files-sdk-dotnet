@@ -37,7 +37,7 @@
 * `id` / `Id`  (Nullable<Int64>): Form field set id
 * `title` / `Title`  (string): Title to be displayed
 * `form_layout` / `FormLayout`  (Nullable<Int64>[]): Layout of the form
-* `form_fields` / `FormFields`  (string[]): Associated form fields
+* `form_fields` / `FormFields`  (object[]): Associated form fields
 * `skip_name` / `SkipName`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
 * `skip_email` / `SkipEmail`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing email
 * `skip_company` / `SkipCompany`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing company

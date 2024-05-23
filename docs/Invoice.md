@@ -44,9 +44,9 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Line item created at
 * `currency` / `Currency`  (string): Line item currency
 * `download_uri` / `DownloadUri`  (string): Line item download uri
-* `invoice_line_items` / `InvoiceLineItems`  (string[]): Associated invoice line items
+* `invoice_line_items` / `InvoiceLineItems`  (object[]): Associated invoice line items
 * `method` / `Method`  (string): Line item payment method
-* `payment_line_items` / `PaymentLineItems`  (string[]): Associated payment line items
+* `payment_line_items` / `PaymentLineItems`  (object[]): Associated payment line items
 * `payment_reversed_at` / `PaymentReversedAt`  (Nullable<DateTime>): Date/time payment was reversed if applicable
 * `payment_type` / `PaymentType`  (string): Type of payment if applicable
 * `site_name` / `SiteName`  (string): Site name this line item is for

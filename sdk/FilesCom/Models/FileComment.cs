@@ -39,7 +39,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("reactions"))
             {
-                this.attributes.Add("reactions", new string[0]);
+                this.attributes.Add("reactions", new object[0]);
             }
             if (!this.attributes.ContainsKey("path"))
             {
@@ -87,9 +87,9 @@ namespace FilesCom.Models
         /// Reactions to this comment.
         /// </summary>
         [JsonPropertyName("reactions")]
-        public string[] Reactions
+        public object[] Reactions
         {
-            get { return (string[])attributes["reactions"]; }
+            get { return (object[])attributes["reactions"]; }
             set { attributes["reactions"] = value; }
         }
 

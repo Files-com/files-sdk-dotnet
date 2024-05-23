@@ -43,7 +43,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("form_fields"))
             {
-                this.attributes.Add("form_fields", new string[0]);
+                this.attributes.Add("form_fields", new object[0]);
             }
             if (!this.attributes.ContainsKey("skip_name"))
             {
@@ -113,9 +113,9 @@ namespace FilesCom.Models
         /// Associated form fields
         /// </summary>
         [JsonPropertyName("form_fields")]
-        public string[] FormFields
+        public object[] FormFields
         {
-            get { return (string[])attributes["form_fields"]; }
+            get { return (object[])attributes["form_fields"]; }
             set { attributes["form_fields"] = value; }
         }
 

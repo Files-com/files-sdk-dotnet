@@ -47,7 +47,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("members"))
             {
-                this.attributes.Add("members", new string[0]);
+                this.attributes.Add("members", new object[0]);
             }
         }
 
@@ -111,9 +111,9 @@ namespace FilesCom.Models
         /// A list of share group members
         /// </summary>
         [JsonPropertyName("members")]
-        public string[] Members
+        public object[] Members
         {
-            get { return (string[])attributes["members"]; }
+            get { return (object[])attributes["members"]; }
             set { attributes["members"] = value; }
         }
 

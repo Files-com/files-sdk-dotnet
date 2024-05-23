@@ -255,7 +255,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("email"))
             {
-                this.attributes.Add("email", null);
+                this.attributes.Add("email", "");
             }
             if (!this.attributes.ContainsKey("ftp_enabled"))
             {
@@ -263,7 +263,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("reply_to_email"))
             {
-                this.attributes.Add("reply_to_email", null);
+                this.attributes.Add("reply_to_email", "");
             }
             if (!this.attributes.ContainsKey("non_sso_groups_allowed"))
             {
@@ -639,7 +639,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("welcome_email_cc"))
             {
-                this.attributes.Add("welcome_email_cc", null);
+                this.attributes.Add("welcome_email_cc", "");
             }
             if (!this.attributes.ContainsKey("welcome_email_subject"))
             {
