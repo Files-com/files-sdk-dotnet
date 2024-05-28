@@ -267,9 +267,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("responseCode")]
-        public string ResponseCode
+        public Nullable<Int64> ResponseCode
         {
-            get { return (string)attributes["responseCode"]; }
+            get { return (Nullable<Int64>)attributes["responseCode"]; }
             private set { attributes["responseCode"] = value; }
         }
 

@@ -17,7 +17,7 @@
   "name": "example",
   "cmd": "example",
   "param": "example",
-  "responseCode": "example",
+  "responseCode": 1,
   "responseMessage": "example",
   "entries_returned": 1,
   "success": true,
@@ -38,7 +38,7 @@
 * `name` / `Name`  (string): Name of File
 * `cmd` / `Cmd`  (string): FTP Command Name
 * `param` / `Param`  (string): FTP Command Param
-* `responseCode` / `ResponseCode`  (string): FTP Response Code
+* `responseCode` / `ResponseCode`  (Nullable<Int64>): FTP Response Code
 * `responseMessage` / `ResponseMessage`  (string): FTP Response Message
 * `entries_returned` / `EntriesReturned`  (Nullable<Int64>): Number of entries returned when listing files and folders
 * `success` / `Success`  (bool): Whether FTP Action was successful.
