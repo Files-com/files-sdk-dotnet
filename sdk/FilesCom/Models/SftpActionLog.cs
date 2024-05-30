@@ -297,9 +297,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("size")]
-        public string Size
+        public Nullable<Int64> Size
         {
-            get { return (string)attributes["size"]; }
+            get { return (Nullable<Int64>)attributes["size"]; }
             private set { attributes["size"] = value; }
         }
 
@@ -308,9 +308,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("data_length")]
-        public string DataLength
+        public Nullable<Int64> DataLength
         {
-            get { return (string)attributes["data_length"]; }
+            get { return (Nullable<Int64>)attributes["data_length"]; }
             private set { attributes["data_length"] = value; }
         }
 

@@ -19,8 +19,8 @@
   "sftp_response_code": "example",
   "sftp_response_message": "example",
   "md5": "example",
-  "size": "example",
-  "data_length": "example",
+  "size": 1,
+  "data_length": 1,
   "entries_returned": 1,
   "success": true,
   "duration_ms": 1
@@ -42,8 +42,8 @@
 * `sftp_response_code` / `SftpResponseCode`  (string): SFTP Response Code Returned to the Client.
 * `sftp_response_message` / `SftpResponseMessage`  (string): SFTP Response Message Returned to the Client.
 * `md5` / `Md5`  (string): MD5 Hash of the file. Not always available.
-* `size` / `Size`  (string): Size of File That was Uploaded or Downloaded.
-* `data_length` / `DataLength`  (string): Data Length in Bytes. Present for actions that transfer data.
+* `size` / `Size`  (Nullable<Int64>): Size of File That was Uploaded or Downloaded.
+* `data_length` / `DataLength`  (Nullable<Int64>): Data Length in Bytes. Present for actions that transfer data.
 * `entries_returned` / `EntriesReturned`  (Nullable<Int64>): Number of entries returned when listing files and folders
 * `success` / `Success`  (bool): Whether SFTP Action was successful.
 * `duration_ms` / `DurationMs`  (Nullable<Int64>): Duration (in milliseconds)
