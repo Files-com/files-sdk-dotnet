@@ -315,10 +315,10 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   path (required) - string - Path
-        ///   allow_access_by_any_user - boolean - Allow lock to be updated by any user?
+        ///   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
         ///   exclusive - boolean - Is lock exclusive?
-        ///   recursive - string - Does lock apply to subfolders?
-        ///   timeout - int64 - Lock timeout length
+        ///   recursive - boolean - Does lock apply to subfolders?
+        ///   timeout - int64 - Lock timeout in seconds
         /// </summary>
         public static async Task<Lock> Create(
             string path,
@@ -353,9 +353,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: exclusive must be of type bool", "parameters[\"exclusive\"]");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is string))
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
-                throw new ArgumentException("Bad parameter: recursive must be of type string", "parameters[\"recursive\"]");
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
             if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64>))
             {
