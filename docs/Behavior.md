@@ -160,8 +160,6 @@ Task<Behavior> Behavior.Update(
 * `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
-* `behavior` (string): Behavior type.
-* `path` (string): Folder behaviors path.
 * `attachment_delete` (bool): If true, will delete the file stored in attachment
 
 
@@ -196,8 +194,6 @@ parameters.Add("disable_parent_folder_behavior", true);
 parameters.Add("recursive", true);
 parameters.Add("name", "example");
 parameters.Add("description", "example");
-parameters.Add("behavior", "webhook");
-parameters.Add("path", "example");
 parameters.Add("attachment_delete", true);
 
 Behavior.Update(parameters);
@@ -212,8 +208,6 @@ Behavior.Update(parameters);
 * `recursive` (bool): Is behavior recursive?
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
-* `behavior` (string): Behavior type.
-* `path` (string): Folder behaviors path.
 * `attachment_delete` (bool): If true, will delete the file stored in attachment
 
 

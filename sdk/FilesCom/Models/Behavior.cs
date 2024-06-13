@@ -212,8 +212,6 @@ namespace FilesCom.Models
         ///   recursive - boolean - Is behavior recursive?
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
-        ///   behavior - string - Behavior type.
-        ///   path - string - Folder behaviors path.
         ///   attachment_delete - boolean - If true, will delete the file stored in attachment
         /// </summary>
         public async Task<Behavior> Update(Dictionary<string, object> parameters)
@@ -256,14 +254,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
-            }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
-            {
-                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
             if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool))
             {
@@ -628,8 +618,6 @@ namespace FilesCom.Models
         ///   recursive - boolean - Is behavior recursive?
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
-        ///   behavior - string - Behavior type.
-        ///   path - string - Folder behaviors path.
         ///   attachment_delete - boolean - If true, will delete the file stored in attachment
         /// </summary>
         public static async Task<Behavior> Update(
@@ -680,14 +668,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
-            }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
-            {
-                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
             if (parameters.ContainsKey("attachment_delete") && !(parameters["attachment_delete"] is bool))
             {
