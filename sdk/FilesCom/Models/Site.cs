@@ -593,6 +593,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("trial_until", null);
             }
+            if (!this.attributes.ContainsKey("use_dedicated_ips_for_smtp"))
+            {
+                this.attributes.Add("use_dedicated_ips_for_smtp", false);
+            }
             if (!this.attributes.ContainsKey("use_provided_modified_at"))
             {
                 this.attributes.Add("use_provided_modified_at", false);
@@ -2296,6 +2300,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If using custom SMTP, should we use dedicated IPs to deliver emails?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("use_dedicated_ips_for_smtp")]
+        public bool UseDedicatedIpsForSmtp
+        {
+            get { return attributes["use_dedicated_ips_for_smtp"] == null ? false : (bool)attributes["use_dedicated_ips_for_smtp"]; }
+            private set { attributes["use_dedicated_ips_for_smtp"] = value; }
+        }
+
+        /// <summary>
         /// Allow uploaders to set `provided_modified_at` for uploaded files?
         /// </summary>
         [JsonInclude]
@@ -2669,6 +2685,7 @@ namespace FilesCom.Models
         ///   site_header - string - Custom site header text
         ///   site_footer - string - Custom site footer text
         ///   login_help_text - string - Login help text
+        ///   use_dedicated_ips_for_smtp - boolean - If using custom SMTP, should we use dedicated IPs to deliver emails?
         ///   smtp_address - string - SMTP server hostname or IP
         ///   smtp_authentication - string - SMTP server authentication type
         ///   smtp_from - string - From address to use when mailing through custom SMTP
@@ -3171,6 +3188,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("login_help_text") && !(parameters["login_help_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: login_help_text must be of type string", "parameters[\"login_help_text\"]");
+            }
+            if (parameters.ContainsKey("use_dedicated_ips_for_smtp") && !(parameters["use_dedicated_ips_for_smtp"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_dedicated_ips_for_smtp must be of type bool", "parameters[\"use_dedicated_ips_for_smtp\"]");
             }
             if (parameters.ContainsKey("smtp_address") && !(parameters["smtp_address"] is string))
             {
