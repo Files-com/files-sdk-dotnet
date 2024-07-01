@@ -85,6 +85,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("last_modified_at", null);
             }
+            if (!this.attributes.ContainsKey("legacy_folder_matching"))
+            {
+                this.attributes.Add("legacy_folder_matching", false);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -325,6 +329,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("legacy_folder_matching")]
+        public bool LegacyFolderMatching
+        {
+            get { return attributes["legacy_folder_matching"] == null ? false : (bool)attributes["legacy_folder_matching"]; }
+            set { attributes["legacy_folder_matching"] = value; }
+        }
+
+        /// <summary>
         /// Name for this automation.
         /// </summary>
         [JsonPropertyName("name")]
@@ -506,7 +521,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// DEPRECATED: Destination Path. Use `destinations` instead.
         /// </summary>
         [JsonPropertyName("destination")]
         public string Destination
@@ -543,7 +557,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   source - string - Source Path
-        ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
+        ///   destination - string
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -552,6 +566,7 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+        ///   schedule - object
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
@@ -560,6 +575,7 @@ namespace FilesCom.Models
         ///   disabled - boolean - If true, this automation will not run.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
+        ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
@@ -626,6 +642,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
+            {
+                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
@@ -657,6 +677,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+            }
+            if (parameters.ContainsKey("legacy_folder_matching") && !(parameters["legacy_folder_matching"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: legacy_folder_matching must be of type bool", "parameters[\"legacy_folder_matching\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -750,6 +774,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string
+        ///   page - int64
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[automation]=desc`). Valid fields are `automation`, `disabled`, `last_modified_at` or `name`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `disabled`, `last_modified_at` or `automation`. Valid field combinations are `[ automation, disabled ]` and `[ disabled, automation ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `last_modified_at`.
@@ -774,6 +800,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
@@ -870,7 +904,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   source - string - Source Path
-        ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
+        ///   destination - string
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -879,6 +913,7 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+        ///   schedule - object
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
@@ -887,6 +922,7 @@ namespace FilesCom.Models
         ///   disabled - boolean - If true, this automation will not run.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
+        ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
@@ -949,6 +985,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
+            {
+                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
@@ -980,6 +1020,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+            }
+            if (parameters.ContainsKey("legacy_folder_matching") && !(parameters["legacy_folder_matching"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: legacy_folder_matching must be of type bool", "parameters[\"legacy_folder_matching\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -1063,7 +1107,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   source - string - Source Path
-        ///   destination - string - DEPRECATED: Destination Path. Use `destinations` instead.
+        ///   destination - string
         ///   destinations - array(string) - A list of String destination paths or Hash of folder_path and optional file_path.
         ///   destination_replace_from - string - If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -1072,6 +1116,7 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
+        ///   schedule - object
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
@@ -1080,6 +1125,7 @@ namespace FilesCom.Models
         ///   disabled - boolean - If true, this automation will not run.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
+        ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
@@ -1154,6 +1200,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
+            if (parameters.ContainsKey("schedule") && !(parameters["schedule"] is object))
+            {
+                throw new ArgumentException("Bad parameter: schedule must be of type object", "parameters[\"schedule\"]");
+            }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
@@ -1185,6 +1235,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+            }
+            if (parameters.ContainsKey("legacy_folder_matching") && !(parameters["legacy_folder_matching"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: legacy_folder_matching must be of type bool", "parameters[\"legacy_folder_matching\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {

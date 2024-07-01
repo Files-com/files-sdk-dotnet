@@ -77,6 +77,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("path"))
+            {
+                this.attributes.Add("path", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -217,6 +221,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Folder path restriction for this api key.
+        /// </summary>
+        [JsonPropertyName("path")]
+        public string Path
+        {
+            get { return (string)attributes["path"]; }
+            set { attributes["path"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
@@ -317,6 +331,8 @@ namespace FilesCom.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string
+        ///   page - int64
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[expires_at]=desc`). Valid fields are `expires_at`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `expires_at`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `expires_at`.
@@ -344,6 +360,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
@@ -465,6 +489,7 @@ namespace FilesCom.Models
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   name (required) - string - Internal name for the API Key.  For your use.
+        ///   path - string - Folder path restriction for this api key.
         /// </summary>
         public static async Task<ApiKey> Create(
 
@@ -498,6 +523,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);

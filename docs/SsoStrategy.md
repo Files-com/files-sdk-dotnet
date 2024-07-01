@@ -82,7 +82,7 @@
 * `provision_email_signup_groups` / `ProvisionEmailSignupGroups`  (string): Comma-separated list of group names whose members will be created with email_signup authentication.
 * `provision_site_admin_groups` / `ProvisionSiteAdminGroups`  (string): Comma-separated list of group names whose members will be created as Site Admins.
 * `provision_group_admin_groups` / `ProvisionGroupAdminGroups`  (string): Comma-separated list of group names whose members will be provisioned as Group Admins.
-* `provision_attachments_permission` / `ProvisionAttachmentsPermission`  (bool): DEPRECATED: Auto-provisioned users get Sharing permission. Use a Group with the Bundle permission instead.
+* `provision_attachments_permission` / `ProvisionAttachmentsPermission`  (bool): 
 * `provision_dav_permission` / `ProvisionDavPermission`  (bool): Auto-provisioned users get WebDAV permission?
 * `provision_ftp_permission` / `ProvisionFtpPermission`  (bool): Auto-provisioned users get FTP permission?
 * `provision_sftp_permission` / `ProvisionSftpPermission`  (bool): Auto-provisioned users get SFTP permission?
@@ -117,6 +117,8 @@ Task<FilesList<SsoStrategy>> SsoStrategy.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): 
+* `page` (Nullable<Int64>): 
 
 
 ---

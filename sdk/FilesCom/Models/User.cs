@@ -376,7 +376,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
+        /// If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("attachments_permission")]
@@ -1168,7 +1168,7 @@ namespace FilesCom.Models
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
-        ///   attachments_permission - boolean - DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
+        ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
         ///   authentication_method - string - How is this user authenticated?
         ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?
@@ -1458,6 +1458,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string
+        ///   page - int64
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[authenticate_until]=desc`). Valid fields are `authenticate_until`, `email`, `last_desktop_login_at`, `last_login_at`, `username`, `company`, `name`, `site_admin`, `receive_admin_alerts`, `password_validity_days`, `ssl_required` or `not_site_admin`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `username`, `email`, `company`, `site_admin`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`. Valid field combinations are `[ not_site_admin, username ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
@@ -1484,6 +1486,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
@@ -1600,7 +1610,7 @@ namespace FilesCom.Models
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
-        ///   attachments_permission - boolean - DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
+        ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
         ///   authentication_method - string - How is this user authenticated?
         ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?
@@ -1954,7 +1964,7 @@ namespace FilesCom.Models
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
-        ///   attachments_permission - boolean - DEPRECATED: Can the user create Bundles (aka Share Links)? Use the bundle permission instead.
+        ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
         ///   authentication_method - string - How is this user authenticated?
         ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?

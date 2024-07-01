@@ -184,7 +184,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
+        /// Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
         /// </summary>
         [JsonPropertyName("attachment_file")]
         public System.Net.Http.ByteArrayContent AttachmentFile
@@ -194,7 +194,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If true, will delete the file stored in attachment
+        /// If `true`, delete the file stored in `attachment`.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("attachment_delete")]
@@ -206,13 +206,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
-        ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-        ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder and its children.
-        ///   recursive - boolean - Is behavior recursive?
+        ///   value - string - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
+        ///   attachment_file - file - Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+        ///   disable_parent_folder_behavior - boolean - If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
+        ///   recursive - boolean - If `true`, behavior is treated as recursive, meaning that it impacts child folders as well.
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
-        ///   attachment_delete - boolean - If true, will delete the file stored in attachment
+        ///   attachment_delete - boolean - If `true`, delete the file stored in `attachment`.
         /// </summary>
         public async Task<Behavior> Update(Dictionary<string, object> parameters)
         {
@@ -319,6 +319,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string
+        ///   page - int64
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[behavior]=desc`). Valid fields are `behavior` and `impacts_ui`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
@@ -339,6 +341,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
@@ -420,12 +430,14 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string
+        ///   page - int64
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[behavior]=desc`). Valid fields are `behavior` and `impacts_ui`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         ///   path (required) - string - Path to operate on.
-        ///   ancestor_behaviors - string - Show behaviors above this path?
-        ///   behavior - string - DEPRECATED: If set only shows folder behaviors matching this behavior type. Use `filter[behavior]` instead.
+        ///   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
+        ///   behavior - string
         /// </summary>
         public static FilesList<Behavior> ListFor(
             string path,
@@ -456,6 +468,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
+            }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
@@ -472,9 +492,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
-            if (parameters.ContainsKey("ancestor_behaviors") && !(parameters["ancestor_behaviors"] is string))
+            if (parameters.ContainsKey("ancestor_behaviors") && !(parameters["ancestor_behaviors"] is bool))
             {
-                throw new ArgumentException("Bad parameter: ancestor_behaviors must be of type string", "parameters[\"ancestor_behaviors\"]");
+                throw new ArgumentException("Bad parameter: ancestor_behaviors must be of type bool", "parameters[\"ancestor_behaviors\"]");
             }
             if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
             {
@@ -487,13 +507,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
-        ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-        ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder and its children.
-        ///   recursive - boolean - Is behavior recursive?
+        ///   value - string - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
+        ///   attachment_file - file - Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+        ///   disable_parent_folder_behavior - boolean - If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
+        ///   recursive - boolean - If `true`, behavior is treated as recursive, meaning that it impacts child folders as well.
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
-        ///   path (required) - string - Folder behaviors path.
+        ///   path (required) - string - Path where this behavior should apply.
         ///   behavior (required) - string - Behavior type.
         /// </summary>
         public static async Task<Behavior> Create(
@@ -562,11 +582,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   url (required) - string - URL for testing the webhook.
-        ///   method - string - HTTP method(GET or POST).
-        ///   encoding - string - HTTP encoding method.  Can be JSON, XML, or RAW (form data).
-        ///   headers - object - Additional request headers.
-        ///   body - object - Additional body parameters.
-        ///   action - string - action for test body
+        ///   method - string - HTTP request method (GET or POST).
+        ///   encoding - string - Encoding type for the webhook payload. Can be JSON, XML, or RAW (form data).
+        ///   headers - object - Additional request headers to send via HTTP.
+        ///   body - object - Additional body parameters to include in the webhook payload.
+        ///   action - string - Action for test body.
         /// </summary>
         public static async Task WebhookTest(
 
@@ -612,13 +632,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   value - string - The value of the folder behavior.  Can be an integer, array, or hash depending on the type of folder behavior. See The Behavior Types section for example values for each type of behavior.
-        ///   attachment_file - file - Certain behaviors may require a file, for instance, the "watermark" behavior requires a watermark image
-        ///   disable_parent_folder_behavior - boolean - If true, the parent folder's behavior will be disabled for this folder and its children.
-        ///   recursive - boolean - Is behavior recursive?
+        ///   value - string - This field stores a hash of data specific to the type of behavior. See The Behavior Types section for example values for each type of behavior.
+        ///   attachment_file - file - Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+        ///   disable_parent_folder_behavior - boolean - If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
+        ///   recursive - boolean - If `true`, behavior is treated as recursive, meaning that it impacts child folders as well.
         ///   name - string - Name for this behavior.
         ///   description - string - Description for this behavior.
-        ///   attachment_delete - boolean - If true, will delete the file stored in attachment
+        ///   attachment_delete - boolean - If `true`, delete the file stored in `attachment`.
         /// </summary>
         public static async Task<Behavior> Update(
             Nullable<Int64> id,

@@ -21,13 +21,13 @@
 
 * `path` / `Path`  (string): Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `timeout` / `Timeout`  (Nullable<Int64>): Lock timeout in seconds
-* `depth` / `Depth`  (string): DEPRECATED: Lock depth
+* `depth` / `Depth`  (string): 
 * `recursive` / `Recursive`  (bool): Does lock apply to subfolders?
 * `owner` / `Owner`  (string): Owner of the lock.  This can be any arbitrary string.
-* `scope` / `Scope`  (string): DEPRECATED: Lock scope
+* `scope` / `Scope`  (string): 
 * `exclusive` / `Exclusive`  (bool): Is lock exclusive?
 * `token` / `Token`  (string): Lock token.  Use to release lock.
-* `type` / `Type`  (string): DEPRECATED: Lock type
+* `type` / `Type`  (string): 
 * `allow_access_by_any_user` / `AllowAccessByAnyUser`  (bool): Can lock be modified by users other than its creator?
 * `user_id` / `UserId`  (Nullable<Int64>): Lock creator user ID
 * `username` / `Username`  (string): Lock creator username
@@ -49,6 +49,8 @@ Task<FilesList<Lock>> Lock.ListFor(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `action` (string): 
+* `page` (Nullable<Int64>): 
 * `path` (string): Required - Path to operate on.
 * `include_children` (bool): Include locks from children objects?
 

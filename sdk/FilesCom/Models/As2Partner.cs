@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_certificate", null);
             }
+            if (!this.attributes.ContainsKey("http_auth_username"))
+            {
+                this.attributes.Add("http_auth_username", null);
+            }
             if (!this.attributes.ContainsKey("mdn_validation_level"))
             {
                 this.attributes.Add("mdn_validation_level", null);
@@ -85,6 +89,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("public_certificate_not_after", null);
             }
+            if (!this.attributes.ContainsKey("http_auth_password"))
+            {
+                this.attributes.Add("http_auth_password", null);
+            }
             if (!this.attributes.ContainsKey("public_certificate"))
             {
                 this.attributes.Add("public_certificate", null);
@@ -108,7 +116,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Id of the AS2 Partner.
+        /// ID of the AS2 Partner.
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
@@ -118,7 +126,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Id of the AS2 Station associated with this partner.
+        /// ID of the AS2 Station associated with this partner.
         /// </summary>
         [JsonPropertyName("as2_station_id")]
         public Nullable<Int64> As2StationId
@@ -138,7 +146,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Public URI for sending AS2 message to.
+        /// Public URI where we will send the AS2 messages (via HTTP/HTTPS).
         /// </summary>
         [JsonPropertyName("uri")]
         public string Uri
@@ -148,7 +156,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Remote server certificate security setting
+        /// Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
         /// </summary>
         [JsonPropertyName("server_certificate")]
         public string ServerCertificate
@@ -158,7 +166,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// MDN Validation Level controls how to evaluate message transfer success based on a partner's MDN response. NOTE: This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+        /// Username to send to server for HTTP Authentication.
+        /// </summary>
+        [JsonPropertyName("http_auth_username")]
+        public string HttpAuthUsername
+        {
+            get { return (string)attributes["http_auth_username"]; }
+            set { attributes["http_auth_username"] = value; }
+        }
+
+        /// <summary>
+        /// How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
         /// </summary>
         [JsonPropertyName("mdn_validation_level")]
         public string MdnValidationLevel
@@ -168,7 +186,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// `true` if remote server only accepts connections from dedicated IPs
+        /// If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("enable_dedicated_ips")]
@@ -249,6 +267,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Password to send to server for HTTP Authentication.
+        /// </summary>
+        [JsonPropertyName("http_auth_password")]
+        public string HttpAuthPassword
+        {
+            get { return (string)attributes["http_auth_password"]; }
+            set { attributes["http_auth_password"] = value; }
+        }
+
+        /// <summary>
+        /// Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
         /// </summary>
         [JsonPropertyName("public_certificate")]
         public string PublicCertificate
@@ -259,12 +288,14 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - AS2 Name
-        ///   uri - string - URL base for AS2 responses
-        ///   server_certificate - string - Remote server certificate security setting
-        ///   mdn_validation_level - string - MDN Validation Level
-        ///   public_certificate - string
-        ///   enable_dedicated_ips - boolean
+        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        ///   http_auth_username - string - Username to send to server for HTTP Authentication.
+        ///   http_auth_password - string - Password to send to server for HTTP Authentication.
+        ///   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+        ///   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+        ///   name - string - The partner's formal AS2 name.
+        ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
+        ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
         /// </summary>
         public async Task<As2Partner> Update(Dictionary<string, object> parameters)
         {
@@ -283,6 +314,26 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+            }
+            if (parameters.ContainsKey("http_auth_username") && !(parameters["http_auth_username"] is string))
+            {
+                throw new ArgumentException("Bad parameter: http_auth_username must be of type string", "parameters[\"http_auth_username\"]");
+            }
+            if (parameters.ContainsKey("http_auth_password") && !(parameters["http_auth_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: http_auth_password must be of type string", "parameters[\"http_auth_password\"]");
+            }
+            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
+            {
+                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
+            }
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -291,21 +342,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
-            }
-            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
-            {
-                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
-            }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
-            }
-            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -367,6 +406,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   action - string
+        ///   page - int64
         /// </summary>
         public static FilesList<As2Partner> List(
 
@@ -384,6 +425,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
 
             return new FilesList<As2Partner>($"/as2_partners", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -451,13 +500,15 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name (required) - string - AS2 Name
-        ///   uri (required) - string - URL base for AS2 responses
-        ///   public_certificate (required) - string
-        ///   as2_station_id (required) - int64 - Id of As2Station for this partner
-        ///   server_certificate - string - Remote server certificate security setting
-        ///   mdn_validation_level - string - MDN Validation Level
-        ///   enable_dedicated_ips - boolean
+        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        ///   http_auth_username - string - Username to send to server for HTTP Authentication.
+        ///   http_auth_password - string - Password to send to server for HTTP Authentication.
+        ///   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+        ///   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+        ///   as2_station_id (required) - int64 - ID of the AS2 Station associated with this partner.
+        ///   name (required) - string - The partner's formal AS2 name.
+        ///   uri (required) - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
+        ///   public_certificate (required) - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
         /// </summary>
         public static async Task<As2Partner> Create(
 
@@ -468,6 +519,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("as2_station_id") || parameters["as2_station_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: as2_station_id", "parameters[\"as2_station_id\"]");
+            }
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
@@ -480,9 +535,29 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: public_certificate", "parameters[\"public_certificate\"]");
             }
-            if (!parameters.ContainsKey("as2_station_id") || parameters["as2_station_id"] == null)
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
             {
-                throw new ArgumentNullException("Parameter missing: as2_station_id", "parameters[\"as2_station_id\"]");
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+            }
+            if (parameters.ContainsKey("http_auth_username") && !(parameters["http_auth_username"] is string))
+            {
+                throw new ArgumentException("Bad parameter: http_auth_username must be of type string", "parameters[\"http_auth_username\"]");
+            }
+            if (parameters.ContainsKey("http_auth_password") && !(parameters["http_auth_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: http_auth_password must be of type string", "parameters[\"http_auth_password\"]");
+            }
+            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
+            {
+                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
+            }
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
+            if (parameters.ContainsKey("as2_station_id") && !(parameters["as2_station_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: as2_station_id must be of type Nullable<Int64>", "parameters[\"as2_station_id\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -495,22 +570,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
-            }
-            if (parameters.ContainsKey("as2_station_id") && !(parameters["as2_station_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: as2_station_id must be of type Nullable<Int64>", "parameters[\"as2_station_id\"]");
-            }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
-            }
-            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
-            {
-                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
-            }
-            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -528,12 +587,14 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - AS2 Name
-        ///   uri - string - URL base for AS2 responses
-        ///   server_certificate - string - Remote server certificate security setting
-        ///   mdn_validation_level - string - MDN Validation Level
-        ///   public_certificate - string
-        ///   enable_dedicated_ips - boolean
+        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        ///   http_auth_username - string - Username to send to server for HTTP Authentication.
+        ///   http_auth_password - string - Password to send to server for HTTP Authentication.
+        ///   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
+        ///   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+        ///   name - string - The partner's formal AS2 name.
+        ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
+        ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
         /// </summary>
         public static async Task<As2Partner> Update(
             Nullable<Int64> id,
@@ -560,6 +621,26 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+            }
+            if (parameters.ContainsKey("http_auth_username") && !(parameters["http_auth_username"] is string))
+            {
+                throw new ArgumentException("Bad parameter: http_auth_username must be of type string", "parameters[\"http_auth_username\"]");
+            }
+            if (parameters.ContainsKey("http_auth_password") && !(parameters["http_auth_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: http_auth_password must be of type string", "parameters[\"http_auth_password\"]");
+            }
+            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
+            {
+                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
+            }
+            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -568,21 +649,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: uri must be of type string", "parameters[\"uri\"]");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
-            }
-            if (parameters.ContainsKey("mdn_validation_level") && !(parameters["mdn_validation_level"] is string))
-            {
-                throw new ArgumentException("Bad parameter: mdn_validation_level must be of type string", "parameters[\"mdn_validation_level\"]");
-            }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
-            }
-            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/as2_partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
