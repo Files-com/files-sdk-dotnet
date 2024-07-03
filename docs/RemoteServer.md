@@ -131,6 +131,7 @@
 * `azure_blob_storage_access_key` / `AzureBlobStorageAccessKey`  (string): Azure Blob Storage secret key.
 * `azure_files_storage_access_key` / `AzureFilesStorageAccessKey`  (string): Azure File Storage access key.
 * `azure_blob_storage_sas_token` / `AzureBlobStorageSasToken`  (string): Shared Access Signature (SAS) token
+* `azure_files_storage_sas_token` / `AzureFilesStorageSasToken`  (string): Shared Access Signature (SAS) token
 * `s3_compatible_secret_key` / `S3CompatibleSecretKey`  (string): S3-compatible secret key
 * `filebase_secret_key` / `FilebaseSecretKey`  (string): Filebase secret key
 * `cloudflare_secret_key` / `CloudflareSecretKey`  (string): Cloudflare secret key
@@ -248,6 +249,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `azure_blob_storage_sas_token` (string): Shared Access Signature (SAS) token
 * `azure_files_storage_account` (string): Azure File Storage Account name
 * `azure_files_storage_share_name` (string): Azure File Storage Share name
+* `azure_files_storage_sas_token` (string): Shared Access Signature (SAS) token
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
 * `s3_compatible_region` (string): S3-compatible endpoint
@@ -357,6 +359,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `azure_blob_storage_sas_token` (string): Shared Access Signature (SAS) token
 * `azure_files_storage_account` (string): Azure File Storage Account name
 * `azure_files_storage_share_name` (string): Azure File Storage Share name
+* `azure_files_storage_sas_token` (string): Shared Access Signature (SAS) token
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
 * `s3_compatible_region` (string): S3-compatible endpoint
@@ -543,6 +546,7 @@ RemoteServer.Update(parameters);
 * `azure_blob_storage_sas_token` (string): Shared Access Signature (SAS) token
 * `azure_files_storage_account` (string): Azure File Storage Account name
 * `azure_files_storage_share_name` (string): Azure File Storage Share name
+* `azure_files_storage_sas_token` (string): Shared Access Signature (SAS) token
 * `s3_compatible_bucket` (string): S3-compatible Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible endpoint
 * `s3_compatible_region` (string): S3-compatible endpoint
