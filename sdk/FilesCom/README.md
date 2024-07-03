@@ -73,7 +73,8 @@ You can set configuration for default client sessions by adding them to the `app
 or you may set them on a config object for per-session configuration.
 
 * `ApiKey` - Required. Must be set in either app.config, appsettings.json, or per-session.
-* `BaseUrl` - to point this client at an on-premise installation of Files.com, set its URL here.
+* `BaseUrl` - Set this to your site subdomain if your site is configured to disable global acceleration.  Otherwise, don't change this setting for production.
+    For dev/CI, you can point this to the mock server.
 * `OpenTimeout` - open timeout in seconds (default: 30)
 * `ReadTimeout` - read timeout in seconds (default: 80)
 * `InitialNetworkRetryDelay` - initial retry delay in seconds (default: 0.5)
