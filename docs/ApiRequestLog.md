@@ -47,7 +47,7 @@
 
 ---
 
-## List Api Request Logs
+## List API Request Logs
 
 ```
 Task<FilesList<ApiRequestLog>> ApiRequestLog.List(

@@ -40,7 +40,7 @@
 
 ---
 
-## List As2 Stations
+## List AS2 Stations
 
 ```
 Task<FilesList<As2Station>> As2Station.List(
@@ -60,7 +60,7 @@ Task<FilesList<As2Station>> As2Station.List(
 
 ---
 
-## Show As2 Station
+## Show AS2 Station
 
 ```
 Task<As2Station> As2Station.Find(
@@ -77,7 +77,7 @@ Task<As2Station> As2Station.Find(
 
 ---
 
-## Create As2 Station
+## Create AS2 Station
 
 ```
 Task<As2Station> As2Station.Create(
@@ -97,7 +97,7 @@ Task<As2Station> As2Station.Create(
 
 ---
 
-## Update As2 Station
+## Update AS2 Station
 
 ```
 Task<As2Station> As2Station.Update(
@@ -118,7 +118,7 @@ Task<As2Station> As2Station.Update(
 
 ---
 
-## Delete As2 Station
+## Delete AS2 Station
 
 ```
 Task As2Station.Delete(
@@ -135,7 +135,7 @@ Task As2Station.Delete(
 
 ---
 
-## Update As2 Station
+## Update AS2 Station
 
 ```
 var As2Station = As2Station.Find(1);
@@ -158,7 +158,7 @@ As2Station.Update(parameters);
 
 ---
 
-## Delete As2 Station
+## Delete AS2 Station
 
 ```
 var As2Station = As2Station.Find(1);

@@ -103,7 +103,7 @@
 
 ---
 
-## List Sso Strategies
+## List SSO Strategies
 
 ```
 Task<FilesList<SsoStrategy>> SsoStrategy.List(
@@ -123,7 +123,7 @@ Task<FilesList<SsoStrategy>> SsoStrategy.List(
 
 ---
 
-## Show Sso Strategy
+## Show SSO Strategy
 
 ```
 Task<SsoStrategy> SsoStrategy.Find(

@@ -51,7 +51,7 @@
 
 ---
 
-## List Sftp Action Logs
+## List SFTP Action Logs
 
 ```
 Task<FilesList<SftpActionLog>> SftpActionLog.List(

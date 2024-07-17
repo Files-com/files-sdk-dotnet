@@ -85,7 +85,7 @@
 
 ---
 
-## List As2 Incoming Messages
+## List AS2 Incoming Messages
 
 ```
 Task<FilesList<As2IncomingMessage>> As2IncomingMessage.List(

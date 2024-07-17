@@ -25,7 +25,7 @@
 
 ---
 
-## List Gpg Keys
+## List GPG Keys
 
 ```
 Task<FilesList<GpgKey>> GpgKey.List(
@@ -47,7 +47,7 @@ Task<FilesList<GpgKey>> GpgKey.List(
 
 ---
 
-## Show Gpg Key
+## Show GPG Key
 
 ```
 Task<GpgKey> GpgKey.Find(
@@ -64,7 +64,7 @@ Task<GpgKey> GpgKey.Find(
 
 ---
 
-## Create Gpg Key
+## Create GPG Key
 
 ```
 Task<GpgKey> GpgKey.Create(
@@ -85,7 +85,7 @@ Task<GpgKey> GpgKey.Create(
 
 ---
 
-## Update Gpg Key
+## Update GPG Key
 
 ```
 Task<GpgKey> GpgKey.Update(
@@ -106,7 +106,7 @@ Task<GpgKey> GpgKey.Update(
 
 ---
 
-## Delete Gpg Key
+## Delete GPG Key
 
 ```
 Task GpgKey.Delete(
@@ -123,7 +123,7 @@ Task GpgKey.Delete(
 
 ---
 
-## Update Gpg Key
+## Update GPG Key
 
 ```
 var GpgKey = GpgKey.Find(1);
@@ -149,7 +149,7 @@ GpgKey.Update(parameters);
 
 ---
 
-## Delete Gpg Key
+## Delete GPG Key
 
 ```
 var GpgKey = GpgKey.Find(1);

@@ -31,12 +31,12 @@
 * `platform` / `Platform`  (string): If this API key represents a Desktop app, what platform was it created on?
 * `url` / `Url`  (string): URL for API host.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID for the owner of this API Key.  May be blank for Site-wide API Keys.
-* `path` / `Path`  (string): Folder path restriction for this api key.
+* `path` / `Path`  (string): Folder path restriction for this API key.
 
 
 ---
 
-## List Api Keys
+## List API Keys
 
 ```
 Task<FilesList<ApiKey>> ApiKey.List(
@@ -76,7 +76,7 @@ Task<ApiKey> ApiKey.FindCurrent(
 
 ---
 
-## Show Api Key
+## Show API Key
 
 ```
 Task<ApiKey> ApiKey.Find(
@@ -93,7 +93,7 @@ Task<ApiKey> ApiKey.Find(
 
 ---
 
-## Create Api Key
+## Create API Key
 
 ```
 Task<ApiKey> ApiKey.Create(
@@ -110,7 +110,7 @@ Task<ApiKey> ApiKey.Create(
 * `expires_at` (string): API Key expiration date
 * `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
 * `name` (string): Required - Internal name for the API Key.  For your use.
-* `path` (string): Folder path restriction for this api key.
+* `path` (string): Folder path restriction for this API key.
 
 
 ---
@@ -134,7 +134,7 @@ Task<ApiKey> ApiKey.UpdateCurrent(
 
 ---
 
-## Update Api Key
+## Update API Key
 
 ```
 Task<ApiKey> ApiKey.Update(
@@ -168,7 +168,7 @@ Task ApiKey.DeleteCurrent(
 
 ---
 
-## Delete Api Key
+## Delete API Key
 
 ```
 Task ApiKey.Delete(
@@ -185,7 +185,7 @@ Task ApiKey.Delete(
 
 ---
 
-## Update Api Key
+## Update API Key
 
 ```
 var ApiKey = ApiKey.Find(1);
@@ -211,7 +211,7 @@ ApiKey.Update(parameters);
 
 ---
 
-## Delete Api Key
+## Delete API Key
 
 ```
 var ApiKey = ApiKey.Find(1);

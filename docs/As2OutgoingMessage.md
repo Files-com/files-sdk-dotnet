@@ -77,7 +77,7 @@
 
 ---
 
-## List As2 Outgoing Messages
+## List AS2 Outgoing Messages
 
 ```
 Task<FilesList<As2OutgoingMessage>> As2OutgoingMessage.List(

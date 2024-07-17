@@ -105,7 +105,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The api key id responsible for this change
+        /// The API key id responsible for this change
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("api_key_id")]

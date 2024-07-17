@@ -221,7 +221,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Folder path restriction for this api key.
+        /// Folder path restriction for this API key.
         /// </summary>
         [JsonPropertyName("path")]
         public string Path
@@ -489,7 +489,7 @@ namespace FilesCom.Models
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations).  Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   name (required) - string - Internal name for the API Key.  For your use.
-        ///   path - string - Folder path restriction for this api key.
+        ///   path - string - Folder path restriction for this API key.
         /// </summary>
         public static async Task<ApiKey> Create(
 

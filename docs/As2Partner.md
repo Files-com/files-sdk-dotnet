@@ -43,7 +43,7 @@
 
 ---
 
-## List As2 Partners
+## List AS2 Partners
 
 ```
 Task<FilesList<As2Partner>> As2Partner.List(
@@ -63,7 +63,7 @@ Task<FilesList<As2Partner>> As2Partner.List(
 
 ---
 
-## Show As2 Partner
+## Show AS2 Partner
 
 ```
 Task<As2Partner> As2Partner.Find(
@@ -80,7 +80,7 @@ Task<As2Partner> As2Partner.Find(
 
 ---
 
-## Create As2 Partner
+## Create AS2 Partner
 
 ```
 Task<As2Partner> As2Partner.Create(
@@ -105,7 +105,7 @@ Task<As2Partner> As2Partner.Create(
 
 ---
 
-## Update As2 Partner
+## Update AS2 Partner
 
 ```
 Task<As2Partner> As2Partner.Update(
@@ -130,7 +130,7 @@ Task<As2Partner> As2Partner.Update(
 
 ---
 
-## Delete As2 Partner
+## Delete AS2 Partner
 
 ```
 Task As2Partner.Delete(
@@ -147,7 +147,7 @@ Task As2Partner.Delete(
 
 ---
 
-## Update As2 Partner
+## Update AS2 Partner
 
 ```
 var As2Partner = As2Partner.Find(1);
@@ -179,7 +179,7 @@ As2Partner.Update(parameters);
 
 ---
 
-## Delete As2 Partner
+## Delete AS2 Partner
 
 ```
 var As2Partner = As2Partner.Find(1);

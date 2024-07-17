@@ -20,7 +20,7 @@
 
 ---
 
-## List Sftp Host Keys
+## List SFTP Host Keys
 
 ```
 Task<FilesList<SftpHostKey>> SftpHostKey.List(
@@ -40,7 +40,7 @@ Task<FilesList<SftpHostKey>> SftpHostKey.List(
 
 ---
 
-## Show Sftp Host Key
+## Show SFTP Host Key
 
 ```
 Task<SftpHostKey> SftpHostKey.Find(
@@ -57,7 +57,7 @@ Task<SftpHostKey> SftpHostKey.Find(
 
 ---
 
-## Create Sftp Host Key
+## Create SFTP Host Key
 
 ```
 Task<SftpHostKey> SftpHostKey.Create(
@@ -75,7 +75,7 @@ Task<SftpHostKey> SftpHostKey.Create(
 
 ---
 
-## Update Sftp Host Key
+## Update SFTP Host Key
 
 ```
 Task<SftpHostKey> SftpHostKey.Update(
@@ -94,7 +94,7 @@ Task<SftpHostKey> SftpHostKey.Update(
 
 ---
 
-## Delete Sftp Host Key
+## Delete SFTP Host Key
 
 ```
 Task SftpHostKey.Delete(
@@ -111,7 +111,7 @@ Task SftpHostKey.Delete(
 
 ---
 
-## Update Sftp Host Key
+## Update SFTP Host Key
 
 ```
 var SftpHostKey = SftpHostKey.Find(1);
@@ -132,7 +132,7 @@ SftpHostKey.Update(parameters);
 
 ---
 
-## Delete Sftp Host Key
+## Delete SFTP Host Key
 
 ```
 var SftpHostKey = SftpHostKey.Find(1);
