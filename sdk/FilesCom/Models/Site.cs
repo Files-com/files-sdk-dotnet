@@ -133,6 +133,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_require_share_recipient", false);
             }
+            if (!this.attributes.ContainsKey("bundle_require_note"))
+            {
+                this.attributes.Add("bundle_require_note", false);
+            }
             if (!this.attributes.ContainsKey("bundle_upload_receipt_notifications"))
             {
                 this.attributes.Add("bundle_upload_receipt_notifications", null);
@@ -987,6 +991,18 @@ namespace FilesCom.Models
         {
             get { return attributes["bundle_require_share_recipient"] == null ? false : (bool)attributes["bundle_require_share_recipient"]; }
             private set { attributes["bundle_require_share_recipient"] = value; }
+        }
+
+        /// <summary>
+        /// Do Bundles require internal notes?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bundle_require_note")]
+        public bool BundleRequireNote
+        {
+            get { return attributes["bundle_require_note"] == null ? false : (bool)attributes["bundle_require_note"]; }
+            private set { attributes["bundle_require_note"] = value; }
         }
 
         /// <summary>
@@ -2607,6 +2623,7 @@ namespace FilesCom.Models
         ///   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
         ///   left_navigation_visibility - object - Visibility settings for account navigation
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
+        ///   bundle_require_note - boolean - Do Bundles require internal notes?
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
@@ -2876,6 +2893,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("additional_text_file_types") && !(parameters["additional_text_file_types"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: additional_text_file_types must be of type string[]", "parameters[\"additional_text_file_types\"]");
+            }
+            if (parameters.ContainsKey("bundle_require_note") && !(parameters["bundle_require_note"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bundle_require_note must be of type bool", "parameters[\"bundle_require_note\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {

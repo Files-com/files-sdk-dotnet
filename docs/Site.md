@@ -34,6 +34,7 @@
   "bundle_registration_notifications": "never",
   "bundle_require_registration": true,
   "bundle_require_share_recipient": true,
+  "bundle_require_note": true,
   "bundle_upload_receipt_notifications": "never",
   "bundle_watermark_attachment": {
     "name": "My logo",
@@ -308,6 +309,7 @@
 * `bundle_registration_notifications` / `BundleRegistrationNotifications`  (string): Do Bundle owners receive registration notification?
 * `bundle_require_registration` / `BundleRequireRegistration`  (bool): Do Bundles require registration?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
+* `bundle_require_note` / `BundleRequireNote`  (bool): Do Bundles require internal notes?
 * `bundle_upload_receipt_notifications` / `BundleUploadReceiptNotifications`  (string): Do Bundle uploaders receive upload confirmation notifications?
 * `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `bundle_watermark_value` / `BundleWatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
@@ -519,6 +521,7 @@ Task<Site> Site.Update(
 * `motd_use_for_sftp` (bool): Show message to users connecting via SFTP
 * `left_navigation_visibility` (object): Visibility settings for account navigation
 * `additional_text_file_types` (string[]): Additional extensions that are considered text files
+* `bundle_require_note` (bool): Do Bundles require internal notes?
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
