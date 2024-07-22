@@ -249,6 +249,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("linode_region", null);
             }
+            if (!this.attributes.ContainsKey("supports_versioning"))
+            {
+                this.attributes.Add("supports_versioning", false);
+            }
             if (!this.attributes.ContainsKey("aws_secret_key"))
             {
                 this.attributes.Add("aws_secret_key", null);
@@ -896,6 +900,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["linode_region"]; }
             set { attributes["linode_region"] = value; }
+        }
+
+        /// <summary>
+        /// If true, this remote server supports file versioning. This value is determined automatically by Files.com.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("supports_versioning")]
+        public bool SupportsVersioning
+        {
+            get { return attributes["supports_versioning"] == null ? false : (bool)attributes["supports_versioning"]; }
+            set { attributes["supports_versioning"] = value; }
         }
 
         /// <summary>
