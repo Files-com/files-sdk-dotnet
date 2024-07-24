@@ -208,7 +208,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Path as sent by the Client (may not match Files.com path due to user root folders for FTP) This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// Path as sent by the Client (may not match Files.com path due to user root folders for FTP). This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("path")]

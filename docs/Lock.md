@@ -19,7 +19,7 @@
 }
 ```
 
-* `path` / `Path`  (string): Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `timeout` / `Timeout`  (Nullable<Int64>): Lock timeout in seconds
 * `depth` / `Depth`  (string): 
 * `recursive` / `Recursive`  (bool): Does lock apply to subfolders?

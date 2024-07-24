@@ -19,7 +19,7 @@
 * `remote_ip` / `RemoteIp`  (string): IP Address of Public Hosting Client
 * `server_ip` / `ServerIp`  (string): IP Address of Public Hosting Server
 * `hostname` / `Hostname`  (string): HTTP Request Hostname
-* `path` / `Path`  (string): HTTP Request Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): HTTP Request Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `responseCode` / `ResponseCode`  (Nullable<Int64>): HTTP Response Code
 * `success` / `Success`  (bool): Whether SFTP Action was successful.
 * `duration_ms` / `DurationMs`  (Nullable<Int64>): Duration (in milliseconds)

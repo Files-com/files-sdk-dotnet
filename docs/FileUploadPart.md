@@ -42,6 +42,6 @@
 * `parameters` / `Parameters`  (object): Additional HTTP parameters to send with the upload
 * `part_number` / `PartNumber`  (Nullable<Int64>): Number of this upload part
 * `partsize` / `Partsize`  (Nullable<Int64>): Size in bytes for the next upload part
-* `path` / `Path`  (string): New file path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): New file path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `ref` / `Ref`  (string): Reference name for this upload part
 * `upload_uri` / `UploadUri`  (string): URI to upload this part to

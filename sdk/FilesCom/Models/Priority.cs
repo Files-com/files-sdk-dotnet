@@ -56,7 +56,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// The path corresponding to the priority color This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// The path corresponding to the priority color. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("path")]

@@ -124,7 +124,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// HTTP Request Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// HTTP Request Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("path")]

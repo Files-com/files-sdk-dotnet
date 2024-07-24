@@ -21,7 +21,7 @@
 * `error_type` / `ErrorType`  (string): Error type, if applicable
 * `message` / `Message`  (string): Message
 * `operation` / `Operation`  (string): Operation type
-* `path` / `Path`  (string): File path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): File path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `status` / `Status`  (string): Status
 
 

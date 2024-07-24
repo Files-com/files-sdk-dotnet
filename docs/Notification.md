@@ -37,7 +37,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Notification ID
-* `path` / `Path`  (string): Folder path to notify on This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Folder path to notify on. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `group_id` / `GroupId`  (Nullable<Int64>): ID of Group to receive notifications
 * `group_name` / `GroupName`  (string): Group name, if a Group ID is set
 * `triggering_group_ids` / `TriggeringGroupIds`  (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups

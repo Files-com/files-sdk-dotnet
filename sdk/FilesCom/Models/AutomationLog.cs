@@ -161,7 +161,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// File path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// File path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("path")]

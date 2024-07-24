@@ -48,7 +48,7 @@
 }
 ```
 
-* `path` / `Path`  (string): File/Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): File/Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `created_by_id` / `CreatedById`  (Nullable<Int64>): User ID of the User who created the file/folder
 * `created_by_api_key_id` / `CreatedByApiKeyId`  (Nullable<Int64>): ID of the API key that created the file/folder
 * `created_by_as2_incoming_message_id` / `CreatedByAs2IncomingMessageId`  (Nullable<Int64>): ID of the AS2 Incoming Message that created the file/folder

@@ -22,7 +22,7 @@
 ```
 
 * `timestamp` / `Timestamp`  (Nullable<DateTime>): Start Time of Action
-* `path` / `Path`  (string): Remote Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Remote Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `client_ip` / `ClientIp`  (string): End User IP
 * `src_remote_server_id` / `SrcRemoteServerId`  (string): Source Remote Server ID
 * `dest_remote_server_id` / `DestRemoteServerId`  (string): Destination Remote Server ID

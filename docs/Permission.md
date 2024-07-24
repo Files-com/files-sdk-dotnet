@@ -16,7 +16,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Permission ID
-* `path` / `Path`  (string): Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `username` / `Username`  (string): User's username
 * `group_id` / `GroupId`  (Nullable<Int64>): Group ID

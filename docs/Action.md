@@ -23,7 +23,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Action ID
-* `path` / `Path`  (string): Path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `when` / `When`  (Nullable<DateTime>): Action occurrence date/time
 * `destination` / `Destination`  (string): The destination path for this action, if applicable
 * `display` / `Display`  (string): Friendly displayed output

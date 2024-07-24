@@ -14,7 +14,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Request ID
-* `path` / `Path`  (string): Folder path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `source` / `Source`  (string): Source filename, if applicable
 * `destination` / `Destination`  (string): Destination filename
 * `automation_id` / `AutomationId`  (string): ID of automation that created request

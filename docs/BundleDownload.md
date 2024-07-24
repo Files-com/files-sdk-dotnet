@@ -13,7 +13,7 @@
 
 * `bundle_registration` / `BundleRegistration`  (BundleRegistration): 
 * `download_method` / `DownloadMethod`  (string): Download method (file or full_zip)
-* `path` / `Path`  (string): Download path This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Download path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Download date/time
 
 
