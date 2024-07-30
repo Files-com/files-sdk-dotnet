@@ -547,6 +547,7 @@ namespace FilesCom.Models
         ///   search_all - boolean - Search entire site?  If set, we will ignore the folder path provided and search the entire site.  This is the same API used by the search bar in the UI.  Search results are a best effort, not real time, and not guaranteed to match every file.  This field should only be used for ad-hoc (human) searching, and not as part of an automated process.
         ///   with_previews - boolean - Include file previews?
         ///   with_priority_color - boolean - Include file priority color information?
+        ///   point_in_time - string - Point in time to view the folder. Available only on remote server mounts for S3 with versioned buckets.
         /// </summary>
         public static FilesList<RemoteFile> ListFor(
             string path,
@@ -612,6 +613,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
+            }
+            if (parameters.ContainsKey("point_in_time") && !(parameters["point_in_time"] is string))
+            {
+                throw new ArgumentException("Bad parameter: point_in_time must be of type string", "parameters[\"point_in_time\"]");
             }
 
             return new FilesList<RemoteFile>($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
