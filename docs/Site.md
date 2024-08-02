@@ -169,7 +169,8 @@
     "allowed_2fa_method_webauthn": true,
     "allowed_2fa_method_yubi": true,
     "use_provided_modified_at": true,
-    "windows_mode_ftp": false
+    "windows_mode_ftp": false,
+    "user_belongs_to_parent_site": false
   },
   "session_pinned_by_ip": true,
   "sftp_enabled": true,

@@ -11,6 +11,7 @@
   "user_id": 1,
   "api_key_id": 1,
   "user_is_files_support": true,
+  "user_is_from_parent_site": true,
   "username": "some_user"
 }
 ```
@@ -20,6 +21,7 @@
 * `user_id` / `UserId`  (Nullable<Int64>): The user id responsible for this change
 * `api_key_id` / `ApiKeyId`  (Nullable<Int64>): The API key id responsible for this change
 * `user_is_files_support` / `UserIsFilesSupport`  (bool): true if this change was performed by Files.com support.
+* `user_is_from_parent_site` / `UserIsFromParentSite`  (bool): true if this change was performed by a user on a parent site.
 * `username` / `Username`  (string): The username of the user responsible for this change
 
 
