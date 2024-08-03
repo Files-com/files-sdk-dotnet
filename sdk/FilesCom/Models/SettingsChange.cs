@@ -49,10 +49,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_is_files_support", false);
             }
-            if (!this.attributes.ContainsKey("user_is_from_parent_site"))
-            {
-                this.attributes.Add("user_is_from_parent_site", false);
-            }
             if (!this.attributes.ContainsKey("username"))
             {
                 this.attributes.Add("username", null);
@@ -129,18 +125,6 @@ namespace FilesCom.Models
         {
             get { return attributes["user_is_files_support"] == null ? false : (bool)attributes["user_is_files_support"]; }
             private set { attributes["user_is_files_support"] = value; }
-        }
-
-        /// <summary>
-        /// true if this change was performed by a user on a parent site.
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("user_is_from_parent_site")]
-        public bool UserIsFromParentSite
-        {
-            get { return attributes["user_is_from_parent_site"] == null ? false : (bool)attributes["user_is_from_parent_site"]; }
-            private set { attributes["user_is_from_parent_site"] = value; }
         }
 
         /// <summary>

@@ -383,12 +383,6 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class InvalidSessionException : NotAuthenticatedException
-    {
-        public InvalidSessionException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
-            : base(message, httpStatus, responseError, httpHeaders)
-        { }
-    }
     public class InvalidUsernameOrPasswordException : NotAuthenticatedException
     {
         public InvalidUsernameOrPasswordException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -525,12 +519,6 @@ namespace FilesCom
     public class InsufficientPermissionForParamsException : NotAuthorizedException
     {
         public InsufficientPermissionForParamsException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
-            : base(message, httpStatus, responseError, httpHeaders)
-        { }
-    }
-    public class InsufficientPermissionForSiteException : NotAuthorizedException
-    {
-        public InsufficientPermissionForSiteException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }

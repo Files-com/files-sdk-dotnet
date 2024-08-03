@@ -16,7 +16,6 @@
   ],
   "user_id": 1,
   "username": "user",
-  "user_is_from_parent_site": true,
   "action": "create",
   "failure_type": "none",
   "interface": "web"
@@ -33,7 +32,6 @@
 * `targets` / `Targets`  (object[]): Targets
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `username` / `Username`  (string): Username
-* `user_is_from_parent_site` / `UserIsFromParentSite`  (bool): true if this change was performed by a user on a parent site.
 * `action` / `ActionType`  (string): Type of action
 * `failure_type` / `FailureType`  (string): Failure type.  If action was a user login or session failure, why did it fail?
 * `interface` / `Interface`  (string): Interface on which this action occurred.
