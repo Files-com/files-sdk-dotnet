@@ -319,9 +319,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   action - string
-        ///   page - int64
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[behavior]=desc`). Valid fields are `behavior` and `impacts_ui`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior` and `impacts_ui`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         /// </summary>
@@ -341,14 +339,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
-            }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
-            {
-                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
-            }
-            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
@@ -430,14 +420,11 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   action - string
-        ///   page - int64
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[behavior]=desc`). Valid fields are `behavior` and `impacts_ui`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior` and `impacts_ui`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         ///   path (required) - string - Path to operate on.
         ///   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
-        ///   behavior - string
         /// </summary>
         public static FilesList<Behavior> ListFor(
             string path,
@@ -468,14 +455,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
-            {
-                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
-            }
-            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
-            }
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
@@ -495,10 +474,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ancestor_behaviors") && !(parameters["ancestor_behaviors"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ancestor_behaviors must be of type bool", "parameters[\"ancestor_behaviors\"]");
-            }
-            if (parameters.ContainsKey("behavior") && !(parameters["behavior"] is string))
-            {
-                throw new ArgumentException("Bad parameter: behavior must be of type string", "parameters[\"behavior\"]");
             }
 
             return new FilesList<Behavior>($"/behaviors/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);

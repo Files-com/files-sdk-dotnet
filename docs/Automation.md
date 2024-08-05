@@ -95,7 +95,6 @@
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
 * `value` / `Value`  (object): A Hash of attributes specific to the automation type.
 * `webhook_url` / `WebhookUrl`  (string): If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
-* `destination` / `Destination`  (string): 
 
 
 ---
@@ -114,9 +113,7 @@ Task<FilesList<Automation>> Automation.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `action` (string): 
-* `page` (Nullable<Int64>): 
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction (e.g. `sort_by[automation]=desc`). Valid fields are `automation`, `disabled`, `last_modified_at` or `name`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `automation`, `disabled`, `last_modified_at` or `name`.
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `disabled`, `last_modified_at` or `automation`. Valid field combinations are `[ automation, disabled ]` and `[ disabled, automation ]`.
 * `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `last_modified_at`.
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `last_modified_at`.
@@ -157,7 +154,6 @@ Task<Automation> Automation.Create(
 ### Parameters
 
 * `source` (string): Source Path
-* `destination` (string): 
 * `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -166,7 +162,6 @@ Task<Automation> Automation.Create(
 * `sync_ids` (string): A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-* `schedule` (object): 
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
 * `schedule_times_of_day` (string[]): If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
 * `schedule_time_zone` (string): If trigger is `custom_schedule`. Time zone for the schedule.
@@ -219,7 +214,6 @@ Task<Automation> Automation.Update(
 
 * `id` (Nullable<Int64>): Required - Automation ID.
 * `source` (string): Source Path
-* `destination` (string): 
 * `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -228,7 +222,6 @@ Task<Automation> Automation.Update(
 * `sync_ids` (string): A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-* `schedule` (object): 
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
 * `schedule_times_of_day` (string[]): If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
 * `schedule_time_zone` (string): If trigger is `custom_schedule`. Time zone for the schedule.
@@ -301,7 +294,6 @@ parameters.Add("path", "example");
 parameters.Add("sync_ids", [1,2]);
 parameters.Add("user_ids", [1,2]);
 parameters.Add("group_ids", [1,2]);
-parameters.Add("schedule", "example");
 parameters.Add("schedule_days_of_week", [0,1,3]);
 parameters.Add("schedule_times_of_day", ["7:30","11:30"]);
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
@@ -327,7 +319,6 @@ Automation.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Automation ID.
 * `source` (string): Source Path
-* `destination` (string): 
 * `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
@@ -336,7 +327,6 @@ Automation.Update(parameters);
 * `sync_ids` (string): A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-* `schedule` (object): 
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
 * `schedule_times_of_day` (string[]): If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
 * `schedule_time_zone` (string): If trigger is `custom_schedule`. Time zone for the schedule.

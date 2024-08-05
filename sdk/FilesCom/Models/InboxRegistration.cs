@@ -233,8 +233,6 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   action - string
-        ///   page - int64
         ///   folder_behavior_id - int64 - ID of the associated Inbox.
         /// </summary>
         public static FilesList<InboxRegistration> List(
@@ -253,14 +251,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
-            }
-            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
-            {
-                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
-            }
-            if (parameters.ContainsKey("page") && !(parameters["page"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: page must be of type Nullable<Int64>", "parameters[\"page\"]");
             }
             if (parameters.ContainsKey("folder_behavior_id") && !(parameters["folder_behavior_id"] is Nullable<Int64>))
             {
