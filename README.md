@@ -2,131 +2,494 @@
 
 The Files.com .NET client library provides convenient access to the Files.com API from applications using the .NET framework.
 
+The content included here should be enough to get started, but please visit our
+[Developer Documentation Website](https://developers.files.com/net/) for the complete documentation.
 
-## Installation
+## Introduction
+
+The Files.com .NET client library provides convenient access to the Files.com API from applications using the .NET framework.
+
+### Installation
 
 To install the package:
-    dotnet add package FilesCom
+
+```bash
+dotnet add package FilesCom
+````
 
 Fetch the dependencies:
-    dotnet restore
 
+```bash
+dotnet restore
+```
 
-## Frameworks Supported
+### Frameworks Supported
 
 - .NET 6
-
 - .NET 5
-
 - .NET Core 2.1, 2.2, 3.0, 3.1
-
 - .NET Standard 2.0
-
 - .NET Framework 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8
 
 .NET Framework versions below 4.6.1 are officially in end-of-life status according to Microsoft.  As a policy, Files.com does not support integrations which are considered end-of-life by their vendor.
 
 If you need support for a newer framework version, please ask, and we'll be happy to add it.  It will most likely work out of the box anyway.
 
+<Note title="Repository">
+Explore the [files-sdk-dotnet](https://github.com/Files-com/files-sdk-dotnet) code on GitHub.
+</Note>
 
-## Usage
+### Getting Support
 
-### Authentication
+The Files.com team is happy to help with any SDK Integration challenges you
+may face.
 
-There are multiple ways to authenticate in the Files.com SDK.
+Just email support@files.com and we'll get the process started.
 
+## Authentication
 
-### app.config/web.config
+### Authenticate with an API Key
 
-In the app.config or web.config of a .NET application, add the following section:
+Authenticating with an API key is the recommended authentication method for most scenarios, and is
+the method used in the examples on this site.
 
-    <configSections>
-        <sectionGroup name="files.com">
-            <section name="filesConfiguration" type="FilesCom.FilesConfiguration, FilesCom"/>
-        </sectionGroup>
-    </configSections>
-    <files.com>
-        <filesConfiguration ApiKey="my-key" />
-    </files.com>
+To use the API or SDKs with an API Key, first generate an API key from the [web
+interface](https://www.files.com/docs/sdk-and-apis/api-keys) or [via the API or an
+SDK](/net/resources/developers/api-keys).
 
+Note that when using a user-specific API key, if the user is an administrator, you will have full
+access to the entire API. If the user is not an administrator, you will only be able to access files
+that user can access, and no access will be granted to site administration functions in the API.
 
-### appsettings.json
+```csharp title="Example Request"
+// Using manual configuration
+var config = new FilesConfiguration();
+config.ApiKey = "YOUR_API_KEY";
 
-You can also use `appsettings.json` from .NET CORE to set the `ApiKey` property.
+new FilesClient(config);
 
+// In app.config
+<configSections>
+    <sectionGroup name="files.com">
+        <section
+            name="filesConfiguration"
+            type="Files.FilesConfiguration, Files.com"
+        />
+    </sectionGroup>
+</configSections>
+<files.com>
+    <filesConfiguration ApiKey="YOUR_API_KEY" />
+</files.com>
 
-### Per-Instance API Key
+new FilesClient();
 
-When instantiating a client, FilesConfiguration can be set directly:
-```csharp
-    using FilesCom;
-
-    FilesConfiguration filesConfig = new FilesConfiguration();
-    filesConfig.ApiKey = "my-key";
-    FilesClient client = new FilesClient(filesConfig);
+// You may also specify the API key on a per-request basis in the final parameter to static methods.
+var options = Dictionary<string, object>();
+options.Add("api_key", "YOUR_API_KEY");
+User.Find(id, params, options);
 ```
 
+<Note>
+Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API key.
+</Note>
 
-### Files.com Configuration
+### Authenticate with a Session
 
-You can set configuration for default client sessions by adding them to the `app.config` or `appsettings.json` as with the ApiKey above,
-or you may set them on a config object for per-session configuration.
+You can also authenticate to the REST API or SDKs by creating a user session using the username and
+password of an active user. If the user is an administrator, the session will have full access to
+the entire API. Sessions created from regular user accounts will only be able to access files that
+user can access, and no access will be granted to site administration functions.
 
-* `ApiKey` - Required. Must be set in either app.config, appsettings.json, or per-session.
-* `BaseUrl` - Set this to your site subdomain if your site is configured to disable global acceleration.  Otherwise, don't change this setting for production.
-    For dev/CI, you can point this to the mock server.
-* `OpenTimeout` - open timeout in seconds (default: 30)
-* `ReadTimeout` - read timeout in seconds (default: 80)
-* `InitialNetworkRetryDelay` - initial retry delay in seconds (default: 0.5)
-* `MaxNetworkRetries` - max retries (default: 3)
-* `MaxNetworkRetryDelay` - max retry delay in seconds (default: 2)
+API sessions use the exact same session timeout settings as web interface sessions. When an API
+session times out, simply create a new session and resume where you left off. This process is not
+automatically handled by SDKs because we do not want to store password information in memory without
+your explicit consent.
 
+#### Logging in
 
-### Pagination
+To create a session, the `create` method is called on the `Session` object with the user's username and
+password.
 
-For endpoints with pagination, operations such as `List` will return a `FilesList` object. This object allows for accessing pages of
-results asyncronously with `LoadNextPage()` and `All()` or with auto-pagination using `ListAutoPaging()`.
+This returns a session object that can be used to authenticate SDK method calls.
+To create a session, the `create` method is called on the `Session` object with the user's username and
+password.
 
+```csharp title="Example Request"
+Dictionary<string, object> paramsDict = new Dictionary<string, object>();
+FilesClient client = new FilesClient(filesConfig);
+paramsDict.Add("username", "username");
+paramsDict.Add("password", "password");
+Session session = await Session.Create(paramsDict);
+```
 
-### Error Handling
+#### Using a session
 
-Unexpected errors when attempting to connect to the API inherit from the base level `SdkException` class. They all contain a `message`
-to describe what went wrong.
+Once a session has been created, you can store the session globally, use the session per object, or use the session per request to authenticate SDK operations.
 
+```csharp title="Example Request"
 
-#### Unable to connect to the API
+// You may set the returned session to be used by default for subsequent requests.
+FilesConfiguration filesConfig = new FilesConfiguration();
+filesConfig.SessionId = session.Id;
 
-```csharp
+// Alternatively, you can specify the session ID on a per-object basis
+// in the second parameter to a model constructor.
+
+user = new User(params, requestParameters);
+Dictionary<string, object> paramsDict = new Dictionary<string, object>();
+Dictionary<string, object> optionsDict = new Dictionary<string, object>();
+optionsDict.Add("session_id", session.Id);
+User user = new User(paramsDict, optionsDict);
+
+// You may also specify the session ID on a per-request basis in the final parameter to static methods.
+Dictionary<string, object> paramsDict = new Dictionary<string, object>();
+Dictionary<string, object> optionsDict = new Dictionary<string, object>();
+optionsDict.Add("session_id", session.Id);
+await Folder.ListFor("/", paramsDict, optionsDict).All();
+
+```
+
+#### Logging out
+
+User sessions can be ended calling the `destroy` method on the `session` object.
+
+```csharp title="Example Request"
+await Session.Destroy();
+```
+
+## Configuration
+
+### Configuration options
+
+#### Base URL
+
+Setting the base URL for the API is required if your site is configured to disable global acceleration.
+This can also be set to use a mock server in development or CI.
+
+```csharp title="Example setting"
+config.BaseUrl = "https://MY-SUBDOMAIN.files.com"
+```
+
+#### Open timeout
+
+Open timeout in seconds. The default value is 30.
+
+```csharp title="Example setting"
+config.OpenTimeout = 60
+```
+
+#### Read timeout
+
+Read timeout in seconds. The default value is 80.
+
+```csharp title="Example setting"
+config.ReadTimeout = 90
+```
+
+#### Initial network retry delay
+
+Initial retry delay in seconds. The default value is 0.5.
+
+```csharp title="Example setting"
+config.InitialNetworkRetryDelay = 1
+```
+
+#### Maximum network retries
+
+Maximum number of retries. The default value is 3.
+
+```csharp title="Example setting"
+config.MaxNetworkRetries = 5
+```
+
+#### Maximum retry delay
+
+Maximum network retry delay in seconds. The default value is 2.
+
+```csharp title="Example setting"
+config.MaxNetworkRetryDelay = 5
+```
+
+### Logging
+
+The Files.com SDK is compatible with the standard log4j logging scheme.
+
+Add `com.files` logger to your `Loggers` root in the `log4j2.xml` file.
+
+```xml title="log4j2.xml"
+<Loggers>
+    <!-- set preferred level -->
+    <Logger name="com.files" level="TRACE" />
+    <!-- to enable network request -->
+    <Logger name="okhttp3.logging.wire" level="INFO"/>
+</Loggers>
+```
+
+Create a `resources/log4j2.xml` file.
+
+```xml title="resources/log4j2.xml"
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- set preferred level -->
+        <Logger name="com.files" level="TRACE"/>
+        <!-- to enable network request -->
+        <Logger name="okhttp3.logging.wire" level="INFO"/>
+    </Loggers>
+</Configuration>
+```
+
+You can read more about [log4j2 configuration](https://logging.apache.org/log4j/2.x/manual/configuration.html).
+
+## Errors
+
+The Files.com DotNet SDK will return errors by raising exceptions. There are many exception classes defined in the Files SDK that correspond
+to specific errors.
+
+The raised exceptions come from two categories:
+
+1.  SDK Exceptions - errors that originate within the SDK
+2.  API Exceptions - errors that occur due to the response from the Files.com API.  These errors are grouped into common error types.
+
+There are several types of exceptions within each category.  Exception classes indicate different types of errors and are named in a
+fashion that describe the general premise of the originating error.  More details can be found in the exception object message using the
+`Message` attribute.
+
+Use standard DotNet exception handling to detect and deal with errors.  It is generally recommended to catch specific errors first, then
+catch the general `SdkException` exception as a catch-all.
+
+```csharp title="Example Error Handling"
+Dictionary<string, object> paramsDict = new Dictionary<string, object>();
+paramsDict.Add("username", "USERNAME");
+paramsDict.Add("password", "BADPASSWORD");
+Session session;
 try
 {
-    await Folder.ListFor("/").All();
+    session = await Session.Create(paramsDict);
 }
-catch (ApiConnectionException e)
+catch (FilesCom.NotAuthenticatedException e)
 {
-    Console.WriteLine("Unable to list root folder: " + e.message);
+    Console.WriteLine($"Authentication Error occured({e.GetType().Name}): " + e.Message);
 }
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error occured({e.GetType().Name}): " + e.Message);
+}
+
 ```
 
-Errors from the API inherit from `ApiException`. They all contain more parameters to describe the error such as `httpCode`, `error`, `detail`, etc.
+### Error Types
 
+#### SDK Errors
 
-#### Path does not exist
+SDK errors are general errors that occur within the SDK code.  These errors generate exceptions.  Each of these
+exception classes inherit from a standard `SdkException` base class.
 
-```csharp
-try
-{
-    await Folder.ListFor("/doesnotexist").All();
-}
-catch (NotFoundException e)
-{
-    Console.WriteLine($"Unable to list folder: <{e.httpStatus}> {e.error}");
-}
+```shell title="Example SDK Exception Class Inheritance Structure"
+FilesCom.ApiConnectException ->
+FilesCom.SdkException ->
+Exception
 ```
+##### SDK Exception Classes
 
+| Exception Class Name| Description |
+| --------------- | ------------ |
+| `ApiConnectionException`| The Files.com API cannot be reached |
+| `InvalidParameterException`| A passed in parameter is invalid |
+| `NotImplementedException`| The called method has not be implemented by the SDK |
+| `InvalidResponseException`| A bad formed response came back from the API |
 
-### Examples
+#### API Errors
 
-#### Writing a file example
+API errors are errors returned by the Files.com API.  Each exception class inherits from an error group base class.
+The error group base class indicates a particular type of error.
+
+```shell title="Example API Exception Class Inheritance Structure"
+FilesCom.FolderAdminPermissionRequiredException ->
+FilesCom.NotAuthorizedException ->
+FilesCom.ApiException ->
+FilesCom.SdkException ->
+Exception
+```
+##### API Exception Classes
+
+| Exception Class Name | Error Group |
+| --------- | --------- |
+|`AgentUpgradeRequiredException`|  `BadRequestException` |
+|`AttachmentTooLargeException`|  `BadRequestException` |
+|`CannotDownloadDirectoryException`|  `BadRequestException` |
+|`CantMoveWithMultipleLocationsException`|  `BadRequestException` |
+|`DatetimeParseException`|  `BadRequestException` |
+|`DestinationSameException`|  `BadRequestException` |
+|`FolderMustNotBeAFileException`|  `BadRequestException` |
+|`InvalidBodyException`|  `BadRequestException` |
+|`InvalidCursorException`|  `BadRequestException` |
+|`InvalidCursorTypeForSortException`|  `BadRequestException` |
+|`InvalidEtagsException`|  `BadRequestException` |
+|`InvalidFilterAliasCombinationException`|  `BadRequestException` |
+|`InvalidFilterCombinationException`|  `BadRequestException` |
+|`InvalidFilterFieldException`|  `BadRequestException` |
+|`InvalidFilterParamException`|  `BadRequestException` |
+|`InvalidFilterParamValueException`|  `BadRequestException` |
+|`InvalidInputEncodingException`|  `BadRequestException` |
+|`InvalidInterfaceException`|  `BadRequestException` |
+|`InvalidOauthProviderException`|  `BadRequestException` |
+|`InvalidPathException`|  `BadRequestException` |
+|`InvalidReturnToUrlException`|  `BadRequestException` |
+|`InvalidUploadOffsetException`|  `BadRequestException` |
+|`InvalidUploadPartGapException`|  `BadRequestException` |
+|`InvalidUploadPartSizeException`|  `BadRequestException` |
+|`MethodNotAllowedException`|  `BadRequestException` |
+|`NoValidInputParamsException`|  `BadRequestException` |
+|`PartNumberTooLargeException`|  `BadRequestException` |
+|`PathCannotHaveTrailingWhitespaceException`|  `BadRequestException` |
+|`ReauthenticationNeededFieldsException`|  `BadRequestException` |
+|`RequestParamsContainInvalidCharacterException`|  `BadRequestException` |
+|`RequestParamsInvalidException`|  `BadRequestException` |
+|`RequestParamsRequiredException`|  `BadRequestException` |
+|`SearchAllOnChildPathException`|  `BadRequestException` |
+|`UnsupportedCurrencyException`|  `BadRequestException` |
+|`UnsupportedHttpResponseFormatException`|  `BadRequestException` |
+|`UnsupportedMediaTypeException`|  `BadRequestException` |
+|`UserIdInvalidException`|  `BadRequestException` |
+|`UserIdOnUserEndpointException`|  `BadRequestException` |
+|`UserRequiredException`|  `BadRequestException` |
+|`AdditionalAuthenticationRequiredException`|  `NotAuthenticatedException` |
+|`AuthenticationRequiredException`|  `NotAuthenticatedException` |
+|`BundleRegistrationCodeFailedException`|  `NotAuthenticatedException` |
+|`FilesAgentTokenFailedException`|  `NotAuthenticatedException` |
+|`InboxRegistrationCodeFailedException`|  `NotAuthenticatedException` |
+|`InvalidCredentialsException`|  `NotAuthenticatedException` |
+|`InvalidOauthException`|  `NotAuthenticatedException` |
+|`InvalidOrExpiredCodeException`|  `NotAuthenticatedException` |
+|`InvalidSessionException`|  `NotAuthenticatedException` |
+|`InvalidUsernameOrPasswordException`|  `NotAuthenticatedException` |
+|`LockedOutException`|  `NotAuthenticatedException` |
+|`LockoutRegionMismatchException`|  `NotAuthenticatedException` |
+|`OneTimePasswordIncorrectException`|  `NotAuthenticatedException` |
+|`TwoFactorAuthenticationErrorException`|  `NotAuthenticatedException` |
+|`TwoFactorAuthenticationSetupExpiredException`|  `NotAuthenticatedException` |
+|`ApiKeyIsDisabledException`|  `NotAuthorizedException` |
+|`ApiKeyIsPathRestrictedException`|  `NotAuthorizedException` |
+|`ApiKeyOnlyForDesktopAppException`|  `NotAuthorizedException` |
+|`ApiKeyOnlyForMobileAppException`|  `NotAuthorizedException` |
+|`ApiKeyOnlyForOfficeIntegrationException`|  `NotAuthorizedException` |
+|`BillingPermissionRequiredException`|  `NotAuthorizedException` |
+|`BundleMaximumUsesReachedException`|  `NotAuthorizedException` |
+|`CannotLoginWhileUsingKeyException`|  `NotAuthorizedException` |
+|`CantActForOtherUserException`|  `NotAuthorizedException` |
+|`ContactAdminForPasswordChangeHelpException`|  `NotAuthorizedException` |
+|`FilesAgentFailedAuthorizationException`|  `NotAuthorizedException` |
+|`FolderAdminOrBillingPermissionRequiredException`|  `NotAuthorizedException` |
+|`FolderAdminPermissionRequiredException`|  `NotAuthorizedException` |
+|`FullPermissionRequiredException`|  `NotAuthorizedException` |
+|`HistoryPermissionRequiredException`|  `NotAuthorizedException` |
+|`InsufficientPermissionForParamsException`|  `NotAuthorizedException` |
+|`InsufficientPermissionForSiteException`|  `NotAuthorizedException` |
+|`MustAuthenticateWithApiKeyException`|  `NotAuthorizedException` |
+|`NeedAdminPermissionForInboxException`|  `NotAuthorizedException` |
+|`NonAdminsMustQueryByFolderOrPathException`|  `NotAuthorizedException` |
+|`NotAllowedToCreateBundleException`|  `NotAuthorizedException` |
+|`PasswordChangeNotRequiredException`|  `NotAuthorizedException` |
+|`PasswordChangeRequiredException`|  `NotAuthorizedException` |
+|`ReadOnlySessionException`|  `NotAuthorizedException` |
+|`ReadPermissionRequiredException`|  `NotAuthorizedException` |
+|`ReauthenticationFailedException`|  `NotAuthorizedException` |
+|`ReauthenticationFailedFinalException`|  `NotAuthorizedException` |
+|`ReauthenticationNeededActionException`|  `NotAuthorizedException` |
+|`RecaptchaFailedException`|  `NotAuthorizedException` |
+|`SelfManagedRequiredException`|  `NotAuthorizedException` |
+|`SiteAdminRequiredException`|  `NotAuthorizedException` |
+|`SiteFilesAreImmutableException`|  `NotAuthorizedException` |
+|`TwoFactorAuthenticationRequiredException`|  `NotAuthorizedException` |
+|`UserIdWithoutSiteAdminException`|  `NotAuthorizedException` |
+|`WriteAndBundlePermissionRequiredException`|  `NotAuthorizedException` |
+|`WritePermissionRequiredException`|  `NotAuthorizedException` |
+|`ZipDownloadIpMismatchException`|  `NotAuthorizedException` |
+|`ApiKeyNotFoundException`|  `NotFoundException` |
+|`BundlePathNotFoundException`|  `NotFoundException` |
+|`BundleRegistrationNotFoundException`|  `NotFoundException` |
+|`CodeNotFoundException`|  `NotFoundException` |
+|`FileNotFoundException`|  `NotFoundException` |
+|`FileUploadNotFoundException`|  `NotFoundException` |
+|`FolderNotFoundException`|  `NotFoundException` |
+|`GroupNotFoundException`|  `NotFoundException` |
+|`InboxNotFoundException`|  `NotFoundException` |
+|`NestedNotFoundException`|  `NotFoundException` |
+|`PlanNotFoundException`|  `NotFoundException` |
+|`SiteNotFoundException`|  `NotFoundException` |
+|`UserNotFoundException`|  `NotFoundException` |
+|`AlreadyCompletedException`|  `ProcessingFailureException` |
+|`AutomationCannotBeRunManuallyException`|  `ProcessingFailureException` |
+|`BehaviorNotAllowedOnRemoteServerException`|  `ProcessingFailureException` |
+|`BundleOnlyAllowsPreviewsException`|  `ProcessingFailureException` |
+|`BundleOperationRequiresSubfolderException`|  `ProcessingFailureException` |
+|`CouldNotCreateParentException`|  `ProcessingFailureException` |
+|`DestinationExistsException`|  `ProcessingFailureException` |
+|`DestinationFolderLimitedException`|  `ProcessingFailureException` |
+|`DestinationParentConflictException`|  `ProcessingFailureException` |
+|`DestinationParentDoesNotExistException`|  `ProcessingFailureException` |
+|`ExpiredPrivateKeyException`|  `ProcessingFailureException` |
+|`ExpiredPublicKeyException`|  `ProcessingFailureException` |
+|`ExportFailureException`|  `ProcessingFailureException` |
+|`ExportNotReadyException`|  `ProcessingFailureException` |
+|`FailedToChangePasswordException`|  `ProcessingFailureException` |
+|`FileLockedException`|  `ProcessingFailureException` |
+|`FileNotUploadedException`|  `ProcessingFailureException` |
+|`FilePendingProcessingException`|  `ProcessingFailureException` |
+|`FileProcessingErrorException`|  `ProcessingFailureException` |
+|`FileTooBigToDecryptException`|  `ProcessingFailureException` |
+|`FileTooBigToEncryptException`|  `ProcessingFailureException` |
+|`FileUploadedToWrongRegionException`|  `ProcessingFailureException` |
+|`FilenameTooLongException`|  `ProcessingFailureException` |
+|`FolderLockedException`|  `ProcessingFailureException` |
+|`FolderNotEmptyException`|  `ProcessingFailureException` |
+|`HistoryUnavailableException`|  `ProcessingFailureException` |
+|`InvalidBundleCodeException`|  `ProcessingFailureException` |
+|`InvalidFileTypeException`|  `ProcessingFailureException` |
+|`InvalidFilenameException`|  `ProcessingFailureException` |
+|`InvalidPriorityColorException`|  `ProcessingFailureException` |
+|`InvalidRangeException`|  `ProcessingFailureException` |
+|`ModelSaveErrorException`|  `ProcessingFailureException` |
+|`MultipleProcessingErrorsException`|  `ProcessingFailureException` |
+|`PathTooLongException`|  `ProcessingFailureException` |
+|`RecipientAlreadySharedException`|  `ProcessingFailureException` |
+|`RemoteServerErrorException`|  `ProcessingFailureException` |
+|`ResourceLockedException`|  `ProcessingFailureException` |
+|`SubfolderLockedException`|  `ProcessingFailureException` |
+|`TwoFactorAuthenticationCodeAlreadySentException`|  `ProcessingFailureException` |
+|`TwoFactorAuthenticationCountryBlacklistedException`|  `ProcessingFailureException` |
+|`TwoFactorAuthenticationGeneralErrorException`|  `ProcessingFailureException` |
+|`TwoFactorAuthenticationUnsubscribedRecipientException`|  `ProcessingFailureException` |
+|`UpdatesNotAllowedForRemotesException`|  `ProcessingFailureException` |
+|`DuplicateShareRecipientException`|  `RateLimitedException` |
+|`ReauthenticationRateLimitedException`|  `RateLimitedException` |
+|`TooManyConcurrentLoginsException`|  `RateLimitedException` |
+|`TooManyConcurrentRequestsException`|  `RateLimitedException` |
+|`TooManyLoginAttemptsException`|  `RateLimitedException` |
+|`TooManyRequestsException`|  `RateLimitedException` |
+|`TooManySharesException`|  `RateLimitedException` |
+|`AgentUnavailableException`|  `ServiceUnavailableException` |
+|`AutomationsUnavailableException`|  `ServiceUnavailableException` |
+|`MigrationInProgressException`|  `ServiceUnavailableException` |
+|`SiteDisabledException`|  `ServiceUnavailableException` |
+|`UploadsUnavailableException`|  `ServiceUnavailableException` |
+|`AccountAlreadyExistsException`|  `SiteConfigurationException` |
+|`AccountOverdueException`|  `SiteConfigurationException` |
+|`NoAccountForSiteException`|  `SiteConfigurationException` |
+|`SiteWasRemovedException`|  `SiteConfigurationException` |
+|`TrialExpiredException`|  `SiteConfigurationException` |
+|`TrialLockedException`|  `SiteConfigurationException` |
+|`UserRequestsEnabledRequiredException`|  `SiteConfigurationException` |
+
+## Examples
+
+### Writing a file
 
 ```csharp
     // Will upload a file called "test.txt"
@@ -160,8 +523,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### Uploading a file from a Stream
+### Uploading a file from a Stream
 
 ```csharp
     using(MemoryStream stream = new System.IO.MemoryStream())
@@ -175,8 +537,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### Reading a file's text as a Stream
+### Reading a file's text as a Stream
 
 ```csharp
     using(MemoryStream stream = new System.IO.MemoryStream())
@@ -189,8 +550,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### Reading a file and writing it to your local drive.
+### Reading a file and writing it to your local drive.
 
 ```csharp
     var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
@@ -201,8 +561,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### List root folder (loads all pages into memory)
+### List root folder (loads all pages into memory)
 
 ```csharp
     var files = Folder.ListFor("/", null, null);
@@ -212,8 +571,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### List root folder with auto pagination (loads each page into memory)
+### List root folder with auto pagination (loads each page into memory)
 
 ```csharp
     foreach (var file in Folder.ListFor("/").ListAutoPaging())
@@ -222,8 +580,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### List root folder with manual pagination (loads each page into memory)
+### List root folder with manual pagination (loads each page into memory)
 
 ```csharp
     FilesList<RemoteFile> listing = Folder.ListFor("/");
@@ -236,8 +593,7 @@ catch (NotFoundException e)
     } while (listing.HasNextPage);
 ```
 
-
-#### List folder with a filter
+### List folder with a filter
 
 ```csharp
     Dictionary<string, object> parameters = new Dictionary<string, object>(){
@@ -250,8 +606,7 @@ catch (NotFoundException e)
     }
 ```
 
-
-#### Comparing Case insensitive files and paths
+### Comparing Case insensitive files and paths
 
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 ```csharp
@@ -260,9 +615,17 @@ For related documentation see [Case Sensitivity Documentation](https://www.files
     }
 ```
 
-#### Logging
-To enable logging, create a file named `log4net.config` in the same directory as the application with the following contents:
-```xml
+### Logging
+
+To enable logging, create a file named `log4net.config` in the same directory as
+the application with the contents as shown.
+
+Then, in the application, use that file to configure `log4net`:
+
+```csharp
+log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("./log4net.config"));
+```
+```xml title="log4net.config"
 <?xml version="1.0" encoding="UTF-8" ?>
 <log4net>
   <root>
@@ -276,14 +639,21 @@ To enable logging, create a file named `log4net.config` in the same directory as
   </appender>
 </log4net>
 ```
-Then, in the application, use that file to configure `log4net`:
-```csharp
-log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("./log4net.config"));
-```
 
+## Mock Server
 
-## Getting Support
+Files.com publishes a Files.com API server, which is useful for testing your use of the Files.com
+SDKs and other direct integrations against the Files.com API in an integration test environment.
 
-The Files.com team is happy to help with any SDK Integration challenges you may face.
+It is a Ruby app that operates as a minimal server for the purpose of testing basic network
+operations and JSON encoding for your SDK or API client. It does not maintain state and it does not
+deeply inspect your submissions for correctness.
 
-Just email support@files.com and we'll get the process started.
+Eventually we will add more features intended for integration testing, such as the ability to
+intentionally provoke errors.
+
+Download the server as a Docker image via [Docker Hub](https://hub.docker.com/r/filescom/files-mock-server).
+
+The Source Code is also available on [GitHub](https://github.com/Files-com/files-mock-server).
+
+A README is available on the GitHub link.
