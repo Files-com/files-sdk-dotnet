@@ -9,6 +9,7 @@
   "api_key_prefix": "example",
   "user_id": 1,
   "username": "example",
+  "user_is_from_parent_site": true,
   "interface": "example",
   "request_method": "example",
   "request_path": "example",
@@ -30,6 +31,7 @@
 * `api_key_prefix` / `ApiKeyPrefix`  (string): API Key Prefix, if applicable
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `username` / `Username`  (string): Username
+* `user_is_from_parent_site` / `UserIsFromParentSite`  (bool): true if this change was performed by a user on a parent site.
 * `interface` / `Interface`  (string): API Interface
 * `request_method` / `RequestMethod`  (string): HTTP Method
 * `request_path` / `RequestPath`  (string): Request path
