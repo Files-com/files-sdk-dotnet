@@ -11,7 +11,7 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Sftp Host Key ID
+* `id` / `Id`  (Nullable<Int64>): SFTP Host Key ID
 * `name` / `Name`  (string): The friendly name of this SFTP Host Key.
 * `fingerprint_md5` / `FingerprintMd5`  (string): MD5 Fingerpint of the public key
 * `fingerprint_sha256` / `FingerprintSha256`  (string): SHA256 Fingerpint of the public key

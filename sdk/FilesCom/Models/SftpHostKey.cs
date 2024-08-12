@@ -68,7 +68,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Sftp Host Key ID
+        /// SFTP Host Key ID
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id

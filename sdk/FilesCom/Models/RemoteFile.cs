@@ -1012,7 +1012,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Begin file upload
+        /// Begin File Upload
         ///
         /// Parameters:
         ///   mkdir_parents - boolean - Create parent directories if they do not exist?
@@ -1549,7 +1549,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Begin file upload
+        /// Begin File Upload
         ///
         /// Parameters:
         ///   mkdir_parents - boolean - Create parent directories if they do not exist?

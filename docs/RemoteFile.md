@@ -243,7 +243,7 @@ Task<FileAction> RemoteFile.Move(
 
 ---
 
-## Begin file upload
+## Begin File Upload
 
 ```
 Task<FileUploadPart[]> RemoteFile.BeginUpload(
@@ -382,7 +382,7 @@ File.Move(parameters);
 
 ---
 
-## Begin file upload
+## Begin File Upload
 
 ```
 var File = RemoteFile.Find(1);
