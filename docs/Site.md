@@ -248,6 +248,7 @@
     "active_2fa": true,
     "require_password_change": true,
     "password_expired": true,
+    "readonly_site_admin": true,
     "restapi_permission": true,
     "self_managed": true,
     "sftp_permission": true,

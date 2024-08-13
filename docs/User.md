@@ -53,6 +53,7 @@
   "active_2fa": true,
   "require_password_change": true,
   "password_expired": true,
+  "readonly_site_admin": true,
   "restapi_permission": true,
   "self_managed": true,
   "sftp_permission": true,
@@ -118,6 +119,7 @@
 * `active_2fa` / `Active2fa`  (bool): Is 2fa active for the user?
 * `require_password_change` / `RequirePasswordChange`  (bool): Is a password change required upon next user login?
 * `password_expired` / `PasswordExpired`  (bool): Is user's password expired?
+* `readonly_site_admin` / `ReadonlySiteAdmin`  (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `restapi_permission` / `RestapiPermission`  (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
 * `self_managed` / `SelfManaged`  (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` / `SftpPermission`  (bool): Can the user access with SFTP?
@@ -233,6 +235,7 @@ Task<User> User.Create(
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
+* `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
@@ -346,6 +349,7 @@ Task<User> User.Update(
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
+* `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
@@ -466,6 +470,7 @@ parameters.Add("company", "ACME Corp.");
 parameters.Add("notes", "Internal notes on this user.");
 parameters.Add("office_integration_enabled", true);
 parameters.Add("password_validity_days", 1);
+parameters.Add("readonly_site_admin", true);
 parameters.Add("receive_admin_alerts", true);
 parameters.Add("require_login_by", "2000-01-01T01:00:00Z");
 parameters.Add("require_password_change", true);
@@ -518,6 +523,7 @@ User.Update(parameters);
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
+* `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?

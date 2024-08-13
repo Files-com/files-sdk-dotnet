@@ -217,6 +217,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("password_expired", false);
             }
+            if (!this.attributes.ContainsKey("readonly_site_admin"))
+            {
+                this.attributes.Add("readonly_site_admin", false);
+            }
             if (!this.attributes.ContainsKey("restapi_permission"))
             {
                 this.attributes.Add("restapi_permission", false);
@@ -820,6 +824,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Is the user an allowed to view all (non-billing) site configuration for this site?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("readonly_site_admin")]
+        public bool ReadonlySiteAdmin
+        {
+            get { return attributes["readonly_site_admin"] == null ? false : (bool)attributes["readonly_site_admin"]; }
+            set { attributes["readonly_site_admin"] = value; }
+        }
+
+        /// <summary>
         /// Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -1185,6 +1200,7 @@ namespace FilesCom.Models
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
@@ -1337,6 +1353,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+            }
+            if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: readonly_site_admin must be of type bool", "parameters[\"readonly_site_admin\"]");
             }
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
@@ -1617,6 +1637,7 @@ namespace FilesCom.Models
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
@@ -1765,6 +1786,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+            }
+            if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: readonly_site_admin must be of type bool", "parameters[\"readonly_site_admin\"]");
             }
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
@@ -1971,6 +1996,7 @@ namespace FilesCom.Models
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
@@ -2131,6 +2157,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+            }
+            if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: readonly_site_admin must be of type bool", "parameters[\"readonly_site_admin\"]");
             }
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
