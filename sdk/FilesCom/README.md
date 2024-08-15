@@ -11,6 +11,11 @@ The Files.com .NET client library provides convenient access to the Files.com AP
 
 ### Installation
 
+#### Command Line Installation
+
+The Files.com client library can be installed on the command line using the ```dotnet``` command.  This method will retrieve a NuGet package
+from the https://www.nuget.org/ repository and install it into your project.
+
 To install the package:
 
 ```bash
@@ -22,6 +27,17 @@ Fetch the dependencies:
 ```bash
 dotnet restore
 ```
+
+#### Visual Studio Installation
+
+The Files.com client library can also be installed using Visual Studio and the NuGet package manager.  In Visual Studio, click on "Manage Nuget Packages"
+under the "Project" menu.  On the "Browse" tab search for "FilesCom", and click on the FilesCom NuGet package.  In the right panel, click the "Install"
+button next to the version dropdown.
+
+##### Visual Studio Requirements
+
+Installation of the FilesCom Nuget package is fully supported by Visual Studio 2022, 2019, and 2017 version 15.3 or later.  For Visual Studio 15, the Nuget Package
+manager version 3.6 or higher must be installed.  You can download the NuGet client for Visual Studio 2015 from the [NuGet downloads](https://www.nuget.org/downloads) page.
 
 ### Frameworks Supported
 
