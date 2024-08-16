@@ -40,7 +40,7 @@ Installation of the FilesCom Nuget package is fully supported by Visual Studio 2
 
 For Visual Studio 2015, the following must be installed:
 
-* [Nuget Package manager for Visual Studio 2015 version 3.6 or higer](https://www.nuget.org/downloads)
+* [Nuget Package manager for Visual Studio 2015 version 3.6 or higher](https://www.nuget.org/downloads)
 * [.NET Standard Support for Visual Studio 2015](https://aka.ms/netstandard-build-support-netfx)
 
 ### Frameworks Supported
