@@ -294,11 +294,11 @@ try
 }
 catch (FilesCom.NotAuthenticatedException e)
 {
-    Console.WriteLine($"Authentication Error occured({e.GetType().Name}): " + e.Message);
+    Console.WriteLine($"Authentication Error occurred({e.GetType().Name}): " + e.Message);
 }
 catch (FilesCom.SdkException e)
 {
-    Console.WriteLine($"Unknown Error occured({e.GetType().Name}): " + e.Message);
+    Console.WriteLine($"Unknown Error occurred({e.GetType().Name}): " + e.Message);
 }
 
 ```
@@ -513,127 +513,127 @@ Exception
 ### Writing a file
 
 ```csharp
-    // Will upload a file called "test.txt"
+// Will upload a file called "test.txt"
 
-    using FilesCom;
-    using FilesCom.Models;
+using FilesCom;
+using FilesCom.Models;
 
-    namespace Example
+namespace Example
+{
+    class Program
     {
-        class Program
+        static async Task Main(string[] args)
         {
-            static async Task Main(string[] args)
-            {
-                FilesConfiguration filesConfig = new FilesConfiguration();
-                filesConfig.ApiKey = "YOUR-API-KEY";
-                FilesClient client = new FilesClient(filesConfig);
+            FilesConfiguration filesConfig = new FilesConfiguration();
+            filesConfig.ApiKey = "YOUR-API-KEY";
+            FilesClient client = new FilesClient(filesConfig);
 
-                Console.WriteLine("Upload Attempt:");
-                var localFilePath = System.IO.Directory.GetCurrentDirectory();
-                var uploadRes = await RemoteFile.UploadFile(localFilePath + "/test.txt", "/test.txt");
-                if (uploadRes) {
-                    Console.WriteLine("-- Upload Result: {0}", uploadRes.ToString());
-                } else {
-                    Console.WriteLine("-- Upload Result: Failed");
-                }
-
-                Console.WriteLine("Press any key to continue...");
-                Console.ReadLine();
+            Console.WriteLine("Upload Attempt:");
+            var localFilePath = System.IO.Directory.GetCurrentDirectory();
+            var uploadRes = await RemoteFile.UploadFile(localFilePath + "/test.txt", "/test.txt");
+            if (uploadRes) {
+                Console.WriteLine("-- Upload Result: {0}", uploadRes.ToString());
+            } else {
+                Console.WriteLine("-- Upload Result: Failed");
             }
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadLine();
         }
     }
+}
 ```
 
 ### Uploading a file from a Stream
 
 ```csharp
-    using(MemoryStream stream = new System.IO.MemoryStream())
-    {
-        byte[] firstString = System.Text.UTF8Encoding.UTF8.GetBytes("Example memory stream contents.");
-        stream.Write(firstString, 0, firstString.Length);
-        stream.Position = 0; // Reset stream pointer
-        var modifiedTime = DateTime.UtcNow;
-        Console.WriteLine("-- Uploaded File Size: {0}", stream.Length);
-        await RemoteFile.UploadFile("dotnet_upload_stream.txt", stream, stream.Length, modifiedTime, options);
-    }
+using(MemoryStream stream = new System.IO.MemoryStream())
+{
+    byte[] firstString = System.Text.UTF8Encoding.UTF8.GetBytes("Example memory stream contents.");
+    stream.Write(firstString, 0, firstString.Length);
+    stream.Position = 0; // Reset stream pointer
+    var modifiedTime = DateTime.UtcNow;
+    Console.WriteLine("-- Uploaded File Size: {0}", stream.Length);
+    await RemoteFile.UploadFile("dotnet_upload_stream.txt", stream, stream.Length, modifiedTime, options);
+}
 ```
 
 ### Reading a file's text as a Stream
 
 ```csharp
-    using(MemoryStream stream = new System.IO.MemoryStream())
-    {
-        RemoteFile f = await RemoteFile.Find("/remote_streamio.txt", null, null);
-        Console.WriteLine("-- Downloaded File Path: {0}", f.Path);
-        Console.WriteLine("-- Downloaded File Size: {0}", f.Size);
-        await f.DownloadFile(stream);
-        Console.WriteLine("-- Downloaded File Contents: {0}", Encoding.UTF8.GetString(stream.ToArray()));
-    }
+using(MemoryStream stream = new System.IO.MemoryStream())
+{
+    RemoteFile f = await RemoteFile.Find("/remote_streamio.txt", null, null);
+    Console.WriteLine("-- Downloaded File Path: {0}", f.Path);
+    Console.WriteLine("-- Downloaded File Size: {0}", f.Size);
+    await f.DownloadFile(stream);
+    Console.WriteLine("-- Downloaded File Contents: {0}", Encoding.UTF8.GetString(stream.ToArray()));
+}
 ```
 
 ### Reading a file and writing it to your local drive.
 
 ```csharp
-    var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
-    if (downloadResponse) {
-        Console.WriteLine("-- Download result: {0}" + downloadResponse+.ToString());
-    } else {
-        Console.WriteLine("-- Download result: Failed");
-    }
+var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
+if (downloadResponse) {
+    Console.WriteLine("-- Download result: {0}" + downloadResponse+.ToString());
+} else {
+    Console.WriteLine("-- Download result: Failed");
+}
 ```
 
 ### List root folder (loads all pages into memory)
 
 ```csharp
-    var files = Folder.ListFor("/", null, null);
-    foreach (var file in await files.All())
-    {
-        Console.WriteLine("- Path: {0}", file.Path);
-    }
+var files = Folder.ListFor("/", null, null);
+foreach (var file in await files.All())
+{
+    Console.WriteLine("- Path: {0}", file.Path);
+}
 ```
 
 ### List root folder with auto pagination (loads each page into memory)
 
 ```csharp
-    foreach (var file in Folder.ListFor("/").ListAutoPaging())
-    {
-        Console.WriteLine("- Path: {0}", file.Path);
-    }
+foreach (var file in Folder.ListFor("/").ListAutoPaging())
+{
+    Console.WriteLine("- Path: {0}", file.Path);
+}
 ```
 
 ### List root folder with manual pagination (loads each page into memory)
 
 ```csharp
-    FilesList<RemoteFile> listing = Folder.ListFor("/");
-    do
+FilesList<RemoteFile> listing = Folder.ListFor("/");
+do
+{
+    foreach (var file in await listing.LoadNextPage())
     {
-        foreach (var file in await listing.LoadNextPage())
-        {
-            Console.WriteLine("- Path: {0}", file.Path);
-        }
-    } while (listing.HasNextPage);
+        Console.WriteLine("- Path: {0}", file.Path);
+    }
+} while (listing.HasNextPage);
 ```
 
 ### List folder with a filter
 
 ```csharp
-    Dictionary<string, object> parameters = new Dictionary<string, object>(){
-        { "filter", "*.png"},
-    };
-    var files = Folder.ListFor("/", parameters, null);
-    foreach (var file in files.ListAutoPaging())
-    {
-        Console.WriteLine("- Path: {0}", file.Path);
-    }
+Dictionary<string, object> parameters = new Dictionary<string, object>(){
+    { "filter", "*.png"},
+};
+var files = Folder.ListFor("/", parameters, null);
+foreach (var file in files.ListAutoPaging())
+{
+    Console.WriteLine("- Path: {0}", file.Path);
+}
 ```
 
 ### Comparing Case insensitive files and paths
 
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 ```csharp
-    if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
-        Console.WriteLine("Paths are the same");
-    }
+if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
+    Console.WriteLine("Paths are the same");
+}
 ```
 
 ### Logging

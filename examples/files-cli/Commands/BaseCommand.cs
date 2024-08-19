@@ -27,7 +27,7 @@ namespace files_cli.Commands
         }
 
         public async Task<Dictionary<string, object>> GetOptions()
-        { 
+        {
             Dictionary<string, object> options = new Dictionary<string, object>();
 
             if (Username != null) {
