@@ -298,7 +298,7 @@
 * `admin_user_id` / `AdminUserId`  (Nullable<Int64>): User ID for the main site administrator
 * `admins_bypass_locked_subfolders` / `AdminsBypassLockedSubfolders`  (bool): Allow admins to bypass the locked subfolders setting.
 * `allow_bundle_names` / `AllowBundleNames`  (bool): Are manual Bundle names allowed?
-* `allowed_countries` / `AllowedCountries`  (string): Comma seperated list of allowed Country codes
+* `allowed_countries` / `AllowedCountries`  (string): Comma separated list of allowed Country codes
 * `allowed_ips` / `AllowedIps`  (string): List of allowed IP addresses
 * `always_mkdir_parents` / `AlwaysMkdirParents`  (bool): Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
 * `ask_about_overwrites` / `AskAboutOverwrites`  (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
@@ -335,7 +335,7 @@
 * `mobile_app` / `MobileApp`  (bool): Is the mobile app enabled?
 * `mobile_app_session_ip_pinning` / `MobileAppSessionIpPinning`  (bool): Is mobile app session IP pinning enabled?
 * `mobile_app_session_lifetime` / `MobileAppSessionLifetime`  (Nullable<Int64>): Mobile app session lifetime (in hours)
-* `disallowed_countries` / `DisallowedCountries`  (string): Comma seperated list of disallowed Country codes
+* `disallowed_countries` / `DisallowedCountries`  (string): Comma separated list of disallowed Country codes
 * `disable_files_certificate_generation` / `DisableFilesCertificateGeneration`  (bool): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
 * `disable_notifications` / `DisableNotifications`  (bool): Are notifications disabled?
 * `disable_password_reset` / `DisablePasswordReset`  (bool): Is password reset disabled?
@@ -407,7 +407,7 @@
 * `sftp_enabled` / `SftpEnabled`  (bool): Is SFTP enabled?
 * `sftp_host_key_type` / `SftpHostKeyType`  (string): Sftp Host Key Type
 * `active_sftp_host_key_id` / `ActiveSftpHostKeyId`  (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
-* `sftp_insecure_ciphers` / `SftpInsecureCiphers`  (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severly weakens the security of your site and it is not recommend, except as a last resort for compatibility.
+* `sftp_insecure_ciphers` / `SftpInsecureCiphers`  (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
 * `sftp_insecure_diffie_hellman` / `SftpInsecureDiffieHellman`  (bool): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
 * `sftp_user_root_enabled` / `SftpUserRootEnabled`  (bool): Use user FTP roots also for SFTP?
 * `sharing_enabled` / `SharingEnabled`  (bool): Allow bundle creation
@@ -527,7 +527,7 @@ Task<Site> Site.Update(
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
-* `sftp_insecure_ciphers` (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severly weakens the security of your site and it is not recommend, except as a last resort for compatibility.
+* `sftp_insecure_ciphers` (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
 * `sftp_insecure_diffie_hellman` (bool): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
 * `disable_files_certificate_generation` (bool): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
 * `user_lockout` (bool): Will users be locked out after incorrect login attempts?
@@ -535,9 +535,9 @@ Task<Site> Site.Update(
 * `user_lockout_within` (Nullable<Int64>): Number of hours for user lockout window
 * `user_lockout_lock_period` (Nullable<Int64>): How many hours to lock user out for failed password?
 * `include_password_in_welcome_email` (bool): Include password in emails to new users?
-* `allowed_countries` (string): Comma seperated list of allowed Country codes
+* `allowed_countries` (string): Comma separated list of allowed Country codes
 * `allowed_ips` (string): List of allowed IP addresses
-* `disallowed_countries` (string): Comma seperated list of disallowed Country codes
+* `disallowed_countries` (string): Comma separated list of disallowed Country codes
 * `days_to_retain_backups` (Nullable<Int64>): Number of days to keep deleted files
 * `max_prior_passwords` (Nullable<Int64>): Number of prior passwords to disallow
 * `password_validity_days` (Nullable<Int64>): Number of days password is valid
