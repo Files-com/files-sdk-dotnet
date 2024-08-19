@@ -55,9 +55,7 @@ For Visual Studio 2015, the following must be installed:
 
 If you need support for a newer framework version, please ask, and we'll be happy to add it.  It will most likely work out of the box anyway.
 
-<Note title="Repository">
 Explore the [files-sdk-dotnet](https://github.com/Files-com/files-sdk-dotnet) code on GitHub.
-</Note>
 
 ### Getting Support
 
@@ -109,9 +107,7 @@ options.Add("api_key", "YOUR_API_KEY");
 User.Find(id, params, options);
 ```
 
-<Note>
 Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API key.
-</Note>
 
 ### Authenticate with a Session
 
