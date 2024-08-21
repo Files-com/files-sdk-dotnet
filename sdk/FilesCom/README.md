@@ -151,7 +151,7 @@ filesConfig.SessionId = session.Id;
 // Alternatively, you can specify the session ID on a per-object basis
 // in the second parameter to a model constructor.
 
-user = new User(params, requestParameters);
+user = new User(params, requestOptions);
 Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 Dictionary<string, object> optionsDict = new Dictionary<string, object>();
 optionsDict.Add("session_id", session.Id);
