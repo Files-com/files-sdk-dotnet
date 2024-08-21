@@ -105,6 +105,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sso_strategy_type", null);
             }
+            if (!this.attributes.ContainsKey("siem_type"))
+            {
+                this.attributes.Add("siem_type", null);
+            }
             if (!this.attributes.ContainsKey("tutorial_youtube_url"))
             {
                 this.attributes.Add("tutorial_youtube_url", null);
@@ -335,6 +339,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["sso_strategy_type"]; }
             private set { attributes["sso_strategy_type"] = value; }
+        }
+
+        /// <summary>
+        /// Associated SIEM type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("siem_type")]
+        public string SiemType
+        {
+            get { return (string)attributes["siem_type"]; }
+            private set { attributes["siem_type"] = value; }
         }
 
         /// <summary>
