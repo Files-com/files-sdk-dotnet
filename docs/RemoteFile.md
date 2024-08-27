@@ -111,6 +111,7 @@ Task<RemoteFile> RemoteFile.Download(
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `with_previews` (bool): Include file preview information?
 * `with_priority_color` (bool): Include file priority color information?
+* `point_in_time` (string): Point in time to view the folder. Available only on remote server mounts for S3 with versioned buckets.
 
 
 ---
@@ -286,6 +287,7 @@ File.Download(parameters);
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `with_previews` (bool): Include file preview information?
 * `with_priority_color` (bool): Include file priority color information?
+* `point_in_time` (string): Point in time to view the folder. Available only on remote server mounts for S3 with versioned buckets.
 
 
 ---
