@@ -770,7 +770,6 @@ namespace FilesCom.Models
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
-        ///   point_in_time - string - Point in time to view the folder. Available only on remote server mounts for S3 with versioned buckets.
         /// </summary>
         public async Task<RemoteFile> Download(Dictionary<string, object> parameters)
         {
@@ -804,10 +803,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
-            }
-            if (parameters.ContainsKey("point_in_time") && !(parameters["point_in_time"] is string))
-            {
-                throw new ArgumentException("Bad parameter: point_in_time must be of type string", "parameters[\"point_in_time\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -1097,7 +1092,6 @@ namespace FilesCom.Models
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
-        ///   point_in_time - string - Point in time to view the folder. Available only on remote server mounts for S3 with versioned buckets.
         /// </summary>
         public static async Task<RemoteFile> Download(
             string path,
@@ -1139,10 +1133,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
-            }
-            if (parameters.ContainsKey("point_in_time") && !(parameters["point_in_time"] is string))
-            {
-                throw new ArgumentException("Bad parameter: point_in_time must be of type string", "parameters[\"point_in_time\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
