@@ -13,6 +13,8 @@ Files.com customers use our .NET client library for directly working with files 
 
 Every function in the Files.com application is available via .NET.  Nothing is excluded.
 
+The .NET client library uses the Files.com RESTful APIs via the HTTPS protocol (port 443) to securely communicate and transfer files so no firewall changes should be required in order to allow connectivity to Files.com.
+
 ### Files.com is Committed to .NET
 
 .NET is our second most popular integration language for custom development and is supported by our highest level of support.
