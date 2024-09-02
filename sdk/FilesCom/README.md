@@ -7,7 +7,27 @@ The content included here should be enough to get started, but please visit our
 
 ## Introduction
 
-The Files.com .NET client library provides convenient access to the Files.com API from applications using the .NET framework.
+The Files.com .NET client library provides convenient access to all aspects of Files.com from applications using the .NET framework.
+
+Files.com customers use our .NET client library for directly working with files and folders as well as performing management tasks such as adding/removing users, onboarding counterparties, retrieving information about automations and more.
+
+Every function in the Files.com application is available via .NET.  Nothing is excluded.
+
+### Files.com is Committed to .NET
+
+.NET is our second most popular integration language for custom development and is supported by our highest level of support.
+
+### Frameworks Supported
+
+- .NET 6
+- .NET 5
+- .NET Core 2.1, 2.2, 3.0, 3.1
+- .NET Standard 2.0
+- .NET Framework 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8
+
+.NET Framework versions below 4.6.1 are officially in end-of-life status according to Microsoft.  As a policy, Files.com does not support integrations which are considered end-of-life by their vendor.
+
+If you need support for a newer framework version, please ask, and we'll be happy to add it.  It will most likely work out of the box anyway.
 
 ### Installation
 
@@ -43,26 +63,13 @@ For Visual Studio 2015, the following must be installed:
 * [Nuget Package manager for Visual Studio 2015 version 3.6 or higher](https://www.nuget.org/downloads)
 * [.NET Standard Support for Visual Studio 2015](https://aka.ms/netstandard-build-support-netfx)
 
-### Frameworks Supported
-
-- .NET 6
-- .NET 5
-- .NET Core 2.1, 2.2, 3.0, 3.1
-- .NET Standard 2.0
-- .NET Framework 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8
-
-.NET Framework versions below 4.6.1 are officially in end-of-life status according to Microsoft.  As a policy, Files.com does not support integrations which are considered end-of-life by their vendor.
-
-If you need support for a newer framework version, please ask, and we'll be happy to add it.  It will most likely work out of the box anyway.
-
 Explore the [files-sdk-dotnet](https://github.com/Files-com/files-sdk-dotnet) code on GitHub.
 
 ### Getting Support
 
-The Files.com team is happy to help with any SDK Integration challenges you
-may face.
+The Files.com Support team provides official support for all of our official Files.com integration tools.
 
-Just email support@files.com and we'll get the process started.
+To initiate a support conversation, you can send an [Authenticated Support Request](https://www.files.com/docs/overview/requesting-support) or simply send an E-Mail to support@files.com.
 
 ## Authentication
 
