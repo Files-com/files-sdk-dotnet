@@ -130,7 +130,7 @@ session times out, simply create a new session and resume where you left off. Th
 automatically handled by SDKs because we do not want to store password information in memory without
 your explicit consent.
 
-#### Logging in
+#### Logging In
 
 To create a session, the `create` method is called on the `Session` object with the user's username and
 password.
@@ -147,7 +147,7 @@ paramsDict.Add("password", "password");
 Session session = await Session.Create(paramsDict);
 ```
 
-#### Using a session
+#### Using a Session
 
 Once a session has been created, you can store the session globally, use the session per object, or use the session per request to authenticate SDK operations.
 
@@ -174,7 +174,7 @@ await Folder.ListFor("/", paramsDict, optionsDict).All();
 
 ```
 
-#### Logging out
+#### Logging Out
 
 User sessions can be ended calling the `destroy` method on the `session` object.
 
@@ -184,7 +184,7 @@ await Session.Destroy();
 
 ## Configuration
 
-### Configuration options
+### Configuration Options
 
 #### Base URL
 
@@ -195,7 +195,7 @@ This can also be set to use a mock server in development or CI.
 config.BaseUrl = "https://MY-SUBDOMAIN.files.com"
 ```
 
-#### Open timeout
+#### Open Timeout
 
 Open timeout in seconds. The default value is 30.
 
@@ -203,7 +203,7 @@ Open timeout in seconds. The default value is 30.
 config.OpenTimeout = 60
 ```
 
-#### Read timeout
+#### Read Timeout
 
 Read timeout in seconds. The default value is 80.
 
@@ -211,7 +211,7 @@ Read timeout in seconds. The default value is 80.
 config.ReadTimeout = 90
 ```
 
-#### Initial network retry delay
+#### Initial Network Retry Delay
 
 Initial retry delay in seconds. The default value is 0.5.
 
@@ -219,7 +219,7 @@ Initial retry delay in seconds. The default value is 0.5.
 config.InitialNetworkRetryDelay = 1
 ```
 
-#### Maximum network retries
+#### Maximum Network Retries
 
 Maximum number of retries. The default value is 3.
 
@@ -227,7 +227,7 @@ Maximum number of retries. The default value is 3.
 config.MaxNetworkRetries = 5
 ```
 
-#### Maximum retry delay
+#### Maximum Retry Delay
 
 Maximum network retry delay in seconds. The default value is 2.
 
@@ -479,7 +479,7 @@ Exception
 
 ## Examples
 
-### Writing a file
+### Writing a File
 
 ```csharp
 // Will upload a file called "test.txt"
@@ -513,7 +513,7 @@ namespace Example
 }
 ```
 
-### Uploading a file from a Stream
+### Uploading a File from a Stream
 
 ```csharp
 using(MemoryStream stream = new System.IO.MemoryStream())
@@ -527,7 +527,7 @@ using(MemoryStream stream = new System.IO.MemoryStream())
 }
 ```
 
-### Reading a file's text as a Stream
+### Reading a File's Text as a Stream
 
 ```csharp
 using(MemoryStream stream = new System.IO.MemoryStream())
@@ -540,7 +540,7 @@ using(MemoryStream stream = new System.IO.MemoryStream())
 }
 ```
 
-### Reading a file and writing it to your local drive.
+### Reading a File and Writing it to Your Local Drive
 
 ```csharp
 var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
@@ -551,7 +551,7 @@ if (downloadResponse) {
 }
 ```
 
-### List root folder (loads all pages into memory)
+### List Root Folder (loads all pages into memory)
 
 ```csharp
 var files = Folder.ListFor("/", null, null);
@@ -561,7 +561,7 @@ foreach (var file in await files.All())
 }
 ```
 
-### List root folder with auto pagination (loads each page into memory)
+### List Root Folder with Auto Pagination (loads each page into memory)
 
 ```csharp
 foreach (var file in Folder.ListFor("/").ListAutoPaging())
@@ -570,7 +570,7 @@ foreach (var file in Folder.ListFor("/").ListAutoPaging())
 }
 ```
 
-### List root folder with manual pagination (loads each page into memory)
+### List Root Folder with Manual Pagination (loads each page into memory)
 
 ```csharp
 FilesList<RemoteFile> listing = Folder.ListFor("/");
@@ -583,7 +583,7 @@ do
 } while (listing.HasNextPage);
 ```
 
-### List folder with a filter
+### List Folder with a Filter
 
 ```csharp
 Dictionary<string, object> parameters = new Dictionary<string, object>(){
@@ -596,7 +596,7 @@ foreach (var file in files.ListAutoPaging())
 }
 ```
 
-### Comparing Case insensitive files and paths
+### Comparing Case-Insensitive Files and Paths
 
 For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 ```csharp
