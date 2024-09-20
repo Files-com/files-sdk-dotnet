@@ -942,7 +942,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Type(s) of 2FA methods in use, for programmatic use.  Will be either `sms`, `totp`, `u2f`, `yubi`, or multiple values sorted alphabetically and joined by an underscore.  Does not specify whether user has more than one of a given method.
+        /// Type(s) of 2FA methods in use, for programmatic use.  Will be either `sms`, `totp`, `webauthn`, `yubi`, `email`, or multiple values sorted alphabetically and joined by an underscore.  Does not specify whether user has more than one of a given method.
         /// </summary>
         [JsonPropertyName("type_of_2fa")]
         public string TypeOf2fa

@@ -589,6 +589,7 @@ Exception
 |`TwoFactorAuthenticationCodeAlreadySentException`|  `ProcessingFailureException` |
 |`TwoFactorAuthenticationCountryBlacklistedException`|  `ProcessingFailureException` |
 |`TwoFactorAuthenticationGeneralErrorException`|  `ProcessingFailureException` |
+|`TwoFactorAuthenticationMethodUnsupportedErrorException`|  `ProcessingFailureException` |
 |`TwoFactorAuthenticationUnsubscribedRecipientException`|  `ProcessingFailureException` |
 |`UpdatesNotAllowedForRemotesException`|  `ProcessingFailureException` |
 |`DuplicateShareRecipientException`|  `RateLimitedException` |

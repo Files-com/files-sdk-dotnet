@@ -49,10 +49,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allowed_2fa_method_totp", false);
             }
-            if (!this.attributes.ContainsKey("allowed_2fa_method_u2f"))
-            {
-                this.attributes.Add("allowed_2fa_method_u2f", false);
-            }
             if (!this.attributes.ContainsKey("allowed_2fa_method_webauthn"))
             {
                 this.attributes.Add("allowed_2fa_method_webauthn", false);
@@ -750,18 +746,6 @@ namespace FilesCom.Models
         {
             get { return attributes["allowed_2fa_method_totp"] == null ? false : (bool)attributes["allowed_2fa_method_totp"]; }
             private set { attributes["allowed_2fa_method_totp"] = value; }
-        }
-
-        /// <summary>
-        /// Is U2F two factor authentication allowed?
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("allowed_2fa_method_u2f")]
-        public bool Allowed2faMethodU2f
-        {
-            get { return attributes["allowed_2fa_method_u2f"] == null ? false : (bool)attributes["allowed_2fa_method_u2f"]; }
-            private set { attributes["allowed_2fa_method_u2f"] = value; }
         }
 
         /// <summary>
@@ -2700,7 +2684,6 @@ namespace FilesCom.Models
         ///   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
         ///   admins_bypass_locked_subfolders - boolean - Allow admins to bypass the locked subfolders setting.
         ///   allowed_2fa_method_sms - boolean - Is SMS two factor authentication allowed?
-        ///   allowed_2fa_method_u2f - boolean - Is U2F two factor authentication allowed?
         ///   allowed_2fa_method_totp - boolean - Is TOTP two factor authentication allowed?
         ///   allowed_2fa_method_webauthn - boolean - Is WebAuthn two factor authentication allowed?
         ///   allowed_2fa_method_yubi - boolean - Is yubikey two factor authentication allowed?
@@ -3156,10 +3139,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allowed_2fa_method_sms must be of type bool", "parameters[\"allowed_2fa_method_sms\"]");
-            }
-            if (parameters.ContainsKey("allowed_2fa_method_u2f") && !(parameters["allowed_2fa_method_u2f"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_u2f must be of type bool", "parameters[\"allowed_2fa_method_u2f\"]");
             }
             if (parameters.ContainsKey("allowed_2fa_method_totp") && !(parameters["allowed_2fa_method_totp"] is bool))
             {

@@ -11,7 +11,6 @@
   ],
   "allowed_2fa_method_sms": true,
   "allowed_2fa_method_totp": true,
-  "allowed_2fa_method_u2f": true,
   "allowed_2fa_method_webauthn": true,
   "allowed_2fa_method_yubi": true,
   "allowed_2fa_method_email": true,
@@ -166,7 +165,6 @@
     "two_factor_setup_needed": false,
     "allowed_2fa_method_sms": true,
     "allowed_2fa_method_totp": true,
-    "allowed_2fa_method_u2f": true,
     "allowed_2fa_method_webauthn": true,
     "allowed_2fa_method_yubi": true,
     "use_provided_modified_at": true,
@@ -291,7 +289,6 @@
 * `additional_text_file_types` / `AdditionalTextFileTypes`  (string[]): Additional extensions that are considered text files
 * `allowed_2fa_method_sms` / `Allowed2faMethodSms`  (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_totp` / `Allowed2faMethodTotp`  (bool): Is TOTP two factor authentication allowed?
-* `allowed_2fa_method_u2f` / `Allowed2faMethodU2f`  (bool): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_webauthn` / `Allowed2faMethodWebauthn`  (bool): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` / `Allowed2faMethodYubi`  (bool): Is yubikey two factor authentication allowed?
 * `allowed_2fa_method_email` / `Allowed2faMethodEmail`  (bool): Is OTP via email two factor authentication allowed?
@@ -587,7 +584,6 @@ Task<Site> Site.Update(
 * `bundle_recipient_blacklist_domains` (string[]): List of email domains to disallow when entering a Bundle/Inbox recipients
 * `admins_bypass_locked_subfolders` (bool): Allow admins to bypass the locked subfolders setting.
 * `allowed_2fa_method_sms` (bool): Is SMS two factor authentication allowed?
-* `allowed_2fa_method_u2f` (bool): Is U2F two factor authentication allowed?
 * `allowed_2fa_method_totp` (bool): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_webauthn` (bool): Is WebAuthn two factor authentication allowed?
 * `allowed_2fa_method_yubi` (bool): Is yubikey two factor authentication allowed?
