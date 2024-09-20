@@ -90,7 +90,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
         public string Path
@@ -110,7 +110,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// User's username
+        /// Username (if applicable)
         /// </summary>
         [JsonPropertyName("username")]
         public string Username
@@ -130,7 +130,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Group name if applicable
+        /// Group name (if applicable)
         /// </summary>
         [JsonPropertyName("group_name")]
         public string GroupName
@@ -140,7 +140,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Permission type
+        /// Permission type.  See the table referenced in the documentation for an explanation of each permission.
         /// </summary>
         [JsonPropertyName("permission")]
         public string PermissionType
@@ -150,7 +150,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Does this permission apply to subfolders?
+        /// Recursive: does this permission apply to subfolders?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("recursive")]
