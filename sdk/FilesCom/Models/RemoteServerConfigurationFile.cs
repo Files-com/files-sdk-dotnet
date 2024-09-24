@@ -300,7 +300,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Maximum number of concurrent jobs (default 1024)
+        /// Maximum number of concurrent jobs (default 500)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("override_max_concurrent_jobs")]
