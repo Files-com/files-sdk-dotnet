@@ -85,9 +85,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("log_rotate_size", null);
             }
-            if (!this.attributes.ContainsKey("max_concurrent_jobs"))
+            if (!this.attributes.ContainsKey("override_max_concurrent_jobs"))
             {
-                this.attributes.Add("max_concurrent_jobs", null);
+                this.attributes.Add("override_max_concurrent_jobs", null);
             }
             if (!this.attributes.ContainsKey("graceful_shutdown_timeout"))
             {
@@ -211,7 +211,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Preferred network protocol ['udp', 'tcp']
+        /// Preferred network protocol ['udp', 'tcp'] (default udp)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("prefer_protocol")]
@@ -222,7 +222,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// DNS lookup method ['auto','doh','system']
+        /// DNS lookup method ['auto','doh','system'] (default auto)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("dns")]
@@ -267,7 +267,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Log level for the agent logs ['debug', 'info', 'warn', 'error', 'fatal']
+        /// Log level for the agent logs ['debug', 'info', 'warn', 'error', 'fatal'] (default info)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("log_level")]
@@ -289,7 +289,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Log route size in MB for agent logs. (default 20MB)
+        /// Log route size in MB for agent logs. (default 20)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("log_rotate_size")]
@@ -300,18 +300,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Maximum number of concurrent jobs (default CPU Count * 4)
+        /// Maximum number of concurrent jobs (default 1024)
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("max_concurrent_jobs")]
-        public Nullable<Int64> MaxConcurrentJobs
+        [JsonPropertyName("override_max_concurrent_jobs")]
+        public Nullable<Int64> OverrideMaxConcurrentJobs
         {
-            get { return (Nullable<Int64>)attributes["max_concurrent_jobs"]; }
-            private set { attributes["max_concurrent_jobs"] = value; }
+            get { return (Nullable<Int64>)attributes["override_max_concurrent_jobs"]; }
+            private set { attributes["override_max_concurrent_jobs"] = value; }
         }
 
         /// <summary>
-        /// Graceful shutdown timeout in seconds
+        /// Graceful shutdown timeout in seconds (default 15)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("graceful_shutdown_timeout")]
