@@ -440,7 +440,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If set, all communciations with this remote server are made through the provided region.
+        /// If set, all communications with this remote server are made through the provided region.
         /// </summary>
         [JsonPropertyName("pinned_region")]
         public string PinnedRegion
