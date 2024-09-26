@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disabled", false);
             }
+            if (!this.attributes.ContainsKey("exclude_pattern"))
+            {
+                this.attributes.Add("exclude_pattern", null);
+            }
             if (!this.attributes.ContainsKey("flatten_destination_structure"))
             {
                 this.attributes.Add("flatten_destination_structure", false);
@@ -273,6 +277,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+        /// </summary>
+        [JsonPropertyName("exclude_pattern")]
+        public string ExcludePattern
+        {
+            get { return (string)attributes["exclude_pattern"]; }
+            set { attributes["exclude_pattern"] = value; }
+        }
+
+        /// <summary>
         /// Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -437,7 +451,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Source Path
+        /// Source path. Supports globs, except on remote mounts.
         /// </summary>
         [JsonPropertyName("source")]
         public string Source
