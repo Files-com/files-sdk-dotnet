@@ -67,6 +67,7 @@
   "type_of_2fa": "yubi",
   "type_of_2fa_for_display": "yubi",
   "user_root": "example",
+  "user_home": "example",
   "days_remaining_until_password_expire": 1,
   "password_expire_at": "2000-01-01T01:00:00Z"
 }
@@ -132,7 +133,8 @@
 * `time_zone` / `TimeZone`  (string): User time zone
 * `type_of_2fa` / `TypeOf2fa`  (string): Type(s) of 2FA methods in use, for programmatic use.  Will be either `sms`, `totp`, `webauthn`, `yubi`, `email`, or multiple values sorted alphabetically and joined by an underscore.  Does not specify whether user has more than one of a given method.
 * `type_of_2fa_for_display` / `TypeOf2faForDisplay`  (string): Type(s) of 2FA methods in use, formatted for displaying in the UI.  Unlike `type_of_2fa`, this value will make clear when a user has more than 1 of the same type of method.
-* `user_root` / `UserRoot`  (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+* `user_root` / `UserRoot`  (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+* `user_home` / `UserHome`  (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `days_remaining_until_password_expire` / `DaysRemainingUntilPasswordExpire`  (Nullable<Int64>): Number of days remaining until password expires
 * `password_expire_at` / `PasswordExpireAt`  (Nullable<DateTime>): Password expiration datetime
 * `avatar_file` / `AvatarFile`  (System.Net.Http.ByteArrayContent): An image file for your user avatar.
@@ -249,7 +251,8 @@ Task<User> User.Create(
 * `subscribe_to_newsletter` (bool): Is the user subscribed to the newsletter?
 * `require_2fa` (string): 2FA required setting
 * `time_zone` (string): User time zone
-* `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+* `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+* `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): Required - User's username
 
 
@@ -363,7 +366,8 @@ Task<User> User.Update(
 * `subscribe_to_newsletter` (bool): Is the user subscribed to the newsletter?
 * `require_2fa` (string): 2FA required setting
 * `time_zone` (string): User time zone
-* `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+* `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+* `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
 
 
@@ -485,6 +489,7 @@ parameters.Add("subscribe_to_newsletter", true);
 parameters.Add("require_2fa", "always_require");
 parameters.Add("time_zone", "Pacific Time (US & Canada)");
 parameters.Add("user_root", "example");
+parameters.Add("user_home", "example");
 parameters.Add("username", "user");
 
 User.Update(parameters);
@@ -537,7 +542,8 @@ User.Update(parameters);
 * `subscribe_to_newsletter` (bool): Is the user subscribed to the newsletter?
 * `require_2fa` (string): 2FA required setting
 * `time_zone` (string): User time zone
-* `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+* `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+* `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
 
 

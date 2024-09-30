@@ -273,6 +273,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_root", null);
             }
+            if (!this.attributes.ContainsKey("user_home"))
+            {
+                this.attributes.Add("user_home", null);
+            }
             if (!this.attributes.ContainsKey("days_remaining_until_password_expire"))
             {
                 this.attributes.Add("days_remaining_until_password_expire", null);
@@ -962,13 +966,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+        /// Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
         /// </summary>
         [JsonPropertyName("user_root")]
         public string UserRoot
         {
             get { return (string)attributes["user_root"]; }
             set { attributes["user_root"] = value; }
+        }
+
+        /// <summary>
+        /// Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+        /// </summary>
+        [JsonPropertyName("user_home")]
+        public string UserHome
+        {
+            get { return (string)attributes["user_home"]; }
+            set { attributes["user_home"] = value; }
         }
 
         /// <summary>
@@ -1214,7 +1228,8 @@ namespace FilesCom.Models
         ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
-        ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+        ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+        ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
         /// </summary>
         public async Task<User> Update(Dictionary<string, object> parameters)
@@ -1413,6 +1428,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_root") && !(parameters["user_root"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_root must be of type string", "parameters[\"user_root\"]");
+            }
+            if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
             }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
@@ -1651,7 +1670,8 @@ namespace FilesCom.Models
         ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
-        ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+        ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+        ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
         ///   username (required) - string - User's username
         /// </summary>
         public static async Task<User> Create(
@@ -1847,6 +1867,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: user_root must be of type string", "parameters[\"user_root\"]");
             }
+            if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
+            }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
@@ -2010,7 +2034,8 @@ namespace FilesCom.Models
         ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting
         ///   time_zone - string - User time zone
-        ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set.)  Note that this is not used for API, Desktop, or Web interface.
+        ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
+        ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
         /// </summary>
         public static async Task<User> Update(
@@ -2217,6 +2242,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_root") && !(parameters["user_root"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_root must be of type string", "parameters[\"user_root\"]");
+            }
+            if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
             }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
