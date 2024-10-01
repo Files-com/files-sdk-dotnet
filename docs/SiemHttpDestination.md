@@ -113,7 +113,7 @@
 
 ---
 
-## List Siem Http Destinations
+## List SIEM HTTP Destinations
 
 ```
 Task<FilesList<SiemHttpDestination>> SiemHttpDestination.List(
@@ -131,7 +131,7 @@ Task<FilesList<SiemHttpDestination>> SiemHttpDestination.List(
 
 ---
 
-## Show Siem Http Destination
+## Show SIEM HTTP Destination
 
 ```
 Task<SiemHttpDestination> SiemHttpDestination.Find(
@@ -148,7 +148,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Find(
 
 ---
 
-## Create Siem Http Destination
+## Create SIEM HTTP Destination
 
 ```
 Task<SiemHttpDestination> SiemHttpDestination.Create(
@@ -191,7 +191,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Create(
 
 ---
 
-## send_test_entry Siem Http Destination
+## send_test_entry SIEM HTTP Destination
 
 ```
 Task SiemHttpDestination.SendTestEntry(
@@ -235,7 +235,7 @@ Task SiemHttpDestination.SendTestEntry(
 
 ---
 
-## Update Siem Http Destination
+## Update SIEM HTTP Destination
 
 ```
 Task<SiemHttpDestination> SiemHttpDestination.Update(
@@ -279,7 +279,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Update(
 
 ---
 
-## Delete Siem Http Destination
+## Delete SIEM HTTP Destination
 
 ```
 Task SiemHttpDestination.Delete(
@@ -296,7 +296,7 @@ Task SiemHttpDestination.Delete(
 
 ---
 
-## Update Siem Http Destination
+## Update SIEM HTTP Destination
 
 ```
 var SiemHttpDestination = SiemHttpDestination.Find(1);
@@ -362,7 +362,7 @@ SiemHttpDestination.Update(parameters);
 
 ---
 
-## Delete Siem Http Destination
+## Delete SIEM HTTP Destination
 
 ```
 var SiemHttpDestination = SiemHttpDestination.Find(1);
