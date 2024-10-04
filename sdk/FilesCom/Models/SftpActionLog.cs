@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("username", null);
             }
+            if (!this.attributes.ContainsKey("ssh_client_identification"))
+            {
+                this.attributes.Add("ssh_client_identification", null);
+            }
             if (!this.attributes.ContainsKey("session_uuid"))
             {
                 this.attributes.Add("session_uuid", null);
@@ -169,6 +173,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["username"]; }
             private set { attributes["username"] = value; }
+        }
+
+        /// <summary>
+        /// Name of the SFTP Client provided at initial connection
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ssh_client_identification")]
+        public string SshClientIdentification
+        {
+            get { return (string)attributes["ssh_client_identification"]; }
+            private set { attributes["ssh_client_identification"] = value; }
         }
 
         /// <summary>
