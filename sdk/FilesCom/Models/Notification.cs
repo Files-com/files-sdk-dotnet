@@ -186,7 +186,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If set, will onlynotify on actions made one of the specified users
+        /// If set, will only notify on actions made one of the specified users
         /// </summary>
         [JsonPropertyName("triggering_user_ids")]
         public Nullable<Int64>[] TriggeringUserIds
@@ -378,7 +378,7 @@ namespace FilesCom.Models
         ///   message - string - Custom message to include in notification emails
         ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
-        ///   triggering_user_ids - array(int64) - If set, will onlynotify on actions made one of the specified users
+        ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         /// </summary>
         public async Task<Notification> Update(Dictionary<string, object> parameters)
@@ -636,7 +636,7 @@ namespace FilesCom.Models
         ///   message - string - Custom message to include in notification emails
         ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
-        ///   triggering_user_ids - array(int64) - If set, will onlynotify on actions made one of the specified users
+        ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         ///   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
         ///   path - string - Path
@@ -746,7 +746,7 @@ namespace FilesCom.Models
         ///   message - string - Custom message to include in notification emails
         ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
-        ///   triggering_user_ids - array(int64) - If set, will onlynotify on actions made one of the specified users
+        ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         /// </summary>
         public static async Task<Notification> Update(

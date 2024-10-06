@@ -88,7 +88,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// MD5 Fingerpint of the public key
+        /// MD5 Fingerprint of the public key
         /// </summary>
         [JsonPropertyName("fingerprint_md5")]
         public string FingerprintMd5
@@ -98,7 +98,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// SHA256 Fingerpint of the public key
+        /// SHA256 Fingerprint of the public key
         /// </summary>
         [JsonPropertyName("fingerprint_sha256")]
         public string FingerprintSha256

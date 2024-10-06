@@ -572,6 +572,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -660,6 +661,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
+            {
+                throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
             }
             if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
             {
@@ -899,6 +904,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -983,6 +989,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
+            {
+                throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
             }
             if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
             {
@@ -1092,6 +1102,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
+        ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -1188,6 +1199,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
+            {
+                throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
             }
             if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
             {

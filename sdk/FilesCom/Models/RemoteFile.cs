@@ -869,7 +869,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
         public async Task Delete(Dictionary<string, object> parameters)
         {
@@ -1307,7 +1307,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
         public static async Task Delete(
             string path,

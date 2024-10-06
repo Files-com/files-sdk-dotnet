@@ -15,7 +15,7 @@
     "destination"
   ],
   "disabled": true,
-  "exclude_pattern": "example",
+  "exclude_pattern": "path/to/exclude/*",
   "flatten_destination_structure": true,
   "group_ids": [
     1,
@@ -170,6 +170,7 @@ Task<Automation> Automation.Create(
 * `always_overwrite_size_matching_files` (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
 * `description` (string): Description for the this Automation.
 * `disabled` (bool): If true, this automation will not run.
+* `exclude_pattern` (string): If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
 * `flatten_destination_structure` (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `legacy_folder_matching` (bool): DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -230,6 +231,7 @@ Task<Automation> Automation.Update(
 * `always_overwrite_size_matching_files` (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
 * `description` (string): Description for the this Automation.
 * `disabled` (bool): If true, this automation will not run.
+* `exclude_pattern` (string): If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
 * `flatten_destination_structure` (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `legacy_folder_matching` (bool): DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -302,6 +304,7 @@ parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("always_overwrite_size_matching_files", true);
 parameters.Add("description", "example");
 parameters.Add("disabled", true);
+parameters.Add("exclude_pattern", "path/to/exclude/*");
 parameters.Add("flatten_destination_structure", true);
 parameters.Add("ignore_locked_folders", true);
 parameters.Add("legacy_folder_matching", true);
@@ -335,6 +338,7 @@ Automation.Update(parameters);
 * `always_overwrite_size_matching_files` (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.
 * `description` (string): Description for the this Automation.
 * `disabled` (bool): If true, this automation will not run.
+* `exclude_pattern` (string): If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
 * `flatten_destination_structure` (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `ignore_locked_folders` (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
 * `legacy_folder_matching` (bool): DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.

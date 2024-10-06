@@ -41,7 +41,7 @@
 * `group_id` / `GroupId`  (Nullable<Int64>): ID of Group to receive notifications
 * `group_name` / `GroupName`  (string): Group name, if a Group ID is set
 * `triggering_group_ids` / `TriggeringGroupIds`  (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
-* `triggering_user_ids` / `TriggeringUserIds`  (Nullable<Int64>[]): If set, will onlynotify on actions made one of the specified users
+* `triggering_user_ids` / `TriggeringUserIds`  (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` / `TriggerByShareRecipients`  (bool): Notify when actions are performed by a share recipient?
 * `notify_user_actions` / `NotifyUserActions`  (bool): If true, will send notifications about a user's own activity to that user.  If false, only activity performed by other users (or anonymous users) will be sent in notifications.
 * `notify_on_copy` / `NotifyOnCopy`  (bool): Trigger on files copied to this path?
@@ -127,7 +127,7 @@ Task<Notification> Notification.Create(
 * `message` (string): Custom message to include in notification emails
 * `triggering_filenames` (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
-* `triggering_user_ids` (Nullable<Int64>[]): If set, will onlynotify on actions made one of the specified users
+* `triggering_user_ids` (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` (bool): Notify when actions are performed by a share recipient?
 * `group_id` (Nullable<Int64>): The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
 * `path` (string): Path
@@ -160,7 +160,7 @@ Task<Notification> Notification.Update(
 * `message` (string): Custom message to include in notification emails
 * `triggering_filenames` (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
-* `triggering_user_ids` (Nullable<Int64>[]): If set, will onlynotify on actions made one of the specified users
+* `triggering_user_ids` (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` (bool): Notify when actions are performed by a share recipient?
 
 
@@ -221,7 +221,7 @@ Notification.Update(parameters);
 * `message` (string): Custom message to include in notification emails
 * `triggering_filenames` (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
-* `triggering_user_ids` (Nullable<Int64>[]): If set, will onlynotify on actions made one of the specified users
+* `triggering_user_ids` (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` (bool): Notify when actions are performed by a share recipient?
 
 

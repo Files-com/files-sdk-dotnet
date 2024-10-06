@@ -178,7 +178,7 @@ Task RemoteFile.Delete(
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `recursive` (bool): If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
+* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
 
 
 ---
@@ -329,7 +329,7 @@ File.Delete(parameters);
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `recursive` (bool): If true, will recursively delete folers.  Otherwise, will error on non-empty folders.
+* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
 
 
 ---

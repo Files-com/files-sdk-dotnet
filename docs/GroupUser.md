@@ -8,9 +8,7 @@
   "group_id": 1,
   "user_id": 1,
   "admin": true,
-  "usernames": [
-    "user"
-  ]
+  "usernames": "user"
 }
 ```
 
@@ -18,7 +16,7 @@
 * `group_id` / `GroupId`  (Nullable<Int64>): Group ID
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `admin` / `Admin`  (bool): Is this user an administrator of this group?
-* `usernames` / `Usernames`  (string[]): A list of usernames for users in this group
+* `usernames` / `Usernames`  (string): Comma-delimited list of usernames who belong to this group (separated by commas).
 * `id` / `Id`  (Nullable<Int64>): Group User ID.
 
 

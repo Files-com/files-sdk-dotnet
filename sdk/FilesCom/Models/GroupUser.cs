@@ -47,7 +47,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("usernames"))
             {
-                this.attributes.Add("usernames", new string[0]);
+                this.attributes.Add("usernames", null);
             }
             if (!this.attributes.ContainsKey("id"))
             {
@@ -113,12 +113,12 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// A list of usernames for users in this group
+        /// Comma-delimited list of usernames who belong to this group (separated by commas).
         /// </summary>
         [JsonPropertyName("usernames")]
-        public string[] Usernames
+        public string Usernames
         {
-            get { return (string[])attributes["usernames"]; }
+            get { return (string)attributes["usernames"]; }
             set { attributes["usernames"] = value; }
         }
 

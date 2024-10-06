@@ -150,7 +150,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// How was email deliered?  `customer_smtp` or `files.com`
+        /// How was the email delivered?  `customer_smtp` or `files.com`
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("delivery_method")]
