@@ -274,9 +274,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Folder path
         ///   group_id - int64 - Group ID
-        ///   path - string - Folder path
-        ///   permission - string -  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
+        ///   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
         ///   recursive - boolean - Apply to subfolders recursively?
         ///   user_id - int64 - User ID.  Provide `username` or `user_id`
         ///   username - string - User username.  Provide `username` or `user_id`
@@ -290,13 +290,17 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
-                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
             if (parameters.ContainsKey("permission") && !(parameters["permission"] is string))
             {

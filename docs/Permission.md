@@ -64,9 +64,9 @@ Task<Permission> Permission.Create(
 
 ### Parameters
 
+* `path` (string): Required - Folder path
 * `group_id` (Nullable<Int64>): Group ID
-* `path` (string): Folder path
-* `permission` (string):  Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
+* `permission` (string): Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
 * `recursive` (bool): Apply to subfolders recursively?
 * `user_id` (Nullable<Int64>): User ID.  Provide `username` or `user_id`
 * `username` (string): User username.  Provide `username` or `user_id`
