@@ -237,45 +237,19 @@ config.MaxNetworkRetryDelay = 5
 
 ## Sort and Filter
 
-Several of the Files.com API resources have list operations that return multiple instances of the resource.  The List operations
-can be sorted and filtered.
+Several of the Files.com API resources have list operations that return multiple instances of the
+resource. The List operations can be sorted and filtered.
 
 ### Sorting
 
-The returned data can be sorted by passing in the ```sort_by``` method argument.
+To sort the returned data, pass in the ```sort_by``` method argument.
 
-Each resource has a set of valid fields for sorting and can be sorted by one field at a time.
+Each resource supports a unique set of valid sort fields and can only be sorted by one field at a
+time.
 
-The argument value is a C# ```Dictionary<string, object>``` object that has a property of the resource field name sort on and a value of either ```"asc"``` or ```"desc"``` to specify the sort order.
-
-### Filters
-
-Filters apply selection criteria to the underlying query that returns the results. Filters can be applied individually to select resource fields
-and/or in a combination with each other.  The results of applying filters and filter combinations can be sorted by a single field.
-
-The passed in argument value is a C# ```Dictionary<string, object>``` object that has a property of the resource field name to filter on and a passed in value to use in the filter comparison.
-
-Each resource has their own set of valid filters and fields, valid combinations of filters, and sortable fields.
-
-#### Types of Filters
-
-##### Exact Filter
-
-`filter` - find resources that have an exact field value match to a passed in value. (i.e., FIELD_VALUE = PASS_IN_VALUE).
-
-#### Range Filters
-
-`filter_gt` - find resources that have a field value that is greater than the passed in value.  (i.e., FIELD_VALUE > PASS_IN_VALUE).
-
-`filter_gte` - find resources that have a field value that is greater than or equal to the passed in value.  (i.e., FIELD_VALUE >=  PASS_IN_VALUE).
-
-`filter_lt` - find resources that have a field value that is less than the passed in value.  (i.e., FIELD_VALUE < PASS_IN_VALUE).
-
-`filter_lte` - find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE).
-
-##### Pattern Filter
-
-`filter_prefix` - find resources where the specified field is prefixed by the supplied value. This is applicable to values that are strings.
+The argument value is a C# ```Dictionary<string, object>``` object that has a property of the
+resource field name sort on and a value of either ```"asc"``` or ```"desc"``` to specify the sort
+order.
 
 ```csharp title="Sort Example"
 // users sorted by username
@@ -290,8 +264,30 @@ var userIterator = User.List(args);
 foreach (User user in userIterator.ListAutoPaging()) {
   // Operate on user
 }
-
 ```
+
+### Filtering
+
+Filters apply selection criteria to the underlying query that returns the results. They can be
+applied individually or combined with other filters, and the resulting data can be sorted by a
+single field.
+
+Each resource supports a unique set of valid filter fields, filter combinations, and combinations of
+filters and sort fields.
+
+The passed in argument value is a C# ```Dictionary<string, object>``` object that has a property of
+the resource field name to filter on and a passed in value to use in the filter comparison.
+
+#### Filter Types
+
+| Filter | Type | Description |
+| --------- | --------- | --------- |
+| `filter` | Exact | Find resources that have an exact field value match to a passed in value. (i.e., FIELD_VALUE = PASS_IN_VALUE). |
+| `filter_prefix` | Pattern | Find resources where the specified field is prefixed by the supplied value. This is applicable to values that are strings. |
+| `filter_gt` | Range | Find resources that have a field value that is greater than the passed in value.  (i.e., FIELD_VALUE > PASS_IN_VALUE). |
+| `filter_gteq` | Range | Find resources that have a field value that is greater than or equal to the passed in value.  (i.e., FIELD_VALUE >=  PASS_IN_VALUE). |
+| `filter_lt` | Range | Find resources that have a field value that is less than the passed in value.  (i.e., FIELD_VALUE < PASS_IN_VALUE). |
+| `filter_lteq` | Range | Find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE). |
 
 ```csharp title="Exact Filter Example"
 // non admin users
@@ -299,17 +295,13 @@ config.ApiKey = "my-key";
 new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
-var sortArgs = new Dictionary<string, object>();
 filterArgs.Add("not_site_admin", true);
-sortArgs.Add("username", "asc");
 args.Add("filter", filterArgs);
-args.Add("sort_by", sortArgs);
 
 var userIterator = User.List(args);
 foreach (User user in userIterator.ListAutoPaging()) {
   // Operate on user
 }
-
 ```
 
 ```csharp  title="Range Filter Example"
@@ -318,11 +310,8 @@ config.ApiKey = "my-key";
 new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
-var sortArgs = new Dictionary<string, object>();
 filterArgs.Add("last_login_at","2024-01-01");
-sortArgs.Add("last_login_at", "asc");
-args.Add("filter_gte", filterArgs);
-args.Add("sort_by", sortArgs);
+args.Add("filter_gteq", filterArgs);
 
 var userIterator = User.List(args);
 foreach (User user in userIterator.ListAutoPaging()) {
@@ -331,16 +320,13 @@ foreach (User user in userIterator.ListAutoPaging()) {
 ```
 
 ```csharp  title="Pattern Filter Example"
-// users who usernames start with 'test'
+// users whose usernames start with 'test'
 config.ApiKey = "my-key";
 new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
-var sortArgs = new Dictionary<string, object>();
 filterArgs.Add("username","test");
-sortArgs.Add("last_login_at", "asc");
 args.Add("filter_prefix", filterArgs);
-args.Add("sort_by", sortArgs);
 
 var userIterator = User.List(args);
 foreach (User user in userIterator.ListAutoPaging()) {
@@ -348,8 +334,8 @@ foreach (User user in userIterator.ListAutoPaging()) {
 }
 ```
 
-```csharp s title="Combined Filter Example"
-// users who usernames start with 'test' and are not admins
+```csharp s title="Combination Filter with Sort Example"
+// users whose usernames start with 'test' and are not admins
 config.ApiKey = "my-key";
 new FilesClient(config);
 var args = new Dictionary<string, object>();
