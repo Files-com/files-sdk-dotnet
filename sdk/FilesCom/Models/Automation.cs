@@ -776,7 +776,6 @@ namespace FilesCom.Models
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `last_modified_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `last_modified_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `last_modified_at`.
-        ///   with_deleted - boolean - Set to true to include deleted automations in the results.
         /// </summary>
         public static FilesList<Automation> List(
 
@@ -818,10 +817,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
-            }
-            if (parameters.ContainsKey("with_deleted") && !(parameters["with_deleted"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: with_deleted must be of type bool", "parameters[\"with_deleted\"]");
             }
 
             return new FilesList<Automation>($"/automations", System.Net.Http.HttpMethod.Get, parameters, options);

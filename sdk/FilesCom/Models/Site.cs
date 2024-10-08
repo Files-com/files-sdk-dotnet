@@ -201,6 +201,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("days_to_retain_backups", null);
             }
+            if (!this.attributes.ContainsKey("document_edits_in_bundle_allowed"))
+            {
+                this.attributes.Add("document_edits_in_bundle_allowed", null);
+            }
             if (!this.attributes.ContainsKey("default_time_zone"))
             {
                 this.attributes.Add("default_time_zone", null);
@@ -1185,6 +1189,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, allow public viewers of Bundles with full permissions to use document editing integrations.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("document_edits_in_bundle_allowed")]
+        public string DocumentEditsInBundleAllowed
+        {
+            get { return (string)attributes["document_edits_in_bundle_allowed"]; }
+            private set { attributes["document_edits_in_bundle_allowed"] = value; }
+        }
+
+        /// <summary>
         /// Site default time zone
         /// </summary>
         [JsonInclude]
@@ -1786,7 +1801,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Allow users to use Office for the web?
+        /// If true, allows users to use a document editing integration.
         /// </summary>
         [JsonInclude]
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -1798,7 +1813,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Office integration application used to edit and view the MS Office documents
+        /// Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("office_integration_type")]
@@ -2614,8 +2629,8 @@ namespace FilesCom.Models
         ///   mobile_app_session_lifetime - int64 - Mobile app session lifetime (in hours)
         ///   folder_permissions_groups_only - boolean - If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
         ///   welcome_screen - string - Does the welcome screen appear?
-        ///   office_integration_available - boolean - Allow users to use Office for the web?
-        ///   office_integration_type - string - Office integration application used to edit and view the MS Office documents
+        ///   office_integration_available - boolean - If true, allows users to use a document editing integration.
+        ///   office_integration_type - string - Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.
         ///   pin_all_remote_servers_to_site_region - boolean - If true, we will ensure that all internal communications with any remote server are made through the primary region of the site. This setting overrides individual remote server settings.
         ///   motd_text - string - A message to show users when they connect via FTP or SFTP.
         ///   motd_use_for_ftp - boolean - Show message to users connecting via FTP
@@ -2659,6 +2674,7 @@ namespace FilesCom.Models
         ///   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
         ///   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
         ///   bundle_upload_receipt_notifications - string - Do Bundle uploaders receive upload confirmation notifications?
+        ///   document_edits_in_bundle_allowed - string - If true, allow public viewers of Bundles with full permissions to use document editing integrations.
         ///   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         ///   prevent_root_permissions_for_non_site_admins - boolean - If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
         ///   opt_out_global - boolean - Use servers in the USA only?
@@ -3039,6 +3055,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_upload_receipt_notifications") && !(parameters["bundle_upload_receipt_notifications"] is string))
             {
                 throw new ArgumentException("Bad parameter: bundle_upload_receipt_notifications must be of type string", "parameters[\"bundle_upload_receipt_notifications\"]");
+            }
+            if (parameters.ContainsKey("document_edits_in_bundle_allowed") && !(parameters["document_edits_in_bundle_allowed"] is string))
+            {
+                throw new ArgumentException("Bad parameter: document_edits_in_bundle_allowed must be of type string", "parameters[\"document_edits_in_bundle_allowed\"]");
             }
             if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool))
             {
