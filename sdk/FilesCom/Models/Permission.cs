@@ -275,11 +275,12 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   path (required) - string - Folder path
-        ///   group_id - int64 - Group ID
+        ///   group_id - int64 - Group ID. Provide `group_name` or `group_id`
         ///   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
         ///   recursive - boolean - Apply to subfolders recursively?
         ///   user_id - int64 - User ID.  Provide `username` or `user_id`
         ///   username - string - User username.  Provide `username` or `user_id`
+        ///   group_name - string - Group name.  Provide `group_name` or `group_id`
         /// </summary>
         public static async Task<Permission> Create(
 
@@ -317,6 +318,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+            }
+            if (parameters.ContainsKey("group_name") && !(parameters["group_name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: group_name must be of type string", "parameters[\"group_name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/permissions", System.Net.Http.HttpMethod.Post, parameters, options);
