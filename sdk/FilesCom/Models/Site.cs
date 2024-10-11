@@ -537,6 +537,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sharing_enabled", false);
             }
+            if (!this.attributes.ContainsKey("show_user_notifications_log_in_link"))
+            {
+                this.attributes.Add("show_user_notifications_log_in_link", false);
+            }
             if (!this.attributes.ContainsKey("show_request_access_link"))
             {
                 this.attributes.Add("show_request_access_link", false);
@@ -2151,6 +2155,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Show log in link in user notifications?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("show_user_notifications_log_in_link")]
+        public bool ShowUserNotificationsLogInLink
+        {
+            get { return attributes["show_user_notifications_log_in_link"] == null ? false : (bool)attributes["show_user_notifications_log_in_link"]; }
+            private set { attributes["show_user_notifications_log_in_link"] = value; }
+        }
+
+        /// <summary>
         /// Show request access link for users without access?  Currently unused.
         /// </summary>
         [JsonInclude]
@@ -2691,6 +2707,7 @@ namespace FilesCom.Models
         ///   sftp_enabled - boolean - Is SFTP enabled?
         ///   users_can_create_api_keys - boolean - Allow users to create their own API keys?
         ///   users_can_create_ssh_keys - boolean - Allow users to create their own SSH keys?
+        ///   show_user_notifications_log_in_link - boolean - Show log in link in user notifications?
         ///   sftp_host_key_type - string - Sftp Host Key Type
         ///   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
         ///   protocol_access_groups_only - boolean - If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
@@ -3123,6 +3140,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("users_can_create_ssh_keys") && !(parameters["users_can_create_ssh_keys"] is bool))
             {
                 throw new ArgumentException("Bad parameter: users_can_create_ssh_keys must be of type bool", "parameters[\"users_can_create_ssh_keys\"]");
+            }
+            if (parameters.ContainsKey("show_user_notifications_log_in_link") && !(parameters["show_user_notifications_log_in_link"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: show_user_notifications_log_in_link must be of type bool", "parameters[\"show_user_notifications_log_in_link\"]");
             }
             if (parameters.ContainsKey("sftp_host_key_type") && !(parameters["sftp_host_key_type"] is string))
             {

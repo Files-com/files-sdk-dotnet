@@ -181,6 +181,7 @@
   "sftp_insecure_diffie_hellman": true,
   "sftp_user_root_enabled": true,
   "sharing_enabled": true,
+  "show_user_notifications_log_in_link": true,
   "show_request_access_link": true,
   "site_footer": "example",
   "site_header": "example",
@@ -414,6 +415,7 @@
 * `sftp_insecure_diffie_hellman` / `SftpInsecureDiffieHellman`  (bool): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
 * `sftp_user_root_enabled` / `SftpUserRootEnabled`  (bool): Use user FTP roots also for SFTP?
 * `sharing_enabled` / `SharingEnabled`  (bool): Allow bundle creation
+* `show_user_notifications_log_in_link` / `ShowUserNotificationsLogInLink`  (bool): Show log in link in user notifications?
 * `show_request_access_link` / `ShowRequestAccessLink`  (bool): Show request access link for users without access?  Currently unused.
 * `site_footer` / `SiteFooter`  (string): Custom site footer text
 * `site_header` / `SiteHeader`  (string): Custom site header text
@@ -580,6 +582,7 @@ Task<Site> Site.Update(
 * `sftp_enabled` (bool): Is SFTP enabled?
 * `users_can_create_api_keys` (bool): Allow users to create their own API keys?
 * `users_can_create_ssh_keys` (bool): Allow users to create their own SSH keys?
+* `show_user_notifications_log_in_link` (bool): Show log in link in user notifications?
 * `sftp_host_key_type` (string): Sftp Host Key Type
 * `active_sftp_host_key_id` (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
 * `protocol_access_groups_only` (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
