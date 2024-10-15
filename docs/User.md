@@ -15,6 +15,7 @@
   "authenticate_until": "2000-01-01T01:00:00Z",
   "authentication_method": "password",
   "avatar_url": "example",
+  "billable": true,
   "billing_permission": true,
   "bypass_site_allowed_ips": true,
   "bypass_inactive_disable": true,
@@ -82,6 +83,7 @@
 * `authenticate_until` / `AuthenticateUntil`  (Nullable<DateTime>): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` / `AuthenticationMethod`  (string): How is this user authenticated?
 * `avatar_url` / `AvatarUrl`  (string): URL holding the user's avatar
+* `billable` / `Billable`  (bool): Is this a billable user record?
 * `billing_permission` / `BillingPermission`  (bool): Allow this user to perform operations on the account, payments, and invoices?
 * `bypass_site_allowed_ips` / `BypassSiteAllowedIps`  (bool): Allow this user to skip site-wide IP blacklists?
 * `bypass_inactive_disable` / `BypassInactiveDisable`  (bool): Exempt this user from being disabled based on inactivity?

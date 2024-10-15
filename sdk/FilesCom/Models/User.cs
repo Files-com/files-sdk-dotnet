@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("avatar_url", null);
             }
+            if (!this.attributes.ContainsKey("billable"))
+            {
+                this.attributes.Add("billable", false);
+            }
             if (!this.attributes.ContainsKey("billing_permission"))
             {
                 this.attributes.Add("billing_permission", false);
@@ -432,6 +436,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["avatar_url"]; }
             set { attributes["avatar_url"] = value; }
+        }
+
+        /// <summary>
+        /// Is this a billable user record?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("billable")]
+        public bool Billable
+        {
+            get { return attributes["billable"] == null ? false : (bool)attributes["billable"]; }
+            set { attributes["billable"] = value; }
         }
 
         /// <summary>

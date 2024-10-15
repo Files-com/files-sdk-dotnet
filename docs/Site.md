@@ -212,6 +212,7 @@
     "authenticate_until": "2000-01-01T01:00:00Z",
     "authentication_method": "password",
     "avatar_url": "example",
+    "billable": true,
     "billing_permission": false,
     "bypass_site_allowed_ips": false,
     "bypass_inactive_disable": false,
