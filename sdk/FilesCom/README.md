@@ -441,7 +441,6 @@ Exception
 |`InvalidCursorTypeForSortException`|  `BadRequestException` |
 |`InvalidEtagsException`|  `BadRequestException` |
 |`InvalidFilterAliasCombinationException`|  `BadRequestException` |
-|`InvalidFilterCombinationException`|  `BadRequestException` |
 |`InvalidFilterFieldException`|  `BadRequestException` |
 |`InvalidFilterParamException`|  `BadRequestException` |
 |`InvalidFilterParamValueException`|  `BadRequestException` |
@@ -450,6 +449,7 @@ Exception
 |`InvalidOauthProviderException`|  `BadRequestException` |
 |`InvalidPathException`|  `BadRequestException` |
 |`InvalidReturnToUrlException`|  `BadRequestException` |
+|`InvalidSortFilterCombinationException`|  `BadRequestException` |
 |`InvalidUploadOffsetException`|  `BadRequestException` |
 |`InvalidUploadPartGapException`|  `BadRequestException` |
 |`InvalidUploadPartSizeException`|  `BadRequestException` |

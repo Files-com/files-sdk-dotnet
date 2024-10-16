@@ -166,12 +166,6 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class InvalidFilterCombinationException : BadRequestException
-    {
-        public InvalidFilterCombinationException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
-            : base(message, httpStatus, responseError, httpHeaders)
-        { }
-    }
     public class InvalidFilterFieldException : BadRequestException
     {
         public InvalidFilterFieldException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -217,6 +211,12 @@ namespace FilesCom
     public class InvalidReturnToUrlException : BadRequestException
     {
         public InvalidReturnToUrlException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class InvalidSortFilterCombinationException : BadRequestException
+    {
+        public InvalidSortFilterCombinationException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
