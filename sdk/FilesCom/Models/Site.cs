@@ -137,6 +137,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_require_note", false);
             }
+            if (!this.attributes.ContainsKey("bundle_send_shared_receipts"))
+            {
+                this.attributes.Add("bundle_send_shared_receipts", false);
+            }
             if (!this.attributes.ContainsKey("bundle_upload_receipt_notifications"))
             {
                 this.attributes.Add("bundle_upload_receipt_notifications", null);
@@ -1010,6 +1014,18 @@ namespace FilesCom.Models
         {
             get { return attributes["bundle_require_note"] == null ? false : (bool)attributes["bundle_require_note"]; }
             private set { attributes["bundle_require_note"] = value; }
+        }
+
+        /// <summary>
+        /// Do Bundle creators receive receipts of invitations?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bundle_send_shared_receipts")]
+        public bool BundleSendSharedReceipts
+        {
+            get { return attributes["bundle_send_shared_receipts"] == null ? false : (bool)attributes["bundle_send_shared_receipts"]; }
+            private set { attributes["bundle_send_shared_receipts"] = value; }
         }
 
         /// <summary>
@@ -2654,6 +2670,7 @@ namespace FilesCom.Models
         ///   left_navigation_visibility - object - Visibility settings for account navigation
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   bundle_require_note - boolean - Do Bundles require internal notes?
+        ///   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
@@ -2928,6 +2945,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_require_note") && !(parameters["bundle_require_note"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_require_note must be of type bool", "parameters[\"bundle_require_note\"]");
+            }
+            if (parameters.ContainsKey("bundle_send_shared_receipts") && !(parameters["bundle_send_shared_receipts"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bundle_send_shared_receipts must be of type bool", "parameters[\"bundle_send_shared_receipts\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {
