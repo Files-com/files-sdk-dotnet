@@ -177,6 +177,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("has_inbox", false);
             }
+            if (!this.attributes.ContainsKey("dont_allow_folders_in_uploads"))
+            {
+                this.attributes.Add("dont_allow_folders_in_uploads", false);
+            }
             if (!this.attributes.ContainsKey("paths"))
             {
                 this.attributes.Add("paths", new string[0]);
@@ -606,6 +610,17 @@ namespace FilesCom.Models
         {
             get { return attributes["has_inbox"] == null ? false : (bool)attributes["has_inbox"]; }
             set { attributes["has_inbox"] = value; }
+        }
+
+        /// <summary>
+        /// Should folder uploads be prevented?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("dont_allow_folders_in_uploads")]
+        public bool DontAllowFoldersInUploads
+        {
+            get { return attributes["dont_allow_folders_in_uploads"] == null ? false : (bool)attributes["dont_allow_folders_in_uploads"]; }
+            set { attributes["dont_allow_folders_in_uploads"] = value; }
         }
 
         /// <summary>

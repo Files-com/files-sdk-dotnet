@@ -74,6 +74,7 @@
     "key": "example value"
   },
   "has_inbox": true,
+  "dont_allow_folders_in_uploads": true,
   "paths": [
     "file.txt"
   ],
@@ -123,6 +124,7 @@
 * `watermark_attachment` / `WatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `watermark_value` / `WatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
+* `dont_allow_folders_in_uploads` / `DontAllowFoldersInUploads`  (bool): Should folder uploads be prevented?
 * `paths` / `Paths`  (string[]): A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `bundlepaths` / `Bundlepaths`  (object[]): A list of bundlepaths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `password` / `Password`  (string): Password for this bundle.
