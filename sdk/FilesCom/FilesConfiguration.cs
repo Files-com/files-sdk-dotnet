@@ -32,7 +32,7 @@ namespace FilesCom
             set { this["OpenTimeout"] = value; }
         }
 
-        [ConfigurationProperty("ReadTimeout", DefaultValue = 80.0D)]
+        [ConfigurationProperty("ReadTimeout", DefaultValue = 60.0D)]
         public double ReadTimeout
         {
             get { return (double)this["ReadTimeout"]; }
