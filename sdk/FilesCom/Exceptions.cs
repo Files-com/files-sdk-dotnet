@@ -136,6 +136,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class FoldersNotAllowedException : BadRequestException
+    {
+        public FoldersNotAllowedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class InvalidBodyException : BadRequestException
     {
         public InvalidBodyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
