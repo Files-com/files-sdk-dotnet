@@ -42,7 +42,7 @@ To install the package:
 
 ```bash
 dotnet add package FilesCom
-````
+```
 
 Fetch the dependencies:
 
