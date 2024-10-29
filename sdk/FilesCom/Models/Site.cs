@@ -153,6 +153,22 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_watermark_value", null);
             }
+            if (!this.attributes.ContainsKey("calculate_file_checksums_crc32"))
+            {
+                this.attributes.Add("calculate_file_checksums_crc32", false);
+            }
+            if (!this.attributes.ContainsKey("calculate_file_checksums_md5"))
+            {
+                this.attributes.Add("calculate_file_checksums_md5", false);
+            }
+            if (!this.attributes.ContainsKey("calculate_file_checksums_sha1"))
+            {
+                this.attributes.Add("calculate_file_checksums_sha1", false);
+            }
+            if (!this.attributes.ContainsKey("calculate_file_checksums_sha256"))
+            {
+                this.attributes.Add("calculate_file_checksums_sha256", false);
+            }
             if (!this.attributes.ContainsKey("uploads_via_email_authentication"))
             {
                 this.attributes.Add("uploads_via_email_authentication", false);
@@ -224,6 +240,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("desktop_app_session_lifetime"))
             {
                 this.attributes.Add("desktop_app_session_lifetime", null);
+            }
+            if (!this.attributes.ContainsKey("legacy_checksums_mode"))
+            {
+                this.attributes.Add("legacy_checksums_mode", false);
             }
             if (!this.attributes.ContainsKey("mobile_app"))
             {
@@ -1062,6 +1082,54 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Calculate CRC32 checksums for files?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("calculate_file_checksums_crc32")]
+        public bool CalculateFileChecksumsCrc32
+        {
+            get { return attributes["calculate_file_checksums_crc32"] == null ? false : (bool)attributes["calculate_file_checksums_crc32"]; }
+            private set { attributes["calculate_file_checksums_crc32"] = value; }
+        }
+
+        /// <summary>
+        /// Calculate MD5 checksums for files?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("calculate_file_checksums_md5")]
+        public bool CalculateFileChecksumsMd5
+        {
+            get { return attributes["calculate_file_checksums_md5"] == null ? false : (bool)attributes["calculate_file_checksums_md5"]; }
+            private set { attributes["calculate_file_checksums_md5"] = value; }
+        }
+
+        /// <summary>
+        /// Calculate SHA1 checksums for files?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("calculate_file_checksums_sha1")]
+        public bool CalculateFileChecksumsSha1
+        {
+            get { return attributes["calculate_file_checksums_sha1"] == null ? false : (bool)attributes["calculate_file_checksums_sha1"]; }
+            private set { attributes["calculate_file_checksums_sha1"] = value; }
+        }
+
+        /// <summary>
+        /// Calculate SHA256 checksums for files?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("calculate_file_checksums_sha256")]
+        public bool CalculateFileChecksumsSha256
+        {
+            get { return attributes["calculate_file_checksums_sha256"] == null ? false : (bool)attributes["calculate_file_checksums_sha256"]; }
+            private set { attributes["calculate_file_checksums_sha256"] = value; }
+        }
+
+        /// <summary>
         /// Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?
         /// </summary>
         [JsonInclude]
@@ -1263,6 +1331,18 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["desktop_app_session_lifetime"]; }
             private set { attributes["desktop_app_session_lifetime"] = value; }
+        }
+
+        /// <summary>
+        /// Use legacy checksums mode?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("legacy_checksums_mode")]
+        public bool LegacyChecksumsMode
+        {
+            get { return attributes["legacy_checksums_mode"] == null ? false : (bool)attributes["legacy_checksums_mode"]; }
+            private set { attributes["legacy_checksums_mode"] = value; }
         }
 
         /// <summary>
@@ -2671,6 +2751,11 @@ namespace FilesCom.Models
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   bundle_require_note - boolean - Do Bundles require internal notes?
         ///   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?
+        ///   calculate_file_checksums_crc32 - boolean - Calculate CRC32 checksums for files?
+        ///   calculate_file_checksums_md5 - boolean - Calculate MD5 checksums for files?
+        ///   calculate_file_checksums_sha1 - boolean - Calculate SHA1 checksums for files?
+        ///   calculate_file_checksums_sha256 - boolean - Calculate SHA256 checksums for files?
+        ///   legacy_checksums_mode - boolean - Use legacy checksums mode?
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
@@ -2949,6 +3034,26 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_send_shared_receipts") && !(parameters["bundle_send_shared_receipts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_send_shared_receipts must be of type bool", "parameters[\"bundle_send_shared_receipts\"]");
+            }
+            if (parameters.ContainsKey("calculate_file_checksums_crc32") && !(parameters["calculate_file_checksums_crc32"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: calculate_file_checksums_crc32 must be of type bool", "parameters[\"calculate_file_checksums_crc32\"]");
+            }
+            if (parameters.ContainsKey("calculate_file_checksums_md5") && !(parameters["calculate_file_checksums_md5"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: calculate_file_checksums_md5 must be of type bool", "parameters[\"calculate_file_checksums_md5\"]");
+            }
+            if (parameters.ContainsKey("calculate_file_checksums_sha1") && !(parameters["calculate_file_checksums_sha1"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: calculate_file_checksums_sha1 must be of type bool", "parameters[\"calculate_file_checksums_sha1\"]");
+            }
+            if (parameters.ContainsKey("calculate_file_checksums_sha256") && !(parameters["calculate_file_checksums_sha256"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: calculate_file_checksums_sha256 must be of type bool", "parameters[\"calculate_file_checksums_sha256\"]");
+            }
+            if (parameters.ContainsKey("legacy_checksums_mode") && !(parameters["legacy_checksums_mode"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: legacy_checksums_mode must be of type bool", "parameters[\"legacy_checksums_mode\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {

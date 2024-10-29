@@ -44,6 +44,10 @@
   "bundle_watermark_value": {
     "key": "example value"
   },
+  "calculate_file_checksums_crc32": true,
+  "calculate_file_checksums_md5": true,
+  "calculate_file_checksums_sha1": true,
+  "calculate_file_checksums_sha256": true,
   "uploads_via_email_authentication": true,
   "color2_left": "#0066a7",
   "color2_link": "#d34f5d",
@@ -62,6 +66,7 @@
   "desktop_app": true,
   "desktop_app_session_ip_pinning": true,
   "desktop_app_session_lifetime": 1,
+  "legacy_checksums_mode": true,
   "mobile_app": true,
   "mobile_app_session_ip_pinning": true,
   "mobile_app_session_lifetime": 1,
@@ -170,6 +175,11 @@
     "allowed_2fa_method_totp": true,
     "allowed_2fa_method_webauthn": true,
     "allowed_2fa_method_yubi": true,
+    "calculate_file_checksums_crc32": true,
+    "calculate_file_checksums_md5": true,
+    "calculate_file_checksums_sha1": true,
+    "calculate_file_checksums_sha256": true,
+    "legacy_checksums_mode": true,
     "use_provided_modified_at": true,
     "windows_mode_ftp": false,
     "user_belongs_to_parent_site": false
@@ -321,6 +331,10 @@
 * `bundle_upload_receipt_notifications` / `BundleUploadReceiptNotifications`  (string): Do Bundle uploaders receive upload confirmation notifications?
 * `bundle_watermark_attachment` / `BundleWatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `bundle_watermark_value` / `BundleWatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+* `calculate_file_checksums_crc32` / `CalculateFileChecksumsCrc32`  (bool): Calculate CRC32 checksums for files?
+* `calculate_file_checksums_md5` / `CalculateFileChecksumsMd5`  (bool): Calculate MD5 checksums for files?
+* `calculate_file_checksums_sha1` / `CalculateFileChecksumsSha1`  (bool): Calculate SHA1 checksums for files?
+* `calculate_file_checksums_sha256` / `CalculateFileChecksumsSha256`  (bool): Calculate SHA256 checksums for files?
 * `uploads_via_email_authentication` / `UploadsViaEmailAuthentication`  (bool): Do incoming emails in the Inboxes require checking for SPF/DKIM/DMARC?
 * `color2_left` / `Color2Left`  (string): Page link and button color
 * `color2_link` / `Color2Link`  (string): Top bar link color
@@ -339,6 +353,7 @@
 * `desktop_app` / `DesktopApp`  (bool): Is the desktop app enabled?
 * `desktop_app_session_ip_pinning` / `DesktopAppSessionIpPinning`  (bool): Is desktop app session IP pinning enabled?
 * `desktop_app_session_lifetime` / `DesktopAppSessionLifetime`  (Nullable<Int64>): Desktop app session lifetime (in hours)
+* `legacy_checksums_mode` / `LegacyChecksumsMode`  (bool): Use legacy checksums mode?
 * `mobile_app` / `MobileApp`  (bool): Is the mobile app enabled?
 * `mobile_app_session_ip_pinning` / `MobileAppSessionIpPinning`  (bool): Is mobile app session IP pinning enabled?
 * `mobile_app_session_lifetime` / `MobileAppSessionLifetime`  (Nullable<Int64>): Mobile app session lifetime (in hours)
@@ -533,6 +548,11 @@ Task<Site> Site.Update(
 * `additional_text_file_types` (string[]): Additional extensions that are considered text files
 * `bundle_require_note` (bool): Do Bundles require internal notes?
 * `bundle_send_shared_receipts` (bool): Do Bundle creators receive receipts of invitations?
+* `calculate_file_checksums_crc32` (bool): Calculate CRC32 checksums for files?
+* `calculate_file_checksums_md5` (bool): Calculate MD5 checksums for files?
+* `calculate_file_checksums_sha1` (bool): Calculate SHA1 checksums for files?
+* `calculate_file_checksums_sha256` (bool): Calculate SHA256 checksums for files?
+* `legacy_checksums_mode` (bool): Use legacy checksums mode?
 * `session_expiry` (double): Session expiry in hours
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `tls_disabled` (bool): DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.

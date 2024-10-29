@@ -125,6 +125,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("md5", null);
             }
+            if (!this.attributes.ContainsKey("sha1"))
+            {
+                this.attributes.Add("sha1", null);
+            }
+            if (!this.attributes.ContainsKey("sha256"))
+            {
+                this.attributes.Add("sha256", null);
+            }
             if (!this.attributes.ContainsKey("mime_type"))
             {
                 this.attributes.Add("mime_type", null);
@@ -422,6 +430,26 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["md5"]; }
             set { attributes["md5"] = value; }
+        }
+
+        /// <summary>
+        /// File SHA1 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
+        /// </summary>
+        [JsonPropertyName("sha1")]
+        public string Sha1
+        {
+            get { return (string)attributes["sha1"]; }
+            set { attributes["sha1"] = value; }
+        }
+
+        /// <summary>
+        /// File SHA256 checksum. This is sometimes delayed, so if you get a blank response, wait and try again.
+        /// </summary>
+        [JsonPropertyName("sha256")]
+        public string Sha256
+        {
+            get { return (string)attributes["sha256"]; }
+            set { attributes["sha256"] = value; }
         }
 
         /// <summary>
