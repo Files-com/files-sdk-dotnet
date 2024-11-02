@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_registration", null);
             }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
             if (!this.attributes.ContainsKey("when"))
             {
                 this.attributes.Add("when", null);
@@ -91,6 +95,17 @@ namespace FilesCom.Models
         {
             get { return (BundleRegistration)attributes["bundle_registration"]; }
             private set { attributes["bundle_registration"] = value; }
+        }
+
+        /// <summary>
+        /// Action occurrence date/time
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>

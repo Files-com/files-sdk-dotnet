@@ -53,6 +53,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("http_auth_username", null);
             }
+            if (!this.attributes.ContainsKey("additional_http_headers"))
+            {
+                this.attributes.Add("additional_http_headers", null);
+            }
+            if (!this.attributes.ContainsKey("default_mime_type"))
+            {
+                this.attributes.Add("default_mime_type", null);
+            }
             if (!this.attributes.ContainsKey("mdn_validation_level"))
             {
                 this.attributes.Add("mdn_validation_level", null);
@@ -176,6 +184,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Additional HTTP Headers for outgoing message sent to this partner.
+        /// </summary>
+        [JsonPropertyName("additional_http_headers")]
+        public object AdditionalHttpHeaders
+        {
+            get { return (object)attributes["additional_http_headers"]; }
+            set { attributes["additional_http_headers"] = value; }
+        }
+
+        /// <summary>
+        /// Default mime type of the file attached to the encrypted message
+        /// </summary>
+        [JsonPropertyName("default_mime_type")]
+        public string DefaultMimeType
+        {
+            get { return (string)attributes["default_mime_type"]; }
+            set { attributes["default_mime_type"] = value; }
+        }
+
+        /// <summary>
         /// How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
         /// </summary>
         [JsonPropertyName("mdn_validation_level")]
@@ -186,7 +214,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        /// If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("enable_dedicated_ips")]
@@ -288,11 +316,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
         ///   http_auth_username - string - Username to send to server for HTTP Authentication.
         ///   http_auth_password - string - Password to send to server for HTTP Authentication.
         ///   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
         ///   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+        ///   default_mime_type - string - Default mime type of the file attached to the encrypted message
+        ///   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
         ///   name - string - The partner's formal AS2 name.
         ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
         ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
@@ -333,6 +363,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
+            if (parameters.ContainsKey("default_mime_type") && !(parameters["default_mime_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: default_mime_type must be of type string", "parameters[\"default_mime_type\"]");
+            }
+            if (parameters.ContainsKey("additional_http_headers") && !(parameters["additional_http_headers"] is object))
+            {
+                throw new ArgumentException("Bad parameter: additional_http_headers must be of type object", "parameters[\"additional_http_headers\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -490,11 +528,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
         ///   http_auth_username - string - Username to send to server for HTTP Authentication.
         ///   http_auth_password - string - Password to send to server for HTTP Authentication.
         ///   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
         ///   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+        ///   default_mime_type - string - Default mime type of the file attached to the encrypted message
+        ///   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
         ///   as2_station_id (required) - int64 - ID of the AS2 Station associated with this partner.
         ///   name (required) - string - The partner's formal AS2 name.
         ///   uri (required) - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
@@ -545,6 +585,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
             }
+            if (parameters.ContainsKey("default_mime_type") && !(parameters["default_mime_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: default_mime_type must be of type string", "parameters[\"default_mime_type\"]");
+            }
+            if (parameters.ContainsKey("additional_http_headers") && !(parameters["additional_http_headers"] is object))
+            {
+                throw new ArgumentException("Bad parameter: additional_http_headers must be of type object", "parameters[\"additional_http_headers\"]");
+            }
             if (parameters.ContainsKey("as2_station_id") && !(parameters["as2_station_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: as2_station_id must be of type Nullable<Int64>", "parameters[\"as2_station_id\"]");
@@ -577,11 +625,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 PArtner.
+        ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
         ///   http_auth_username - string - Username to send to server for HTTP Authentication.
         ///   http_auth_password - string - Password to send to server for HTTP Authentication.
         ///   mdn_validation_level - string - How should Files.com evaluate message transfer success based on a partner's MDN response?  This setting does not affect MDN storage; all MDNs received from a partner are always stored. `none`: MDN is stored for informational purposes only, a successful HTTPS transfer is a successful AS2 transfer. `weak`: Inspect the MDN for MIC and Disposition only. `normal`: `weak` plus validate MDN signature matches body, `strict`: `normal` but do not allow signatures from self-signed or incorrectly purposed certificates.
         ///   server_certificate - string - Should we require that the remote HTTP server have a valid SSL Certificate for HTTPS?
+        ///   default_mime_type - string - Default mime type of the file attached to the encrypted message
+        ///   additional_http_headers - object - Additional HTTP Headers for outgoing message sent to this partner.
         ///   name - string - The partner's formal AS2 name.
         ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
         ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
@@ -630,6 +680,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+            }
+            if (parameters.ContainsKey("default_mime_type") && !(parameters["default_mime_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: default_mime_type must be of type string", "parameters[\"default_mime_type\"]");
+            }
+            if (parameters.ContainsKey("additional_http_headers") && !(parameters["additional_http_headers"] is object))
+            {
+                throw new ArgumentException("Bad parameter: additional_http_headers must be of type object", "parameters[\"additional_http_headers\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
