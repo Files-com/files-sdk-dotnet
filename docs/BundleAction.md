@@ -23,7 +23,6 @@
     "created_at": "2000-01-01T01:00:00Z"
   },
   "created_at": "2000-01-01T01:00:00Z",
-  "when": "2000-01-01T01:00:00Z",
   "destination": "/to_path",
   "path": "",
   "source": "/from_path"
@@ -33,7 +32,6 @@
 * `action` / `Action`  (string): Type of action
 * `bundle_registration` / `BundleRegistration`  (BundleRegistration): Object that contains bundle registration information
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Action occurrence date/time
-* `when` / `When`  (Nullable<DateTime>): Action occurrence date/time
 * `destination` / `Destination`  (string): The destination path for this bundle action, if applicable
 * `path` / `Path`  (string): Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `source` / `Source`  (string): The source path for this bundle action, if applicable

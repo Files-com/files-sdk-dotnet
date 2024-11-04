@@ -41,10 +41,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
-            if (!this.attributes.ContainsKey("when"))
-            {
-                this.attributes.Add("when", null);
-            }
             if (!this.attributes.ContainsKey("destination"))
             {
                 this.attributes.Add("destination", null);
@@ -106,17 +102,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
-        }
-
-        /// <summary>
-        /// Action occurrence date/time
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("when")]
-        public Nullable<DateTime> When
-        {
-            get { return (Nullable<DateTime>)attributes["when"]; }
-            private set { attributes["when"] = value; }
         }
 
         /// <summary>
