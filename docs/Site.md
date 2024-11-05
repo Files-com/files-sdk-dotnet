@@ -61,7 +61,7 @@
   "dav_enabled": true,
   "dav_user_root_enabled": true,
   "days_to_retain_backups": 30,
-  "document_edits_in_bundle_allowed": "example",
+  "document_edits_in_bundle_allowed": true,
   "default_time_zone": "Pacific Time (US & Canada)",
   "desktop_app": true,
   "desktop_app_session_ip_pinning": true,
@@ -348,7 +348,7 @@
 * `dav_enabled` / `DavEnabled`  (bool): Is WebDAV enabled?
 * `dav_user_root_enabled` / `DavUserRootEnabled`  (bool): Use user FTP roots also for WebDAV?
 * `days_to_retain_backups` / `DaysToRetainBackups`  (Nullable<Int64>): Number of days to keep deleted files
-* `document_edits_in_bundle_allowed` / `DocumentEditsInBundleAllowed`  (string): If true, allow public viewers of Bundles with full permissions to use document editing integrations.
+* `document_edits_in_bundle_allowed` / `DocumentEditsInBundleAllowed`  (bool): If true, allow public viewers of Bundles with full permissions to use document editing integrations.
 * `default_time_zone` / `DefaultTimeZone`  (string): Site default time zone
 * `desktop_app` / `DesktopApp`  (bool): Is the desktop app enabled?
 * `desktop_app_session_ip_pinning` / `DesktopAppSessionIpPinning`  (bool): Is desktop app session IP pinning enabled?
@@ -589,7 +589,7 @@ Task<Site> Site.Update(
 * `bundle_registration_notifications` (string): Do Bundle owners receive registration notification?
 * `bundle_activity_notifications` (string): Do Bundle owners receive activity notifications?
 * `bundle_upload_receipt_notifications` (string): Do Bundle uploaders receive upload confirmation notifications?
-* `document_edits_in_bundle_allowed` (string): If true, allow public viewers of Bundles with full permissions to use document editing integrations.
+* `document_edits_in_bundle_allowed` (bool): If true, allow public viewers of Bundles with full permissions to use document editing integrations.
 * `password_requirements_apply_to_bundles` (bool): Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
 * `prevent_root_permissions_for_non_site_admins` (bool): If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
 * `opt_out_global` (bool): Use servers in the USA only?

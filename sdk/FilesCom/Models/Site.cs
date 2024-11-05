@@ -223,7 +223,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("document_edits_in_bundle_allowed"))
             {
-                this.attributes.Add("document_edits_in_bundle_allowed", null);
+                this.attributes.Add("document_edits_in_bundle_allowed", false);
             }
             if (!this.attributes.ContainsKey("default_time_zone"))
             {
@@ -1280,10 +1280,11 @@ namespace FilesCom.Models
         /// If true, allow public viewers of Bundles with full permissions to use document editing integrations.
         /// </summary>
         [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("document_edits_in_bundle_allowed")]
-        public string DocumentEditsInBundleAllowed
+        public bool DocumentEditsInBundleAllowed
         {
-            get { return (string)attributes["document_edits_in_bundle_allowed"]; }
+            get { return attributes["document_edits_in_bundle_allowed"] == null ? false : (bool)attributes["document_edits_in_bundle_allowed"]; }
             private set { attributes["document_edits_in_bundle_allowed"] = value; }
         }
 
@@ -2792,7 +2793,7 @@ namespace FilesCom.Models
         ///   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
         ///   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
         ///   bundle_upload_receipt_notifications - string - Do Bundle uploaders receive upload confirmation notifications?
-        ///   document_edits_in_bundle_allowed - string - If true, allow public viewers of Bundles with full permissions to use document editing integrations.
+        ///   document_edits_in_bundle_allowed - boolean - If true, allow public viewers of Bundles with full permissions to use document editing integrations.
         ///   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         ///   prevent_root_permissions_for_non_site_admins - boolean - If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
         ///   opt_out_global - boolean - Use servers in the USA only?
@@ -3199,9 +3200,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: bundle_upload_receipt_notifications must be of type string", "parameters[\"bundle_upload_receipt_notifications\"]");
             }
-            if (parameters.ContainsKey("document_edits_in_bundle_allowed") && !(parameters["document_edits_in_bundle_allowed"] is string))
+            if (parameters.ContainsKey("document_edits_in_bundle_allowed") && !(parameters["document_edits_in_bundle_allowed"] is bool))
             {
-                throw new ArgumentException("Bad parameter: document_edits_in_bundle_allowed must be of type string", "parameters[\"document_edits_in_bundle_allowed\"]");
+                throw new ArgumentException("Bad parameter: document_edits_in_bundle_allowed must be of type bool", "parameters[\"document_edits_in_bundle_allowed\"]");
             }
             if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool))
             {
