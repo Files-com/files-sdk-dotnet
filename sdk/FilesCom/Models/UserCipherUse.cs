@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("insecure"))
+            {
+                this.attributes.Add("insecure", false);
+            }
             if (!this.attributes.ContainsKey("interface"))
             {
                 this.attributes.Add("interface", null);
@@ -102,6 +106,18 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// Is this cipher considered insecure?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("insecure")]
+        public bool Insecure
+        {
+            get { return attributes["insecure"] == null ? false : (bool)attributes["insecure"]; }
+            private set { attributes["insecure"] = value; }
         }
 
         /// <summary>
