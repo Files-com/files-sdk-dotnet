@@ -660,12 +660,6 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class ZipDownloadIpMismatchException : NotAuthorizedException
-    {
-        public ZipDownloadIpMismatchException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
-            : base(message, httpStatus, responseError, httpHeaders)
-        { }
-    }
 
     public class NotFoundException : ApiException
     {

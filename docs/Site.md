@@ -184,7 +184,6 @@
     "windows_mode_ftp": false,
     "user_belongs_to_parent_site": false
   },
-  "session_pinned_by_ip": true,
   "sftp_enabled": true,
   "sftp_host_key_type": "default",
   "active_sftp_host_key_id": 1,
@@ -425,7 +424,6 @@
 * `require_2fa_user_type` / `Require2faUserType`  (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
 * `require_logout_from_bundles_and_inboxes` / `RequireLogoutFromBundlesAndInboxes`  (bool): If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
 * `session` / `Session`  (Session): Current session
-* `session_pinned_by_ip` / `SessionPinnedByIp`  (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `sftp_enabled` / `SftpEnabled`  (bool): Is SFTP enabled?
 * `sftp_host_key_type` / `SftpHostKeyType`  (string): Sftp Host Key Type
 * `active_sftp_host_key_id` / `ActiveSftpHostKeyId`  (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
@@ -581,7 +579,6 @@ Task<Site> Site.Update(
 * `sftp_user_root_enabled` (bool): Use user FTP roots also for SFTP?
 * `disable_password_reset` (bool): Is password reset disabled?
 * `immutable_files` (bool): Are files protected from modification?
-* `session_pinned_by_ip` (bool): Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
 * `bundle_not_found_message` (string): Custom error message to show when bundle is not found.
 * `bundle_password_required` (bool): Do Bundles require password protection?
 * `bundle_require_registration` (bool): Do Bundles require registration?

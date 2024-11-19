@@ -521,7 +521,6 @@ Exception
 |`UserIdWithoutSiteAdminException`|  `NotAuthorizedException` |
 |`WriteAndBundlePermissionRequiredException`|  `NotAuthorizedException` |
 |`WritePermissionRequiredException`|  `NotAuthorizedException` |
-|`ZipDownloadIpMismatchException`|  `NotAuthorizedException` |
 |`ApiKeyNotFoundException`|  `NotFoundException` |
 |`BundlePathNotFoundException`|  `NotFoundException` |
 |`BundleRegistrationNotFoundException`|  `NotFoundException` |

@@ -529,10 +529,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("session", null);
             }
-            if (!this.attributes.ContainsKey("session_pinned_by_ip"))
-            {
-                this.attributes.Add("session_pinned_by_ip", false);
-            }
             if (!this.attributes.ContainsKey("sftp_enabled"))
             {
                 this.attributes.Add("sftp_enabled", false);
@@ -2158,18 +2154,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("session_pinned_by_ip")]
-        public bool SessionPinnedByIp
-        {
-            get { return attributes["session_pinned_by_ip"] == null ? false : (bool)attributes["session_pinned_by_ip"]; }
-            private set { attributes["session_pinned_by_ip"] = value; }
-        }
-
-        /// <summary>
         /// Is SFTP enabled?
         /// </summary>
         [JsonInclude]
@@ -2785,7 +2769,6 @@ namespace FilesCom.Models
         ///   sftp_user_root_enabled - boolean - Use user FTP roots also for SFTP?
         ///   disable_password_reset - boolean - Is password reset disabled?
         ///   immutable_files - boolean - Are files protected from modification?
-        ///   session_pinned_by_ip - boolean - Are sessions locked to the same IP? (i.e. do users need to log in again if they change IPs?)
         ///   bundle_not_found_message - string - Custom error message to show when bundle is not found.
         ///   bundle_password_required - boolean - Do Bundles require password protection?
         ///   bundle_require_registration - boolean - Do Bundles require registration?
@@ -3167,10 +3150,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("immutable_files") && !(parameters["immutable_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: immutable_files must be of type bool", "parameters[\"immutable_files\"]");
-            }
-            if (parameters.ContainsKey("session_pinned_by_ip") && !(parameters["session_pinned_by_ip"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: session_pinned_by_ip must be of type bool", "parameters[\"session_pinned_by_ip\"]");
             }
             if (parameters.ContainsKey("bundle_not_found_message") && !(parameters["bundle_not_found_message"] is string))
             {
