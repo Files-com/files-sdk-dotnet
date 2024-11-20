@@ -73,6 +73,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("restapi_permission", false);
             }
+            if (!this.attributes.ContainsKey("site_id"))
+            {
+                this.attributes.Add("site_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -206,6 +210,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Site ID
+        /// </summary>
+        [JsonPropertyName("site_id")]
+        public Nullable<Int64> SiteId
+        {
+            get { return (Nullable<Int64>)attributes["site_id"]; }
+            set { attributes["site_id"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
@@ -330,10 +344,11 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id` and `name`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
         ///   ids - string - Comma-separated list of group ids to include in results.
+        ///   include_parent_site_groups - boolean - Include groups from the parent site.
         /// </summary>
         public static FilesList<Group> List(
 
@@ -367,6 +382,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ids") && !(parameters["ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: ids must be of type string", "parameters[\"ids\"]");
+            }
+            if (parameters.ContainsKey("include_parent_site_groups") && !(parameters["include_parent_site_groups"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_parent_site_groups must be of type bool", "parameters[\"include_parent_site_groups\"]");
             }
 
             return new FilesList<Group>($"/groups", System.Net.Http.HttpMethod.Get, parameters, options);

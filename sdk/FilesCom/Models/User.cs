@@ -241,6 +241,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("site_admin", false);
             }
+            if (!this.attributes.ContainsKey("site_id"))
+            {
+                this.attributes.Add("site_id", null);
+            }
             if (!this.attributes.ContainsKey("skip_welcome_screen"))
             {
                 this.attributes.Add("skip_welcome_screen", false);
@@ -898,6 +902,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Site ID
+        /// </summary>
+        [JsonPropertyName("site_id")]
+        public Nullable<Int64> SiteId
+        {
+            get { return (Nullable<Int64>)attributes["site_id"]; }
+            set { attributes["site_id"] = value; }
+        }
+
+        /// <summary>
         /// Skip Welcome page in the UI?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -1512,7 +1526,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `authenticate_until`, `email`, `last_desktop_login_at`, `last_login_at`, `username`, `name`, `company`, `site_admin`, `password_validity_days` or `ssl_required`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `authenticate_until`, `email`, `last_desktop_login_at`, `last_login_at`, `username`, `name`, `company`, `site_admin`, `password_validity_days` or `ssl_required`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `username`, `name`, `email`, `company`, `site_admin`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until` or `not_site_admin`. Valid field combinations are `[ username, not_site_admin ]` and `[ name, company ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
@@ -1520,6 +1534,7 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
         ///   ids - string - comma-separated list of User IDs
+        ///   include_parent_site_users - boolean - Include users from the parent site.
         ///   search - string - Searches for partial matches of name, username, or email.
         /// </summary>
         public static FilesList<User> List(
@@ -1570,6 +1585,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ids") && !(parameters["ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: ids must be of type string", "parameters[\"ids\"]");
+            }
+            if (parameters.ContainsKey("include_parent_site_users") && !(parameters["include_parent_site_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_parent_site_users must be of type bool", "parameters[\"include_parent_site_users\"]");
             }
             if (parameters.ContainsKey("search") && !(parameters["search"] is string))
             {
