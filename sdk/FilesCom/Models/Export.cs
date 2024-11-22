@@ -41,9 +41,33 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("export_type", null);
             }
+            if (!this.attributes.ContainsKey("export_rows"))
+            {
+                this.attributes.Add("export_rows", null);
+            }
             if (!this.attributes.ContainsKey("download_uri"))
             {
                 this.attributes.Add("download_uri", null);
+            }
+            if (!this.attributes.ContainsKey("message"))
+            {
+                this.attributes.Add("message", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("sort_by"))
+            {
+                this.attributes.Add("sort_by", null);
+            }
+            if (!this.attributes.ContainsKey("filter"))
+            {
+                this.attributes.Add("filter", null);
+            }
+            if (!this.attributes.ContainsKey("filter_prefix"))
+            {
+                this.attributes.Add("filter_prefix", null);
             }
         }
 
@@ -66,48 +90,116 @@ namespace FilesCom.Models
         /// <summary>
         /// ID for this Export
         /// </summary>
-        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            private set { attributes["id"] = value; }
+            set { attributes["id"] = value; }
         }
 
         /// <summary>
         /// Status of the Export
         /// </summary>
-        [JsonInclude]
         [JsonPropertyName("export_status")]
         public string ExportStatus
         {
             get { return (string)attributes["export_status"]; }
-            private set { attributes["export_status"] = value; }
+            set { attributes["export_status"] = value; }
         }
 
         /// <summary>
         /// Type of data being exported
         /// </summary>
-        [JsonInclude]
         [JsonPropertyName("export_type")]
         public string ExportType
         {
             get { return (string)attributes["export_type"]; }
-            private set { attributes["export_type"] = value; }
+            set { attributes["export_type"] = value; }
+        }
+
+        /// <summary>
+        /// Number of rows exported
+        /// </summary>
+        [JsonPropertyName("export_rows")]
+        public Nullable<Int64> ExportRows
+        {
+            get { return (Nullable<Int64>)attributes["export_rows"]; }
+            set { attributes["export_rows"] = value; }
         }
 
         /// <summary>
         /// Link to download Export file.
         /// </summary>
-        [JsonInclude]
         [JsonPropertyName("download_uri")]
         public string DownloadUri
         {
             get { return (string)attributes["download_uri"]; }
-            private set { attributes["download_uri"] = value; }
+            set { attributes["download_uri"] = value; }
+        }
+
+        /// <summary>
+        /// Export message
+        /// </summary>
+        [JsonPropertyName("message")]
+        public string Message
+        {
+            get { return (string)attributes["message"]; }
+            set { attributes["message"] = value; }
+        }
+
+        /// <summary>
+        /// User ID.  Provide a value of `0` to operate the current session's user.
+        /// </summary>
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
+        {
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `export_status` and `export_type`.
+        /// </summary>
+        [JsonPropertyName("sort_by")]
+        public object SortBy
+        {
+            get { return (object)attributes["sort_by"]; }
+            set { attributes["sort_by"] = value; }
+        }
+
+        /// <summary>
+        /// If set, return records where the specified field is equal to the supplied value. Valid fields are `export_status` and `export_type`.
+        /// </summary>
+        [JsonPropertyName("filter")]
+        public object Filter
+        {
+            get { return (object)attributes["filter"]; }
+            set { attributes["filter"] = value; }
+        }
+
+        /// <summary>
+        /// If set, return records where the specified field is prefixed by the supplied value. Valid fields are `export_type`.
+        /// </summary>
+        [JsonPropertyName("filter_prefix")]
+        public object FilterPrefix
+        {
+            get { return (object)attributes["filter_prefix"]; }
+            set { attributes["filter_prefix"] = value; }
         }
 
 
+        public async Task Save()
+        {
+            if (this.attributes["id"] != null)
+            {
+                throw new NotImplementedException("The Export object doesn't support updates.");
+            }
+            else
+            {
+                var newObj = await Export.Create(this.attributes, this.options);
+                this.attributes = newObj.getAttributes();
+            }
+        }
 
         /// <summary>
         /// Parameters:
@@ -214,6 +306,52 @@ namespace FilesCom.Models
         {
             return await Find(id, parameters, options);
         }
+
+        /// <summary>
+        /// Parameters:
+        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `export_status` and `export_type`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `export_status` and `export_type`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `export_type`.
+        /// </summary>
+        public static async Task<Export> Create(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/exports/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
 
     }
 }

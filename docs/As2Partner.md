@@ -111,6 +111,19 @@ Task<As2Partner> As2Partner.Create(
 
 ---
 
+## Create an export CSV of AS2 Partner resources
+
+```
+Task<Export> As2Partner.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+
+---
+
 ## Update AS2 Partner
 
 ```

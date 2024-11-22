@@ -113,6 +113,29 @@ Task<ApiKey> ApiKey.Create(
 
 ---
 
+## Create an export CSV of API Key resources
+
+```
+Task<Export> ApiKey.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `expires_at`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `expires_at`.
+* `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `expires_at`.
+* `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `expires_at`.
+* `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `expires_at`.
+* `filter_lteq` (object): If set, return records where the specified field is less than or equal the supplied value. Valid fields are `expires_at`.
+
+
+---
+
 ## Update current API key.  (Requires current API connection to be using an API key.)
 
 ```

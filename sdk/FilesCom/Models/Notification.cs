@@ -735,6 +735,62 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path`, `user_id` or `group_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id` or `group_id`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
+        ///   path - string - Show notifications for this Path.
+        ///   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
+        ///   group_id - string
+        /// </summary>
+        public static async Task<Export> CreateExport(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("include_ancestors") && !(parameters["include_ancestors"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_ancestors must be of type bool", "parameters[\"include_ancestors\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/notifications/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Parameters:
         ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
         ///   notify_on_delete - boolean - Trigger on files deleted in this path?
         ///   notify_on_download - boolean - Trigger on files downloaded in this path?

@@ -155,6 +155,19 @@ Task SsoStrategy.Sync(
 
 ---
 
+## Create an export CSV of SSO Strategy resources
+
+```
+Task<Export> SsoStrategy.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+
+---
+
 ## Synchronize provisioning data with the SSO remote server
 
 ```

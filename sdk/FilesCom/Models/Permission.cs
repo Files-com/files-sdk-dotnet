@@ -338,6 +338,67 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `group_id`, `path` or `user_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `group_id` or `user_id`. Valid field combinations are `[ path, group_id ]`, `[ path, user_id ]` or `[ group_id, user_id ]`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
+        ///   path - string - Permission path.  If provided, will scope all permissions(including upward) to this path.
+        ///   include_groups - boolean - If searching by user or group, also include user's permissions that are inherited from its groups?
+        ///   group_id - string
+        ///   user_id - string
+        /// </summary>
+        public static async Task<Export> CreateExport(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("include_groups") && !(parameters["include_groups"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_groups must be of type bool", "parameters[\"include_groups\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type string", "parameters[\"user_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/permissions/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// </summary>
         public static async Task Delete(
             Nullable<Int64> id,

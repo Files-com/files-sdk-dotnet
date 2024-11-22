@@ -47,3 +47,21 @@ Task<FilesList<ActionNotificationExportResult>> ActionNotificationExportResult.L
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `action_notification_export_id` (Nullable<Int64>): Required - ID of the associated action notification export.
+
+
+---
+
+## Create an export CSV of Action Notification Export Result resources
+
+```
+Task<Export> ActionNotificationExportResult.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `action_notification_export_id` (Nullable<Int64>): Required - ID of the associated action notification export.

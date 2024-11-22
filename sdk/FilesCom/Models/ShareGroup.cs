@@ -355,6 +355,37 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+        /// </summary>
+        public static async Task<Export> CreateExport(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/share_groups/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Parameters:
         ///   notes - string - Additional notes of the share group
         ///   name - string - Name of the share group
         ///   members - array(object) - A list of share group members.

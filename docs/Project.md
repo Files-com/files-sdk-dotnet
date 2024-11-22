@@ -67,6 +67,19 @@ Task<Project> Project.Create(
 
 ---
 
+## Create an export CSV of Project resources
+
+```
+Task<Export> Project.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+
+---
+
 ## Update Project
 
 ```

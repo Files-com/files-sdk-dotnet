@@ -49,3 +49,25 @@ Task<FilesList<BandwidthSnapshot>> BandwidthSnapshot.List(
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `logged_at`.
 * `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `logged_at`.
 * `filter_lteq` (object): If set, return records where the specified field is less than or equal the supplied value. Valid fields are `logged_at`.
+
+
+---
+
+## Create an export CSV of Bandwidth Snapshot resources
+
+```
+Task<Export> BandwidthSnapshot.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `logged_at`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `logged_at`.
+* `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `logged_at`.
+* `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `logged_at`.
+* `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `logged_at`.
+* `filter_lteq` (object): If set, return records where the specified field is less than or equal the supplied value. Valid fields are `logged_at`.

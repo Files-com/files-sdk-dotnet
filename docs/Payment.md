@@ -86,3 +86,16 @@ Task<AccountLineItem> Payment.Find(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Payment ID.
+
+
+---
+
+## Create an export CSV of Payment resources
+
+```
+Task<Export> Payment.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```

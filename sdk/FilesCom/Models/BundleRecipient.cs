@@ -278,5 +278,50 @@ namespace FilesCom.Models
         }
 
 
+        /// <summary>
+        /// Parameters:
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
+        ///   bundle_id (required) - int64 - List recipients for the bundle with this ID.
+        /// </summary>
+        public static async Task<Export> CreateExport(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (!parameters.ContainsKey("bundle_id") || parameters["bundle_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/bundle_recipients/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
     }
 }

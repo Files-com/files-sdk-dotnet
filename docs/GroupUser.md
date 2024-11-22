@@ -61,6 +61,24 @@ Task<GroupUser> GroupUser.Create(
 
 ---
 
+## Create an export CSV of Group User resources
+
+```
+Task<Export> GroupUser.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  If provided, will return group_users of this user.
+* `group_id` (Nullable<Int64>): Group ID.  If provided, will return group_users of this group.
+
+
+---
+
 ## Update Group User
 
 ```

@@ -76,6 +76,19 @@ Task<UserRequest> UserRequest.Create(
 
 ---
 
+## Create an export CSV of User Request resources
+
+```
+Task<Export> UserRequest.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+
+---
+
 ## Delete User Request
 
 ```

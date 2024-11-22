@@ -346,6 +346,42 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   user_id - int64 - User ID.  If provided, will return group_users of this user.
+        ///   group_id - int64 - Group ID.  If provided, will return group_users of this group.
+        /// </summary>
+        public static async Task<Export> CreateExport(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/group_users/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Parameters:
         ///   group_id (required) - int64 - Group ID to add user to.
         ///   user_id (required) - int64 - User ID to add to group.
         ///   admin - boolean - Is the user a group administrator?

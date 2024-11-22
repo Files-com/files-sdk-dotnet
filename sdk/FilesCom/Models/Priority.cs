@@ -131,5 +131,48 @@ namespace FilesCom.Models
             return List(path, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   path (required) - string - The path to query for priorities
+        /// </summary>
+        public static async Task<Export> CreateExport(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/priorities/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<Export>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
     }
 }

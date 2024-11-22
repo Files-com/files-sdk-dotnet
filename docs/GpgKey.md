@@ -83,6 +83,24 @@ Task<GpgKey> GpgKey.Create(
 
 ---
 
+## Create an export CSV of GPG Key resources
+
+```
+Task<Export> GpgKey.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name` and `expires_at`.
+
+
+---
+
 ## Update GPG Key
 
 ```

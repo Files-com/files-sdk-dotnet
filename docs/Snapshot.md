@@ -95,6 +95,19 @@ Task Snapshot.Finalize(
 
 ---
 
+## Create an export CSV of Snapshot resources
+
+```
+Task<Export> Snapshot.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+
+---
+
 ## Update Snapshot
 
 ```

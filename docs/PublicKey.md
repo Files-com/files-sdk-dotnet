@@ -81,6 +81,23 @@ Task<PublicKey> PublicKey.Create(
 
 ---
 
+## Create an export CSV of Public Key resources
+
+```
+Task<Export> PublicKey.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+
+
+---
+
 ## Update Public Key
 
 ```

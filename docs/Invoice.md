@@ -86,3 +86,16 @@ Task<AccountLineItem> Invoice.Find(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Invoice ID.
+
+
+---
+
+## Create an export CSV of Invoice resources
+
+```
+Task<Export> Invoice.CreateExport(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
