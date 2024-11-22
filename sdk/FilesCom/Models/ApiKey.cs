@@ -534,67 +534,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `expires_at`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `expires_at`.
-        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `expires_at`.
-        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `expires_at`.
-        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `expires_at`.
-        ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `expires_at`.
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
-            {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
-            }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
-            }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
-            }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
-            }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
-            }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/api_keys/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Parameters:
         ///   expires_at - string - API Key expiration date
         ///   name - string - Internal name for the API Key.  For your use.
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.

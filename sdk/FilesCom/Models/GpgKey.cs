@@ -394,42 +394,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name` and `expires_at`.
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
-            {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/gpg_keys/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Parameters:
         ///   public_key - string - Your GPG public key
         ///   private_key - string - Your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.

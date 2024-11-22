@@ -394,46 +394,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   project_id (required) - int64 - Project for which to return messages.
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (!parameters.ContainsKey("project_id") || parameters["project_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: project_id", "parameters[\"project_id\"]");
-            }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (parameters.ContainsKey("project_id") && !(parameters["project_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: project_id must be of type Nullable<Int64>", "parameters[\"project_id\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/messages/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Parameters:
         ///   project_id (required) - int64 - Project to which the message should be attached.
         ///   subject (required) - string - Message subject.
         ///   body (required) - string - Message body.

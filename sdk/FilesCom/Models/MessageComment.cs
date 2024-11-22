@@ -330,46 +330,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   message_id (required) - int64 - Message comment to return comments for.
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (!parameters.ContainsKey("message_id") || parameters["message_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: message_id", "parameters[\"message_id\"]");
-            }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (parameters.ContainsKey("message_id") && !(parameters["message_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: message_id must be of type Nullable<Int64>", "parameters[\"message_id\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/message_comments/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Parameters:
         ///   body (required) - string - Comment body.
         /// </summary>
         public static async Task<MessageComment> Update(

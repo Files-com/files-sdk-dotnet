@@ -79,19 +79,6 @@ Task<Clickwrap> Clickwrap.Create(
 
 ---
 
-## Create an export CSV of Clickwrap resources
-
-```
-Task<Export> Clickwrap.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-
----
-
 ## Update Clickwrap
 
 ```

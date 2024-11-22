@@ -892,30 +892,5 @@ namespace FilesCom.Models
         }
 
 
-        /// <summary>
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-
-            string responseJson = await FilesClient.SendStringRequest($"/sso_strategies/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
     }
 }

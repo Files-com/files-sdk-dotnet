@@ -89,24 +89,6 @@ Task<Message> Message.Create(
 
 ---
 
-## Create an export CSV of Message resources
-
-```
-Task<Export> Message.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `project_id` (Nullable<Int64>): Required - Project for which to return messages.
-
-
----
-
 ## Update Message
 
 ```

@@ -78,24 +78,6 @@ Task<BundleNotification> BundleNotification.Create(
 
 ---
 
-## Create an export CSV of Bundle Notification resources
-
-```
-Task<Export> BundleNotification.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `bundle_id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
-
-
----
-
 ## Update Bundle Notification
 
 ```

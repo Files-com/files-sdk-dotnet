@@ -71,24 +71,6 @@ Task<MessageReaction> MessageReaction.Create(
 
 ---
 
-## Create an export CSV of Message Reaction resources
-
-```
-Task<Export> MessageReaction.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `message_id` (Nullable<Int64>): Required - Message to return reactions for.
-
-
----
-
 ## Delete Message Reaction
 
 ```

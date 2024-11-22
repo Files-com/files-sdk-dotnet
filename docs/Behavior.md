@@ -140,25 +140,6 @@ Task Behavior.WebhookTest(
 
 ---
 
-## Create an export CSV of Behavior resources
-
-```
-Task<Export> Behavior.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
-* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
-
-
----
-
 ## Update Behavior
 
 ```

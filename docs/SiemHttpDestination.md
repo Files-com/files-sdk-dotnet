@@ -191,19 +191,6 @@ Task<SiemHttpDestination> SiemHttpDestination.Create(
 
 ---
 
-## Create an export CSV of SIEM HTTP Destination resources
-
-```
-Task<Export> SiemHttpDestination.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-
----
-
 ## send_test_entry SIEM HTTP Destination
 
 ```

@@ -272,46 +272,6 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Parameters:
-        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   message_comment_id (required) - int64 - Message comment to return reactions for.
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (!parameters.ContainsKey("message_comment_id") || parameters["message_comment_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: message_comment_id", "parameters[\"message_comment_id\"]");
-            }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
-            if (parameters.ContainsKey("message_comment_id") && !(parameters["message_comment_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: message_comment_id must be of type Nullable<Int64>", "parameters[\"message_comment_id\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/message_comment_reactions/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
         /// </summary>
         public static async Task Delete(
             Nullable<Int64> id,

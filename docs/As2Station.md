@@ -95,19 +95,6 @@ Task<As2Station> As2Station.Create(
 
 ---
 
-## Create an export CSV of AS2 Station resources
-
-```
-Task<Export> As2Station.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-
----
-
 ## Update AS2 Station
 
 ```

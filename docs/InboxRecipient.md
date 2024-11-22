@@ -62,22 +62,3 @@ Task<InboxRecipient> InboxRecipient.Create(
 * `company` (string): Company of recipient.
 * `note` (string): Note to include in email.
 * `share_after_create` (bool): Set to true to share the link with the recipient upon creation.
-
-
----
-
-## Create an export CSV of Inbox Recipient resources
-
-```
-Task<Export> InboxRecipient.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `has_registrations`.
-* `inbox_id` (Nullable<Int64>): Required - List recipients for the inbox with this ID.

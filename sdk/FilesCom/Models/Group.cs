@@ -528,57 +528,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id` and `name`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`.
-        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
-        ///   ids - string - Comma-separated list of group ids to include in results.
-        ///   include_parent_site_groups - boolean - Include groups from the parent site.
-        /// </summary>
-        public static async Task<Export> CreateExport(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
-            {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
-            }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
-            }
-            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
-            }
-            if (parameters.ContainsKey("ids") && !(parameters["ids"] is string))
-            {
-                throw new ArgumentException("Bad parameter: ids must be of type string", "parameters[\"ids\"]");
-            }
-            if (parameters.ContainsKey("include_parent_site_groups") && !(parameters["include_parent_site_groups"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: include_parent_site_groups must be of type bool", "parameters[\"include_parent_site_groups\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/groups/create_export", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<Export>(responseJson);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Parameters:
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.

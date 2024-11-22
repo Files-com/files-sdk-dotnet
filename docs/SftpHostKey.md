@@ -73,19 +73,6 @@ Task<SftpHostKey> SftpHostKey.Create(
 
 ---
 
-## Create an export CSV of SFTP Host Key resources
-
-```
-Task<Export> SftpHostKey.CreateExport(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-
----
-
 ## Update SFTP Host Key
 
 ```
