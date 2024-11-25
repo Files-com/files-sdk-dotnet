@@ -185,7 +185,7 @@ Task<Automation> Automation.Create(
 
 ---
 
-## Manually run automation
+## Manually Run Automation
 
 ```
 Task Automation.ManualRun(
@@ -263,7 +263,7 @@ Task Automation.Delete(
 
 ---
 
-## Manually run automation
+## Manually Run Automation
 
 ```
 var Automation = Automation.Find(1);

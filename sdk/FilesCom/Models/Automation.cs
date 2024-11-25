@@ -531,7 +531,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Manually run automation
+        /// Manually Run Automation
         /// </summary>
         public async Task ManualRun(Dictionary<string, object> parameters)
         {
@@ -1048,7 +1048,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Manually run automation
+        /// Manually Run Automation
         /// </summary>
         public static async Task ManualRun(
             Nullable<Int64> id,

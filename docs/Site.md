@@ -472,7 +472,7 @@
 
 ---
 
-## Show site settings
+## Show Site Settings
 
 ```
 Task<Site> Site.Get(
@@ -498,7 +498,7 @@ Task<UsageSnapshot> Site.GetUsage(
 
 ---
 
-## Update site settings
+## Update Site Settings
 
 ```
 Task<Site> Site.Update(

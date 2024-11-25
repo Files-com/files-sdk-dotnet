@@ -98,7 +98,7 @@
 
 ---
 
-## Download file
+## Download File
 
 ```
 Task<RemoteFile> RemoteFile.Download(
@@ -119,7 +119,7 @@ Task<RemoteFile> RemoteFile.Download(
 
 ---
 
-## Upload file
+## Upload File
 
 ```
 Task<RemoteFile> RemoteFile.Create(
@@ -149,7 +149,7 @@ Task<RemoteFile> RemoteFile.Create(
 
 ---
 
-## Update file/folder metadata
+## Update File/Folder Metadata
 
 ```
 Task<RemoteFile> RemoteFile.Update(
@@ -169,7 +169,7 @@ Task<RemoteFile> RemoteFile.Update(
 
 ---
 
-## Delete file/folder
+## Delete File/Folder
 
 ```
 Task RemoteFile.Delete(
@@ -187,7 +187,7 @@ Task RemoteFile.Delete(
 
 ---
 
-## Find file/folder by path
+## Find File/Folder by Path
 
 ```
 Task<RemoteFile> RemoteFile.Find(
@@ -207,7 +207,7 @@ Task<RemoteFile> RemoteFile.Find(
 
 ---
 
-## Copy file/folder
+## Copy File/Folder
 
 ```
 Task<FileAction> RemoteFile.Copy(
@@ -227,7 +227,7 @@ Task<FileAction> RemoteFile.Copy(
 
 ---
 
-## Move file/folder
+## Move File/Folder
 
 ```
 Task<FileAction> RemoteFile.Move(
@@ -270,7 +270,7 @@ Task<FileUploadPart[]> RemoteFile.BeginUpload(
 
 ---
 
-## Download file
+## Download File
 
 ```
 var File = RemoteFile.Find(1);
@@ -294,7 +294,7 @@ File.Download(parameters);
 
 ---
 
-## Update file/folder metadata
+## Update File/Folder Metadata
 
 ```
 var File = RemoteFile.Find(1);
@@ -318,7 +318,7 @@ File.Update(parameters);
 
 ---
 
-## Delete file/folder
+## Delete File/Folder
 
 ```
 var File = RemoteFile.Find(1);
@@ -338,7 +338,7 @@ File.Delete(parameters);
 
 ---
 
-## Copy file/folder
+## Copy File/Folder
 
 ```
 var File = RemoteFile.Find(1);
@@ -362,7 +362,7 @@ File.Copy(parameters);
 
 ---
 
-## Move file/folder
+## Move File/Folder
 
 ```
 var File = RemoteFile.Find(1);
