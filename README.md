@@ -618,7 +618,9 @@ A README is available on the GitHub link.
 
 ## File/Folder Operations
 
-### Writing a File
+### Upload
+
+#### Writing a File
 
 ```csharp
 // Will upload a file called "test.txt"
@@ -652,7 +654,7 @@ namespace Example
 }
 ```
 
-### Uploading a File from a Stream
+#### Uploading a File from a Stream
 
 ```csharp
 using(MemoryStream stream = new System.IO.MemoryStream())
@@ -666,7 +668,9 @@ using(MemoryStream stream = new System.IO.MemoryStream())
 }
 ```
 
-### Reading a File's Text as a Stream
+### Download
+
+#### Reading a File's Text as a Stream
 
 ```csharp
 using(MemoryStream stream = new System.IO.MemoryStream())
@@ -679,7 +683,7 @@ using(MemoryStream stream = new System.IO.MemoryStream())
 }
 ```
 
-### Reading a File and Writing it to Your Local Drive
+#### Reading a File and Writing it to Your Local Drive
 
 ```csharp
 var downloadResponse = await RemoteFile.DownloadFile("Remote-Path/file.txt", "Local-Path/file.txt");
@@ -690,7 +694,9 @@ if (downloadResponse) {
 }
 ```
 
-### List Root Folder (loads all pages into memory)
+### List
+
+#### List Root Folder (loads all pages into memory)
 
 ```csharp
 var files = Folder.ListFor("/", null, null);
@@ -700,7 +706,7 @@ foreach (var file in await files.All())
 }
 ```
 
-### List Root Folder with Auto Pagination (loads each page into memory)
+#### List Root Folder with Auto Pagination (loads each page into memory)
 
 ```csharp
 foreach (var file in Folder.ListFor("/").ListAutoPaging())
@@ -709,7 +715,7 @@ foreach (var file in Folder.ListFor("/").ListAutoPaging())
 }
 ```
 
-### List Root Folder with Manual Pagination (loads each page into memory)
+#### List Root Folder with Manual Pagination (loads each page into memory)
 
 ```csharp
 FilesList<RemoteFile> listing = Folder.ListFor("/");
@@ -722,7 +728,7 @@ do
 } while (listing.HasNextPage);
 ```
 
-### List Folder with a Filter
+#### List Folder with a Filter
 
 ```csharp
 Dictionary<string, object> parameters = new Dictionary<string, object>(){
