@@ -71,7 +71,7 @@ Task<Behavior> Behavior.Find(
 
 ---
 
-## List Behaviors by path
+## List Behaviors by Path
 
 ```
 Task<FilesList<Behavior>> Behavior.ListFor(

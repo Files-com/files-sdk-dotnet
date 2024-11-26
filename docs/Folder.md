@@ -90,7 +90,7 @@
 
 ---
 
-## List Folders by path
+## List Folders by Path
 
 ```
 Task<FilesList<RemoteFile>> Folder.ListFor(

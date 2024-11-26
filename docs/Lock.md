@@ -35,7 +35,7 @@
 
 ---
 
-## List Locks by path
+## List Locks by Path
 
 ```
 Task<FilesList<Lock>> Lock.ListFor(

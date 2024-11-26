@@ -23,7 +23,7 @@
 
 ---
 
-## List File Comments by path
+## List File Comments by Path
 
 ```
 Task<FilesList<FileComment>> FileComment.ListFor(
