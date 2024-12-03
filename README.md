@@ -599,6 +599,22 @@ Exception
 |`TrialLockedException`|  `SiteConfigurationException` |
 |`UserRequestsEnabledRequiredException`|  `SiteConfigurationException` |
 
+## Case Sensitivity
+
+The Files.com API compares files and paths in a case-insensitive manner.
+ For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
+
+The `PathUtil.same` function in the Files.com SDK is designed to help you determine if two paths on
+your native file system would be considered the same on Files.com. This is particularly important
+when handling errors related to duplicate file names and when developing tools for folder
+synchronization.
+
+```csharp title="Compare Case-Insensitive Files and Paths"
+if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
+    Console.WriteLine("Paths are the same");
+}
+```
+
 ## Examples
 
 ### Upload
@@ -724,16 +740,7 @@ foreach (var file in files.ListAutoPaging())
 }
 ```
 
-### Comparing Case-Insensitive Files and Paths
-
-For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
-```csharp
-if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
-    Console.WriteLine("Paths are the same");
-}
-```
-
-### Logging
+## Logs
 
 To enable logging, create a file named `log4net.config` in the same directory as
 the application with the contents as shown.
@@ -743,6 +750,7 @@ Then, in the application, use that file to configure `log4net`:
 ```csharp
 log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo("./log4net.config"));
 ```
+
 ```xml title="log4net.config"
 <?xml version="1.0" encoding="UTF-8" ?>
 <log4net>
