@@ -71,7 +71,7 @@
 * `name` / `Name`  (string): Internal name for your reference
 * `port` / `Port`  (Nullable<Int64>): Port for remote server.  Not needed for S3.
 * `max_connections` / `MaxConnections`  (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
-* `pin_to_site_region` / `PinToSiteRegion`  (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
+* `pin_to_site_region` / `PinToSiteRegion`  (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `pinned_region` / `PinnedRegion`  (string): If set, all communications with this remote server are made through the provided region.
 * `s3_bucket` / `S3Bucket`  (string): S3 bucket name
 * `s3_region` / `S3Region`  (string): S3 region
@@ -227,7 +227,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `hostname` (string): Hostname or IP address
 * `name` (string): Internal name for your reference
 * `max_connections` (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
-* `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
+* `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
 * `s3_bucket` (string): S3 bucket name
 * `s3_region` (string): S3 region
@@ -337,7 +337,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `hostname` (string): Hostname or IP address
 * `name` (string): Internal name for your reference
 * `max_connections` (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
-* `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
+* `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
 * `s3_bucket` (string): S3 bucket name
 * `s3_region` (string): S3 region
@@ -524,7 +524,7 @@ RemoteServer.Update(parameters);
 * `hostname` (string): Hostname or IP address
 * `name` (string): Internal name for your reference
 * `max_connections` (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
-* `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a sitewide setting which will force it to true.
+* `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
 * `s3_bucket` (string): S3 bucket name
 * `s3_region` (string): S3 region
