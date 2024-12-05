@@ -69,6 +69,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("exclude_pattern", null);
             }
+            if (!this.attributes.ContainsKey("import_urls"))
+            {
+                this.attributes.Add("import_urls", new object[0]);
+            }
             if (!this.attributes.ContainsKey("flatten_destination_structure"))
             {
                 this.attributes.Add("flatten_destination_structure", false);
@@ -284,6 +288,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["exclude_pattern"]; }
             set { attributes["exclude_pattern"] = value; }
+        }
+
+        /// <summary>
+        /// List of URLs to be imported and names to be used.
+        /// </summary>
+        [JsonPropertyName("import_urls")]
+        public object[] ImportUrls
+        {
+            get { return (object[])attributes["import_urls"]; }
+            set { attributes["import_urls"] = value; }
         }
 
         /// <summary>
@@ -573,6 +587,7 @@ namespace FilesCom.Models
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+        ///   import_urls - array(object) - List of URLs to be imported and names to be used.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -665,6 +680,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
             {
                 throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
+            }
+            if (parameters.ContainsKey("import_urls") && !(parameters["import_urls"] is object[]))
+            {
+                throw new ArgumentException("Bad parameter: import_urls must be of type object[]", "parameters[\"import_urls\"]");
             }
             if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
             {
@@ -900,6 +919,7 @@ namespace FilesCom.Models
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+        ///   import_urls - array(object) - List of URLs to be imported and names to be used.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -988,6 +1008,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
             {
                 throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
+            }
+            if (parameters.ContainsKey("import_urls") && !(parameters["import_urls"] is object[]))
+            {
+                throw new ArgumentException("Bad parameter: import_urls must be of type object[]", "parameters[\"import_urls\"]");
             }
             if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
             {
@@ -1098,6 +1122,7 @@ namespace FilesCom.Models
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
+        ///   import_urls - array(object) - List of URLs to be imported and names to be used.
         ///   flatten_destination_structure - boolean - Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
         ///   ignore_locked_folders - boolean - If true, the Lock Folders behavior will be disregarded for automated actions.
         ///   legacy_folder_matching - boolean - DEPRECATED: If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
@@ -1198,6 +1223,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
             {
                 throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
+            }
+            if (parameters.ContainsKey("import_urls") && !(parameters["import_urls"] is object[]))
+            {
+                throw new ArgumentException("Bad parameter: import_urls must be of type object[]", "parameters[\"import_urls\"]");
             }
             if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
             {
