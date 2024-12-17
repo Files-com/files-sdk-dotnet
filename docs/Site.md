@@ -60,6 +60,7 @@
   "custom_namespace": true,
   "dav_enabled": true,
   "dav_user_root_enabled": true,
+  "days_before_deleting_disabled_users": 30,
   "days_to_retain_backups": 30,
   "document_edits_in_bundle_allowed": true,
   "default_time_zone": "Pacific Time (US & Canada)",
@@ -347,6 +348,7 @@
 * `custom_namespace` / `CustomNamespace`  (bool): Is this site using a custom namespace for users?
 * `dav_enabled` / `DavEnabled`  (bool): Is WebDAV enabled?
 * `dav_user_root_enabled` / `DavUserRootEnabled`  (bool): Use user FTP roots also for WebDAV?
+* `days_before_deleting_disabled_users` / `DaysBeforeDeletingDisabledUsers`  (Nullable<Int64>): Number of days to keep disabled users before deleting them. If set to 0, disabled users will not be deleted.
 * `days_to_retain_backups` / `DaysToRetainBackups`  (Nullable<Int64>): Number of days to keep deleted files
 * `document_edits_in_bundle_allowed` / `DocumentEditsInBundleAllowed`  (bool): If true, allow public viewers of Bundles with full permissions to use document editing integrations.
 * `default_time_zone` / `DefaultTimeZone`  (string): Site default time zone
@@ -566,6 +568,7 @@ Task<Site> Site.Update(
 * `allowed_countries` (string): Comma separated list of allowed Country codes
 * `allowed_ips` (string): List of allowed IP addresses
 * `disallowed_countries` (string): Comma separated list of disallowed Country codes
+* `days_before_deleting_disabled_users` (Nullable<Int64>): Number of days to keep disabled users before deleting them. If set to 0, disabled users will not be deleted.
 * `days_to_retain_backups` (Nullable<Int64>): Number of days to keep deleted files
 * `max_prior_passwords` (Nullable<Int64>): Number of prior passwords to disallow
 * `password_validity_days` (Nullable<Int64>): Number of days password is valid
