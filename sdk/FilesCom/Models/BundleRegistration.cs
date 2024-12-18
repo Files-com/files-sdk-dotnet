@@ -248,6 +248,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `bundle_id`.
         ///   bundle_id - int64 - ID of the associated Bundle
         /// </summary>
         public static FilesList<BundleRegistration> List(
@@ -266,6 +267,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
             if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
