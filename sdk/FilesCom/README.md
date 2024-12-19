@@ -111,7 +111,7 @@ new FilesClient(config);
 new FilesClient();
 
 // You may also specify the API key on a per-request basis in the final parameter to static methods.
-var options = Dictionary<string, object>();
+var options = new Dictionary<string, object>();
 options.Add("api_key", "YOUR_API_KEY");
 User.Find(id, params, options);
 ```
@@ -195,17 +195,17 @@ This can also be set to use a mock server in development or CI.
 config.BaseUrl = "https://MY-SUBDOMAIN.files.com"
 ```
 
-#### Open Timeout
+#### Connect Timeout
 
-Open timeout in seconds. The default value is 30.
+Connect timeout in seconds. The default value is 30.
 
 ```csharp title="Example setting"
-config.OpenTimeout = 60
+config.ConnectTimeout = 60
 ```
 
 #### Read Timeout
 
-Read timeout in seconds. The default value is 80.
+Read timeout in seconds. The default value is 60.
 
 ```csharp title="Example setting"
 config.ReadTimeout = 90

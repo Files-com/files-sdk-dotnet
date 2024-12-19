@@ -26,7 +26,6 @@ namespace FilesTests
         }
     }
 
-
     [TestClass]
     public class FilesApiServiceTest
     {
@@ -88,7 +87,7 @@ namespace FilesTests
                             .RespondWith(
                                 Response.Create()
                                 .WithStatusCode(200)
-                                .WithHeader("Content-Type", "aplication/json")
+                                .WithHeader("Content-Type", "application/json")
                                 .WithBodyAsJson(bodyContent)
                             );
 
@@ -112,7 +111,7 @@ namespace FilesTests
               .RespondWith(
                 Response.Create()
                   .WithStatusCode(404)
-                  .WithHeader("Content-Type", "aplication/json")
+                  .WithHeader("Content-Type", "application/json")
                   .WithBody(@"{""type"": ""not-found/folder-not-found"",""http-code"": 404,""error"": ""Folder missing not found.""}")
               );
 
@@ -142,7 +141,7 @@ namespace FilesTests
                             .RespondWith(
                                 Response.Create()
                                 .WithStatusCode(200)
-                                .WithHeader("Content-Type", "aplication/json")
+                                .WithHeader("Content-Type", "application/json")
                                 .WithBody(@"[]")
                             );
 

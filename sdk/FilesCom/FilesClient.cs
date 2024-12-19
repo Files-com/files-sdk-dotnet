@@ -7,6 +7,7 @@ using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom
@@ -57,7 +58,7 @@ namespace FilesCom
             }
             else
             {
-                log.Info("Files.com Client created with no preconfigured auth");
+                log.Info("Files.com Client created with no pre-configured auth");
             }
 
             var builder = new HostBuilder()
@@ -89,13 +90,27 @@ namespace FilesCom
                     {
                         client.BaseAddress = new Uri(BaseUrl);
                         client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
+                        client.Timeout = Timeout.InfiniteTimeSpan;
                     })
+#if NETCOREAPP2_1_OR_GREATER
+                    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+                    {
+                        ConnectTimeout = TimeSpan.FromSeconds(this.config.ConnectTimeout)
+                    })
+#endif
                     .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
 
                     services.AddHttpClient(HttpUpload, client =>
                     {
                         client.DefaultRequestHeaders.UserAgent.ParseAdd(UserAgent);
+                        client.Timeout = Timeout.InfiniteTimeSpan;
                     })
+#if NETCOREAPP2_1_OR_GREATER
+                    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+                    {
+                        ConnectTimeout = TimeSpan.FromSeconds(this.config.ConnectTimeout)
+                    })
+#endif
                     .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
 
                     services.AddTransient<IFilesApiService, FilesApiService>();
@@ -117,6 +132,11 @@ namespace FilesCom
         public string SessionId
         {
             get { return config.SessionId; }
+        }
+
+        public int ReadTimeout
+        {
+            get { return config.ReadTimeout; }
         }
 
         public static async Task<HttpResponseMessage> SendRequest(

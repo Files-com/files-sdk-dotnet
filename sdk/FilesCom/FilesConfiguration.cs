@@ -25,17 +25,17 @@ namespace FilesCom
             set { this["BaseUrl"] = value; }
         }
 
-        [ConfigurationProperty("OpenTimeout", DefaultValue = 30.0D)]
-        public double OpenTimeout
+        [ConfigurationProperty("ConnectTimeout", DefaultValue = 30)]
+        public int ConnectTimeout
         {
-            get { return (double)this["OpenTimeout"]; }
-            set { this["OpenTimeout"] = value; }
+            get { return (int)this["ConnectTimeout"]; }
+            set { this["ConnectTimeout"] = value; }
         }
 
-        [ConfigurationProperty("ReadTimeout", DefaultValue = 60.0D)]
-        public double ReadTimeout
+        [ConfigurationProperty("ReadTimeout", DefaultValue = 60)]
+        public int ReadTimeout
         {
-            get { return (double)this["ReadTimeout"]; }
+            get { return (int)this["ReadTimeout"]; }
             set { this["ReadTimeout"] = value; }
         }
 

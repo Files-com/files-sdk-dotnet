@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom
@@ -193,13 +194,17 @@ namespace FilesCom
 
         public async Task StreamDownload(string uriString, Stream writeStream)
         {
+            FilesClient filesClient = FilesClient.Instance;
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             Uri uri = new Uri(uriString);
             HttpResponseMessage response;
 
             try
             {
-                response = await httpClient.GetAsync(uri);
+                var cts = new CancellationTokenSource();
+                cts.CancelAfter(TimeSpan.FromSeconds(filesClient.ReadTimeout));
+
+                response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cts.Token);
             }
             catch (HttpRequestException e)
             {
@@ -216,9 +221,15 @@ namespace FilesCom
                     await this.HandleErrorResponse(response);
                 }
 
-                using (writeStream)
+                using (Stream responseStream = await response.Content.ReadAsStreamAsync())
                 {
-                    await response.Content.CopyToAsync(writeStream);
+                    byte[] buffer = new byte[2 * 1024 * 1024]; // 2MB
+                    int bytesRead;
+
+                    while ((bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        await writeStream.WriteAsync(buffer, 0, bytesRead);
+                    }
                 }
                 log.Debug($"Successfully downloaded {uri}");
             }
