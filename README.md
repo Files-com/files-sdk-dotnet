@@ -91,6 +91,9 @@ access to the entire API. If the user is not an administrator, you will only be 
 that user can access, and no access will be granted to site administration functions in the API.
 
 ```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
+
 // Using manual configuration
 var config = new FilesConfiguration();
 config.ApiKey = "YOUR_API_KEY";
@@ -142,6 +145,9 @@ To create a session, the `create` method is called on the `Session` object with 
 password.
 
 ```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
+
 Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 FilesClient client = new FilesClient(filesConfig);
 paramsDict.Add("username", "username");
@@ -154,6 +160,8 @@ Session session = await Session.Create(paramsDict);
 Once a session has been created, you can store the session globally, use the session per object, or use the session per request to authenticate SDK operations.
 
 ```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
 
 // You may set the returned session to be used by default for subsequent requests.
 FilesConfiguration filesConfig = new FilesConfiguration();
@@ -173,7 +181,6 @@ Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 Dictionary<string, object> optionsDict = new Dictionary<string, object>();
 optionsDict.Add("session_id", session.Id);
 await Folder.ListFor("/", paramsDict, optionsDict).All();
-
 ```
 
 #### Logging Out
@@ -181,6 +188,8 @@ await Folder.ListFor("/", paramsDict, optionsDict).All();
 User sessions can be ended calling the `destroy` method on the `session` object.
 
 ```csharp title="Example Request"
+using FilesCom.Models;
+
 await Session.Destroy();
 ```
 
@@ -254,9 +263,10 @@ resource field name sort on and a value of either ```"asc"``` or ```"desc"``` to
 order.
 
 ```csharp title="Sort Example"
+using FilesCom;
+using FilesCom.Models;
+
 // users sorted by username
-config.ApiKey = "my-key";
-new FilesClient(config);
 var args = new Dictionary<string, object>();
 var sortArgs = new Dictionary<string, object>();
 sortArgs.Add("username", "asc");
@@ -292,9 +302,9 @@ the resource field name to filter on and a passed in value to use in the filter 
 | `filter_lteq` | Range | Find resources that have a field value that is less than or equal to the passed in value.  (i.e., FIELD_VALUE \<= PASS_IN_VALUE). |
 
 ```csharp title="Exact Filter Example"
+using FilesCom.Models;
+
 // non admin users
-config.ApiKey = "my-key";
-new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
 filterArgs.Add("not_site_admin", true);
@@ -307,9 +317,9 @@ foreach (User user in userIterator.ListAutoPaging()) {
 ```
 
 ```csharp  title="Range Filter Example"
+using FilesCom.Models;
+
 // users who haven't logged in since 2024-01-01
-config.ApiKey = "my-key";
-new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
 filterArgs.Add("last_login_at","2024-01-01");
@@ -322,9 +332,9 @@ foreach (User user in userIterator.ListAutoPaging()) {
 ```
 
 ```csharp  title="Pattern Filter Example"
+using FilesCom.Models;
+
 // users whose usernames start with 'test'
-config.ApiKey = "my-key";
-new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
 filterArgs.Add("username","test");
@@ -337,9 +347,9 @@ foreach (User user in userIterator.ListAutoPaging()) {
 ```
 
 ```csharp s title="Combination Filter with Sort Example"
+using FilesCom.Models;
+
 // users whose usernames start with 'test' and are not admins
-config.ApiKey = "my-key";
-new FilesClient(config);
 var args = new Dictionary<string, object>();
 var filterPrefixArgs = new Dictionary<string, object>();
 var filterArgs = new Dictionary<string, object>();
@@ -375,6 +385,8 @@ Use standard DotNet exception handling to detect and deal with errors.  It is ge
 catch the general `SdkException` exception as a catch-all.
 
 ```csharp title="Example Error Handling"
+using FilesCom.Models;
+
 Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 paramsDict.Add("username", "USERNAME");
 paramsDict.Add("password", "BADPASSWORD");
@@ -391,7 +403,6 @@ catch (FilesCom.SdkException e)
 {
     Console.WriteLine($"Unknown Error occurred({e.GetType().Name}): " + e.Message);
 }
-
 ```
 
 ### Error Types
@@ -612,6 +623,8 @@ when handling errors related to duplicate file names and when developing tools f
 synchronization.
 
 ```csharp title="Compare Case-Insensitive Files and Paths"
+using FilesCom.Util;
+
 if(PathUtil.same("Fïłèńämê.Txt", "filename.txt")) {
     Console.WriteLine("Paths are the same");
 }
