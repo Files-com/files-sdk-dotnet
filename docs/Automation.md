@@ -323,7 +323,7 @@ parameters.Add("exclude_pattern", "path/to/exclude/*");
 parameters.Add("import_urls", [{"name":"users.json","url":"http://example.com/users","method":"POST","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}]);
 parameters.Add("flatten_destination_structure", true);
 parameters.Add("ignore_locked_folders", true);
-parameters.Add("legacy_folder_matching", true);
+parameters.Add("legacy_folder_matching", false);
 parameters.Add("name", "example");
 parameters.Add("overwrite_files", true);
 parameters.Add("path_time_zone", "Eastern Time (US & Canada)");

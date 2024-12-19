@@ -277,8 +277,8 @@ var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("with_previews", true);
-parameters.Add("with_priority_color", true);
+parameters.Add("with_previews", false);
+parameters.Add("with_priority_color", false);
 
 File.Download(parameters);
 ```
@@ -325,7 +325,7 @@ var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("recursive", true);
+parameters.Add("recursive", false);
 
 File.Delete(parameters);
 ```
@@ -346,8 +346,8 @@ var File = RemoteFile.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
-parameters.Add("structure", true);
-parameters.Add("overwrite", true);
+parameters.Add("structure", false);
+parameters.Add("overwrite", false);
 
 File.Copy(parameters);
 ```
@@ -370,7 +370,7 @@ var File = RemoteFile.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
-parameters.Add("overwrite", true);
+parameters.Add("overwrite", false);
 
 File.Move(parameters);
 ```
@@ -391,13 +391,13 @@ var File = RemoteFile.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("mkdir_parents", true);
+parameters.Add("mkdir_parents", false);
 parameters.Add("part", 1);
 parameters.Add("parts", 1);
 parameters.Add("ref", "upload-1");
 parameters.Add("restart", 1);
 parameters.Add("size", 1);
-parameters.Add("with_rename", true);
+parameters.Add("with_rename", false);
 
 File.BeginUpload(parameters);
 ```

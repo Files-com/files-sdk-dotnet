@@ -454,7 +454,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("aws_access_key", "example");
 parameters.Add("wasabi_access_key", "example");
-parameters.Add("reset_authentication", true);
+parameters.Add("reset_authentication", false);
 parameters.Add("hostname", "remote-server.com");
 parameters.Add("name", "My Remote server");
 parameters.Add("max_connections", 1);

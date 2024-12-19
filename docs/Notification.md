@@ -190,13 +190,13 @@ var Notification = Notification.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("notify_on_copy", true);
+parameters.Add("notify_on_copy", false);
 parameters.Add("notify_on_delete", true);
 parameters.Add("notify_on_download", true);
 parameters.Add("notify_on_move", true);
 parameters.Add("notify_on_upload", true);
-parameters.Add("notify_user_actions", true);
-parameters.Add("recursive", true);
+parameters.Add("notify_user_actions", false);
+parameters.Add("recursive", false);
 parameters.Add("send_interval", "daily");
 parameters.Add("message", "custom notification email message");
 parameters.Add("triggering_filenames", ["*.jpg","notify_file.txt"]);

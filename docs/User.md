@@ -456,18 +456,18 @@ var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("avatar_delete", true);
+parameters.Add("avatar_delete", false);
 parameters.Add("email", "example");
 parameters.Add("group_id", 1);
 parameters.Add("group_ids", "example");
-parameters.Add("announcements_read", true);
+parameters.Add("announcements_read", false);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("attachments_permission", true);
 parameters.Add("authenticate_until", "2000-01-01T01:00:00Z");
 parameters.Add("authentication_method", "password");
-parameters.Add("billing_permission", true);
-parameters.Add("bypass_inactive_disable", true);
-parameters.Add("bypass_site_allowed_ips", true);
+parameters.Add("billing_permission", false);
+parameters.Add("bypass_inactive_disable", false);
+parameters.Add("bypass_site_allowed_ips", false);
 parameters.Add("dav_permission", true);
 parameters.Add("disabled", true);
 parameters.Add("ftp_permission", true);

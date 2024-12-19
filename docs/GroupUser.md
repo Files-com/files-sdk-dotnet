@@ -109,7 +109,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("group_id", 1);
 parameters.Add("user_id", 1);
-parameters.Add("admin", true);
+parameters.Add("admin", false);
 
 GroupUser.Update(parameters);
 ```

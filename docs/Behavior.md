@@ -189,11 +189,11 @@ var Behavior = Behavior.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("value", "{\"method\": \"GET\"}");
-parameters.Add("disable_parent_folder_behavior", true);
-parameters.Add("recursive", true);
+parameters.Add("disable_parent_folder_behavior", false);
+parameters.Add("recursive", false);
 parameters.Add("name", "example");
 parameters.Add("description", "example");
-parameters.Add("attachment_delete", true);
+parameters.Add("attachment_delete", false);
 
 Behavior.Update(parameters);
 ```
