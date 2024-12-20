@@ -22,6 +22,7 @@
   "md5": "example",
   "size": 1,
   "data_length": 1,
+  "bytes_transferred": 1,
   "entries_returned": 1,
   "success": true,
   "status": "example",
@@ -47,6 +48,7 @@
 * `md5` / `Md5`  (string): MD5 Hash of the file. Not always available.
 * `size` / `Size`  (Nullable<Int64>): Size of File That was Uploaded or Downloaded.
 * `data_length` / `DataLength`  (Nullable<Int64>): Data Length in Bytes. Present for actions that transfer data.
+* `bytes_transferred` / `BytesTransferred`  (Nullable<Int64>): The number of bytes transferred for uploads and downloads.
 * `entries_returned` / `EntriesReturned`  (Nullable<Int64>): Number of entries returned when listing files and folders
 * `success` / `Success`  (bool): Whether SFTP Action was successful.
 * `status` / `Status`  (string): SFTP Action status.

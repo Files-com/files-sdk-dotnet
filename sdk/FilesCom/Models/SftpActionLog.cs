@@ -101,6 +101,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("data_length", null);
             }
+            if (!this.attributes.ContainsKey("bytes_transferred"))
+            {
+                this.attributes.Add("bytes_transferred", null);
+            }
             if (!this.attributes.ContainsKey("entries_returned"))
             {
                 this.attributes.Add("entries_returned", null);
@@ -331,6 +335,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["data_length"]; }
             private set { attributes["data_length"] = value; }
+        }
+
+        /// <summary>
+        /// The number of bytes transferred for uploads and downloads.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bytes_transferred")]
+        public Nullable<Int64> BytesTransferred
+        {
+            get { return (Nullable<Int64>)attributes["bytes_transferred"]; }
+            private set { attributes["bytes_transferred"] = value; }
         }
 
         /// <summary>
