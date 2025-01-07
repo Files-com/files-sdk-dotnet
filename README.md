@@ -558,6 +558,7 @@ Exception
 |`DestinationFolderLimitedException`|  `ProcessingFailureException` |
 |`DestinationParentConflictException`|  `ProcessingFailureException` |
 |`DestinationParentDoesNotExistException`|  `ProcessingFailureException` |
+|`ExceededRuntimeLimitException`|  `ProcessingFailureException` |
 |`ExpiredPrivateKeyException`|  `ProcessingFailureException` |
 |`ExpiredPublicKeyException`|  `ProcessingFailureException` |
 |`ExportFailureException`|  `ProcessingFailureException` |

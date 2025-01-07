@@ -818,6 +818,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class ExceededRuntimeLimitException : ProcessingFailureException
+    {
+        public ExceededRuntimeLimitException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class ExpiredPrivateKeyException : ProcessingFailureException
     {
         public ExpiredPrivateKeyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
