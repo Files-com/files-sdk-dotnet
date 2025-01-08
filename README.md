@@ -203,7 +203,10 @@ Setting the base URL for the API is required if your site is configured to disab
 This can also be set to use a mock server in development or CI.
 
 ```csharp title="Example setting"
-config.BaseUrl = "https://MY-SUBDOMAIN.files.com"
+using FilesCom;
+
+var config = new FilesConfiguration();
+config.BaseUrl = "https://MY-SUBDOMAIN.files.com";
 ```
 
 #### Connect Timeout
@@ -211,7 +214,10 @@ config.BaseUrl = "https://MY-SUBDOMAIN.files.com"
 Connect timeout in seconds. The default value is 30.
 
 ```csharp title="Example setting"
-config.ConnectTimeout = 60
+using FilesCom;
+
+var config = new FilesConfiguration();
+config.ConnectTimeout = 60;
 ```
 
 #### Read Timeout
@@ -219,7 +225,10 @@ config.ConnectTimeout = 60
 Read timeout in seconds. The default value is 60.
 
 ```csharp title="Example setting"
-config.ReadTimeout = 90
+using FilesCom;
+
+var config = new FilesConfiguration();
+config.ReadTimeout = 90;
 ```
 
 #### Initial Network Retry Delay
@@ -227,7 +236,10 @@ config.ReadTimeout = 90
 Initial retry delay in seconds. The default value is 0.5.
 
 ```csharp title="Example setting"
-config.InitialNetworkRetryDelay = 1
+using FilesCom;
+
+var config = new FilesConfiguration();
+config.InitialNetworkRetryDelay = 1;
 ```
 
 #### Maximum Network Retries
@@ -235,7 +247,10 @@ config.InitialNetworkRetryDelay = 1
 Maximum number of retries. The default value is 3.
 
 ```csharp title="Example setting"
-config.MaxNetworkRetries = 5
+using FilesCom;
+
+var config = new FilesConfiguration();
+config.MaxNetworkRetries = 5;
 ```
 
 #### Maximum Retry Delay
@@ -243,7 +258,10 @@ config.MaxNetworkRetries = 5
 Maximum network retry delay in seconds. The default value is 2.
 
 ```csharp title="Example setting"
-config.MaxNetworkRetryDelay = 5
+using FilesCom;
+
+var config = new FilesConfiguration();
+config.MaxNetworkRetryDelay = 5;
 ```
 
 ## Sort and Filter
