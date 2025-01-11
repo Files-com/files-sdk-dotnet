@@ -118,7 +118,19 @@ new FilesClient();
 // You may also specify the API key on a per-request basis in the final parameter to static methods.
 var options = new Dictionary<string, object>();
 options.Add("api_key", "YOUR_API_KEY");
-User.Find(id, params, options);
+
+try
+{
+    User.Find(id, params, options);
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
 ```
 
 Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API key.
@@ -152,7 +164,19 @@ Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 FilesClient client = new FilesClient(filesConfig);
 paramsDict.Add("username", "username");
 paramsDict.Add("password", "password");
-Session session = await Session.Create(paramsDict);
+
+try
+{
+    Session session = await Session.Create(paramsDict);
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
 ```
 
 #### Using a Session
@@ -180,7 +204,19 @@ User user = new User(paramsDict, optionsDict);
 Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 Dictionary<string, object> optionsDict = new Dictionary<string, object>();
 optionsDict.Add("session_id", session.Id);
-await Folder.ListFor("/", paramsDict, optionsDict).All();
+
+try
+{
+    await Folder.ListFor("/", paramsDict, optionsDict).All();
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
 ```
 
 #### Logging Out
@@ -190,7 +226,18 @@ User sessions can be ended calling the `destroy` method on the `session` object.
 ```csharp title="Example Request"
 using FilesCom.Models;
 
-await Session.Destroy();
+try
+{
+    await Session.Destroy();
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
 ```
 
 ## Configuration
@@ -290,9 +337,20 @@ var sortArgs = new Dictionary<string, object>();
 sortArgs.Add("username", "asc");
 args.Add("sort_by", sortArgs);
 
-var userIterator = User.List(args);
-foreach (User user in userIterator.ListAutoPaging()) {
-  // Operate on user
+try
+{
+    var userIterator = User.List(args);
+    foreach (User user in userIterator.ListAutoPaging()) {
+        // Operate on user
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
 
@@ -328,9 +386,20 @@ var filterArgs = new Dictionary<string, object>();
 filterArgs.Add("not_site_admin", true);
 args.Add("filter", filterArgs);
 
-var userIterator = User.List(args);
-foreach (User user in userIterator.ListAutoPaging()) {
-  // Operate on user
+try
+{
+    var userIterator = User.List(args);
+    foreach (User user in userIterator.ListAutoPaging()) {
+        // Operate on user
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
 
@@ -343,9 +412,20 @@ var filterArgs = new Dictionary<string, object>();
 filterArgs.Add("last_login_at","2024-01-01");
 args.Add("filter_gteq", filterArgs);
 
-var userIterator = User.List(args);
-foreach (User user in userIterator.ListAutoPaging()) {
-  // Operate on user
+try
+{
+    var userIterator = User.List(args);
+    foreach (User user in userIterator.ListAutoPaging()) {
+        // Operate on user
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
 
@@ -358,9 +438,20 @@ var filterArgs = new Dictionary<string, object>();
 filterArgs.Add("username","test");
 args.Add("filter_prefix", filterArgs);
 
-var userIterator = User.List(args);
-foreach (User user in userIterator.ListAutoPaging()) {
-  // Operate on user
+try
+{
+    var userIterator = User.List(args);
+    foreach (User user in userIterator.ListAutoPaging()) {
+        // Operate on user
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
 
@@ -379,9 +470,20 @@ args.Add("filter_prefix", filterPrefixArgs);
 args.Add("filter", filterArgs);
 args.Add("sort_by", sortArgs);
 
-var userIterator = User.List(args);
-foreach (User user in userIterator.ListAutoPaging()) {
-  // Operate on user
+try
+{
+    var userIterator = User.List(args);
+    foreach (User user in userIterator.ListAutoPaging()) {
+        // Operate on user
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
 
@@ -409,17 +511,18 @@ Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 paramsDict.Add("username", "USERNAME");
 paramsDict.Add("password", "BADPASSWORD");
 Session session;
+
 try
 {
     session = await Session.Create(paramsDict);
 }
 catch (FilesCom.NotAuthenticatedException e)
 {
-    Console.WriteLine($"Authentication Error occurred({e.GetType().Name}): " + e.Message);
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 catch (FilesCom.SdkException e)
 {
-    Console.WriteLine($"Unknown Error occurred({e.GetType().Name}): " + e.Message);
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
 
