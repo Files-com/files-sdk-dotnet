@@ -45,17 +45,21 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("retry_at"))
+            {
+                this.attributes.Add("retry_at", null);
+            }
             if (!this.attributes.ContainsKey("retried_at"))
             {
                 this.attributes.Add("retried_at", null);
             }
-            if (!this.attributes.ContainsKey("retry_of_run_id"))
-            {
-                this.attributes.Add("retry_of_run_id", null);
-            }
             if (!this.attributes.ContainsKey("retried_in_run_id"))
             {
                 this.attributes.Add("retried_in_run_id", null);
+            }
+            if (!this.attributes.ContainsKey("retry_of_run_id"))
+            {
+                this.attributes.Add("retry_of_run_id", null);
             }
             if (!this.attributes.ContainsKey("runtime"))
             {
@@ -140,6 +144,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("retry_at")]
+        public string RetryAt
+        {
+            get { return (string)attributes["retry_at"]; }
+            private set { attributes["retry_at"] = value; }
+        }
+
+        /// <summary>
         /// If set, this Automation run was retried due to `failure` or `partial_failure`.
         /// </summary>
         [JsonInclude]
@@ -151,17 +166,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the original run that this run is retrying.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("retry_of_run_id")]
-        public Nullable<Int64> RetryOfRunId
-        {
-            get { return (Nullable<Int64>)attributes["retry_of_run_id"]; }
-            private set { attributes["retry_of_run_id"] = value; }
-        }
-
-        /// <summary>
         /// ID of the run that is or will be retrying this run.
         /// </summary>
         [JsonInclude]
@@ -170,6 +174,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["retried_in_run_id"]; }
             private set { attributes["retried_in_run_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the original run that this run is retrying.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("retry_of_run_id")]
+        public Nullable<Int64> RetryOfRunId
+        {
+            get { return (Nullable<Int64>)attributes["retry_of_run_id"]; }
+            private set { attributes["retry_of_run_id"] = value; }
         }
 
         /// <summary>
