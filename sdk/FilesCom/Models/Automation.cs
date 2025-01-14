@@ -117,6 +117,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("retry_on_failure_interval_in_minutes"))
+            {
+                this.attributes.Add("retry_on_failure_interval_in_minutes", null);
+            }
+            if (!this.attributes.ContainsKey("retry_on_failure_number_of_attempts"))
+            {
+                this.attributes.Add("retry_on_failure_number_of_attempts", null);
+            }
             if (!this.attributes.ContainsKey("schedule"))
             {
                 this.attributes.Add("schedule", null);
@@ -415,6 +423,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If the Automation fails, retry at this interval (in minutes).
+        /// </summary>
+        [JsonPropertyName("retry_on_failure_interval_in_minutes")]
+        public Nullable<Int64> RetryOnFailureIntervalInMinutes
+        {
+            get { return (Nullable<Int64>)attributes["retry_on_failure_interval_in_minutes"]; }
+            set { attributes["retry_on_failure_interval_in_minutes"] = value; }
+        }
+
+        /// <summary>
+        /// If the Automation fails, retry at most this many times.
+        /// </summary>
+        [JsonPropertyName("retry_on_failure_number_of_attempts")]
+        public Nullable<Int64> RetryOnFailureNumberOfAttempts
+        {
+            get { return (Nullable<Int64>)attributes["retry_on_failure_number_of_attempts"]; }
+            set { attributes["retry_on_failure_number_of_attempts"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run in json format.
         /// </summary>
         [JsonPropertyName("schedule")]
@@ -594,6 +622,8 @@ namespace FilesCom.Models
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
+        ///   retry_on_failure_interval_in_minutes - int64 - If the Automation fails, retry at this interval (in minutes).
+        ///   retry_on_failure_number_of_attempts - int64 - If the Automation fails, retry at most this many times.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -708,6 +738,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
             {
                 throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
+            }
+            if (parameters.ContainsKey("retry_on_failure_interval_in_minutes") && !(parameters["retry_on_failure_interval_in_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "parameters[\"retry_on_failure_interval_in_minutes\"]");
+            }
+            if (parameters.ContainsKey("retry_on_failure_number_of_attempts") && !(parameters["retry_on_failure_number_of_attempts"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "parameters[\"retry_on_failure_number_of_attempts\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -926,6 +964,8 @@ namespace FilesCom.Models
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
+        ///   retry_on_failure_interval_in_minutes - int64 - If the Automation fails, retry at this interval (in minutes).
+        ///   retry_on_failure_number_of_attempts - int64 - If the Automation fails, retry at most this many times.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -1037,6 +1077,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
             }
+            if (parameters.ContainsKey("retry_on_failure_interval_in_minutes") && !(parameters["retry_on_failure_interval_in_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "parameters[\"retry_on_failure_interval_in_minutes\"]");
+            }
+            if (parameters.ContainsKey("retry_on_failure_number_of_attempts") && !(parameters["retry_on_failure_number_of_attempts"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "parameters[\"retry_on_failure_number_of_attempts\"]");
+            }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
@@ -1129,6 +1177,8 @@ namespace FilesCom.Models
         ///   name - string - Name for this automation.
         ///   overwrite_files - boolean - If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
         ///   path_time_zone - string - Timezone to use when rendering timestamps in paths.
+        ///   retry_on_failure_interval_in_minutes - int64 - If the Automation fails, retry at this interval (in minutes).
+        ///   retry_on_failure_number_of_attempts - int64 - If the Automation fails, retry at most this many times.
         ///   trigger - string - How this automation is triggered to run.
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
         ///   value - object - A Hash of attributes specific to the automation type.
@@ -1251,6 +1301,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
             {
                 throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
+            }
+            if (parameters.ContainsKey("retry_on_failure_interval_in_minutes") && !(parameters["retry_on_failure_interval_in_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "parameters[\"retry_on_failure_interval_in_minutes\"]");
+            }
+            if (parameters.ContainsKey("retry_on_failure_number_of_attempts") && !(parameters["retry_on_failure_number_of_attempts"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "parameters[\"retry_on_failure_number_of_attempts\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {

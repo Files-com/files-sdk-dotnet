@@ -45,6 +45,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("retried_at"))
+            {
+                this.attributes.Add("retried_at", null);
+            }
+            if (!this.attributes.ContainsKey("retry_of_run_id"))
+            {
+                this.attributes.Add("retry_of_run_id", null);
+            }
+            if (!this.attributes.ContainsKey("retried_in_run_id"))
+            {
+                this.attributes.Add("retried_in_run_id", null);
+            }
             if (!this.attributes.ContainsKey("runtime"))
             {
                 this.attributes.Add("runtime", null);
@@ -125,6 +137,39 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// If set, this Automation run was retried due to `failure` or `partial_failure`.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("retried_at")]
+        public Nullable<DateTime> RetriedAt
+        {
+            get { return (Nullable<DateTime>)attributes["retried_at"]; }
+            private set { attributes["retried_at"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the original run that this run is retrying.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("retry_of_run_id")]
+        public Nullable<Int64> RetryOfRunId
+        {
+            get { return (Nullable<Int64>)attributes["retry_of_run_id"]; }
+            private set { attributes["retry_of_run_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the run that is or will be retrying this run.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("retried_in_run_id")]
+        public Nullable<Int64> RetriedInRunId
+        {
+            get { return (Nullable<Int64>)attributes["retried_in_run_id"]; }
+            private set { attributes["retried_in_run_id"] = value; }
         }
 
         /// <summary>
