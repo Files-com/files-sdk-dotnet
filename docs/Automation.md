@@ -100,8 +100,8 @@
 * `path` / `Path`  (string): Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `path_time_zone` / `PathTimeZone`  (string): Timezone to use when rendering timestamps in paths.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `retry_on_failure_interval_in_minutes` / `RetryOnFailureIntervalInMinutes`  (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).
-* `retry_on_failure_number_of_attempts` / `RetryOnFailureNumberOfAttempts`  (Nullable<Int64>): If the Automation fails, retry at most this many times.
+* `retry_on_failure_interval_in_minutes` / `RetryOnFailureIntervalInMinutes`  (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
+* `retry_on_failure_number_of_attempts` / `RetryOnFailureNumberOfAttempts`  (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `schedule` / `Schedule`  (object): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run in json format.
 * `human_readable_schedule` / `HumanReadableSchedule`  (string): If trigger is `custom_schedule`, Human readable Custom schedule description for when the automation should be run.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
@@ -195,8 +195,8 @@ Task<Automation> Automation.Create(
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
 * `path_time_zone` (string): Timezone to use when rendering timestamps in paths.
-* `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).
-* `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.
+* `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
+* `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `trigger` (string): How this automation is triggered to run.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
@@ -259,8 +259,8 @@ Task<Automation> Automation.Update(
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
 * `path_time_zone` (string): Timezone to use when rendering timestamps in paths.
-* `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).
-* `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.
+* `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
+* `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `trigger` (string): How this automation is triggered to run.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
@@ -372,8 +372,8 @@ Automation.Update(parameters);
 * `name` (string): Name for this automation.
 * `overwrite_files` (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten if they appear to be the same file size as the newly incoming file.  Use the `:always_overwrite_size_matching_files` option to override this.
 * `path_time_zone` (string): Timezone to use when rendering timestamps in paths.
-* `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).
-* `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.
+* `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
+* `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `trigger` (string): How this automation is triggered to run.
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, copy
 * `value` (object): A Hash of attributes specific to the automation type.
