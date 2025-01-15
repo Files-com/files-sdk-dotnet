@@ -734,6 +734,90 @@ Exception
 |`TrialLockedException`|  `SiteConfigurationException` |
 |`UserRequestsEnabledRequiredException`|  `SiteConfigurationException` |
 
+## {frontmatter.title}
+
+Certain API operations return lists of objects. When the number of objects in the list is large,
+the API will paginate the results.
+
+The Files.com DotNet SDK provides multiple ways to paginate through lists of objects.
+
+### Automatic Pagination
+
+The `ListAutoPaging` method automatically paginates and loads each page into memory.
+
+```csharp title="Example Request"
+using FilesCom.Models;
+
+try
+{
+    foreach (var file in Folder.ListFor("/").ListAutoPaging())
+    {
+        Console.WriteLine("- Path: {0}", file.Path);
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+```
+
+### Manual Pagination
+
+The `LoadNextPage/HasNextPage` methods allow for manual pagination and loading of each page into memory.
+
+```csharp title="Example Request"
+using FilesCom.Models;
+
+try
+{
+    FilesList<RemoteFile> listing = Folder.ListFor("/");
+    do
+    {
+        foreach (var file in await listing.LoadNextPage())
+        {
+            Console.WriteLine("- Path: {0}", file.Path);
+        }
+    } while (listing.HasNextPage);
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+```
+
+### Load All Items
+
+The `All` method loads all items into memory.
+
+```csharp title="Example Request"
+using FilesCom.Models;
+
+try
+{
+    var files = await Folder.ListFor("/").All();
+    foreach (var file in files)
+    {
+        Console.WriteLine("- Path: {0}", file.Path);
+    }
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+```
+
 ## Case Sensitivity
 
 The Files.com API compares files and paths in a case-insensitive manner.
