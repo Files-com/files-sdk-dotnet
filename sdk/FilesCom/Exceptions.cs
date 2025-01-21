@@ -130,6 +130,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class DoesNotSupportSortingException : BadRequestException
+    {
+        public DoesNotSupportSortingException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class FolderMustNotBeAFileException : BadRequestException
     {
         public FolderMustNotBeAFileException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -226,6 +232,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class InvalidSortFieldException : BadRequestException
+    {
+        public InvalidSortFieldException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class InvalidSortFilterCombinationException : BadRequestException
     {
         public InvalidSortFilterCombinationException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -253,6 +265,12 @@ namespace FilesCom
     public class MethodNotAllowedException : BadRequestException
     {
         public MethodNotAllowedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class MultipleSortParamsNotAllowedException : BadRequestException
+    {
+        public MultipleSortParamsNotAllowedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
@@ -301,6 +319,12 @@ namespace FilesCom
     public class SearchAllOnChildPathException : BadRequestException
     {
         public SearchAllOnChildPathException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class UnrecognizedSortIndexException : BadRequestException
+    {
+        public UnrecognizedSortIndexException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
