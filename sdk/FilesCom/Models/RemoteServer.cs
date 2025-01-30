@@ -141,10 +141,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("rackspace_container", null);
             }
-            if (!this.attributes.ContainsKey("auth_setup_link"))
-            {
-                this.attributes.Add("auth_setup_link", null);
-            }
             if (!this.attributes.ContainsKey("auth_status"))
             {
                 this.attributes.Add("auth_status", null);
@@ -631,16 +627,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["rackspace_container"]; }
             set { attributes["rackspace_container"] = value; }
-        }
-
-        /// <summary>
-        /// Returns link to login with an Oauth provider
-        /// </summary>
-        [JsonPropertyName("auth_setup_link")]
-        public string AuthSetupLink
-        {
-            get { return (string)attributes["auth_setup_link"]; }
-            set { attributes["auth_setup_link"] = value; }
         }
 
         /// <summary>
