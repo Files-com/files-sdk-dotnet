@@ -173,6 +173,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("provision_require_2fa", null);
             }
+            if (!this.attributes.ContainsKey("identifier"))
+            {
+                this.attributes.Add("identifier", null);
+            }
             if (!this.attributes.ContainsKey("ldap_base_dn"))
             {
                 this.attributes.Add("ldap_base_dn", null);
@@ -632,6 +636,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["provision_require_2fa"]; }
             private set { attributes["provision_require_2fa"] = value; }
+        }
+
+        /// <summary>
+        /// URL-friendly, unique identifier for Azure SAML configuration
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("identifier")]
+        public string Identifier
+        {
+            get { return (string)attributes["identifier"]; }
+            private set { attributes["identifier"] = value; }
         }
 
         /// <summary>
