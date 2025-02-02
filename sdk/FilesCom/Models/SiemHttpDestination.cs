@@ -105,81 +105,81 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sftp_action_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("sftp_action_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("sftp_action_entries_sent"))
             {
-                this.attributes.Add("sftp_action_records_sent_entries_sent", null);
+                this.attributes.Add("sftp_action_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("ftp_action_send_enabled"))
             {
                 this.attributes.Add("ftp_action_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("ftp_action_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("ftp_action_entries_sent"))
             {
-                this.attributes.Add("ftp_action_records_sent_entries_sent", null);
+                this.attributes.Add("ftp_action_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("web_dav_action_send_enabled"))
             {
                 this.attributes.Add("web_dav_action_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("web_dav_action_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("web_dav_action_entries_sent"))
             {
-                this.attributes.Add("web_dav_action_records_sent_entries_sent", null);
+                this.attributes.Add("web_dav_action_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("sync_send_enabled"))
             {
                 this.attributes.Add("sync_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("sync_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("sync_entries_sent"))
             {
-                this.attributes.Add("sync_records_sent_entries_sent", null);
+                this.attributes.Add("sync_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("outbound_connection_send_enabled"))
             {
                 this.attributes.Add("outbound_connection_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("outbound_connection_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("outbound_connection_entries_sent"))
             {
-                this.attributes.Add("outbound_connection_records_sent_entries_sent", null);
+                this.attributes.Add("outbound_connection_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("automation_send_enabled"))
             {
                 this.attributes.Add("automation_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("automation_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("automation_entries_sent"))
             {
-                this.attributes.Add("automation_records_sent_entries_sent", null);
+                this.attributes.Add("automation_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("api_request_send_enabled"))
             {
                 this.attributes.Add("api_request_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("api_request_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("api_request_entries_sent"))
             {
-                this.attributes.Add("api_request_records_sent_entries_sent", null);
+                this.attributes.Add("api_request_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("public_hosting_request_send_enabled"))
             {
                 this.attributes.Add("public_hosting_request_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("public_hosting_request_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("public_hosting_request_entries_sent"))
             {
-                this.attributes.Add("public_hosting_request_records_sent_entries_sent", null);
+                this.attributes.Add("public_hosting_request_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("email_send_enabled"))
             {
                 this.attributes.Add("email_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("email_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("email_entries_sent"))
             {
-                this.attributes.Add("email_records_sent_entries_sent", null);
+                this.attributes.Add("email_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("exavault_api_request_send_enabled"))
             {
                 this.attributes.Add("exavault_api_request_send_enabled", false);
             }
-            if (!this.attributes.ContainsKey("exavault_api_request_records_sent_entries_sent"))
+            if (!this.attributes.ContainsKey("exavault_api_request_entries_sent"))
             {
-                this.attributes.Add("exavault_api_request_records_sent_entries_sent", null);
+                this.attributes.Add("exavault_api_request_entries_sent", null);
             }
             if (!this.attributes.ContainsKey("last_http_call_target_type"))
             {
@@ -454,11 +454,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("sftp_action_records_sent_entries_sent")]
-        public Nullable<Int64> SftpActionRecordsSentEntriesSent
+        [JsonPropertyName("sftp_action_entries_sent")]
+        public Nullable<Int64> SftpActionEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["sftp_action_records_sent_entries_sent"]; }
-            set { attributes["sftp_action_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["sftp_action_entries_sent"]; }
+            set { attributes["sftp_action_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -475,11 +475,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("ftp_action_records_sent_entries_sent")]
-        public Nullable<Int64> FtpActionRecordsSentEntriesSent
+        [JsonPropertyName("ftp_action_entries_sent")]
+        public Nullable<Int64> FtpActionEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["ftp_action_records_sent_entries_sent"]; }
-            set { attributes["ftp_action_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["ftp_action_entries_sent"]; }
+            set { attributes["ftp_action_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -496,11 +496,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("web_dav_action_records_sent_entries_sent")]
-        public Nullable<Int64> WebDavActionRecordsSentEntriesSent
+        [JsonPropertyName("web_dav_action_entries_sent")]
+        public Nullable<Int64> WebDavActionEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["web_dav_action_records_sent_entries_sent"]; }
-            set { attributes["web_dav_action_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["web_dav_action_entries_sent"]; }
+            set { attributes["web_dav_action_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -517,11 +517,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("sync_records_sent_entries_sent")]
-        public Nullable<Int64> SyncRecordsSentEntriesSent
+        [JsonPropertyName("sync_entries_sent")]
+        public Nullable<Int64> SyncEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["sync_records_sent_entries_sent"]; }
-            set { attributes["sync_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["sync_entries_sent"]; }
+            set { attributes["sync_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -538,11 +538,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("outbound_connection_records_sent_entries_sent")]
-        public Nullable<Int64> OutboundConnectionRecordsSentEntriesSent
+        [JsonPropertyName("outbound_connection_entries_sent")]
+        public Nullable<Int64> OutboundConnectionEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["outbound_connection_records_sent_entries_sent"]; }
-            set { attributes["outbound_connection_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["outbound_connection_entries_sent"]; }
+            set { attributes["outbound_connection_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -559,11 +559,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("automation_records_sent_entries_sent")]
-        public Nullable<Int64> AutomationRecordsSentEntriesSent
+        [JsonPropertyName("automation_entries_sent")]
+        public Nullable<Int64> AutomationEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["automation_records_sent_entries_sent"]; }
-            set { attributes["automation_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["automation_entries_sent"]; }
+            set { attributes["automation_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -580,11 +580,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("api_request_records_sent_entries_sent")]
-        public Nullable<Int64> ApiRequestRecordsSentEntriesSent
+        [JsonPropertyName("api_request_entries_sent")]
+        public Nullable<Int64> ApiRequestEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["api_request_records_sent_entries_sent"]; }
-            set { attributes["api_request_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["api_request_entries_sent"]; }
+            set { attributes["api_request_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -601,11 +601,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("public_hosting_request_records_sent_entries_sent")]
-        public Nullable<Int64> PublicHostingRequestRecordsSentEntriesSent
+        [JsonPropertyName("public_hosting_request_entries_sent")]
+        public Nullable<Int64> PublicHostingRequestEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["public_hosting_request_records_sent_entries_sent"]; }
-            set { attributes["public_hosting_request_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["public_hosting_request_entries_sent"]; }
+            set { attributes["public_hosting_request_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -622,11 +622,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("email_records_sent_entries_sent")]
-        public Nullable<Int64> EmailRecordsSentEntriesSent
+        [JsonPropertyName("email_entries_sent")]
+        public Nullable<Int64> EmailEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["email_records_sent_entries_sent"]; }
-            set { attributes["email_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["email_entries_sent"]; }
+            set { attributes["email_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -643,11 +643,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Number of log entries sent for the lifetime of this destination.
         /// </summary>
-        [JsonPropertyName("exavault_api_request_records_sent_entries_sent")]
-        public Nullable<Int64> ExavaultApiRequestRecordsSentEntriesSent
+        [JsonPropertyName("exavault_api_request_entries_sent")]
+        public Nullable<Int64> ExavaultApiRequestEntriesSent
         {
-            get { return (Nullable<Int64>)attributes["exavault_api_request_records_sent_entries_sent"]; }
-            set { attributes["exavault_api_request_records_sent_entries_sent"] = value; }
+            get { return (Nullable<Int64>)attributes["exavault_api_request_entries_sent"]; }
+            set { attributes["exavault_api_request_entries_sent"] = value; }
         }
 
         /// <summary>
