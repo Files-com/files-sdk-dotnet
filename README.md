@@ -609,6 +609,7 @@ Exception
 |`UserIdOnUserEndpointException`|  `BadRequestException` |
 |`UserRequiredException`|  `BadRequestException` |
 |`AdditionalAuthenticationRequiredException`|  `NotAuthenticatedException` |
+|`ApiKeySessionsNotSupportedException`|  `NotAuthenticatedException` |
 |`AuthenticationRequiredException`|  `NotAuthenticatedException` |
 |`BundleRegistrationCodeFailedException`|  `NotAuthenticatedException` |
 |`FilesAgentTokenFailedException`|  `NotAuthenticatedException` |
