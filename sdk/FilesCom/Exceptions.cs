@@ -980,6 +980,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class InvalidSiteException : ProcessingFailureException
+    {
+        public InvalidSiteException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class ModelSaveErrorException : ProcessingFailureException
     {
         public ModelSaveErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -1007,6 +1013,12 @@ namespace FilesCom
     public class RemoteServerErrorException : ProcessingFailureException
     {
         public RemoteServerErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class ResourceBelongsToParentSiteException : ProcessingFailureException
+    {
+        public ResourceBelongsToParentSiteException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
