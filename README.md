@@ -827,8 +827,7 @@ catch (FilesCom.SdkException e)
 
 ## Case Sensitivity
 
-The Files.com API compares files and paths in a case-insensitive manner.
- For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
+The Files.com API compares files and paths in a case-insensitive manner. For related documentation see [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity).
 
 The `PathUtil.same` function in the Files.com SDK is designed to help you determine if two paths on
 your native file system would be considered the same on Files.com. This is particularly important
