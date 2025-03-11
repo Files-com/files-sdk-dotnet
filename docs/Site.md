@@ -371,7 +371,7 @@
 * `reply_to_email` / `ReplyToEmail`  (string): Reply-to email for this site
 * `non_sso_groups_allowed` / `NonSsoGroupsAllowed`  (bool): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
 * `non_sso_users_allowed` / `NonSsoUsersAllowed`  (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
-* `folder_permissions_groups_only` / `FolderPermissionsGroupsOnly`  (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
+* `folder_permissions_groups_only` / `FolderPermissionsGroupsOnly`  (bool): If true, permissions for this site must be bound to a group (not a user).
 * `hipaa` / `Hipaa`  (bool): Is there a signed HIPAA BAA between Files.com and this site?
 * `icon128` / `Icon128`  (Image): Branded icon 128x128
 * `icon16` / `Icon16`  (Image): Branded icon 16x16
@@ -537,7 +537,7 @@ Task<Site> Site.Update(
 * `mobile_app` (bool): Is the mobile app enabled?
 * `mobile_app_session_ip_pinning` (bool): Is mobile app session IP pinning enabled?
 * `mobile_app_session_lifetime` (Nullable<Int64>): Mobile app session lifetime (in hours)
-* `folder_permissions_groups_only` (bool): If true, permissions for this site must be bound to a group (not a user). Otherwise, permissions must be bound to a user.
+* `folder_permissions_groups_only` (bool): If true, permissions for this site must be bound to a group (not a user).
 * `welcome_screen` (string): Does the welcome screen appear?
 * `office_integration_available` (bool): If true, allows users to use a document editing integration.
 * `office_integration_type` (string): Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.
