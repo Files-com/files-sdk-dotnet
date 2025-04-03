@@ -71,7 +71,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
             {
-                this.attributes.Add("usage_by_top_level_dir", null);
+                this.attributes.Add("usage_by_top_level_dir", new object[0]);
             }
         }
 
@@ -163,9 +163,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("current_storage")]
-        public Nullable<Int64> CurrentStorage
+        public double CurrentStorage
         {
-            get { return (Nullable<Int64>)attributes["current_storage"]; }
+            get { return (double)attributes["current_storage"]; }
             private set { attributes["current_storage"] = value; }
         }
 
@@ -174,9 +174,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_storage")]
-        public Nullable<Int64> DeletedFilesStorage
+        public double DeletedFilesStorage
         {
-            get { return (Nullable<Int64>)attributes["deleted_files_storage"]; }
+            get { return (double)attributes["deleted_files_storage"]; }
             private set { attributes["deleted_files_storage"] = value; }
         }
 
@@ -185,9 +185,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_counted_in_minimum")]
-        public Nullable<Int64> DeletedFilesCountedInMinimum
+        public double DeletedFilesCountedInMinimum
         {
-            get { return (Nullable<Int64>)attributes["deleted_files_counted_in_minimum"]; }
+            get { return (double)attributes["deleted_files_counted_in_minimum"]; }
             private set { attributes["deleted_files_counted_in_minimum"] = value; }
         }
 
@@ -196,9 +196,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("root_storage")]
-        public Nullable<Int64> RootStorage
+        public double RootStorage
         {
-            get { return (Nullable<Int64>)attributes["root_storage"]; }
+            get { return (double)attributes["root_storage"]; }
             private set { attributes["root_storage"] = value; }
         }
 
@@ -207,9 +207,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("usage_by_top_level_dir")]
-        public object UsageByTopLevelDir
+        public object[] UsageByTopLevelDir
         {
-            get { return (object)attributes["usage_by_top_level_dir"]; }
+            get { return (object[])attributes["usage_by_top_level_dir"]; }
             private set { attributes["usage_by_top_level_dir"] = value; }
         }
 

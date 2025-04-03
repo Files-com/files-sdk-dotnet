@@ -23,7 +23,7 @@
   "dav_permission": true,
   "disabled": true,
   "disabled_expired_or_inactive": true,
-  "email": "example",
+  "email": "john.doe@files.com",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
   "group_ids": "example",
@@ -457,7 +457,7 @@ var User = User.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("avatar_delete", false);
-parameters.Add("email", "example");
+parameters.Add("email", "john.doe@files.com");
 parameters.Add("group_id", 1);
 parameters.Add("group_ids", "example");
 parameters.Add("announcements_read", false);

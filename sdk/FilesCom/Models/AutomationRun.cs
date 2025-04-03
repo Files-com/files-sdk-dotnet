@@ -148,9 +148,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("retry_at")]
-        public string RetryAt
+        public Nullable<DateTime> RetryAt
         {
-            get { return (string)attributes["retry_at"]; }
+            get { return (Nullable<DateTime>)attributes["retry_at"]; }
             private set { attributes["retry_at"] = value; }
         }
 

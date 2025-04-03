@@ -53,10 +53,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("high_water_storage", null);
             }
-            if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
-            {
-                this.attributes.Add("usage_by_top_level_dir", null);
-            }
             if (!this.attributes.ContainsKey("root_storage"))
             {
                 this.attributes.Add("root_storage", null);
@@ -88,6 +84,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("sync_bytes_sent"))
             {
                 this.attributes.Add("sync_bytes_sent", null);
+            }
+            if (!this.attributes.ContainsKey("usage_by_top_level_dir"))
+            {
+                this.attributes.Add("usage_by_top_level_dir", new object[0]);
             }
         }
 
@@ -145,9 +145,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("high_water_user_count")]
-        public double HighWaterUserCount
+        public Nullable<Int64> HighWaterUserCount
         {
-            get { return (double)attributes["high_water_user_count"]; }
+            get { return (Nullable<Int64>)attributes["high_water_user_count"]; }
             private set { attributes["high_water_user_count"] = value; }
         }
 
@@ -171,17 +171,6 @@ namespace FilesCom.Models
         {
             get { return (double)attributes["high_water_storage"]; }
             private set { attributes["high_water_storage"] = value; }
-        }
-
-        /// <summary>
-        /// Storage Usage - map of root folders to their usage as of end date (not necessarily high water mark, which is used for billing)
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("usage_by_top_level_dir")]
-        public object UsageByTopLevelDir
-        {
-            get { return (object)attributes["usage_by_top_level_dir"]; }
-            private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
         /// <summary>
@@ -270,6 +259,17 @@ namespace FilesCom.Models
         {
             get { return (double)attributes["sync_bytes_sent"]; }
             private set { attributes["sync_bytes_sent"] = value; }
+        }
+
+        /// <summary>
+        /// Storage Usage - map of root folders to their usage as of end date (not necessarily high water mark, which is used for billing)
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("usage_by_top_level_dir")]
+        public object[] UsageByTopLevelDir
+        {
+            get { return (object[])attributes["usage_by_top_level_dir"]; }
+            private set { attributes["usage_by_top_level_dir"] = value; }
         }
 
 

@@ -123,9 +123,9 @@ namespace FilesCom.Models
         /// ID of automation that created request
         /// </summary>
         [JsonPropertyName("automation_id")]
-        public string AutomationId
+        public Nullable<Int64> AutomationId
         {
-            get { return (string)attributes["automation_id"]; }
+            get { return (Nullable<Int64>)attributes["automation_id"]; }
             set { attributes["automation_id"] = value; }
         }
 

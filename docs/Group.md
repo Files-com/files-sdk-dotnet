@@ -10,7 +10,7 @@
   "admin_ids": "1",
   "notes": "example",
   "user_ids": "1",
-  "usernames": "example",
+  "usernames": "user",
   "ftp_permission": true,
   "sftp_permission": true,
   "dav_permission": true,
