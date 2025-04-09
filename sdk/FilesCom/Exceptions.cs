@@ -522,6 +522,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class BundlePermissionRequiredException : NotAuthorizedException
+    {
+        public BundlePermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class CannotLoginWhileUsingKeyException : NotAuthorizedException
     {
         public CannotLoginWhileUsingKeyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
