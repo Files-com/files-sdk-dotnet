@@ -12,7 +12,6 @@
   "http_headers": {
     "key": "example value"
   },
-  "activity_log": "example",
   "processing_result": "example",
   "processing_result_description": "example",
   "mic": "example",
@@ -52,7 +51,6 @@
 * `uuid` / `Uuid`  (string): UUID assigned to this message.
 * `content_type` / `ContentType`  (string): Content Type header of the incoming message.
 * `http_headers` / `HttpHeaders`  (object): HTTP Headers sent with this message.
-* `activity_log` / `ActivityLog`  (string): JSON Structure of the activity log.
 * `processing_result` / `ProcessingResult`  (string): Result of processing.
 * `processing_result_description` / `ProcessingResultDescription`  (string): Result of processing description.
 * `mic` / `Mic`  (string): AS2 Message Integrity Check

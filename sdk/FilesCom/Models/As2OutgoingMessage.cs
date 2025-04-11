@@ -49,10 +49,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("http_headers", null);
             }
-            if (!this.attributes.ContainsKey("activity_log"))
-            {
-                this.attributes.Add("activity_log", null);
-            }
             if (!this.attributes.ContainsKey("processing_result"))
             {
                 this.attributes.Add("processing_result", null);
@@ -224,17 +220,6 @@ namespace FilesCom.Models
         {
             get { return (object)attributes["http_headers"]; }
             private set { attributes["http_headers"] = value; }
-        }
-
-        /// <summary>
-        /// JSON Structure of the activity log.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("activity_log")]
-        public string ActivityLog
-        {
-            get { return (string)attributes["activity_log"]; }
-            private set { attributes["activity_log"] = value; }
         }
 
         /// <summary>
