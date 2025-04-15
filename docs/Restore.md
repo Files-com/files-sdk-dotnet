@@ -23,7 +23,7 @@
 }
 ```
 
-* `earliest_date` / `EarliestDate`  (Nullable<DateTime>): Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365
+* `earliest_date` / `EarliestDate`  (Nullable<DateTime>): Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
 * `id` / `Id`  (Nullable<Int64>): Restore Record ID.
 * `dirs_restored` / `DirsRestored`  (Nullable<Int64>): Number of directories that were successfully restored.
 * `dirs_errored` / `DirsErrored`  (Nullable<Int64>): Number of directories that were not able to be restored.
@@ -31,11 +31,11 @@
 * `files_restored` / `FilesRestored`  (Nullable<Int64>): Number of files successfully restored.
 * `files_errored` / `FilesErrored`  (Nullable<Int64>): Number of files that were not able to be restored.
 * `files_total` / `FilesTotal`  (Nullable<Int64>): Total number of files processed.
-* `prefix` / `Prefix`  (string): Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash.
+* `prefix` / `Prefix`  (string): Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
 * `restore_in_place` / `RestoreInPlace`  (bool): If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
 * `restore_deleted_permissions` / `RestoreDeletedPermissions`  (bool): If true, we will also restore any Permissions that match the same path prefix from the same dates.
 * `status` / `Status`  (string): Status of the restoration process.
-* `update_timestamps` / `UpdateTimestamps`  (bool): If trie, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
+* `update_timestamps` / `UpdateTimestamps`  (bool): If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
 * `error_messages` / `ErrorMessages`  (string[]): Error messages received while restoring files and/or directories. Only present if there were errors.
 
 
@@ -71,7 +71,8 @@ Task<Restore> Restore.Create(
 
 ### Parameters
 
-* `earliest_date` (string): Required - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365
+* `earliest_date` (string): Required - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
+* `prefix` (string): Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
 * `restore_deleted_permissions` (bool): If true, we will also restore any Permissions that match the same path prefix from the same dates.
 * `restore_in_place` (bool): If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
-* `prefix` (string): Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash.
+* `update_timestamps` (bool): If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.

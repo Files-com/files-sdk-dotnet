@@ -104,7 +104,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365
+        /// Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
         /// </summary>
         [JsonPropertyName("earliest_date")]
         public Nullable<DateTime> EarliestDate
@@ -184,7 +184,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash.
+        /// Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
         /// </summary>
         [JsonPropertyName("prefix")]
         public string Prefix
@@ -226,7 +226,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trie, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
+        /// If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("update_timestamps")]
@@ -297,10 +297,11 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365
+        ///   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
+        ///   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
         ///   restore_deleted_permissions - boolean - If true, we will also restore any Permissions that match the same path prefix from the same dates.
         ///   restore_in_place - boolean - If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
-        ///   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash.
+        ///   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
         /// </summary>
         public static async Task<Restore> Create(
 
@@ -319,6 +320,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: earliest_date must be of type string", "parameters[\"earliest_date\"]");
             }
+            if (parameters.ContainsKey("prefix") && !(parameters["prefix"] is string))
+            {
+                throw new ArgumentException("Bad parameter: prefix must be of type string", "parameters[\"prefix\"]");
+            }
             if (parameters.ContainsKey("restore_deleted_permissions") && !(parameters["restore_deleted_permissions"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restore_deleted_permissions must be of type bool", "parameters[\"restore_deleted_permissions\"]");
@@ -327,9 +332,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: restore_in_place must be of type bool", "parameters[\"restore_in_place\"]");
             }
-            if (parameters.ContainsKey("prefix") && !(parameters["prefix"] is string))
+            if (parameters.ContainsKey("update_timestamps") && !(parameters["update_timestamps"] is bool))
             {
-                throw new ArgumentException("Bad parameter: prefix must be of type string", "parameters[\"prefix\"]");
+                throw new ArgumentException("Bad parameter: update_timestamps must be of type bool", "parameters[\"update_timestamps\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/restores", System.Net.Http.HttpMethod.Post, parameters, options);
