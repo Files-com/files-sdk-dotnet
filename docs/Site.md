@@ -203,6 +203,7 @@
   "smtp_username": "mail",
   "session_expiry": 6.0,
   "session_expiry_minutes": 360,
+  "snapshot_sharing_enabled": true,
   "ssl_required": true,
   "subdomain": "mysite",
   "switch_to_plan_date": "2000-01-01T01:00:00Z",
@@ -445,6 +446,7 @@
 * `smtp_username` / `SmtpUsername`  (string): SMTP server username
 * `session_expiry` / `SessionExpiry`  (double): Session expiry in hours
 * `session_expiry_minutes` / `SessionExpiryMinutes`  (Nullable<Int64>): Session expiry in minutes
+* `snapshot_sharing_enabled` / `SnapshotSharingEnabled`  (bool): Allow snapshot share links creation
 * `ssl_required` / `SslRequired`  (bool): Is SSL required?  Disabling this is insecure.
 * `subdomain` / `Subdomain`  (string): Site subdomain
 * `switch_to_plan_date` / `SwitchToPlanDate`  (Nullable<DateTime>): If switching plans, when does the new plan take effect?
@@ -600,6 +602,7 @@ Task<Site> Site.Update(
 * `non_sso_groups_allowed` (bool): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
 * `non_sso_users_allowed` (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
 * `sharing_enabled` (bool): Allow bundle creation
+* `snapshot_sharing_enabled` (bool): Allow snapshot share links creation
 * `user_requests_enabled` (bool): Enable User Requests feature
 * `user_requests_notify_admins` (bool): Send email to site admins when a user request is received?
 * `dav_enabled` (bool): Is WebDAV enabled?

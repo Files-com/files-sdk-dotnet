@@ -605,6 +605,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("session_expiry_minutes", null);
             }
+            if (!this.attributes.ContainsKey("snapshot_sharing_enabled"))
+            {
+                this.attributes.Add("snapshot_sharing_enabled", false);
+            }
             if (!this.attributes.ContainsKey("ssl_required"))
             {
                 this.attributes.Add("ssl_required", false);
@@ -2374,6 +2378,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Allow snapshot share links creation
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("snapshot_sharing_enabled")]
+        public bool SnapshotSharingEnabled
+        {
+            get { return attributes["snapshot_sharing_enabled"] == null ? false : (bool)attributes["snapshot_sharing_enabled"]; }
+            private set { attributes["snapshot_sharing_enabled"] = value; }
+        }
+
+        /// <summary>
         /// Is SSL required?  Disabling this is insecure.
         /// </summary>
         [JsonInclude]
@@ -2802,6 +2818,7 @@ namespace FilesCom.Models
         ///   non_sso_groups_allowed - boolean - If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
         ///   non_sso_users_allowed - boolean - If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
         ///   sharing_enabled - boolean - Allow bundle creation
+        ///   snapshot_sharing_enabled - boolean - Allow snapshot share links creation
         ///   user_requests_enabled - boolean - Enable User Requests feature
         ///   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
         ///   dav_enabled - boolean - Is WebDAV enabled?
@@ -3238,6 +3255,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sharing_enabled") && !(parameters["sharing_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sharing_enabled must be of type bool", "parameters[\"sharing_enabled\"]");
+            }
+            if (parameters.ContainsKey("snapshot_sharing_enabled") && !(parameters["snapshot_sharing_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: snapshot_sharing_enabled must be of type bool", "parameters[\"snapshot_sharing_enabled\"]");
             }
             if (parameters.ContainsKey("user_requests_enabled") && !(parameters["user_requests_enabled"] is bool))
             {

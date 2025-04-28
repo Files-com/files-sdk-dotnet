@@ -165,6 +165,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("azure_blob_storage_hierarchical_namespace", false);
             }
+            if (!this.attributes.ContainsKey("azure_blob_storage_dns_suffix"))
+            {
+                this.attributes.Add("azure_blob_storage_dns_suffix", null);
+            }
             if (!this.attributes.ContainsKey("azure_files_storage_account"))
             {
                 this.attributes.Add("azure_files_storage_account", null);
@@ -688,6 +692,16 @@ namespace FilesCom.Models
         {
             get { return attributes["azure_blob_storage_hierarchical_namespace"] == null ? false : (bool)attributes["azure_blob_storage_hierarchical_namespace"]; }
             set { attributes["azure_blob_storage_hierarchical_namespace"] = value; }
+        }
+
+        /// <summary>
+        /// Custom DNS suffix
+        /// </summary>
+        [JsonPropertyName("azure_blob_storage_dns_suffix")]
+        public string AzureBlobStorageDnsSuffix
+        {
+            get { return (string)attributes["azure_blob_storage_dns_suffix"]; }
+            set { attributes["azure_blob_storage_dns_suffix"] = value; }
         }
 
         /// <summary>
@@ -1238,6 +1252,7 @@ namespace FilesCom.Models
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_blob_storage_dns_suffix - string - Custom DNS suffix
         ///   azure_files_storage_account - string - Azure File Storage Account name
         ///   azure_files_storage_share_name - string - Azure File Storage Share name
         ///   azure_files_storage_dns_suffix - string - Custom DNS suffix
@@ -1444,6 +1459,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_dns_suffix") && !(parameters["azure_blob_storage_dns_suffix"] is string))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_dns_suffix must be of type string", "parameters[\"azure_blob_storage_dns_suffix\"]");
             }
             if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
             {
@@ -1788,6 +1807,7 @@ namespace FilesCom.Models
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_blob_storage_dns_suffix - string - Custom DNS suffix
         ///   azure_files_storage_account - string - Azure File Storage Account name
         ///   azure_files_storage_share_name - string - Azure File Storage Share name
         ///   azure_files_storage_dns_suffix - string - Custom DNS suffix
@@ -1986,6 +2006,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_dns_suffix") && !(parameters["azure_blob_storage_dns_suffix"] is string))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_dns_suffix must be of type string", "parameters[\"azure_blob_storage_dns_suffix\"]");
             }
             if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
             {
@@ -2243,6 +2267,7 @@ namespace FilesCom.Models
         ///   azure_blob_storage_container - string - Azure Blob Storage Container name
         ///   azure_blob_storage_hierarchical_namespace - boolean - Enable when storage account has hierarchical namespace feature enabled
         ///   azure_blob_storage_sas_token - string - Shared Access Signature (SAS) token
+        ///   azure_blob_storage_dns_suffix - string - Custom DNS suffix
         ///   azure_files_storage_account - string - Azure File Storage Account name
         ///   azure_files_storage_share_name - string - Azure File Storage Share name
         ///   azure_files_storage_dns_suffix - string - Custom DNS suffix
@@ -2457,6 +2482,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+            }
+            if (parameters.ContainsKey("azure_blob_storage_dns_suffix") && !(parameters["azure_blob_storage_dns_suffix"] is string))
+            {
+                throw new ArgumentException("Bad parameter: azure_blob_storage_dns_suffix must be of type string", "parameters[\"azure_blob_storage_dns_suffix\"]");
             }
             if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
             {
