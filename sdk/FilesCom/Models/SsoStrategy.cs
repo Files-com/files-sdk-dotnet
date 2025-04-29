@@ -137,6 +137,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("provision_email_signup_groups", null);
             }
+            if (!this.attributes.ContainsKey("provision_readonly_site_admin_groups"))
+            {
+                this.attributes.Add("provision_readonly_site_admin_groups", null);
+            }
             if (!this.attributes.ContainsKey("provision_site_admin_groups"))
             {
                 this.attributes.Add("provision_site_admin_groups", null);
@@ -534,6 +538,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["provision_email_signup_groups"]; }
             private set { attributes["provision_email_signup_groups"] = value; }
+        }
+
+        /// <summary>
+        /// Comma-separated list of group names whose members will be created as Read-Only Site Admins.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("provision_readonly_site_admin_groups")]
+        public string ProvisionReadonlySiteAdminGroups
+        {
+            get { return (string)attributes["provision_readonly_site_admin_groups"]; }
+            private set { attributes["provision_readonly_site_admin_groups"] = value; }
         }
 
         /// <summary>
