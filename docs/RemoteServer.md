@@ -24,7 +24,6 @@
   "username": "user",
   "google_cloud_storage_bucket": "my-bucket",
   "google_cloud_storage_project_id": "my-project",
-  "google_cloud_storage_region": "us-east-1",
   "google_cloud_storage_s3_compatible_access_key": "example",
   "backblaze_b2_s3_endpoint": "s3.us-west-001.backblazeb2.com",
   "backblaze_b2_bucket": "my-bucket",
@@ -86,7 +85,6 @@
 * `username` / `Username`  (string): Remote server username.  Not needed for S3 buckets.
 * `google_cloud_storage_bucket` / `GoogleCloudStorageBucket`  (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` / `GoogleCloudStorageProjectId`  (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` / `GoogleCloudStorageRegion`  (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` / `GoogleCloudStorageS3CompatibleAccessKey`  (string): Google Cloud Storage: S3-compatible Access Key.
 * `backblaze_b2_s3_endpoint` / `BackblazeB2S3Endpoint`  (string): Backblaze B2 Cloud Storage: S3 Endpoint
 * `backblaze_b2_bucket` / `BackblazeB2Bucket`  (string): Backblaze B2 Cloud Storage: Bucket name
@@ -258,7 +256,6 @@ Task<RemoteServer> RemoteServer.Create(
 * `files_agent_version` (string): Files Agent version
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
 * `hostname` (string): Hostname or IP address
 * `linode_access_key` (string): Linode: Access Key
@@ -373,7 +370,6 @@ Task<RemoteServer> RemoteServer.Update(
 * `files_agent_version` (string): Files Agent version
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
 * `hostname` (string): Hostname or IP address
 * `linode_access_key` (string): Linode: Access Key
@@ -492,7 +488,6 @@ parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_version", "example");
 parameters.Add("google_cloud_storage_bucket", "my-bucket");
 parameters.Add("google_cloud_storage_project_id", "my-project");
-parameters.Add("google_cloud_storage_region", "us-east-1");
 parameters.Add("google_cloud_storage_s3_compatible_access_key", "example");
 parameters.Add("hostname", "remote-server.com");
 parameters.Add("linode_access_key", "example");
@@ -569,7 +564,6 @@ RemoteServer.Update(parameters);
 * `files_agent_version` (string): Files Agent version
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
-* `google_cloud_storage_region` (string): Google Cloud Storage: Region
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
 * `hostname` (string): Hostname or IP address
 * `linode_access_key` (string): Linode: Access Key

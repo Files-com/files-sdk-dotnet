@@ -109,10 +109,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("google_cloud_storage_project_id", null);
             }
-            if (!this.attributes.ContainsKey("google_cloud_storage_region"))
-            {
-                this.attributes.Add("google_cloud_storage_region", null);
-            }
             if (!this.attributes.ContainsKey("google_cloud_storage_s3_compatible_access_key"))
             {
                 this.attributes.Add("google_cloud_storage_s3_compatible_access_key", null);
@@ -563,16 +559,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["google_cloud_storage_project_id"]; }
             set { attributes["google_cloud_storage_project_id"] = value; }
-        }
-
-        /// <summary>
-        /// Google Cloud Storage: Region
-        /// </summary>
-        [JsonPropertyName("google_cloud_storage_region")]
-        public string GoogleCloudStorageRegion
-        {
-            get { return (string)attributes["google_cloud_storage_region"]; }
-            set { attributes["google_cloud_storage_region"] = value; }
         }
 
         /// <summary>
@@ -1295,7 +1281,6 @@ namespace FilesCom.Models
         ///   files_agent_version - string - Files Agent version
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
-        ///   google_cloud_storage_region - string - Google Cloud Storage: Region
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   hostname - string - Hostname or IP address
         ///   linode_access_key - string - Linode: Access Key
@@ -1508,10 +1493,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
             {
                 throw new ArgumentException("Bad parameter: google_cloud_storage_project_id must be of type string", "parameters[\"google_cloud_storage_project_id\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_region") && !(parameters["google_cloud_storage_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_region must be of type string", "parameters[\"google_cloud_storage_region\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_s3_compatible_access_key") && !(parameters["google_cloud_storage_s3_compatible_access_key"] is string))
             {
@@ -1865,7 +1846,6 @@ namespace FilesCom.Models
         ///   files_agent_version - string - Files Agent version
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
-        ///   google_cloud_storage_region - string - Google Cloud Storage: Region
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   hostname - string - Hostname or IP address
         ///   linode_access_key - string - Linode: Access Key
@@ -2070,10 +2050,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
             {
                 throw new ArgumentException("Bad parameter: google_cloud_storage_project_id must be of type string", "parameters[\"google_cloud_storage_project_id\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_region") && !(parameters["google_cloud_storage_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_region must be of type string", "parameters[\"google_cloud_storage_region\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_s3_compatible_access_key") && !(parameters["google_cloud_storage_s3_compatible_access_key"] is string))
             {
@@ -2340,7 +2316,6 @@ namespace FilesCom.Models
         ///   files_agent_version - string - Files Agent version
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
-        ///   google_cloud_storage_region - string - Google Cloud Storage: Region
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   hostname - string - Hostname or IP address
         ///   linode_access_key - string - Linode: Access Key
@@ -2561,10 +2536,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
             {
                 throw new ArgumentException("Bad parameter: google_cloud_storage_project_id must be of type string", "parameters[\"google_cloud_storage_project_id\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_region") && !(parameters["google_cloud_storage_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_region must be of type string", "parameters[\"google_cloud_storage_region\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_s3_compatible_access_key") && !(parameters["google_cloud_storage_s3_compatible_access_key"] is string))
             {
