@@ -44,6 +44,8 @@
   "email_entries_sent": 1,
   "exavault_api_request_send_enabled": true,
   "exavault_api_request_entries_sent": 1,
+  "settings_change_send_enabled": true,
+  "settings_change_entries_sent": 1,
   "last_http_call_target_type": "destination_url",
   "last_http_call_success": true,
   "last_http_call_response_code": 1,
@@ -94,6 +96,8 @@
 * `email_entries_sent` / `EmailEntriesSent`  (Nullable<Int64>): Number of log entries sent for the lifetime of this destination.
 * `exavault_api_request_send_enabled` / `ExavaultApiRequestSendEnabled`  (bool): Whether or not sending is enabled for exavault_api_request logs.
 * `exavault_api_request_entries_sent` / `ExavaultApiRequestEntriesSent`  (Nullable<Int64>): Number of log entries sent for the lifetime of this destination.
+* `settings_change_send_enabled` / `SettingsChangeSendEnabled`  (bool): Whether or not sending is enabled for settings_change logs.
+* `settings_change_entries_sent` / `SettingsChangeEntriesSent`  (Nullable<Int64>): Number of log entries sent for the lifetime of this destination.
 * `last_http_call_target_type` / `LastHttpCallTargetType`  (string): Type of URL that was last called. Can be `destination_url` or `azure_oauth_client_credentials_url`
 * `last_http_call_success` / `LastHttpCallSuccess`  (bool): Was the last HTTP call made successful?
 * `last_http_call_response_code` / `LastHttpCallResponseCode`  (Nullable<Int64>): Last HTTP Call Response Code
@@ -185,6 +189,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Create(
 * `public_hosting_request_send_enabled` (bool): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (bool): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (bool): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (bool): Whether or not sending is enabled for settings_change logs.
 * `destination_type` (string): Required - Destination Type
 * `destination_url` (string): Required - Destination Url
 
@@ -231,6 +236,7 @@ Task SiemHttpDestination.SendTestEntry(
 * `public_hosting_request_send_enabled` (bool): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (bool): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (bool): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (bool): Whether or not sending is enabled for settings_change logs.
 
 
 ---
@@ -273,6 +279,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Update(
 * `public_hosting_request_send_enabled` (bool): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (bool): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (bool): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (bool): Whether or not sending is enabled for settings_change logs.
 * `destination_type` (string): Destination Type
 * `destination_url` (string): Destination Url
 
@@ -322,6 +329,7 @@ parameters.Add("api_request_send_enabled", true);
 parameters.Add("public_hosting_request_send_enabled", true);
 parameters.Add("email_send_enabled", true);
 parameters.Add("exavault_api_request_send_enabled", true);
+parameters.Add("settings_change_send_enabled", true);
 parameters.Add("destination_type", "example");
 parameters.Add("destination_url", "example");
 
@@ -356,6 +364,7 @@ SiemHttpDestination.Update(parameters);
 * `public_hosting_request_send_enabled` (bool): Whether or not sending is enabled for public_hosting_request logs.
 * `email_send_enabled` (bool): Whether or not sending is enabled for email logs.
 * `exavault_api_request_send_enabled` (bool): Whether or not sending is enabled for exavault_api_request logs.
+* `settings_change_send_enabled` (bool): Whether or not sending is enabled for settings_change logs.
 * `destination_type` (string): Destination Type
 * `destination_url` (string): Destination Url
 

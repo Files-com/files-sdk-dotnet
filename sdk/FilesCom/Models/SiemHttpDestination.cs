@@ -181,6 +181,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("exavault_api_request_entries_sent", null);
             }
+            if (!this.attributes.ContainsKey("settings_change_send_enabled"))
+            {
+                this.attributes.Add("settings_change_send_enabled", false);
+            }
+            if (!this.attributes.ContainsKey("settings_change_entries_sent"))
+            {
+                this.attributes.Add("settings_change_entries_sent", null);
+            }
             if (!this.attributes.ContainsKey("last_http_call_target_type"))
             {
                 this.attributes.Add("last_http_call_target_type", null);
@@ -651,6 +659,27 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Whether or not sending is enabled for settings_change logs.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("settings_change_send_enabled")]
+        public bool SettingsChangeSendEnabled
+        {
+            get { return attributes["settings_change_send_enabled"] == null ? false : (bool)attributes["settings_change_send_enabled"]; }
+            set { attributes["settings_change_send_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Number of log entries sent for the lifetime of this destination.
+        /// </summary>
+        [JsonPropertyName("settings_change_entries_sent")]
+        public Nullable<Int64> SettingsChangeEntriesSent
+        {
+            get { return (Nullable<Int64>)attributes["settings_change_entries_sent"]; }
+            set { attributes["settings_change_entries_sent"] = value; }
+        }
+
+        /// <summary>
         /// Type of URL that was last called. Can be `destination_url` or `azure_oauth_client_credentials_url`
         /// </summary>
         [JsonPropertyName("last_http_call_target_type")]
@@ -828,6 +857,7 @@ namespace FilesCom.Models
         ///   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
         ///   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+        ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
@@ -947,6 +977,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("exavault_api_request_send_enabled") && !(parameters["exavault_api_request_send_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
+            }
+            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
             }
             if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
             {
@@ -1125,6 +1159,7 @@ namespace FilesCom.Models
         ///   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
         ///   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+        ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         ///   destination_type (required) - string - Destination Type
         ///   destination_url (required) - string - Destination Url
         /// </summary>
@@ -1245,6 +1280,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
             }
+            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
+            }
             if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: destination_type must be of type string", "parameters[\"destination_type\"]");
@@ -1297,6 +1336,7 @@ namespace FilesCom.Models
         ///   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
         ///   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+        ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         /// </summary>
         public static async Task SendTestEntry(
 
@@ -1419,6 +1459,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
             }
+            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
+            }
 
             await FilesClient.SendRequest($"/siem_http_destinations/send_test_entry", System.Net.Http.HttpMethod.Post, parameters, options);
         }
@@ -1451,6 +1495,7 @@ namespace FilesCom.Models
         ///   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
         ///   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+        ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
@@ -1578,6 +1623,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("exavault_api_request_send_enabled") && !(parameters["exavault_api_request_send_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
+            }
+            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
             }
             if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
             {

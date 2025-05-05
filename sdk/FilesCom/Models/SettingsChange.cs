@@ -29,6 +29,10 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("api_key_id"))
+            {
+                this.attributes.Add("api_key_id", null);
+            }
             if (!this.attributes.ContainsKey("changes"))
             {
                 this.attributes.Add("changes", new string[0]);
@@ -40,10 +44,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
-            }
-            if (!this.attributes.ContainsKey("api_key_id"))
-            {
-                this.attributes.Add("api_key_id", null);
             }
             if (!this.attributes.ContainsKey("user_is_files_support"))
             {
@@ -76,6 +76,17 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// The API key id responsible for this change.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("api_key_id")]
+        public Nullable<Int64> ApiKeyId
+        {
+            get { return (Nullable<Int64>)attributes["api_key_id"]; }
+            private set { attributes["api_key_id"] = value; }
+        }
+
+        /// <summary>
         /// Markdown-formatted change messages.
         /// </summary>
         [JsonInclude]
@@ -87,7 +98,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The time this change was made
+        /// The time this change was made.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("created_at")]
@@ -98,7 +109,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The user id responsible for this change
+        /// The user id responsible for this change.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("user_id")]
@@ -106,17 +117,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
             private set { attributes["user_id"] = value; }
-        }
-
-        /// <summary>
-        /// The API key id responsible for this change
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("api_key_id")]
-        public Nullable<Int64> ApiKeyId
-        {
-            get { return (Nullable<Int64>)attributes["api_key_id"]; }
-            private set { attributes["api_key_id"] = value; }
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The username of the user responsible for this change
+        /// The username of the user responsible for this change.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("username")]
