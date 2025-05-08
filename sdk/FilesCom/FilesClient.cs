@@ -129,6 +129,11 @@ namespace FilesCom
             get { return config.ApiKey; }
         }
 
+        public string Language
+        {
+            get { return config.Language; }
+        }
+
         public string SessionId
         {
             get { return config.SessionId; }

@@ -25,6 +25,13 @@ namespace FilesCom
             set { this["BaseUrl"] = value; }
         }
 
+        [ConfigurationProperty("Language")]
+        public string Language
+        {
+            get { return (string)this["Language"]; }
+            set { this["Language"] = value; }
+        }
+
         [ConfigurationProperty("ConnectTimeout", DefaultValue = 30)]
         public int ConnectTimeout
         {

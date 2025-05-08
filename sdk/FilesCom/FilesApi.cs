@@ -169,6 +169,11 @@ namespace FilesCom
                 }
             }
 
+            if (!string.IsNullOrWhiteSpace(filesClient.Language))
+            {
+                httpRequestMessage.Headers.Add("Accept-Language", filesClient.Language);
+            }
+
             log.Info($"Sending {verb} request: {uri}");
             log.Debug($"content: {jsonString}");
 
