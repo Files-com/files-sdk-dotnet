@@ -8,7 +8,7 @@
   "id": 1,
   "notify_on_registration": true,
   "notify_on_upload": true,
-  "user_id": 1
+  "notify_user_id": 1
 }
 ```
 
@@ -16,7 +16,7 @@
 * `id` / `Id`  (Nullable<Int64>): Bundle Notification ID
 * `notify_on_registration` / `NotifyOnRegistration`  (bool): Triggers bundle notification when a registration action occurs for it.
 * `notify_on_upload` / `NotifyOnUpload`  (bool): Triggers bundle notification when a upload action occurs for it.
-* `user_id` / `UserId`  (Nullable<Int64>): The id of the user to notify.
+* `notify_user_id` / `NotifyUserId`  (Nullable<Int64>): The id of the user to notify.
 
 
 ---
@@ -71,7 +71,7 @@ Task<BundleNotification> BundleNotification.Create(
 ### Parameters
 
 * `bundle_id` (Nullable<Int64>): Required - Bundle ID to notify on
-* `user_id` (Nullable<Int64>): The id of the user to notify.
+* `notify_user_id` (Nullable<Int64>): The id of the user to notify.
 * `notify_on_registration` (bool): Triggers bundle notification when a registration action occurs for it.
 * `notify_on_upload` (bool): Triggers bundle notification when a upload action occurs for it.
 

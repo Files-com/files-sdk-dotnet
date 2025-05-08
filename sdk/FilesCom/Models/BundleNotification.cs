@@ -45,9 +45,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("notify_on_upload", false);
             }
-            if (!this.attributes.ContainsKey("user_id"))
+            if (!this.attributes.ContainsKey("notify_user_id"))
             {
-                this.attributes.Add("user_id", null);
+                this.attributes.Add("notify_user_id", null);
             }
         }
 
@@ -112,11 +112,11 @@ namespace FilesCom.Models
         /// <summary>
         /// The id of the user to notify.
         /// </summary>
-        [JsonPropertyName("user_id")]
-        public Nullable<Int64> UserId
+        [JsonPropertyName("notify_user_id")]
+        public Nullable<Int64> NotifyUserId
         {
-            get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
+            get { return (Nullable<Int64>)attributes["notify_user_id"]; }
+            set { attributes["notify_user_id"] = value; }
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   bundle_id (required) - int64 - Bundle ID to notify on
-        ///   user_id - int64 - The id of the user to notify.
+        ///   notify_user_id - int64 - The id of the user to notify.
         ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
         ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         /// </summary>
@@ -325,9 +325,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            if (parameters.ContainsKey("notify_user_id") && !(parameters["notify_user_id"] is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+                throw new ArgumentException("Bad parameter: notify_user_id must be of type Nullable<Int64>", "parameters[\"notify_user_id\"]");
             }
             if (parameters.ContainsKey("notify_on_registration") && !(parameters["notify_on_registration"] is bool))
             {
