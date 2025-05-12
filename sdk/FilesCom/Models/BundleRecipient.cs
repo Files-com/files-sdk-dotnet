@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sent_at", null);
             }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
             if (!this.attributes.ContainsKey("bundle_id"))
             {
                 this.attributes.Add("bundle_id", null);
@@ -126,6 +130,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// User ID.  Provide a value of `0` to operate the current session's user.
+        /// </summary>
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
+        {
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
         /// Bundle to share.
         /// </summary>
         [JsonPropertyName("bundle_id")]
@@ -162,6 +176,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
@@ -180,6 +195,10 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("bundle_id") || parameters["bundle_id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: bundle_id", "parameters[\"bundle_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
@@ -216,6 +235,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   bundle_id (required) - int64 - Bundle to share.
         ///   recipient (required) - string - Email addresses to share this bundle with.
         ///   name - string - Name of recipient.
@@ -239,6 +259,10 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("recipient") || parameters["recipient"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: recipient", "parameters[\"recipient\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
             if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
             {
