@@ -148,6 +148,77 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Parameters:
+        ///   action (required) - string - Action to take on inactive users (disable or delete)
+        ///   authentication_method (required) - string - User authentication method for the rule
+        ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+        ///   include_site_admins - boolean - Include site admins in the rule
+        ///   include_folder_admins - boolean - Include folder admins in the rule
+        /// </summary>
+        public async Task<UserLifecycleRule> Update(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("action") || parameters["action"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: action", "parameters[\"action\"]");
+            }
+            if (!parameters.ContainsKey("authentication_method") || parameters["authentication_method"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: authentication_method", "parameters[\"authentication_method\"]");
+            }
+            if (!parameters.ContainsKey("inactivity_days") || parameters["inactivity_days"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: inactivity_days", "parameters[\"inactivity_days\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
+            {
+                throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+            }
+            if (parameters.ContainsKey("inactivity_days") && !(parameters["inactivity_days"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: inactivity_days must be of type Nullable<Int64>", "parameters[\"inactivity_days\"]");
+            }
+            if (parameters.ContainsKey("include_site_admins") && !(parameters["include_site_admins"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_site_admins must be of type bool", "parameters[\"include_site_admins\"]");
+            }
+            if (parameters.ContainsKey("include_folder_admins") && !(parameters["include_folder_admins"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<UserLifecycleRule>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// </summary>
         public async Task Delete(Dictionary<string, object> parameters)
         {
@@ -180,7 +251,7 @@ namespace FilesCom.Models
         {
             if (this.attributes["id"] != null)
             {
-                throw new NotImplementedException("The UserLifecycleRule object doesn't support updates.");
+                await this.Update(this.attributes);
             }
             else
             {
@@ -326,6 +397,85 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<UserLifecycleRule>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Parameters:
+        ///   action (required) - string - Action to take on inactive users (disable or delete)
+        ///   authentication_method (required) - string - User authentication method for the rule
+        ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+        ///   include_site_admins - boolean - Include site admins in the rule
+        ///   include_folder_admins - boolean - Include folder admins in the rule
+        /// </summary>
+        public static async Task<UserLifecycleRule> Update(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("action") || parameters["action"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: action", "parameters[\"action\"]");
+            }
+            if (!parameters.ContainsKey("authentication_method") || parameters["authentication_method"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: authentication_method", "parameters[\"authentication_method\"]");
+            }
+            if (!parameters.ContainsKey("inactivity_days") || parameters["inactivity_days"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: inactivity_days", "parameters[\"inactivity_days\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("action") && !(parameters["action"] is string))
+            {
+                throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
+            {
+                throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+            }
+            if (parameters.ContainsKey("inactivity_days") && !(parameters["inactivity_days"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: inactivity_days must be of type Nullable<Int64>", "parameters[\"inactivity_days\"]");
+            }
+            if (parameters.ContainsKey("include_site_admins") && !(parameters["include_site_admins"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_site_admins must be of type bool", "parameters[\"include_site_admins\"]");
+            }
+            if (parameters.ContainsKey("include_folder_admins") && !(parameters["include_folder_admins"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             try
             {

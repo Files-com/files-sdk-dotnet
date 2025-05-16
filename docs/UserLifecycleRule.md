@@ -81,6 +81,28 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 
 ---
 
+## Update User Lifecycle Rule
+
+```
+Task<UserLifecycleRule> UserLifecycleRule.Update(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
+* `action` (string): Required - Action to take on inactive users (disable or delete)
+* `authentication_method` (string): Required - User authentication method for the rule
+* `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
+* `include_site_admins` (bool): Include site admins in the rule
+* `include_folder_admins` (bool): Include folder admins in the rule
+
+
+---
+
 ## Delete User Lifecycle Rule
 
 ```
@@ -94,6 +116,33 @@ Task UserLifecycleRule.Delete(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
+
+
+---
+
+## Update User Lifecycle Rule
+
+```
+var UserLifecycleRule = UserLifecycleRule.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("authentication_method", "password");
+parameters.Add("inactivity_days", 12);
+parameters.Add("include_site_admins", true);
+parameters.Add("include_folder_admins", true);
+
+UserLifecycleRule.Update(parameters);
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
+* `action` (string): Required - Action to take on inactive users (disable or delete)
+* `authentication_method` (string): Required - User authentication method for the rule
+* `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
+* `include_site_admins` (bool): Include site admins in the rule
+* `include_folder_admins` (bool): Include folder admins in the rule
 
 
 ---
