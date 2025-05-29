@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("skip_company", false);
             }
+            if (!this.attributes.ContainsKey("in_use"))
+            {
+                this.attributes.Add("in_use", false);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -150,6 +154,17 @@ namespace FilesCom.Models
         {
             get { return attributes["skip_company"] == null ? false : (bool)attributes["skip_company"]; }
             set { attributes["skip_company"] = value; }
+        }
+
+        /// <summary>
+        /// Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("in_use")]
+        public bool InUse
+        {
+            get { return attributes["in_use"] == null ? false : (bool)attributes["in_use"]; }
+            set { attributes["in_use"] = value; }
         }
 
         /// <summary>

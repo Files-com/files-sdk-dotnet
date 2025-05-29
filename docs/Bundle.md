@@ -47,7 +47,8 @@
     ],
     "skip_name": true,
     "skip_email": true,
-    "skip_company": true
+    "skip_company": true,
+    "in_use": true
   },
   "skip_name": true,
   "skip_email": true,
