@@ -1481,6 +1481,8 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
         public async Task Delete(Dictionary<string, object> parameters)
         {
@@ -1498,6 +1500,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("new_owner_id") && !(parameters["new_owner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: new_owner_id must be of type Nullable<Int64>", "parameters[\"new_owner_id\"]");
             }
 
             await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
@@ -2300,6 +2306,8 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Parameters:
+        ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
         public static async Task Delete(
             Nullable<Int64> id,
@@ -2325,6 +2333,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("new_owner_id") && !(parameters["new_owner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: new_owner_id must be of type Nullable<Int64>", "parameters[\"new_owner_id\"]");
             }
 
             await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);

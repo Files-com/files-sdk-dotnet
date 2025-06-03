@@ -391,6 +391,7 @@ Task User.Delete(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User ID.
+* `new_owner_id` (Nullable<Int64>): Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
 
 
 ---
@@ -561,10 +562,12 @@ var User = User.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("new_owner_id", 1);
 
-User.Delete
+User.Delete(parameters);
 ```
 
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User ID.
+* `new_owner_id` (Nullable<Int64>): Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
