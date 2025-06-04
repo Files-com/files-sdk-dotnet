@@ -105,6 +105,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("duration_ms", null);
             }
+            if (!this.attributes.ContainsKey("impersonator_user_id"))
+            {
+                this.attributes.Add("impersonator_user_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -332,6 +336,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["duration_ms"]; }
             private set { attributes["duration_ms"] = value; }
+        }
+
+        /// <summary>
+        /// User ID of Site Admin user impersonating this user via a Read-Only session.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("impersonator_user_id")]
+        public Nullable<Int64> ImpersonatorUserId
+        {
+            get { return (Nullable<Int64>)attributes["impersonator_user_id"]; }
+            private set { attributes["impersonator_user_id"] = value; }
         }
 
 
