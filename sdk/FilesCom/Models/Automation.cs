@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("always_serialize_jobs"))
+            {
+                this.attributes.Add("always_serialize_jobs", false);
+            }
             if (!this.attributes.ContainsKey("always_overwrite_size_matching_files"))
             {
                 this.attributes.Add("always_overwrite_size_matching_files", false);
@@ -203,6 +207,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("always_serialize_jobs")]
+        public bool AlwaysSerializeJobs
+        {
+            get { return attributes["always_serialize_jobs"] == null ? false : (bool)attributes["always_serialize_jobs"]; }
+            set { attributes["always_serialize_jobs"] = value; }
         }
 
         /// <summary>
@@ -612,6 +627,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
+        ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
@@ -698,6 +714,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
+            }
+            if (parameters.ContainsKey("always_serialize_jobs") && !(parameters["always_serialize_jobs"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_serialize_jobs must be of type bool", "parameters[\"always_serialize_jobs\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -954,6 +974,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
+        ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
@@ -1036,6 +1057,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
+            }
+            if (parameters.ContainsKey("always_serialize_jobs") && !(parameters["always_serialize_jobs"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_serialize_jobs must be of type bool", "parameters[\"always_serialize_jobs\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -1167,6 +1192,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`. A list of times of day to run this automation. 24-hour time format.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`. Time zone for the schedule.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
+        ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
@@ -1261,6 +1287,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
             {
                 throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
+            }
+            if (parameters.ContainsKey("always_serialize_jobs") && !(parameters["always_serialize_jobs"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_serialize_jobs must be of type bool", "parameters[\"always_serialize_jobs\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
