@@ -705,10 +705,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("windows_mode_ftp", false);
             }
-            if (!this.attributes.ContainsKey("disable_users_from_inactivity_period_days"))
-            {
-                this.attributes.Add("disable_users_from_inactivity_period_days", null);
-            }
             if (!this.attributes.ContainsKey("group_admins_can_set_user_password"))
             {
                 this.attributes.Add("group_admins_can_set_user_password", false);
@@ -2670,17 +2666,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If greater than zero, users will unable to login if they do not show activity within this number of days.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("disable_users_from_inactivity_period_days")]
-        public Nullable<Int64> DisableUsersFromInactivityPeriodDays
-        {
-            get { return (Nullable<Int64>)attributes["disable_users_from_inactivity_period_days"]; }
-            private set { attributes["disable_users_from_inactivity_period_days"] = value; }
-        }
-
-        /// <summary>
         /// Allow group admins set password authentication method
         /// </summary>
         [JsonInclude]
@@ -2830,7 +2815,6 @@ namespace FilesCom.Models
         ///   opt_out_global - boolean - Use servers in the USA only?
         ///   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
         ///   custom_namespace - boolean - Is this site using a custom namespace for users?
-        ///   disable_users_from_inactivity_period_days - int64 - If greater than zero, users will unable to login if they do not show activity within this number of days.
         ///   non_sso_groups_allowed - boolean - If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
         ///   non_sso_users_allowed - boolean - If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
         ///   sharing_enabled - boolean - Allow bundle creation
@@ -3256,10 +3240,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("custom_namespace") && !(parameters["custom_namespace"] is bool))
             {
                 throw new ArgumentException("Bad parameter: custom_namespace must be of type bool", "parameters[\"custom_namespace\"]");
-            }
-            if (parameters.ContainsKey("disable_users_from_inactivity_period_days") && !(parameters["disable_users_from_inactivity_period_days"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: disable_users_from_inactivity_period_days must be of type Nullable<Int64>", "parameters[\"disable_users_from_inactivity_period_days\"]");
             }
             if (parameters.ContainsKey("non_sso_groups_allowed") && !(parameters["non_sso_groups_allowed"] is bool))
             {

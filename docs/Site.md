@@ -229,7 +229,7 @@
     "billable": true,
     "billing_permission": false,
     "bypass_site_allowed_ips": false,
-    "bypass_inactive_disable": false,
+    "bypass_user_lifecycle_rules": false,
     "created_at": "2000-01-01T01:00:00Z",
     "dav_permission": true,
     "disabled": true,
@@ -299,7 +299,6 @@
   "welcome_email_enabled": true,
   "welcome_screen": "user_controlled",
   "windows_mode_ftp": true,
-  "disable_users_from_inactivity_period_days": 1,
   "group_admins_can_set_user_password": true
 }
 ```
@@ -473,7 +472,6 @@
 * `welcome_email_enabled` / `WelcomeEmailEnabled`  (bool): Will the welcome email be sent to new users?
 * `welcome_screen` / `WelcomeScreen`  (string): Does the welcome screen appear?
 * `windows_mode_ftp` / `WindowsModeFtp`  (bool): Does FTP user Windows emulation mode?
-* `disable_users_from_inactivity_period_days` / `DisableUsersFromInactivityPeriodDays`  (Nullable<Int64>): If greater than zero, users will unable to login if they do not show activity within this number of days.
 * `group_admins_can_set_user_password` / `GroupAdminsCanSetUserPassword`  (bool): Allow group admins set password authentication method
 
 
@@ -601,7 +599,6 @@ Task<Site> Site.Update(
 * `opt_out_global` (bool): Use servers in the USA only?
 * `use_provided_modified_at` (bool): Allow uploaders to set `provided_modified_at` for uploaded files?
 * `custom_namespace` (bool): Is this site using a custom namespace for users?
-* `disable_users_from_inactivity_period_days` (Nullable<Int64>): If greater than zero, users will unable to login if they do not show activity within this number of days.
 * `non_sso_groups_allowed` (bool): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
 * `non_sso_users_allowed` (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
 * `sharing_enabled` (bool): Allow bundle creation

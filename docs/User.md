@@ -18,7 +18,7 @@
   "billable": true,
   "billing_permission": true,
   "bypass_site_allowed_ips": true,
-  "bypass_inactive_disable": true,
+  "bypass_user_lifecycle_rules": true,
   "created_at": "2000-01-01T01:00:00Z",
   "dav_permission": true,
   "disabled": true,
@@ -87,7 +87,7 @@
 * `billable` / `Billable`  (bool): Is this a billable user record?
 * `billing_permission` / `BillingPermission`  (bool): Allow this user to perform operations on the account, payments, and invoices?
 * `bypass_site_allowed_ips` / `BypassSiteAllowedIps`  (bool): Allow this user to skip site-wide IP blacklists?
-* `bypass_inactive_disable` / `BypassInactiveDisable`  (bool): Exempt this user from being disabled based on inactivity?
+* `bypass_user_lifecycle_rules` / `BypassUserLifecycleRules`  (bool): Exempt this user from user lifecycle rules?
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): When this user was created
 * `dav_permission` / `DavPermission`  (bool): Can the user connect with WebDAV?
 * `disabled` / `Disabled`  (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -229,7 +229,7 @@ Task<User> User.Create(
 * `authenticate_until` (string): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `billing_permission` (bool): Allow this user to perform operations on the account, payments, and invoices?
-* `bypass_inactive_disable` (bool): Exempt this user from being disabled based on inactivity?
+* `bypass_user_lifecycle_rules` (bool): Exempt this user from user lifecycle rules?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -344,7 +344,7 @@ Task<User> User.Update(
 * `authenticate_until` (string): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `billing_permission` (bool): Allow this user to perform operations on the account, payments, and invoices?
-* `bypass_inactive_disable` (bool): Exempt this user from being disabled based on inactivity?
+* `bypass_user_lifecycle_rules` (bool): Exempt this user from user lifecycle rules?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -467,7 +467,7 @@ parameters.Add("attachments_permission", true);
 parameters.Add("authenticate_until", "2000-01-01T01:00:00Z");
 parameters.Add("authentication_method", "password");
 parameters.Add("billing_permission", false);
-parameters.Add("bypass_inactive_disable", false);
+parameters.Add("bypass_user_lifecycle_rules", false);
 parameters.Add("bypass_site_allowed_ips", false);
 parameters.Add("dav_permission", true);
 parameters.Add("disabled", true);
@@ -521,7 +521,7 @@ User.Update(parameters);
 * `authenticate_until` (string): Scheduled Date/Time at which user will be deactivated
 * `authentication_method` (string): How is this user authenticated?
 * `billing_permission` (bool): Allow this user to perform operations on the account, payments, and invoices?
-* `bypass_inactive_disable` (bool): Exempt this user from being disabled based on inactivity?
+* `bypass_user_lifecycle_rules` (bool): Exempt this user from user lifecycle rules?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.

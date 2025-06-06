@@ -77,9 +77,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bypass_site_allowed_ips", false);
             }
-            if (!this.attributes.ContainsKey("bypass_inactive_disable"))
+            if (!this.attributes.ContainsKey("bypass_user_lifecycle_rules"))
             {
-                this.attributes.Add("bypass_inactive_disable", false);
+                this.attributes.Add("bypass_user_lifecycle_rules", false);
             }
             if (!this.attributes.ContainsKey("created_at"))
             {
@@ -476,14 +476,14 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Exempt this user from being disabled based on inactivity?
+        /// Exempt this user from user lifecycle rules?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("bypass_inactive_disable")]
-        public bool BypassInactiveDisable
+        [JsonPropertyName("bypass_user_lifecycle_rules")]
+        public bool BypassUserLifecycleRules
         {
-            get { return attributes["bypass_inactive_disable"] == null ? false : (bool)attributes["bypass_inactive_disable"]; }
-            set { attributes["bypass_inactive_disable"] = value; }
+            get { return attributes["bypass_user_lifecycle_rules"] == null ? false : (bool)attributes["bypass_user_lifecycle_rules"]; }
+            set { attributes["bypass_user_lifecycle_rules"] = value; }
         }
 
         /// <summary>
@@ -1230,7 +1230,7 @@ namespace FilesCom.Models
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
         ///   authentication_method - string - How is this user authenticated?
         ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?
-        ///   bypass_inactive_disable - boolean - Exempt this user from being disabled based on inactivity?
+        ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -1346,9 +1346,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: billing_permission must be of type bool", "parameters[\"billing_permission\"]");
             }
-            if (parameters.ContainsKey("bypass_inactive_disable") && !(parameters["bypass_inactive_disable"] is bool))
+            if (parameters.ContainsKey("bypass_user_lifecycle_rules") && !(parameters["bypass_user_lifecycle_rules"] is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_inactive_disable must be of type bool", "parameters[\"bypass_inactive_disable\"]");
+                throw new ArgumentException("Bad parameter: bypass_user_lifecycle_rules must be of type bool", "parameters[\"bypass_user_lifecycle_rules\"]");
             }
             if (parameters.ContainsKey("bypass_site_allowed_ips") && !(parameters["bypass_site_allowed_ips"] is bool))
             {
@@ -1683,7 +1683,7 @@ namespace FilesCom.Models
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
         ///   authentication_method - string - How is this user authenticated?
         ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?
-        ///   bypass_inactive_disable - boolean - Exempt this user from being disabled based on inactivity?
+        ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -1795,9 +1795,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: billing_permission must be of type bool", "parameters[\"billing_permission\"]");
             }
-            if (parameters.ContainsKey("bypass_inactive_disable") && !(parameters["bypass_inactive_disable"] is bool))
+            if (parameters.ContainsKey("bypass_user_lifecycle_rules") && !(parameters["bypass_user_lifecycle_rules"] is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_inactive_disable must be of type bool", "parameters[\"bypass_inactive_disable\"]");
+                throw new ArgumentException("Bad parameter: bypass_user_lifecycle_rules must be of type bool", "parameters[\"bypass_user_lifecycle_rules\"]");
             }
             if (parameters.ContainsKey("bypass_site_allowed_ips") && !(parameters["bypass_site_allowed_ips"] is bool))
             {
@@ -2047,7 +2047,7 @@ namespace FilesCom.Models
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
         ///   authentication_method - string - How is this user authenticated?
         ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?
-        ///   bypass_inactive_disable - boolean - Exempt this user from being disabled based on inactivity?
+        ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
@@ -2171,9 +2171,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: billing_permission must be of type bool", "parameters[\"billing_permission\"]");
             }
-            if (parameters.ContainsKey("bypass_inactive_disable") && !(parameters["bypass_inactive_disable"] is bool))
+            if (parameters.ContainsKey("bypass_user_lifecycle_rules") && !(parameters["bypass_user_lifecycle_rules"] is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_inactive_disable must be of type bool", "parameters[\"bypass_inactive_disable\"]");
+                throw new ArgumentException("Bad parameter: bypass_user_lifecycle_rules must be of type bool", "parameters[\"bypass_user_lifecycle_rules\"]");
             }
             if (parameters.ContainsKey("bypass_site_allowed_ips") && !(parameters["bypass_site_allowed_ips"] is bool))
             {
