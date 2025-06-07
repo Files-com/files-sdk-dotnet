@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("fingerprint_sha256", null);
             }
+            if (!this.attributes.ContainsKey("last_login_at"))
+            {
+                this.attributes.Add("last_login_at", null);
+            }
             if (!this.attributes.ContainsKey("username"))
             {
                 this.attributes.Add("username", null);
@@ -128,6 +132,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["fingerprint_sha256"]; }
             set { attributes["fingerprint_sha256"] = value; }
+        }
+
+        /// <summary>
+        /// Key's most recent login time via SFTP
+        /// </summary>
+        [JsonPropertyName("last_login_at")]
+        public Nullable<DateTime> LastLoginAt
+        {
+            get { return (Nullable<DateTime>)attributes["last_login_at"]; }
+            set { attributes["last_login_at"] = value; }
         }
 
         /// <summary>
