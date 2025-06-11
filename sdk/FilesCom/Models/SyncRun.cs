@@ -260,9 +260,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("runtime")]
-        public float Runtime
+        public double Runtime
         {
-            get { return (float)attributes["runtime"]; }
+            get { return (double)attributes["runtime"]; }
             private set { attributes["runtime"] = value; }
         }
 
