@@ -73,6 +73,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("hex_public_certificate_serial", null);
             }
+            if (!this.attributes.ContainsKey("public_certificate"))
+            {
+                this.attributes.Add("public_certificate", null);
+            }
             if (!this.attributes.ContainsKey("public_certificate_md5"))
             {
                 this.attributes.Add("public_certificate_md5", null);
@@ -100,10 +104,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("http_auth_password"))
             {
                 this.attributes.Add("http_auth_password", null);
-            }
-            if (!this.attributes.ContainsKey("public_certificate"))
-            {
-                this.attributes.Add("public_certificate", null);
             }
         }
 
@@ -235,6 +235,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate")]
+        public string PublicCertificate
+        {
+            get { return (string)attributes["public_certificate"]; }
+            set { attributes["public_certificate"] = value; }
+        }
+
+        /// <summary>
         /// MD5 hash of public certificate used for message security.
         /// </summary>
         [JsonPropertyName("public_certificate_md5")]
@@ -302,16 +312,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["http_auth_password"]; }
             set { attributes["http_auth_password"] = value; }
-        }
-
-        /// <summary>
-        /// Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
-        /// </summary>
-        [JsonPropertyName("public_certificate")]
-        public string PublicCertificate
-        {
-            get { return (string)attributes["public_certificate"]; }
-            set { attributes["public_certificate"] = value; }
         }
 
         /// <summary>

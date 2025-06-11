@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("public_certificate_md5", null);
             }
+            if (!this.attributes.ContainsKey("public_certificate"))
+            {
+                this.attributes.Add("public_certificate", null);
+            }
             if (!this.attributes.ContainsKey("private_key_md5"))
             {
                 this.attributes.Add("private_key_md5", null);
@@ -80,10 +84,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("private_key_password_md5"))
             {
                 this.attributes.Add("private_key_password_md5", null);
-            }
-            if (!this.attributes.ContainsKey("public_certificate"))
-            {
-                this.attributes.Add("public_certificate", null);
             }
             if (!this.attributes.ContainsKey("private_key"))
             {
@@ -172,6 +172,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Public certificate used for message security.
+        /// </summary>
+        [JsonPropertyName("public_certificate")]
+        public string PublicCertificate
+        {
+            get { return (string)attributes["public_certificate"]; }
+            set { attributes["public_certificate"] = value; }
+        }
+
+        /// <summary>
         /// MD5 hash of private key used for message security.
         /// </summary>
         [JsonPropertyName("private_key_md5")]
@@ -239,15 +249,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["private_key_password_md5"]; }
             set { attributes["private_key_password_md5"] = value; }
-        }
-
-        /// <summary>
-        /// </summary>
-        [JsonPropertyName("public_certificate")]
-        public string PublicCertificate
-        {
-            get { return (string)attributes["public_certificate"]; }
-            set { attributes["public_certificate"] = value; }
         }
 
         /// <summary>

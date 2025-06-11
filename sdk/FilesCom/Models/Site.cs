@@ -249,6 +249,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("legacy_checksums_mode", false);
             }
+            if (!this.attributes.ContainsKey("migrate_remote_server_sync_to_sync"))
+            {
+                this.attributes.Add("migrate_remote_server_sync_to_sync", false);
+            }
             if (!this.attributes.ContainsKey("mobile_app"))
             {
                 this.attributes.Add("mobile_app", false);
@@ -1359,6 +1363,18 @@ namespace FilesCom.Models
         {
             get { return attributes["legacy_checksums_mode"] == null ? false : (bool)attributes["legacy_checksums_mode"]; }
             private set { attributes["legacy_checksums_mode"] = value; }
+        }
+
+        /// <summary>
+        /// If true, we will migrate all remote server syncs to the new Sync model.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("migrate_remote_server_sync_to_sync")]
+        public bool MigrateRemoteServerSyncToSync
+        {
+            get { return attributes["migrate_remote_server_sync_to_sync"] == null ? false : (bool)attributes["migrate_remote_server_sync_to_sync"]; }
+            private set { attributes["migrate_remote_server_sync_to_sync"] = value; }
         }
 
         /// <summary>
@@ -2773,6 +2789,7 @@ namespace FilesCom.Models
         ///   calculate_file_checksums_sha1 - boolean - Calculate SHA1 checksums for files?
         ///   calculate_file_checksums_sha256 - boolean - Calculate SHA256 checksums for files?
         ///   legacy_checksums_mode - boolean - Use legacy checksums mode?
+        ///   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   tls_disabled - boolean - DO NOT ENABLE. This setting allows TLSv1.0 and TLSv1.1 to be used on your site.  We intend to remove this capability entirely in early 2024.  If set, the `sftp_insecure_ciphers` flag will be automatically set to true.
@@ -3072,6 +3089,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("legacy_checksums_mode") && !(parameters["legacy_checksums_mode"] is bool))
             {
                 throw new ArgumentException("Bad parameter: legacy_checksums_mode must be of type bool", "parameters[\"legacy_checksums_mode\"]");
+            }
+            if (parameters.ContainsKey("migrate_remote_server_sync_to_sync") && !(parameters["migrate_remote_server_sync_to_sync"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: migrate_remote_server_sync_to_sync must be of type bool", "parameters[\"migrate_remote_server_sync_to_sync\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {

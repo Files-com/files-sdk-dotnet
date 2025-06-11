@@ -10,6 +10,7 @@
   "domain": "domain.test",
   "hex_public_certificate_serial": "A5:EB:C1:95:DC:D8:2B:E7",
   "public_certificate_md5": "example",
+  "public_certificate": "example",
   "private_key_md5": "example",
   "public_certificate_subject": "example",
   "public_certificate_issuer": "example",
@@ -26,6 +27,7 @@
 * `domain` / `Domain`  (string): The station's AS2 domain name.
 * `hex_public_certificate_serial` / `HexPublicCertificateSerial`  (string): Serial of public certificate used for message security in hex format.
 * `public_certificate_md5` / `PublicCertificateMd5`  (string): MD5 hash of public certificate used for message security.
+* `public_certificate` / `PublicCertificate`  (string): Public certificate used for message security.
 * `private_key_md5` / `PrivateKeyMd5`  (string): MD5 hash of private key used for message security.
 * `public_certificate_subject` / `PublicCertificateSubject`  (string): Subject of public certificate used for message security.
 * `public_certificate_issuer` / `PublicCertificateIssuer`  (string): Issuer of public certificate used for message security.
@@ -33,7 +35,6 @@
 * `public_certificate_not_before` / `PublicCertificateNotBefore`  (string): Not before value of public certificate used for message security.
 * `public_certificate_not_after` / `PublicCertificateNotAfter`  (string): Not after value of public certificate used for message security.
 * `private_key_password_md5` / `PrivateKeyPasswordMd5`  (string): MD5 hash of private key password used for message security.
-* `public_certificate` / `PublicCertificate`  (string): 
 * `private_key` / `PrivateKey`  (string): 
 * `private_key_password` / `PrivateKeyPassword`  (string): 
 
@@ -142,6 +143,7 @@ var As2Station = As2Station.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "AS2 Station Name");
+parameters.Add("public_certificate", "example");
 
 As2Station.Update(parameters);
 ```
