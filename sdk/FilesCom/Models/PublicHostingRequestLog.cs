@@ -65,6 +65,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("bytes_transferred"))
+            {
+                this.attributes.Add("bytes_transferred", null);
+            }
+            if (!this.attributes.ContainsKey("http_method"))
+            {
+                this.attributes.Add("http_method", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -95,7 +103,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// IP Address of Public Hosting Client
+        /// IP Address of Public Hosting Client.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("remote_ip")]
@@ -106,7 +114,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// IP Address of Public Hosting Server
+        /// IP Address of Public Hosting Server.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("server_ip")]
@@ -117,7 +125,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// HTTP Request Hostname
+        /// HTTP Request Hostname.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("hostname")]
@@ -139,7 +147,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// HTTP Response Code
+        /// HTTP Response Code.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("responseCode")]
@@ -162,7 +170,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Duration (in milliseconds)
+        /// Duration (in milliseconds).
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("duration_ms")]
@@ -173,7 +181,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Start Time of Action
+        /// Start Time of Action.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("created_at")]
@@ -181,6 +189,28 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// The number of bytes transferred for file downloads.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bytes_transferred")]
+        public Nullable<Int64> BytesTransferred
+        {
+            get { return (Nullable<Int64>)attributes["bytes_transferred"]; }
+            private set { attributes["bytes_transferred"] = value; }
+        }
+
+        /// <summary>
+        /// Method of the HTTP call.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("http_method")]
+        public string HttpMethod
+        {
+            get { return (string)attributes["http_method"]; }
+            private set { attributes["http_method"] = value; }
         }
 
 
