@@ -17,7 +17,6 @@
   "keep_after_copy": true,
   "delete_empty_folders": true,
   "disabled": true,
-  "interval": "week",
   "trigger": "example",
   "trigger_file": "example",
   "include_patterns": [
@@ -29,6 +28,7 @@
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z",
   "sync_interval_minutes": 1,
+  "interval": "week",
   "recurring_day": 25,
   "schedule_days_of_week": [
     0,
@@ -56,7 +56,6 @@
 * `keep_after_copy` / `KeepAfterCopy`  (bool): Keep files after copying?
 * `delete_empty_folders` / `DeleteEmptyFolders`  (bool): Delete empty folders after sync?
 * `disabled` / `Disabled`  (bool): Is this sync disabled?
-* `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `trigger` / `Trigger`  (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` / `TriggerFile`  (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
 * `include_patterns` / `IncludePatterns`  (string[]): Array of glob patterns to include
@@ -64,6 +63,7 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): When this sync was created
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): When this sync was last updated
 * `sync_interval_minutes` / `SyncIntervalMinutes`  (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
+* `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
 * `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
@@ -129,7 +129,7 @@ Task<Sync> Sync.Create(
 * `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
 * `disabled` (bool): Is this sync disabled?
-* `interval` (Nullable<Int64>): Interval in minutes for sync (if scheduled)
+* `interval` (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -176,7 +176,7 @@ Task<Sync> Sync.Update(
 * `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
 * `disabled` (bool): Is this sync disabled?
-* `interval` (Nullable<Int64>): Interval in minutes for sync (if scheduled)
+* `interval` (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -221,7 +221,7 @@ parameters.Add("two_way", false);
 parameters.Add("keep_after_copy", false);
 parameters.Add("delete_empty_folders", false);
 parameters.Add("disabled", false);
-parameters.Add("interval", 1);
+parameters.Add("interval", "week");
 parameters.Add("trigger", "example");
 parameters.Add("trigger_file", "example");
 parameters.Add("recurring_day", 25);
@@ -245,7 +245,7 @@ Sync.Update(parameters);
 * `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
 * `disabled` (bool): Is this sync disabled?
-* `interval` (Nullable<Int64>): Interval in minutes for sync (if scheduled)
+* `interval` (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.

@@ -81,10 +81,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disabled", false);
             }
-            if (!this.attributes.ContainsKey("interval"))
-            {
-                this.attributes.Add("interval", null);
-            }
             if (!this.attributes.ContainsKey("trigger"))
             {
                 this.attributes.Add("trigger", null);
@@ -112,6 +108,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("sync_interval_minutes"))
             {
                 this.attributes.Add("sync_interval_minutes", null);
+            }
+            if (!this.attributes.ContainsKey("interval"))
+            {
+                this.attributes.Add("interval", null);
             }
             if (!this.attributes.ContainsKey("recurring_day"))
             {
@@ -282,16 +282,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
-        /// </summary>
-        [JsonPropertyName("interval")]
-        public string Interval
-        {
-            get { return (string)attributes["interval"]; }
-            set { attributes["interval"] = value; }
-        }
-
-        /// <summary>
         /// Trigger type: daily, custom_schedule, or manual
         /// </summary>
         [JsonPropertyName("trigger")]
@@ -364,6 +354,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+        /// </summary>
+        [JsonPropertyName("interval")]
+        public string Interval
+        {
+            get { return (string)attributes["interval"]; }
+            set { attributes["interval"] = value; }
+        }
+
+        /// <summary>
         /// If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         /// </summary>
         [JsonPropertyName("recurring_day")]
@@ -415,7 +415,7 @@ namespace FilesCom.Models
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
         ///   disabled - boolean - Is this sync disabled?
-        ///   interval - int64 - Interval in minutes for sync (if scheduled)
+        ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -480,9 +480,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is Nullable<Int64>))
+            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
-                throw new ArgumentException("Bad parameter: interval must be of type Nullable<Int64>", "parameters[\"interval\"]");
+                throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -662,7 +662,7 @@ namespace FilesCom.Models
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
         ///   disabled - boolean - Is this sync disabled?
-        ///   interval - int64 - Interval in minutes for sync (if scheduled)
+        ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -719,9 +719,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is Nullable<Int64>))
+            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
-                throw new ArgumentException("Bad parameter: interval must be of type Nullable<Int64>", "parameters[\"interval\"]");
+                throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -789,7 +789,7 @@ namespace FilesCom.Models
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
         ///   disabled - boolean - Is this sync disabled?
-        ///   interval - int64 - Interval in minutes for sync (if scheduled)
+        ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
@@ -862,9 +862,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is Nullable<Int64>))
+            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
-                throw new ArgumentException("Bad parameter: interval must be of type Nullable<Int64>", "parameters[\"interval\"]");
+                throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
