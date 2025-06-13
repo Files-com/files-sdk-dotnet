@@ -21,6 +21,7 @@ The .NET client library uses the Files.com RESTful APIs via the HTTPS protocol (
 
 ### Frameworks Supported
 
+- .NET 8
 - .NET 6
 - .NET 5
 - .NET Core 2.1, 2.2, 3.0, 3.1

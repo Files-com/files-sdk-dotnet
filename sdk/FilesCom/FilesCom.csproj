@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net5.0;netcoreapp3.1;netcoreapp3.0;netcoreapp2.2;netcoreapp2.1;netstandard2.1;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net6.0;net5.0;netcoreapp3.1;netcoreapp3.0;netcoreapp2.2;netcoreapp2.1;netstandard2.1;netstandard2.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>FilesCom</PackageId>
-    <Version>1.4.185</Version>
+    <Version>1.4.186</Version>
     <Authors>Files.com - support@files.com - https://www.files.com/</Authors>
     <Title>Files.com Client</Title>
     <Description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</Description>
-    <Copyright>Copyright 2020-2023</Copyright>
+    <Copyright>Copyright 2020-2025</Copyright>
     <PackageProjectUrl>https://github.com/Files-com/files-sdk-dotnet/tree/master/sdk/FilesCom</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
