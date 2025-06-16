@@ -153,6 +153,23 @@ Task Sync.CreateMigrateTo(
 
 ---
 
+## Manually Run Sync
+
+```
+Task Sync.ManualRun(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Sync ID.
+
+
+---
+
 ## Update Sync
 
 ```
@@ -195,6 +212,24 @@ Task Sync.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Sync ID.
+
+
+---
+
+## Manually Run Sync
+
+```
+var Sync = Sync.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+
+Sync.ManualRun
 ```
 
 ### Parameters
