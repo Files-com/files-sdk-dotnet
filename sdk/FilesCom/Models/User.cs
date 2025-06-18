@@ -293,10 +293,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("password_expire_at", null);
             }
-            if (!this.attributes.ContainsKey("has_reassignable_associations"))
-            {
-                this.attributes.Add("has_reassignable_associations", false);
-            }
             if (!this.attributes.ContainsKey("avatar_file"))
             {
                 this.attributes.Add("avatar_file", null);
@@ -1036,17 +1032,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["password_expire_at"]; }
             set { attributes["password_expire_at"] = value; }
-        }
-
-        /// <summary>
-        /// Does this user have any associations that can be reassigned on delete?
-        /// </summary>
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("has_reassignable_associations")]
-        public bool HasReassignableAssociations
-        {
-            get { return attributes["has_reassignable_associations"] == null ? false : (bool)attributes["has_reassignable_associations"]; }
-            set { attributes["has_reassignable_associations"] = value; }
         }
 
         /// <summary>

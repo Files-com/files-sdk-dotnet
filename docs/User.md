@@ -71,8 +71,7 @@
   "user_root": "example",
   "user_home": "example",
   "days_remaining_until_password_expire": 1,
-  "password_expire_at": "2000-01-01T01:00:00Z",
-  "has_reassignable_associations": true
+  "password_expire_at": "2000-01-01T01:00:00Z"
 }
 ```
 
@@ -142,7 +141,6 @@
 * `user_home` / `UserHome`  (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `days_remaining_until_password_expire` / `DaysRemainingUntilPasswordExpire`  (Nullable<Int64>): Number of days remaining until password expires
 * `password_expire_at` / `PasswordExpireAt`  (Nullable<DateTime>): Password expiration datetime
-* `has_reassignable_associations` / `HasReassignableAssociations`  (bool): Does this user have any associations that can be reassigned on delete?
 * `avatar_file` / `AvatarFile`  (System.Net.Http.ByteArrayContent): An image file for your user avatar.
 * `avatar_delete` / `AvatarDelete`  (bool): If true, the avatar will be deleted.
 * `change_password` / `ChangePassword`  (string): Used for changing a password on an existing user.
