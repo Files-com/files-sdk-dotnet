@@ -81,13 +81,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("runtime", null);
             }
-            if (!this.attributes.ContainsKey("s3_body_path"))
+            if (!this.attributes.ContainsKey("log_url"))
             {
-                this.attributes.Add("s3_body_path", null);
-            }
-            if (!this.attributes.ContainsKey("s3_internal_body_path"))
-            {
-                this.attributes.Add("s3_internal_body_path", null);
+                this.attributes.Add("log_url", null);
             }
             if (!this.attributes.ContainsKey("completed_at"))
             {
@@ -267,25 +263,14 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// S3 path to the main log file
+        /// Link to external log file.
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("s3_body_path")]
-        public string S3BodyPath
+        [JsonPropertyName("log_url")]
+        public string LogUrl
         {
-            get { return (string)attributes["s3_body_path"]; }
-            private set { attributes["s3_body_path"] = value; }
-        }
-
-        /// <summary>
-        /// S3 path to the internal log file
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("s3_internal_body_path")]
-        public string S3InternalBodyPath
-        {
-            get { return (string)attributes["s3_internal_body_path"]; }
-            private set { attributes["s3_internal_body_path"] = value; }
+            get { return (string)attributes["log_url"]; }
+            private set { attributes["log_url"] = value; }
         }
 
         /// <summary>
