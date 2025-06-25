@@ -9,6 +9,7 @@
   "fall": 1,
   "health_check_enabled": true,
   "health_check_type": "active",
+  "id": 1,
   "interval": 60,
   "min_free_cpu": 1.0,
   "min_free_mem": 1.0,
@@ -27,6 +28,7 @@
 * `fall` / `Fall`  (Nullable<Int64>): Number of consecutive failures before considering the backend unhealthy.
 * `health_check_enabled` / `HealthCheckEnabled`  (bool): True if health checks are enabled for this backend.
 * `health_check_type` / `HealthCheckType`  (string): Type of health check to perform.
+* `id` / `Id`  (Nullable<Int64>): Unique identifier for this backend.
 * `interval` / `Interval`  (Nullable<Int64>): Interval in seconds between health checks.
 * `min_free_cpu` / `MinFreeCpu`  (double): Minimum free CPU percentage required for this backend to be considered healthy.
 * `min_free_mem` / `MinFreeMem`  (double): Minimum free memory percentage required for this backend to be considered healthy.
@@ -37,7 +39,6 @@
 * `rise` / `Rise`  (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.
 * `status` / `Status`  (string): Status of this backend.
 * `undergoing_maintenance` / `UndergoingMaintenance`  (bool): True if this backend is undergoing maintenance.
-* `id` / `Id`  (Nullable<Int64>): Remote Mount Backend ID.
 
 
 ---
@@ -56,6 +57,7 @@ Task<FilesList<RemoteMountBackend>> RemoteMountBackend.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `remote_server_mount_id`.
 
 
 ---

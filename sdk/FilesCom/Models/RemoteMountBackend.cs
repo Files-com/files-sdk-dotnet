@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("health_check_type", null);
             }
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
             if (!this.attributes.ContainsKey("interval"))
             {
                 this.attributes.Add("interval", null);
@@ -88,10 +92,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("undergoing_maintenance"))
             {
                 this.attributes.Add("undergoing_maintenance", false);
-            }
-            if (!this.attributes.ContainsKey("id"))
-            {
-                this.attributes.Add("id", null);
             }
         }
 
@@ -161,6 +161,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["health_check_type"]; }
             set { attributes["health_check_type"] = value; }
+        }
+
+        /// <summary>
+        /// Unique identifier for this backend.
+        /// </summary>
+        [JsonPropertyName("id")]
+        public Nullable<Int64> Id
+        {
+            get { return (Nullable<Int64>)attributes["id"]; }
+            set { attributes["id"] = value; }
         }
 
         /// <summary>
@@ -262,16 +272,6 @@ namespace FilesCom.Models
         {
             get { return attributes["undergoing_maintenance"] == null ? false : (bool)attributes["undergoing_maintenance"]; }
             set { attributes["undergoing_maintenance"] = value; }
-        }
-
-        /// <summary>
-        /// Remote Mount Backend ID.
-        /// </summary>
-        [JsonPropertyName("id")]
-        public Nullable<Int64> Id
-        {
-            get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
         }
 
         /// <summary>
@@ -456,6 +456,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `remote_server_mount_id`.
         /// </summary>
         public static FilesList<RemoteMountBackend> List(
 
@@ -473,6 +474,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<RemoteMountBackend>($"/remote_mount_backends", System.Net.Http.HttpMethod.Get, parameters, options);
