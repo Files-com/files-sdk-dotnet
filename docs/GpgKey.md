@@ -21,6 +21,10 @@
 * `public_key` / `PublicKey`  (string): Your GPG public key
 * `private_key` / `PrivateKey`  (string): Your GPG private key.
 * `private_key_password` / `PrivateKeyPassword`  (string): Your GPG private key password. Only required for password protected keys.
+* `generate_expires_at` / `GenerateExpiresAt`  (string): Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_keypair` / `GenerateKeypair`  (bool): If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
+* `generate_full_name` / `GenerateFullName`  (string): Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_email` / `GenerateEmail`  (string): Email address of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 
 
 ---
@@ -79,6 +83,10 @@ Task<GpgKey> GpgKey.Create(
 * `private_key` (string): Your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
 * `name` (string): Required - Your GPG key name.
+* `generate_expires_at` (string): Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_keypair` (bool): If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
+* `generate_full_name` (string): Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_email` (string): Email address of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 
 
 ---

@@ -57,6 +57,22 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("private_key_password", null);
             }
+            if (!this.attributes.ContainsKey("generate_expires_at"))
+            {
+                this.attributes.Add("generate_expires_at", null);
+            }
+            if (!this.attributes.ContainsKey("generate_keypair"))
+            {
+                this.attributes.Add("generate_keypair", false);
+            }
+            if (!this.attributes.ContainsKey("generate_full_name"))
+            {
+                this.attributes.Add("generate_full_name", null);
+            }
+            if (!this.attributes.ContainsKey("generate_email"))
+            {
+                this.attributes.Add("generate_email", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -143,6 +159,47 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["private_key_password"]; }
             set { attributes["private_key_password"] = value; }
+        }
+
+        /// <summary>
+        /// Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        /// </summary>
+        [JsonPropertyName("generate_expires_at")]
+        public string GenerateExpiresAt
+        {
+            get { return (string)attributes["generate_expires_at"]; }
+            set { attributes["generate_expires_at"] = value; }
+        }
+
+        /// <summary>
+        /// If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("generate_keypair")]
+        public bool GenerateKeypair
+        {
+            get { return attributes["generate_keypair"] == null ? false : (bool)attributes["generate_keypair"]; }
+            set { attributes["generate_keypair"] = value; }
+        }
+
+        /// <summary>
+        /// Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        /// </summary>
+        [JsonPropertyName("generate_full_name")]
+        public string GenerateFullName
+        {
+            get { return (string)attributes["generate_full_name"]; }
+            set { attributes["generate_full_name"] = value; }
+        }
+
+        /// <summary>
+        /// Email address of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        /// </summary>
+        [JsonPropertyName("generate_email")]
+        public string GenerateEmail
+        {
+            get { return (string)attributes["generate_email"]; }
+            set { attributes["generate_email"] = value; }
         }
 
         /// <summary>
@@ -344,6 +401,10 @@ namespace FilesCom.Models
         ///   private_key - string - Your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
         ///   name (required) - string - Your GPG key name.
+        ///   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        ///   generate_keypair - boolean - If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
+        ///   generate_full_name - string - Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        ///   generate_email - string - Email address of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
         /// </summary>
         public static async Task<GpgKey> Create(
 
@@ -377,6 +438,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("generate_expires_at") && !(parameters["generate_expires_at"] is string))
+            {
+                throw new ArgumentException("Bad parameter: generate_expires_at must be of type string", "parameters[\"generate_expires_at\"]");
+            }
+            if (parameters.ContainsKey("generate_keypair") && !(parameters["generate_keypair"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: generate_keypair must be of type bool", "parameters[\"generate_keypair\"]");
+            }
+            if (parameters.ContainsKey("generate_full_name") && !(parameters["generate_full_name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: generate_full_name must be of type string", "parameters[\"generate_full_name\"]");
+            }
+            if (parameters.ContainsKey("generate_email") && !(parameters["generate_email"] is string))
+            {
+                throw new ArgumentException("Bad parameter: generate_email must be of type string", "parameters[\"generate_email\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/gpg_keys", System.Net.Http.HttpMethod.Post, parameters, options);

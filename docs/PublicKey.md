@@ -9,7 +9,10 @@
   "created_at": "2000-01-01T01:00:00Z",
   "fingerprint": "43:51:43:a1:b5:fc:8b:b7:0a:3a:a9:b1:0f:66:73:a8",
   "fingerprint_sha256": "V5Q5t/ghT3R8Tol5GX9385bzmpygWVRnLuI9EXNrjCX",
+  "status": "complete",
   "last_login_at": "2000-01-01T01:00:00Z",
+  "private_key": "example",
+  "public_key": "example",
   "username": "User",
   "user_id": 1
 }
@@ -20,10 +23,16 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Public key created at date/time
 * `fingerprint` / `Fingerprint`  (string): Public key fingerprint (MD5)
 * `fingerprint_sha256` / `FingerprintSha256`  (string): Public key fingerprint (SHA256)
+* `status` / `Status`  (string): Can be invalid, not_generated, generating, complete
 * `last_login_at` / `LastLoginAt`  (Nullable<DateTime>): Key's most recent login time via SFTP
+* `private_key` / `PrivateKey`  (string): Private key generated for the user.
+* `public_key` / `PublicKeyType`  (string): Public key generated for the user.
 * `username` / `Username`  (string): Username of the user this public key is associated with
 * `user_id` / `UserId`  (Nullable<Int64>): User ID this public key is associated with
-* `public_key` / `PublicKeyType`  (string): Actual contents of SSH key.
+* `generate_keypair` / `GenerateKeypair`  (bool): If true, generate a new SSH key pair. Can not be used with `public_key`
+* `generate_private_key_password` / `GeneratePrivateKeyPassword`  (string): Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_algorithm` / `GenerateAlgorithm`  (string): Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_length` / `GenerateLength`  (Nullable<Int64>): Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 
 
 ---
@@ -83,7 +92,11 @@ Task<PublicKey> PublicKey.Create(
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `title` (string): Required - Internal reference for key.
-* `public_key` (string): Required - Actual contents of SSH key.
+* `public_key` (string): Actual contents of SSH key.
+* `generate_keypair` (bool): If true, generate a new SSH key pair. Can not be used with `public_key`
+* `generate_private_key_password` (string): Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_algorithm` (string): Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+* `generate_length` (Nullable<Int64>): Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 
 
 ---

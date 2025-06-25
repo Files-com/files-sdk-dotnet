@@ -49,9 +49,21 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("fingerprint_sha256", null);
             }
+            if (!this.attributes.ContainsKey("status"))
+            {
+                this.attributes.Add("status", null);
+            }
             if (!this.attributes.ContainsKey("last_login_at"))
             {
                 this.attributes.Add("last_login_at", null);
+            }
+            if (!this.attributes.ContainsKey("private_key"))
+            {
+                this.attributes.Add("private_key", null);
+            }
+            if (!this.attributes.ContainsKey("public_key"))
+            {
+                this.attributes.Add("public_key", null);
             }
             if (!this.attributes.ContainsKey("username"))
             {
@@ -61,9 +73,21 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
-            if (!this.attributes.ContainsKey("public_key"))
+            if (!this.attributes.ContainsKey("generate_keypair"))
             {
-                this.attributes.Add("public_key", null);
+                this.attributes.Add("generate_keypair", false);
+            }
+            if (!this.attributes.ContainsKey("generate_private_key_password"))
+            {
+                this.attributes.Add("generate_private_key_password", null);
+            }
+            if (!this.attributes.ContainsKey("generate_algorithm"))
+            {
+                this.attributes.Add("generate_algorithm", null);
+            }
+            if (!this.attributes.ContainsKey("generate_length"))
+            {
+                this.attributes.Add("generate_length", null);
             }
         }
 
@@ -135,6 +159,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Can be invalid, not_generated, generating, complete
+        /// </summary>
+        [JsonPropertyName("status")]
+        public string Status
+        {
+            get { return (string)attributes["status"]; }
+            set { attributes["status"] = value; }
+        }
+
+        /// <summary>
         /// Key's most recent login time via SFTP
         /// </summary>
         [JsonPropertyName("last_login_at")]
@@ -142,6 +176,26 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["last_login_at"]; }
             set { attributes["last_login_at"] = value; }
+        }
+
+        /// <summary>
+        /// Private key generated for the user.
+        /// </summary>
+        [JsonPropertyName("private_key")]
+        public string PrivateKey
+        {
+            get { return (string)attributes["private_key"]; }
+            set { attributes["private_key"] = value; }
+        }
+
+        /// <summary>
+        /// Public key generated for the user.
+        /// </summary>
+        [JsonPropertyName("public_key")]
+        public string PublicKeyType
+        {
+            get { return (string)attributes["public_key"]; }
+            set { attributes["public_key"] = value; }
         }
 
         /// <summary>
@@ -165,13 +219,44 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Actual contents of SSH key.
+        /// If true, generate a new SSH key pair. Can not be used with `public_key`
         /// </summary>
-        [JsonPropertyName("public_key")]
-        public string PublicKeyType
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("generate_keypair")]
+        public bool GenerateKeypair
         {
-            get { return (string)attributes["public_key"]; }
-            set { attributes["public_key"] = value; }
+            get { return attributes["generate_keypair"] == null ? false : (bool)attributes["generate_keypair"]; }
+            set { attributes["generate_keypair"] = value; }
+        }
+
+        /// <summary>
+        /// Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        /// </summary>
+        [JsonPropertyName("generate_private_key_password")]
+        public string GeneratePrivateKeyPassword
+        {
+            get { return (string)attributes["generate_private_key_password"]; }
+            set { attributes["generate_private_key_password"] = value; }
+        }
+
+        /// <summary>
+        /// Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        /// </summary>
+        [JsonPropertyName("generate_algorithm")]
+        public string GenerateAlgorithm
+        {
+            get { return (string)attributes["generate_algorithm"]; }
+            set { attributes["generate_algorithm"] = value; }
+        }
+
+        /// <summary>
+        /// Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        /// </summary>
+        [JsonPropertyName("generate_length")]
+        public Nullable<Int64> GenerateLength
+        {
+            get { return (Nullable<Int64>)attributes["generate_length"]; }
+            set { attributes["generate_length"] = value; }
         }
 
         /// <summary>
@@ -379,7 +464,11 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   title (required) - string - Internal reference for key.
-        ///   public_key (required) - string - Actual contents of SSH key.
+        ///   public_key - string - Actual contents of SSH key.
+        ///   generate_keypair - boolean - If true, generate a new SSH key pair. Can not be used with `public_key`
+        ///   generate_private_key_password - string - Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        ///   generate_algorithm - string - Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
+        ///   generate_length - int64 - Length of key to generate. If algorithm is ecdsa, this is the signature size. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
         /// </summary>
         public static async Task<PublicKey> Create(
 
@@ -394,10 +483,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: title", "parameters[\"title\"]");
             }
-            if (!parameters.ContainsKey("public_key") || parameters["public_key"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: public_key", "parameters[\"public_key\"]");
-            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -409,6 +494,22 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
+            }
+            if (parameters.ContainsKey("generate_keypair") && !(parameters["generate_keypair"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: generate_keypair must be of type bool", "parameters[\"generate_keypair\"]");
+            }
+            if (parameters.ContainsKey("generate_private_key_password") && !(parameters["generate_private_key_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: generate_private_key_password must be of type string", "parameters[\"generate_private_key_password\"]");
+            }
+            if (parameters.ContainsKey("generate_algorithm") && !(parameters["generate_algorithm"] is string))
+            {
+                throw new ArgumentException("Bad parameter: generate_algorithm must be of type string", "parameters[\"generate_algorithm\"]");
+            }
+            if (parameters.ContainsKey("generate_length") && !(parameters["generate_length"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: generate_length must be of type Nullable<Int64>", "parameters[\"generate_length\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/public_keys", System.Net.Http.HttpMethod.Post, parameters, options);
