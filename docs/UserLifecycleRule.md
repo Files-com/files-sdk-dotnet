@@ -10,6 +10,7 @@
   "include_folder_admins": true,
   "include_site_admins": true,
   "action": "disable",
+  "user_state": "inactive",
   "site_id": 1
 }
 ```
@@ -20,6 +21,7 @@
 * `include_folder_admins` / `IncludeFolderAdmins`  (bool): Include folder admins in the rule
 * `include_site_admins` / `IncludeSiteAdmins`  (bool): Include site admins in the rule
 * `action` / `Action`  (string): Action to take on inactive users (disable or delete)
+* `user_state` / `UserState`  (string): State of the users to apply the rule to (inactive or disabled)
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 
 
@@ -77,6 +79,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 * `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
+* `user_state` (string): State of the users to apply the rule to (inactive or disabled)
 
 
 ---
@@ -99,6 +102,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
 * `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
+* `user_state` (string): State of the users to apply the rule to (inactive or disabled)
 
 
 ---
@@ -131,6 +135,7 @@ parameters.Add("authentication_method", "password");
 parameters.Add("inactivity_days", 12);
 parameters.Add("include_site_admins", true);
 parameters.Add("include_folder_admins", true);
+parameters.Add("user_state", "inactive");
 
 UserLifecycleRule.Update(parameters);
 ```
@@ -143,6 +148,7 @@ UserLifecycleRule.Update(parameters);
 * `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
+* `user_state` (string): State of the users to apply the rule to (inactive or disabled)
 
 
 ---

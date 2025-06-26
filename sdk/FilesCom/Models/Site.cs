@@ -217,10 +217,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("dav_user_root_enabled", false);
             }
-            if (!this.attributes.ContainsKey("days_before_deleting_disabled_users"))
-            {
-                this.attributes.Add("days_before_deleting_disabled_users", null);
-            }
             if (!this.attributes.ContainsKey("days_to_retain_backups"))
             {
                 this.attributes.Add("days_to_retain_backups", null);
@@ -1271,17 +1267,6 @@ namespace FilesCom.Models
         {
             get { return attributes["dav_user_root_enabled"] == null ? false : (bool)attributes["dav_user_root_enabled"]; }
             private set { attributes["dav_user_root_enabled"] = value; }
-        }
-
-        /// <summary>
-        /// Number of days to keep disabled users before deleting them. If set to 0, disabled users will not be deleted.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("days_before_deleting_disabled_users")]
-        public Nullable<Int64> DaysBeforeDeletingDisabledUsers
-        {
-            get { return (Nullable<Int64>)attributes["days_before_deleting_disabled_users"]; }
-            private set { attributes["days_before_deleting_disabled_users"] = value; }
         }
 
         /// <summary>
@@ -2804,7 +2789,6 @@ namespace FilesCom.Models
         ///   allowed_countries - string - Comma separated list of allowed Country codes
         ///   allowed_ips - string - List of allowed IP addresses
         ///   disallowed_countries - string - Comma separated list of disallowed Country codes
-        ///   days_before_deleting_disabled_users - int64 - Number of days to keep disabled users before deleting them. If set to 0, disabled users will not be deleted.
         ///   days_to_retain_backups - int64 - Number of days to keep deleted files
         ///   max_prior_passwords - int64 - Number of prior passwords to disallow
         ///   password_validity_days - int64 - Number of days password is valid
@@ -3149,10 +3133,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disallowed_countries") && !(parameters["disallowed_countries"] is string))
             {
                 throw new ArgumentException("Bad parameter: disallowed_countries must be of type string", "parameters[\"disallowed_countries\"]");
-            }
-            if (parameters.ContainsKey("days_before_deleting_disabled_users") && !(parameters["days_before_deleting_disabled_users"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: days_before_deleting_disabled_users must be of type Nullable<Int64>", "parameters[\"days_before_deleting_disabled_users\"]");
             }
             if (parameters.ContainsKey("days_to_retain_backups") && !(parameters["days_to_retain_backups"] is Nullable<Int64>))
             {

@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("action", null);
             }
+            if (!this.attributes.ContainsKey("user_state"))
+            {
+                this.attributes.Add("user_state", null);
+            }
             if (!this.attributes.ContainsKey("site_id"))
             {
                 this.attributes.Add("site_id", null);
@@ -138,6 +142,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// State of the users to apply the rule to (inactive or disabled)
+        /// </summary>
+        [JsonPropertyName("user_state")]
+        public string UserState
+        {
+            get { return (string)attributes["user_state"]; }
+            set { attributes["user_state"] = value; }
+        }
+
+        /// <summary>
         /// Site ID
         /// </summary>
         [JsonPropertyName("site_id")]
@@ -154,6 +168,7 @@ namespace FilesCom.Models
         ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
+        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         /// </summary>
         public async Task<UserLifecycleRule> Update(Dictionary<string, object> parameters)
         {
@@ -203,6 +218,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("include_folder_admins") && !(parameters["include_folder_admins"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
+            }
+            if (parameters.ContainsKey("user_state") && !(parameters["user_state"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_state must be of type string", "parameters[\"user_state\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -353,6 +372,7 @@ namespace FilesCom.Models
         ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
+        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         /// </summary>
         public static async Task<UserLifecycleRule> Create(
 
@@ -395,6 +415,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
             }
+            if (parameters.ContainsKey("user_state") && !(parameters["user_state"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_state must be of type string", "parameters[\"user_state\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -416,6 +440,7 @@ namespace FilesCom.Models
         ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
+        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         /// </summary>
         public static async Task<UserLifecycleRule> Update(
             Nullable<Int64> id,
@@ -473,6 +498,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("include_folder_admins") && !(parameters["include_folder_admins"] is bool))
             {
                 throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
+            }
+            if (parameters.ContainsKey("user_state") && !(parameters["user_state"] is string))
+            {
+                throw new ArgumentException("Bad parameter: user_state must be of type string", "parameters[\"user_state\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
