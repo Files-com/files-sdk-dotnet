@@ -181,6 +181,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("webhook_url", null);
             }
+            if (!this.attributes.ContainsKey("holiday_region"))
+            {
+                this.attributes.Add("holiday_region", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -585,6 +589,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["webhook_url"]; }
             set { attributes["webhook_url"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `custom_schedule`, the Automation will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        /// </summary>
+        [JsonPropertyName("holiday_region")]
+        public string HolidayRegion
+        {
+            get { return (string)attributes["holiday_region"]; }
+            set { attributes["holiday_region"] = value; }
         }
 
         /// <summary>
