@@ -91,9 +91,6 @@ Task<RemoteMountBackend> RemoteMountBackend.Create(
 
 ### Parameters
 
-* `canary_file_path` (string): Required - Path to the canary file used for health checks.
-* `remote_server_mount_id` (Nullable<Int64>): Required - The mount ID of the Remote Server Mount that this backend is associated with.
-* `remote_server_id` (Nullable<Int64>): Required - The remote server that this backend is associated with.
 * `enabled` (bool): True if this backend is enabled.
 * `fall` (Nullable<Int64>): Number of consecutive failures before considering the backend unhealthy.
 * `health_check_enabled` (bool): True if health checks are enabled for this backend.
@@ -104,6 +101,9 @@ Task<RemoteMountBackend> RemoteMountBackend.Create(
 * `priority` (Nullable<Int64>): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.
+* `canary_file_path` (string): Required - Path to the canary file used for health checks.
+* `remote_server_mount_id` (Nullable<Int64>): Required - The mount ID of the Remote Server Mount that this backend is associated with.
+* `remote_server_id` (Nullable<Int64>): Required - The remote server that this backend is associated with.
 
 
 ---
@@ -138,9 +138,6 @@ Task<RemoteMountBackend> RemoteMountBackend.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
-* `canary_file_path` (string): Required - Path to the canary file used for health checks.
-* `remote_server_mount_id` (Nullable<Int64>): Required - The mount ID of the Remote Server Mount that this backend is associated with.
-* `remote_server_id` (Nullable<Int64>): Required - The remote server that this backend is associated with.
 * `enabled` (bool): True if this backend is enabled.
 * `fall` (Nullable<Int64>): Number of consecutive failures before considering the backend unhealthy.
 * `health_check_enabled` (bool): True if health checks are enabled for this backend.
@@ -151,6 +148,8 @@ Task<RemoteMountBackend> RemoteMountBackend.Update(
 * `priority` (Nullable<Int64>): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.
+* `canary_file_path` (string): Path to the canary file used for health checks.
+* `remote_server_id` (Nullable<Int64>): The remote server that this backend is associated with.
 
 
 ---
@@ -197,9 +196,6 @@ var RemoteMountBackend = RemoteMountBackend.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("canary_file_path", "backend1.txt");
-parameters.Add("remote_server_mount_id", 1);
-parameters.Add("remote_server_id", 1);
 parameters.Add("enabled", true);
 parameters.Add("fall", 1);
 parameters.Add("health_check_enabled", true);
@@ -210,6 +206,8 @@ parameters.Add("min_free_mem", 1.0);
 parameters.Add("priority", 1);
 parameters.Add("remote_path", "/path/on/remote");
 parameters.Add("rise", 1);
+parameters.Add("canary_file_path", "backend1.txt");
+parameters.Add("remote_server_id", 1);
 
 RemoteMountBackend.Update(parameters);
 ```
@@ -217,9 +215,6 @@ RemoteMountBackend.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
-* `canary_file_path` (string): Required - Path to the canary file used for health checks.
-* `remote_server_mount_id` (Nullable<Int64>): Required - The mount ID of the Remote Server Mount that this backend is associated with.
-* `remote_server_id` (Nullable<Int64>): Required - The remote server that this backend is associated with.
 * `enabled` (bool): True if this backend is enabled.
 * `fall` (Nullable<Int64>): Number of consecutive failures before considering the backend unhealthy.
 * `health_check_enabled` (bool): True if health checks are enabled for this backend.
@@ -230,6 +225,8 @@ RemoteMountBackend.Update(parameters);
 * `priority` (Nullable<Int64>): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.
+* `canary_file_path` (string): Path to the canary file used for health checks.
+* `remote_server_id` (Nullable<Int64>): The remote server that this backend is associated with.
 
 
 ---

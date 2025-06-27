@@ -301,9 +301,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   canary_file_path (required) - string - Path to the canary file used for health checks.
-        ///   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
-        ///   remote_server_id (required) - int64 - The remote server that this backend is associated with.
         ///   enabled - boolean - True if this backend is enabled.
         ///   fall - int64 - Number of consecutive failures before considering the backend unhealthy.
         ///   health_check_enabled - boolean - True if health checks are enabled for this backend.
@@ -314,6 +311,8 @@ namespace FilesCom.Models
         ///   priority - int64 - Priority of this backend.
         ///   remote_path - string - Path on the remote server to treat as the root of this mount.
         ///   rise - int64 - Number of consecutive successes before considering the backend healthy.
+        ///   canary_file_path - string - Path to the canary file used for health checks.
+        ///   remote_server_id - int64 - The remote server that this backend is associated with.
         /// </summary>
         public async Task<RemoteMountBackend> Update(Dictionary<string, object> parameters)
         {
@@ -328,33 +327,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
-            if (!parameters.ContainsKey("canary_file_path") || parameters["canary_file_path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: canary_file_path", "parameters[\"canary_file_path\"]");
-            }
-            if (!parameters.ContainsKey("remote_server_mount_id") || parameters["remote_server_mount_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: remote_server_mount_id", "parameters[\"remote_server_mount_id\"]");
-            }
-            if (!parameters.ContainsKey("remote_server_id") || parameters["remote_server_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: remote_server_id", "parameters[\"remote_server_id\"]");
-            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("canary_file_path") && !(parameters["canary_file_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: canary_file_path must be of type string", "parameters[\"canary_file_path\"]");
-            }
-            if (parameters.ContainsKey("remote_server_mount_id") && !(parameters["remote_server_mount_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_mount_id must be of type Nullable<Int64>", "parameters[\"remote_server_mount_id\"]");
-            }
-            if (parameters.ContainsKey("remote_server_id") && !(parameters["remote_server_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -395,6 +370,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("rise") && !(parameters["rise"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: rise must be of type Nullable<Int64>", "parameters[\"rise\"]");
+            }
+            if (parameters.ContainsKey("canary_file_path") && !(parameters["canary_file_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: canary_file_path must be of type string", "parameters[\"canary_file_path\"]");
+            }
+            if (parameters.ContainsKey("remote_server_id") && !(parameters["remote_server_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -545,9 +528,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   canary_file_path (required) - string - Path to the canary file used for health checks.
-        ///   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
-        ///   remote_server_id (required) - int64 - The remote server that this backend is associated with.
         ///   enabled - boolean - True if this backend is enabled.
         ///   fall - int64 - Number of consecutive failures before considering the backend unhealthy.
         ///   health_check_enabled - boolean - True if health checks are enabled for this backend.
@@ -558,6 +538,9 @@ namespace FilesCom.Models
         ///   priority - int64 - Priority of this backend.
         ///   remote_path - string - Path on the remote server to treat as the root of this mount.
         ///   rise - int64 - Number of consecutive successes before considering the backend healthy.
+        ///   canary_file_path (required) - string - Path to the canary file used for health checks.
+        ///   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
+        ///   remote_server_id (required) - int64 - The remote server that this backend is associated with.
         /// </summary>
         public static async Task<RemoteMountBackend> Create(
 
@@ -579,18 +562,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("remote_server_id") || parameters["remote_server_id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: remote_server_id", "parameters[\"remote_server_id\"]");
-            }
-            if (parameters.ContainsKey("canary_file_path") && !(parameters["canary_file_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: canary_file_path must be of type string", "parameters[\"canary_file_path\"]");
-            }
-            if (parameters.ContainsKey("remote_server_mount_id") && !(parameters["remote_server_mount_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_mount_id must be of type Nullable<Int64>", "parameters[\"remote_server_mount_id\"]");
-            }
-            if (parameters.ContainsKey("remote_server_id") && !(parameters["remote_server_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -631,6 +602,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("rise") && !(parameters["rise"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: rise must be of type Nullable<Int64>", "parameters[\"rise\"]");
+            }
+            if (parameters.ContainsKey("canary_file_path") && !(parameters["canary_file_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: canary_file_path must be of type string", "parameters[\"canary_file_path\"]");
+            }
+            if (parameters.ContainsKey("remote_server_mount_id") && !(parameters["remote_server_mount_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_mount_id must be of type Nullable<Int64>", "parameters[\"remote_server_mount_id\"]");
+            }
+            if (parameters.ContainsKey("remote_server_id") && !(parameters["remote_server_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -681,9 +664,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   canary_file_path (required) - string - Path to the canary file used for health checks.
-        ///   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
-        ///   remote_server_id (required) - int64 - The remote server that this backend is associated with.
         ///   enabled - boolean - True if this backend is enabled.
         ///   fall - int64 - Number of consecutive failures before considering the backend unhealthy.
         ///   health_check_enabled - boolean - True if health checks are enabled for this backend.
@@ -694,6 +674,8 @@ namespace FilesCom.Models
         ///   priority - int64 - Priority of this backend.
         ///   remote_path - string - Path on the remote server to treat as the root of this mount.
         ///   rise - int64 - Number of consecutive successes before considering the backend healthy.
+        ///   canary_file_path - string - Path to the canary file used for health checks.
+        ///   remote_server_id - int64 - The remote server that this backend is associated with.
         /// </summary>
         public static async Task<RemoteMountBackend> Update(
             Nullable<Int64> id,
@@ -716,33 +698,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
-            if (!parameters.ContainsKey("canary_file_path") || parameters["canary_file_path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: canary_file_path", "parameters[\"canary_file_path\"]");
-            }
-            if (!parameters.ContainsKey("remote_server_mount_id") || parameters["remote_server_mount_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: remote_server_mount_id", "parameters[\"remote_server_mount_id\"]");
-            }
-            if (!parameters.ContainsKey("remote_server_id") || parameters["remote_server_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: remote_server_id", "parameters[\"remote_server_id\"]");
-            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("canary_file_path") && !(parameters["canary_file_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: canary_file_path must be of type string", "parameters[\"canary_file_path\"]");
-            }
-            if (parameters.ContainsKey("remote_server_mount_id") && !(parameters["remote_server_mount_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_mount_id must be of type Nullable<Int64>", "parameters[\"remote_server_mount_id\"]");
-            }
-            if (parameters.ContainsKey("remote_server_id") && !(parameters["remote_server_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -783,6 +741,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("rise") && !(parameters["rise"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: rise must be of type Nullable<Int64>", "parameters[\"rise\"]");
+            }
+            if (parameters.ContainsKey("canary_file_path") && !(parameters["canary_file_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: canary_file_path must be of type string", "parameters[\"canary_file_path\"]");
+            }
+            if (parameters.ContainsKey("remote_server_id") && !(parameters["remote_server_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
