@@ -321,7 +321,6 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
-        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         /// </summary>
         public static FilesList<Behavior> List(
 
@@ -347,10 +346,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
-            }
-            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
             }
 
             return new FilesList<Behavior>($"/behaviors", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -422,7 +417,6 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`.
-        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `behavior`.
         ///   path (required) - string - Path to operate on.
         ///   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
         /// </summary>
@@ -462,10 +456,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
-            }
-            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
-            {
-                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
             }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
