@@ -23,10 +23,10 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Public key created at date/time
 * `fingerprint` / `Fingerprint`  (string): Public key fingerprint (MD5)
 * `fingerprint_sha256` / `FingerprintSha256`  (string): Public key fingerprint (SHA256)
-* `status` / `Status`  (string): Can be invalid, not_generated, generating, complete
+* `status` / `Status`  (string): Only returned when generating keys. Can be invalid, not_generated, generating, complete
 * `last_login_at` / `LastLoginAt`  (Nullable<DateTime>): Key's most recent login time via SFTP
-* `private_key` / `PrivateKey`  (string): Private key generated for the user.
-* `public_key` / `PublicKeyType`  (string): Public key generated for the user.
+* `private_key` / `PrivateKey`  (string): Only returned when generating keys. Private key generated for the user.
+* `public_key` / `PublicKeyType`  (string): Only returned when generating keys. Public key generated for the user.
 * `username` / `Username`  (string): Username of the user this public key is associated with
 * `user_id` / `UserId`  (Nullable<Int64>): User ID this public key is associated with
 * `generate_keypair` / `GenerateKeypair`  (bool): If true, generate a new SSH key pair. Can not be used with `public_key`

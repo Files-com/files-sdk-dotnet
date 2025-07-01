@@ -159,7 +159,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Can be invalid, not_generated, generating, complete
+        /// Only returned when generating keys. Can be invalid, not_generated, generating, complete
         /// </summary>
         [JsonPropertyName("status")]
         public string Status
@@ -179,7 +179,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Private key generated for the user.
+        /// Only returned when generating keys. Private key generated for the user.
         /// </summary>
         [JsonPropertyName("private_key")]
         public string PrivateKey
@@ -189,7 +189,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Public key generated for the user.
+        /// Only returned when generating keys. Public key generated for the user.
         /// </summary>
         [JsonPropertyName("public_key")]
         public string PublicKeyType
