@@ -408,7 +408,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `custom_schedule`, the Automation will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        /// If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
         /// </summary>
         [JsonPropertyName("holiday_region")]
         public string HolidayRegion
@@ -457,6 +457,8 @@ namespace FilesCom.Models
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
@@ -530,6 +532,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
+            }
+            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+            }
+            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
             }
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
@@ -704,6 +714,8 @@ namespace FilesCom.Models
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
@@ -769,6 +781,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
+            }
+            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+            }
+            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
             }
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
@@ -864,6 +884,8 @@ namespace FilesCom.Models
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
@@ -945,6 +967,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
+            }
+            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+            }
+            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
             }
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
