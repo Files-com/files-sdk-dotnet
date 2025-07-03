@@ -11,6 +11,7 @@
   "include_site_admins": true,
   "action": "disable",
   "user_state": "inactive",
+  "name": "password specific rules",
   "site_id": 1
 }
 ```
@@ -22,6 +23,7 @@
 * `include_site_admins` / `IncludeSiteAdmins`  (bool): Include site admins in the rule
 * `action` / `Action`  (string): Action to take on inactive users (disable or delete)
 * `user_state` / `UserState`  (string): State of the users to apply the rule to (inactive or disabled)
+* `name` / `Name`  (string): User Lifecycle Rule name
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 
 
@@ -80,6 +82,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
+* `name` (string): User Lifecycle Rule name
 
 
 ---
@@ -103,6 +106,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
+* `name` (string): User Lifecycle Rule name
 
 
 ---
@@ -136,6 +140,7 @@ parameters.Add("inactivity_days", 12);
 parameters.Add("include_site_admins", true);
 parameters.Add("include_folder_admins", true);
 parameters.Add("user_state", "inactive");
+parameters.Add("name", "password specific rules");
 
 UserLifecycleRule.Update(parameters);
 ```
@@ -149,6 +154,7 @@ UserLifecycleRule.Update(parameters);
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
+* `name` (string): User Lifecycle Rule name
 
 
 ---
