@@ -163,9 +163,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   action (required) - string - Action to take on inactive users (disable or delete)
-        ///   authentication_method (required) - string - User authentication method for the rule
-        ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+        ///   action - string - Action to take on inactive users (disable or delete)
+        ///   authentication_method - string - User authentication method for the rule
+        ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
@@ -182,18 +182,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("action") || parameters["action"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: action", "parameters[\"action\"]");
-            }
-            if (!parameters.ContainsKey("authentication_method") || parameters["authentication_method"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: authentication_method", "parameters[\"authentication_method\"]");
-            }
-            if (!parameters.ContainsKey("inactivity_days") || parameters["inactivity_days"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: inactivity_days", "parameters[\"inactivity_days\"]");
             }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
@@ -367,9 +355,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   action (required) - string - Action to take on inactive users (disable or delete)
-        ///   authentication_method (required) - string - User authentication method for the rule
-        ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+        ///   action - string - Action to take on inactive users (disable or delete)
+        ///   authentication_method - string - User authentication method for the rule
+        ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
@@ -383,18 +371,6 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (!parameters.ContainsKey("action") || parameters["action"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: action", "parameters[\"action\"]");
-            }
-            if (!parameters.ContainsKey("authentication_method") || parameters["authentication_method"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: authentication_method", "parameters[\"authentication_method\"]");
-            }
-            if (!parameters.ContainsKey("inactivity_days") || parameters["inactivity_days"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: inactivity_days", "parameters[\"inactivity_days\"]");
-            }
             if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
@@ -435,9 +411,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   action (required) - string - Action to take on inactive users (disable or delete)
-        ///   authentication_method (required) - string - User authentication method for the rule
-        ///   inactivity_days (required) - int64 - Number of days of inactivity before the rule applies
+        ///   action - string - Action to take on inactive users (disable or delete)
+        ///   authentication_method - string - User authentication method for the rule
+        ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
@@ -462,18 +438,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("id") || parameters["id"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("action") || parameters["action"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: action", "parameters[\"action\"]");
-            }
-            if (!parameters.ContainsKey("authentication_method") || parameters["authentication_method"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: authentication_method", "parameters[\"authentication_method\"]");
-            }
-            if (!parameters.ContainsKey("inactivity_days") || parameters["inactivity_days"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: inactivity_days", "parameters[\"inactivity_days\"]");
             }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {

@@ -74,9 +74,9 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 
 ### Parameters
 
-* `action` (string): Required - Action to take on inactive users (disable or delete)
-* `authentication_method` (string): Required - User authentication method for the rule
-* `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
+* `action` (string): Action to take on inactive users (disable or delete)
+* `authentication_method` (string): User authentication method for the rule
+* `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
@@ -97,9 +97,9 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
-* `action` (string): Required - Action to take on inactive users (disable or delete)
-* `authentication_method` (string): Required - User authentication method for the rule
-* `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
+* `action` (string): Action to take on inactive users (disable or delete)
+* `authentication_method` (string): User authentication method for the rule
+* `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
@@ -143,9 +143,9 @@ UserLifecycleRule.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
-* `action` (string): Required - Action to take on inactive users (disable or delete)
-* `authentication_method` (string): Required - User authentication method for the rule
-* `inactivity_days` (Nullable<Int64>): Required - Number of days of inactivity before the rule applies
+* `action` (string): Action to take on inactive users (disable or delete)
+* `authentication_method` (string): User authentication method for the rule
+* `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
