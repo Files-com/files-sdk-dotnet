@@ -581,6 +581,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("site_header", null);
             }
+            if (!this.attributes.ContainsKey("site_public_footer"))
+            {
+                this.attributes.Add("site_public_footer", null);
+            }
+            if (!this.attributes.ContainsKey("site_public_header"))
+            {
+                this.attributes.Add("site_public_header", null);
+            }
             if (!this.attributes.ContainsKey("smtp_address"))
             {
                 this.attributes.Add("smtp_address", null);
@@ -2292,7 +2300,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Custom site footer text
+        /// Custom site footer text for authenticated pages
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("site_footer")]
@@ -2303,7 +2311,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Custom site header text
+        /// Custom site header text for authenticated pages
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("site_header")]
@@ -2311,6 +2319,28 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["site_header"]; }
             private set { attributes["site_header"] = value; }
+        }
+
+        /// <summary>
+        /// Custom site footer text for public pages
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("site_public_footer")]
+        public string SitePublicFooter
+        {
+            get { return (string)attributes["site_public_footer"]; }
+            private set { attributes["site_public_footer"] = value; }
+        }
+
+        /// <summary>
+        /// Custom site header text for public pages
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("site_public_header")]
+        public string SitePublicHeader
+        {
+            get { return (string)attributes["site_public_header"]; }
+            private set { attributes["site_public_header"] = value; }
         }
 
         /// <summary>
@@ -2851,8 +2881,10 @@ namespace FilesCom.Models
         ///   color2_link - string - Top bar link color
         ///   color2_text - string - Page link and button color
         ///   color2_top_text - string - Top bar text color
-        ///   site_header - string - Custom site header text
-        ///   site_footer - string - Custom site footer text
+        ///   site_header - string - Custom site header text for authenticated pages
+        ///   site_footer - string - Custom site footer text for authenticated pages
+        ///   site_public_header - string - Custom site header text for public pages
+        ///   site_public_footer - string - Custom site footer text for public pages
         ///   login_help_text - string - Login help text
         ///   use_dedicated_ips_for_smtp - boolean - If using custom SMTP, should we use dedicated IPs to deliver emails?
         ///   smtp_address - string - SMTP server hostname or IP
@@ -3389,6 +3421,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("site_footer") && !(parameters["site_footer"] is string))
             {
                 throw new ArgumentException("Bad parameter: site_footer must be of type string", "parameters[\"site_footer\"]");
+            }
+            if (parameters.ContainsKey("site_public_header") && !(parameters["site_public_header"] is string))
+            {
+                throw new ArgumentException("Bad parameter: site_public_header must be of type string", "parameters[\"site_public_header\"]");
+            }
+            if (parameters.ContainsKey("site_public_footer") && !(parameters["site_public_footer"] is string))
+            {
+                throw new ArgumentException("Bad parameter: site_public_footer must be of type string", "parameters[\"site_public_footer\"]");
             }
             if (parameters.ContainsKey("login_help_text") && !(parameters["login_help_text"] is string))
             {
