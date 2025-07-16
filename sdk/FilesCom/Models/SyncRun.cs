@@ -45,9 +45,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("status", null);
             }
-            if (!this.attributes.ContainsKey("remote_server_type"))
+            if (!this.attributes.ContainsKey("src_remote_server_type"))
             {
-                this.attributes.Add("remote_server_type", null);
+                this.attributes.Add("src_remote_server_type", null);
+            }
+            if (!this.attributes.ContainsKey("dest_remote_server_type"))
+            {
+                this.attributes.Add("dest_remote_server_type", null);
             }
             if (!this.attributes.ContainsKey("body"))
             {
@@ -164,14 +168,25 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Type of remote server used, if any
+        /// Source remote server type, if any
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("remote_server_type")]
-        public string RemoteServerType
+        [JsonPropertyName("src_remote_server_type")]
+        public string SrcRemoteServerType
         {
-            get { return (string)attributes["remote_server_type"]; }
-            private set { attributes["remote_server_type"] = value; }
+            get { return (string)attributes["src_remote_server_type"]; }
+            private set { attributes["src_remote_server_type"] = value; }
+        }
+
+        /// <summary>
+        /// Destination remote server type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("dest_remote_server_type")]
+        public string DestRemoteServerType
+        {
+            get { return (string)attributes["dest_remote_server_type"]; }
+            private set { attributes["dest_remote_server_type"] = value; }
         }
 
         /// <summary>

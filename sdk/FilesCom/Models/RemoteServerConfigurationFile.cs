@@ -97,6 +97,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("transfer_rate_limit", null);
             }
+            if (!this.attributes.ContainsKey("auto_update_policy"))
+            {
+                this.attributes.Add("auto_update_policy", null);
+            }
             if (!this.attributes.ContainsKey("api_token"))
             {
                 this.attributes.Add("api_token", null);
@@ -340,6 +344,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["transfer_rate_limit"]; }
             private set { attributes["transfer_rate_limit"] = value; }
+        }
+
+        /// <summary>
+        /// Auto update policy ['manual_trigger', 'critical_only', 'always'] (default critical_only)
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("auto_update_policy")]
+        public string AutoUpdatePolicy
+        {
+            get { return (string)attributes["auto_update_policy"]; }
+            private set { attributes["auto_update_policy"] = value; }
         }
 
         /// <summary>
