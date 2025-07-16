@@ -574,6 +574,8 @@ namespace FilesCom.Models
         ///   search_all - boolean - Search entire site?  If set, we will ignore the folder path provided and search the entire site.  This is the same API used by the search bar in the web UI when running 'Search All Files'.  Search results are a best effort, not real time, and not guaranteed to match every file.  This field should only be used for ad-hoc (human) searching, and not as part of an automated process.
         ///   with_previews - boolean - Include file previews?
         ///   with_priority_color - boolean - Include file priority color information?
+        ///   type - string - Type of objects to return.  Can be `folder` or `file`.
+        ///   modified_at_datetime - string - If provided, will only return files/folders modified after this time. Can be used only in combination with `type` filter.
         /// </summary>
         public static FilesList<RemoteFile> ListFor(
             string path,
@@ -635,6 +637,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
+            }
+            if (parameters.ContainsKey("type") && !(parameters["type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: type must be of type string", "parameters[\"type\"]");
+            }
+            if (parameters.ContainsKey("modified_at_datetime") && !(parameters["modified_at_datetime"] is string))
+            {
+                throw new ArgumentException("Bad parameter: modified_at_datetime must be of type string", "parameters[\"modified_at_datetime\"]");
             }
 
             return new FilesList<RemoteFile>($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
