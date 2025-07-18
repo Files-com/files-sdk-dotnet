@@ -821,22 +821,6 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// </summary>
-        public static async Task CreateMigrateTo(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-
-            await FilesClient.SendRequest($"/syncs/migrate_to_syncs", System.Net.Http.HttpMethod.Post, parameters, options);
-        }
-
-
-        /// <summary>
         /// Manually Run Sync
         /// </summary>
         public static async Task ManualRun(

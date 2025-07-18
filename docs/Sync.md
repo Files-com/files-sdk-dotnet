@@ -144,19 +144,6 @@ Task<Sync> Sync.Create(
 
 ---
 
-## Migrate Legacy Syncs to Syncs
-
-```
-Task Sync.CreateMigrateTo(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-
----
-
 ## Manually Run Sync
 
 ```
