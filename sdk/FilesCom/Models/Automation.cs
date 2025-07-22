@@ -153,6 +153,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("source", null);
             }
+            if (!this.attributes.ContainsKey("legacy_sync_ids"))
+            {
+                this.attributes.Add("legacy_sync_ids", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("sync_ids"))
             {
                 this.attributes.Add("sync_ids", new Nullable<Int64>[0]);
@@ -524,6 +528,16 @@ namespace FilesCom.Models
         /// <summary>
         /// IDs of remote sync folder behaviors to run by this Automation
         /// </summary>
+        [JsonPropertyName("legacy_sync_ids")]
+        public Nullable<Int64>[] LegacySyncIds
+        {
+            get { return (Nullable<Int64>[])attributes["legacy_sync_ids"]; }
+            set { attributes["legacy_sync_ids"] = value; }
+        }
+
+        /// <summary>
+        /// IDs of syncs to run by this Automation. This is the new way to specify syncs, and it is recommended to use this instead of `legacy_sync_ids`.
+        /// </summary>
         [JsonPropertyName("sync_ids")]
         public Nullable<Int64>[] SyncIds
         {
@@ -634,6 +648,7 @@ namespace FilesCom.Models
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
         ///   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   path - string - Path on which this Automation runs.  Supports globs, except on remote mounts.
+        ///   legacy_sync_ids - string - A list of legacy sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
@@ -701,6 +716,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("legacy_sync_ids") && !(parameters["legacy_sync_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: legacy_sync_ids must be of type string", "parameters[\"legacy_sync_ids\"]");
             }
             if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
             {
@@ -986,6 +1005,7 @@ namespace FilesCom.Models
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
         ///   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   path - string - Path on which this Automation runs.  Supports globs, except on remote mounts.
+        ///   legacy_sync_ids - string - A list of legacy sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
@@ -1049,6 +1069,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("legacy_sync_ids") && !(parameters["legacy_sync_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: legacy_sync_ids must be of type string", "parameters[\"legacy_sync_ids\"]");
             }
             if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
             {
@@ -1209,6 +1233,7 @@ namespace FilesCom.Models
         ///   destination_replace_to - string - If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
         ///   interval - string - How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   path - string - Path on which this Automation runs.  Supports globs, except on remote mounts.
+        ///   legacy_sync_ids - string - A list of legacy sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
@@ -1284,6 +1309,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("legacy_sync_ids") && !(parameters["legacy_sync_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: legacy_sync_ids must be of type string", "parameters[\"legacy_sync_ids\"]");
             }
             if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
             {
