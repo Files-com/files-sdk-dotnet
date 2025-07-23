@@ -112,7 +112,7 @@ namespace FilesTests
                 Response.Create()
                   .WithStatusCode(404)
                   .WithHeader("Content-Type", "application/json")
-                  .WithBody(@"{""type"": ""not-found/folder-not-found"",""http-code"": 404,""error"": ""Folder missing not found.""}")
+                  .WithBody(@"{""type"": ""not-found"",""http-code"": 404,""error"": ""Not Found.  This may be related to your permissions.""}")
               );
 
             Dictionary<string, object> parameters = new Dictionary<string, object>() { };
@@ -125,8 +125,8 @@ namespace FilesTests
                 }
                 Assert.Fail("no exception thrown");
             } catch (Exception ex) {
-                Assert.AreEqual(typeof(FolderNotFoundException), ex.InnerException.GetType());
-                Assert.AreEqual("Folder missing not found.", ex.InnerException.Message);
+                Assert.AreEqual(typeof(NotFoundException), ex.InnerException.GetType());
+                Assert.AreEqual("Not Found.  This may be related to your permissions.", ex.InnerException.Message);
             }
 
             // assert our count matches
