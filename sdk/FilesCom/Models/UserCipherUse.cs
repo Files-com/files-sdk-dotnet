@@ -33,6 +33,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
             if (!this.attributes.ContainsKey("protocol_cipher"))
             {
                 this.attributes.Add("protocol_cipher", null);
@@ -52,10 +60,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("updated_at"))
             {
                 this.attributes.Add("updated_at", null);
-            }
-            if (!this.attributes.ContainsKey("user_id"))
-            {
-                this.attributes.Add("user_id", null);
             }
         }
 
@@ -84,6 +88,28 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the user who performed this access
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
+        {
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            private set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// Username of the user who performed this access
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("username")]
+        public string Username
+        {
+            get { return (string)attributes["username"]; }
+            private set { attributes["username"] = value; }
         }
 
         /// <summary>
@@ -140,17 +166,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["updated_at"]; }
             private set { attributes["updated_at"] = value; }
-        }
-
-        /// <summary>
-        /// ID of the user who performed this access
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("user_id")]
-        public Nullable<Int64> UserId
-        {
-            get { return (Nullable<Int64>)attributes["user_id"]; }
-            private set { attributes["user_id"] = value; }
         }
 
 
