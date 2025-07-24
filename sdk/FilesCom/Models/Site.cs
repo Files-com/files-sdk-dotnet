@@ -633,10 +633,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("switch_to_plan_date", null);
             }
-            if (!this.attributes.ContainsKey("tls_disabled"))
-            {
-                this.attributes.Add("tls_disabled", false);
-            }
             if (!this.attributes.ContainsKey("trial_days_left"))
             {
                 this.attributes.Add("trial_days_left", null);
@@ -2467,18 +2463,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// This setting enables Legacy Support for Insecure Ciphers across SFTP and FTP.  See our documentation for more information.  Contrary to its name, this setting does not disable TLS (it used to do that a long time ago), but rather enables certain ciphers which are known to be insecure but required for broad MFT compatibility.
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("tls_disabled")]
-        public bool TlsDisabled
-        {
-            get { return attributes["tls_disabled"] == null ? false : (bool)attributes["tls_disabled"]; }
-            private set { attributes["tls_disabled"] = value; }
-        }
-
-        /// <summary>
         /// Number of days left in trial
         /// </summary>
         [JsonInclude]
@@ -2807,7 +2791,6 @@ namespace FilesCom.Models
         ///   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
-        ///   tls_disabled - boolean - This setting enables Legacy Support for Insecure Ciphers across SFTP and FTP.  See our documentation for more information.  Contrary to its name, this setting does not disable TLS (it used to do that a long time ago), but rather enables certain ciphers which are known to be insecure but required for broad MFT compatibility.
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
         ///   sftp_insecure_diffie_hellman - boolean - If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
         ///   disable_files_certificate_generation - boolean - If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
@@ -3117,10 +3100,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ssl_required must be of type bool", "parameters[\"ssl_required\"]");
-            }
-            if (parameters.ContainsKey("tls_disabled") && !(parameters["tls_disabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: tls_disabled must be of type bool", "parameters[\"tls_disabled\"]");
             }
             if (parameters.ContainsKey("sftp_insecure_ciphers") && !(parameters["sftp_insecure_ciphers"] is bool))
             {
