@@ -8,6 +8,8 @@
   "expires_at": "2000-01-01T01:00:00Z",
   "name": "key name",
   "user_id": 1,
+  "public_key_md5": "7f8bc1210b09b9ddf469e6b6b8920e76",
+  "private_key_md5": "ab236cfe4a195f0226bc2e674afdd6b0",
   "public_key": "7f8bc1210b09b9ddf469e6b6b8920e76",
   "private_key": "ab236cfe4a195f0226bc2e674afdd6b0",
   "private_key_password": "[your GPG private key password]"
@@ -18,6 +20,8 @@
 * `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Your GPG key expiration date.
 * `name` / `Name`  (string): Your GPG key name.
 * `user_id` / `UserId`  (Nullable<Int64>): GPG owner's user id
+* `public_key_md5` / `PublicKeyMd5`  (string): MD5 hash of your GPG public key
+* `private_key_md5` / `PrivateKeyMd5`  (string): MD5 hash of your GPG private key.
 * `public_key` / `PublicKey`  (string): Your GPG public key
 * `private_key` / `PrivateKey`  (string): Your GPG private key.
 * `private_key_password` / `PrivateKeyPassword`  (string): Your GPG private key password. Only required for password protected keys.
@@ -79,8 +83,8 @@ Task<GpgKey> GpgKey.Create(
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
-* `public_key` (string): Your GPG public key
-* `private_key` (string): Your GPG private key.
+* `public_key` (string): MD5 hash of your GPG public key
+* `private_key` (string): MD5 hash of your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
 * `name` (string): Required - Your GPG key name.
 * `generate_expires_at` (string): Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -104,8 +108,8 @@ Task<GpgKey> GpgKey.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
-* `public_key` (string): Your GPG public key
-* `private_key` (string): Your GPG private key.
+* `public_key` (string): MD5 hash of your GPG public key
+* `private_key` (string): MD5 hash of your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
 * `name` (string): Your GPG key name.
 
@@ -147,8 +151,8 @@ GpgKey.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
-* `public_key` (string): Your GPG public key
-* `private_key` (string): Your GPG private key.
+* `public_key` (string): MD5 hash of your GPG public key
+* `private_key` (string): MD5 hash of your GPG private key.
 * `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
 * `name` (string): Your GPG key name.
 

@@ -45,6 +45,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("public_key_md5"))
+            {
+                this.attributes.Add("public_key_md5", null);
+            }
+            if (!this.attributes.ContainsKey("private_key_md5"))
+            {
+                this.attributes.Add("private_key_md5", null);
+            }
             if (!this.attributes.ContainsKey("public_key"))
             {
                 this.attributes.Add("public_key", null);
@@ -132,6 +140,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// MD5 hash of your GPG public key
+        /// </summary>
+        [JsonPropertyName("public_key_md5")]
+        public string PublicKeyMd5
+        {
+            get { return (string)attributes["public_key_md5"]; }
+            set { attributes["public_key_md5"] = value; }
+        }
+
+        /// <summary>
+        /// MD5 hash of your GPG private key.
+        /// </summary>
+        [JsonPropertyName("private_key_md5")]
+        public string PrivateKeyMd5
+        {
+            get { return (string)attributes["private_key_md5"]; }
+            set { attributes["private_key_md5"] = value; }
+        }
+
+        /// <summary>
         /// Your GPG public key
         /// </summary>
         [JsonPropertyName("public_key")]
@@ -204,8 +232,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   public_key - string - Your GPG public key
-        ///   private_key - string - Your GPG private key.
+        ///   public_key - string - MD5 hash of your GPG public key
+        ///   private_key - string - MD5 hash of your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
         ///   name - string - Your GPG key name.
         /// </summary>
@@ -397,8 +425,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
-        ///   public_key - string - Your GPG public key
-        ///   private_key - string - Your GPG private key.
+        ///   public_key - string - MD5 hash of your GPG public key
+        ///   private_key - string - MD5 hash of your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
         ///   name (required) - string - Your GPG key name.
         ///   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -471,8 +499,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   public_key - string - Your GPG public key
-        ///   private_key - string - Your GPG private key.
+        ///   public_key - string - MD5 hash of your GPG public key
+        ///   private_key - string - MD5 hash of your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
         ///   name - string - Your GPG key name.
         /// </summary>
