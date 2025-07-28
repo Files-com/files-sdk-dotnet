@@ -713,6 +713,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_admins_can_set_user_password", false);
             }
+            if (!this.attributes.ContainsKey("managed_site_settings"))
+            {
+                this.attributes.Add("managed_site_settings", new string[0]);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -2690,6 +2694,17 @@ namespace FilesCom.Models
         {
             get { return attributes["group_admins_can_set_user_password"] == null ? false : (bool)attributes["group_admins_can_set_user_password"]; }
             private set { attributes["group_admins_can_set_user_password"] = value; }
+        }
+
+        /// <summary>
+        /// List of site settings managed by the parent site
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("managed_site_settings")]
+        public string[] ManagedSiteSettings
+        {
+            get { return (string[])attributes["managed_site_settings"]; }
+            private set { attributes["managed_site_settings"] = value; }
         }
 
 

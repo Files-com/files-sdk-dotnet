@@ -59,7 +59,7 @@ Examples:
 * 10 requests/minute: '10-M'
 * 1000 requests/hour: '1000-H'
 * 2000 requests/day: '2000-D'
-* `auto_update_policy` / `AutoUpdatePolicy`  (string): Auto update policy ['manual_trigger', 'critical_only', 'always'] (default critical_only)
+* `auto_update_policy` / `AutoUpdatePolicy`  (string): Auto update policy ['manual_trigger', 'critical_only', 'always', 'never'] (default critical_only)
 * `api_token` / `ApiToken`  (string): Files Agent API Token
 * `port` / `Port`  (Nullable<Int64>): Incoming port for files agent connections
 * `hostname` / `Hostname`  (string): 

@@ -347,7 +347,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Auto update policy ['manual_trigger', 'critical_only', 'always'] (default critical_only)
+        /// Auto update policy ['manual_trigger', 'critical_only', 'always', 'never'] (default critical_only)
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("auto_update_policy")]
