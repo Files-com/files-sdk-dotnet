@@ -30,9 +30,6 @@
   "wasabi_bucket": "my-bucket",
   "wasabi_region": "us-west-1",
   "wasabi_access_key": "example",
-  "rackspace_username": "rackspaceuser",
-  "rackspace_region": "dfw",
-  "rackspace_container": "my-container",
   "auth_status": "in_setup",
   "auth_account_name": "me@example.com",
   "one_drive_account_type": "personal",
@@ -91,9 +88,6 @@
 * `wasabi_bucket` / `WasabiBucket`  (string): Wasabi: Bucket name
 * `wasabi_region` / `WasabiRegion`  (string): Wasabi: Region
 * `wasabi_access_key` / `WasabiAccessKey`  (string): Wasabi: Access Key.
-* `rackspace_username` / `RackspaceUsername`  (string): Rackspace: username used to login to the Rackspace Cloud Control Panel.
-* `rackspace_region` / `RackspaceRegion`  (string): Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-* `rackspace_container` / `RackspaceContainer`  (string): Rackspace: The name of the container (top level directory) where files will sync.
 * `auth_status` / `AuthStatus`  (string): Either `in_setup` or `complete`
 * `auth_account_name` / `AuthAccountName`  (string): Describes the authorized account
 * `one_drive_account_type` / `OneDriveAccountType`  (string): OneDrive: Either personal or business_other account types
@@ -140,7 +134,6 @@
 * `google_cloud_storage_credentials_json` / `GoogleCloudStorageCredentialsJson`  (string): Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `google_cloud_storage_s3_compatible_secret_key` / `GoogleCloudStorageS3CompatibleSecretKey`  (string): Google Cloud Storage: S3-compatible secret key
 * `linode_secret_key` / `LinodeSecretKey`  (string): Linode: Secret Key
-* `rackspace_api_key` / `RackspaceApiKey`  (string): Rackspace: API key from the Rackspace Cloud Control Panel
 * `s3_compatible_secret_key` / `S3CompatibleSecretKey`  (string): S3-compatible: Secret Key
 * `wasabi_secret_key` / `WasabiSecretKey`  (string): Wasabi: Secret Key
 
@@ -161,9 +154,9 @@ Task<FilesList<RemoteServer>> RemoteServer.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ rackspace_container, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
-* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `rackspace_container`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ rackspace_container, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
+* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
 
 
 ---
@@ -231,7 +224,6 @@ Task<RemoteServer> RemoteServer.Create(
 * `google_cloud_storage_credentials_json` (string): Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `google_cloud_storage_s3_compatible_secret_key` (string): Google Cloud Storage: S3-compatible secret key
 * `linode_secret_key` (string): Linode: Secret Key
-* `rackspace_api_key` (string): Rackspace: API key from the Rackspace Cloud Control Panel
 * `s3_compatible_secret_key` (string): S3-compatible: Secret Key
 * `wasabi_secret_key` (string): Wasabi: Secret Key
 * `aws_access_key` (string): AWS Access Key.
@@ -266,9 +258,6 @@ Task<RemoteServer> RemoteServer.Create(
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
-* `rackspace_container` (string): Rackspace: The name of the container (top level directory) where files will sync.
-* `rackspace_region` (string): Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-* `rackspace_username` (string): Rackspace: username used to login to the Rackspace Cloud Control Panel.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -345,7 +334,6 @@ Task<RemoteServer> RemoteServer.Update(
 * `google_cloud_storage_credentials_json` (string): Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `google_cloud_storage_s3_compatible_secret_key` (string): Google Cloud Storage: S3-compatible secret key
 * `linode_secret_key` (string): Linode: Secret Key
-* `rackspace_api_key` (string): Rackspace: API key from the Rackspace Cloud Control Panel
 * `s3_compatible_secret_key` (string): S3-compatible: Secret Key
 * `wasabi_secret_key` (string): Wasabi: Secret Key
 * `aws_access_key` (string): AWS Access Key.
@@ -380,9 +368,6 @@ Task<RemoteServer> RemoteServer.Update(
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
-* `rackspace_container` (string): Rackspace: The name of the container (top level directory) where files will sync.
-* `rackspace_region` (string): Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-* `rackspace_username` (string): Rackspace: username used to login to the Rackspace Cloud Control Panel.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -498,9 +483,6 @@ parameters.Add("name", "My Remote server");
 parameters.Add("one_drive_account_type", "personal");
 parameters.Add("pin_to_site_region", true);
 parameters.Add("port", 1);
-parameters.Add("rackspace_container", "my-container");
-parameters.Add("rackspace_region", "dfw");
-parameters.Add("rackspace_username", "rackspaceuser");
 parameters.Add("s3_bucket", "my-bucket");
 parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("s3_compatible_bucket", "my-bucket");
@@ -539,7 +521,6 @@ RemoteServer.Update(parameters);
 * `google_cloud_storage_credentials_json` (string): Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
 * `google_cloud_storage_s3_compatible_secret_key` (string): Google Cloud Storage: S3-compatible secret key
 * `linode_secret_key` (string): Linode: Secret Key
-* `rackspace_api_key` (string): Rackspace: API key from the Rackspace Cloud Control Panel
 * `s3_compatible_secret_key` (string): S3-compatible: Secret Key
 * `wasabi_secret_key` (string): Wasabi: Secret Key
 * `aws_access_key` (string): AWS Access Key.
@@ -574,9 +555,6 @@ RemoteServer.Update(parameters);
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
-* `rackspace_container` (string): Rackspace: The name of the container (top level directory) where files will sync.
-* `rackspace_region` (string): Rackspace: Three letter code for Rackspace region. See https://support.rackspace.com/how-to/about-regions/
-* `rackspace_username` (string): Rackspace: username used to login to the Rackspace Cloud Control Panel.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
