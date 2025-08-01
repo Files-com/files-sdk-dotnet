@@ -324,7 +324,7 @@ To sort the returned data, pass in the ```sort_by``` method argument.
 Each resource supports a unique set of valid sort fields and can only be sorted by one field at a
 time.
 
-The argument value is a C# ```Dictionary<string, object>``` object that has a property of the
+The argument value is a C# ```Dictionary<string, string>``` object that has a property of the
 resource field name sort on and a value of either ```"asc"``` or ```"desc"``` to specify the sort
 order.
 
@@ -341,7 +341,7 @@ using FilesCom.Models;
 
 // users sorted by username
 var args = new Dictionary<string, object>();
-var sortArgs = new Dictionary<string, object>();
+var sortArgs = new Dictionary<string, string>();
 sortArgs.Add("username", "asc");
 args.Add("sort_by", sortArgs);
 
@@ -371,7 +371,7 @@ single field.
 Each resource supports a unique set of valid filter fields, filter combinations, and combinations of
 filters and sort fields.
 
-The passed in argument value is a C# ```Dictionary<string, object>``` object that has a property of
+The passed in argument value is a C# ```Dictionary<string, string>``` object that has a property of
 the resource field name to filter on and a passed in value to use in the filter comparison.
 
 #### Filter Types
@@ -390,8 +390,8 @@ using FilesCom.Models;
 
 // non admin users
 var args = new Dictionary<string, object>();
-var filterArgs = new Dictionary<string, object>();
-filterArgs.Add("not_site_admin", true);
+var filterArgs = new Dictionary<string, string>();
+filterArgs.Add("not_site_admin", "true");
 args.Add("filter", filterArgs);
 
 try
@@ -416,7 +416,7 @@ using FilesCom.Models;
 
 // users who haven't logged in since 2024-01-01
 var args = new Dictionary<string, object>();
-var filterArgs = new Dictionary<string, object>();
+var filterArgs = new Dictionary<string, string>();
 filterArgs.Add("last_login_at","2024-01-01");
 args.Add("filter_gteq", filterArgs);
 
@@ -442,7 +442,7 @@ using FilesCom.Models;
 
 // users whose usernames start with 'test'
 var args = new Dictionary<string, object>();
-var filterArgs = new Dictionary<string, object>();
+var filterArgs = new Dictionary<string, string>();
 filterArgs.Add("username","test");
 args.Add("filter_prefix", filterArgs);
 
@@ -468,12 +468,12 @@ using FilesCom.Models;
 
 // users whose usernames start with 'test' and are not admins
 var args = new Dictionary<string, object>();
-var filterPrefixArgs = new Dictionary<string, object>();
-var filterArgs = new Dictionary<string, object>();
-var sortArgs = new Dictionary<string, object>();
+var filterPrefixArgs = new Dictionary<string, string>();
+var filterArgs = new Dictionary<string, string>();
+var sortArgs = new Dictionary<string, string>();
 filterPrefixArgs.Add("username","test");
-filterArgs.Add("not_site_admin", true);
-sortArgs.Add("last_login_at", "asc");
+filterArgs.Add("not_site_admin", "true");
+sortArgs.Add("username", "asc");
 args.Add("filter_prefix", filterPrefixArgs);
 args.Add("filter", filterArgs);
 args.Add("sort_by", sortArgs);
