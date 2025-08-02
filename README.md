@@ -736,12 +736,16 @@ Exception
 |`HistoryPermissionRequiredException`|  `NotAuthorizedException` |
 |`InsufficientPermissionForParamsException`|  `NotAuthorizedException` |
 |`InsufficientPermissionForSiteException`|  `NotAuthorizedException` |
+|`MoverAccessDeniedException`|  `NotAuthorizedException` |
+|`MoverPackageRequiredException`|  `NotAuthorizedException` |
 |`MustAuthenticateWithApiKeyException`|  `NotAuthorizedException` |
 |`NeedAdminPermissionForInboxException`|  `NotAuthorizedException` |
 |`NonAdminsMustQueryByFolderOrPathException`|  `NotAuthorizedException` |
 |`NotAllowedToCreateBundleException`|  `NotAuthorizedException` |
+|`NotEnqueuableSyncException`|  `NotAuthorizedException` |
 |`PasswordChangeNotRequiredException`|  `NotAuthorizedException` |
 |`PasswordChangeRequiredException`|  `NotAuthorizedException` |
+|`PaymentMethodErrorException`|  `NotAuthorizedException` |
 |`ReadOnlySessionException`|  `NotAuthorizedException` |
 |`ReadPermissionRequiredException`|  `NotAuthorizedException` |
 |`ReauthenticationFailedException`|  `NotAuthorizedException` |
@@ -808,6 +812,7 @@ Exception
 |`ResourceBelongsToParentSiteException`|  `ProcessingFailureException` |
 |`ResourceLockedException`|  `ProcessingFailureException` |
 |`SubfolderLockedException`|  `ProcessingFailureException` |
+|`SyncInProgressException`|  `ProcessingFailureException` |
 |`TwoFactorAuthenticationCodeAlreadySentException`|  `ProcessingFailureException` |
 |`TwoFactorAuthenticationCountryBlacklistedException`|  `ProcessingFailureException` |
 |`TwoFactorAuthenticationGeneralErrorException`|  `ProcessingFailureException` |

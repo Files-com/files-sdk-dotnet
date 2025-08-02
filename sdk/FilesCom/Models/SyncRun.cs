@@ -61,10 +61,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("event_errors", new string[0]);
             }
-            if (!this.attributes.ContainsKey("bytes_synced"))
-            {
-                this.attributes.Add("bytes_synced", null);
-            }
             if (!this.attributes.ContainsKey("compared_files"))
             {
                 this.attributes.Add("compared_files", null);
@@ -96,6 +92,18 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("notified"))
             {
                 this.attributes.Add("notified", false);
+            }
+            if (!this.attributes.ContainsKey("dry_run"))
+            {
+                this.attributes.Add("dry_run", false);
+            }
+            if (!this.attributes.ContainsKey("bytes_synced"))
+            {
+                this.attributes.Add("bytes_synced", null);
+            }
+            if (!this.attributes.ContainsKey("estimated_bytes_count"))
+            {
+                this.attributes.Add("estimated_bytes_count", null);
             }
             if (!this.attributes.ContainsKey("created_at"))
             {
@@ -212,17 +220,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Total bytes synced in this run
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("bytes_synced")]
-        public Nullable<Int64> BytesSynced
-        {
-            get { return (Nullable<Int64>)attributes["bytes_synced"]; }
-            private set { attributes["bytes_synced"] = value; }
-        }
-
-        /// <summary>
         /// Number of files compared
         /// </summary>
         [JsonInclude]
@@ -312,6 +309,40 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Whether this run was a dry run (no actual changes made)
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("dry_run")]
+        public bool DryRun
+        {
+            get { return attributes["dry_run"] == null ? false : (bool)attributes["dry_run"]; }
+            private set { attributes["dry_run"] = value; }
+        }
+
+        /// <summary>
+        /// Total bytes synced in this run
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bytes_synced")]
+        public Nullable<Int64> BytesSynced
+        {
+            get { return (Nullable<Int64>)attributes["bytes_synced"]; }
+            private set { attributes["bytes_synced"] = value; }
+        }
+
+        /// <summary>
+        /// Estimated bytes count for this run
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("estimated_bytes_count")]
+        public Nullable<Int64> EstimatedBytesCount
+        {
+            get { return (Nullable<Int64>)attributes["estimated_bytes_count"]; }
+            private set { attributes["estimated_bytes_count"] = value; }
+        }
+
+        /// <summary>
         /// When this run was created
         /// </summary>
         [JsonInclude]
@@ -340,9 +371,8 @@ namespace FilesCom.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `sync_id`, `created_at` or `status`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status` and `sync_id`. Valid field combinations are `[ sync_id, status ]`.
-        ///   sync_id (required) - int64 - ID of the Sync this run belongs to
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `sync_id` or `created_at`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status`, `dry_run` or `sync_id`. Valid field combinations are `[ sync_id, status ]`.
         /// </summary>
         public static FilesList<SyncRun> List(
 
@@ -353,10 +383,6 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (!parameters.ContainsKey("sync_id") || parameters["sync_id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: sync_id", "parameters[\"sync_id\"]");
-            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
@@ -376,10 +402,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
-            }
-            if (parameters.ContainsKey("sync_id") && !(parameters["sync_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: sync_id must be of type Nullable<Int64>", "parameters[\"sync_id\"]");
             }
 
             return new FilesList<SyncRun>($"/sync_runs", System.Net.Http.HttpMethod.Get, parameters, options);

@@ -133,6 +133,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("holiday_region", null);
             }
+            if (!this.attributes.ContainsKey("latest_sync_run"))
+            {
+                this.attributes.Add("latest_sync_run", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -416,6 +420,41 @@ namespace FilesCom.Models
             get { return (string)attributes["holiday_region"]; }
             set { attributes["holiday_region"] = value; }
         }
+
+        /// <summary>
+        /// The latest run of this sync
+        /// </summary>
+        [JsonPropertyName("latest_sync_run")]
+        public SyncRun LatestSyncRun
+        {
+            get { return (SyncRun)attributes["latest_sync_run"]; }
+            set { attributes["latest_sync_run"] = value; }
+        }
+
+        /// <summary>
+        /// Dry Run Sync
+        /// </summary>
+        public async Task DryRun(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/syncs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/dry_run", System.Net.Http.HttpMethod.Post, parameters, options);
+        }
+
 
         /// <summary>
         /// Manually Run Sync
@@ -817,6 +856,39 @@ namespace FilesCom.Models
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
+        }
+
+
+        /// <summary>
+        /// Dry Run Sync
+        /// </summary>
+        public static async Task DryRun(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/syncs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/dry_run", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 

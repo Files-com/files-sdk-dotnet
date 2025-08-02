@@ -29,6 +29,10 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("id"))
+            {
+                this.attributes.Add("id", null);
+            }
             if (!this.attributes.ContainsKey("amount"))
             {
                 this.attributes.Add("amount", null);
@@ -78,6 +82,17 @@ namespace FilesCom.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// Invoice Line item Id
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("id")]
+        public Nullable<Int64> Id
+        {
+            get { return (Nullable<Int64>)attributes["id"]; }
+            private set { attributes["id"] = value; }
+        }
 
         /// <summary>
         /// Invoice line item amount

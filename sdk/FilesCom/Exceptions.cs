@@ -588,6 +588,18 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class MoverAccessDeniedException : NotAuthorizedException
+    {
+        public MoverAccessDeniedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class MoverPackageRequiredException : NotAuthorizedException
+    {
+        public MoverPackageRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class MustAuthenticateWithApiKeyException : NotAuthorizedException
     {
         public MustAuthenticateWithApiKeyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -612,6 +624,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class NotEnqueuableSyncException : NotAuthorizedException
+    {
+        public NotEnqueuableSyncException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class PasswordChangeNotRequiredException : NotAuthorizedException
     {
         public PasswordChangeNotRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -621,6 +639,12 @@ namespace FilesCom
     public class PasswordChangeRequiredException : NotAuthorizedException
     {
         public PasswordChangeRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class PaymentMethodErrorException : NotAuthorizedException
+    {
+        public PaymentMethodErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
@@ -1031,6 +1055,12 @@ namespace FilesCom
     public class SubfolderLockedException : ProcessingFailureException
     {
         public SubfolderLockedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SyncInProgressException : ProcessingFailureException
+    {
+        public SyncInProgressException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
