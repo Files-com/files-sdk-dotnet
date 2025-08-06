@@ -57,13 +57,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("last_login_at", null);
             }
-            if (!this.attributes.ContainsKey("private_key"))
+            if (!this.attributes.ContainsKey("generated_private_key"))
             {
-                this.attributes.Add("private_key", null);
+                this.attributes.Add("generated_private_key", null);
             }
-            if (!this.attributes.ContainsKey("public_key"))
+            if (!this.attributes.ContainsKey("generated_public_key"))
             {
-                this.attributes.Add("public_key", null);
+                this.attributes.Add("generated_public_key", null);
             }
             if (!this.attributes.ContainsKey("username"))
             {
@@ -72,6 +72,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("public_key"))
+            {
+                this.attributes.Add("public_key", null);
             }
             if (!this.attributes.ContainsKey("generate_keypair"))
             {
@@ -181,21 +185,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Only returned when generating keys. Private key generated for the user.
         /// </summary>
-        [JsonPropertyName("private_key")]
-        public string PrivateKey
+        [JsonPropertyName("generated_private_key")]
+        public string GeneratedPrivateKey
         {
-            get { return (string)attributes["private_key"]; }
-            set { attributes["private_key"] = value; }
+            get { return (string)attributes["generated_private_key"]; }
+            set { attributes["generated_private_key"] = value; }
         }
 
         /// <summary>
         /// Only returned when generating keys. Public key generated for the user.
         /// </summary>
-        [JsonPropertyName("public_key")]
-        public string PublicKeyType
+        [JsonPropertyName("generated_public_key")]
+        public string GeneratedPublicKey
         {
-            get { return (string)attributes["public_key"]; }
-            set { attributes["public_key"] = value; }
+            get { return (string)attributes["generated_public_key"]; }
+            set { attributes["generated_public_key"] = value; }
         }
 
         /// <summary>
@@ -216,6 +220,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
             set { attributes["user_id"] = value; }
+        }
+
+        /// <summary>
+        /// Actual contents of SSH key.
+        /// </summary>
+        [JsonPropertyName("public_key")]
+        public string PublicKeyType
+        {
+            get { return (string)attributes["public_key"]; }
+            set { attributes["public_key"] = value; }
         }
 
         /// <summary>

@@ -53,6 +53,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("private_key_md5", null);
             }
+            if (!this.attributes.ContainsKey("generated_public_key"))
+            {
+                this.attributes.Add("generated_public_key", null);
+            }
+            if (!this.attributes.ContainsKey("generated_private_key"))
+            {
+                this.attributes.Add("generated_private_key", null);
+            }
+            if (!this.attributes.ContainsKey("private_key_password_md5"))
+            {
+                this.attributes.Add("private_key_password_md5", null);
+            }
             if (!this.attributes.ContainsKey("public_key"))
             {
                 this.attributes.Add("public_key", null);
@@ -162,6 +174,36 @@ namespace FilesCom.Models
         /// <summary>
         /// Your GPG public key
         /// </summary>
+        [JsonPropertyName("generated_public_key")]
+        public string GeneratedPublicKey
+        {
+            get { return (string)attributes["generated_public_key"]; }
+            set { attributes["generated_public_key"] = value; }
+        }
+
+        /// <summary>
+        /// Your GPG private key.
+        /// </summary>
+        [JsonPropertyName("generated_private_key")]
+        public string GeneratedPrivateKey
+        {
+            get { return (string)attributes["generated_private_key"]; }
+            set { attributes["generated_private_key"] = value; }
+        }
+
+        /// <summary>
+        /// Your GPG private key password. Only required for password protected keys.
+        /// </summary>
+        [JsonPropertyName("private_key_password_md5")]
+        public string PrivateKeyPasswordMd5
+        {
+            get { return (string)attributes["private_key_password_md5"]; }
+            set { attributes["private_key_password_md5"] = value; }
+        }
+
+        /// <summary>
+        /// MD5 hash of your GPG public key
+        /// </summary>
         [JsonPropertyName("public_key")]
         public string PublicKey
         {
@@ -170,7 +212,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG private key.
+        /// MD5 hash of your GPG private key.
         /// </summary>
         [JsonPropertyName("private_key")]
         public string PrivateKey

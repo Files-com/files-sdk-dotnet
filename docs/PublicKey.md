@@ -11,8 +11,8 @@
   "fingerprint_sha256": "V5Q5t/ghT3R8Tol5GX9385bzmpygWVRnLuI9EXNrjCX",
   "status": "complete",
   "last_login_at": "2000-01-01T01:00:00Z",
-  "private_key": "example",
-  "public_key": "example",
+  "generated_private_key": "example",
+  "generated_public_key": "example",
   "username": "User",
   "user_id": 1
 }
@@ -25,10 +25,11 @@
 * `fingerprint_sha256` / `FingerprintSha256`  (string): Public key fingerprint (SHA256)
 * `status` / `Status`  (string): Only returned when generating keys. Can be invalid, not_generated, generating, complete
 * `last_login_at` / `LastLoginAt`  (Nullable<DateTime>): Key's most recent login time via SFTP
-* `private_key` / `PrivateKey`  (string): Only returned when generating keys. Private key generated for the user.
-* `public_key` / `PublicKeyType`  (string): Only returned when generating keys. Public key generated for the user.
+* `generated_private_key` / `GeneratedPrivateKey`  (string): Only returned when generating keys. Private key generated for the user.
+* `generated_public_key` / `GeneratedPublicKey`  (string): Only returned when generating keys. Public key generated for the user.
 * `username` / `Username`  (string): Username of the user this public key is associated with
 * `user_id` / `UserId`  (Nullable<Int64>): User ID this public key is associated with
+* `public_key` / `PublicKeyType`  (string): Actual contents of SSH key.
 * `generate_keypair` / `GenerateKeypair`  (bool): If true, generate a new SSH key pair. Can not be used with `public_key`
 * `generate_private_key_password` / `GeneratePrivateKeyPassword`  (string): Password for the private key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 * `generate_algorithm` / `GenerateAlgorithm`  (string): Type of key to generate.  One of rsa, dsa, ecdsa, ed25519. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
