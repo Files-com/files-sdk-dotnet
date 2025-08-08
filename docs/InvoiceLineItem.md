@@ -12,7 +12,11 @@
   "service_end_at": "2000-01-01T01:00:00Z",
   "service_start_at": "2000-01-01T01:00:00Z",
   "plan": "Premier",
-  "site": "My site"
+  "site": "My site",
+  "prepaid_bytes": 1,
+  "prepaid_bytes_expire_at": "2000-01-01T01:00:00Z",
+  "prepaid_bytes_used": 1,
+  "prepaid_bytes_avaliable": 1
 }
 ```
 
@@ -25,3 +29,7 @@
 * `service_start_at` / `ServiceStartAt`  (Nullable<DateTime>): Invoice line item service start date/time
 * `plan` / `Plan`  (string): Plan name
 * `site` / `Site`  (string): Site name
+* `prepaid_bytes` / `PrepaidBytes`  (Nullable<Int64>): Prepaid bytes purchased for this invoice line item
+* `prepaid_bytes_expire_at` / `PrepaidBytesExpireAt`  (Nullable<DateTime>): When the prepaid bytes expire
+* `prepaid_bytes_used` / `PrepaidBytesUsed`  (Nullable<Int64>): Total prepaid bytes used for this invoice line item
+* `prepaid_bytes_avaliable` / `PrepaidBytesAvaliable`  (Nullable<Int64>): Available prepaid bytes for this invoice line item

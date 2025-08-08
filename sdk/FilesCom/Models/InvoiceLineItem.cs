@@ -65,6 +65,22 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("site", null);
             }
+            if (!this.attributes.ContainsKey("prepaid_bytes"))
+            {
+                this.attributes.Add("prepaid_bytes", null);
+            }
+            if (!this.attributes.ContainsKey("prepaid_bytes_expire_at"))
+            {
+                this.attributes.Add("prepaid_bytes_expire_at", null);
+            }
+            if (!this.attributes.ContainsKey("prepaid_bytes_used"))
+            {
+                this.attributes.Add("prepaid_bytes_used", null);
+            }
+            if (!this.attributes.ContainsKey("prepaid_bytes_avaliable"))
+            {
+                this.attributes.Add("prepaid_bytes_avaliable", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -180,6 +196,50 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["site"]; }
             private set { attributes["site"] = value; }
+        }
+
+        /// <summary>
+        /// Prepaid bytes purchased for this invoice line item
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("prepaid_bytes")]
+        public Nullable<Int64> PrepaidBytes
+        {
+            get { return (Nullable<Int64>)attributes["prepaid_bytes"]; }
+            private set { attributes["prepaid_bytes"] = value; }
+        }
+
+        /// <summary>
+        /// When the prepaid bytes expire
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("prepaid_bytes_expire_at")]
+        public Nullable<DateTime> PrepaidBytesExpireAt
+        {
+            get { return (Nullable<DateTime>)attributes["prepaid_bytes_expire_at"]; }
+            private set { attributes["prepaid_bytes_expire_at"] = value; }
+        }
+
+        /// <summary>
+        /// Total prepaid bytes used for this invoice line item
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("prepaid_bytes_used")]
+        public Nullable<Int64> PrepaidBytesUsed
+        {
+            get { return (Nullable<Int64>)attributes["prepaid_bytes_used"]; }
+            private set { attributes["prepaid_bytes_used"] = value; }
+        }
+
+        /// <summary>
+        /// Available prepaid bytes for this invoice line item
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("prepaid_bytes_avaliable")]
+        public Nullable<Int64> PrepaidBytesAvaliable
+        {
+            get { return (Nullable<Int64>)attributes["prepaid_bytes_avaliable"]; }
+            private set { attributes["prepaid_bytes_avaliable"] = value; }
         }
 
 
