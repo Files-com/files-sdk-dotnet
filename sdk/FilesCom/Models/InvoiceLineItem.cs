@@ -77,9 +77,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("prepaid_bytes_used", null);
             }
-            if (!this.attributes.ContainsKey("prepaid_bytes_avaliable"))
+            if (!this.attributes.ContainsKey("prepaid_bytes_available"))
             {
-                this.attributes.Add("prepaid_bytes_avaliable", null);
+                this.attributes.Add("prepaid_bytes_available", null);
             }
         }
 
@@ -235,11 +235,11 @@ namespace FilesCom.Models
         /// Available prepaid bytes for this invoice line item
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("prepaid_bytes_avaliable")]
-        public Nullable<Int64> PrepaidBytesAvaliable
+        [JsonPropertyName("prepaid_bytes_available")]
+        public Nullable<Int64> PrepaidBytesAvailable
         {
-            get { return (Nullable<Int64>)attributes["prepaid_bytes_avaliable"]; }
-            private set { attributes["prepaid_bytes_avaliable"] = value; }
+            get { return (Nullable<Int64>)attributes["prepaid_bytes_available"]; }
+            private set { attributes["prepaid_bytes_available"] = value; }
         }
 
 

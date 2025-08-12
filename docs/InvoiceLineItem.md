@@ -16,7 +16,7 @@
   "prepaid_bytes": 1,
   "prepaid_bytes_expire_at": "2000-01-01T01:00:00Z",
   "prepaid_bytes_used": 1,
-  "prepaid_bytes_avaliable": 1
+  "prepaid_bytes_available": 1
 }
 ```
 
@@ -32,4 +32,4 @@
 * `prepaid_bytes` / `PrepaidBytes`  (Nullable<Int64>): Prepaid bytes purchased for this invoice line item
 * `prepaid_bytes_expire_at` / `PrepaidBytesExpireAt`  (Nullable<DateTime>): When the prepaid bytes expire
 * `prepaid_bytes_used` / `PrepaidBytesUsed`  (Nullable<Int64>): Total prepaid bytes used for this invoice line item
-* `prepaid_bytes_avaliable` / `PrepaidBytesAvaliable`  (Nullable<Int64>): Available prepaid bytes for this invoice line item
+* `prepaid_bytes_available` / `PrepaidBytesAvailable`  (Nullable<Int64>): Available prepaid bytes for this invoice line item
