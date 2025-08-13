@@ -151,6 +151,7 @@
 * `password` / `Password`  (string): User password.
 * `password_confirmation` / `PasswordConfirmation`  (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` / `AnnouncementsRead`  (bool): Signifies that the user has read all the announcements in the UI.
+* `clear_2fa` / `Clear2fa`  (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
 
 
 ---
@@ -374,6 +375,7 @@ Task<User> User.Update(
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
+* `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
 
 
 ---
@@ -497,6 +499,7 @@ parameters.Add("time_zone", "Pacific Time (US & Canada)");
 parameters.Add("user_root", "example");
 parameters.Add("user_home", "example");
 parameters.Add("username", "user");
+parameters.Add("clear_2fa", false);
 
 User.Update(parameters);
 ```
@@ -551,6 +554,7 @@ User.Update(parameters);
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
+* `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
 
 
 ---

@@ -333,6 +333,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("announcements_read", false);
             }
+            if (!this.attributes.ContainsKey("clear_2fa"))
+            {
+                this.attributes.Add("clear_2fa", false);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -1137,6 +1141,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("clear_2fa")]
+        public bool Clear2fa
+        {
+            get { return attributes["clear_2fa"] == null ? false : (bool)attributes["clear_2fa"]; }
+            set { attributes["clear_2fa"] = value; }
+        }
+
+        /// <summary>
         /// Unlock user who has been locked out due to failed logins
         /// </summary>
         public async Task Unlock(Dictionary<string, object> parameters)
@@ -1260,6 +1275,7 @@ namespace FilesCom.Models
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
         ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
+        ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         /// </summary>
         public async Task<User> Update(Dictionary<string, object> parameters)
         {
@@ -1465,6 +1481,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+            }
+            if (parameters.ContainsKey("clear_2fa") && !(parameters["clear_2fa"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: clear_2fa must be of type bool", "parameters[\"clear_2fa\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -2077,6 +2097,7 @@ namespace FilesCom.Models
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
         ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
         ///   username - string - User's username
+        ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         /// </summary>
         public static async Task<User> Update(
             Nullable<Int64> id,
@@ -2290,6 +2311,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+            }
+            if (parameters.ContainsKey("clear_2fa") && !(parameters["clear_2fa"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: clear_2fa must be of type bool", "parameters[\"clear_2fa\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
