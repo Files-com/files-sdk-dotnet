@@ -153,7 +153,6 @@ Task<Sync> Sync.Create(
 * `dest_path` (string): Absolute destination path
 * `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source
 * `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination
-* `two_way` (bool): Is this a two-way sync?
 * `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
 * `disabled` (bool): Is this sync disabled?
@@ -223,7 +222,6 @@ Task<Sync> Sync.Update(
 * `dest_path` (string): Absolute destination path
 * `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source
 * `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination
-* `two_way` (bool): Is this a two-way sync?
 * `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
 * `disabled` (bool): Is this sync disabled?
@@ -306,7 +304,6 @@ parameters.Add("src_path", "example");
 parameters.Add("dest_path", "example");
 parameters.Add("src_remote_server_id", 1);
 parameters.Add("dest_remote_server_id", 1);
-parameters.Add("two_way", false);
 parameters.Add("keep_after_copy", false);
 parameters.Add("delete_empty_folders", false);
 parameters.Add("disabled", false);
@@ -332,7 +329,6 @@ Sync.Update(parameters);
 * `dest_path` (string): Absolute destination path
 * `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source
 * `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination
-* `two_way` (bool): Is this a two-way sync?
 * `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
 * `disabled` (bool): Is this sync disabled?

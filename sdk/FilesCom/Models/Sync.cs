@@ -489,7 +489,6 @@ namespace FilesCom.Models
         ///   dest_path - string - Absolute destination path
         ///   src_remote_server_id - int64 - Remote server ID for the source
         ///   dest_remote_server_id - int64 - Remote server ID for the destination
-        ///   two_way - boolean - Is this a two-way sync?
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
         ///   disabled - boolean - Is this sync disabled?
@@ -543,10 +542,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dest_remote_server_id") && !(parameters["dest_remote_server_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: dest_remote_server_id must be of type Nullable<Int64>", "parameters[\"dest_remote_server_id\"]");
-            }
-            if (parameters.ContainsKey("two_way") && !(parameters["two_way"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: two_way must be of type bool", "parameters[\"two_way\"]");
             }
             if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
             {
@@ -746,7 +741,6 @@ namespace FilesCom.Models
         ///   dest_path - string - Absolute destination path
         ///   src_remote_server_id - int64 - Remote server ID for the source
         ///   dest_remote_server_id - int64 - Remote server ID for the destination
-        ///   two_way - boolean - Is this a two-way sync?
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
         ///   disabled - boolean - Is this sync disabled?
@@ -792,10 +786,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dest_remote_server_id") && !(parameters["dest_remote_server_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: dest_remote_server_id must be of type Nullable<Int64>", "parameters[\"dest_remote_server_id\"]");
-            }
-            if (parameters.ContainsKey("two_way") && !(parameters["two_way"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: two_way must be of type bool", "parameters[\"two_way\"]");
             }
             if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
             {
@@ -933,7 +923,6 @@ namespace FilesCom.Models
         ///   dest_path - string - Absolute destination path
         ///   src_remote_server_id - int64 - Remote server ID for the source
         ///   dest_remote_server_id - int64 - Remote server ID for the destination
-        ///   two_way - boolean - Is this a two-way sync?
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
         ///   disabled - boolean - Is this sync disabled?
@@ -995,10 +984,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dest_remote_server_id") && !(parameters["dest_remote_server_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: dest_remote_server_id must be of type Nullable<Int64>", "parameters[\"dest_remote_server_id\"]");
-            }
-            if (parameters.ContainsKey("two_way") && !(parameters["two_way"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: two_way must be of type bool", "parameters[\"two_way\"]");
             }
             if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
             {
