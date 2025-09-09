@@ -1016,6 +1016,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class MetadataNotSupportedOnRemotesErrorException : ProcessingFailureException
+    {
+        public MetadataNotSupportedOnRemotesErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class ModelSaveErrorException : ProcessingFailureException
     {
         public ModelSaveErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
