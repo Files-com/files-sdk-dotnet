@@ -1016,9 +1016,9 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class MetadataNotSupportedOnRemotesErrorException : ProcessingFailureException
+    public class MetadataNotSupportedOnRemotesException : ProcessingFailureException
     {
-        public MetadataNotSupportedOnRemotesErrorException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+        public MetadataNotSupportedOnRemotesException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
