@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("health_check_enabled", false);
             }
+            if (!this.attributes.ContainsKey("health_check_results"))
+            {
+                this.attributes.Add("health_check_results", new object[0]);
+            }
             if (!this.attributes.ContainsKey("health_check_type"))
             {
                 this.attributes.Add("health_check_type", null);
@@ -151,6 +155,16 @@ namespace FilesCom.Models
         {
             get { return attributes["health_check_enabled"] == null ? false : (bool)attributes["health_check_enabled"]; }
             set { attributes["health_check_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Array of recent health check results.
+        /// </summary>
+        [JsonPropertyName("health_check_results")]
+        public object[] HealthCheckResults
+        {
+            get { return (object[])attributes["health_check_results"]; }
+            set { attributes["health_check_results"] = value; }
         }
 
         /// <summary>
