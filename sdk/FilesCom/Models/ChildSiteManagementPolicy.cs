@@ -33,21 +33,37 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
-            if (!this.attributes.ContainsKey("site_id"))
+            if (!this.attributes.ContainsKey("policy_type"))
             {
-                this.attributes.Add("site_id", null);
+                this.attributes.Add("policy_type", null);
             }
-            if (!this.attributes.ContainsKey("site_setting_name"))
+            if (!this.attributes.ContainsKey("name"))
             {
-                this.attributes.Add("site_setting_name", null);
+                this.attributes.Add("name", null);
             }
-            if (!this.attributes.ContainsKey("managed_value"))
+            if (!this.attributes.ContainsKey("description"))
             {
-                this.attributes.Add("managed_value", null);
+                this.attributes.Add("description", null);
+            }
+            if (!this.attributes.ContainsKey("value"))
+            {
+                this.attributes.Add("value", null);
+            }
+            if (!this.attributes.ContainsKey("applied_child_site_ids"))
+            {
+                this.attributes.Add("applied_child_site_ids", new Nullable<Int64>[0]);
             }
             if (!this.attributes.ContainsKey("skip_child_site_ids"))
             {
                 this.attributes.Add("skip_child_site_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("updated_at"))
+            {
+                this.attributes.Add("updated_at", null);
             }
         }
 
@@ -68,7 +84,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// ChildSiteManagementPolicy ID
+        /// Policy ID.
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
@@ -78,37 +94,57 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the Site managing the policy
+        /// Type of policy.  Valid values: `settings`.
         /// </summary>
-        [JsonPropertyName("site_id")]
-        public Nullable<Int64> SiteId
+        [JsonPropertyName("policy_type")]
+        public string PolicyType
         {
-            get { return (Nullable<Int64>)attributes["site_id"]; }
-            set { attributes["site_id"] = value; }
+            get { return (string)attributes["policy_type"]; }
+            set { attributes["policy_type"] = value; }
         }
 
         /// <summary>
-        /// The name of the setting that is managed by the policy
+        /// Name for this policy.
         /// </summary>
-        [JsonPropertyName("site_setting_name")]
-        public string SiteSettingName
+        [JsonPropertyName("name")]
+        public string Name
         {
-            get { return (string)attributes["site_setting_name"]; }
-            set { attributes["site_setting_name"] = value; }
+            get { return (string)attributes["name"]; }
+            set { attributes["name"] = value; }
         }
 
         /// <summary>
-        /// The value for the setting that will be enforced for all child sites that are not exempt
+        /// Description for this policy.
         /// </summary>
-        [JsonPropertyName("managed_value")]
-        public string ManagedValue
+        [JsonPropertyName("description")]
+        public string Description
         {
-            get { return (string)attributes["managed_value"]; }
-            set { attributes["managed_value"] = value; }
+            get { return (string)attributes["description"]; }
+            set { attributes["description"] = value; }
         }
 
         /// <summary>
-        /// The list of child site IDs that are exempt from this policy
+        /// Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
+        /// </summary>
+        [JsonPropertyName("value")]
+        public object Value
+        {
+            get { return (object)attributes["value"]; }
+            set { attributes["value"] = value; }
+        }
+
+        /// <summary>
+        /// IDs of child sites that this policy has been applied to. This field is read-only.
+        /// </summary>
+        [JsonPropertyName("applied_child_site_ids")]
+        public Nullable<Int64>[] AppliedChildSiteIds
+        {
+            get { return (Nullable<Int64>[])attributes["applied_child_site_ids"]; }
+            set { attributes["applied_child_site_ids"] = value; }
+        }
+
+        /// <summary>
+        /// IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
         /// </summary>
         [JsonPropertyName("skip_child_site_ids")]
         public Nullable<Int64>[] SkipChildSiteIds
@@ -118,10 +154,34 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// When this policy was created.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// When this policy was last updated.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("updated_at")]
+        public Nullable<DateTime> UpdatedAt
+        {
+            get { return (Nullable<DateTime>)attributes["updated_at"]; }
+            private set { attributes["updated_at"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
-        ///   site_setting_name (required) - string - The name of the setting that is managed by the policy
-        ///   managed_value (required) - string - The value for the setting that will be enforced for all child sites that are not exempt
-        ///   skip_child_site_ids - array(int64) - The list of child site IDs that are exempt from this policy
+        ///   value - string
+        ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        ///   policy_type - string - Type of policy.  Valid values: `settings`.
+        ///   name - string - Name for this policy.
+        ///   description - string - Description for this policy.
         /// </summary>
         public async Task<ChildSiteManagementPolicy> Update(Dictionary<string, object> parameters)
         {
@@ -136,29 +196,29 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
-            if (!parameters.ContainsKey("site_setting_name") || parameters["site_setting_name"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: site_setting_name", "parameters[\"site_setting_name\"]");
-            }
-            if (!parameters.ContainsKey("managed_value") || parameters["managed_value"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: managed_value", "parameters[\"managed_value\"]");
-            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("site_setting_name") && !(parameters["site_setting_name"] is string))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
             {
-                throw new ArgumentException("Bad parameter: site_setting_name must be of type string", "parameters[\"site_setting_name\"]");
-            }
-            if (parameters.ContainsKey("managed_value") && !(parameters["managed_value"] is string))
-            {
-                throw new ArgumentException("Bad parameter: managed_value must be of type string", "parameters[\"managed_value\"]");
+                throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
             }
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: skip_child_site_ids must be of type Nullable<Int64>[]", "parameters[\"skip_child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("policy_type") && !(parameters["policy_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: policy_type must be of type string", "parameters[\"policy_type\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/child_site_management_policies/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -304,9 +364,11 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   site_setting_name (required) - string - The name of the setting that is managed by the policy
-        ///   managed_value (required) - string - The value for the setting that will be enforced for all child sites that are not exempt
-        ///   skip_child_site_ids - array(int64) - The list of child site IDs that are exempt from this policy
+        ///   value - string
+        ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        ///   policy_type (required) - string - Type of policy.  Valid values: `settings`.
+        ///   name - string - Name for this policy.
+        ///   description - string - Description for this policy.
         /// </summary>
         public static async Task<ChildSiteManagementPolicy> Create(
 
@@ -317,25 +379,29 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (!parameters.ContainsKey("site_setting_name") || parameters["site_setting_name"] == null)
+            if (!parameters.ContainsKey("policy_type") || parameters["policy_type"] == null)
             {
-                throw new ArgumentNullException("Parameter missing: site_setting_name", "parameters[\"site_setting_name\"]");
+                throw new ArgumentNullException("Parameter missing: policy_type", "parameters[\"policy_type\"]");
             }
-            if (!parameters.ContainsKey("managed_value") || parameters["managed_value"] == null)
+            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
             {
-                throw new ArgumentNullException("Parameter missing: managed_value", "parameters[\"managed_value\"]");
-            }
-            if (parameters.ContainsKey("site_setting_name") && !(parameters["site_setting_name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: site_setting_name must be of type string", "parameters[\"site_setting_name\"]");
-            }
-            if (parameters.ContainsKey("managed_value") && !(parameters["managed_value"] is string))
-            {
-                throw new ArgumentException("Bad parameter: managed_value must be of type string", "parameters[\"managed_value\"]");
+                throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
             }
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: skip_child_site_ids must be of type Nullable<Int64>[]", "parameters[\"skip_child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("policy_type") && !(parameters["policy_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: policy_type must be of type string", "parameters[\"policy_type\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/child_site_management_policies", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -353,9 +419,11 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   site_setting_name (required) - string - The name of the setting that is managed by the policy
-        ///   managed_value (required) - string - The value for the setting that will be enforced for all child sites that are not exempt
-        ///   skip_child_site_ids - array(int64) - The list of child site IDs that are exempt from this policy
+        ///   value - string
+        ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        ///   policy_type - string - Type of policy.  Valid values: `settings`.
+        ///   name - string - Name for this policy.
+        ///   description - string - Description for this policy.
         /// </summary>
         public static async Task<ChildSiteManagementPolicy> Update(
             Nullable<Int64> id,
@@ -378,29 +446,29 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
-            if (!parameters.ContainsKey("site_setting_name") || parameters["site_setting_name"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: site_setting_name", "parameters[\"site_setting_name\"]");
-            }
-            if (!parameters.ContainsKey("managed_value") || parameters["managed_value"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: managed_value", "parameters[\"managed_value\"]");
-            }
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("site_setting_name") && !(parameters["site_setting_name"] is string))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
             {
-                throw new ArgumentException("Bad parameter: site_setting_name must be of type string", "parameters[\"site_setting_name\"]");
-            }
-            if (parameters.ContainsKey("managed_value") && !(parameters["managed_value"] is string))
-            {
-                throw new ArgumentException("Bad parameter: managed_value must be of type string", "parameters[\"managed_value\"]");
+                throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
             }
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: skip_child_site_ids must be of type Nullable<Int64>[]", "parameters[\"skip_child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("policy_type") && !(parameters["policy_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: policy_type must be of type string", "parameters[\"policy_type\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/child_site_management_policies/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
