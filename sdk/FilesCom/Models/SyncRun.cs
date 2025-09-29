@@ -89,10 +89,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("completed_at", null);
             }
-            if (!this.attributes.ContainsKey("notified"))
-            {
-                this.attributes.Add("notified", false);
-            }
             if (!this.attributes.ContainsKey("dry_run"))
             {
                 this.attributes.Add("dry_run", false);
@@ -294,18 +290,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["completed_at"]; }
             private set { attributes["completed_at"] = value; }
-        }
-
-        /// <summary>
-        /// Whether notifications were sent for this run
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("notified")]
-        public bool Notified
-        {
-            get { return attributes["notified"] == null ? false : (bool)attributes["notified"]; }
-            private set { attributes["notified"] = value; }
         }
 
         /// <summary>
