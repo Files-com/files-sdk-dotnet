@@ -93,6 +93,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("always_mkdir_parents", false);
             }
+            if (!this.attributes.ContainsKey("as2_message_retention_days"))
+            {
+                this.attributes.Add("as2_message_retention_days", null);
+            }
             if (!this.attributes.ContainsKey("ask_about_overwrites"))
             {
                 this.attributes.Add("ask_about_overwrites", false);
@@ -919,6 +923,17 @@ namespace FilesCom.Models
         {
             get { return attributes["always_mkdir_parents"] == null ? false : (bool)attributes["always_mkdir_parents"]; }
             private set { attributes["always_mkdir_parents"] = value; }
+        }
+
+        /// <summary>
+        /// Number of days to retain AS2 messages (incoming and outgoing).
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("as2_message_retention_days")]
+        public Nullable<Int64> As2MessageRetentionDays
+        {
+            get { return (Nullable<Int64>)attributes["as2_message_retention_days"]; }
+            private set { attributes["as2_message_retention_days"] = value; }
         }
 
         /// <summary>
@@ -2804,6 +2819,7 @@ namespace FilesCom.Models
         ///   calculate_file_checksums_sha256 - boolean - Calculate SHA256 checksums for files?
         ///   legacy_checksums_mode - boolean - Use legacy checksums mode?
         ///   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
+        ///   as2_message_retention_days - int64 - Number of days to retain AS2 messages (incoming and outgoing).
         ///   session_expiry - double - Session expiry in hours
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -3107,6 +3123,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("migrate_remote_server_sync_to_sync") && !(parameters["migrate_remote_server_sync_to_sync"] is bool))
             {
                 throw new ArgumentException("Bad parameter: migrate_remote_server_sync_to_sync must be of type bool", "parameters[\"migrate_remote_server_sync_to_sync\"]");
+            }
+            if (parameters.ContainsKey("as2_message_retention_days") && !(parameters["as2_message_retention_days"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: as2_message_retention_days must be of type Nullable<Int64>", "parameters[\"as2_message_retention_days\"]");
             }
             if (parameters.ContainsKey("session_expiry") && !(parameters["session_expiry"] is double))
             {
