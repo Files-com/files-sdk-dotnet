@@ -94,6 +94,7 @@
 * `restart` / `Restart`  (Nullable<Int64>): File byte offset to restart from.
 * `structure` / `Structure`  (string): If copying folder, copy just the structure?
 * `with_rename` / `WithRename`  (bool): Allow file rename instead of overwrite?
+* `buffered_upload` / `BufferedUpload`  (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
 
 
 ---
@@ -145,6 +146,7 @@ Task<RemoteFile> RemoteFile.Create(
 * `size` (Nullable<Int64>): Size of file.
 * `structure` (string): If copying folder, copy just the structure?
 * `with_rename` (bool): Allow file rename instead of overwrite?
+* `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
 
 
 ---

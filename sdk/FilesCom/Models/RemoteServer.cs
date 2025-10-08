@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("port", null);
             }
+            if (!this.attributes.ContainsKey("buffer_uploads_always"))
+            {
+                this.attributes.Add("buffer_uploads_always", false);
+            }
             if (!this.attributes.ContainsKey("max_connections"))
             {
                 this.attributes.Add("max_connections", null);
@@ -412,6 +416,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["port"]; }
             set { attributes["port"] = value; }
+        }
+
+        /// <summary>
+        /// If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("buffer_uploads_always")]
+        public bool BufferUploadsAlways
+        {
+            get { return attributes["buffer_uploads_always"] == null ? false : (bool)attributes["buffer_uploads_always"]; }
+            set { attributes["buffer_uploads_always"] = value; }
         }
 
         /// <summary>
@@ -1212,6 +1227,7 @@ namespace FilesCom.Models
         ///   azure_files_storage_share_name - string - Azure Files:  Storage Share name
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
+        ///   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -1381,6 +1397,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("backblaze_b2_s3_endpoint") && !(parameters["backblaze_b2_s3_endpoint"] is string))
             {
                 throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
+            }
+            if (parameters.ContainsKey("buffer_uploads_always") && !(parameters["buffer_uploads_always"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: buffer_uploads_always must be of type bool", "parameters[\"buffer_uploads_always\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -1757,6 +1777,7 @@ namespace FilesCom.Models
         ///   azure_files_storage_share_name - string - Azure Files:  Storage Share name
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
+        ///   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -1918,6 +1939,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("backblaze_b2_s3_endpoint") && !(parameters["backblaze_b2_s3_endpoint"] is string))
             {
                 throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
+            }
+            if (parameters.ContainsKey("buffer_uploads_always") && !(parameters["buffer_uploads_always"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: buffer_uploads_always must be of type bool", "parameters[\"buffer_uploads_always\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -2207,6 +2232,7 @@ namespace FilesCom.Models
         ///   azure_files_storage_share_name - string - Azure Files:  Storage Share name
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
+        ///   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -2384,6 +2410,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("backblaze_b2_s3_endpoint") && !(parameters["backblaze_b2_s3_endpoint"] is string))
             {
                 throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
+            }
+            if (parameters.ContainsKey("buffer_uploads_always") && !(parameters["buffer_uploads_always"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: buffer_uploads_always must be of type bool", "parameters[\"buffer_uploads_always\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
