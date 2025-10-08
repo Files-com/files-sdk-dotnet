@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("authentication_method", null);
             }
+            if (!this.attributes.ContainsKey("group_ids"))
+            {
+                this.attributes.Add("group_ids", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("inactivity_days"))
             {
                 this.attributes.Add("inactivity_days", null);
@@ -101,6 +105,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["authentication_method"]; }
             set { attributes["authentication_method"] = value; }
+        }
+
+        /// <summary>
+        /// Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
+        /// </summary>
+        [JsonPropertyName("group_ids")]
+        public Nullable<Int64>[] GroupIds
+        {
+            get { return (Nullable<Int64>[])attributes["group_ids"]; }
+            set { attributes["group_ids"] = value; }
         }
 
         /// <summary>
@@ -179,6 +193,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
         ///   authentication_method - string - User authentication method for the rule
+        ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
@@ -209,6 +224,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
             {
                 throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+            }
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: group_ids must be of type Nullable<Int64>[]", "parameters[\"group_ids\"]");
             }
             if (parameters.ContainsKey("inactivity_days") && !(parameters["inactivity_days"] is Nullable<Int64>))
             {
@@ -376,6 +395,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
         ///   authentication_method - string - User authentication method for the rule
+        ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
@@ -398,6 +418,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
             {
                 throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+            }
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: group_ids must be of type Nullable<Int64>[]", "parameters[\"group_ids\"]");
             }
             if (parameters.ContainsKey("inactivity_days") && !(parameters["inactivity_days"] is Nullable<Int64>))
             {
@@ -437,6 +461,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
         ///   authentication_method - string - User authentication method for the rule
+        ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
         ///   include_site_admins - boolean - Include site admins in the rule
         ///   include_folder_admins - boolean - Include folder admins in the rule
@@ -475,6 +500,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
             {
                 throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+            }
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: group_ids must be of type Nullable<Int64>[]", "parameters[\"group_ids\"]");
             }
             if (parameters.ContainsKey("inactivity_days") && !(parameters["inactivity_days"] is Nullable<Int64>))
             {

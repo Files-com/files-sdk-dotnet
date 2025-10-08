@@ -6,6 +6,11 @@
 {
   "id": 1,
   "authentication_method": "password",
+  "group_ids": [
+    1,
+    2,
+    3
+  ],
   "inactivity_days": 12,
   "include_folder_admins": true,
   "include_site_admins": true,
@@ -18,6 +23,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): User Lifecycle Rule ID
 * `authentication_method` / `AuthenticationMethod`  (string): User authentication method for the rule
+* `group_ids` / `GroupIds`  (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` / `InactivityDays`  (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_folder_admins` / `IncludeFolderAdmins`  (bool): Include folder admins in the rule
 * `include_site_admins` / `IncludeSiteAdmins`  (bool): Include site admins in the rule
@@ -78,6 +84,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 
 * `action` (string): Action to take on inactive users (disable or delete)
 * `authentication_method` (string): User authentication method for the rule
+* `group_ids` (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
@@ -102,6 +109,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
 * `action` (string): Action to take on inactive users (disable or delete)
 * `authentication_method` (string): User authentication method for the rule
+* `group_ids` (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
@@ -136,6 +144,7 @@ var UserLifecycleRule = UserLifecycleRule.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("authentication_method", "password");
+parameters.Add("group_ids", [1,2,3]);
 parameters.Add("inactivity_days", 12);
 parameters.Add("include_site_admins", true);
 parameters.Add("include_folder_admins", true);
@@ -150,6 +159,7 @@ UserLifecycleRule.Update(parameters);
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
 * `action` (string): Action to take on inactive users (disable or delete)
 * `authentication_method` (string): User authentication method for the rule
+* `group_ids` (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): Include site admins in the rule
 * `include_folder_admins` (bool): Include folder admins in the rule
