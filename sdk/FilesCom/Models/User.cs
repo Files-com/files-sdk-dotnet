@@ -189,6 +189,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("office_integration_enabled", false);
             }
+            if (!this.attributes.ContainsKey("partner_admin"))
+            {
+                this.attributes.Add("partner_admin", false);
+            }
             if (!this.attributes.ContainsKey("partner_id"))
             {
                 this.attributes.Add("partner_id", null);
@@ -772,6 +776,17 @@ namespace FilesCom.Models
         {
             get { return attributes["office_integration_enabled"] == null ? false : (bool)attributes["office_integration_enabled"]; }
             set { attributes["office_integration_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Is this user a Partner administrator?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("partner_admin")]
+        public bool PartnerAdmin
+        {
+            get { return attributes["partner_admin"] == null ? false : (bool)attributes["partner_admin"]; }
+            set { attributes["partner_admin"] = value; }
         }
 
         /// <summary>
