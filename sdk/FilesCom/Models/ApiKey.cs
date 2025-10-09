@@ -53,6 +53,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("key", null);
             }
+            if (!this.attributes.ContainsKey("aws_style_credentials"))
+            {
+                this.attributes.Add("aws_style_credentials", false);
+            }
+            if (!this.attributes.ContainsKey("aws_access_key_id"))
+            {
+                this.attributes.Add("aws_access_key_id", null);
+            }
+            if (!this.attributes.ContainsKey("aws_secret_key"))
+            {
+                this.attributes.Add("aws_secret_key", null);
+            }
             if (!this.attributes.ContainsKey("last_use_at"))
             {
                 this.attributes.Add("last_use_at", null);
@@ -158,6 +170,37 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["key"]; }
             set { attributes["key"] = value; }
+        }
+
+        /// <summary>
+        /// If `true`, this API key will be usable with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("aws_style_credentials")]
+        public bool AwsStyleCredentials
+        {
+            get { return attributes["aws_style_credentials"] == null ? false : (bool)attributes["aws_style_credentials"]; }
+            set { attributes["aws_style_credentials"] = value; }
+        }
+
+        /// <summary>
+        /// AWS Access Key ID to use with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
+        /// </summary>
+        [JsonPropertyName("aws_access_key_id")]
+        public string AwsAccessKeyId
+        {
+            get { return (string)attributes["aws_access_key_id"]; }
+            set { attributes["aws_access_key_id"] = value; }
+        }
+
+        /// <summary>
+        /// AWS Secret Key to use with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
+        /// </summary>
+        [JsonPropertyName("aws_secret_key")]
+        public string AwsSecretKey
+        {
+            get { return (string)attributes["aws_secret_key"]; }
+            set { attributes["aws_secret_key"] = value; }
         }
 
         /// <summary>
@@ -479,6 +522,7 @@ namespace FilesCom.Models
         ///   expires_at - string - API Key expiration date
         ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   name (required) - string - Internal name for the API Key.  For your use.
+        ///   aws_style_credentials - boolean - If `true`, this API key will be usable with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
         ///   path - string - Folder path restriction for `office_integration` permission set API keys.
         /// </summary>
         public static async Task<ApiKey> Create(
@@ -513,6 +557,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("aws_style_credentials") && !(parameters["aws_style_credentials"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: aws_style_credentials must be of type bool", "parameters[\"aws_style_credentials\"]");
             }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
