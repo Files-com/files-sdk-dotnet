@@ -177,6 +177,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("provision_require_2fa", null);
             }
+            if (!this.attributes.ContainsKey("provision_filesystem_layout"))
+            {
+                this.attributes.Add("provision_filesystem_layout", null);
+            }
             if (!this.attributes.ContainsKey("provider_identifier"))
             {
                 this.attributes.Add("provider_identifier", null);
@@ -416,7 +420,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Subdomain
+        /// Subdomain or domain name for your auth provider.   Example: `https://[subdomain].okta.com/`
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("subdomain")]
@@ -651,6 +655,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["provision_require_2fa"]; }
             private set { attributes["provision_require_2fa"] = value; }
+        }
+
+        /// <summary>
+        /// File System layout to use for auto provisioned users.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("provision_filesystem_layout")]
+        public string ProvisionFilesystemLayout
+        {
+            get { return (string)attributes["provision_filesystem_layout"]; }
+            private set { attributes["provision_filesystem_layout"] = value; }
         }
 
         /// <summary>

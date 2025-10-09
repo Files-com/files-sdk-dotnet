@@ -101,6 +101,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", "");
             }
+            if (!this.attributes.ContainsKey("filesystem_layout"))
+            {
+                this.attributes.Add("filesystem_layout", null);
+            }
             if (!this.attributes.ContainsKey("first_login_at"))
             {
                 this.attributes.Add("first_login_at", null);
@@ -542,6 +546,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["email"]; }
             set { attributes["email"] = value; }
+        }
+
+        /// <summary>
+        /// File system layout
+        /// </summary>
+        [JsonPropertyName("filesystem_layout")]
+        public string FilesystemLayout
+        {
+            get { return (string)attributes["filesystem_layout"]; }
+            set { attributes["filesystem_layout"] = value; }
         }
 
         /// <summary>
@@ -1249,6 +1263,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+        ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
         ///   language - string - Preferred language
@@ -1377,6 +1392,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("filesystem_layout") && !(parameters["filesystem_layout"] is string))
+            {
+                throw new ArgumentException("Bad parameter: filesystem_layout must be of type string", "parameters[\"filesystem_layout\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {
@@ -1707,6 +1726,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+        ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
         ///   language - string - Preferred language
@@ -1830,6 +1850,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("filesystem_layout") && !(parameters["filesystem_layout"] is string))
+            {
+                throw new ArgumentException("Bad parameter: filesystem_layout must be of type string", "parameters[\"filesystem_layout\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {
@@ -2071,6 +2095,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+        ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
         ///   language - string - Preferred language
@@ -2207,6 +2232,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+            }
+            if (parameters.ContainsKey("filesystem_layout") && !(parameters["filesystem_layout"] is string))
+            {
+                throw new ArgumentException("Bad parameter: filesystem_layout must be of type string", "parameters[\"filesystem_layout\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {

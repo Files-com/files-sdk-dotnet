@@ -24,6 +24,7 @@
   "disabled": true,
   "disabled_expired_or_inactive": true,
   "email": "john.doe@files.com",
+  "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",
   "ftp_permission": true,
   "group_ids": "example",
@@ -93,6 +94,7 @@
 * `disabled` / `Disabled`  (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `disabled_expired_or_inactive` / `DisabledExpiredOrInactive`  (bool): Computed property that returns true if user disabled or expired or inactive.
 * `email` / `Email`  (string): User email address
+* `filesystem_layout` / `FilesystemLayout`  (string): File system layout
 * `first_login_at` / `FirstLoginAt`  (Nullable<DateTime>): User's first login time
 * `ftp_permission` / `FtpPermission`  (bool): Can the user access with FTP/FTPS?
 * `group_ids` / `GroupIds`  (string): Comma-separated list of group IDs of which this user is a member
@@ -234,6 +236,7 @@ Task<User> User.Create(
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+* `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
@@ -349,6 +352,7 @@ Task<User> User.Update(
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+* `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
@@ -473,6 +477,7 @@ parameters.Add("bypass_user_lifecycle_rules", false);
 parameters.Add("bypass_site_allowed_ips", false);
 parameters.Add("dav_permission", true);
 parameters.Add("disabled", true);
+parameters.Add("filesystem_layout", "site_root");
 parameters.Add("ftp_permission", true);
 parameters.Add("header_text", "User-specific message.");
 parameters.Add("language", "en");
@@ -528,6 +533,7 @@ User.Update(parameters);
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+* `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
 * `language` (string): Preferred language
