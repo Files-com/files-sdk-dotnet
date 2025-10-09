@@ -1301,6 +1301,7 @@ namespace FilesCom.Models
         ///   company - string - User's company
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_admin - boolean - Is this user a Partner administrator?
         ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -1458,6 +1459,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+            }
+            if (parameters.ContainsKey("partner_admin") && !(parameters["partner_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: partner_admin must be of type bool", "parameters[\"partner_admin\"]");
             }
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
@@ -1769,6 +1774,7 @@ namespace FilesCom.Models
         ///   company - string - User's company
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_admin - boolean - Is this user a Partner administrator?
         ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -1921,6 +1927,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+            }
+            if (parameters.ContainsKey("partner_admin") && !(parameters["partner_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: partner_admin must be of type bool", "parameters[\"partner_admin\"]");
             }
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
@@ -2143,6 +2153,7 @@ namespace FilesCom.Models
         ///   company - string - User's company
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_admin - boolean - Is this user a Partner administrator?
         ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -2308,6 +2319,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+            }
+            if (parameters.ContainsKey("partner_admin") && !(parameters["partner_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: partner_admin must be of type bool", "parameters[\"partner_admin\"]");
             }
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {

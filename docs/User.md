@@ -249,6 +249,7 @@ Task<User> User.Create(
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
+* `partner_admin` (bool): Is this user a Partner administrator?
 * `partner_id` (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -366,6 +367,7 @@ Task<User> User.Update(
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
+* `partner_admin` (bool): Is this user a Partner administrator?
 * `partner_id` (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
@@ -492,6 +494,7 @@ parameters.Add("name", "John Doe");
 parameters.Add("company", "ACME Corp.");
 parameters.Add("notes", "Internal notes on this user.");
 parameters.Add("office_integration_enabled", true);
+parameters.Add("partner_admin", true);
 parameters.Add("partner_id", 1);
 parameters.Add("password_validity_days", 1);
 parameters.Add("readonly_site_admin", true);
@@ -549,6 +552,7 @@ User.Update(parameters);
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
+* `partner_admin` (bool): Is this user a Partner administrator?
 * `partner_id` (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
