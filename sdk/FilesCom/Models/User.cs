@@ -189,6 +189,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("office_integration_enabled", false);
             }
+            if (!this.attributes.ContainsKey("partner_id"))
+            {
+                this.attributes.Add("partner_id", null);
+            }
             if (!this.attributes.ContainsKey("password_set_at"))
             {
                 this.attributes.Add("password_set_at", null);
@@ -771,6 +775,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Partner ID if this user belongs to a Partner
+        /// </summary>
+        [JsonPropertyName("partner_id")]
+        public Nullable<Int64> PartnerId
+        {
+            get { return (Nullable<Int64>)attributes["partner_id"]; }
+            set { attributes["partner_id"] = value; }
+        }
+
+        /// <summary>
         /// Last time the user's password was set
         /// </summary>
         [JsonPropertyName("password_set_at")]
@@ -1272,6 +1286,7 @@ namespace FilesCom.Models
         ///   company - string - User's company
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -1428,6 +1443,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
@@ -1735,6 +1754,7 @@ namespace FilesCom.Models
         ///   company - string - User's company
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -1886,6 +1906,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
@@ -2104,6 +2128,7 @@ namespace FilesCom.Models
         ///   company - string - User's company
         ///   notes - string - Any internal notes on the user
         ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -2268,6 +2293,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {

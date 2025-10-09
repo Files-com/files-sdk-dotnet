@@ -46,6 +46,7 @@
   "notes": "Internal notes on this user.",
   "notification_daily_send_time": 18,
   "office_integration_enabled": true,
+  "partner_id": 1,
   "password_set_at": "2000-01-01T01:00:00Z",
   "password_validity_days": 1,
   "public_keys_count": 1,
@@ -116,6 +117,7 @@
 * `notes` / `Notes`  (string): Any internal notes on the user
 * `notification_daily_send_time` / `NotificationDailySendTime`  (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `office_integration_enabled` / `OfficeIntegrationEnabled`  (bool): Enable integration with Office for the web?
+* `partner_id` / `PartnerId`  (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_set_at` / `PasswordSetAt`  (Nullable<DateTime>): Last time the user's password was set
 * `password_validity_days` / `PasswordValidityDays`  (Nullable<Int64>): Number of days to allow user to use the same password
 * `public_keys_count` / `PublicKeysCount`  (Nullable<Int64>): Number of public keys associated with this user
@@ -245,6 +247,7 @@ Task<User> User.Create(
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
+* `partner_id` (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -361,6 +364,7 @@ Task<User> User.Update(
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
+* `partner_id` (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?
@@ -486,6 +490,7 @@ parameters.Add("name", "John Doe");
 parameters.Add("company", "ACME Corp.");
 parameters.Add("notes", "Internal notes on this user.");
 parameters.Add("office_integration_enabled", true);
+parameters.Add("partner_id", 1);
 parameters.Add("password_validity_days", 1);
 parameters.Add("readonly_site_admin", true);
 parameters.Add("receive_admin_alerts", true);
@@ -542,6 +547,7 @@ User.Update(parameters);
 * `company` (string): User's company
 * `notes` (string): Any internal notes on the user
 * `office_integration_enabled` (bool): Enable integration with Office for the web?
+* `partner_id` (Nullable<Int64>): Partner ID if this user belongs to a Partner
 * `password_validity_days` (Nullable<Int64>): Number of days to allow user to use the same password
 * `readonly_site_admin` (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `receive_admin_alerts` (bool): Should the user receive admin alerts such a certificate expiration notifications and overages?

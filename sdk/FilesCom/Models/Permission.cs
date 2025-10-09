@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_name", null);
             }
+            if (!this.attributes.ContainsKey("partner_id"))
+            {
+                this.attributes.Add("partner_id", null);
+            }
             if (!this.attributes.ContainsKey("permission"))
             {
                 this.attributes.Add("permission", null);
@@ -144,6 +148,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Partner ID (if applicable)
+        /// </summary>
+        [JsonPropertyName("partner_id")]
+        public Nullable<Int64> PartnerId
+        {
+            get { return (Nullable<Int64>)attributes["partner_id"]; }
+            set { attributes["partner_id"] = value; }
+        }
+
+        /// <summary>
         /// Permission type.  See the table referenced in the documentation for an explanation of each permission.
         /// </summary>
         [JsonPropertyName("permission")]
@@ -220,12 +234,13 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `group_id`, `path`, `user_id` or `id`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `group_id` or `user_id`. Valid field combinations are `[ group_id, path ]`, `[ user_id, path ]`, `[ user_id, group_id ]` or `[ user_id, group_id, path ]`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `group_id`, `path`, `user_id`, `partner_id` or `id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `group_id`, `partner_id` or `user_id`. Valid field combinations are `[ group_id, path ]`, `[ partner_id, path ]`, `[ user_id, path ]`, `[ user_id, group_id ]`, `[ user_id, group_id, path ]`, `[ user_id, group_id, partner_id ]` or `[ user_id, group_id, partner_id, path ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
         ///   path - string - Permission path.  If provided, will scope all permissions(including upward) to this path.
         ///   include_groups - boolean - If searching by user or group, also include user's permissions that are inherited from its groups?
         ///   group_id - string
+        ///   partner_id - string
         ///   user_id - string
         /// </summary>
         public static FilesList<Permission> List(
@@ -269,6 +284,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
             }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type string", "parameters[\"partner_id\"]");
+            }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type string", "parameters[\"user_id\"]");
@@ -292,6 +311,7 @@ namespace FilesCom.Models
         ///   group_id - int64 - Group ID. Provide `group_name` or `group_id`
         ///   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
         ///   recursive - boolean - Apply to subfolders recursively?
+        ///   partner_id - int64 - Partner ID if this Permission belongs to a partner.
         ///   user_id - int64 - User ID.  Provide `username` or `user_id`
         ///   username - string - User username.  Provide `username` or `user_id`
         ///   group_name - string - Group name.  Provide `group_name` or `group_id`
@@ -325,6 +345,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {

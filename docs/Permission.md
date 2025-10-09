@@ -10,6 +10,7 @@
   "username": "user",
   "group_id": 1,
   "group_name": "example",
+  "partner_id": 1,
   "permission": "full",
   "recursive": true,
   "site_id": 1
@@ -22,6 +23,7 @@
 * `username` / `Username`  (string): Username (if applicable)
 * `group_id` / `GroupId`  (Nullable<Int64>): Group ID
 * `group_name` / `GroupName`  (string): Group name (if applicable)
+* `partner_id` / `PartnerId`  (Nullable<Int64>): Partner ID (if applicable)
 * `permission` / `PermissionType`  (string): Permission type.  See the table referenced in the documentation for an explanation of each permission.
 * `recursive` / `Recursive`  (bool): Recursive: does this permission apply to subfolders?
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
@@ -43,12 +45,13 @@ Task<FilesList<Permission>> Permission.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `group_id`, `path`, `user_id` or `id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `group_id` or `user_id`. Valid field combinations are `[ group_id, path ]`, `[ user_id, path ]`, `[ user_id, group_id ]` or `[ user_id, group_id, path ]`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `group_id`, `path`, `user_id`, `partner_id` or `id`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `group_id`, `partner_id` or `user_id`. Valid field combinations are `[ group_id, path ]`, `[ partner_id, path ]`, `[ user_id, path ]`, `[ user_id, group_id ]`, `[ user_id, group_id, path ]`, `[ user_id, group_id, partner_id ]` or `[ user_id, group_id, partner_id, path ]`.
 * `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
 * `path` (string): Permission path.  If provided, will scope all permissions(including upward) to this path.
 * `include_groups` (bool): If searching by user or group, also include user's permissions that are inherited from its groups?
 * `group_id` (string): 
+* `partner_id` (string): 
 * `user_id` (string): 
 
 
@@ -70,6 +73,7 @@ Task<Permission> Permission.Create(
 * `group_id` (Nullable<Int64>): Group ID. Provide `group_name` or `group_id`
 * `permission` (string): Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
 * `recursive` (bool): Apply to subfolders recursively?
+* `partner_id` (Nullable<Int64>): Partner ID if this Permission belongs to a partner.
 * `user_id` (Nullable<Int64>): User ID.  Provide `username` or `user_id`
 * `username` (string): User username.  Provide `username` or `user_id`
 * `group_name` (string): Group name.  Provide `group_name` or `group_id`
