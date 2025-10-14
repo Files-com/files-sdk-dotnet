@@ -33,33 +33,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
-            if (!this.attributes.ContainsKey("sync_id"))
-            {
-                this.attributes.Add("sync_id", null);
-            }
-            if (!this.attributes.ContainsKey("site_id"))
-            {
-                this.attributes.Add("site_id", null);
-            }
-            if (!this.attributes.ContainsKey("status"))
-            {
-                this.attributes.Add("status", null);
-            }
-            if (!this.attributes.ContainsKey("src_remote_server_type"))
-            {
-                this.attributes.Add("src_remote_server_type", null);
-            }
-            if (!this.attributes.ContainsKey("dest_remote_server_type"))
-            {
-                this.attributes.Add("dest_remote_server_type", null);
-            }
             if (!this.attributes.ContainsKey("body"))
             {
                 this.attributes.Add("body", null);
             }
-            if (!this.attributes.ContainsKey("event_errors"))
+            if (!this.attributes.ContainsKey("bytes_synced"))
             {
-                this.attributes.Add("event_errors", new string[0]);
+                this.attributes.Add("bytes_synced", null);
             }
             if (!this.attributes.ContainsKey("compared_files"))
             {
@@ -69,41 +49,65 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("compared_folders", null);
             }
-            if (!this.attributes.ContainsKey("errored_files"))
-            {
-                this.attributes.Add("errored_files", null);
-            }
-            if (!this.attributes.ContainsKey("successful_files"))
-            {
-                this.attributes.Add("successful_files", null);
-            }
-            if (!this.attributes.ContainsKey("runtime"))
-            {
-                this.attributes.Add("runtime", null);
-            }
-            if (!this.attributes.ContainsKey("log_url"))
-            {
-                this.attributes.Add("log_url", null);
-            }
             if (!this.attributes.ContainsKey("completed_at"))
             {
                 this.attributes.Add("completed_at", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("dest_remote_server_type"))
+            {
+                this.attributes.Add("dest_remote_server_type", null);
             }
             if (!this.attributes.ContainsKey("dry_run"))
             {
                 this.attributes.Add("dry_run", false);
             }
-            if (!this.attributes.ContainsKey("bytes_synced"))
+            if (!this.attributes.ContainsKey("errored_files"))
             {
-                this.attributes.Add("bytes_synced", null);
+                this.attributes.Add("errored_files", null);
             }
             if (!this.attributes.ContainsKey("estimated_bytes_count"))
             {
                 this.attributes.Add("estimated_bytes_count", null);
             }
-            if (!this.attributes.ContainsKey("created_at"))
+            if (!this.attributes.ContainsKey("event_errors"))
             {
-                this.attributes.Add("created_at", null);
+                this.attributes.Add("event_errors", new string[0]);
+            }
+            if (!this.attributes.ContainsKey("log_url"))
+            {
+                this.attributes.Add("log_url", null);
+            }
+            if (!this.attributes.ContainsKey("runtime"))
+            {
+                this.attributes.Add("runtime", null);
+            }
+            if (!this.attributes.ContainsKey("site_id"))
+            {
+                this.attributes.Add("site_id", null);
+            }
+            if (!this.attributes.ContainsKey("src_remote_server_type"))
+            {
+                this.attributes.Add("src_remote_server_type", null);
+            }
+            if (!this.attributes.ContainsKey("status"))
+            {
+                this.attributes.Add("status", null);
+            }
+            if (!this.attributes.ContainsKey("successful_files"))
+            {
+                this.attributes.Add("successful_files", null);
+            }
+            if (!this.attributes.ContainsKey("sync_id"))
+            {
+                this.attributes.Add("sync_id", null);
+            }
+            if (!this.attributes.ContainsKey("sync_name"))
+            {
+                this.attributes.Add("sync_name", null);
             }
             if (!this.attributes.ContainsKey("updated_at"))
             {
@@ -139,61 +143,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the Sync this run belongs to
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("sync_id")]
-        public Nullable<Int64> SyncId
-        {
-            get { return (Nullable<Int64>)attributes["sync_id"]; }
-            private set { attributes["sync_id"] = value; }
-        }
-
-        /// <summary>
-        /// Site ID
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("site_id")]
-        public Nullable<Int64> SiteId
-        {
-            get { return (Nullable<Int64>)attributes["site_id"]; }
-            private set { attributes["site_id"] = value; }
-        }
-
-        /// <summary>
-        /// Status of the sync run (success, failure, partial_failure, in_progress, skipped)
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("status")]
-        public string Status
-        {
-            get { return (string)attributes["status"]; }
-            private set { attributes["status"] = value; }
-        }
-
-        /// <summary>
-        /// Source remote server type, if any
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("src_remote_server_type")]
-        public string SrcRemoteServerType
-        {
-            get { return (string)attributes["src_remote_server_type"]; }
-            private set { attributes["src_remote_server_type"] = value; }
-        }
-
-        /// <summary>
-        /// Destination remote server type, if any
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("dest_remote_server_type")]
-        public string DestRemoteServerType
-        {
-            get { return (string)attributes["dest_remote_server_type"]; }
-            private set { attributes["dest_remote_server_type"] = value; }
-        }
-
-        /// <summary>
         /// Log or summary body for this run
         /// </summary>
         [JsonInclude]
@@ -205,14 +154,14 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Array of errors encountered during the run
+        /// Total bytes synced in this run
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("event_errors")]
-        public string[] EventErrors
+        [JsonPropertyName("bytes_synced")]
+        public Nullable<Int64> BytesSynced
         {
-            get { return (string[])attributes["event_errors"]; }
-            private set { attributes["event_errors"] = value; }
+            get { return (Nullable<Int64>)attributes["bytes_synced"]; }
+            private set { attributes["bytes_synced"] = value; }
         }
 
         /// <summary>
@@ -238,50 +187,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Number of files that errored
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("errored_files")]
-        public Nullable<Int64> ErroredFiles
-        {
-            get { return (Nullable<Int64>)attributes["errored_files"]; }
-            private set { attributes["errored_files"] = value; }
-        }
-
-        /// <summary>
-        /// Number of files successfully synced
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("successful_files")]
-        public Nullable<Int64> SuccessfulFiles
-        {
-            get { return (Nullable<Int64>)attributes["successful_files"]; }
-            private set { attributes["successful_files"] = value; }
-        }
-
-        /// <summary>
-        /// Total runtime in seconds
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("runtime")]
-        public double Runtime
-        {
-            get { return (double)attributes["runtime"]; }
-            private set { attributes["runtime"] = value; }
-        }
-
-        /// <summary>
-        /// Link to external log file.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("log_url")]
-        public string LogUrl
-        {
-            get { return (string)attributes["log_url"]; }
-            private set { attributes["log_url"] = value; }
-        }
-
-        /// <summary>
         /// When this run was completed
         /// </summary>
         [JsonInclude]
@@ -290,6 +195,28 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["completed_at"]; }
             private set { attributes["completed_at"] = value; }
+        }
+
+        /// <summary>
+        /// When this run was created
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// Destination remote server type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("dest_remote_server_type")]
+        public string DestRemoteServerType
+        {
+            get { return (string)attributes["dest_remote_server_type"]; }
+            private set { attributes["dest_remote_server_type"] = value; }
         }
 
         /// <summary>
@@ -305,14 +232,14 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Total bytes synced in this run
+        /// Number of files that errored
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("bytes_synced")]
-        public Nullable<Int64> BytesSynced
+        [JsonPropertyName("errored_files")]
+        public Nullable<Int64> ErroredFiles
         {
-            get { return (Nullable<Int64>)attributes["bytes_synced"]; }
-            private set { attributes["bytes_synced"] = value; }
+            get { return (Nullable<Int64>)attributes["errored_files"]; }
+            private set { attributes["errored_files"] = value; }
         }
 
         /// <summary>
@@ -327,14 +254,102 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// When this run was created
+        /// Array of errors encountered during the run
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("created_at")]
-        public Nullable<DateTime> CreatedAt
+        [JsonPropertyName("event_errors")]
+        public string[] EventErrors
         {
-            get { return (Nullable<DateTime>)attributes["created_at"]; }
-            private set { attributes["created_at"] = value; }
+            get { return (string[])attributes["event_errors"]; }
+            private set { attributes["event_errors"] = value; }
+        }
+
+        /// <summary>
+        /// Link to external log file.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("log_url")]
+        public string LogUrl
+        {
+            get { return (string)attributes["log_url"]; }
+            private set { attributes["log_url"] = value; }
+        }
+
+        /// <summary>
+        /// Total runtime in seconds
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("runtime")]
+        public double Runtime
+        {
+            get { return (double)attributes["runtime"]; }
+            private set { attributes["runtime"] = value; }
+        }
+
+        /// <summary>
+        /// Site ID
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("site_id")]
+        public Nullable<Int64> SiteId
+        {
+            get { return (Nullable<Int64>)attributes["site_id"]; }
+            private set { attributes["site_id"] = value; }
+        }
+
+        /// <summary>
+        /// Source remote server type, if any
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("src_remote_server_type")]
+        public string SrcRemoteServerType
+        {
+            get { return (string)attributes["src_remote_server_type"]; }
+            private set { attributes["src_remote_server_type"] = value; }
+        }
+
+        /// <summary>
+        /// Status of the sync run (success, failure, partial_failure, in_progress, skipped)
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("status")]
+        public string Status
+        {
+            get { return (string)attributes["status"]; }
+            private set { attributes["status"] = value; }
+        }
+
+        /// <summary>
+        /// Number of files successfully synced
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("successful_files")]
+        public Nullable<Int64> SuccessfulFiles
+        {
+            get { return (Nullable<Int64>)attributes["successful_files"]; }
+            private set { attributes["successful_files"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Sync this run belongs to
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sync_id")]
+        public Nullable<Int64> SyncId
+        {
+            get { return (Nullable<Int64>)attributes["sync_id"]; }
+            private set { attributes["sync_id"] = value; }
+        }
+
+        /// <summary>
+        /// Name of the Sync this run belongs to
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("sync_name")]
+        public string SyncName
+        {
+            get { return (string)attributes["sync_name"]; }
+            private set { attributes["sync_name"] = value; }
         }
 
         /// <summary>
