@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("partner_id"))
+            {
+                this.attributes.Add("partner_id", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -142,7 +146,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// GPG owner's user id
+        /// Partner ID who owns this GPG Key, if applicable.
+        /// </summary>
+        [JsonPropertyName("partner_id")]
+        public Nullable<Int64> PartnerId
+        {
+            get { return (Nullable<Int64>)attributes["partner_id"]; }
+            set { attributes["partner_id"] = value; }
+        }
+
+        /// <summary>
+        /// User ID who owns this GPG Key, if applicable.
         /// </summary>
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
@@ -274,6 +288,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
         ///   public_key - string - MD5 hash of your GPG public key
         ///   private_key - string - MD5 hash of your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
@@ -295,6 +310,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
@@ -467,6 +486,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+        ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
         ///   public_key - string - MD5 hash of your GPG public key
         ///   private_key - string - MD5 hash of your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
@@ -492,6 +512,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
@@ -541,6 +565,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
         ///   public_key - string - MD5 hash of your GPG public key
         ///   private_key - string - MD5 hash of your GPG private key.
         ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
@@ -570,6 +595,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {

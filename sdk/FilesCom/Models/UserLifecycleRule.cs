@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_ids", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("action"))
+            {
+                this.attributes.Add("action", null);
+            }
             if (!this.attributes.ContainsKey("inactivity_days"))
             {
                 this.attributes.Add("inactivity_days", null);
@@ -53,21 +57,25 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("include_site_admins", false);
             }
-            if (!this.attributes.ContainsKey("action"))
+            if (!this.attributes.ContainsKey("name"))
             {
-                this.attributes.Add("action", null);
+                this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("partner_tag"))
+            {
+                this.attributes.Add("partner_tag", null);
+            }
+            if (!this.attributes.ContainsKey("site_id"))
+            {
+                this.attributes.Add("site_id", null);
             }
             if (!this.attributes.ContainsKey("user_state"))
             {
                 this.attributes.Add("user_state", null);
             }
-            if (!this.attributes.ContainsKey("name"))
+            if (!this.attributes.ContainsKey("user_tag"))
             {
-                this.attributes.Add("name", null);
-            }
-            if (!this.attributes.ContainsKey("site_id"))
-            {
-                this.attributes.Add("site_id", null);
+                this.attributes.Add("user_tag", null);
             }
         }
 
@@ -98,7 +106,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// User authentication method for the rule
+        /// User authentication method for which the rule will apply.
         /// </summary>
         [JsonPropertyName("authentication_method")]
         public string AuthenticationMethod
@@ -118,38 +126,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Number of days of inactivity before the rule applies
-        /// </summary>
-        [JsonPropertyName("inactivity_days")]
-        public Nullable<Int64> InactivityDays
-        {
-            get { return (Nullable<Int64>)attributes["inactivity_days"]; }
-            set { attributes["inactivity_days"] = value; }
-        }
-
-        /// <summary>
-        /// Include folder admins in the rule
-        /// </summary>
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("include_folder_admins")]
-        public bool IncludeFolderAdmins
-        {
-            get { return attributes["include_folder_admins"] == null ? false : (bool)attributes["include_folder_admins"]; }
-            set { attributes["include_folder_admins"] = value; }
-        }
-
-        /// <summary>
-        /// Include site admins in the rule
-        /// </summary>
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("include_site_admins")]
-        public bool IncludeSiteAdmins
-        {
-            get { return attributes["include_site_admins"] == null ? false : (bool)attributes["include_site_admins"]; }
-            set { attributes["include_site_admins"] = value; }
-        }
-
-        /// <summary>
         /// Action to take on inactive users (disable or delete)
         /// </summary>
         [JsonPropertyName("action")]
@@ -160,13 +136,35 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// State of the users to apply the rule to (inactive or disabled)
+        /// Number of days of inactivity before the rule applies
         /// </summary>
-        [JsonPropertyName("user_state")]
-        public string UserState
+        [JsonPropertyName("inactivity_days")]
+        public Nullable<Int64> InactivityDays
         {
-            get { return (string)attributes["user_state"]; }
-            set { attributes["user_state"] = value; }
+            get { return (Nullable<Int64>)attributes["inactivity_days"]; }
+            set { attributes["inactivity_days"] = value; }
+        }
+
+        /// <summary>
+        /// If true, the rule will apply to folder admins.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("include_folder_admins")]
+        public bool IncludeFolderAdmins
+        {
+            get { return attributes["include_folder_admins"] == null ? false : (bool)attributes["include_folder_admins"]; }
+            set { attributes["include_folder_admins"] = value; }
+        }
+
+        /// <summary>
+        /// If true, the rule will apply to site admins.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("include_site_admins")]
+        public bool IncludeSiteAdmins
+        {
+            get { return attributes["include_site_admins"] == null ? false : (bool)attributes["include_site_admins"]; }
+            set { attributes["include_site_admins"] = value; }
         }
 
         /// <summary>
@@ -180,6 +178,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        /// </summary>
+        [JsonPropertyName("partner_tag")]
+        public string PartnerTag
+        {
+            get { return (string)attributes["partner_tag"]; }
+            set { attributes["partner_tag"] = value; }
+        }
+
+        /// <summary>
         /// Site ID
         /// </summary>
         [JsonPropertyName("site_id")]
@@ -190,15 +198,37 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// State of the users to apply the rule to (inactive or disabled)
+        /// </summary>
+        [JsonPropertyName("user_state")]
+        public string UserState
+        {
+            get { return (string)attributes["user_state"]; }
+            set { attributes["user_state"] = value; }
+        }
+
+        /// <summary>
+        /// If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        /// </summary>
+        [JsonPropertyName("user_tag")]
+        public string UserTag
+        {
+            get { return (string)attributes["user_tag"]; }
+            set { attributes["user_tag"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
-        ///   authentication_method - string - User authentication method for the rule
+        ///   authentication_method - string - User authentication method for which the rule will apply.
         ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
-        ///   include_site_admins - boolean - Include site admins in the rule
-        ///   include_folder_admins - boolean - Include folder admins in the rule
-        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
+        ///   include_site_admins - boolean - If true, the rule will apply to site admins.
+        ///   include_folder_admins - boolean - If true, the rule will apply to folder admins.
         ///   name - string - User Lifecycle Rule name
+        ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
+        ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         public async Task<UserLifecycleRule> Update(Dictionary<string, object> parameters)
         {
@@ -241,13 +271,21 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("partner_tag") && !(parameters["partner_tag"] is string))
+            {
+                throw new ArgumentException("Bad parameter: partner_tag must be of type string", "parameters[\"partner_tag\"]");
+            }
             if (parameters.ContainsKey("user_state") && !(parameters["user_state"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_state must be of type string", "parameters[\"user_state\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.ContainsKey("user_tag") && !(parameters["user_tag"] is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentException("Bad parameter: user_tag must be of type string", "parameters[\"user_tag\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -309,6 +347,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`.
         /// </summary>
         public static FilesList<UserLifecycleRule> List(
 
@@ -326,6 +365,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
 
             return new FilesList<UserLifecycleRule>($"/user_lifecycle_rules", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -394,13 +437,15 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
-        ///   authentication_method - string - User authentication method for the rule
+        ///   authentication_method - string - User authentication method for which the rule will apply.
         ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
-        ///   include_site_admins - boolean - Include site admins in the rule
-        ///   include_folder_admins - boolean - Include folder admins in the rule
-        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
+        ///   include_site_admins - boolean - If true, the rule will apply to site admins.
+        ///   include_folder_admins - boolean - If true, the rule will apply to folder admins.
         ///   name - string - User Lifecycle Rule name
+        ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
+        ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         public static async Task<UserLifecycleRule> Create(
 
@@ -435,13 +480,21 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("partner_tag") && !(parameters["partner_tag"] is string))
+            {
+                throw new ArgumentException("Bad parameter: partner_tag must be of type string", "parameters[\"partner_tag\"]");
+            }
             if (parameters.ContainsKey("user_state") && !(parameters["user_state"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_state must be of type string", "parameters[\"user_state\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.ContainsKey("user_tag") && !(parameters["user_tag"] is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentException("Bad parameter: user_tag must be of type string", "parameters[\"user_tag\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -460,13 +513,15 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
-        ///   authentication_method - string - User authentication method for the rule
+        ///   authentication_method - string - User authentication method for which the rule will apply.
         ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
-        ///   include_site_admins - boolean - Include site admins in the rule
-        ///   include_folder_admins - boolean - Include folder admins in the rule
-        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
+        ///   include_site_admins - boolean - If true, the rule will apply to site admins.
+        ///   include_folder_admins - boolean - If true, the rule will apply to folder admins.
         ///   name - string - User Lifecycle Rule name
+        ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
+        ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         public static async Task<UserLifecycleRule> Update(
             Nullable<Int64> id,
@@ -517,13 +572,21 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: include_folder_admins must be of type bool", "parameters[\"include_folder_admins\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("partner_tag") && !(parameters["partner_tag"] is string))
+            {
+                throw new ArgumentException("Bad parameter: partner_tag must be of type string", "parameters[\"partner_tag\"]");
+            }
             if (parameters.ContainsKey("user_state") && !(parameters["user_state"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_state must be of type string", "parameters[\"user_state\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.ContainsKey("user_tag") && !(parameters["user_tag"] is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentException("Bad parameter: user_tag must be of type string", "parameters[\"user_tag\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);

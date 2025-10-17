@@ -10,7 +10,8 @@
   "id": 1,
   "name": "Acme Corp",
   "notes": "This is a note about the partner.",
-  "root_folder": "/AcmeCorp"
+  "root_folder": "/AcmeCorp",
+  "tags": "example"
 }
 ```
 
@@ -21,6 +22,7 @@
 * `name` / `Name`  (string): The name of the Partner.
 * `notes` / `Notes`  (string): Notes about this Partner.
 * `root_folder` / `RootFolder`  (string): The root folder path for this Partner.
+* `tags` / `Tags`  (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 
 ---
@@ -73,12 +75,13 @@ Task<Partner> Partner.Create(
 
 ### Parameters
 
+* `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
-* `name` (string): The name of the Partner.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
+* `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 
 ---
@@ -96,12 +99,13 @@ Task<Partner> Partner.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+* `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
-* `name` (string): The name of the Partner.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
+* `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 
 ---
@@ -130,12 +134,13 @@ var Partner = Partner.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("name", "Acme Corp");
 parameters.Add("allow_bypassing_2fa_policies", false);
 parameters.Add("allow_credential_changes", false);
 parameters.Add("allow_user_creation", false);
-parameters.Add("name", "Acme Corp");
 parameters.Add("notes", "This is a note about the partner.");
 parameters.Add("root_folder", "/AcmeCorp");
+parameters.Add("tags", "example");
 
 Partner.Update(parameters);
 ```
@@ -143,12 +148,13 @@ Partner.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+* `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
-* `name` (string): The name of the Partner.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
+* `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 
 
 ---

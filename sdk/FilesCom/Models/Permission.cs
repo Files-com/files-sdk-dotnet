@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("partner_id", null);
             }
+            if (!this.attributes.ContainsKey("partner_name"))
+            {
+                this.attributes.Add("partner_name", null);
+            }
             if (!this.attributes.ContainsKey("permission"))
             {
                 this.attributes.Add("permission", null);
@@ -155,6 +159,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["partner_id"]; }
             set { attributes["partner_id"] = value; }
+        }
+
+        /// <summary>
+        /// Partner name (if applicable)
+        /// </summary>
+        [JsonPropertyName("partner_name")]
+        public string PartnerName
+        {
+            get { return (string)attributes["partner_name"]; }
+            set { attributes["partner_name"] = value; }
         }
 
         /// <summary>

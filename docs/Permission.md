@@ -11,6 +11,7 @@
   "group_id": 1,
   "group_name": "example",
   "partner_id": 1,
+  "partner_name": "Acme Corp.",
   "permission": "full",
   "recursive": true,
   "site_id": 1
@@ -24,6 +25,7 @@
 * `group_id` / `GroupId`  (Nullable<Int64>): Group ID
 * `group_name` / `GroupName`  (string): Group name (if applicable)
 * `partner_id` / `PartnerId`  (Nullable<Int64>): Partner ID (if applicable)
+* `partner_name` / `PartnerName`  (string): Partner name (if applicable)
 * `permission` / `PermissionType`  (string): Permission type.  See the table referenced in the documentation for an explanation of each permission.
 * `recursive` / `Recursive`  (bool): Recursive: does this permission apply to subfolders?
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID

@@ -209,5 +209,56 @@ namespace FilesCom.Models
             return List(parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Scim Log ID.
+        /// </summary>
+        public static async Task<ScimLog> Find(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/scim_logs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<ScimLog>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+        public static async Task<ScimLog> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return await Find(id, parameters, options);
+        }
+
     }
 }

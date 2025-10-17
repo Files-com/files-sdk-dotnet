@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("root_folder", null);
             }
+            if (!this.attributes.ContainsKey("tags"))
+            {
+                this.attributes.Add("tags", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -149,13 +153,24 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+        /// </summary>
+        [JsonPropertyName("tags")]
+        public string Tags
+        {
+            get { return (string)attributes["tags"]; }
+            set { attributes["tags"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
+        ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
-        ///   name - string - The name of the Partner.
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
+        ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         public async Task<Partner> Update(Dictionary<string, object> parameters)
         {
@@ -174,6 +189,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_bypassing_2fa_policies must be of type bool", "parameters[\"allow_bypassing_2fa_policies\"]");
@@ -186,10 +205,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: allow_user_creation must be of type bool", "parameters[\"allow_user_creation\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
@@ -197,6 +212,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
             {
                 throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
+            }
+            if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
+            {
+                throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -347,12 +366,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
-        ///   name - string - The name of the Partner.
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
+        ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         public static async Task<Partner> Create(
 
@@ -363,6 +383,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_bypassing_2fa_policies must be of type bool", "parameters[\"allow_bypassing_2fa_policies\"]");
@@ -375,10 +399,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: allow_user_creation must be of type bool", "parameters[\"allow_user_creation\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
@@ -386,6 +406,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
             {
                 throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
+            }
+            if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
+            {
+                throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -403,12 +427,13 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
-        ///   name - string - The name of the Partner.
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
+        ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         public static async Task<Partner> Update(
             Nullable<Int64> id,
@@ -435,6 +460,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_bypassing_2fa_policies must be of type bool", "parameters[\"allow_bypassing_2fa_policies\"]");
@@ -447,10 +476,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: allow_user_creation must be of type bool", "parameters[\"allow_user_creation\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
@@ -458,6 +483,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
             {
                 throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
+            }
+            if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
+            {
+                throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
