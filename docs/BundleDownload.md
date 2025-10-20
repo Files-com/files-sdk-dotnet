@@ -35,7 +35,7 @@
 
 ---
 
-## List Bundle Downloads
+## List Share Link Downloads
 
 ```
 Task<FilesList<BundleDownload>> BundleDownload.List(

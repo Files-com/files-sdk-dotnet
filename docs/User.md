@@ -160,6 +160,7 @@
 * `password_confirmation` / `PasswordConfirmation`  (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` / `AnnouncementsRead`  (bool): Signifies that the user has read all the announcements in the UI.
 * `clear_2fa` / `Clear2fa`  (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
+* `convert_to_partner_user` / `ConvertToPartnerUser`  (bool): If true, convert this user to a partner user by assigning the partner_id provided.
 
 
 ---
@@ -392,6 +393,7 @@ Task<User> User.Update(
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
 * `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
+* `convert_to_partner_user` (bool): If true, convert this user to a partner user by assigning the partner_id provided.
 
 
 ---
@@ -520,6 +522,7 @@ parameters.Add("user_root", "example");
 parameters.Add("user_home", "example");
 parameters.Add("username", "user");
 parameters.Add("clear_2fa", false);
+parameters.Add("convert_to_partner_user", false);
 
 User.Update(parameters);
 ```
@@ -579,6 +582,7 @@ User.Update(parameters);
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
 * `username` (string): User's username
 * `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
+* `convert_to_partner_user` (bool): If true, convert this user to a partner user by assigning the partner_id provided.
 
 
 ---

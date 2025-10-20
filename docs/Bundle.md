@@ -138,7 +138,7 @@
 
 ---
 
-## List Bundles
+## List Share Links
 
 ```
 Task<FilesList<Bundle>> Bundle.List(
@@ -164,7 +164,7 @@ Task<FilesList<Bundle>> Bundle.List(
 
 ---
 
-## Show Bundle
+## Show Share Link
 
 ```
 Task<Bundle> Bundle.Find(
@@ -181,7 +181,7 @@ Task<Bundle> Bundle.Find(
 
 ---
 
-## Create Bundle
+## Create Share Link
 
 ```
 Task<Bundle> Bundle.Create(
@@ -243,7 +243,7 @@ Task Bundle.Share(
 
 ---
 
-## Update Bundle
+## Update Share Link
 
 ```
 Task<Bundle> Bundle.Update(
@@ -285,7 +285,7 @@ Task<Bundle> Bundle.Update(
 
 ---
 
-## Delete Bundle
+## Delete Share Link
 
 ```
 Task Bundle.Delete(
@@ -326,7 +326,7 @@ Bundle.Share(parameters);
 
 ---
 
-## Update Bundle
+## Update Share Link
 
 ```
 var Bundle = Bundle.Find(1);
@@ -393,7 +393,7 @@ Bundle.Update(parameters);
 
 ---
 
-## Delete Bundle
+## Delete Share Link
 
 ```
 var Bundle = Bundle.Find(1);

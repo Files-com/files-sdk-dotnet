@@ -22,7 +22,7 @@
 
 ---
 
-## List Bundle Notifications
+## List Share Link Notifications
 
 ```
 Task<FilesList<BundleNotification>> BundleNotification.List(
@@ -43,7 +43,7 @@ Task<FilesList<BundleNotification>> BundleNotification.List(
 
 ---
 
-## Show Bundle Notification
+## Show Share Link Notification
 
 ```
 Task<BundleNotification> BundleNotification.Find(
@@ -60,7 +60,7 @@ Task<BundleNotification> BundleNotification.Find(
 
 ---
 
-## Create Bundle Notification
+## Create Share Link Notification
 
 ```
 Task<BundleNotification> BundleNotification.Create(
@@ -81,7 +81,7 @@ Task<BundleNotification> BundleNotification.Create(
 
 ---
 
-## Update Bundle Notification
+## Update Share Link Notification
 
 ```
 Task<BundleNotification> BundleNotification.Update(
@@ -100,7 +100,7 @@ Task<BundleNotification> BundleNotification.Update(
 
 ---
 
-## Delete Bundle Notification
+## Delete Share Link Notification
 
 ```
 Task BundleNotification.Delete(
@@ -117,7 +117,7 @@ Task BundleNotification.Delete(
 
 ---
 
-## Update Bundle Notification
+## Update Share Link Notification
 
 ```
 var BundleNotification = BundleNotification.Find(1);
@@ -139,7 +139,7 @@ BundleNotification.Update(parameters);
 
 ---
 
-## Delete Bundle Notification
+## Delete Share Link Notification
 
 ```
 var BundleNotification = BundleNotification.Find(1);

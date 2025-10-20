@@ -24,7 +24,7 @@
 
 ---
 
-## List Bundle Recipients
+## List Share Link Recipients
 
 ```
 Task<FilesList<BundleRecipient>> BundleRecipient.List(
@@ -46,7 +46,7 @@ Task<FilesList<BundleRecipient>> BundleRecipient.List(
 
 ---
 
-## Create Bundle Recipient
+## Create Share Link Recipient
 
 ```
 Task<BundleRecipient> BundleRecipient.Create(

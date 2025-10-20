@@ -39,7 +39,7 @@
 
 ---
 
-## List Bundle Registrations
+## List Share Link Registrations
 
 ```
 Task<FilesList<BundleRegistration>> BundleRegistration.List(
