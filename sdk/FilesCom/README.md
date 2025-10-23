@@ -1,6 +1,10 @@
 ﻿# Files.com .NET Client
 
-The Files.com .NET client library provides convenient access to the Files.com API from applications using the .NET framework.
+The Files.com .NET client library provides a direct, high performance integration to Files.com from applications using the .NET framework.
+
+Files.com is the cloud-native, next-gen MFT, SFTP, and secure file-sharing platform that replaces brittle legacy servers with one always-on, secure fabric. Automate mission-critical file flows—across any cloud, protocol, or partner—while supporting human collaboration and eliminating manual work.
+
+With universal SFTP, AS2, HTTPS, and 50+ native connectors backed by military-grade encryption, Files.com unifies governance, visibility, and compliance in a single pane of glass.
 
 The content included here should be enough to get started, but please visit our
 [Developer Documentation Website](https://developers.files.com/net/) for the complete documentation.
