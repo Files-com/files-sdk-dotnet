@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allow_credential_changes", false);
             }
+            if (!this.attributes.ContainsKey("allow_providing_gpg_keys"))
+            {
+                this.attributes.Add("allow_providing_gpg_keys", false);
+            }
             if (!this.attributes.ContainsKey("allow_user_creation"))
             {
                 this.attributes.Add("allow_user_creation", false);
@@ -99,6 +103,17 @@ namespace FilesCom.Models
         {
             get { return attributes["allow_credential_changes"] == null ? false : (bool)attributes["allow_credential_changes"]; }
             set { attributes["allow_credential_changes"] = value; }
+        }
+
+        /// <summary>
+        /// Allow Partner Admins to provide GPG keys.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("allow_providing_gpg_keys")]
+        public bool AllowProvidingGpgKeys
+        {
+            get { return attributes["allow_providing_gpg_keys"] == null ? false : (bool)attributes["allow_providing_gpg_keys"]; }
+            set { attributes["allow_providing_gpg_keys"] = value; }
         }
 
         /// <summary>
@@ -167,6 +182,7 @@ namespace FilesCom.Models
         ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+        ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -200,6 +216,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allow_credential_changes") && !(parameters["allow_credential_changes"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_credential_changes must be of type bool", "parameters[\"allow_credential_changes\"]");
+            }
+            if (parameters.ContainsKey("allow_providing_gpg_keys") && !(parameters["allow_providing_gpg_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_providing_gpg_keys must be of type bool", "parameters[\"allow_providing_gpg_keys\"]");
             }
             if (parameters.ContainsKey("allow_user_creation") && !(parameters["allow_user_creation"] is bool))
             {
@@ -369,6 +389,7 @@ namespace FilesCom.Models
         ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+        ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -394,6 +415,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allow_credential_changes") && !(parameters["allow_credential_changes"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_credential_changes must be of type bool", "parameters[\"allow_credential_changes\"]");
+            }
+            if (parameters.ContainsKey("allow_providing_gpg_keys") && !(parameters["allow_providing_gpg_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_providing_gpg_keys must be of type bool", "parameters[\"allow_providing_gpg_keys\"]");
             }
             if (parameters.ContainsKey("allow_user_creation") && !(parameters["allow_user_creation"] is bool))
             {
@@ -430,6 +455,7 @@ namespace FilesCom.Models
         ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+        ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -471,6 +497,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allow_credential_changes") && !(parameters["allow_credential_changes"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_credential_changes must be of type bool", "parameters[\"allow_credential_changes\"]");
+            }
+            if (parameters.ContainsKey("allow_providing_gpg_keys") && !(parameters["allow_providing_gpg_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_providing_gpg_keys must be of type bool", "parameters[\"allow_providing_gpg_keys\"]");
             }
             if (parameters.ContainsKey("allow_user_creation") && !(parameters["allow_user_creation"] is bool))
             {

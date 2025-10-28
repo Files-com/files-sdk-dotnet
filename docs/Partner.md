@@ -6,6 +6,7 @@
 {
   "allow_bypassing_2fa_policies": true,
   "allow_credential_changes": true,
+  "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
   "id": 1,
   "name": "Acme Corp",
@@ -17,6 +18,7 @@
 
 * `allow_bypassing_2fa_policies` / `AllowBypassing2faPolicies`  (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` / `AllowCredentialChanges`  (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` / `AllowProvidingGpgKeys`  (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` / `AllowUserCreation`  (bool): Allow Partner Admins to create users.
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner.
 * `name` / `Name`  (string): The name of the Partner.
@@ -78,6 +80,7 @@ Task<Partner> Partner.Create(
 * `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
@@ -102,6 +105,7 @@ Task<Partner> Partner.Update(
 * `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
@@ -137,6 +141,7 @@ var parameters = new Dictionary<string, object>();
 parameters.Add("name", "Acme Corp");
 parameters.Add("allow_bypassing_2fa_policies", false);
 parameters.Add("allow_credential_changes", false);
+parameters.Add("allow_providing_gpg_keys", false);
 parameters.Add("allow_user_creation", false);
 parameters.Add("notes", "This is a note about the partner.");
 parameters.Add("root_folder", "/AcmeCorp");
@@ -151,6 +156,7 @@ Partner.Update(parameters);
 * `name` (string): The name of the Partner.
 * `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
+* `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
 * `root_folder` (string): The root folder path for this Partner.
