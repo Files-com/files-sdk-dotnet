@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("partner_id", null);
             }
+            if (!this.attributes.ContainsKey("partner_name"))
+            {
+                this.attributes.Add("partner_name", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -153,6 +157,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["partner_id"]; }
             set { attributes["partner_id"] = value; }
+        }
+
+        /// <summary>
+        /// Name of the Partner who owns this GPG Key, if applicable.
+        /// </summary>
+        [JsonPropertyName("partner_name")]
+        public string PartnerName
+        {
+            get { return (string)attributes["partner_name"]; }
+            set { attributes["partner_name"] = value; }
         }
 
         /// <summary>

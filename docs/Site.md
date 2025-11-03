@@ -262,6 +262,7 @@
     "office_integration_enabled": true,
     "partner_admin": true,
     "partner_id": 1,
+    "partner_name": "example",
     "password_set_at": "2000-01-01T01:00:00Z",
     "password_validity_days": 1,
     "public_keys_count": 1,
