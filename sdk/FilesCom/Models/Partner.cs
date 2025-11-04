@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("notes", null);
             }
+            if (!this.attributes.ContainsKey("partner_admin_ids"))
+            {
+                this.attributes.Add("partner_admin_ids", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("root_folder"))
             {
                 this.attributes.Add("root_folder", null);
@@ -159,6 +163,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["notes"]; }
             set { attributes["notes"] = value; }
+        }
+
+        /// <summary>
+        /// Array of User IDs that are Partner Admins for this Partner.
+        /// </summary>
+        [JsonPropertyName("partner_admin_ids")]
+        public Nullable<Int64>[] PartnerAdminIds
+        {
+            get { return (Nullable<Int64>[])attributes["partner_admin_ids"]; }
+            set { attributes["partner_admin_ids"] = value; }
         }
 
         /// <summary>
