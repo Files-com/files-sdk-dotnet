@@ -12,7 +12,12 @@
   "name": "Acme Corp",
   "notes": "This is a note about the partner.",
   "root_folder": "/AcmeCorp",
-  "tags": "example"
+  "tags": "example",
+  "user_ids": [
+    1,
+    2,
+    3
+  ]
 }
 ```
 
@@ -25,6 +30,7 @@
 * `notes` / `Notes`  (string): Notes about this Partner.
 * `root_folder` / `RootFolder`  (string): The root folder path for this Partner.
 * `tags` / `Tags`  (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+* `user_ids` / `UserIds`  (Nullable<Int64>[]): Array of User IDs that belong to this Partner.
 
 
 ---

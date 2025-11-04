@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("tags", null);
             }
+            if (!this.attributes.ContainsKey("user_ids"))
+            {
+                this.attributes.Add("user_ids", new Nullable<Int64>[0]);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -175,6 +179,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["tags"]; }
             set { attributes["tags"] = value; }
+        }
+
+        /// <summary>
+        /// Array of User IDs that belong to this Partner.
+        /// </summary>
+        [JsonPropertyName("user_ids")]
+        public Nullable<Int64>[] UserIds
+        {
+            get { return (Nullable<Int64>[])attributes["user_ids"]; }
+            set { attributes["user_ids"] = value; }
         }
 
         /// <summary>
