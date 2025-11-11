@@ -207,7 +207,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -215,6 +214,7 @@ namespace FilesCom.Models
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   name - string - The name of the Partner.
         /// </summary>
         public async Task<Partner> Update(Dictionary<string, object> parameters)
         {
@@ -232,10 +232,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
@@ -264,6 +260,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -414,7 +414,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -422,6 +421,7 @@ namespace FilesCom.Models
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   name (required) - string - The name of the Partner.
         /// </summary>
         public static async Task<Partner> Create(
 
@@ -432,9 +432,9 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
@@ -464,6 +464,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -480,7 +484,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - The name of the Partner.
         ///   allow_bypassing_2fa_policies - boolean - Allow users created under this Partner to bypass Two-Factor Authentication policies.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -488,6 +491,7 @@ namespace FilesCom.Models
         ///   notes - string - Notes about this Partner.
         ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   name - string - The name of the Partner.
         /// </summary>
         public static async Task<Partner> Update(
             Nullable<Int64> id,
@@ -514,10 +518,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
                 throw new ArgumentException("Bad parameter: allow_bypassing_2fa_policies must be of type bool", "parameters[\"allow_bypassing_2fa_policies\"]");
@@ -545,6 +545,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
