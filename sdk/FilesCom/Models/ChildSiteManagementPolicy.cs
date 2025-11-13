@@ -177,7 +177,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   value - string
+        ///   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
         ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
         ///   policy_type - string - Type of policy.  Valid values: `settings`.
         ///   name - string - Name for this policy.
@@ -200,9 +200,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
-                throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
+                throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
@@ -364,7 +364,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   value - string
+        ///   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
         ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
         ///   policy_type (required) - string - Type of policy.  Valid values: `settings`.
         ///   name - string - Name for this policy.
@@ -383,9 +383,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: policy_type", "parameters[\"policy_type\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
-                throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
+                throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
@@ -419,7 +419,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   value - string
+        ///   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
         ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
         ///   policy_type - string - Type of policy.  Valid values: `settings`.
         ///   name - string - Name for this policy.
@@ -450,9 +450,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is string))
+            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
             {
-                throw new ArgumentException("Bad parameter: value must be of type string", "parameters[\"value\"]");
+                throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
             }
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
