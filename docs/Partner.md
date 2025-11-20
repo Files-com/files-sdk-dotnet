@@ -26,7 +26,7 @@
 }
 ```
 
-* `allow_bypassing_2fa_policies` / `AllowBypassing2faPolicies`  (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
+* `allow_bypassing_2fa_policies` / `AllowBypassing2faPolicies`  (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` / `AllowCredentialChanges`  (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` / `AllowProvidingGpgKeys`  (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` / `AllowUserCreation`  (bool): Allow Partner Admins to create users.
@@ -89,7 +89,7 @@ Task<Partner> Partner.Create(
 
 ### Parameters
 
-* `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
+* `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
@@ -114,7 +114,7 @@ Task<Partner> Partner.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
-* `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
+* `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
@@ -165,7 +165,7 @@ Partner.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
-* `allow_bypassing_2fa_policies` (bool): Allow users created under this Partner to bypass Two-Factor Authentication policies.
+* `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
