@@ -45,6 +45,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("destination_url", null);
             }
+            if (!this.attributes.ContainsKey("file_destination_path"))
+            {
+                this.attributes.Add("file_destination_path", null);
+            }
+            if (!this.attributes.ContainsKey("file_format"))
+            {
+                this.attributes.Add("file_format", null);
+            }
+            if (!this.attributes.ContainsKey("file_interval_minutes"))
+            {
+                this.attributes.Add("file_interval_minutes", null);
+            }
             if (!this.attributes.ContainsKey("additional_headers"))
             {
                 this.attributes.Add("additional_headers", null);
@@ -305,6 +317,36 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["destination_url"]; }
             set { attributes["destination_url"] = value; }
+        }
+
+        /// <summary>
+        /// Applicable only for destination type: file. Destination folder path on Files.com.
+        /// </summary>
+        [JsonPropertyName("file_destination_path")]
+        public string FileDestinationPath
+        {
+            get { return (string)attributes["file_destination_path"]; }
+            set { attributes["file_destination_path"] = value; }
+        }
+
+        /// <summary>
+        /// Applicable only for destination type: file. Generated file format.
+        /// </summary>
+        [JsonPropertyName("file_format")]
+        public string FileFormat
+        {
+            get { return (string)attributes["file_format"]; }
+            set { attributes["file_format"] = value; }
+        }
+
+        /// <summary>
+        /// Applicable only for destination type: file. Interval, in minutes, between file deliveries.
+        /// </summary>
+        [JsonPropertyName("file_interval_minutes")]
+        public Nullable<Int64> FileIntervalMinutes
+        {
+            get { return (Nullable<Int64>)attributes["file_interval_minutes"]; }
+            set { attributes["file_interval_minutes"] = value; }
         }
 
         /// <summary>
@@ -836,6 +878,9 @@ namespace FilesCom.Models
         ///   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
         ///   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
         ///   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+        ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+        ///   file_format - string - Applicable only for destination type: file. Generated file format.
+        ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
         ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -893,6 +938,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+            }
+            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+            }
+            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+            }
+            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
             }
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
@@ -1138,6 +1195,9 @@ namespace FilesCom.Models
         ///   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
         ///   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
         ///   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+        ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+        ///   file_format - string - Applicable only for destination type: file. Generated file format.
+        ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
         ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -1161,7 +1221,7 @@ namespace FilesCom.Models
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
         ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         ///   destination_type (required) - string - Destination Type
-        ///   destination_url (required) - string - Destination Url
+        ///   destination_url - string - Destination Url
         /// </summary>
         public static async Task<SiemHttpDestination> Create(
 
@@ -1175,10 +1235,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("destination_type") || parameters["destination_type"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: destination_type", "parameters[\"destination_type\"]");
-            }
-            if (!parameters.ContainsKey("destination_url") || parameters["destination_url"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: destination_url", "parameters[\"destination_url\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -1195,6 +1251,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+            }
+            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+            }
+            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+            }
+            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
             }
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
@@ -1315,6 +1383,9 @@ namespace FilesCom.Models
         ///   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
         ///   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
         ///   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+        ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+        ///   file_format - string - Applicable only for destination type: file. Generated file format.
+        ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
         ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -1374,6 +1445,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+            }
+            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+            }
+            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+            }
+            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
             }
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
@@ -1474,6 +1557,9 @@ namespace FilesCom.Models
         ///   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
         ///   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
         ///   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+        ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+        ///   file_format - string - Applicable only for destination type: file. Generated file format.
+        ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
         ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
@@ -1539,6 +1625,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+            }
+            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+            }
+            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            {
+                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+            }
+            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
             }
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
