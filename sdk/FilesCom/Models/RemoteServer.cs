@@ -57,9 +57,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("port", null);
             }
-            if (!this.attributes.ContainsKey("buffer_uploads_always"))
+            if (!this.attributes.ContainsKey("buffer_uploads"))
             {
-                this.attributes.Add("buffer_uploads_always", false);
+                this.attributes.Add("buffer_uploads", null);
             }
             if (!this.attributes.ContainsKey("max_connections"))
             {
@@ -419,14 +419,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+        /// If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
         /// </summary>
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("buffer_uploads_always")]
-        public bool BufferUploadsAlways
+        [JsonPropertyName("buffer_uploads")]
+        public string BufferUploads
         {
-            get { return attributes["buffer_uploads_always"] == null ? false : (bool)attributes["buffer_uploads_always"]; }
-            set { attributes["buffer_uploads_always"] = value; }
+            get { return (string)attributes["buffer_uploads"]; }
+            set { attributes["buffer_uploads"] = value; }
         }
 
         /// <summary>
@@ -1227,7 +1226,7 @@ namespace FilesCom.Models
         ///   azure_files_storage_share_name - string - Azure Files:  Storage Share name
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
-        ///   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+        ///   buffer_uploads - string - If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -1398,9 +1397,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
             }
-            if (parameters.ContainsKey("buffer_uploads_always") && !(parameters["buffer_uploads_always"] is bool))
+            if (parameters.ContainsKey("buffer_uploads") && !(parameters["buffer_uploads"] is string))
             {
-                throw new ArgumentException("Bad parameter: buffer_uploads_always must be of type bool", "parameters[\"buffer_uploads_always\"]");
+                throw new ArgumentException("Bad parameter: buffer_uploads must be of type string", "parameters[\"buffer_uploads\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -1777,7 +1776,7 @@ namespace FilesCom.Models
         ///   azure_files_storage_share_name - string - Azure Files:  Storage Share name
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
-        ///   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+        ///   buffer_uploads - string - If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -1940,9 +1939,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
             }
-            if (parameters.ContainsKey("buffer_uploads_always") && !(parameters["buffer_uploads_always"] is bool))
+            if (parameters.ContainsKey("buffer_uploads") && !(parameters["buffer_uploads"] is string))
             {
-                throw new ArgumentException("Bad parameter: buffer_uploads_always must be of type bool", "parameters[\"buffer_uploads_always\"]");
+                throw new ArgumentException("Bad parameter: buffer_uploads must be of type string", "parameters[\"buffer_uploads\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -2232,7 +2231,7 @@ namespace FilesCom.Models
         ///   azure_files_storage_share_name - string - Azure Files:  Storage Share name
         ///   backblaze_b2_bucket - string - Backblaze B2 Cloud Storage: Bucket name
         ///   backblaze_b2_s3_endpoint - string - Backblaze B2 Cloud Storage: S3 Endpoint
-        ///   buffer_uploads_always - boolean - If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+        ///   buffer_uploads - string - If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
@@ -2411,9 +2410,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
             }
-            if (parameters.ContainsKey("buffer_uploads_always") && !(parameters["buffer_uploads_always"] is bool))
+            if (parameters.ContainsKey("buffer_uploads") && !(parameters["buffer_uploads"] is string))
             {
-                throw new ArgumentException("Bad parameter: buffer_uploads_always must be of type bool", "parameters[\"buffer_uploads_always\"]");
+                throw new ArgumentException("Bad parameter: buffer_uploads must be of type string", "parameters[\"buffer_uploads\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {

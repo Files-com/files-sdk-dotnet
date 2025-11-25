@@ -11,7 +11,7 @@
   "remote_home_path": "/home/user1",
   "name": "My Remote server",
   "port": 1,
-  "buffer_uploads_always": true,
+  "buffer_uploads": "example",
   "max_connections": 1,
   "pin_to_site_region": true,
   "pinned_region": "us-east-1",
@@ -70,7 +70,7 @@
 * `remote_home_path` / `RemoteHomePath`  (string): Initial home folder on remote server
 * `name` / `Name`  (string): Internal name for your reference
 * `port` / `Port`  (Nullable<Int64>): Port for remote server.  Not needed for S3.
-* `buffer_uploads_always` / `BufferUploadsAlways`  (bool): If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+* `buffer_uploads` / `BufferUploads`  (string): If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
 * `max_connections` / `MaxConnections`  (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
 * `pin_to_site_region` / `PinToSiteRegion`  (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `pinned_region` / `PinnedRegion`  (string): If set, all communications with this remote server are made through the provided region.
@@ -238,7 +238,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `azure_files_storage_share_name` (string): Azure Files:  Storage Share name
 * `backblaze_b2_bucket` (string): Backblaze B2 Cloud Storage: Bucket name
 * `backblaze_b2_s3_endpoint` (string): Backblaze B2 Cloud Storage: S3 Endpoint
-* `buffer_uploads_always` (bool): If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+* `buffer_uploads` (string): If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `cloudflare_bucket` (string): Cloudflare: Bucket name
 * `cloudflare_endpoint` (string): Cloudflare: endpoint
@@ -349,7 +349,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `azure_files_storage_share_name` (string): Azure Files:  Storage Share name
 * `backblaze_b2_bucket` (string): Backblaze B2 Cloud Storage: Bucket name
 * `backblaze_b2_s3_endpoint` (string): Backblaze B2 Cloud Storage: S3 Endpoint
-* `buffer_uploads_always` (bool): If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+* `buffer_uploads` (string): If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `cloudflare_bucket` (string): Cloudflare: Bucket name
 * `cloudflare_endpoint` (string): Cloudflare: endpoint
@@ -465,7 +465,7 @@ parameters.Add("azure_files_storage_dns_suffix", "file.core.windows.net");
 parameters.Add("azure_files_storage_share_name", "share-name");
 parameters.Add("backblaze_b2_bucket", "my-bucket");
 parameters.Add("backblaze_b2_s3_endpoint", "s3.us-west-001.backblazeb2.com");
-parameters.Add("buffer_uploads_always", true);
+parameters.Add("buffer_uploads", "example");
 parameters.Add("cloudflare_access_key", "example");
 parameters.Add("cloudflare_bucket", "my-bucket");
 parameters.Add("cloudflare_endpoint", "https://<ACCOUNT_ID>.r2.cloudflarestorage.com");
@@ -538,7 +538,7 @@ RemoteServer.Update(parameters);
 * `azure_files_storage_share_name` (string): Azure Files:  Storage Share name
 * `backblaze_b2_bucket` (string): Backblaze B2 Cloud Storage: Bucket name
 * `backblaze_b2_s3_endpoint` (string): Backblaze B2 Cloud Storage: S3 Endpoint
-* `buffer_uploads_always` (bool): If true, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com.
+* `buffer_uploads` (string): If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `cloudflare_bucket` (string): Cloudflare: Bucket name
 * `cloudflare_endpoint` (string): Cloudflare: endpoint
