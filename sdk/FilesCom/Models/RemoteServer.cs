@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("description"))
+            {
+                this.attributes.Add("description", null);
+            }
             if (!this.attributes.ContainsKey("port"))
             {
                 this.attributes.Add("port", null);
@@ -406,6 +410,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// Internal description for your reference
+        /// </summary>
+        [JsonPropertyName("description")]
+        public string Description
+        {
+            get { return (string)attributes["description"]; }
+            set { attributes["description"] = value; }
         }
 
         /// <summary>
@@ -1230,6 +1244,7 @@ namespace FilesCom.Models
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
+        ///   description - string - Internal description for your reference
         ///   dropbox_teams - boolean - Dropbox: If true, list Team folders in root?
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   filebase_access_key - string - Filebase: Access Key.
@@ -1412,6 +1427,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
             {
                 throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
@@ -1780,6 +1799,7 @@ namespace FilesCom.Models
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
+        ///   description - string - Internal description for your reference
         ///   dropbox_teams - boolean - Dropbox: If true, list Team folders in root?
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   filebase_access_key - string - Filebase: Access Key.
@@ -1954,6 +1974,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
             {
                 throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
@@ -2235,6 +2259,7 @@ namespace FilesCom.Models
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   cloudflare_bucket - string - Cloudflare: Bucket name
         ///   cloudflare_endpoint - string - Cloudflare: endpoint
+        ///   description - string - Internal description for your reference
         ///   dropbox_teams - boolean - Dropbox: If true, list Team folders in root?
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   filebase_access_key - string - Filebase: Access Key.
@@ -2425,6 +2450,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
             {
                 throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+            }
+            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            {
+                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
             if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
             {
