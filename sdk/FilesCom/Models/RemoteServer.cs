@@ -217,6 +217,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("files_agent_version", null);
             }
+            if (!this.attributes.ContainsKey("outbound_agent_id"))
+            {
+                this.attributes.Add("outbound_agent_id", null);
+            }
             if (!this.attributes.ContainsKey("filebase_bucket"))
             {
                 this.attributes.Add("filebase_bucket", null);
@@ -826,6 +830,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Route traffic to outbound on a files-agent
+        /// </summary>
+        [JsonPropertyName("outbound_agent_id")]
+        public Nullable<Int64> OutboundAgentId
+        {
+            get { return (Nullable<Int64>)attributes["outbound_agent_id"]; }
+            set { attributes["outbound_agent_id"] = value; }
+        }
+
+        /// <summary>
         /// Filebase: Bucket name
         /// </summary>
         [JsonPropertyName("filebase_bucket")]
@@ -1252,6 +1266,7 @@ namespace FilesCom.Models
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
+        ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -1459,6 +1474,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
             {
                 throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
+            }
+            if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
             {
@@ -1807,6 +1826,7 @@ namespace FilesCom.Models
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
+        ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -2006,6 +2026,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
             {
                 throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
+            }
+            if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
             {
@@ -2267,6 +2291,7 @@ namespace FilesCom.Models
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
+        ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -2482,6 +2507,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
             {
                 throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
+            }
+            if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
             {

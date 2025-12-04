@@ -51,6 +51,7 @@
   "files_agent_root": "example",
   "files_agent_api_token": "example",
   "files_agent_version": "example",
+  "outbound_agent_id": 1,
   "filebase_bucket": "my-bucket",
   "filebase_access_key": "example",
   "cloudflare_bucket": "my-bucket",
@@ -111,6 +112,7 @@
 * `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
 * `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
 * `files_agent_version` / `FilesAgentVersion`  (string): Files Agent version
+* `outbound_agent_id` / `OutboundAgentId`  (Nullable<Int64>): Route traffic to outbound on a files-agent
 * `filebase_bucket` / `FilebaseBucket`  (string): Filebase: Bucket name
 * `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase: Access Key.
 * `cloudflare_bucket` / `CloudflareBucket`  (string): Cloudflare: Bucket name
@@ -252,6 +254,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
+* `outbound_agent_id` (Nullable<Int64>): Route traffic to outbound on a files-agent
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
@@ -364,6 +367,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
+* `outbound_agent_id` (Nullable<Int64>): Route traffic to outbound on a files-agent
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
@@ -481,6 +485,7 @@ parameters.Add("filebase_bucket", "my-bucket");
 parameters.Add("files_agent_permission_set", "read_write");
 parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_version", "example");
+parameters.Add("outbound_agent_id", 1);
 parameters.Add("google_cloud_storage_bucket", "my-bucket");
 parameters.Add("google_cloud_storage_project_id", "my-project");
 parameters.Add("google_cloud_storage_s3_compatible_access_key", "example");
@@ -555,6 +560,7 @@ RemoteServer.Update(parameters);
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
+* `outbound_agent_id` (Nullable<Int64>): Route traffic to outbound on a files-agent
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` (string): Google Cloud Storage: Project ID
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
