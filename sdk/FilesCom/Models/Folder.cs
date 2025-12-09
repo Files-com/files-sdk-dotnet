@@ -61,9 +61,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_by_remote_server_id", null);
             }
-            if (!this.attributes.ContainsKey("created_by_remote_server_sync_id"))
+            if (!this.attributes.ContainsKey("created_by_sync_id"))
             {
-                this.attributes.Add("created_by_remote_server_sync_id", null);
+                this.attributes.Add("created_by_sync_id", null);
             }
             if (!this.attributes.ContainsKey("custom_metadata"))
             {
@@ -105,9 +105,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("last_modified_by_remote_server_id", null);
             }
-            if (!this.attributes.ContainsKey("last_modified_by_remote_server_sync_id"))
+            if (!this.attributes.ContainsKey("last_modified_by_sync_id"))
             {
-                this.attributes.Add("last_modified_by_remote_server_sync_id", null);
+                this.attributes.Add("last_modified_by_sync_id", null);
             }
             if (!this.attributes.ContainsKey("mtime"))
             {
@@ -272,13 +272,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the Remote Server Sync that created the file/folder
+        /// ID of the Sync that created the file/folder
         /// </summary>
-        [JsonPropertyName("created_by_remote_server_sync_id")]
-        public Nullable<Int64> CreatedByRemoteServerSyncId
+        [JsonPropertyName("created_by_sync_id")]
+        public Nullable<Int64> CreatedBySyncId
         {
-            get { return (Nullable<Int64>)attributes["created_by_remote_server_sync_id"]; }
-            set { attributes["created_by_remote_server_sync_id"] = value; }
+            get { return (Nullable<Int64>)attributes["created_by_sync_id"]; }
+            set { attributes["created_by_sync_id"] = value; }
         }
 
         /// <summary>
@@ -383,13 +383,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the Remote Server Sync that last modified the file/folder
+        /// ID of the Sync that last modified the file/folder
         /// </summary>
-        [JsonPropertyName("last_modified_by_remote_server_sync_id")]
-        public Nullable<Int64> LastModifiedByRemoteServerSyncId
+        [JsonPropertyName("last_modified_by_sync_id")]
+        public Nullable<Int64> LastModifiedBySyncId
         {
-            get { return (Nullable<Int64>)attributes["last_modified_by_remote_server_sync_id"]; }
-            set { attributes["last_modified_by_remote_server_sync_id"] = value; }
+            get { return (Nullable<Int64>)attributes["last_modified_by_sync_id"]; }
+            set { attributes["last_modified_by_sync_id"] = value; }
         }
 
         /// <summary>
