@@ -510,12 +510,11 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at` and `as2_partner_id`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]` and `[ as2_partner_id, created_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
-        ///   as2_partner_id - int64 - As2 Partner ID.  If provided, will return message specific to that partner.
         /// </summary>
         public static FilesList<As2OutgoingMessage> List(
 
@@ -557,10 +556,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
-            }
-            if (parameters.ContainsKey("as2_partner_id") && !(parameters["as2_partner_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: as2_partner_id must be of type Nullable<Int64>", "parameters[\"as2_partner_id\"]");
             }
 
             return new FilesList<As2OutgoingMessage>($"/as2_outgoing_messages", System.Net.Http.HttpMethod.Get, parameters, options);
