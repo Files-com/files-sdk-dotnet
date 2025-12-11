@@ -207,7 +207,6 @@
   "smtp_from": "me@my-mail-server.com",
   "smtp_port": 25,
   "smtp_username": "mail",
-  "session_expiry": 6.0,
   "session_expiry_minutes": 360,
   "snapshot_sharing_enabled": true,
   "ssl_required": true,
@@ -460,7 +459,6 @@
 * `smtp_from` / `SmtpFrom`  (string): From address to use when mailing through custom SMTP
 * `smtp_port` / `SmtpPort`  (Nullable<Int64>): SMTP server port
 * `smtp_username` / `SmtpUsername`  (string): SMTP server username
-* `session_expiry` / `SessionExpiry`  (double): Session expiry in hours
 * `session_expiry_minutes` / `SessionExpiryMinutes`  (Nullable<Int64>): Session expiry in minutes
 * `snapshot_sharing_enabled` / `SnapshotSharingEnabled`  (bool): Allow snapshot share links creation
 * `ssl_required` / `SslRequired`  (bool): Is SSL required?  Disabling this is insecure.
@@ -573,7 +571,7 @@ Task<Site> Site.Update(
 * `legacy_checksums_mode` (bool): Use legacy checksums mode?
 * `migrate_remote_server_sync_to_sync` (bool): If true, we will migrate all remote server syncs to the new Sync model.
 * `as2_message_retention_days` (Nullable<Int64>): Number of days to retain AS2 messages (incoming and outgoing).
-* `session_expiry` (double): Session expiry in hours
+* `session_expiry_minutes` (Nullable<Int64>): Session expiry in minutes
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `sftp_insecure_ciphers` (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
 * `sftp_insecure_diffie_hellman` (bool): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
@@ -695,4 +693,3 @@ Task<Site> Site.Update(
 * `ldap_password_change` (string): New LDAP password.
 * `ldap_password_change_confirmation` (string): Confirm new LDAP password.
 * `smtp_password` (string): Password for SMTP server.
-* `session_expiry_minutes` (Nullable<Int64>): Session expiry in minutes
