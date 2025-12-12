@@ -120,7 +120,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Your GPG key ID.
+        /// GPG key ID.
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
@@ -130,7 +130,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG key expiration date.
+        /// GPG key expiration date.
         /// </summary>
         [JsonPropertyName("expires_at")]
         public Nullable<DateTime> ExpiresAt
@@ -140,7 +140,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG key name.
+        /// GPG key name.
         /// </summary>
         [JsonPropertyName("name")]
         public string Name
@@ -180,7 +180,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// MD5 hash of your GPG public key
+        /// MD5 hash of the GPG public key
         /// </summary>
         [JsonPropertyName("public_key_md5")]
         public string PublicKeyMd5
@@ -190,7 +190,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// MD5 hash of your GPG private key.
+        /// MD5 hash of the GPG private key.
         /// </summary>
         [JsonPropertyName("private_key_md5")]
         public string PrivateKeyMd5
@@ -200,7 +200,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG public key
+        /// GPG public key
         /// </summary>
         [JsonPropertyName("generated_public_key")]
         public string GeneratedPublicKey
@@ -210,7 +210,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG private key.
+        /// GPG private key.
         /// </summary>
         [JsonPropertyName("generated_private_key")]
         public string GeneratedPrivateKey
@@ -220,7 +220,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG private key password. Only required for password protected keys.
+        /// GPG private key password. Only required for password protected keys.
         /// </summary>
         [JsonPropertyName("private_key_password_md5")]
         public string PrivateKeyPasswordMd5
@@ -230,7 +230,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// MD5 hash of your GPG public key
+        /// The GPG public key
         /// </summary>
         [JsonPropertyName("public_key")]
         public string PublicKey
@@ -240,7 +240,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// MD5 hash of your GPG private key.
+        /// The GPG private key
         /// </summary>
         [JsonPropertyName("private_key")]
         public string PrivateKey
@@ -250,7 +250,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Your GPG private key password. Only required for password protected keys.
+        /// The GPG private key password
         /// </summary>
         [JsonPropertyName("private_key_password")]
         public string PrivateKeyPassword
@@ -303,10 +303,10 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-        ///   public_key - string - MD5 hash of your GPG public key
-        ///   private_key - string - MD5 hash of your GPG private key.
-        ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
-        ///   name - string - Your GPG key name.
+        ///   public_key - string - The GPG public key
+        ///   private_key - string - The GPG private key
+        ///   private_key_password - string - The GPG private key password
+        ///   name - string - GPG key name.
         /// </summary>
         public async Task<GpgKey> Update(Dictionary<string, object> parameters)
         {
@@ -501,10 +501,10 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-        ///   public_key - string - MD5 hash of your GPG public key
-        ///   private_key - string - MD5 hash of your GPG private key.
-        ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
-        ///   name (required) - string - Your GPG key name.
+        ///   public_key - string - The GPG public key
+        ///   private_key - string - The GPG private key
+        ///   private_key_password - string - The GPG private key password
+        ///   name (required) - string - GPG key name.
         ///   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
         ///   generate_keypair - boolean - If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
         ///   generate_full_name - string - Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -580,10 +580,10 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-        ///   public_key - string - MD5 hash of your GPG public key
-        ///   private_key - string - MD5 hash of your GPG private key.
-        ///   private_key_password - string - Your GPG private key password. Only required for password protected keys.
-        ///   name - string - Your GPG key name.
+        ///   public_key - string - The GPG public key
+        ///   private_key - string - The GPG private key
+        ///   private_key_password - string - The GPG private key password
+        ///   name - string - GPG key name.
         /// </summary>
         public static async Task<GpgKey> Update(
             Nullable<Int64> id,

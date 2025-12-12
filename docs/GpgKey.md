@@ -14,24 +14,24 @@
   "private_key_md5": "ab236cfe4a195f0226bc2e674afdd6b0",
   "generated_public_key": "7f8bc1210b09b9ddf469e6b6b8920e76",
   "generated_private_key": "ab236cfe4a195f0226bc2e674afdd6b0",
-  "private_key_password_md5": "[your GPG private key password]"
+  "private_key_password_md5": "[the GPG private key password]"
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Your GPG key ID.
-* `expires_at` / `ExpiresAt`  (Nullable<DateTime>): Your GPG key expiration date.
-* `name` / `Name`  (string): Your GPG key name.
+* `id` / `Id`  (Nullable<Int64>): GPG key ID.
+* `expires_at` / `ExpiresAt`  (Nullable<DateTime>): GPG key expiration date.
+* `name` / `Name`  (string): GPG key name.
 * `partner_id` / `PartnerId`  (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
 * `partner_name` / `PartnerName`  (string): Name of the Partner who owns this GPG Key, if applicable.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID who owns this GPG Key, if applicable.
-* `public_key_md5` / `PublicKeyMd5`  (string): MD5 hash of your GPG public key
-* `private_key_md5` / `PrivateKeyMd5`  (string): MD5 hash of your GPG private key.
-* `generated_public_key` / `GeneratedPublicKey`  (string): Your GPG public key
-* `generated_private_key` / `GeneratedPrivateKey`  (string): Your GPG private key.
-* `private_key_password_md5` / `PrivateKeyPasswordMd5`  (string): Your GPG private key password. Only required for password protected keys.
-* `public_key` / `PublicKey`  (string): MD5 hash of your GPG public key
-* `private_key` / `PrivateKey`  (string): MD5 hash of your GPG private key.
-* `private_key_password` / `PrivateKeyPassword`  (string): Your GPG private key password. Only required for password protected keys.
+* `public_key_md5` / `PublicKeyMd5`  (string): MD5 hash of the GPG public key
+* `private_key_md5` / `PrivateKeyMd5`  (string): MD5 hash of the GPG private key.
+* `generated_public_key` / `GeneratedPublicKey`  (string): GPG public key
+* `generated_private_key` / `GeneratedPrivateKey`  (string): GPG private key.
+* `private_key_password_md5` / `PrivateKeyPasswordMd5`  (string): GPG private key password. Only required for password protected keys.
+* `public_key` / `PublicKey`  (string): The GPG public key
+* `private_key` / `PrivateKey`  (string): The GPG private key
+* `private_key_password` / `PrivateKeyPassword`  (string): The GPG private key password
 * `generate_expires_at` / `GenerateExpiresAt`  (string): Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 * `generate_keypair` / `GenerateKeypair`  (bool): If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
 * `generate_full_name` / `GenerateFullName`  (string): Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -91,10 +91,10 @@ Task<GpgKey> GpgKey.Create(
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `partner_id` (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
-* `public_key` (string): MD5 hash of your GPG public key
-* `private_key` (string): MD5 hash of your GPG private key.
-* `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
-* `name` (string): Required - Your GPG key name.
+* `public_key` (string): The GPG public key
+* `private_key` (string): The GPG private key
+* `private_key_password` (string): The GPG private key password
+* `name` (string): Required - GPG key name.
 * `generate_expires_at` (string): Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 * `generate_keypair` (bool): If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
 * `generate_full_name` (string): Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -117,10 +117,10 @@ Task<GpgKey> GpgKey.Update(
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
 * `partner_id` (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
-* `public_key` (string): MD5 hash of your GPG public key
-* `private_key` (string): MD5 hash of your GPG private key.
-* `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
-* `name` (string): Your GPG key name.
+* `public_key` (string): The GPG public key
+* `private_key` (string): The GPG private key
+* `private_key_password` (string): The GPG private key password
+* `name` (string): GPG key name.
 
 
 ---
@@ -150,9 +150,6 @@ var GpgKey = GpgKey.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("partner_id", 1);
-parameters.Add("public_key", "7f8bc1210b09b9ddf469e6b6b8920e76");
-parameters.Add("private_key", "ab236cfe4a195f0226bc2e674afdd6b0");
-parameters.Add("private_key_password", "[your GPG private key password]");
 parameters.Add("name", "key name");
 
 GpgKey.Update(parameters);
@@ -162,10 +159,10 @@ GpgKey.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
 * `partner_id` (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
-* `public_key` (string): MD5 hash of your GPG public key
-* `private_key` (string): MD5 hash of your GPG private key.
-* `private_key_password` (string): Your GPG private key password. Only required for password protected keys.
-* `name` (string): Your GPG key name.
+* `public_key` (string): The GPG public key
+* `private_key` (string): The GPG private key
+* `private_key_password` (string): The GPG private key password
+* `name` (string): GPG key name.
 
 
 ---
