@@ -77,6 +77,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("pinned_region", null);
             }
+            if (!this.attributes.ContainsKey("remote_server_credential_id"))
+            {
+                this.attributes.Add("remote_server_credential_id", null);
+            }
             if (!this.attributes.ContainsKey("s3_bucket"))
             {
                 this.attributes.Add("s3_bucket", null);
@@ -427,7 +431,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Port for remote server.  Not needed for S3.
+        /// Port for remote server.
         /// </summary>
         [JsonPropertyName("port")]
         public Nullable<Int64> Port
@@ -475,6 +479,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["pinned_region"]; }
             set { attributes["pinned_region"] = value; }
+        }
+
+        /// <summary>
+        /// ID of Remote Server Credential, if applicable.
+        /// </summary>
+        [JsonPropertyName("remote_server_credential_id")]
+        public Nullable<Int64> RemoteServerCredentialId
+        {
+            get { return (Nullable<Int64>)attributes["remote_server_credential_id"]; }
+            set { attributes["remote_server_credential_id"] = value; }
         }
 
         /// <summary>
@@ -548,7 +562,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Remote server username.  Not needed for S3 buckets.
+        /// Remote server username.
         /// </summary>
         [JsonPropertyName("username")]
         public string Username
@@ -1278,7 +1292,8 @@ namespace FilesCom.Models
         ///   name - string - Internal name for your reference
         ///   one_drive_account_type - string - OneDrive: Either personal or business_other account types
         ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-        ///   port - int64 - Port for remote server.  Not needed for S3.
+        ///   port - int64 - Port for remote server.
+        ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1289,7 +1304,7 @@ namespace FilesCom.Models
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
         ///   server_type - string - Remote server type.
         ///   ssl - string - Should we require SSL?
-        ///   username - string - Remote server username.  Not needed for S3 buckets.
+        ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
@@ -1526,6 +1541,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
             }
             if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
             {
@@ -1838,7 +1857,8 @@ namespace FilesCom.Models
         ///   name - string - Internal name for your reference
         ///   one_drive_account_type - string - OneDrive: Either personal or business_other account types
         ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-        ///   port - int64 - Port for remote server.  Not needed for S3.
+        ///   port - int64 - Port for remote server.
+        ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1849,7 +1869,7 @@ namespace FilesCom.Models
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
         ///   server_type - string - Remote server type.
         ///   ssl - string - Should we require SSL?
-        ///   username - string - Remote server username.  Not needed for S3 buckets.
+        ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
@@ -2079,6 +2099,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
             }
+            if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
+            }
             if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_bucket must be of type string", "parameters[\"s3_bucket\"]");
@@ -2303,7 +2327,8 @@ namespace FilesCom.Models
         ///   name - string - Internal name for your reference
         ///   one_drive_account_type - string - OneDrive: Either personal or business_other account types
         ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-        ///   port - int64 - Port for remote server.  Not needed for S3.
+        ///   port - int64 - Port for remote server.
+        ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -2314,7 +2339,7 @@ namespace FilesCom.Models
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
         ///   server_type - string - Remote server type.
         ///   ssl - string - Should we require SSL?
-        ///   username - string - Remote server username.  Not needed for S3 buckets.
+        ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
@@ -2559,6 +2584,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
             }
             if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
             {

@@ -16,6 +16,7 @@
   "max_connections": 1,
   "pin_to_site_region": true,
   "pinned_region": "us-east-1",
+  "remote_server_credential_id": 1,
   "s3_bucket": "my-bucket",
   "s3_region": "us-east-1",
   "aws_access_key": "example",
@@ -72,11 +73,12 @@
 * `remote_home_path` / `RemoteHomePath`  (string): Initial home folder on remote server
 * `name` / `Name`  (string): Internal name for your reference
 * `description` / `Description`  (string): Internal description for your reference
-* `port` / `Port`  (Nullable<Int64>): Port for remote server.  Not needed for S3.
+* `port` / `Port`  (Nullable<Int64>): Port for remote server.
 * `buffer_uploads` / `BufferUploads`  (string): If set to always, uploads to this server will be uploaded first to Files.com before being sent to the remote server. This can improve performance in certain access patterns, such as high-latency connections.  It will cause data to be temporarily stored in Files.com. If set to auto, we will perform this optimization if we believe it to be a benefit in a given situation.
 * `max_connections` / `MaxConnections`  (Nullable<Int64>): Max number of parallel connections.  Ignored for S3 connections (we will parallelize these as much as possible).
 * `pin_to_site_region` / `PinToSiteRegion`  (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `pinned_region` / `PinnedRegion`  (string): If set, all communications with this remote server are made through the provided region.
+* `remote_server_credential_id` / `RemoteServerCredentialId`  (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` / `S3Bucket`  (string): S3 bucket name
 * `s3_region` / `S3Region`  (string): S3 region
 * `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
@@ -84,7 +86,7 @@
 * `server_host_key` / `ServerHostKey`  (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` / `ServerType`  (string): Remote server type.
 * `ssl` / `Ssl`  (string): Should we require SSL?
-* `username` / `Username`  (string): Remote server username.  Not needed for S3 buckets.
+* `username` / `Username`  (string): Remote server username.
 * `google_cloud_storage_bucket` / `GoogleCloudStorageBucket`  (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_project_id` / `GoogleCloudStorageProjectId`  (string): Google Cloud Storage: Project ID
 * `google_cloud_storage_s3_compatible_access_key` / `GoogleCloudStorageS3CompatibleAccessKey`  (string): Google Cloud Storage: S3-compatible Access Key.
@@ -266,7 +268,8 @@ Task<RemoteServer> RemoteServer.Create(
 * `name` (string): Internal name for your reference
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-* `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
+* `port` (Nullable<Int64>): Port for remote server.
+* `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -277,7 +280,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` (string): Remote server type.
 * `ssl` (string): Should we require SSL?
-* `username` (string): Remote server username.  Not needed for S3 buckets.
+* `username` (string): Remote server username.
 * `wasabi_access_key` (string): Wasabi: Access Key.
 * `wasabi_bucket` (string): Wasabi: Bucket name
 * `wasabi_region` (string): Wasabi: Region
@@ -379,7 +382,8 @@ Task<RemoteServer> RemoteServer.Update(
 * `name` (string): Internal name for your reference
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-* `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
+* `port` (Nullable<Int64>): Port for remote server.
+* `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -390,7 +394,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` (string): Remote server type.
 * `ssl` (string): Should we require SSL?
-* `username` (string): Remote server username.  Not needed for S3 buckets.
+* `username` (string): Remote server username.
 * `wasabi_access_key` (string): Wasabi: Access Key.
 * `wasabi_bucket` (string): Wasabi: Bucket name
 * `wasabi_region` (string): Wasabi: Region
@@ -498,6 +502,7 @@ parameters.Add("name", "My Remote server");
 parameters.Add("one_drive_account_type", "personal");
 parameters.Add("pin_to_site_region", true);
 parameters.Add("port", 1);
+parameters.Add("remote_server_credential_id", 1);
 parameters.Add("s3_bucket", "my-bucket");
 parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("s3_compatible_bucket", "my-bucket");
@@ -572,7 +577,8 @@ RemoteServer.Update(parameters);
 * `name` (string): Internal name for your reference
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
-* `port` (Nullable<Int64>): Port for remote server.  Not needed for S3.
+* `port` (Nullable<Int64>): Port for remote server.
+* `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -583,7 +589,7 @@ RemoteServer.Update(parameters);
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` (string): Remote server type.
 * `ssl` (string): Should we require SSL?
-* `username` (string): Remote server username.  Not needed for S3 buckets.
+* `username` (string): Remote server username.
 * `wasabi_access_key` (string): Wasabi: Access Key.
 * `wasabi_bucket` (string): Wasabi: Bucket name
 * `wasabi_region` (string): Wasabi: Region
