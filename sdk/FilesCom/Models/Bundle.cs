@@ -773,6 +773,7 @@ namespace FilesCom.Models
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
+        ///   user_id - int64 - The owning user id. Only site admins can set this.
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
@@ -884,6 +885,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_name") && !(parameters["skip_name"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_name must be of type bool", "parameters[\"skip_name\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
             if (parameters.ContainsKey("watermark_attachment_delete") && !(parameters["watermark_attachment_delete"] is bool))
             {
@@ -1310,6 +1315,7 @@ namespace FilesCom.Models
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
+        ///   user_id - int64 - The owning user id. Only site admins can set this.
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
@@ -1429,6 +1435,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_name") && !(parameters["skip_name"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_name must be of type bool", "parameters[\"skip_name\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
             if (parameters.ContainsKey("watermark_attachment_delete") && !(parameters["watermark_attachment_delete"] is bool))
             {

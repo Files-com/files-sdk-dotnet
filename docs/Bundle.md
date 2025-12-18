@@ -279,6 +279,7 @@ Task<Bundle> Bundle.Update(
 * `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
@@ -356,6 +357,7 @@ parameters.Add("skip_company", true);
 parameters.Add("start_access_on_date", "2000-01-01T01:00:00Z");
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
+parameters.Add("user_id", 1);
 parameters.Add("watermark_attachment_delete", false);
 
 Bundle.Update(parameters);
@@ -387,6 +389,7 @@ Bundle.Update(parameters);
 * `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
