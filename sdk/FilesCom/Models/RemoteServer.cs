@@ -221,6 +221,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("files_agent_version", null);
             }
+            if (!this.attributes.ContainsKey("files_agent_up_to_date"))
+            {
+                this.attributes.Add("files_agent_up_to_date", false);
+            }
+            if (!this.attributes.ContainsKey("files_agent_latest_version"))
+            {
+                this.attributes.Add("files_agent_latest_version", null);
+            }
             if (!this.attributes.ContainsKey("outbound_agent_id"))
             {
                 this.attributes.Add("outbound_agent_id", null);
@@ -844,6 +852,27 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, the Files Agent is up to date.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("files_agent_up_to_date")]
+        public bool FilesAgentUpToDate
+        {
+            get { return attributes["files_agent_up_to_date"] == null ? false : (bool)attributes["files_agent_up_to_date"]; }
+            set { attributes["files_agent_up_to_date"] = value; }
+        }
+
+        /// <summary>
+        /// Latest available Files Agent version
+        /// </summary>
+        [JsonPropertyName("files_agent_latest_version")]
+        public string FilesAgentLatestVersion
+        {
+            get { return (string)attributes["files_agent_latest_version"]; }
+            set { attributes["files_agent_latest_version"] = value; }
+        }
+
+        /// <summary>
         /// Route traffic to outbound on a files-agent
         /// </summary>
         [JsonPropertyName("outbound_agent_id")]
@@ -1145,6 +1174,40 @@ namespace FilesCom.Models
             get { return (string)attributes["wasabi_secret_key"]; }
             set { attributes["wasabi_secret_key"] = value; }
         }
+
+        /// <summary>
+        /// Push update to Files Agent
+        /// </summary>
+        public async Task<AgentPushUpdate> AgentPushUpdate(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/agent_push_update", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
 
         /// <summary>
         /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
@@ -2165,6 +2228,48 @@ namespace FilesCom.Models
             try
             {
                 return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Push update to Files Agent
+        /// </summary>
+        public static async Task<AgentPushUpdate> AgentPushUpdate(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/agent_push_update", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson);
             }
             catch (JsonException)
             {

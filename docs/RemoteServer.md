@@ -52,6 +52,8 @@
   "files_agent_root": "example",
   "files_agent_api_token": "example",
   "files_agent_version": "example",
+  "files_agent_up_to_date": true,
+  "files_agent_latest_version": "example",
   "outbound_agent_id": 1,
   "filebase_bucket": "my-bucket",
   "filebase_access_key": "example",
@@ -114,6 +116,8 @@
 * `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
 * `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
 * `files_agent_version` / `FilesAgentVersion`  (string): Files Agent version
+* `files_agent_up_to_date` / `FilesAgentUpToDate`  (bool): If true, the Files Agent is up to date.
+* `files_agent_latest_version` / `FilesAgentLatestVersion`  (string): Latest available Files Agent version
 * `outbound_agent_id` / `OutboundAgentId`  (Nullable<Int64>): Route traffic to outbound on a files-agent
 * `filebase_bucket` / `FilebaseBucket`  (string): Filebase: Bucket name
 * `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase: Access Key.
@@ -288,6 +292,23 @@ Task<RemoteServer> RemoteServer.Create(
 
 ---
 
+## Push update to Files Agent
+
+```
+Task<AgentPushUpdate> RemoteServer.AgentPushUpdate(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
 ## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
 
 ```
@@ -410,6 +431,24 @@ Task RemoteServer.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
+## Push update to Files Agent
+
+```
+var RemoteServer = RemoteServer.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+
+RemoteServer.AgentPushUpdate
 ```
 
 ### Parameters
