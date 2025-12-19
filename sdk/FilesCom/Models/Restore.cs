@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("prefix", null);
             }
+            if (!this.attributes.ContainsKey("restoration_type"))
+            {
+                this.attributes.Add("restoration_type", null);
+            }
             if (!this.attributes.ContainsKey("restore_in_place"))
             {
                 this.attributes.Add("restore_in_place", false);
@@ -72,6 +76,30 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("restore_deleted_permissions"))
             {
                 this.attributes.Add("restore_deleted_permissions", false);
+            }
+            if (!this.attributes.ContainsKey("users_restored"))
+            {
+                this.attributes.Add("users_restored", null);
+            }
+            if (!this.attributes.ContainsKey("users_errored"))
+            {
+                this.attributes.Add("users_errored", null);
+            }
+            if (!this.attributes.ContainsKey("users_total"))
+            {
+                this.attributes.Add("users_total", null);
+            }
+            if (!this.attributes.ContainsKey("api_keys_restored"))
+            {
+                this.attributes.Add("api_keys_restored", null);
+            }
+            if (!this.attributes.ContainsKey("public_keys_restored"))
+            {
+                this.attributes.Add("public_keys_restored", null);
+            }
+            if (!this.attributes.ContainsKey("two_factor_authentication_methods_restored"))
+            {
+                this.attributes.Add("two_factor_authentication_methods_restored", null);
             }
             if (!this.attributes.ContainsKey("status"))
             {
@@ -194,6 +222,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records.
+        /// </summary>
+        [JsonPropertyName("restoration_type")]
+        public string RestorationType
+        {
+            get { return (string)attributes["restoration_type"]; }
+            set { attributes["restoration_type"] = value; }
+        }
+
+        /// <summary>
         /// If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -213,6 +251,66 @@ namespace FilesCom.Models
         {
             get { return attributes["restore_deleted_permissions"] == null ? false : (bool)attributes["restore_deleted_permissions"]; }
             set { attributes["restore_deleted_permissions"] = value; }
+        }
+
+        /// <summary>
+        /// Number of users successfully restored (only present for `restoration_type=users`).
+        /// </summary>
+        [JsonPropertyName("users_restored")]
+        public Nullable<Int64> UsersRestored
+        {
+            get { return (Nullable<Int64>)attributes["users_restored"]; }
+            set { attributes["users_restored"] = value; }
+        }
+
+        /// <summary>
+        /// Number of users that failed to restore (only present for `restoration_type=users`).
+        /// </summary>
+        [JsonPropertyName("users_errored")]
+        public Nullable<Int64> UsersErrored
+        {
+            get { return (Nullable<Int64>)attributes["users_errored"]; }
+            set { attributes["users_errored"] = value; }
+        }
+
+        /// <summary>
+        /// Total number of users processed (only present for `restoration_type=users`).
+        /// </summary>
+        [JsonPropertyName("users_total")]
+        public Nullable<Int64> UsersTotal
+        {
+            get { return (Nullable<Int64>)attributes["users_total"]; }
+            set { attributes["users_total"] = value; }
+        }
+
+        /// <summary>
+        /// Number of API keys restored (only present for `restoration_type=users`).
+        /// </summary>
+        [JsonPropertyName("api_keys_restored")]
+        public Nullable<Int64> ApiKeysRestored
+        {
+            get { return (Nullable<Int64>)attributes["api_keys_restored"]; }
+            set { attributes["api_keys_restored"] = value; }
+        }
+
+        /// <summary>
+        /// Number of public keys restored (only present for `restoration_type=users`).
+        /// </summary>
+        [JsonPropertyName("public_keys_restored")]
+        public Nullable<Int64> PublicKeysRestored
+        {
+            get { return (Nullable<Int64>)attributes["public_keys_restored"]; }
+            set { attributes["public_keys_restored"] = value; }
+        }
+
+        /// <summary>
+        /// Number of two factor authentication methods restored (only present for `restoration_type=users`).
+        /// </summary>
+        [JsonPropertyName("two_factor_authentication_methods_restored")]
+        public Nullable<Int64> TwoFactorAuthenticationMethodsRestored
+        {
+            get { return (Nullable<Int64>)attributes["two_factor_authentication_methods_restored"]; }
+            set { attributes["two_factor_authentication_methods_restored"] = value; }
         }
 
         /// <summary>
@@ -299,6 +397,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
         ///   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
+        ///   restoration_type - string - Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records.
         ///   restore_deleted_permissions - boolean - If true, we will also restore any Permissions that match the same path prefix from the same dates.
         ///   restore_in_place - boolean - If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
         ///   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
@@ -323,6 +422,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("prefix") && !(parameters["prefix"] is string))
             {
                 throw new ArgumentException("Bad parameter: prefix must be of type string", "parameters[\"prefix\"]");
+            }
+            if (parameters.ContainsKey("restoration_type") && !(parameters["restoration_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: restoration_type must be of type string", "parameters[\"restoration_type\"]");
             }
             if (parameters.ContainsKey("restore_deleted_permissions") && !(parameters["restore_deleted_permissions"] is bool))
             {
