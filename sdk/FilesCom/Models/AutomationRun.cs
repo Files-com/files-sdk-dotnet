@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("automation_id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("completed_at"))
             {
                 this.attributes.Add("completed_at", null);
@@ -119,6 +123,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["automation_id"]; }
             private set { attributes["automation_id"] = value; }
+        }
+
+        /// <summary>
+        /// Workspace ID.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            private set { attributes["workspace_id"] = value; }
         }
 
         /// <summary>
@@ -250,7 +265,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `automation_id`, `created_at` or `status`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status` and `automation_id`. Valid field combinations are `[ automation_id, status ]`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `status`, `workspace_id` or `automation_id`. Valid field combinations are `[ workspace_id, status ]`, `[ automation_id, status ]`, `[ workspace_id, automation_id ]` or `[ workspace_id, automation_id, status ]`.
         ///   automation_id (required) - int64 - ID of the associated Automation.
         /// </summary>
         public static FilesList<AutomationRun> List(

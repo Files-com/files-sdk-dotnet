@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("expires_at"))
             {
                 this.attributes.Add("expires_at", null);
@@ -127,6 +131,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Workspace ID (0 for default workspace).
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
         }
 
         /// <summary>
@@ -303,6 +317,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
+        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   public_key - string - The GPG public key
         ///   private_key - string - The GPG private key
         ///   private_key_password - string - The GPG private key password
@@ -328,6 +343,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
@@ -406,7 +425,12 @@ namespace FilesCom.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name` and `expires_at`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name` or `expires_at`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`, `partner_id` or `expires_at`. Valid field combinations are `[ workspace_id, expires_at ]`.
+        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `expires_at`.
+        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `expires_at`.
+        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `expires_at`.
+        ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `expires_at`.
         /// </summary>
         public static FilesList<GpgKey> List(
 
@@ -432,6 +456,26 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+            }
+            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+            }
+            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+            }
+            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
             return new FilesList<GpgKey>($"/gpg_keys", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -501,6 +545,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
+        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   public_key - string - The GPG public key
         ///   private_key - string - The GPG private key
         ///   private_key_password - string - The GPG private key password
@@ -530,6 +575,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
@@ -580,6 +629,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
+        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   public_key - string - The GPG public key
         ///   private_key - string - The GPG private key
         ///   private_key_password - string - The GPG private key password
@@ -613,6 +663,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {

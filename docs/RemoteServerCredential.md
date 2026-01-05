@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "workspace_id": 1,
   "name": "My Credential",
   "description": "More information or notes about this credential.",
   "server_type": "s3",
@@ -22,6 +23,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Remote Server Credential ID
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` / `Name`  (string): Internal name for your reference
 * `description` / `Description`  (string): Internal description for your reference
 * `server_type` / `ServerType`  (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -70,7 +72,8 @@ Task<FilesList<RemoteServerCredential>> RemoteServerCredential.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `name`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id` and `name`. Valid field combinations are `[ workspace_id, name ]`.
 * `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`.
 
 
@@ -105,6 +108,7 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
 
 ### Parameters
 
+* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -152,6 +156,7 @@ Task<RemoteServerCredential> RemoteServerCredential.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
+* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -210,6 +215,7 @@ var RemoteServerCredential = RemoteServerCredential.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("workspace_id", 0);
 parameters.Add("name", "My Credential");
 parameters.Add("description", "More information or notes about this credential.");
 parameters.Add("server_type", "s3");
@@ -230,6 +236,7 @@ RemoteServerCredential.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
+* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.

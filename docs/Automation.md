@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "workspace_id": 1,
   "always_serialize_jobs": true,
   "always_overwrite_size_matching_files": true,
   "automation": "create_folder",
@@ -96,6 +97,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Automation ID
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 * `always_serialize_jobs` / `AlwaysSerializeJobs`  (bool): Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
 * `always_overwrite_size_matching_files` / `AlwaysOverwriteSizeMatchingFiles`  (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
 * `automation` / `AutomationType`  (string): Automation type
@@ -153,8 +155,8 @@ Task<FilesList<Automation>> Automation.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `automation`, `disabled`, `last_modified_at` or `name`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `disabled`, `last_modified_at` or `automation`. Valid field combinations are `[ disabled, last_modified_at ]`, `[ automation, disabled ]`, `[ automation, last_modified_at ]` or `[ automation, disabled, last_modified_at ]`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name`, `automation`, `last_modified_at` or `disabled`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `disabled`, `last_modified_at`, `workspace_id` or `automation`. Valid field combinations are `[ disabled, last_modified_at ]`, `[ workspace_id, disabled ]`, `[ disabled, automation ]`, `[ workspace_id, last_modified_at ]`, `[ automation, last_modified_at ]`, `[ workspace_id, automation ]`, `[ workspace_id, disabled, last_modified_at ]`, `[ disabled, automation, last_modified_at ]`, `[ workspace_id, disabled, automation ]`, `[ workspace_id, automation, last_modified_at ]` or `[ workspace_id, disabled, automation, last_modified_at ]`.
 * `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `last_modified_at`.
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `last_modified_at`.
 * `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `last_modified_at`.
@@ -224,6 +226,7 @@ Task<Automation> Automation.Create(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `workspace_id` (Nullable<Int64>): Workspace ID
 * `automation` (string): Required - Automation type
 
 
@@ -291,6 +294,7 @@ Task<Automation> Automation.Update(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `workspace_id` (Nullable<Int64>): Workspace ID
 * `automation` (string): Automation type
 
 
@@ -370,6 +374,7 @@ parameters.Add("trigger", "daily");
 parameters.Add("trigger_actions", ["create"]);
 parameters.Add("value", {"limit":"1"});
 parameters.Add("recurring_day", 25);
+parameters.Add("workspace_id", 0);
 parameters.Add("automation", "create_folder");
 
 Automation.Update(parameters);
@@ -410,6 +415,7 @@ Automation.Update(parameters);
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `workspace_id` (Nullable<Int64>): Workspace ID
 * `automation` (string): Automation type
 
 

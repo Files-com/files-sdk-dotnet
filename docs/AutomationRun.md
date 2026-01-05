@@ -6,6 +6,7 @@
 {
   "id": 1,
   "automation_id": 1,
+  "workspace_id": 1,
   "completed_at": "2000-01-01T01:00:00Z",
   "created_at": "2000-01-01T01:00:00Z",
   "retry_at": "2000-01-01T01:00:00Z",
@@ -22,6 +23,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): ID.
 * `automation_id` / `AutomationId`  (Nullable<Int64>): ID of the associated Automation.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID.
 * `completed_at` / `CompletedAt`  (Nullable<DateTime>): Automation run completion/failure date/time.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Automation run start date/time.
 * `retry_at` / `RetryAt`  (Nullable<DateTime>): If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
@@ -53,7 +55,7 @@ Task<FilesList<AutomationRun>> AutomationRun.List(
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `automation_id`, `created_at` or `status`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `status` and `automation_id`. Valid field combinations are `[ automation_id, status ]`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `status`, `workspace_id` or `automation_id`. Valid field combinations are `[ workspace_id, status ]`, `[ automation_id, status ]`, `[ workspace_id, automation_id ]` or `[ workspace_id, automation_id, status ]`.
 * `automation_id` (Nullable<Int64>): Required - ID of the associated Automation.
 
 
