@@ -317,7 +317,6 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   public_key - string - The GPG public key
         ///   private_key - string - The GPG private key
         ///   private_key_password - string - The GPG private key password
@@ -343,10 +342,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
@@ -545,11 +540,11 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   public_key - string - The GPG public key
         ///   private_key - string - The GPG private key
         ///   private_key_password - string - The GPG private key password
         ///   name (required) - string - GPG key name.
+        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   generate_expires_at - string - Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
         ///   generate_keypair - boolean - If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
         ///   generate_full_name - string - Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -576,10 +571,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
-            }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
@@ -595,6 +586,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("generate_expires_at") && !(parameters["generate_expires_at"] is string))
             {
@@ -629,7 +624,6 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   partner_id - int64 - Partner ID who owns this GPG Key, if applicable.
-        ///   workspace_id - int64 - Workspace ID (0 for default workspace).
         ///   public_key - string - The GPG public key
         ///   private_key - string - The GPG private key
         ///   private_key_password - string - The GPG private key password
@@ -663,10 +657,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
             {

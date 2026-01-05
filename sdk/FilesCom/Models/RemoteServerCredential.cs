@@ -497,7 +497,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         ///   name - string - Internal name for your reference
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -545,10 +544,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -829,7 +824,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         ///   name - string - Internal name for your reference
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -860,6 +854,7 @@ namespace FilesCom.Models
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
         ///   wasabi_secret_key - string - Wasabi: Secret Key
+        ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         /// </summary>
         public static async Task<RemoteServerCredential> Create(
 
@@ -870,10 +865,6 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
-            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -994,6 +985,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_server_credentials", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1010,7 +1005,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         ///   name - string - Internal name for your reference
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -1066,10 +1060,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {

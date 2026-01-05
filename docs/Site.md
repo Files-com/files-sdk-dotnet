@@ -277,6 +277,7 @@
     "sftp_permission": true,
     "site_admin": true,
     "site_id": 1,
+    "workspace_id": 1,
     "skip_welcome_screen": true,
     "ssl_required": "always_require",
     "sso_strategy_id": 1,

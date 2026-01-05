@@ -105,6 +105,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_type", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("ssl"))
             {
                 this.attributes.Add("ssl", null);
@@ -228,6 +232,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("files_agent_latest_version"))
             {
                 this.attributes.Add("files_agent_latest_version", null);
+            }
+            if (!this.attributes.ContainsKey("files_agent_supports_push_updates"))
+            {
+                this.attributes.Add("files_agent_supports_push_updates", false);
             }
             if (!this.attributes.ContainsKey("outbound_agent_id"))
             {
@@ -560,6 +568,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID (0 for default workspace)
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Should we require SSL?
         /// </summary>
         [JsonPropertyName("ssl")]
@@ -870,6 +888,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["files_agent_latest_version"]; }
             set { attributes["files_agent_latest_version"] = value; }
+        }
+
+        /// <summary>
+        /// Files Agent supports receiving push updates
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("files_agent_supports_push_updates")]
+        public bool FilesAgentSupportsPushUpdates
+        {
+            get { return attributes["files_agent_supports_push_updates"] == null ? false : (bool)attributes["files_agent_supports_push_updates"]; }
+            set { attributes["files_agent_supports_push_updates"] = value; }
         }
 
         /// <summary>
@@ -1725,7 +1754,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `workspace_id`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ workspace_id, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]`, `[ linode_bucket, name ]`, `[ workspace_id, server_type ]` or `[ workspace_id, server_type, name ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
         /// </summary>
@@ -1936,6 +1965,7 @@ namespace FilesCom.Models
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
+        ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         /// </summary>
         public static async Task<RemoteServer> Create(
 
@@ -2221,6 +2251,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("wasabi_region") && !(parameters["wasabi_region"] is string))
             {
                 throw new ArgumentException("Bad parameter: wasabi_region must be of type string", "parameters[\"wasabi_region\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options);

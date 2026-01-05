@@ -688,7 +688,6 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
         ///   value - object - A Hash of attributes specific to the automation type.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        ///   workspace_id - int64 - Workspace ID
         ///   automation - string - Automation type
         /// </summary>
         public async Task<Automation> Update(Dictionary<string, object> parameters)
@@ -835,10 +834,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
@@ -1050,8 +1045,8 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
         ///   value - object - A Hash of attributes specific to the automation type.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        ///   workspace_id - int64 - Workspace ID
         ///   automation (required) - string - Automation type
+        ///   workspace_id - int64 - Workspace ID
         /// </summary>
         public static async Task<Automation> Create(
 
@@ -1194,13 +1189,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
-            }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {
                 throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/automations", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1283,7 +1278,6 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
         ///   value - object - A Hash of attributes specific to the automation type.
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        ///   workspace_id - int64 - Workspace ID
         ///   automation - string - Automation type
         /// </summary>
         public static async Task<Automation> Update(
@@ -1438,10 +1432,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
             {

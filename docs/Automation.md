@@ -226,8 +226,8 @@ Task<Automation> Automation.Create(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `workspace_id` (Nullable<Int64>): Workspace ID
 * `automation` (string): Required - Automation type
+* `workspace_id` (Nullable<Int64>): Workspace ID
 
 
 ---
@@ -294,7 +294,6 @@ Task<Automation> Automation.Update(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `workspace_id` (Nullable<Int64>): Workspace ID
 * `automation` (string): Automation type
 
 
@@ -374,7 +373,6 @@ parameters.Add("trigger", "daily");
 parameters.Add("trigger_actions", ["create"]);
 parameters.Add("value", {"limit":"1"});
 parameters.Add("recurring_day", 25);
-parameters.Add("workspace_id", 0);
 parameters.Add("automation", "create_folder");
 
 Automation.Update(parameters);
@@ -415,7 +413,6 @@ Automation.Update(parameters);
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `workspace_id` (Nullable<Int64>): Workspace ID
 * `automation` (string): Automation type
 
 

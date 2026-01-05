@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "workspace_id": 1,
   "title": "My public key",
   "created_at": "2000-01-01T01:00:00Z",
   "fingerprint": "43:51:43:a1:b5:fc:8b:b7:0a:3a:a9:b1:0f:66:73:a8",
@@ -19,6 +20,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Public key ID
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID (0 for default workspace).
 * `title` / `Title`  (string): Public key title
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Public key created at date/time
 * `fingerprint` / `Fingerprint`  (string): Public key fingerprint (MD5)
@@ -53,8 +55,8 @@ Task<FilesList<PublicKey>> PublicKey.List(
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `title`, `created_at` or `user_id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `user_id`, `title` or `created_at`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at` and `workspace_id`.
 * `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
 * `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.

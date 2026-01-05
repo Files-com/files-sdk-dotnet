@@ -108,7 +108,6 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
 
 ### Parameters
 
-* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -139,6 +138,7 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
 * `linode_secret_key` (string): Linode: Secret Key
 * `s3_compatible_secret_key` (string): S3-compatible: Secret Key
 * `wasabi_secret_key` (string): Wasabi: Secret Key
+* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 
 
 ---
@@ -156,7 +156,6 @@ Task<RemoteServerCredential> RemoteServerCredential.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
-* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
@@ -215,7 +214,6 @@ var RemoteServerCredential = RemoteServerCredential.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("workspace_id", 0);
 parameters.Add("name", "My Credential");
 parameters.Add("description", "More information or notes about this credential.");
 parameters.Add("server_type", "s3");
@@ -236,7 +234,6 @@ RemoteServerCredential.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
-* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `name` (string): Internal name for your reference
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.

@@ -98,11 +98,11 @@ Task<GpgKey> GpgKey.Create(
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `partner_id` (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
-* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace).
 * `public_key` (string): The GPG public key
 * `private_key` (string): The GPG private key
 * `private_key_password` (string): The GPG private key password
 * `name` (string): Required - GPG key name.
+* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace).
 * `generate_expires_at` (string): Expiration date of the key. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
 * `generate_keypair` (bool): If true, generate a new GPG key pair. Can not be used with `public_key`/`private_key`
 * `generate_full_name` (string): Full name of the key owner. Used for the generation of the key. Will be ignored if `generate_keypair` is false.
@@ -125,7 +125,6 @@ Task<GpgKey> GpgKey.Update(
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
 * `partner_id` (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
-* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace).
 * `public_key` (string): The GPG public key
 * `private_key` (string): The GPG private key
 * `private_key_password` (string): The GPG private key password
@@ -159,7 +158,6 @@ var GpgKey = GpgKey.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("partner_id", 1);
-parameters.Add("workspace_id", 0);
 parameters.Add("name", "key name");
 
 GpgKey.Update(parameters);
@@ -169,7 +167,6 @@ GpgKey.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
 * `partner_id` (Nullable<Int64>): Partner ID who owns this GPG Key, if applicable.
-* `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace).
 * `public_key` (string): The GPG public key
 * `private_key` (string): The GPG private key
 * `private_key_password` (string): The GPG private key password

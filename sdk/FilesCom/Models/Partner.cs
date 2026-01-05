@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -143,6 +147,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Workspace associated with this Partner.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
         }
 
         /// <summary>
@@ -325,7 +339,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
         public static FilesList<Partner> List(
 
@@ -347,6 +362,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<Partner>($"/partners", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -422,6 +441,7 @@ namespace FilesCom.Models
         ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name (required) - string - The name of the Partner.
+        ///   workspace_id - int64 - ID of the Workspace associated with this Partner.
         /// </summary>
         public static async Task<Partner> Create(
 
@@ -467,6 +487,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners", System.Net.Http.HttpMethod.Post, parameters, options);

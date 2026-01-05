@@ -238,7 +238,6 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
-        ///   workspace_id - int64 - Workspace ID
         ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -274,10 +273,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {
@@ -475,13 +470,13 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
-        ///   workspace_id - int64 - Workspace ID
         ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name (required) - string - Group name.
+        ///   workspace_id - int64 - Workspace ID
         /// </summary>
         public static async Task<Group> Create(
 
@@ -508,10 +503,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
-            }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
@@ -536,6 +527,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/groups", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -555,7 +550,6 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
-        ///   workspace_id - int64 - Workspace ID
         ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -599,10 +593,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {

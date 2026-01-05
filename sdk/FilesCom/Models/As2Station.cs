@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -119,6 +123,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the Workspace associated with this AS2 Station.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
         }
 
         /// <summary>
@@ -271,7 +285,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - AS2 Name
+        ///   name - string - The station's formal AS2 name.
         ///   public_certificate - string
         ///   private_key - string
         ///   private_key_password - string
@@ -369,7 +383,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
         public static FilesList<As2Station> List(
 
@@ -391,6 +406,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<As2Station>($"/as2_stations", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -458,7 +477,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name (required) - string - AS2 Name
+        ///   name (required) - string - The station's formal AS2 name.
+        ///   workspace_id - int64 - ID of the Workspace associated with this AS2 Station.
         ///   public_certificate (required) - string
         ///   private_key (required) - string
         ///   private_key_password - string
@@ -488,6 +508,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
@@ -516,7 +540,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - AS2 Name
+        ///   name - string - The station's formal AS2 name.
         ///   public_certificate - string
         ///   private_key - string
         ///   private_key_password - string
