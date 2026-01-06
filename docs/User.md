@@ -63,6 +63,7 @@
   "self_managed": true,
   "sftp_permission": true,
   "site_admin": true,
+  "workspace_admin": true,
   "site_id": 1,
   "workspace_id": 1,
   "skip_welcome_screen": true,
@@ -138,6 +139,7 @@
 * `self_managed` / `SelfManaged`  (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` / `SftpPermission`  (bool): Can the user access with SFTP?
 * `site_admin` / `SiteAdmin`  (bool): Is the user an administrator for this site?
+* `workspace_admin` / `WorkspaceAdmin`  (bool): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 * `skip_welcome_screen` / `SkipWelcomeScreen`  (bool): Skip Welcome page in the UI?
@@ -276,6 +278,7 @@ Task<User> User.Create(
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+* `workspace_admin` (bool): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `username` (string): Required - User's username
 * `workspace_id` (Nullable<Int64>): Workspace ID
 
@@ -396,6 +399,7 @@ Task<User> User.Update(
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+* `workspace_admin` (bool): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `username` (string): User's username
 * `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
 * `convert_to_partner_user` (bool): If true, convert this user to a partner user by assigning the partner_id provided.
@@ -525,6 +529,7 @@ parameters.Add("tags", "example");
 parameters.Add("time_zone", "Pacific Time (US & Canada)");
 parameters.Add("user_root", "example");
 parameters.Add("user_home", "example");
+parameters.Add("workspace_admin", true);
 parameters.Add("username", "user");
 parameters.Add("clear_2fa", false);
 parameters.Add("convert_to_partner_user", false);
@@ -585,6 +590,7 @@ User.Update(parameters);
 * `time_zone` (string): User time zone
 * `user_root` (string): Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
 * `user_home` (string): Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+* `workspace_admin` (bool): Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
 * `username` (string): User's username
 * `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
 * `convert_to_partner_user` (bool): If true, convert this user to a partner user by assigning the partner_id provided.

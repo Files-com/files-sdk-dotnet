@@ -257,6 +257,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("site_admin", false);
             }
+            if (!this.attributes.ContainsKey("workspace_admin"))
+            {
+                this.attributes.Add("workspace_admin", false);
+            }
             if (!this.attributes.ContainsKey("site_id"))
             {
                 this.attributes.Add("site_id", null);
@@ -975,6 +979,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("workspace_admin")]
+        public bool WorkspaceAdmin
+        {
+            get { return attributes["workspace_admin"] == null ? false : (bool)attributes["workspace_admin"]; }
+            set { attributes["workspace_admin"] = value; }
+        }
+
+        /// <summary>
         /// Site ID
         /// </summary>
         [JsonPropertyName("site_id")]
@@ -1378,6 +1393,7 @@ namespace FilesCom.Models
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
         ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+        ///   workspace_admin - boolean - Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
         ///   username - string - User's username
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - If true, convert this user to a partner user by assigning the partner_id provided.
@@ -1598,6 +1614,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
+            }
+            if (parameters.ContainsKey("workspace_admin") && !(parameters["workspace_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: workspace_admin must be of type bool", "parameters[\"workspace_admin\"]");
             }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
@@ -1861,6 +1881,7 @@ namespace FilesCom.Models
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
         ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+        ///   workspace_admin - boolean - Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
         ///   username (required) - string - User's username
         ///   workspace_id - int64 - Workspace ID
         /// </summary>
@@ -2077,6 +2098,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
             }
+            if (parameters.ContainsKey("workspace_admin") && !(parameters["workspace_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: workspace_admin must be of type bool", "parameters[\"workspace_admin\"]");
+            }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
@@ -2250,6 +2275,7 @@ namespace FilesCom.Models
         ///   time_zone - string - User time zone
         ///   user_root - string - Root folder for FTP (and optionally SFTP if the appropriate site-wide setting is set).  Note that this is not used for API, Desktop, or Web interface.
         ///   user_home - string - Home folder for FTP/SFTP.  Note that this is not used for API, Desktop, or Web interface.
+        ///   workspace_admin - boolean - Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
         ///   username - string - User's username
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - If true, convert this user to a partner user by assigning the partner_id provided.
@@ -2478,6 +2504,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
+            }
+            if (parameters.ContainsKey("workspace_admin") && !(parameters["workspace_admin"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: workspace_admin must be of type bool", "parameters[\"workspace_admin\"]");
             }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
