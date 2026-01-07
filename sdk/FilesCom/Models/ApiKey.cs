@@ -277,7 +277,6 @@ namespace FilesCom.Models
         /// Parameters:
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
-        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   name - string - Internal name for the API Key.  For your use.
         /// </summary>
         public async Task<ApiKey> Update(Dictionary<string, object> parameters)
@@ -304,10 +303,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
-            }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
-            {
-                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -520,10 +515,10 @@ namespace FilesCom.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
-        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   name (required) - string - Internal name for the API Key.  For your use.
         ///   aws_style_credentials - boolean - If `true`, this API key will be usable with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
         ///   path - string - Folder path restriction for `office_integration` permission set API keys.
+        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         /// </summary>
         public static async Task<ApiKey> Create(
 
@@ -550,10 +545,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
             }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
-            {
-                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
-            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -565,6 +556,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/api_keys", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -625,7 +620,6 @@ namespace FilesCom.Models
         /// Parameters:
         ///   description - string - User-supplied description of API key.
         ///   expires_at - string - API Key expiration date
-        ///   permission_set - string - Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
         ///   name - string - Internal name for the API Key.  For your use.
         /// </summary>
         public static async Task<ApiKey> Update(
@@ -660,10 +654,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("expires_at") && !(parameters["expires_at"] is string))
             {
                 throw new ArgumentException("Bad parameter: expires_at must be of type string", "parameters[\"expires_at\"]");
-            }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
-            {
-                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
