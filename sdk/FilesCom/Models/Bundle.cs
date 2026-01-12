@@ -173,6 +173,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("watermark_value", null);
             }
+            if (!this.attributes.ContainsKey("send_one_time_password_to_recipient_at_registration"))
+            {
+                this.attributes.Add("send_one_time_password_to_recipient_at_registration", false);
+            }
             if (!this.attributes.ContainsKey("has_inbox"))
             {
                 this.attributes.Add("has_inbox", false);
@@ -602,6 +606,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, require_share_recipient bundles will send a one-time password to the recipient when they register. Cannot be enabled if the bundle has a password set.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("send_one_time_password_to_recipient_at_registration")]
+        public bool SendOneTimePasswordToRecipientAtRegistration
+        {
+            get { return attributes["send_one_time_password_to_recipient_at_registration"] == null ? false : (bool)attributes["send_one_time_password_to_recipient_at_registration"]; }
+            set { attributes["send_one_time_password_to_recipient_at_registration"] = value; }
+        }
+
+        /// <summary>
         /// Does this bundle have an associated inbox?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -768,6 +783,7 @@ namespace FilesCom.Models
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_one_time_password_to_recipient_at_registration - boolean - If true, require_share_recipient bundles will send a one-time password to the recipient when they register. Cannot be enabled if the bundle has a password set.
         ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
@@ -865,6 +881,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("send_one_time_password_to_recipient_at_registration") && !(parameters["send_one_time_password_to_recipient_at_registration"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: send_one_time_password_to_recipient_at_registration must be of type bool", "parameters[\"send_one_time_password_to_recipient_at_registration\"]");
             }
             if (parameters.ContainsKey("send_email_receipt_to_uploader") && !(parameters["send_email_receipt_to_uploader"] is bool))
             {
@@ -1101,6 +1121,7 @@ namespace FilesCom.Models
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_one_time_password_to_recipient_at_registration - boolean - If true, require_share_recipient bundles will send a one-time password to the recipient when they register. Cannot be enabled if the bundle has a password set.
         ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
@@ -1197,6 +1218,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("send_one_time_password_to_recipient_at_registration") && !(parameters["send_one_time_password_to_recipient_at_registration"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: send_one_time_password_to_recipient_at_registration must be of type bool", "parameters[\"send_one_time_password_to_recipient_at_registration\"]");
             }
             if (parameters.ContainsKey("send_email_receipt_to_uploader") && !(parameters["send_email_receipt_to_uploader"] is bool))
             {
@@ -1310,6 +1335,7 @@ namespace FilesCom.Models
         ///   permissions - string - Permissions that apply to Folders in this Share Link.
         ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
         ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_one_time_password_to_recipient_at_registration - boolean - If true, require_share_recipient bundles will send a one-time password to the recipient when they register. Cannot be enabled if the bundle has a password set.
         ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
@@ -1415,6 +1441,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_share_recipient") && !(parameters["require_share_recipient"] is bool))
             {
                 throw new ArgumentException("Bad parameter: require_share_recipient must be of type bool", "parameters[\"require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("send_one_time_password_to_recipient_at_registration") && !(parameters["send_one_time_password_to_recipient_at_registration"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: send_one_time_password_to_recipient_at_registration must be of type bool", "parameters[\"send_one_time_password_to_recipient_at_registration\"]");
             }
             if (parameters.ContainsKey("send_email_receipt_to_uploader") && !(parameters["send_email_receipt_to_uploader"] is bool))
             {
