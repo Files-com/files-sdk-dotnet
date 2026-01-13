@@ -61,14 +61,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("wasabi_access_key", null);
             }
-            if (!this.attributes.ContainsKey("azure_blob_storage_account"))
-            {
-                this.attributes.Add("azure_blob_storage_account", null);
-            }
-            if (!this.attributes.ContainsKey("azure_files_storage_account"))
-            {
-                this.attributes.Add("azure_files_storage_account", null);
-            }
             if (!this.attributes.ContainsKey("s3_compatible_access_key"))
             {
                 this.attributes.Add("s3_compatible_access_key", null);
@@ -253,26 +245,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["wasabi_access_key"]; }
             set { attributes["wasabi_access_key"] = value; }
-        }
-
-        /// <summary>
-        /// Azure Blob Storage: Account name
-        /// </summary>
-        [JsonPropertyName("azure_blob_storage_account")]
-        public string AzureBlobStorageAccount
-        {
-            get { return (string)attributes["azure_blob_storage_account"]; }
-            set { attributes["azure_blob_storage_account"] = value; }
-        }
-
-        /// <summary>
-        /// Azure Files: Storage Account name
-        /// </summary>
-        [JsonPropertyName("azure_files_storage_account")]
-        public string AzureFilesStorageAccount
-        {
-            get { return (string)attributes["azure_files_storage_account"]; }
-            set { attributes["azure_files_storage_account"] = value; }
         }
 
         /// <summary>
@@ -501,8 +473,6 @@ namespace FilesCom.Models
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
         ///   aws_access_key - string - AWS Access Key.
-        ///   azure_blob_storage_account - string - Azure Blob Storage: Account name
-        ///   azure_files_storage_account - string - Azure Files: Storage Account name
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -560,14 +530,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -828,8 +790,6 @@ namespace FilesCom.Models
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
         ///   aws_access_key - string - AWS Access Key.
-        ///   azure_blob_storage_account - string - Azure Blob Storage: Account name
-        ///   azure_files_storage_account - string - Azure Files: Storage Account name
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -880,14 +840,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -1009,8 +961,6 @@ namespace FilesCom.Models
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
         ///   aws_access_key - string - AWS Access Key.
-        ///   azure_blob_storage_account - string - Azure Blob Storage: Account name
-        ///   azure_files_storage_account - string - Azure Files: Storage Account name
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -1076,14 +1026,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {

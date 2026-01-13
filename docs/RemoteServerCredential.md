@@ -12,8 +12,6 @@
   "aws_access_key": "example",
   "google_cloud_storage_s3_compatible_access_key": "example",
   "wasabi_access_key": "example",
-  "azure_blob_storage_account": "storage-account-name",
-  "azure_files_storage_account": "storage-account-name",
   "s3_compatible_access_key": "example",
   "filebase_access_key": "example",
   "cloudflare_access_key": "example",
@@ -30,8 +28,6 @@
 * `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
 * `google_cloud_storage_s3_compatible_access_key` / `GoogleCloudStorageS3CompatibleAccessKey`  (string): Google Cloud Storage: S3-compatible Access Key.
 * `wasabi_access_key` / `WasabiAccessKey`  (string): Wasabi: Access Key.
-* `azure_blob_storage_account` / `AzureBlobStorageAccount`  (string): Azure Blob Storage: Account name
-* `azure_files_storage_account` / `AzureFilesStorageAccount`  (string): Azure Files: Storage Account name
 * `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible: Access Key
 * `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase: Access Key.
 * `cloudflare_access_key` / `CloudflareAccessKey`  (string): Cloudflare: Access Key.
@@ -112,8 +108,6 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` (string): AWS Access Key.
-* `azure_blob_storage_account` (string): Azure Blob Storage: Account name
-* `azure_files_storage_account` (string): Azure Files: Storage Account name
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `filebase_access_key` (string): Filebase: Access Key.
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
@@ -160,8 +154,6 @@ Task<RemoteServerCredential> RemoteServerCredential.Update(
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` (string): AWS Access Key.
-* `azure_blob_storage_account` (string): Azure Blob Storage: Account name
-* `azure_files_storage_account` (string): Azure Files: Storage Account name
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `filebase_access_key` (string): Filebase: Access Key.
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
@@ -218,8 +210,6 @@ parameters.Add("name", "My Credential");
 parameters.Add("description", "More information or notes about this credential.");
 parameters.Add("server_type", "s3");
 parameters.Add("aws_access_key", "example");
-parameters.Add("azure_blob_storage_account", "storage-account-name");
-parameters.Add("azure_files_storage_account", "storage-account-name");
 parameters.Add("cloudflare_access_key", "example");
 parameters.Add("filebase_access_key", "example");
 parameters.Add("google_cloud_storage_s3_compatible_access_key", "example");
@@ -238,8 +228,6 @@ RemoteServerCredential.Update(parameters);
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` (string): AWS Access Key.
-* `azure_blob_storage_account` (string): Azure Blob Storage: Account name
-* `azure_files_storage_account` (string): Azure Files: Storage Account name
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `filebase_access_key` (string): Filebase: Access Key.
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
