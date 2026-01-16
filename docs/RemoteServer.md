@@ -9,6 +9,7 @@
   "authentication_method": "password",
   "hostname": "remote-server.com",
   "remote_home_path": "/home/user1",
+  "upload_staging_path": "/tmp/uploads",
   "name": "My Remote server",
   "description": "More information or notes about my server",
   "port": 1,
@@ -70,11 +71,12 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Remote server ID
-* `disabled` / `Disabled`  (bool): If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
-* `authentication_method` / `AuthenticationMethod`  (string): Type of authentication method
+* `id` / `Id`  (Nullable<Int64>): Remote Server ID
+* `disabled` / `Disabled`  (bool): If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+* `authentication_method` / `AuthenticationMethod`  (string): Type of authentication method to use
 * `hostname` / `Hostname`  (string): Hostname or IP address
 * `remote_home_path` / `RemoteHomePath`  (string): Initial home folder on remote server
+* `upload_staging_path` / `UploadStagingPath`  (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `name` / `Name`  (string): Internal name for your reference
 * `description` / `Description`  (string): Internal description for your reference
 * `port` / `Port`  (Nullable<Int64>): Port for remote server.
@@ -277,6 +279,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.
+* `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
@@ -409,6 +412,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.
+* `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
@@ -546,6 +550,7 @@ parameters.Add("name", "My Remote server");
 parameters.Add("one_drive_account_type", "personal");
 parameters.Add("pin_to_site_region", true);
 parameters.Add("port", 1);
+parameters.Add("upload_staging_path", "/tmp/uploads");
 parameters.Add("remote_server_credential_id", 1);
 parameters.Add("s3_bucket", "my-bucket");
 parameters.Add("s3_compatible_access_key", "example");
@@ -622,6 +627,7 @@ RemoteServer.Update(parameters);
 * `one_drive_account_type` (string): OneDrive: Either personal or business_other account types
 * `pin_to_site_region` (bool): If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
 * `port` (Nullable<Int64>): Port for remote server.
+* `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key

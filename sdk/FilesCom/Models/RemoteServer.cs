@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("remote_home_path", null);
             }
+            if (!this.attributes.ContainsKey("upload_staging_path"))
+            {
+                this.attributes.Add("upload_staging_path", null);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -376,7 +380,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Remote server ID
+        /// Remote Server ID
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
@@ -386,7 +390,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If true, this server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+        /// If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disabled")]
@@ -397,7 +401,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Type of authentication method
+        /// Type of authentication method to use
         /// </summary>
         [JsonPropertyName("authentication_method")]
         public string AuthenticationMethod
@@ -424,6 +428,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["remote_home_path"]; }
             set { attributes["remote_home_path"] = value; }
+        }
+
+        /// <summary>
+        /// Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
+        /// </summary>
+        [JsonPropertyName("upload_staging_path")]
+        public string UploadStagingPath
+        {
+            get { return (string)attributes["upload_staging_path"]; }
+            set { attributes["upload_staging_path"] = value; }
         }
 
         /// <summary>
@@ -1385,6 +1399,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - OneDrive: Either personal or business_other account types
         ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
         ///   port - int64 - Port for remote server.
+        ///   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
         ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
@@ -1633,6 +1648,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("upload_staging_path") && !(parameters["upload_staging_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: upload_staging_path must be of type string", "parameters[\"upload_staging_path\"]");
             }
             if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
             {
@@ -1950,6 +1969,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - OneDrive: Either personal or business_other account types
         ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
         ///   port - int64 - Port for remote server.
+        ///   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
         ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
@@ -2191,6 +2211,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("upload_staging_path") && !(parameters["upload_staging_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: upload_staging_path must be of type string", "parameters[\"upload_staging_path\"]");
             }
             if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
             {
@@ -2467,6 +2491,7 @@ namespace FilesCom.Models
         ///   one_drive_account_type - string - OneDrive: Either personal or business_other account types
         ///   pin_to_site_region - boolean - If true, we will ensure that all communications with this remote server are made through the primary region of the site.  This setting can also be overridden by a site-wide setting which will force it to true.
         ///   port - int64 - Port for remote server.
+        ///   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
         ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
@@ -2723,6 +2748,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+            }
+            if (parameters.ContainsKey("upload_staging_path") && !(parameters["upload_staging_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: upload_staging_path must be of type string", "parameters[\"upload_staging_path\"]");
             }
             if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
             {
