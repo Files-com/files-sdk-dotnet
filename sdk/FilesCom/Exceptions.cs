@@ -262,6 +262,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class InvalidWorkspaceIdHeaderException : BadRequestException
+    {
+        public InvalidWorkspaceIdHeaderException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class MethodNotAllowedException : BadRequestException
     {
         public MethodNotAllowedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
