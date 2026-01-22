@@ -113,6 +113,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("datadog_api_key_masked", null);
             }
+            if (!this.attributes.ContainsKey("action_send_enabled"))
+            {
+                this.attributes.Add("action_send_enabled", false);
+            }
+            if (!this.attributes.ContainsKey("action_entries_sent"))
+            {
+                this.attributes.Add("action_entries_sent", null);
+            }
             if (!this.attributes.ContainsKey("sftp_action_send_enabled"))
             {
                 this.attributes.Add("sftp_action_send_enabled", false);
@@ -488,6 +496,27 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["datadog_api_key_masked"]; }
             set { attributes["datadog_api_key_masked"] = value; }
+        }
+
+        /// <summary>
+        /// Whether or not sending is enabled for action logs.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("action_send_enabled")]
+        public bool ActionSendEnabled
+        {
+            get { return attributes["action_send_enabled"] == null ? false : (bool)attributes["action_send_enabled"]; }
+            set { attributes["action_send_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Number of log entries sent for the lifetime of this destination.
+        /// </summary>
+        [JsonPropertyName("action_entries_sent")]
+        public Nullable<Int64> ActionEntriesSent
+        {
+            get { return (Nullable<Int64>)attributes["action_entries_sent"]; }
+            set { attributes["action_entries_sent"] = value; }
         }
 
         /// <summary>
@@ -892,6 +921,7 @@ namespace FilesCom.Models
         ///   solar_winds_token - string - Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
         ///   new_relic_api_key - string - Applicable only for destination type: new_relic. API key provided by New Relic.
         ///   datadog_api_key - string - Applicable only for destination type: datadog. API key provided by Datadog.
+        ///   action_send_enabled - boolean - Whether or not sending is enabled for action logs.
         ///   sftp_action_send_enabled - boolean - Whether or not sending is enabled for sftp_action logs.
         ///   ftp_action_send_enabled - boolean - Whether or not sending is enabled for ftp_action logs.
         ///   web_dav_action_send_enabled - boolean - Whether or not sending is enabled for web_dav_action logs.
@@ -994,6 +1024,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("datadog_api_key") && !(parameters["datadog_api_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
+            }
+            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
             }
             if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
             {
@@ -1209,6 +1243,7 @@ namespace FilesCom.Models
         ///   solar_winds_token - string - Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
         ///   new_relic_api_key - string - Applicable only for destination type: new_relic. API key provided by New Relic.
         ///   datadog_api_key - string - Applicable only for destination type: datadog. API key provided by Datadog.
+        ///   action_send_enabled - boolean - Whether or not sending is enabled for action logs.
         ///   sftp_action_send_enabled - boolean - Whether or not sending is enabled for sftp_action logs.
         ///   ftp_action_send_enabled - boolean - Whether or not sending is enabled for ftp_action logs.
         ///   web_dav_action_send_enabled - boolean - Whether or not sending is enabled for web_dav_action logs.
@@ -1308,6 +1343,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
             }
+            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
+            }
             if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_action_send_enabled must be of type bool", "parameters[\"sftp_action_send_enabled\"]");
@@ -1397,6 +1436,7 @@ namespace FilesCom.Models
         ///   solar_winds_token - string - Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
         ///   new_relic_api_key - string - Applicable only for destination type: new_relic. API key provided by New Relic.
         ///   datadog_api_key - string - Applicable only for destination type: datadog. API key provided by Datadog.
+        ///   action_send_enabled - boolean - Whether or not sending is enabled for action logs.
         ///   sftp_action_send_enabled - boolean - Whether or not sending is enabled for sftp_action logs.
         ///   ftp_action_send_enabled - boolean - Whether or not sending is enabled for ftp_action logs.
         ///   web_dav_action_send_enabled - boolean - Whether or not sending is enabled for web_dav_action logs.
@@ -1502,6 +1542,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
             }
+            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
+            }
             if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_action_send_enabled must be of type bool", "parameters[\"sftp_action_send_enabled\"]");
@@ -1571,6 +1615,7 @@ namespace FilesCom.Models
         ///   solar_winds_token - string - Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
         ///   new_relic_api_key - string - Applicable only for destination type: new_relic. API key provided by New Relic.
         ///   datadog_api_key - string - Applicable only for destination type: datadog. API key provided by Datadog.
+        ///   action_send_enabled - boolean - Whether or not sending is enabled for action logs.
         ///   sftp_action_send_enabled - boolean - Whether or not sending is enabled for sftp_action logs.
         ///   ftp_action_send_enabled - boolean - Whether or not sending is enabled for ftp_action logs.
         ///   web_dav_action_send_enabled - boolean - Whether or not sending is enabled for web_dav_action logs.
@@ -1681,6 +1726,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("datadog_api_key") && !(parameters["datadog_api_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
+            }
+            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
             }
             if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
             {

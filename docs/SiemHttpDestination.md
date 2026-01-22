@@ -27,6 +27,8 @@
   "solar_winds_token_masked": "example",
   "new_relic_api_key_masked": "example",
   "datadog_api_key_masked": "example",
+  "action_send_enabled": true,
+  "action_entries_sent": 1,
   "sftp_action_send_enabled": true,
   "sftp_action_entries_sent": 1,
   "ftp_action_send_enabled": true,
@@ -82,6 +84,8 @@
 * `solar_winds_token_masked` / `SolarWindsTokenMasked`  (string): Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
 * `new_relic_api_key_masked` / `NewRelicApiKeyMasked`  (string): Applicable only for destination type: new_relic. API key provided by New Relic.
 * `datadog_api_key_masked` / `DatadogApiKeyMasked`  (string): Applicable only for destination type: datadog. API key provided by Datadog.
+* `action_send_enabled` / `ActionSendEnabled`  (bool): Whether or not sending is enabled for action logs.
+* `action_entries_sent` / `ActionEntriesSent`  (Nullable<Int64>): Number of log entries sent for the lifetime of this destination.
 * `sftp_action_send_enabled` / `SftpActionSendEnabled`  (bool): Whether or not sending is enabled for sftp_action logs.
 * `sftp_action_entries_sent` / `SftpActionEntriesSent`  (Nullable<Int64>): Number of log entries sent for the lifetime of this destination.
 * `ftp_action_send_enabled` / `FtpActionSendEnabled`  (bool): Whether or not sending is enabled for ftp_action logs.
@@ -188,6 +192,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Create(
 * `solar_winds_token` (string): Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
 * `new_relic_api_key` (string): Applicable only for destination type: new_relic. API key provided by New Relic.
 * `datadog_api_key` (string): Applicable only for destination type: datadog. API key provided by Datadog.
+* `action_send_enabled` (bool): Whether or not sending is enabled for action logs.
 * `sftp_action_send_enabled` (bool): Whether or not sending is enabled for sftp_action logs.
 * `ftp_action_send_enabled` (bool): Whether or not sending is enabled for ftp_action logs.
 * `web_dav_action_send_enabled` (bool): Whether or not sending is enabled for web_dav_action logs.
@@ -238,6 +243,7 @@ Task SiemHttpDestination.SendTestEntry(
 * `solar_winds_token` (string): Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
 * `new_relic_api_key` (string): Applicable only for destination type: new_relic. API key provided by New Relic.
 * `datadog_api_key` (string): Applicable only for destination type: datadog. API key provided by Datadog.
+* `action_send_enabled` (bool): Whether or not sending is enabled for action logs.
 * `sftp_action_send_enabled` (bool): Whether or not sending is enabled for sftp_action logs.
 * `ftp_action_send_enabled` (bool): Whether or not sending is enabled for ftp_action logs.
 * `web_dav_action_send_enabled` (bool): Whether or not sending is enabled for web_dav_action logs.
@@ -284,6 +290,7 @@ Task<SiemHttpDestination> SiemHttpDestination.Update(
 * `solar_winds_token` (string): Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
 * `new_relic_api_key` (string): Applicable only for destination type: new_relic. API key provided by New Relic.
 * `datadog_api_key` (string): Applicable only for destination type: datadog. API key provided by Datadog.
+* `action_send_enabled` (bool): Whether or not sending is enabled for action logs.
 * `sftp_action_send_enabled` (bool): Whether or not sending is enabled for sftp_action logs.
 * `ftp_action_send_enabled` (bool): Whether or not sending is enabled for ftp_action logs.
 * `web_dav_action_send_enabled` (bool): Whether or not sending is enabled for web_dav_action logs.
@@ -337,6 +344,7 @@ parameters.Add("azure_stream_name", "example");
 parameters.Add("azure_oauth_client_credentials_tenant_id", "example");
 parameters.Add("azure_oauth_client_credentials_client_id", "example");
 parameters.Add("qradar_username", "example");
+parameters.Add("action_send_enabled", true);
 parameters.Add("sftp_action_send_enabled", true);
 parameters.Add("ftp_action_send_enabled", true);
 parameters.Add("web_dav_action_send_enabled", true);
@@ -375,6 +383,7 @@ SiemHttpDestination.Update(parameters);
 * `solar_winds_token` (string): Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
 * `new_relic_api_key` (string): Applicable only for destination type: new_relic. API key provided by New Relic.
 * `datadog_api_key` (string): Applicable only for destination type: datadog. API key provided by Datadog.
+* `action_send_enabled` (bool): Whether or not sending is enabled for action logs.
 * `sftp_action_send_enabled` (bool): Whether or not sending is enabled for sftp_action logs.
 * `ftp_action_send_enabled` (bool): Whether or not sending is enabled for ftp_action logs.
 * `web_dav_action_send_enabled` (bool): Whether or not sending is enabled for web_dav_action logs.
