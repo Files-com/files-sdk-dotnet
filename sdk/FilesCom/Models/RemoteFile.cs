@@ -945,6 +945,40 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// List the contents of a ZIP file
+        /// </summary>
+        public async Task<ZipListEntry[]> ZipListContents(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["path"] = attributes["path"];
+
+            if (!attributes.ContainsKey("path"))
+            {
+                throw new ArgumentException("Current object doesn't have a path");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/zip_list/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<ZipListEntry[]>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Copy File/Folder
         ///
         /// Parameters:
@@ -1037,6 +1071,61 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Extract a ZIP file to a destination folder
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
+        /// </summary>
+        public async Task<FileAction> Unzip(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["path"] = attributes["path"];
+
+            if (!attributes.ContainsKey("path"))
+            {
+                throw new ArgumentException("Current object doesn't have a path");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("filename") && !(parameters["filename"] is string))
+            {
+                throw new ArgumentException("Bad parameter: filename must be of type string", "parameters[\"filename\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {
@@ -1466,6 +1555,48 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// List the contents of a ZIP file
+        /// </summary>
+        public static async Task<ZipListEntry[]> ZipListContents(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/zip_list/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<ZipListEntry[]>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Copy File/Folder
         ///
         /// Parameters:
@@ -1574,6 +1705,118 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Extract a ZIP file to a destination folder
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
+        /// </summary>
+        public static async Task<FileAction> Unzip(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("filename") && !(parameters["filename"] is string))
+            {
+                throw new ArgumentException("Bad parameter: filename must be of type string", "parameters[\"filename\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Parameters:
+        ///   paths (required) - array(string) - Paths to include in the ZIP.
+        ///   destination (required) - string - Destination file path for the ZIP.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public static async Task<FileAction> Zip(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (!parameters.ContainsKey("paths") || parameters["paths"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: paths", "parameters[\"paths\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/zip", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {

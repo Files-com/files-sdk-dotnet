@@ -209,6 +209,23 @@ Task<RemoteFile> RemoteFile.Find(
 
 ---
 
+## List the contents of a ZIP file
+
+```
+Task<ZipListEntry[]> RemoteFile.ZipListContents(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+
+
+---
+
 ## Copy File/Folder
 
 ```
@@ -244,6 +261,45 @@ Task<FileAction> RemoteFile.Move(
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
 * `overwrite` (bool): Overwrite existing file(s) in the destination?
+
+
+---
+
+## Extract a ZIP file to a destination folder
+
+```
+Task<FileAction> RemoteFile.Unzip(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - ZIP file path to extract.
+* `destination` (string): Required - Destination folder path for extracted files.
+* `filename` (string): Optional single entry filename to extract.
+* `overwrite` (bool): Overwrite existing files in the destination?
+
+
+---
+
+## Create a ZIP from one or more paths and save it to a destination path
+
+```
+Task<FileAction> RemoteFile.Zip(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `paths` (string[]): Required - Paths to include in the ZIP.
+* `destination` (string): Required - Destination file path for the ZIP.
+* `overwrite` (bool): Overwrite existing file in the destination?
 
 
 ---
@@ -340,6 +396,24 @@ File.Delete(parameters);
 
 ---
 
+## List the contents of a ZIP file
+
+```
+var File = RemoteFile.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+
+File.ZipListContents
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+
+
+---
+
 ## Copy File/Folder
 
 ```
@@ -382,6 +456,29 @@ File.Move(parameters);
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
 * `overwrite` (bool): Overwrite existing file(s) in the destination?
+
+
+---
+
+## Extract a ZIP file to a destination folder
+
+```
+var File = RemoteFile.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("overwrite", false);
+
+File.Unzip(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - ZIP file path to extract.
+* `destination` (string): Required - Destination folder path for extracted files.
+* `filename` (string): Optional single entry filename to extract.
+* `overwrite` (bool): Overwrite existing files in the destination?
 
 
 ---
