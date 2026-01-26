@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("upload_staging_path", null);
             }
+            if (!this.attributes.ContainsKey("allow_relative_paths"))
+            {
+                this.attributes.Add("allow_relative_paths", false);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -438,6 +442,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["upload_staging_path"]; }
             set { attributes["upload_staging_path"] = value; }
+        }
+
+        /// <summary>
+        /// Allow relative paths in SFTP. If true, paths will not be forced to be absolute, allowing operations relative to the user's home directory.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("allow_relative_paths")]
+        public bool AllowRelativePaths
+        {
+            get { return attributes["allow_relative_paths"] == null ? false : (bool)attributes["allow_relative_paths"]; }
+            set { attributes["allow_relative_paths"] = value; }
         }
 
         /// <summary>
@@ -1364,6 +1379,7 @@ namespace FilesCom.Models
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
         ///   wasabi_secret_key - string - Wasabi: Secret Key
+        ///   allow_relative_paths - boolean - Allow relative paths in SFTP. If true, paths will not be forced to be absolute, allowing operations relative to the user's home directory.
         ///   aws_access_key - string - AWS Access Key.
         ///   azure_blob_storage_account - string - Azure Blob Storage: Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage: Container name
@@ -1508,6 +1524,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
+            }
+            if (parameters.ContainsKey("allow_relative_paths") && !(parameters["allow_relative_paths"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_relative_paths must be of type bool", "parameters[\"allow_relative_paths\"]");
             }
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
@@ -1934,6 +1954,7 @@ namespace FilesCom.Models
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
         ///   wasabi_secret_key - string - Wasabi: Secret Key
+        ///   allow_relative_paths - boolean - Allow relative paths in SFTP. If true, paths will not be forced to be absolute, allowing operations relative to the user's home directory.
         ///   aws_access_key - string - AWS Access Key.
         ///   azure_blob_storage_account - string - Azure Blob Storage: Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage: Container name
@@ -2071,6 +2092,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
+            }
+            if (parameters.ContainsKey("allow_relative_paths") && !(parameters["allow_relative_paths"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_relative_paths must be of type bool", "parameters[\"allow_relative_paths\"]");
             }
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
@@ -2456,6 +2481,7 @@ namespace FilesCom.Models
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
         ///   wasabi_secret_key - string - Wasabi: Secret Key
+        ///   allow_relative_paths - boolean - Allow relative paths in SFTP. If true, paths will not be forced to be absolute, allowing operations relative to the user's home directory.
         ///   aws_access_key - string - AWS Access Key.
         ///   azure_blob_storage_account - string - Azure Blob Storage: Account name
         ///   azure_blob_storage_container - string - Azure Blob Storage: Container name
@@ -2608,6 +2634,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
+            }
+            if (parameters.ContainsKey("allow_relative_paths") && !(parameters["allow_relative_paths"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_relative_paths must be of type bool", "parameters[\"allow_relative_paths\"]");
             }
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
