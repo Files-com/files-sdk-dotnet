@@ -23,8 +23,8 @@
   "health_check_type": "active",
   "id": 1,
   "interval": 60,
-  "min_free_cpu": 1.0,
-  "min_free_mem": 1.0,
+  "min_free_cpu": "1.0",
+  "min_free_mem": "1.0",
   "priority": 1,
   "remote_path": "/path/on/remote",
   "remote_server_id": 1,
@@ -214,8 +214,8 @@ parameters.Add("fall", 1);
 parameters.Add("health_check_enabled", true);
 parameters.Add("health_check_type", "active");
 parameters.Add("interval", 60);
-parameters.Add("min_free_cpu", 1.0);
-parameters.Add("min_free_mem", 1.0);
+parameters.Add("min_free_cpu", "1.0");
+parameters.Add("min_free_mem", "1.0");
 parameters.Add("priority", 1);
 parameters.Add("remote_path", "/path/on/remote");
 parameters.Add("rise", 1);
