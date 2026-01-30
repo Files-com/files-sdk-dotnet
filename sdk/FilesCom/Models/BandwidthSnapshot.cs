@@ -99,9 +99,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("bytes_received")]
-        public double BytesReceived
+        public Nullable<Int64> BytesReceived
         {
-            get { return (double)attributes["bytes_received"]; }
+            get { return (Nullable<Int64>)attributes["bytes_received"]; }
             private set { attributes["bytes_received"] = value; }
         }
 
@@ -110,9 +110,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("bytes_sent")]
-        public double BytesSent
+        public Nullable<Int64> BytesSent
         {
-            get { return (double)attributes["bytes_sent"]; }
+            get { return (Nullable<Int64>)attributes["bytes_sent"]; }
             private set { attributes["bytes_sent"] = value; }
         }
 
@@ -121,9 +121,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sync_bytes_received")]
-        public double SyncBytesReceived
+        public Nullable<Int64> SyncBytesReceived
         {
-            get { return (double)attributes["sync_bytes_received"]; }
+            get { return (Nullable<Int64>)attributes["sync_bytes_received"]; }
             private set { attributes["sync_bytes_received"] = value; }
         }
 
@@ -132,9 +132,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sync_bytes_sent")]
-        public double SyncBytesSent
+        public Nullable<Int64> SyncBytesSent
         {
-            get { return (double)attributes["sync_bytes_sent"]; }
+            get { return (Nullable<Int64>)attributes["sync_bytes_sent"]; }
             private set { attributes["sync_bytes_sent"] = value; }
         }
 
@@ -143,9 +143,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("requests_get")]
-        public double RequestsGet
+        public Nullable<Int64> RequestsGet
         {
-            get { return (double)attributes["requests_get"]; }
+            get { return (Nullable<Int64>)attributes["requests_get"]; }
             private set { attributes["requests_get"] = value; }
         }
 
@@ -154,9 +154,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("requests_put")]
-        public double RequestsPut
+        public Nullable<Int64> RequestsPut
         {
-            get { return (double)attributes["requests_put"]; }
+            get { return (Nullable<Int64>)attributes["requests_put"]; }
             private set { attributes["requests_put"] = value; }
         }
 
@@ -165,9 +165,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("requests_other")]
-        public double RequestsOther
+        public Nullable<Int64> RequestsOther
         {
-            get { return (double)attributes["requests_other"]; }
+            get { return (Nullable<Int64>)attributes["requests_other"]; }
             private set { attributes["requests_other"] = value; }
         }
 
