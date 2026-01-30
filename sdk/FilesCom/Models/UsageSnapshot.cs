@@ -156,9 +156,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("current_storage")]
-        public double CurrentStorage
+        public Nullable<Int64> CurrentStorage
         {
-            get { return (double)attributes["current_storage"]; }
+            get { return (Nullable<Int64>)attributes["current_storage"]; }
             private set { attributes["current_storage"] = value; }
         }
 
@@ -167,9 +167,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("high_water_storage")]
-        public double HighWaterStorage
+        public Nullable<Int64> HighWaterStorage
         {
-            get { return (double)attributes["high_water_storage"]; }
+            get { return (Nullable<Int64>)attributes["high_water_storage"]; }
             private set { attributes["high_water_storage"] = value; }
         }
 
@@ -178,9 +178,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("root_storage")]
-        public double RootStorage
+        public Nullable<Int64> RootStorage
         {
-            get { return (double)attributes["root_storage"]; }
+            get { return (Nullable<Int64>)attributes["root_storage"]; }
             private set { attributes["root_storage"] = value; }
         }
 
@@ -189,9 +189,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_counted_in_minimum")]
-        public double DeletedFilesCountedInMinimum
+        public Nullable<Int64> DeletedFilesCountedInMinimum
         {
-            get { return (double)attributes["deleted_files_counted_in_minimum"]; }
+            get { return (Nullable<Int64>)attributes["deleted_files_counted_in_minimum"]; }
             private set { attributes["deleted_files_counted_in_minimum"] = value; }
         }
 
@@ -200,9 +200,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_storage")]
-        public double DeletedFilesStorage
+        public Nullable<Int64> DeletedFilesStorage
         {
-            get { return (double)attributes["deleted_files_storage"]; }
+            get { return (Nullable<Int64>)attributes["deleted_files_storage"]; }
             private set { attributes["deleted_files_storage"] = value; }
         }
 
@@ -211,9 +211,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("total_billable_usage")]
-        public double TotalBillableUsage
+        public Nullable<Int64> TotalBillableUsage
         {
-            get { return (double)attributes["total_billable_usage"]; }
+            get { return (Nullable<Int64>)attributes["total_billable_usage"]; }
             private set { attributes["total_billable_usage"] = value; }
         }
 
@@ -222,9 +222,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("total_billable_transfer_usage")]
-        public double TotalBillableTransferUsage
+        public Nullable<Int64> TotalBillableTransferUsage
         {
-            get { return (double)attributes["total_billable_transfer_usage"]; }
+            get { return (Nullable<Int64>)attributes["total_billable_transfer_usage"]; }
             private set { attributes["total_billable_transfer_usage"] = value; }
         }
 
@@ -233,9 +233,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("bytes_sent")]
-        public double BytesSent
+        public Nullable<Int64> BytesSent
         {
-            get { return (double)attributes["bytes_sent"]; }
+            get { return (Nullable<Int64>)attributes["bytes_sent"]; }
             private set { attributes["bytes_sent"] = value; }
         }
 
@@ -244,9 +244,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sync_bytes_received")]
-        public double SyncBytesReceived
+        public Nullable<Int64> SyncBytesReceived
         {
-            get { return (double)attributes["sync_bytes_received"]; }
+            get { return (Nullable<Int64>)attributes["sync_bytes_received"]; }
             private set { attributes["sync_bytes_received"] = value; }
         }
 
@@ -255,9 +255,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sync_bytes_sent")]
-        public double SyncBytesSent
+        public Nullable<Int64> SyncBytesSent
         {
-            get { return (double)attributes["sync_bytes_sent"]; }
+            get { return (Nullable<Int64>)attributes["sync_bytes_sent"]; }
             private set { attributes["sync_bytes_sent"] = value; }
         }
 
