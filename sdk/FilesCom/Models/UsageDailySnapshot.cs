@@ -163,9 +163,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("current_storage")]
-        public double CurrentStorage
+        public Nullable<Int64> CurrentStorage
         {
-            get { return (double)attributes["current_storage"]; }
+            get { return (Nullable<Int64>)attributes["current_storage"]; }
             private set { attributes["current_storage"] = value; }
         }
 
@@ -174,9 +174,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_storage")]
-        public double DeletedFilesStorage
+        public Nullable<Int64> DeletedFilesStorage
         {
-            get { return (double)attributes["deleted_files_storage"]; }
+            get { return (Nullable<Int64>)attributes["deleted_files_storage"]; }
             private set { attributes["deleted_files_storage"] = value; }
         }
 
@@ -185,9 +185,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("deleted_files_counted_in_minimum")]
-        public double DeletedFilesCountedInMinimum
+        public Nullable<Int64> DeletedFilesCountedInMinimum
         {
-            get { return (double)attributes["deleted_files_counted_in_minimum"]; }
+            get { return (Nullable<Int64>)attributes["deleted_files_counted_in_minimum"]; }
             private set { attributes["deleted_files_counted_in_minimum"] = value; }
         }
 
@@ -196,9 +196,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("root_storage")]
-        public double RootStorage
+        public Nullable<Int64> RootStorage
         {
-            get { return (double)attributes["root_storage"]; }
+            get { return (Nullable<Int64>)attributes["root_storage"]; }
             private set { attributes["root_storage"] = value; }
         }
 
