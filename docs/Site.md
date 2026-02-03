@@ -418,7 +418,7 @@
 * `motd_text` / `MotdText`  (string): A message to show users when they connect via FTP or SFTP.
 * `motd_use_for_ftp` / `MotdUseForFtp`  (bool): Show message to users connecting via FTP
 * `motd_use_for_sftp` / `MotdUseForSftp`  (bool): Show message to users connecting via SFTP
-* `next_billing_amount` / `NextBillingAmount`  (double): Next billing amount
+* `next_billing_amount` / `NextBillingAmount`  (decimal): Next billing amount
 * `next_billing_date` / `NextBillingDate`  (string): Next billing date
 * `office_integration_available` / `OfficeIntegrationAvailable`  (bool): If true, allows users to use a document editing integration.
 * `office_integration_type` / `OfficeIntegrationType`  (string): Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.

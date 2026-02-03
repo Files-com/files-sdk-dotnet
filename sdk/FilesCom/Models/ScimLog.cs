@@ -243,7 +243,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ScimLog>(responseJson);
+                return JsonSerializer.Deserialize<ScimLog>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

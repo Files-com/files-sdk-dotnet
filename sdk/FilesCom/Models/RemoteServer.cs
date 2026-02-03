@@ -1258,7 +1258,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson);
+                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1349,7 +1349,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1738,7 +1738,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1873,7 +1873,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1924,7 +1924,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -2310,7 +2310,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -2352,7 +2352,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson);
+                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -2451,7 +2451,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -2848,7 +2848,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

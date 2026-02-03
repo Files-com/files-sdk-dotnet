@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +42,7 @@ namespace FilesCom
             string body = await response.Content.ReadAsStringAsync();
             try
             {
-                responseError = JsonSerializer.Deserialize<ResponseError>(body);
+                responseError = JsonSerializer.Deserialize<ResponseError>(body, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -114,7 +115,7 @@ namespace FilesCom
                     uri.Query = new FormUrlEncodedContent(queryParams).ReadAsStringAsync().Result;
                     break;
                 default:
-                    jsonString = await Task.Run(() => JsonSerializer.Serialize<Dictionary<string, object>>(parameters));
+                    jsonString = await Task.Run(() => JsonSerializer.Serialize(parameters, JsonUtil.Options));
                     httpContent = new StringContent(jsonString, Encoding.UTF8, "application/json");
                     break;
             }

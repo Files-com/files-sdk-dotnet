@@ -21,7 +21,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Invoice Line item Id
-* `amount` / `Amount`  (double): Invoice line item amount
+* `amount` / `Amount`  (decimal): Invoice line item amount
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Invoice line item created at date/time
 * `description` / `Description`  (string): Invoice line item description
 * `type` / `Type`  (string): Invoice line item type

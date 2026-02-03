@@ -43,8 +43,8 @@
 * `health_check_type` / `HealthCheckType`  (string): Type of health check to perform.
 * `id` / `Id`  (Nullable<Int64>): Unique identifier for this backend.
 * `interval` / `Interval`  (Nullable<Int64>): Interval in seconds between health checks.
-* `min_free_cpu` / `MinFreeCpu`  (double): Minimum free CPU percentage required for this backend to be considered healthy.
-* `min_free_mem` / `MinFreeMem`  (double): Minimum free memory percentage required for this backend to be considered healthy.
+* `min_free_cpu` / `MinFreeCpu`  (decimal): Minimum free CPU percentage required for this backend to be considered healthy.
+* `min_free_mem` / `MinFreeMem`  (decimal): Minimum free memory percentage required for this backend to be considered healthy.
 * `priority` / `Priority`  (Nullable<Int64>): Priority of this backend.
 * `remote_path` / `RemotePath`  (string): Path on the remote server to treat as the root of this mount.
 * `remote_server_id` / `RemoteServerId`  (Nullable<Int64>): The remote server that this backend is associated with.

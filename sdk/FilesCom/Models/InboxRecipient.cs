@@ -269,7 +269,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<InboxRecipient>(responseJson);
+                return JsonSerializer.Deserialize<InboxRecipient>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

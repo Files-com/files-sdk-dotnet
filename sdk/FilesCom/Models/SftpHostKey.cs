@@ -152,7 +152,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SftpHostKey>(responseJson);
+                return JsonSerializer.Deserialize<SftpHostKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -272,7 +272,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SftpHostKey>(responseJson);
+                return JsonSerializer.Deserialize<SftpHostKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -316,7 +316,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SftpHostKey>(responseJson);
+                return JsonSerializer.Deserialize<SftpHostKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -368,7 +368,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SftpHostKey>(responseJson);
+                return JsonSerializer.Deserialize<SftpHostKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

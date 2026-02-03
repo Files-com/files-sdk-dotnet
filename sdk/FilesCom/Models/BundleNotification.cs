@@ -168,7 +168,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -303,7 +303,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -366,7 +366,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -418,7 +418,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<BundleNotification>(responseJson);
+                return JsonSerializer.Deserialize<BundleNotification>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

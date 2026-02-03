@@ -484,7 +484,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SyncRun>(responseJson);
+                return JsonSerializer.Deserialize<SyncRun>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

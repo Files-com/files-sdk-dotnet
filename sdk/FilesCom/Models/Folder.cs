@@ -695,7 +695,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

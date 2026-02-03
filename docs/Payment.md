@@ -44,8 +44,8 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Line item Id
-* `amount` / `Amount`  (double): Line item amount
-* `balance` / `Balance`  (double): Line item balance
+* `amount` / `Amount`  (decimal): Line item amount
+* `balance` / `Balance`  (decimal): Line item balance
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Line item created at
 * `currency` / `Currency`  (string): Line item currency
 * `download_uri` / `DownloadUri`  (string): Line item download uri

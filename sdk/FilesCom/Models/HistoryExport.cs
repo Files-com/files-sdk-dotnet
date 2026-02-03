@@ -459,7 +459,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<HistoryExport>(responseJson);
+                return JsonSerializer.Deserialize<HistoryExport>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -603,7 +603,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<HistoryExport>(responseJson);
+                return JsonSerializer.Deserialize<HistoryExport>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

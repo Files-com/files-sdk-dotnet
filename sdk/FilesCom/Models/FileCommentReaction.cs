@@ -185,7 +185,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileCommentReaction>(responseJson);
+                return JsonSerializer.Deserialize<FileCommentReaction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

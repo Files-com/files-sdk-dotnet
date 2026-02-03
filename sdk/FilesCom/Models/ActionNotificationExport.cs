@@ -292,7 +292,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
+                return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -376,7 +376,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson);
+                return JsonSerializer.Deserialize<ActionNotificationExport>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

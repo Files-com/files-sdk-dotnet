@@ -364,7 +364,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GpgKey>(responseJson);
+                return JsonSerializer.Deserialize<GpgKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -519,7 +519,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GpgKey>(responseJson);
+                return JsonSerializer.Deserialize<GpgKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -612,7 +612,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GpgKey>(responseJson);
+                return JsonSerializer.Deserialize<GpgKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -679,7 +679,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GpgKey>(responseJson);
+                return JsonSerializer.Deserialize<GpgKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

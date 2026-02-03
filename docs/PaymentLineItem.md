@@ -11,7 +11,7 @@
 }
 ```
 
-* `amount` / `Amount`  (double): Payment line item amount
+* `amount` / `Amount`  (decimal): Payment line item amount
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Payment line item created at date/time
 * `invoice_id` / `InvoiceId`  (Nullable<Int64>): Invoice ID
 * `payment_id` / `PaymentId`  (Nullable<Int64>): Payment ID

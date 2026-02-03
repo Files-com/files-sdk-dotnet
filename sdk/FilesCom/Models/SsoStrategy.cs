@@ -892,7 +892,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SsoStrategy>(responseJson);
+                return JsonSerializer.Deserialize<SsoStrategy>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

@@ -227,7 +227,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -352,7 +352,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -416,7 +416,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -483,7 +483,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FormFieldSet>(responseJson);
+                return JsonSerializer.Deserialize<FormFieldSet>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

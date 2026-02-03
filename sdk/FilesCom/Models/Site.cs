@@ -1934,9 +1934,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("next_billing_amount")]
-        public double NextBillingAmount
+        public decimal NextBillingAmount
         {
-            get { return (double)attributes["next_billing_amount"]; }
+            get { return (decimal)attributes["next_billing_amount"]; }
             private set { attributes["next_billing_amount"] = value; }
         }
 
@@ -2740,7 +2740,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Site>(responseJson);
+                return JsonSerializer.Deserialize<Site>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -2765,7 +2765,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<UsageSnapshot>(responseJson);
+                return JsonSerializer.Deserialize<UsageSnapshot>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -3621,7 +3621,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Site>(responseJson);
+                return JsonSerializer.Deserialize<Site>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

@@ -632,7 +632,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -767,7 +767,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -946,7 +946,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1128,7 +1128,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson);
+                return JsonSerializer.Deserialize<RemoteServerCredential>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

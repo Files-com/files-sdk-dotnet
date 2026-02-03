@@ -1086,7 +1086,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson);
+                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1206,7 +1206,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson);
+                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1404,7 +1404,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson);
+                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1788,7 +1788,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson);
+                return JsonSerializer.Deserialize<SiemHttpDestination>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

@@ -293,7 +293,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<BundleRecipient>(responseJson);
+                return JsonSerializer.Deserialize<BundleRecipient>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

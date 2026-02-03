@@ -217,7 +217,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileMigration>(responseJson);
+                return JsonSerializer.Deserialize<FileMigration>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

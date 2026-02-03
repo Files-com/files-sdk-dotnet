@@ -157,7 +157,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -282,7 +282,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -344,7 +344,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -401,7 +401,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ShareGroup>(responseJson);
+                return JsonSerializer.Deserialize<ShareGroup>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

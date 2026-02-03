@@ -454,7 +454,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Restore>(responseJson);
+                return JsonSerializer.Deserialize<Restore>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

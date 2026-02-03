@@ -844,7 +844,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Automation>(responseJson);
+                return JsonSerializer.Deserialize<Automation>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -994,7 +994,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Automation>(responseJson);
+                return JsonSerializer.Deserialize<Automation>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1202,7 +1202,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Automation>(responseJson);
+                return JsonSerializer.Deserialize<Automation>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1442,7 +1442,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Automation>(responseJson);
+                return JsonSerializer.Deserialize<Automation>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

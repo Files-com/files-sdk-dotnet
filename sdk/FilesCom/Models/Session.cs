@@ -212,7 +212,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Session>(responseJson);
+                return JsonSerializer.Deserialize<Session>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

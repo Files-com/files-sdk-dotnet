@@ -321,7 +321,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<PublicKey>(responseJson);
+                return JsonSerializer.Deserialize<PublicKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -476,7 +476,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<PublicKey>(responseJson);
+                return JsonSerializer.Deserialize<PublicKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -549,7 +549,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<PublicKey>(responseJson);
+                return JsonSerializer.Deserialize<PublicKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -600,7 +600,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<PublicKey>(responseJson);
+                return JsonSerializer.Deserialize<PublicKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

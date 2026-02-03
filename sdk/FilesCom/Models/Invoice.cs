@@ -115,9 +115,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("amount")]
-        public double Amount
+        public decimal Amount
         {
-            get { return (double)attributes["amount"]; }
+            get { return (decimal)attributes["amount"]; }
             private set { attributes["amount"] = value; }
         }
 
@@ -126,9 +126,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("balance")]
-        public double Balance
+        public decimal Balance
         {
-            get { return (double)attributes["balance"]; }
+            get { return (decimal)attributes["balance"]; }
             private set { attributes["balance"] = value; }
         }
 
@@ -313,7 +313,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<AccountLineItem>(responseJson);
+                return JsonSerializer.Deserialize<AccountLineItem>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

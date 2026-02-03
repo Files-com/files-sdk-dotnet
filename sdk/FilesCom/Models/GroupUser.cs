@@ -180,7 +180,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GroupUser>(responseJson);
+                return JsonSerializer.Deserialize<GroupUser>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -335,7 +335,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GroupUser>(responseJson);
+                return JsonSerializer.Deserialize<GroupUser>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -400,7 +400,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<GroupUser>(responseJson);
+                return JsonSerializer.Deserialize<GroupUser>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

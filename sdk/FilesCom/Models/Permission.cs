@@ -385,7 +385,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Permission>(responseJson);
+                return JsonSerializer.Deserialize<Permission>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

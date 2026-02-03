@@ -201,9 +201,9 @@ namespace FilesCom.Models
         /// Minimum free CPU percentage required for this backend to be considered healthy.
         /// </summary>
         [JsonPropertyName("min_free_cpu")]
-        public double MinFreeCpu
+        public decimal MinFreeCpu
         {
-            get { return (double)attributes["min_free_cpu"]; }
+            get { return (decimal)attributes["min_free_cpu"]; }
             set { attributes["min_free_cpu"] = value; }
         }
 
@@ -211,9 +211,9 @@ namespace FilesCom.Models
         /// Minimum free memory percentage required for this backend to be considered healthy.
         /// </summary>
         [JsonPropertyName("min_free_mem")]
-        public double MinFreeMem
+        public decimal MinFreeMem
         {
-            get { return (double)attributes["min_free_mem"]; }
+            get { return (decimal)attributes["min_free_mem"]; }
             set { attributes["min_free_mem"] = value; }
         }
 
@@ -398,7 +398,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson);
+                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -523,7 +523,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson);
+                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -634,7 +634,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson);
+                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -769,7 +769,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson);
+                return JsonSerializer.Deserialize<RemoteMountBackend>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

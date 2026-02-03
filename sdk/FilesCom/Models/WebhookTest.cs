@@ -345,7 +345,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<WebhookTest>(responseJson);
+                return JsonSerializer.Deserialize<WebhookTest>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

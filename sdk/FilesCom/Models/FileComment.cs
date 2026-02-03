@@ -137,7 +137,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileComment>(responseJson);
+                return JsonSerializer.Deserialize<FileComment>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -267,7 +267,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileComment>(responseJson);
+                return JsonSerializer.Deserialize<FileComment>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -318,7 +318,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileComment>(responseJson);
+                return JsonSerializer.Deserialize<FileComment>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

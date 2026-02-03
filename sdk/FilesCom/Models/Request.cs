@@ -350,7 +350,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Request>(responseJson);
+                return JsonSerializer.Deserialize<Request>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

@@ -1,3 +1,4 @@
+using FilesCom.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ namespace FilesCom
                 string body = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    data = JsonSerializer.Deserialize<List<T>>(body);
+                    data = JsonSerializer.Deserialize<List<T>>(body, JsonUtil.Options);
                 }
                 catch (JsonException)
                 {

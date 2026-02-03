@@ -357,7 +357,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+                return JsonSerializer.Deserialize<ExternalEvent>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -409,7 +409,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ExternalEvent>(responseJson);
+                return JsonSerializer.Deserialize<ExternalEvent>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

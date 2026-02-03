@@ -181,7 +181,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -306,7 +306,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -365,7 +365,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -432,7 +432,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Clickwrap>(responseJson);
+                return JsonSerializer.Deserialize<Clickwrap>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

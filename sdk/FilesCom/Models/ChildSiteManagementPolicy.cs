@@ -225,7 +225,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson);
+                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -345,7 +345,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson);
+                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -408,7 +408,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson);
+                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -475,7 +475,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson);
+                return JsonSerializer.Deserialize<ChildSiteManagementPolicy>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

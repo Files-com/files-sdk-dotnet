@@ -219,7 +219,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<MessageCommentReaction>(responseJson);
+                return JsonSerializer.Deserialize<MessageCommentReaction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -267,7 +267,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<MessageCommentReaction>(responseJson);
+                return JsonSerializer.Deserialize<MessageCommentReaction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

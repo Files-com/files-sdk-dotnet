@@ -363,7 +363,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Lock>(responseJson);
+                return JsonSerializer.Deserialize<Lock>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

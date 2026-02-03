@@ -341,7 +341,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+                return JsonSerializer.Deserialize<ApiKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -478,7 +478,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+                return JsonSerializer.Deserialize<ApiKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -521,7 +521,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+                return JsonSerializer.Deserialize<ApiKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -594,7 +594,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+                return JsonSerializer.Deserialize<ApiKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -635,7 +635,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+                return JsonSerializer.Deserialize<ApiKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -692,7 +692,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ApiKey>(responseJson);
+                return JsonSerializer.Deserialize<ApiKey>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

@@ -115,9 +115,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("amount")]
-        public double Amount
+        public decimal Amount
         {
-            get { return (double)attributes["amount"]; }
+            get { return (decimal)attributes["amount"]; }
             private set { attributes["amount"] = value; }
         }
 

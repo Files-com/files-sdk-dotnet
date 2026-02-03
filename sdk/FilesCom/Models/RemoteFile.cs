@@ -852,7 +852,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -901,7 +901,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -969,7 +969,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ZipListEntry[]>(responseJson);
+                return JsonSerializer.Deserialize<ZipListEntry[]>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1024,7 +1024,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1074,7 +1074,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1129,7 +1129,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1200,7 +1200,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
+                return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1271,7 +1271,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1376,7 +1376,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1433,7 +1433,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1537,7 +1537,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteFile>(responseJson);
+                return JsonSerializer.Deserialize<RemoteFile>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1587,7 +1587,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<ZipListEntry[]>(responseJson);
+                return JsonSerializer.Deserialize<ZipListEntry[]>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1650,7 +1650,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1708,7 +1708,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1771,7 +1771,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1820,7 +1820,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileAction>(responseJson);
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -1899,7 +1899,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson);
+                return JsonSerializer.Deserialize<FileUploadPart[]>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

@@ -143,7 +143,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson);
+                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -273,7 +273,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson);
+                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -322,7 +322,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson);
+                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -379,7 +379,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson);
+                return JsonSerializer.Deserialize<KeyLifecycleRule>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {

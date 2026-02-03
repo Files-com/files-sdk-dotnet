@@ -109,7 +109,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Project>(responseJson);
+                return JsonSerializer.Deserialize<Project>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -229,7 +229,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Project>(responseJson);
+                return JsonSerializer.Deserialize<Project>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -272,7 +272,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Project>(responseJson);
+                return JsonSerializer.Deserialize<Project>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -323,7 +323,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Project>(responseJson);
+                return JsonSerializer.Deserialize<Project>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
