@@ -83,9 +83,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sync_bytes_received")]
-        public double SyncBytesReceived
+        public Nullable<Int64> SyncBytesReceived
         {
-            get { return (double)attributes["sync_bytes_received"]; }
+            get { return (Nullable<Int64>)attributes["sync_bytes_received"]; }
             private set { attributes["sync_bytes_received"] = value; }
         }
 
@@ -94,9 +94,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("sync_bytes_sent")]
-        public double SyncBytesSent
+        public Nullable<Int64> SyncBytesSent
         {
-            get { return (double)attributes["sync_bytes_sent"]; }
+            get { return (Nullable<Int64>)attributes["sync_bytes_sent"]; }
             private set { attributes["sync_bytes_sent"] = value; }
         }
 
