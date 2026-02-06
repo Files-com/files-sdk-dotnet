@@ -41,6 +41,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("linked_site_id", null);
             }
+            if (!this.attributes.ContainsKey("linked_site_name"))
+            {
+                this.attributes.Add("linked_site_name", null);
+            }
+            if (!this.attributes.ContainsKey("main_site_id"))
+            {
+                this.attributes.Add("main_site_id", null);
+            }
+            if (!this.attributes.ContainsKey("main_site_name"))
+            {
+                this.attributes.Add("main_site_name", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -92,6 +104,64 @@ namespace FilesCom.Models
             private set { attributes["linked_site_id"] = value; }
         }
 
+        /// <summary>
+        /// Linked Site Name
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("linked_site_name")]
+        public string LinkedSiteName
+        {
+            get { return (string)attributes["linked_site_name"]; }
+            private set { attributes["linked_site_name"] = value; }
+        }
+
+        /// <summary>
+        /// Main Site ID
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("main_site_id")]
+        public Nullable<Int64> MainSiteId
+        {
+            get { return (Nullable<Int64>)attributes["main_site_id"]; }
+            private set { attributes["main_site_id"] = value; }
+        }
+
+        /// <summary>
+        /// Main Site Name
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("main_site_name")]
+        public string MainSiteName
+        {
+            get { return (string)attributes["main_site_name"]; }
+            private set { attributes["main_site_name"] = value; }
+        }
+
+
+
+        /// <summary>
+        /// </summary>
+        public static async Task<PartnerSite[]> Linkeds(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+
+            string responseJson = await FilesClient.SendStringRequest($"/partner_sites/linked_partner_sites", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<PartnerSite[]>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
 
 
         /// <summary>

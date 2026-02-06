@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("status", null);
             }
+            if (!this.attributes.ContainsKey("main_site_name"))
+            {
+                this.attributes.Add("main_site_name", null);
+            }
             if (!this.attributes.ContainsKey("pairing_key"))
             {
                 this.attributes.Add("pairing_key", null);
@@ -117,6 +121,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["status"]; }
             set { attributes["status"] = value; }
+        }
+
+        /// <summary>
+        /// Main Site Name
+        /// </summary>
+        [JsonPropertyName("main_site_name")]
+        public string MainSiteName
+        {
+            get { return (string)attributes["main_site_name"]; }
+            set { attributes["main_site_name"] = value; }
         }
 
         /// <summary>
