@@ -101,6 +101,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("aws_access_key", null);
             }
+            if (!this.attributes.ContainsKey("s3_assume_role_arn"))
+            {
+                this.attributes.Add("s3_assume_role_arn", null);
+            }
+            if (!this.attributes.ContainsKey("s3_assume_role_duration_seconds"))
+            {
+                this.attributes.Add("s3_assume_role_duration_seconds", null);
+            }
+            if (!this.attributes.ContainsKey("s3_assume_role_external_id"))
+            {
+                this.attributes.Add("s3_assume_role_external_id", null);
+            }
             if (!this.attributes.ContainsKey("server_certificate"))
             {
                 this.attributes.Add("server_certificate", null);
@@ -564,6 +576,36 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["aws_access_key"]; }
             set { attributes["aws_access_key"] = value; }
+        }
+
+        /// <summary>
+        /// AWS IAM Role ARN for AssumeRole authentication.
+        /// </summary>
+        [JsonPropertyName("s3_assume_role_arn")]
+        public string S3AssumeRoleArn
+        {
+            get { return (string)attributes["s3_assume_role_arn"]; }
+            set { attributes["s3_assume_role_arn"] = value; }
+        }
+
+        /// <summary>
+        /// Session duration in seconds for AssumeRole authentication (900-43200).
+        /// </summary>
+        [JsonPropertyName("s3_assume_role_duration_seconds")]
+        public Nullable<Int64> S3AssumeRoleDurationSeconds
+        {
+            get { return (Nullable<Int64>)attributes["s3_assume_role_duration_seconds"]; }
+            set { attributes["s3_assume_role_duration_seconds"] = value; }
+        }
+
+        /// <summary>
+        /// External ID for AssumeRole authentication.
+        /// </summary>
+        [JsonPropertyName("s3_assume_role_external_id")]
+        public string S3AssumeRoleExternalId
+        {
+            get { return (string)attributes["s3_assume_role_external_id"]; }
+            set { attributes["s3_assume_role_external_id"] = value; }
         }
 
         /// <summary>
@@ -1417,6 +1459,8 @@ namespace FilesCom.Models
         ///   port - int64 - Port for remote server.
         ///   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
         ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -1676,6 +1720,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
             }
             if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
             {
@@ -1992,6 +2044,8 @@ namespace FilesCom.Models
         ///   port - int64 - Port for remote server.
         ///   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
         ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -2244,6 +2298,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
             }
             if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
             {
@@ -2519,6 +2581,8 @@ namespace FilesCom.Models
         ///   port - int64 - Port for remote server.
         ///   upload_staging_path - string - Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
         ///   remote_server_credential_id - int64 - ID of Remote Server Credential, if applicable.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
         ///   s3_bucket - string - S3 bucket name
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
@@ -2786,6 +2850,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
             }
             if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
             {

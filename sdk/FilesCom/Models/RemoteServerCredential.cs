@@ -53,6 +53,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("aws_access_key", null);
             }
+            if (!this.attributes.ContainsKey("s3_assume_role_arn"))
+            {
+                this.attributes.Add("s3_assume_role_arn", null);
+            }
+            if (!this.attributes.ContainsKey("s3_assume_role_duration_seconds"))
+            {
+                this.attributes.Add("s3_assume_role_duration_seconds", null);
+            }
+            if (!this.attributes.ContainsKey("s3_assume_role_external_id"))
+            {
+                this.attributes.Add("s3_assume_role_external_id", null);
+            }
             if (!this.attributes.ContainsKey("google_cloud_storage_s3_compatible_access_key"))
             {
                 this.attributes.Add("google_cloud_storage_s3_compatible_access_key", null);
@@ -225,6 +237,36 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["aws_access_key"]; }
             set { attributes["aws_access_key"] = value; }
+        }
+
+        /// <summary>
+        /// AWS IAM Role ARN for AssumeRole authentication.
+        /// </summary>
+        [JsonPropertyName("s3_assume_role_arn")]
+        public string S3AssumeRoleArn
+        {
+            get { return (string)attributes["s3_assume_role_arn"]; }
+            set { attributes["s3_assume_role_arn"] = value; }
+        }
+
+        /// <summary>
+        /// Session duration in seconds for AssumeRole authentication (900-43200).
+        /// </summary>
+        [JsonPropertyName("s3_assume_role_duration_seconds")]
+        public Nullable<Int64> S3AssumeRoleDurationSeconds
+        {
+            get { return (Nullable<Int64>)attributes["s3_assume_role_duration_seconds"]; }
+            set { attributes["s3_assume_role_duration_seconds"] = value; }
+        }
+
+        /// <summary>
+        /// External ID for AssumeRole authentication.
+        /// </summary>
+        [JsonPropertyName("s3_assume_role_external_id")]
+        public string S3AssumeRoleExternalId
+        {
+            get { return (string)attributes["s3_assume_role_external_id"]; }
+            set { attributes["s3_assume_role_external_id"] = value; }
         }
 
         /// <summary>
@@ -473,6 +515,8 @@ namespace FilesCom.Models
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
         ///   aws_access_key - string - AWS Access Key.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -530,6 +574,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -790,6 +842,8 @@ namespace FilesCom.Models
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
         ///   aws_access_key - string - AWS Access Key.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -840,6 +894,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {
@@ -961,6 +1023,8 @@ namespace FilesCom.Models
         ///   description - string - Internal description for your reference
         ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
         ///   aws_access_key - string - AWS Access Key.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
         ///   cloudflare_access_key - string - Cloudflare: Access Key.
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
@@ -1026,6 +1090,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+            }
+            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
             }
             if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
             {

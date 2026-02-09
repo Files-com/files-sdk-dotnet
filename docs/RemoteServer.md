@@ -22,6 +22,9 @@
   "s3_bucket": "my-bucket",
   "s3_region": "us-east-1",
   "aws_access_key": "example",
+  "s3_assume_role_arn": "example",
+  "s3_assume_role_duration_seconds": 1,
+  "s3_assume_role_external_id": "example",
   "server_certificate": "require_match",
   "server_host_key": "[public key]",
   "server_type": "s3",
@@ -90,6 +93,9 @@
 * `s3_bucket` / `S3Bucket`  (string): S3 bucket name
 * `s3_region` / `S3Region`  (string): S3 region
 * `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
+* `s3_assume_role_arn` / `S3AssumeRoleArn`  (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` / `S3AssumeRoleDurationSeconds`  (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
+* `s3_assume_role_external_id` / `S3AssumeRoleExternalId`  (string): External ID for AssumeRole authentication.
 * `server_certificate` / `ServerCertificate`  (string): Remote server certificate
 * `server_host_key` / `ServerHostKey`  (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` / `ServerType`  (string): Remote server type.
@@ -284,6 +290,8 @@ Task<RemoteServer> RemoteServer.Create(
 * `port` (Nullable<Int64>): Port for remote server.
 * `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
+* `s3_assume_role_arn` (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -418,6 +426,8 @@ Task<RemoteServer> RemoteServer.Update(
 * `port` (Nullable<Int64>): Port for remote server.
 * `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
+* `s3_assume_role_arn` (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
@@ -557,6 +567,8 @@ parameters.Add("pin_to_site_region", true);
 parameters.Add("port", 1);
 parameters.Add("upload_staging_path", "/tmp/uploads");
 parameters.Add("remote_server_credential_id", 1);
+parameters.Add("s3_assume_role_arn", "example");
+parameters.Add("s3_assume_role_duration_seconds", 1);
 parameters.Add("s3_bucket", "my-bucket");
 parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("s3_compatible_bucket", "my-bucket");
@@ -635,6 +647,8 @@ RemoteServer.Update(parameters);
 * `port` (Nullable<Int64>): Port for remote server.
 * `upload_staging_path` (string): Upload staging path.  Applies to SFTP only.  If a path is provided here, files will first be uploaded to this path on the remote folder and the moved into the final correct path via an SFTP move command.  This is required by some remote MFT systems to emulate atomic uploads, which are otherwise not supoprted by SFTP.
 * `remote_server_credential_id` (Nullable<Int64>): ID of Remote Server Credential, if applicable.
+* `s3_assume_role_arn` (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `s3_bucket` (string): S3 bucket name
 * `s3_compatible_access_key` (string): S3-compatible: Access Key
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name

@@ -10,6 +10,9 @@
   "description": "More information or notes about this credential.",
   "server_type": "s3",
   "aws_access_key": "example",
+  "s3_assume_role_arn": "example",
+  "s3_assume_role_duration_seconds": 1,
+  "s3_assume_role_external_id": "example",
   "google_cloud_storage_s3_compatible_access_key": "example",
   "wasabi_access_key": "example",
   "s3_compatible_access_key": "example",
@@ -26,6 +29,9 @@
 * `description` / `Description`  (string): Internal description for your reference
 * `server_type` / `ServerType`  (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` / `AwsAccessKey`  (string): AWS Access Key.
+* `s3_assume_role_arn` / `S3AssumeRoleArn`  (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` / `S3AssumeRoleDurationSeconds`  (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
+* `s3_assume_role_external_id` / `S3AssumeRoleExternalId`  (string): External ID for AssumeRole authentication.
 * `google_cloud_storage_s3_compatible_access_key` / `GoogleCloudStorageS3CompatibleAccessKey`  (string): Google Cloud Storage: S3-compatible Access Key.
 * `wasabi_access_key` / `WasabiAccessKey`  (string): Wasabi: Access Key.
 * `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible: Access Key
@@ -108,6 +114,8 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` (string): AWS Access Key.
+* `s3_assume_role_arn` (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `filebase_access_key` (string): Filebase: Access Key.
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
@@ -154,6 +162,8 @@ Task<RemoteServerCredential> RemoteServerCredential.Update(
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` (string): AWS Access Key.
+* `s3_assume_role_arn` (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `filebase_access_key` (string): Filebase: Access Key.
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
@@ -210,6 +220,8 @@ parameters.Add("name", "My Credential");
 parameters.Add("description", "More information or notes about this credential.");
 parameters.Add("server_type", "s3");
 parameters.Add("aws_access_key", "example");
+parameters.Add("s3_assume_role_arn", "example");
+parameters.Add("s3_assume_role_duration_seconds", 1);
 parameters.Add("cloudflare_access_key", "example");
 parameters.Add("filebase_access_key", "example");
 parameters.Add("google_cloud_storage_s3_compatible_access_key", "example");
@@ -228,6 +240,8 @@ RemoteServerCredential.Update(parameters);
 * `description` (string): Internal description for your reference
 * `server_type` (string): Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
 * `aws_access_key` (string): AWS Access Key.
+* `s3_assume_role_arn` (string): AWS IAM Role ARN for AssumeRole authentication.
+* `s3_assume_role_duration_seconds` (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `cloudflare_access_key` (string): Cloudflare: Access Key.
 * `filebase_access_key` (string): Filebase: Access Key.
 * `google_cloud_storage_s3_compatible_access_key` (string): Google Cloud Storage: S3-compatible Access Key.
