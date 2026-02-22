@@ -97,9 +97,9 @@ Task<Partner> Partner.Create(
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
-* `root_folder` (string): The root folder path for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): Required - The name of the Partner.
+* `root_folder` (string): Required - The root folder path for this Partner.
 * `workspace_id` (Nullable<Int64>): ID of the Workspace associated with this Partner.
 
 
@@ -123,9 +123,9 @@ Task<Partner> Partner.Update(
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
-* `root_folder` (string): The root folder path for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
+* `root_folder` (string): The root folder path for this Partner.
 
 
 ---
@@ -159,9 +159,9 @@ parameters.Add("allow_credential_changes", false);
 parameters.Add("allow_providing_gpg_keys", false);
 parameters.Add("allow_user_creation", false);
 parameters.Add("notes", "This is a note about the partner.");
-parameters.Add("root_folder", "/AcmeCorp");
 parameters.Add("tags", "example");
 parameters.Add("name", "Acme Corp");
+parameters.Add("root_folder", "/AcmeCorp");
 
 Partner.Update(parameters);
 ```
@@ -174,9 +174,9 @@ Partner.Update(parameters);
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `notes` (string): Notes about this Partner.
-* `root_folder` (string): The root folder path for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
+* `root_folder` (string): The root folder path for this Partner.
 
 
 ---

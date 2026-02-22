@@ -226,9 +226,9 @@ namespace FilesCom.Models
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   notes - string - Notes about this Partner.
-        ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
+        ///   root_folder - string - The root folder path for this Partner.
         /// </summary>
         public async Task<Partner> Update(Dictionary<string, object> parameters)
         {
@@ -267,10 +267,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
             }
-            if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
-            {
-                throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
-            }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
@@ -278,6 +274,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
+            {
+                throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -438,9 +438,9 @@ namespace FilesCom.Models
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   notes - string - Notes about this Partner.
-        ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name (required) - string - The name of the Partner.
+        ///   root_folder (required) - string - The root folder path for this Partner.
         ///   workspace_id - int64 - ID of the Workspace associated with this Partner.
         /// </summary>
         public static async Task<Partner> Create(
@@ -455,6 +455,10 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
+            }
+            if (!parameters.ContainsKey("root_folder") || parameters["root_folder"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: root_folder", "parameters[\"root_folder\"]");
             }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
@@ -476,10 +480,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
             }
-            if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
-            {
-                throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
-            }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
@@ -487,6 +487,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
+            {
+                throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
@@ -513,9 +517,9 @@ namespace FilesCom.Models
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   notes - string - Notes about this Partner.
-        ///   root_folder - string - The root folder path for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
+        ///   root_folder - string - The root folder path for this Partner.
         /// </summary>
         public static async Task<Partner> Update(
             Nullable<Int64> id,
@@ -562,10 +566,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
             }
-            if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
-            {
-                throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
-            }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
@@ -573,6 +573,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
+            {
+                throw new ArgumentException("Bad parameter: root_folder must be of type string", "parameters[\"root_folder\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
