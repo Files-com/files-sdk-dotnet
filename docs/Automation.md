@@ -130,7 +130,7 @@
 * `source` / `Source`  (string): Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
 * `legacy_sync_ids` / `LegacySyncIds`  (Nullable<Int64>[]): IDs of remote sync folder behaviors to run by this Automation
 * `sync_ids` / `SyncIds`  (Nullable<Int64>[]): IDs of syncs to run by this Automation. This is the new way to specify syncs, and it is recommended to use this instead of `legacy_sync_ids`.
-* `trigger_actions` / `TriggerActions`  (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
+* `trigger_actions` / `TriggerActions`  (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `trigger` / `Trigger`  (string): How this automation is triggered to run.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID of the Automation's creator.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
@@ -223,7 +223,7 @@ Task<Automation> Automation.Create(
 * `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
 * `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `trigger` (string): How this automation is triggered to run.
-* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
+* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `automation` (string): Required - Automation type
@@ -291,7 +291,7 @@ Task<Automation> Automation.Update(
 * `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
 * `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `trigger` (string): How this automation is triggered to run.
-* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
+* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `automation` (string): Automation type
@@ -410,7 +410,7 @@ Automation.Update(parameters);
 * `retry_on_failure_interval_in_minutes` (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
 * `retry_on_failure_number_of_attempts` (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
 * `trigger` (string): How this automation is triggered to run.
-* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, read, update, destroy, move, archived_delete, copy
+* `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `automation` (string): Automation type
