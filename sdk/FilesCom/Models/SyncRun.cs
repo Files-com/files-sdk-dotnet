@@ -284,9 +284,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("runtime")]
-        public double Runtime
+        public Nullable<double> Runtime
         {
-            get { return (double)attributes["runtime"]; }
+            get { return (Nullable<double>)attributes["runtime"]; }
             private set { attributes["runtime"] = value; }
         }
 

@@ -156,5 +156,24 @@ namespace FilesTests
             // assert our count matches
             Assert.AreEqual(0, itemCount);
         }
+
+        [TestMethod]
+        public void TestSyncListWithInProgressSyncRun()
+        {
+            _server
+                .Given(WireMock.RequestBuilders.Request.Create().WithPath("/api/rest/v1/syncs").UsingGet())
+                .RespondWith(
+                    Response.Create()
+                        .WithStatusCode(200)
+                        .WithHeader("Content-Type", "application/json")
+                        .WithBody(@"[{""id"":3803,""name"":""Batchsync"",""latest_sync_run"":{""id"":41970631,""completed_at"":null,""log_url"":null,""runtime"":null,""status"":""in_progress"",""successful_files"":0}}]")
+                );
+
+            var syncs = Sync.List(null, null).All().Result;
+
+            Assert.AreEqual(1, syncs.Count);
+            Assert.AreEqual(3803, syncs[0].Id);
+            Assert.IsNull(syncs[0].LatestSyncRun.Runtime);
+        }
     }
 }

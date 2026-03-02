@@ -30,7 +30,7 @@
 * `retried_at` / `RetriedAt`  (Nullable<DateTime>): If set, this Automation run was retried due to `failure` or `partial_failure`.
 * `retried_in_run_id` / `RetriedInRunId`  (Nullable<Int64>): ID of the run that is or will be retrying this run.
 * `retry_of_run_id` / `RetryOfRunId`  (Nullable<Int64>): ID of the original run that this run is retrying.
-* `runtime` / `Runtime`  (double): Automation run runtime.
+* `runtime` / `Runtime`  (Nullable<double>): Automation run runtime.
 * `status` / `Status`  (string): The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
 * `successful_operations` / `SuccessfulOperations`  (Nullable<Int64>): Count of successful operations.
 * `failed_operations` / `FailedOperations`  (Nullable<Int64>): Count of failed operations.

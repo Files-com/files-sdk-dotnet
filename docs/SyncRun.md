@@ -44,7 +44,7 @@
 * `estimated_bytes_count` / `EstimatedBytesCount`  (Nullable<Int64>): Estimated bytes count for this run
 * `event_errors` / `EventErrors`  (string[]): Array of errors encountered during the run
 * `log_url` / `LogUrl`  (string): Link to external log file.
-* `runtime` / `Runtime`  (double): Total runtime in seconds
+* `runtime` / `Runtime`  (Nullable<double>): Total runtime in seconds
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 * `src_remote_server_type` / `SrcRemoteServerType`  (string): Source remote server type, if any

@@ -61,7 +61,7 @@
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Message creation date/time
 * `http_response_code` / `HttpResponseCode`  (string): HTTP Response Code received for this message
 * `http_response_headers` / `HttpResponseHeaders`  (object): HTTP Headers received for this message.
-* `http_transmission_duration` / `HttpTransmissionDuration`  (double): HTTP transmission duration in seceonds
+* `http_transmission_duration` / `HttpTransmissionDuration`  (Nullable<double>): HTTP transmission duration in seceonds
 * `mdn_received` / `MdnReceived`  (bool): Did the partner give a response body?
 * `mdn_valid` / `MdnValid`  (bool): Is the response in MDN format?
 * `mdn_signature_verified` / `MdnSignatureVerified`  (bool): MDN signature verified?

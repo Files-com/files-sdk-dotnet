@@ -385,9 +385,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("http_transmission_duration")]
-        public double HttpTransmissionDuration
+        public Nullable<double> HttpTransmissionDuration
         {
-            get { return (double)attributes["http_transmission_duration"]; }
+            get { return (Nullable<double>)attributes["http_transmission_duration"]; }
             private set { attributes["http_transmission_duration"] = value; }
         }
 

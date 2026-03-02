@@ -109,8 +109,8 @@ Task<RemoteMountBackend> RemoteMountBackend.Create(
 * `health_check_enabled` (bool): True if health checks are enabled for this backend.
 * `health_check_type` (string): Type of health check to perform.
 * `interval` (Nullable<Int64>): Interval in seconds between health checks.
-* `min_free_cpu` (double): Minimum free CPU percentage required for this backend to be considered healthy.
-* `min_free_mem` (double): Minimum free memory percentage required for this backend to be considered healthy.
+* `min_free_cpu` (Nullable<double>): Minimum free CPU percentage required for this backend to be considered healthy.
+* `min_free_mem` (Nullable<double>): Minimum free memory percentage required for this backend to be considered healthy.
 * `priority` (Nullable<Int64>): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.
@@ -156,8 +156,8 @@ Task<RemoteMountBackend> RemoteMountBackend.Update(
 * `health_check_enabled` (bool): True if health checks are enabled for this backend.
 * `health_check_type` (string): Type of health check to perform.
 * `interval` (Nullable<Int64>): Interval in seconds between health checks.
-* `min_free_cpu` (double): Minimum free CPU percentage required for this backend to be considered healthy.
-* `min_free_mem` (double): Minimum free memory percentage required for this backend to be considered healthy.
+* `min_free_cpu` (Nullable<double>): Minimum free CPU percentage required for this backend to be considered healthy.
+* `min_free_mem` (Nullable<double>): Minimum free memory percentage required for this backend to be considered healthy.
 * `priority` (Nullable<Int64>): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.
@@ -233,8 +233,8 @@ RemoteMountBackend.Update(parameters);
 * `health_check_enabled` (bool): True if health checks are enabled for this backend.
 * `health_check_type` (string): Type of health check to perform.
 * `interval` (Nullable<Int64>): Interval in seconds between health checks.
-* `min_free_cpu` (double): Minimum free CPU percentage required for this backend to be considered healthy.
-* `min_free_mem` (double): Minimum free memory percentage required for this backend to be considered healthy.
+* `min_free_cpu` (Nullable<double>): Minimum free CPU percentage required for this backend to be considered healthy.
+* `min_free_mem` (Nullable<double>): Minimum free memory percentage required for this backend to be considered healthy.
 * `priority` (Nullable<Int64>): Priority of this backend.
 * `remote_path` (string): Path on the remote server to treat as the root of this mount.
 * `rise` (Nullable<Int64>): Number of consecutive successes before considering the backend healthy.

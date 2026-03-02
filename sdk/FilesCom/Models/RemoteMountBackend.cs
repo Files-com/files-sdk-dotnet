@@ -365,13 +365,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: interval must be of type Nullable<Int64>", "parameters[\"interval\"]");
             }
-            if (parameters.ContainsKey("min_free_cpu") && !(parameters["min_free_cpu"] is double))
+            if (parameters.ContainsKey("min_free_cpu") && !(parameters["min_free_cpu"] is Nullable<double>))
             {
-                throw new ArgumentException("Bad parameter: min_free_cpu must be of type double", "parameters[\"min_free_cpu\"]");
+                throw new ArgumentException("Bad parameter: min_free_cpu must be of type Nullable<double>", "parameters[\"min_free_cpu\"]");
             }
-            if (parameters.ContainsKey("min_free_mem") && !(parameters["min_free_mem"] is double))
+            if (parameters.ContainsKey("min_free_mem") && !(parameters["min_free_mem"] is Nullable<double>))
             {
-                throw new ArgumentException("Bad parameter: min_free_mem must be of type double", "parameters[\"min_free_mem\"]");
+                throw new ArgumentException("Bad parameter: min_free_mem must be of type Nullable<double>", "parameters[\"min_free_mem\"]");
             }
             if (parameters.ContainsKey("priority") && !(parameters["priority"] is Nullable<Int64>))
             {
@@ -597,13 +597,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: interval must be of type Nullable<Int64>", "parameters[\"interval\"]");
             }
-            if (parameters.ContainsKey("min_free_cpu") && !(parameters["min_free_cpu"] is double))
+            if (parameters.ContainsKey("min_free_cpu") && !(parameters["min_free_cpu"] is Nullable<double>))
             {
-                throw new ArgumentException("Bad parameter: min_free_cpu must be of type double", "parameters[\"min_free_cpu\"]");
+                throw new ArgumentException("Bad parameter: min_free_cpu must be of type Nullable<double>", "parameters[\"min_free_cpu\"]");
             }
-            if (parameters.ContainsKey("min_free_mem") && !(parameters["min_free_mem"] is double))
+            if (parameters.ContainsKey("min_free_mem") && !(parameters["min_free_mem"] is Nullable<double>))
             {
-                throw new ArgumentException("Bad parameter: min_free_mem must be of type double", "parameters[\"min_free_mem\"]");
+                throw new ArgumentException("Bad parameter: min_free_mem must be of type Nullable<double>", "parameters[\"min_free_mem\"]");
             }
             if (parameters.ContainsKey("priority") && !(parameters["priority"] is Nullable<Int64>))
             {
@@ -736,13 +736,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: interval must be of type Nullable<Int64>", "parameters[\"interval\"]");
             }
-            if (parameters.ContainsKey("min_free_cpu") && !(parameters["min_free_cpu"] is double))
+            if (parameters.ContainsKey("min_free_cpu") && !(parameters["min_free_cpu"] is Nullable<double>))
             {
-                throw new ArgumentException("Bad parameter: min_free_cpu must be of type double", "parameters[\"min_free_cpu\"]");
+                throw new ArgumentException("Bad parameter: min_free_cpu must be of type Nullable<double>", "parameters[\"min_free_cpu\"]");
             }
-            if (parameters.ContainsKey("min_free_mem") && !(parameters["min_free_mem"] is double))
+            if (parameters.ContainsKey("min_free_mem") && !(parameters["min_free_mem"] is Nullable<double>))
             {
-                throw new ArgumentException("Bad parameter: min_free_mem must be of type double", "parameters[\"min_free_mem\"]");
+                throw new ArgumentException("Bad parameter: min_free_mem must be of type Nullable<double>", "parameters[\"min_free_mem\"]");
             }
             if (parameters.ContainsKey("priority") && !(parameters["priority"] is Nullable<Int64>))
             {
