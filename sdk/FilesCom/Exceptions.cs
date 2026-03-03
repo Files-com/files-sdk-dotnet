@@ -1046,6 +1046,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class InvalidZipFileException : ProcessingFailureException
+    {
+        public InvalidZipFileException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class MetadataNotSupportedOnRemotesException : ProcessingFailureException
     {
         public MetadataNotSupportedOnRemotesException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
