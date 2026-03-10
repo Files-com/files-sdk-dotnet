@@ -195,7 +195,7 @@ Task<Automation> Automation.Create(
 ### Parameters
 
 * `source` (string): Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
-* `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
+* `destinations` (string[]): A list of destination paths. Use a trailing slash for folder destinations and omit it for file destinations.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `interval` (string): How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -263,7 +263,7 @@ Task<Automation> Automation.Update(
 
 * `id` (Nullable<Int64>): Required - Automation ID.
 * `source` (string): Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
-* `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
+* `destinations` (string[]): A list of destination paths. Use a trailing slash for folder destinations and omit it for file destinations.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `interval` (string): How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
@@ -342,7 +342,7 @@ var Automation = Automation.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("source", "example");
-parameters.Add("destinations", ["folder_a/file_a.txt",{"folder_path":"folder_b","file_path":"file_b.txt"},{"folder_path":"folder_c"}]);
+parameters.Add("destinations", ["folder_a/file_a.txt","folder_b/","./relative-folder/"]);
 parameters.Add("destination_replace_from", "example");
 parameters.Add("destination_replace_to", "example");
 parameters.Add("interval", "year");
@@ -382,7 +382,7 @@ Automation.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Automation ID.
 * `source` (string): Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
-* `destinations` (string[]): A list of String destination paths or Hash of folder_path and optional file_path.
+* `destinations` (string[]): A list of destination paths. Use a trailing slash for folder destinations and omit it for file destinations.
 * `destination_replace_from` (string): If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
 * `destination_replace_to` (string): If set, this string will replace the value `destination_replace_from` in the destination filename. You can use special patterns here.
 * `interval` (string): How often to run this automation? One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
