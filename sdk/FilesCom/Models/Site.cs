@@ -81,6 +81,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allow_bundle_names", false);
             }
+            if (!this.attributes.ContainsKey("allow_user_level_2fa_override"))
+            {
+                this.attributes.Add("allow_user_level_2fa_override", false);
+            }
+            if (!this.attributes.ContainsKey("allow_user_level_allowed_ip_override"))
+            {
+                this.attributes.Add("allow_user_level_allowed_ip_override", false);
+            }
+            if (!this.attributes.ContainsKey("allow_user_level_ssl_override"))
+            {
+                this.attributes.Add("allow_user_level_ssl_override", false);
+            }
             if (!this.attributes.ContainsKey("allowed_countries"))
             {
                 this.attributes.Add("allowed_countries", null);
@@ -889,6 +901,42 @@ namespace FilesCom.Models
         {
             get { return attributes["allow_bundle_names"] == null ? false : (bool)attributes["allow_bundle_names"]; }
             private set { attributes["allow_bundle_names"] = value; }
+        }
+
+        /// <summary>
+        /// Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("allow_user_level_2fa_override")]
+        public bool AllowUserLevel2faOverride
+        {
+            get { return attributes["allow_user_level_2fa_override"] == null ? false : (bool)attributes["allow_user_level_2fa_override"]; }
+            private set { attributes["allow_user_level_2fa_override"] = value; }
+        }
+
+        /// <summary>
+        /// Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("allow_user_level_allowed_ip_override")]
+        public bool AllowUserLevelAllowedIpOverride
+        {
+            get { return attributes["allow_user_level_allowed_ip_override"] == null ? false : (bool)attributes["allow_user_level_allowed_ip_override"]; }
+            private set { attributes["allow_user_level_allowed_ip_override"] = value; }
+        }
+
+        /// <summary>
+        /// Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("allow_user_level_ssl_override")]
+        public bool AllowUserLevelSslOverride
+        {
+            get { return attributes["allow_user_level_ssl_override"] == null ? false : (bool)attributes["allow_user_level_ssl_override"]; }
+            private set { attributes["allow_user_level_ssl_override"] = value; }
         }
 
         /// <summary>
@@ -2832,6 +2880,9 @@ namespace FilesCom.Models
         ///   include_password_in_welcome_email - boolean - Include password in emails to new users?
         ///   allowed_countries - string - Comma separated list of allowed Country codes
         ///   allowed_ips - string - List of allowed IP addresses
+        ///   allow_user_level_2fa_override - boolean - Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
+        ///   allow_user_level_allowed_ip_override - boolean - Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
+        ///   allow_user_level_ssl_override - boolean - Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
         ///   disallowed_countries - string - Comma separated list of disallowed Country codes
         ///   days_to_retain_backups - int64 - Number of days to keep deleted files
         ///   max_prior_passwords - int64 - Number of prior passwords to disallow
@@ -3175,6 +3226,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
                 throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
+            }
+            if (parameters.ContainsKey("allow_user_level_2fa_override") && !(parameters["allow_user_level_2fa_override"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_user_level_2fa_override must be of type bool", "parameters[\"allow_user_level_2fa_override\"]");
+            }
+            if (parameters.ContainsKey("allow_user_level_allowed_ip_override") && !(parameters["allow_user_level_allowed_ip_override"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_user_level_allowed_ip_override must be of type bool", "parameters[\"allow_user_level_allowed_ip_override\"]");
+            }
+            if (parameters.ContainsKey("allow_user_level_ssl_override") && !(parameters["allow_user_level_ssl_override"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: allow_user_level_ssl_override must be of type bool", "parameters[\"allow_user_level_ssl_override\"]");
             }
             if (parameters.ContainsKey("disallowed_countries") && !(parameters["disallowed_countries"] is string))
             {
