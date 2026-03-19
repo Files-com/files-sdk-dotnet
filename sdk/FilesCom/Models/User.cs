@@ -97,6 +97,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disabled_expired_or_inactive", false);
             }
+            if (!this.attributes.ContainsKey("desktop_configuration_profile_id"))
+            {
+                this.attributes.Add("desktop_configuration_profile_id", null);
+            }
             if (!this.attributes.ContainsKey("email"))
             {
                 this.attributes.Add("email", "");
@@ -564,6 +568,16 @@ namespace FilesCom.Models
         {
             get { return attributes["disabled_expired_or_inactive"] == null ? false : (bool)attributes["disabled_expired_or_inactive"]; }
             set { attributes["disabled_expired_or_inactive"] = value; }
+        }
+
+        /// <summary>
+        /// Desktop Configuration Profile ID assigned directly to this user, if any.
+        /// </summary>
+        [JsonPropertyName("desktop_configuration_profile_id")]
+        public Nullable<Int64> DesktopConfigurationProfileId
+        {
+            get { return (Nullable<Int64>)attributes["desktop_configuration_profile_id"]; }
+            set { attributes["desktop_configuration_profile_id"] = value; }
         }
 
         /// <summary>
@@ -1363,6 +1377,7 @@ namespace FilesCom.Models
         ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
+        ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1494,6 +1509,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+            }
+            if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
@@ -1851,6 +1870,7 @@ namespace FilesCom.Models
         ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
+        ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1977,6 +1997,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+            }
+            if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
@@ -2245,6 +2269,7 @@ namespace FilesCom.Models
         ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
+        ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -2384,6 +2409,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+            }
+            if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {

@@ -23,6 +23,7 @@
   "dav_permission": true,
   "disabled": true,
   "disabled_expired_or_inactive": true,
+  "desktop_configuration_profile_id": 1,
   "email": "john.doe@files.com",
   "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",
@@ -99,6 +100,7 @@
 * `dav_permission` / `DavPermission`  (bool): Can the user connect with WebDAV?
 * `disabled` / `Disabled`  (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `disabled_expired_or_inactive` / `DisabledExpiredOrInactive`  (bool): Computed property that returns true if user disabled or expired or inactive.
+* `desktop_configuration_profile_id` / `DesktopConfigurationProfileId`  (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
 * `email` / `Email`  (string): User email address
 * `filesystem_layout` / `FilesystemLayout`  (string): File system layout
 * `first_login_at` / `FirstLoginAt`  (Nullable<DateTime>): User's first login time
@@ -248,6 +250,7 @@ Task<User> User.Create(
 * `bypass_user_lifecycle_rules` (bool): Exempt this user from user lifecycle rules?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
+* `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
@@ -369,6 +372,7 @@ Task<User> User.Update(
 * `bypass_user_lifecycle_rules` (bool): Exempt this user from user lifecycle rules?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
+* `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
@@ -499,6 +503,7 @@ parameters.Add("billing_permission", false);
 parameters.Add("bypass_user_lifecycle_rules", false);
 parameters.Add("bypass_site_allowed_ips", false);
 parameters.Add("dav_permission", true);
+parameters.Add("desktop_configuration_profile_id", 1);
 parameters.Add("disabled", true);
 parameters.Add("filesystem_layout", "site_root");
 parameters.Add("ftp_permission", true);
@@ -560,6 +565,7 @@ User.Update(parameters);
 * `bypass_user_lifecycle_rules` (bool): Exempt this user from user lifecycle rules?
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
+* `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
