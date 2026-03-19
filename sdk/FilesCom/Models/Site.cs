@@ -561,6 +561,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sftp_enabled", false);
             }
+            if (!this.attributes.ContainsKey("sftp_finalize_partial_uploads"))
+            {
+                this.attributes.Add("sftp_finalize_partial_uploads", false);
+            }
             if (!this.attributes.ContainsKey("sftp_host_key_type"))
             {
                 this.attributes.Add("sftp_host_key_type", null);
@@ -2280,6 +2284,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Finalize partial SFTP uploads from interrupted connections? Default: true.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("sftp_finalize_partial_uploads")]
+        public bool SftpFinalizePartialUploads
+        {
+            get { return attributes["sftp_finalize_partial_uploads"] == null ? false : (bool)attributes["sftp_finalize_partial_uploads"]; }
+            private set { attributes["sftp_finalize_partial_uploads"] = value; }
+        }
+
+        /// <summary>
         /// Sftp Host Key Type
         /// </summary>
         [JsonInclude]
@@ -2920,6 +2936,7 @@ namespace FilesCom.Models
         ///   dav_enabled - boolean - Is WebDAV enabled?
         ///   ftp_enabled - boolean - Is FTP enabled?
         ///   sftp_enabled - boolean - Is SFTP enabled?
+        ///   sftp_finalize_partial_uploads - boolean - Finalize partial SFTP uploads from interrupted connections? Default: true.
         ///   users_can_create_api_keys - boolean - Allow users to create their own API keys?
         ///   users_can_create_ssh_keys - boolean - Allow users to create their own SSH keys?
         ///   show_user_notifications_log_in_link - boolean - Show log in link in user notifications?
@@ -3386,6 +3403,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: sftp_enabled must be of type bool", "parameters[\"sftp_enabled\"]");
+            }
+            if (parameters.ContainsKey("sftp_finalize_partial_uploads") && !(parameters["sftp_finalize_partial_uploads"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: sftp_finalize_partial_uploads must be of type bool", "parameters[\"sftp_finalize_partial_uploads\"]");
             }
             if (parameters.ContainsKey("users_can_create_api_keys") && !(parameters["users_can_create_api_keys"] is bool))
             {

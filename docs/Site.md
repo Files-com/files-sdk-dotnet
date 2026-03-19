@@ -187,12 +187,14 @@
     "calculate_file_checksums_sha1": true,
     "calculate_file_checksums_sha256": true,
     "legacy_checksums_mode": true,
+    "finalize_partial_uploads": true,
     "use_provided_modified_at": true,
     "windows_mode_ftp": false,
     "user_belongs_to_parent_site": false,
     "impersonator_user_id": 1
   },
   "sftp_enabled": true,
+  "sftp_finalize_partial_uploads": true,
   "sftp_host_key_type": "default",
   "active_sftp_host_key_id": 1,
   "sftp_insecure_ciphers": true,
@@ -451,6 +453,7 @@
 * `require_logout_from_bundles_and_inboxes` / `RequireLogoutFromBundlesAndInboxes`  (bool): If true, we will hide the 'Remember Me' box on Inbox and Bundle registration pages, requiring that the user logout and log back in every time they visit the page.
 * `session` / `Session`  (Session): Current session
 * `sftp_enabled` / `SftpEnabled`  (bool): Is SFTP enabled?
+* `sftp_finalize_partial_uploads` / `SftpFinalizePartialUploads`  (bool): Finalize partial SFTP uploads from interrupted connections? Default: true.
 * `sftp_host_key_type` / `SftpHostKeyType`  (string): Sftp Host Key Type
 * `active_sftp_host_key_id` / `ActiveSftpHostKeyId`  (Nullable<Int64>): Id of the currently selected custom SFTP Host Key
 * `sftp_insecure_ciphers` / `SftpInsecureCiphers`  (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -632,6 +635,7 @@ Task<Site> Site.Update(
 * `dav_enabled` (bool): Is WebDAV enabled?
 * `ftp_enabled` (bool): Is FTP enabled?
 * `sftp_enabled` (bool): Is SFTP enabled?
+* `sftp_finalize_partial_uploads` (bool): Finalize partial SFTP uploads from interrupted connections? Default: true.
 * `users_can_create_api_keys` (bool): Allow users to create their own API keys?
 * `users_can_create_ssh_keys` (bool): Allow users to create their own SSH keys?
 * `show_user_notifications_log_in_link` (bool): Show log in link in user notifications?
