@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -178,8 +182,19 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   title - string - Title to be displayed
+        ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
         ///   skip_company - boolean - Skip validating company
@@ -205,6 +220,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("title") && !(parameters["title"] is string))
             {
                 throw new ArgumentException("Bad parameter: title must be of type string", "parameters[\"title\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool))
             {
@@ -373,6 +392,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   title - string - Title to be displayed
+        ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
         ///   skip_company - boolean - Skip validating company
@@ -394,6 +414,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("title") && !(parameters["title"] is string))
             {
                 throw new ArgumentException("Bad parameter: title must be of type string", "parameters[\"title\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool))
             {
@@ -428,6 +452,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   title - string - Title to be displayed
+        ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
         ///   skip_company - boolean - Skip validating company
@@ -461,6 +486,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("title") && !(parameters["title"] is string))
             {
                 throw new ArgumentException("Bad parameter: title must be of type string", "parameters[\"title\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("skip_email") && !(parameters["skip_email"] is bool))
             {

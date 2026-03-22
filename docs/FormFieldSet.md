@@ -44,6 +44,7 @@
 * `skip_company` / `SkipCompany`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing company
 * `in_use` / `InUse`  (bool): Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 
 
 ---
@@ -98,6 +99,7 @@ Task<FormFieldSet> FormFieldSet.Create(
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `title` (string): Title to be displayed
+* `workspace_id` (Nullable<Int64>): Workspace ID
 * `skip_email` (bool): Skip validating form email
 * `skip_name` (bool): Skip validating form name
 * `skip_company` (bool): Skip validating company
@@ -120,6 +122,7 @@ Task<FormFieldSet> FormFieldSet.Update(
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `workspace_id` (Nullable<Int64>): Workspace ID
 * `skip_email` (bool): Skip validating form email
 * `skip_name` (bool): Skip validating form name
 * `skip_company` (bool): Skip validating company
@@ -153,6 +156,7 @@ var FormFieldSet = FormFieldSet.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("title", "Sample Form Title");
+parameters.Add("workspace_id", 1);
 parameters.Add("skip_email", false);
 parameters.Add("skip_name", false);
 parameters.Add("skip_company", false);
@@ -165,6 +169,7 @@ FormFieldSet.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `workspace_id` (Nullable<Int64>): Workspace ID
 * `skip_email` (bool): Skip validating form email
 * `skip_name` (bool): Skip validating form name
 * `skip_company` (bool): Skip validating company
