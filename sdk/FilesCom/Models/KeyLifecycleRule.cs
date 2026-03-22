@@ -41,9 +41,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("inactivity_days", null);
             }
+            if (!this.attributes.ContainsKey("apply_to_all_workspaces"))
+            {
+                this.attributes.Add("apply_to_all_workspaces", false);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
             }
         }
 
@@ -94,6 +102,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, a default-workspace rule also applies to keys in all workspaces.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("apply_to_all_workspaces")]
+        public bool ApplyToAllWorkspaces
+        {
+            get { return attributes["apply_to_all_workspaces"] == null ? false : (bool)attributes["apply_to_all_workspaces"]; }
+            set { attributes["apply_to_all_workspaces"] = value; }
+        }
+
+        /// <summary>
         /// Key Lifecycle Rule name
         /// </summary>
         [JsonPropertyName("name")]
@@ -104,10 +123,22 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID. `0` means the default workspace.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
+        ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
         ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public async Task<KeyLifecycleRule> Update(Dictionary<string, object> parameters)
         {
@@ -126,6 +157,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
             if (parameters.ContainsKey("key_type") && !(parameters["key_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: key_type must be of type string", "parameters[\"key_type\"]");
@@ -137,6 +172,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/key_lifecycle_rules/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -198,8 +237,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `key_type`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `key_type`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `key_type`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
         public static FilesList<KeyLifecycleRule> List(
 
@@ -292,9 +331,11 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
         ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<KeyLifecycleRule> Create(
 
@@ -305,6 +346,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
             if (parameters.ContainsKey("key_type") && !(parameters["key_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: key_type must be of type string", "parameters[\"key_type\"]");
@@ -316,6 +361,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/key_lifecycle_rules", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -333,9 +382,11 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
         ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<KeyLifecycleRule> Update(
             Nullable<Int64> id,
@@ -362,6 +413,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
+            if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
             if (parameters.ContainsKey("key_type") && !(parameters["key_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: key_type must be of type string", "parameters[\"key_type\"]");
@@ -373,6 +428,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/key_lifecycle_rules/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);

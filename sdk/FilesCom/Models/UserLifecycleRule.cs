@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("include_site_admins", false);
             }
+            if (!this.attributes.ContainsKey("apply_to_all_workspaces"))
+            {
+                this.attributes.Add("apply_to_all_workspaces", false);
+            }
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
@@ -68,6 +72,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("site_id"))
             {
                 this.attributes.Add("site_id", null);
+            }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
             }
             if (!this.attributes.ContainsKey("user_state"))
             {
@@ -168,6 +176,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, a default-workspace rule also applies to users in all workspaces.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("apply_to_all_workspaces")]
+        public bool ApplyToAllWorkspaces
+        {
+            get { return attributes["apply_to_all_workspaces"] == null ? false : (bool)attributes["apply_to_all_workspaces"]; }
+            set { attributes["apply_to_all_workspaces"] = value; }
+        }
+
+        /// <summary>
         /// User Lifecycle Rule name
         /// </summary>
         [JsonPropertyName("name")]
@@ -198,6 +217,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID. `0` means the default workspace.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// State of the users to apply the rule to (inactive or disabled)
         /// </summary>
         [JsonPropertyName("user_state")]
@@ -220,6 +249,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
+        ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to users in all workspaces.
         ///   authentication_method - string - User authentication method for which the rule will apply.
         ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
@@ -229,6 +259,7 @@ namespace FilesCom.Models
         ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public async Task<UserLifecycleRule> Update(Dictionary<string, object> parameters)
         {
@@ -250,6 +281,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
             }
             if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
             {
@@ -286,6 +321,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_tag") && !(parameters["user_tag"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_tag must be of type string", "parameters[\"user_tag\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -347,7 +386,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id` and `workspace_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
         public static FilesList<UserLifecycleRule> List(
 
@@ -369,6 +409,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<UserLifecycleRule>($"/user_lifecycle_rules", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -437,6 +481,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
+        ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to users in all workspaces.
         ///   authentication_method - string - User authentication method for which the rule will apply.
         ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
@@ -446,6 +491,7 @@ namespace FilesCom.Models
         ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<UserLifecycleRule> Create(
 
@@ -459,6 +505,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
             }
             if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
             {
@@ -496,6 +546,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: user_tag must be of type string", "parameters[\"user_tag\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -513,6 +567,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   action - string - Action to take on inactive users (disable or delete)
+        ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to users in all workspaces.
         ///   authentication_method - string - User authentication method for which the rule will apply.
         ///   group_ids - array(int64) - Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies
@@ -522,6 +577,7 @@ namespace FilesCom.Models
         ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<UserLifecycleRule> Update(
             Nullable<Int64> id,
@@ -552,6 +608,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
             }
+            if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
             if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
             {
                 throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
@@ -587,6 +647,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("user_tag") && !(parameters["user_tag"] is string))
             {
                 throw new ArgumentException("Bad parameter: user_tag must be of type string", "parameters[\"user_tag\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/user_lifecycle_rules/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);

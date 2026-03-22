@@ -24,6 +24,7 @@
   "two_factor_authentication_methods_restored": 1,
   "status": "pending",
   "update_timestamps": true,
+  "workspace_id": 12,
   "error_messages": [
     "example"
   ]
@@ -50,6 +51,7 @@
 * `two_factor_authentication_methods_restored` / `TwoFactorAuthenticationMethodsRestored`  (Nullable<Int64>): Number of two factor authentication methods restored (only present for `restoration_type=users`).
 * `status` / `Status`  (string): Status of the restoration process.
 * `update_timestamps` / `UpdateTimestamps`  (bool): If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.
 * `error_messages` / `ErrorMessages`  (string[]): Error messages received while restoring files and/or directories. Only present if there were errors.
 
 
@@ -69,7 +71,7 @@ Task<FilesList<Restore>> Restore.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`.
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `restoration_type`.
 
 
@@ -93,3 +95,4 @@ Task<Restore> Restore.Create(
 * `restore_deleted_permissions` (bool): If true, we will also restore any Permissions that match the same path prefix from the same dates.
 * `restore_in_place` (bool): If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
 * `update_timestamps` (bool): If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
+* `workspace_id` (Nullable<Int64>): Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.

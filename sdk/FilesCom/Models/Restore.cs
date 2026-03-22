@@ -109,6 +109,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("update_timestamps", false);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("error_messages"))
             {
                 this.attributes.Add("error_messages", new string[0]);
@@ -335,6 +339,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Error messages received while restoring files and/or directories. Only present if there were errors.
         /// </summary>
         [JsonPropertyName("error_messages")]
@@ -362,7 +376,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `restoration_type`.
         /// </summary>
         public static FilesList<Restore> List(
@@ -411,6 +425,7 @@ namespace FilesCom.Models
         ///   restore_deleted_permissions - boolean - If true, we will also restore any Permissions that match the same path prefix from the same dates.
         ///   restore_in_place - boolean - If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
         ///   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
+        ///   workspace_id - int64 - Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.
         /// </summary>
         public static async Task<Restore> Create(
 
@@ -448,6 +463,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("update_timestamps") && !(parameters["update_timestamps"] is bool))
             {
                 throw new ArgumentException("Bad parameter: update_timestamps must be of type bool", "parameters[\"update_timestamps\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/restores", System.Net.Http.HttpMethod.Post, parameters, options);
