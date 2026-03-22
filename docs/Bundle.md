@@ -75,6 +75,7 @@
     "key": "example value"
   },
   "send_one_time_password_to_recipient_at_registration": true,
+  "workspace_id": 1,
   "has_inbox": true,
   "dont_allow_folders_in_uploads": true,
   "paths": [
@@ -126,6 +127,7 @@
 * `watermark_attachment` / `WatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
 * `watermark_value` / `WatermarkValue`  (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `send_one_time_password_to_recipient_at_registration` / `SendOneTimePasswordToRecipientAtRegistration`  (bool): If true, require_share_recipient bundles will send a one-time password to the recipient when they register. Cannot be enabled if the bundle has a password set.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
 * `dont_allow_folders_in_uploads` / `DontAllowFoldersInUploads`  (bool): Should folder uploads be prevented?
 * `paths` / `Paths`  (string[]): A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
@@ -221,6 +223,7 @@ Task<Bundle> Bundle.Create(
 * `skip_company` (bool): BundleRegistrations can be saved without providing company?
 * `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `snapshot_id` (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
 
 
@@ -283,6 +286,7 @@ Task<Bundle> Bundle.Update(
 * `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
@@ -362,6 +366,7 @@ parameters.Add("skip_company", true);
 parameters.Add("start_access_on_date", "2000-01-01T01:00:00Z");
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
+parameters.Add("workspace_id", 1);
 parameters.Add("user_id", 1);
 parameters.Add("watermark_attachment_delete", false);
 
@@ -395,6 +400,7 @@ Bundle.Update(parameters);
 * `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `skip_email` (bool): BundleRegistrations can be saved without providing email?
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.

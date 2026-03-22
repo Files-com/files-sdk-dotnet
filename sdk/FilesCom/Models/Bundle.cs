@@ -177,6 +177,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("send_one_time_password_to_recipient_at_registration", false);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("has_inbox"))
             {
                 this.attributes.Add("has_inbox", false);
@@ -617,6 +621,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID. `0` means the default workspace.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Does this bundle have an associated inbox?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -789,6 +803,7 @@ namespace FilesCom.Models
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         ///   user_id - int64 - The owning user id. Only site admins can set this.
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
@@ -905,6 +920,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_name") && !(parameters["skip_name"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_name must be of type bool", "parameters[\"skip_name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
@@ -1128,6 +1147,7 @@ namespace FilesCom.Models
         ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         /// </summary>
         public static async Task<Bundle> Create(
@@ -1247,6 +1267,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: snapshot_id must be of type Nullable<Int64>", "parameters[\"snapshot_id\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
             if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
@@ -1341,6 +1365,7 @@ namespace FilesCom.Models
         ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
         ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
         ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         ///   user_id - int64 - The owning user id. Only site admins can set this.
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
@@ -1465,6 +1490,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_name") && !(parameters["skip_name"] is bool))
             {
                 throw new ArgumentException("Bad parameter: skip_name must be of type bool", "parameters[\"skip_name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
             {
