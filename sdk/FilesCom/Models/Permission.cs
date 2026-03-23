@@ -53,6 +53,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_name", null);
             }
+            if (!this.attributes.ContainsKey("group_ids"))
+            {
+                this.attributes.Add("group_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("group_names"))
+            {
+                this.attributes.Add("group_names", new string[0]);
+            }
             if (!this.attributes.ContainsKey("partner_id"))
             {
                 this.attributes.Add("partner_id", null);
@@ -149,6 +157,26 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["group_name"]; }
             set { attributes["group_name"] = value; }
+        }
+
+        /// <summary>
+        /// Group IDs when this permission requires multiple groups
+        /// </summary>
+        [JsonPropertyName("group_ids")]
+        public Nullable<Int64>[] GroupIds
+        {
+            get { return (Nullable<Int64>[])attributes["group_ids"]; }
+            set { attributes["group_ids"] = value; }
+        }
+
+        /// <summary>
+        /// Group names when this permission requires multiple groups
+        /// </summary>
+        [JsonPropertyName("group_names")]
+        public string[] GroupNames
+        {
+            get { return (string[])attributes["group_names"]; }
+            set { attributes["group_names"] = value; }
         }
 
         /// <summary>
@@ -323,6 +351,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   path (required) - string - Folder path
         ///   group_id - int64 - Group ID. Provide `group_name` or `group_id`
+        ///   group_ids - string - Group IDs when the permission requires multiple groups. If sent as a string, it should be comma-delimited.
         ///   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
         ///   recursive - boolean - Apply to subfolders recursively?
         ///   partner_id - int64 - Partner ID if this Permission belongs to a partner.
@@ -351,6 +380,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
             if (parameters.ContainsKey("permission") && !(parameters["permission"] is string))
             {
