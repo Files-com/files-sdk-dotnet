@@ -753,6 +753,7 @@ Exception
 |`PasswordChangeNotRequiredException`|  `NotAuthorizedException` |
 |`PasswordChangeRequiredException`|  `NotAuthorizedException` |
 |`PaymentMethodErrorException`|  `NotAuthorizedException` |
+|`PreviewOnlyPermissionCannotDownloadException`|  `NotAuthorizedException` |
 |`ReadOnlySessionException`|  `NotAuthorizedException` |
 |`ReadPermissionRequiredException`|  `NotAuthorizedException` |
 |`ReauthenticationFailedException`|  `NotAuthorizedException` |

@@ -666,6 +666,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class PreviewOnlyPermissionCannotDownloadException : NotAuthorizedException
+    {
+        public PreviewOnlyPermissionCannotDownloadException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class ReadOnlySessionException : NotAuthorizedException
     {
         public ReadOnlySessionException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
