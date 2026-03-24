@@ -795,6 +795,8 @@ Exception
 |`DestinationParentConflictException`|  `ProcessingFailureException` |
 |`DestinationParentDoesNotExistException`|  `ProcessingFailureException` |
 |`ExceededRuntimeLimitException`|  `ProcessingFailureException` |
+|`ExpectationAlreadyHasOpenWindowException`|  `ProcessingFailureException` |
+|`ExpectationNotManualTriggerException`|  `ProcessingFailureException` |
 |`ExpiredPrivateKeyException`|  `ProcessingFailureException` |
 |`ExpiredPublicKeyException`|  `ProcessingFailureException` |
 |`ExportFailureException`|  `ProcessingFailureException` |
