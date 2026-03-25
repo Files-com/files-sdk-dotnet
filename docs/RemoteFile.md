@@ -92,6 +92,7 @@
 * `parts` / `Parts`  (Nullable<Int64>): How many parts to fetch?
 * `ref` / `Ref`  (string): 
 * `restart` / `Restart`  (Nullable<Int64>): File byte offset to restart from.
+* `copy_behaviors` / `CopyBehaviors`  (bool): If copying a folder, also copy supported behaviors to the destination folder tree?
 * `structure` / `Structure`  (string): If copying folder, copy just the structure?
 * `with_rename` / `WithRename`  (bool): Allow file rename instead of overwrite?
 * `buffered_upload` / `BufferedUpload`  (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
@@ -144,6 +145,7 @@ Task<RemoteFile> RemoteFile.Create(
 * `ref` (string): 
 * `restart` (Nullable<Int64>): File byte offset to restart from.
 * `size` (Nullable<Int64>): Size of file.
+* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors to the destination folder tree?
 * `structure` (string): If copying folder, copy just the structure?
 * `with_rename` (bool): Allow file rename instead of overwrite?
 * `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
@@ -240,6 +242,7 @@ Task<FileAction> RemoteFile.Copy(
 
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Copy destination path.
+* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors to the destination folder tree?
 * `structure` (bool): Copy structure only?
 * `overwrite` (bool): Overwrite existing file(s) in the destination?
 
@@ -422,6 +425,7 @@ var File = RemoteFile.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
+parameters.Add("copy_behaviors", false);
 parameters.Add("structure", false);
 parameters.Add("overwrite", false);
 
@@ -432,6 +436,7 @@ File.Copy(parameters);
 
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Copy destination path.
+* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors to the destination folder tree?
 * `structure` (bool): Copy structure only?
 * `overwrite` (bool): Overwrite existing file(s) in the destination?
 
