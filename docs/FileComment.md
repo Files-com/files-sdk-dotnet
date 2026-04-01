@@ -102,7 +102,7 @@ var FileComment = FileComment.ListFor(path)[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("body", "body");
+parameters.Add("body", "What a great file!");
 
 FileComment.Update(parameters);
 ```

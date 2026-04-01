@@ -69,6 +69,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("dest_remote_server_id", null);
             }
+            if (!this.attributes.ContainsKey("src_site_id"))
+            {
+                this.attributes.Add("src_site_id", null);
+            }
+            if (!this.attributes.ContainsKey("dest_site_id"))
+            {
+                this.attributes.Add("dest_site_id", null);
+            }
             if (!this.attributes.ContainsKey("two_way"))
             {
                 this.attributes.Add("two_way", false);
@@ -257,6 +265,26 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["dest_remote_server_id"]; }
             set { attributes["dest_remote_server_id"] = value; }
+        }
+
+        /// <summary>
+        /// Source site ID if syncing from a child or partner site
+        /// </summary>
+        [JsonPropertyName("src_site_id")]
+        public Nullable<Int64> SrcSiteId
+        {
+            get { return (Nullable<Int64>)attributes["src_site_id"]; }
+            set { attributes["src_site_id"] = value; }
+        }
+
+        /// <summary>
+        /// Destination site ID if syncing to a child or partner site
+        /// </summary>
+        [JsonPropertyName("dest_site_id")]
+        public Nullable<Int64> DestSiteId
+        {
+            get { return (Nullable<Int64>)attributes["dest_site_id"]; }
+            set { attributes["dest_site_id"] = value; }
         }
 
         /// <summary>
@@ -497,24 +525,28 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Name for this sync job
-        ///   description - string - Description for this sync job
-        ///   src_path - string - Absolute source path
-        ///   dest_path - string - Absolute destination path
-        ///   src_remote_server_id - int64 - Remote server ID for the source
-        ///   dest_remote_server_id - int64 - Remote server ID for the destination
-        ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
+        ///   description - string - Description for this sync job
+        ///   dest_path - string - Absolute destination path for the sync
+        ///   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
+        ///   dest_site_id - int64 - Destination site ID if syncing to a child or partner site
         ///   disabled - boolean - Is this sync disabled?
+        ///   exclude_patterns - array(string) - Array of glob patterns to exclude
+        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        ///   include_patterns - array(string) - Array of glob patterns to include
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+        ///   keep_after_copy - boolean - Keep files after copying?
+        ///   name - string - Name for this sync job
+        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+        ///   src_path - string - Absolute source path for the sync
+        ///   src_remote_server_id - int64 - Remote server ID for the source (if remote)
+        ///   src_site_id - int64 - Source site ID if syncing from a child or partner site
+        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
         /// </summary>
         public async Task<Sync> Update(Dictionary<string, object> parameters)
         {
@@ -533,45 +565,85 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.ContainsKey("delete_empty_folders") && !(parameters["delete_empty_folders"] is bool))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentException("Bad parameter: delete_empty_folders must be of type bool", "parameters[\"delete_empty_folders\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("src_path") && !(parameters["src_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: src_path must be of type string", "parameters[\"src_path\"]");
-            }
             if (parameters.ContainsKey("dest_path") && !(parameters["dest_path"] is string))
             {
                 throw new ArgumentException("Bad parameter: dest_path must be of type string", "parameters[\"dest_path\"]");
-            }
-            if (parameters.ContainsKey("src_remote_server_id") && !(parameters["src_remote_server_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: src_remote_server_id must be of type Nullable<Int64>", "parameters[\"src_remote_server_id\"]");
             }
             if (parameters.ContainsKey("dest_remote_server_id") && !(parameters["dest_remote_server_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: dest_remote_server_id must be of type Nullable<Int64>", "parameters[\"dest_remote_server_id\"]");
             }
-            if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
+            if (parameters.ContainsKey("dest_site_id") && !(parameters["dest_site_id"] is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: keep_after_copy must be of type bool", "parameters[\"keep_after_copy\"]");
-            }
-            if (parameters.ContainsKey("delete_empty_folders") && !(parameters["delete_empty_folders"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: delete_empty_folders must be of type bool", "parameters[\"delete_empty_folders\"]");
+                throw new ArgumentException("Bad parameter: dest_site_id must be of type Nullable<Int64>", "parameters[\"dest_site_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
+            if (parameters.ContainsKey("exclude_patterns") && !(parameters["exclude_patterns"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: exclude_patterns must be of type string[]", "parameters[\"exclude_patterns\"]");
+            }
+            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+            }
+            if (parameters.ContainsKey("include_patterns") && !(parameters["include_patterns"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: include_patterns must be of type string[]", "parameters[\"include_patterns\"]");
+            }
             if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
+            }
+            if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: keep_after_copy must be of type bool", "parameters[\"keep_after_copy\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+            }
+            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
+            }
+            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+            }
+            if (parameters.ContainsKey("src_path") && !(parameters["src_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: src_path must be of type string", "parameters[\"src_path\"]");
+            }
+            if (parameters.ContainsKey("src_remote_server_id") && !(parameters["src_remote_server_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: src_remote_server_id must be of type Nullable<Int64>", "parameters[\"src_remote_server_id\"]");
+            }
+            if (parameters.ContainsKey("src_site_id") && !(parameters["src_site_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: src_site_id must be of type Nullable<Int64>", "parameters[\"src_site_id\"]");
+            }
+            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -580,30 +652,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
-            }
-            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
-            }
-            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
-            }
-            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
-            }
-            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
-            {
-                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
-            }
-            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
-            }
-            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/syncs/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -759,24 +807,28 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Name for this sync job
-        ///   description - string - Description for this sync job
-        ///   src_path - string - Absolute source path
-        ///   dest_path - string - Absolute destination path
-        ///   src_remote_server_id - int64 - Remote server ID for the source
-        ///   dest_remote_server_id - int64 - Remote server ID for the destination
-        ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
+        ///   description - string - Description for this sync job
+        ///   dest_path - string - Absolute destination path for the sync
+        ///   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
+        ///   dest_site_id - int64 - Destination site ID if syncing to a child or partner site
         ///   disabled - boolean - Is this sync disabled?
+        ///   exclude_patterns - array(string) - Array of glob patterns to exclude
+        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        ///   include_patterns - array(string) - Array of glob patterns to include
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+        ///   keep_after_copy - boolean - Keep files after copying?
+        ///   name - string - Name for this sync job
+        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+        ///   src_path - string - Absolute source path for the sync
+        ///   src_remote_server_id - int64 - Remote server ID for the source (if remote)
+        ///   src_site_id - int64 - Source site ID if syncing from a child or partner site
+        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
         ///   workspace_id - int64 - Workspace ID this sync belongs to
         /// </summary>
         public static async Task<Sync> Create(
@@ -788,45 +840,85 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.ContainsKey("delete_empty_folders") && !(parameters["delete_empty_folders"] is bool))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentException("Bad parameter: delete_empty_folders must be of type bool", "parameters[\"delete_empty_folders\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("src_path") && !(parameters["src_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: src_path must be of type string", "parameters[\"src_path\"]");
-            }
             if (parameters.ContainsKey("dest_path") && !(parameters["dest_path"] is string))
             {
                 throw new ArgumentException("Bad parameter: dest_path must be of type string", "parameters[\"dest_path\"]");
-            }
-            if (parameters.ContainsKey("src_remote_server_id") && !(parameters["src_remote_server_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: src_remote_server_id must be of type Nullable<Int64>", "parameters[\"src_remote_server_id\"]");
             }
             if (parameters.ContainsKey("dest_remote_server_id") && !(parameters["dest_remote_server_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: dest_remote_server_id must be of type Nullable<Int64>", "parameters[\"dest_remote_server_id\"]");
             }
-            if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
+            if (parameters.ContainsKey("dest_site_id") && !(parameters["dest_site_id"] is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: keep_after_copy must be of type bool", "parameters[\"keep_after_copy\"]");
-            }
-            if (parameters.ContainsKey("delete_empty_folders") && !(parameters["delete_empty_folders"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: delete_empty_folders must be of type bool", "parameters[\"delete_empty_folders\"]");
+                throw new ArgumentException("Bad parameter: dest_site_id must be of type Nullable<Int64>", "parameters[\"dest_site_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
+            if (parameters.ContainsKey("exclude_patterns") && !(parameters["exclude_patterns"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: exclude_patterns must be of type string[]", "parameters[\"exclude_patterns\"]");
+            }
+            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+            }
+            if (parameters.ContainsKey("include_patterns") && !(parameters["include_patterns"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: include_patterns must be of type string[]", "parameters[\"include_patterns\"]");
+            }
             if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
+            }
+            if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: keep_after_copy must be of type bool", "parameters[\"keep_after_copy\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+            }
+            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
+            }
+            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+            }
+            if (parameters.ContainsKey("src_path") && !(parameters["src_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: src_path must be of type string", "parameters[\"src_path\"]");
+            }
+            if (parameters.ContainsKey("src_remote_server_id") && !(parameters["src_remote_server_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: src_remote_server_id must be of type Nullable<Int64>", "parameters[\"src_remote_server_id\"]");
+            }
+            if (parameters.ContainsKey("src_site_id") && !(parameters["src_site_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: src_site_id must be of type Nullable<Int64>", "parameters[\"src_site_id\"]");
+            }
+            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -835,30 +927,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
-            }
-            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
-            }
-            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
-            }
-            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
-            }
-            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
-            {
-                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
-            }
-            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
-            }
-            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
@@ -946,24 +1014,28 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - Name for this sync job
-        ///   description - string - Description for this sync job
-        ///   src_path - string - Absolute source path
-        ///   dest_path - string - Absolute destination path
-        ///   src_remote_server_id - int64 - Remote server ID for the source
-        ///   dest_remote_server_id - int64 - Remote server ID for the destination
-        ///   keep_after_copy - boolean - Keep files after copying?
         ///   delete_empty_folders - boolean - Delete empty folders after sync?
+        ///   description - string - Description for this sync job
+        ///   dest_path - string - Absolute destination path for the sync
+        ///   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
+        ///   dest_site_id - int64 - Destination site ID if syncing to a child or partner site
         ///   disabled - boolean - Is this sync disabled?
+        ///   exclude_patterns - array(string) - Array of glob patterns to exclude
+        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+        ///   include_patterns - array(string) - Array of glob patterns to include
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+        ///   keep_after_copy - boolean - Keep files after copying?
+        ///   name - string - Name for this sync job
+        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+        ///   src_path - string - Absolute source path for the sync
+        ///   src_remote_server_id - int64 - Remote server ID for the source (if remote)
+        ///   src_site_id - int64 - Source site ID if syncing from a child or partner site
+        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-        ///   holiday_region - string - If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-        ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-        ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-        ///   schedule_time_zone - string - If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
         /// </summary>
         public static async Task<Sync> Update(
             Nullable<Int64> id,
@@ -990,45 +1062,85 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.ContainsKey("delete_empty_folders") && !(parameters["delete_empty_folders"] is bool))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new ArgumentException("Bad parameter: delete_empty_folders must be of type bool", "parameters[\"delete_empty_folders\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
             }
-            if (parameters.ContainsKey("src_path") && !(parameters["src_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: src_path must be of type string", "parameters[\"src_path\"]");
-            }
             if (parameters.ContainsKey("dest_path") && !(parameters["dest_path"] is string))
             {
                 throw new ArgumentException("Bad parameter: dest_path must be of type string", "parameters[\"dest_path\"]");
-            }
-            if (parameters.ContainsKey("src_remote_server_id") && !(parameters["src_remote_server_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: src_remote_server_id must be of type Nullable<Int64>", "parameters[\"src_remote_server_id\"]");
             }
             if (parameters.ContainsKey("dest_remote_server_id") && !(parameters["dest_remote_server_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: dest_remote_server_id must be of type Nullable<Int64>", "parameters[\"dest_remote_server_id\"]");
             }
-            if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
+            if (parameters.ContainsKey("dest_site_id") && !(parameters["dest_site_id"] is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: keep_after_copy must be of type bool", "parameters[\"keep_after_copy\"]");
-            }
-            if (parameters.ContainsKey("delete_empty_folders") && !(parameters["delete_empty_folders"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: delete_empty_folders must be of type bool", "parameters[\"delete_empty_folders\"]");
+                throw new ArgumentException("Bad parameter: dest_site_id must be of type Nullable<Int64>", "parameters[\"dest_site_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
             }
+            if (parameters.ContainsKey("exclude_patterns") && !(parameters["exclude_patterns"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: exclude_patterns must be of type string[]", "parameters[\"exclude_patterns\"]");
+            }
+            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            {
+                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+            }
+            if (parameters.ContainsKey("include_patterns") && !(parameters["include_patterns"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: include_patterns must be of type string[]", "parameters[\"include_patterns\"]");
+            }
             if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
+            }
+            if (parameters.ContainsKey("keep_after_copy") && !(parameters["keep_after_copy"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: keep_after_copy must be of type bool", "parameters[\"keep_after_copy\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+            }
+            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            {
+                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
+            }
+            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            {
+                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+            }
+            if (parameters.ContainsKey("src_path") && !(parameters["src_path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: src_path must be of type string", "parameters[\"src_path\"]");
+            }
+            if (parameters.ContainsKey("src_remote_server_id") && !(parameters["src_remote_server_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: src_remote_server_id must be of type Nullable<Int64>", "parameters[\"src_remote_server_id\"]");
+            }
+            if (parameters.ContainsKey("src_site_id") && !(parameters["src_site_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: src_site_id must be of type Nullable<Int64>", "parameters[\"src_site_id\"]");
+            }
+            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
             }
             if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
             {
@@ -1037,30 +1149,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
-            }
-            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
-            }
-            if (parameters.ContainsKey("sync_interval_minutes") && !(parameters["sync_interval_minutes"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: sync_interval_minutes must be of type Nullable<Int64>", "parameters[\"sync_interval_minutes\"]");
-            }
-            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
-            }
-            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
-            {
-                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
-            }
-            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
-            }
-            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/syncs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);

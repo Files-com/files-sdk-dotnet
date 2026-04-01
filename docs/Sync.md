@@ -14,6 +14,8 @@
   "dest_path": "example",
   "src_remote_server_id": 1,
   "dest_remote_server_id": 1,
+  "src_site_id": 1,
+  "dest_site_id": 1,
   "two_way": true,
   "keep_after_copy": true,
   "delete_empty_folders": true,
@@ -81,6 +83,8 @@
 * `dest_path` / `DestPath`  (string): Absolute destination path for the sync
 * `src_remote_server_id` / `SrcRemoteServerId`  (Nullable<Int64>): Remote server ID for the source (if remote)
 * `dest_remote_server_id` / `DestRemoteServerId`  (Nullable<Int64>): Remote server ID for the destination (if remote)
+* `src_site_id` / `SrcSiteId`  (Nullable<Int64>): Source site ID if syncing from a child or partner site
+* `dest_site_id` / `DestSiteId`  (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `two_way` / `TwoWay`  (bool): Is this a two-way sync?
 * `keep_after_copy` / `KeepAfterCopy`  (bool): Keep files after copying?
 * `delete_empty_folders` / `DeleteEmptyFolders`  (bool): Delete empty folders after sync?
@@ -152,24 +156,28 @@ Task<Sync> Sync.Create(
 
 ### Parameters
 
-* `name` (string): Name for this sync job
-* `description` (string): Description for this sync job
-* `src_path` (string): Absolute source path
-* `dest_path` (string): Absolute destination path
-* `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source
-* `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination
-* `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
+* `description` (string): Description for this sync job
+* `dest_path` (string): Absolute destination path for the sync
+* `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination (if remote)
+* `dest_site_id` (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `disabled` (bool): Is this sync disabled?
+* `exclude_patterns` (string[]): Array of glob patterns to exclude
+* `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+* `include_patterns` (string[]): Array of glob patterns to include
 * `interval` (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+* `keep_after_copy` (bool): Keep files after copying?
+* `name` (string): Name for this sync job
+* `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+* `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+* `src_path` (string): Absolute source path for the sync
+* `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source (if remote)
+* `src_site_id` (Nullable<Int64>): Source site ID if syncing from a child or partner site
+* `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-* `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-* `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-* `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-* `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-* `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 * `workspace_id` (Nullable<Int64>): Workspace ID this sync belongs to
 
 
@@ -222,24 +230,28 @@ Task<Sync> Sync.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Sync ID.
-* `name` (string): Name for this sync job
-* `description` (string): Description for this sync job
-* `src_path` (string): Absolute source path
-* `dest_path` (string): Absolute destination path
-* `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source
-* `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination
-* `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
+* `description` (string): Description for this sync job
+* `dest_path` (string): Absolute destination path for the sync
+* `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination (if remote)
+* `dest_site_id` (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `disabled` (bool): Is this sync disabled?
+* `exclude_patterns` (string[]): Array of glob patterns to exclude
+* `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+* `include_patterns` (string[]): Array of glob patterns to include
 * `interval` (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+* `keep_after_copy` (bool): Keep files after copying?
+* `name` (string): Name for this sync job
+* `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+* `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+* `src_path` (string): Absolute source path for the sync
+* `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source (if remote)
+* `src_site_id` (Nullable<Int64>): Source site ID if syncing from a child or partner site
+* `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-* `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-* `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-* `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-* `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-* `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 
 
 ---
@@ -304,24 +316,28 @@ var Sync = Sync.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("name", "example");
+parameters.Add("delete_empty_folders", true);
 parameters.Add("description", "example");
-parameters.Add("src_path", "example");
 parameters.Add("dest_path", "example");
-parameters.Add("src_remote_server_id", 1);
 parameters.Add("dest_remote_server_id", 1);
-parameters.Add("keep_after_copy", false);
-parameters.Add("delete_empty_folders", false);
-parameters.Add("disabled", false);
+parameters.Add("dest_site_id", 1);
+parameters.Add("disabled", true);
+parameters.Add("exclude_patterns", ["example"]);
+parameters.Add("holiday_region", "us_dc");
+parameters.Add("include_patterns", ["example"]);
 parameters.Add("interval", "week");
+parameters.Add("keep_after_copy", true);
+parameters.Add("name", "example");
+parameters.Add("recurring_day", 25);
+parameters.Add("schedule_days_of_week", [0,2,4]);
+parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
+parameters.Add("schedule_times_of_day", ["06:30","14:30"]);
+parameters.Add("src_path", "example");
+parameters.Add("src_remote_server_id", 1);
+parameters.Add("src_site_id", 1);
+parameters.Add("sync_interval_minutes", 1);
 parameters.Add("trigger", "example");
 parameters.Add("trigger_file", "example");
-parameters.Add("holiday_region", "us_dc");
-parameters.Add("sync_interval_minutes", 1);
-parameters.Add("recurring_day", 25);
-parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
-parameters.Add("schedule_days_of_week", [0,2,4]);
-parameters.Add("schedule_times_of_day", ["06:30","14:30"]);
 
 Sync.Update(parameters);
 ```
@@ -329,24 +345,28 @@ Sync.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Sync ID.
-* `name` (string): Name for this sync job
-* `description` (string): Description for this sync job
-* `src_path` (string): Absolute source path
-* `dest_path` (string): Absolute destination path
-* `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source
-* `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination
-* `keep_after_copy` (bool): Keep files after copying?
 * `delete_empty_folders` (bool): Delete empty folders after sync?
+* `description` (string): Description for this sync job
+* `dest_path` (string): Absolute destination path for the sync
+* `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination (if remote)
+* `dest_site_id` (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `disabled` (bool): Is this sync disabled?
+* `exclude_patterns` (string[]): Array of glob patterns to exclude
+* `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
+* `include_patterns` (string[]): Array of glob patterns to include
 * `interval` (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
+* `keep_after_copy` (bool): Keep files after copying?
+* `name` (string): Name for this sync job
+* `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
+* `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
+* `src_path` (string): Absolute source path for the sync
+* `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source (if remote)
+* `src_site_id` (Nullable<Int64>): Source site ID if syncing from a child or partner site
+* `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
-* `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
-* `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
-* `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
-* `schedule_time_zone` (string): If trigger is `custom_schedule`, Custom schedule Time Zone for when the sync should be run.
-* `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-* `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 
 
 ---

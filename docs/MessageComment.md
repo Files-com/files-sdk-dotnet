@@ -121,7 +121,7 @@ var MessageComment = MessageComment.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("body", "body");
+parameters.Add("body", "What a great idea, thank you!");
 
 MessageComment.Update(parameters);
 ```
