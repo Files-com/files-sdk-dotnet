@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("logo", null);
             }
+            if (!this.attributes.ContainsKey("logo_click_href"))
+            {
+                this.attributes.Add("logo_click_href", null);
+            }
             if (!this.attributes.ContainsKey("thumbnail"))
             {
                 this.attributes.Add("thumbnail", null);
@@ -98,6 +102,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// URL to open when a public visitor clicks the logo
+        /// </summary>
+        [JsonPropertyName("logo_click_href")]
+        public string LogoClickHref
+        {
+            get { return (string)attributes["logo_click_href"]; }
+            set { attributes["logo_click_href"] = value; }
+        }
+
+        /// <summary>
         /// Logo thumbnail
         /// </summary>
         [JsonPropertyName("thumbnail")]
@@ -108,7 +122,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Logo for custom branding.
+        /// Logo for custom branding. Required when creating a new style.
         /// </summary>
         [JsonPropertyName("file")]
         public System.Net.Http.ByteArrayContent File
@@ -119,7 +133,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   file (required) - file - Logo for custom branding.
+        ///   file - file - Logo for custom branding. Required when creating a new style.
+        ///   logo_click_href - string - URL to open when a public visitor clicks the logo.
         /// </summary>
         public async Task<Style> Update(Dictionary<string, object> parameters)
         {
@@ -134,10 +149,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
-            if (!parameters.ContainsKey("file") || parameters["file"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: file", "parameters[\"file\"]");
-            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -145,6 +156,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
+            }
+            if (parameters.ContainsKey("logo_click_href") && !(parameters["logo_click_href"] is string))
+            {
+                throw new ArgumentException("Bad parameter: logo_click_href must be of type string", "parameters[\"logo_click_href\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -248,7 +263,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   file (required) - file - Logo for custom branding.
+        ///   file - file - Logo for custom branding. Required when creating a new style.
+        ///   logo_click_href - string - URL to open when a public visitor clicks the logo.
         /// </summary>
         public static async Task<Style> Update(
             string path,
@@ -271,10 +287,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
             }
-            if (!parameters.ContainsKey("file") || parameters["file"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: file", "parameters[\"file\"]");
-            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
@@ -282,6 +294,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("file") && !(parameters["file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: file must be of type System.Net.Http.ByteArrayContent", "parameters[\"file\"]");
+            }
+            if (parameters.ContainsKey("logo_click_href") && !(parameters["logo_click_href"] is string))
+            {
+                throw new ArgumentException("Bad parameter: logo_click_href must be of type string", "parameters[\"logo_click_href\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/styles/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);

@@ -7,6 +7,7 @@
   "id": 1,
   "path": "example",
   "logo": "https://mysite.files.com/...",
+  "logo_click_href": "https://www.example.com",
   "thumbnail": {
     "name": "My logo",
     "uri": "https://mysite.files.com/.../my_image.png"
@@ -17,8 +18,9 @@
 * `id` / `Id`  (Nullable<Int64>): Style ID
 * `path` / `Path`  (string): Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `logo` / `Logo`  (Image): Logo
+* `logo_click_href` / `LogoClickHref`  (string): URL to open when a public visitor clicks the logo
 * `thumbnail` / `Thumbnail`  (Image): Logo thumbnail
-* `file` / `File`  (System.Net.Http.ByteArrayContent): Logo for custom branding.
+* `file` / `File`  (System.Net.Http.ByteArrayContent): Logo for custom branding. Required when creating a new style.
 
 
 ---
@@ -53,7 +55,8 @@ Task<Style> Style.Update(
 ### Parameters
 
 * `path` (string): Required - Style path.
-* `file` (System.Net.Http.ByteArrayContent): Required - Logo for custom branding.
+* `file` (System.Net.Http.ByteArrayContent): Logo for custom branding. Required when creating a new style.
+* `logo_click_href` (string): URL to open when a public visitor clicks the logo.
 
 
 ---
@@ -82,7 +85,7 @@ var Style = Style.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("file", "file");
+parameters.Add("logo_click_href", "https://www.example.com");
 
 Style.Update(parameters);
 ```
@@ -90,7 +93,8 @@ Style.Update(parameters);
 ### Parameters
 
 * `path` (string): Required - Style path.
-* `file` (System.Net.Http.ByteArrayContent): Required - Logo for custom branding.
+* `file` (System.Net.Http.ByteArrayContent): Logo for custom branding. Required when creating a new style.
+* `logo_click_href` (string): URL to open when a public visitor clicks the logo.
 
 
 ---
