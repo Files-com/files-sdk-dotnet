@@ -18,7 +18,7 @@
 * `name` / `Name`  (string): Profile name
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 * `use_for_all_users` / `UseForAllUsers`  (bool): Whether this profile applies to all users in the Workspace by default
-* `mount_mappings` / `MountMappings`  (object): Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` / `MountMappings`  (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 
 
 ---
@@ -73,7 +73,7 @@ Task<DesktopConfigurationProfile> DesktopConfigurationProfile.Create(
 ### Parameters
 
 * `name` (string): Required - Profile name
-* `mount_mappings` (object): Required - Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` (object): Required - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `workspace_id` (Nullable<Int64>): Workspace ID
 * `use_for_all_users` (bool): Whether this profile applies to all users in the Workspace by default
 
@@ -95,7 +95,7 @@ Task<DesktopConfigurationProfile> DesktopConfigurationProfile.Update(
 * `id` (Nullable<Int64>): Required - Desktop Configuration Profile ID.
 * `name` (string): Profile name
 * `workspace_id` (Nullable<Int64>): Workspace ID
-* `mount_mappings` (object): Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `use_for_all_users` (bool): Whether this profile applies to all users in the Workspace by default
 
 
@@ -138,7 +138,7 @@ DesktopConfigurationProfile.Update(parameters);
 * `id` (Nullable<Int64>): Required - Desktop Configuration Profile ID.
 * `name` (string): Profile name
 * `workspace_id` (Nullable<Int64>): Workspace ID
-* `mount_mappings` (object): Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+* `mount_mappings` (object): Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
 * `use_for_all_users` (bool): Whether this profile applies to all users in the Workspace by default
 
 

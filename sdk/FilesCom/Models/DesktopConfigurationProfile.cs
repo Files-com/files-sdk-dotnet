@@ -109,7 +109,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+        /// Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         /// </summary>
         [JsonPropertyName("mount_mappings")]
         public object MountMappings
@@ -122,7 +122,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   name - string - Profile name
         ///   workspace_id - int64 - Workspace ID
-        ///   mount_mappings - object - Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+        ///   mount_mappings - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         ///   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
         /// </summary>
         public async Task<DesktopConfigurationProfile> Update(Dictionary<string, object> parameters)
@@ -313,7 +313,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name (required) - string - Profile name
-        ///   mount_mappings (required) - object - Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+        ///   mount_mappings (required) - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         ///   workspace_id - int64 - Workspace ID
         ///   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
         /// </summary>
@@ -368,7 +368,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   name - string - Profile name
         ///   workspace_id - int64 - Workspace ID
-        ///   mount_mappings - object - Mount point mappings for the desktop app. Keys are mount points (e.g. drive letters) and values are paths in Files.com that the mount points map to.
+        ///   mount_mappings - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         ///   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
         /// </summary>
         public static async Task<DesktopConfigurationProfile> Update(
