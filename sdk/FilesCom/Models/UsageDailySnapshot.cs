@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("write_api_usage", null);
             }
+            if (!this.attributes.ContainsKey("transformation_credits_usage"))
+            {
+                this.attributes.Add("transformation_credits_usage", null);
+            }
             if (!this.attributes.ContainsKey("user_count"))
             {
                 this.attributes.Add("user_count", null);
@@ -145,6 +149,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["write_api_usage"]; }
             private set { attributes["write_api_usage"] = value; }
+        }
+
+        /// <summary>
+        /// Transformation and AI credits used on this day. Note: initially this tracks GPG encrypt, decrypt, and recrypt usage.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("transformation_credits_usage")]
+        public decimal TransformationCreditsUsage
+        {
+            get { return (decimal)attributes["transformation_credits_usage"]; }
+            private set { attributes["transformation_credits_usage"] = value; }
         }
 
         /// <summary>

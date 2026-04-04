@@ -9,6 +9,7 @@
   "api_usage_available": true,
   "read_api_usage": 1,
   "write_api_usage": 1,
+  "transformation_credits_usage": "100",
   "user_count": 1,
   "current_storage": 1,
   "deleted_files_storage": 1,
@@ -29,6 +30,7 @@
 * `api_usage_available` / `ApiUsageAvailable`  (bool): True if the API usage fields `read_api_usage` and `write_api_usage` can be relied upon.  If this is false, we suggest hiding that value from any UI.
 * `read_api_usage` / `ReadApiUsage`  (Nullable<Int64>): Read API Calls used on this day. Note: only updated for days before the current day.
 * `write_api_usage` / `WriteApiUsage`  (Nullable<Int64>): Write API Calls used on this day. Note: only updated for days before the current day.
+* `transformation_credits_usage` / `TransformationCreditsUsage`  (decimal): Transformation and AI credits used on this day. Note: initially this tracks GPG encrypt, decrypt, and recrypt usage.
 * `user_count` / `UserCount`  (Nullable<Int64>): Number of billable users as of this day.
 * `current_storage` / `CurrentStorage`  (Nullable<Int64>): GB of Files Native Storage used on this day.
 * `deleted_files_storage` / `DeletedFilesStorage`  (Nullable<Int64>): GB of Files Native Storage used on this day for files that have been deleted and are stored as backups.
