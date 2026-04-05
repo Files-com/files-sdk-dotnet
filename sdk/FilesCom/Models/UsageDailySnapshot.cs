@@ -156,9 +156,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("transformation_credits_usage")]
-        public decimal TransformationCreditsUsage
+        public Nullable<Int64> TransformationCreditsUsage
         {
-            get { return (decimal)attributes["transformation_credits_usage"]; }
+            get { return (Nullable<Int64>)attributes["transformation_credits_usage"]; }
             private set { attributes["transformation_credits_usage"] = value; }
         }
 
