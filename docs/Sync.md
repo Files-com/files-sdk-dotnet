@@ -160,7 +160,6 @@ Task<Sync> Sync.Create(
 * `description` (string): Description for this sync job
 * `dest_path` (string): Absolute destination path for the sync
 * `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination (if remote)
-* `dest_site_id` (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `disabled` (bool): Is this sync disabled?
 * `exclude_patterns` (string[]): Array of glob patterns to exclude
 * `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
@@ -174,7 +173,6 @@ Task<Sync> Sync.Create(
 * `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 * `src_path` (string): Absolute source path for the sync
 * `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source (if remote)
-* `src_site_id` (Nullable<Int64>): Source site ID if syncing from a child or partner site
 * `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
@@ -234,7 +232,6 @@ Task<Sync> Sync.Update(
 * `description` (string): Description for this sync job
 * `dest_path` (string): Absolute destination path for the sync
 * `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination (if remote)
-* `dest_site_id` (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `disabled` (bool): Is this sync disabled?
 * `exclude_patterns` (string[]): Array of glob patterns to exclude
 * `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
@@ -248,7 +245,6 @@ Task<Sync> Sync.Update(
 * `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 * `src_path` (string): Absolute source path for the sync
 * `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source (if remote)
-* `src_site_id` (Nullable<Int64>): Source site ID if syncing from a child or partner site
 * `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
@@ -320,7 +316,6 @@ parameters.Add("delete_empty_folders", true);
 parameters.Add("description", "example");
 parameters.Add("dest_path", "example");
 parameters.Add("dest_remote_server_id", 1);
-parameters.Add("dest_site_id", 1);
 parameters.Add("disabled", true);
 parameters.Add("exclude_patterns", ["example"]);
 parameters.Add("holiday_region", "us_dc");
@@ -334,7 +329,6 @@ parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("schedule_times_of_day", ["06:30","14:30"]);
 parameters.Add("src_path", "example");
 parameters.Add("src_remote_server_id", 1);
-parameters.Add("src_site_id", 1);
 parameters.Add("sync_interval_minutes", 1);
 parameters.Add("trigger", "example");
 parameters.Add("trigger_file", "example");
@@ -349,7 +343,6 @@ Sync.Update(parameters);
 * `description` (string): Description for this sync job
 * `dest_path` (string): Absolute destination path for the sync
 * `dest_remote_server_id` (Nullable<Int64>): Remote server ID for the destination (if remote)
-* `dest_site_id` (Nullable<Int64>): Destination site ID if syncing to a child or partner site
 * `disabled` (bool): Is this sync disabled?
 * `exclude_patterns` (string[]): Array of glob patterns to exclude
 * `holiday_region` (string): If trigger is `custom_schedule`, the sync will check if there is a formal, observed holiday for the region, and if so, it will not run.
@@ -363,7 +356,6 @@ Sync.Update(parameters);
 * `schedule_times_of_day` (string[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. Times of day in HH:MM format.
 * `src_path` (string): Absolute source path for the sync
 * `src_remote_server_id` (Nullable<Int64>): Remote server ID for the source (if remote)
-* `src_site_id` (Nullable<Int64>): Source site ID if syncing from a child or partner site
 * `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
