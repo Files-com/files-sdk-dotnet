@@ -117,6 +117,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("updated_at", null);
             }
+            if (!this.attributes.ContainsKey("live_transfers"))
+            {
+                this.attributes.Add("live_transfers", new object[0]);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -376,6 +380,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["updated_at"]; }
             private set { attributes["updated_at"] = value; }
+        }
+
+        /// <summary>
+        /// Array of in-progress file transfers with progress data. Only present when the sync run status is in_progress.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("live_transfers")]
+        public object[] LiveTransfers
+        {
+            get { return (object[])attributes["live_transfers"]; }
+            private set { attributes["live_transfers"] = value; }
         }
 
 
