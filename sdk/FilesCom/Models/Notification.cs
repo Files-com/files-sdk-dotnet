@@ -45,6 +45,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_name", null);
             }
+            if (!this.attributes.ContainsKey("group_ids"))
+            {
+                this.attributes.Add("group_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("group_names"))
+            {
+                this.attributes.Add("group_names", new string[0]);
+            }
             if (!this.attributes.ContainsKey("triggering_group_ids"))
             {
                 this.attributes.Add("triggering_group_ids", new Nullable<Int64>[0]);
@@ -173,6 +181,26 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["group_name"]; }
             set { attributes["group_name"] = value; }
+        }
+
+        /// <summary>
+        /// Group IDs when the notification requires multiple groups
+        /// </summary>
+        [JsonPropertyName("group_ids")]
+        public Nullable<Int64>[] GroupIds
+        {
+            get { return (Nullable<Int64>[])attributes["group_ids"]; }
+            set { attributes["group_ids"] = value; }
+        }
+
+        /// <summary>
+        /// Group names when the notification requires multiple groups
+        /// </summary>
+        [JsonPropertyName("group_names")]
+        public string[] GroupNames
+        {
+            get { return (string[])attributes["group_names"]; }
+            set { attributes["group_names"] = value; }
         }
 
         /// <summary>
@@ -639,6 +667,7 @@ namespace FilesCom.Models
         ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         ///   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
+        ///   group_ids - string - Group IDs when the notification requires multiple groups. If sent as a string, it should be comma-delimited.
         ///   path - string - Path
         ///   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
         /// </summary>
@@ -710,6 +739,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
+            {
+                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
