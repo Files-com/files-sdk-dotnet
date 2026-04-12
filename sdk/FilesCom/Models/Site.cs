@@ -329,6 +329,30 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("folder_permissions_groups_only", false);
             }
+            if (!this.attributes.ContainsKey("group_admins_can_add_users"))
+            {
+                this.attributes.Add("group_admins_can_add_users", false);
+            }
+            if (!this.attributes.ContainsKey("group_admins_can_delete_users"))
+            {
+                this.attributes.Add("group_admins_can_delete_users", false);
+            }
+            if (!this.attributes.ContainsKey("group_admins_can_enable_disable_users"))
+            {
+                this.attributes.Add("group_admins_can_enable_disable_users", false);
+            }
+            if (!this.attributes.ContainsKey("group_admins_can_modify_users"))
+            {
+                this.attributes.Add("group_admins_can_modify_users", false);
+            }
+            if (!this.attributes.ContainsKey("group_admins_can_reset_passwords"))
+            {
+                this.attributes.Add("group_admins_can_reset_passwords", false);
+            }
+            if (!this.attributes.ContainsKey("group_admins_can_set_user_password"))
+            {
+                this.attributes.Add("group_admins_can_set_user_password", false);
+            }
             if (!this.attributes.ContainsKey("hipaa"))
             {
                 this.attributes.Add("hipaa", false);
@@ -732,10 +756,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("windows_mode_ftp"))
             {
                 this.attributes.Add("windows_mode_ftp", false);
-            }
-            if (!this.attributes.ContainsKey("group_admins_can_set_user_password"))
-            {
-                this.attributes.Add("group_admins_can_set_user_password", false);
             }
         }
 
@@ -1621,6 +1641,78 @@ namespace FilesCom.Models
         {
             get { return attributes["folder_permissions_groups_only"] == null ? false : (bool)attributes["folder_permissions_groups_only"]; }
             private set { attributes["folder_permissions_groups_only"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to create users in their groups
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_add_users")]
+        public bool GroupAdminsCanAddUsers
+        {
+            get { return attributes["group_admins_can_add_users"] == null ? false : (bool)attributes["group_admins_can_add_users"]; }
+            private set { attributes["group_admins_can_add_users"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to delete users in their groups
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_delete_users")]
+        public bool GroupAdminsCanDeleteUsers
+        {
+            get { return attributes["group_admins_can_delete_users"] == null ? false : (bool)attributes["group_admins_can_delete_users"]; }
+            private set { attributes["group_admins_can_delete_users"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to enable or disable users in their groups
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_enable_disable_users")]
+        public bool GroupAdminsCanEnableDisableUsers
+        {
+            get { return attributes["group_admins_can_enable_disable_users"] == null ? false : (bool)attributes["group_admins_can_enable_disable_users"]; }
+            private set { attributes["group_admins_can_enable_disable_users"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to modify users in their groups
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_modify_users")]
+        public bool GroupAdminsCanModifyUsers
+        {
+            get { return attributes["group_admins_can_modify_users"] == null ? false : (bool)attributes["group_admins_can_modify_users"]; }
+            private set { attributes["group_admins_can_modify_users"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to reset passwords for users in their groups
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_reset_passwords")]
+        public bool GroupAdminsCanResetPasswords
+        {
+            get { return attributes["group_admins_can_reset_passwords"] == null ? false : (bool)attributes["group_admins_can_reset_passwords"]; }
+            private set { attributes["group_admins_can_reset_passwords"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to set password authentication method
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_set_user_password")]
+        public bool GroupAdminsCanSetUserPassword
+        {
+            get { return attributes["group_admins_can_set_user_password"] == null ? false : (bool)attributes["group_admins_can_set_user_password"]; }
+            private set { attributes["group_admins_can_set_user_password"] = value; }
         }
 
         /// <summary>
@@ -2774,18 +2866,6 @@ namespace FilesCom.Models
             private set { attributes["windows_mode_ftp"] = value; }
         }
 
-        /// <summary>
-        /// Allow group admins set password authentication method
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("group_admins_can_set_user_password")]
-        public bool GroupAdminsCanSetUserPassword
-        {
-            get { return attributes["group_admins_can_set_user_password"] == null ? false : (bool)attributes["group_admins_can_set_user_password"]; }
-            private set { attributes["group_admins_can_set_user_password"] = value; }
-        }
-
 
 
         /// <summary>
@@ -2945,7 +3025,12 @@ namespace FilesCom.Models
         ///   protocol_access_groups_only - boolean - If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
         ///   revoke_bundle_access_on_disable_or_delete - boolean - Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
-        ///   group_admins_can_set_user_password - boolean - Allow group admins set password authentication method
+        ///   group_admins_can_add_users - boolean - Allow group admins to create users in their groups
+        ///   group_admins_can_delete_users - boolean - Allow group admins to delete users in their groups
+        ///   group_admins_can_enable_disable_users - boolean - Allow group admins to enable or disable users in their groups
+        ///   group_admins_can_modify_users - boolean - Allow group admins to modify users in their groups
+        ///   group_admins_can_reset_passwords - boolean - Allow group admins to reset passwords for users in their groups
+        ///   group_admins_can_set_user_password - boolean - Allow group admins to set password authentication method
         ///   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
         ///   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
         ///   admins_bypass_locked_subfolders - boolean - Allow admins to bypass the locked subfolders setting.
@@ -3439,6 +3524,26 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_watermark_value") && !(parameters["bundle_watermark_value"] is object))
             {
                 throw new ArgumentException("Bad parameter: bundle_watermark_value must be of type object", "parameters[\"bundle_watermark_value\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_add_users") && !(parameters["group_admins_can_add_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_add_users must be of type bool", "parameters[\"group_admins_can_add_users\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_delete_users") && !(parameters["group_admins_can_delete_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_delete_users must be of type bool", "parameters[\"group_admins_can_delete_users\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_enable_disable_users") && !(parameters["group_admins_can_enable_disable_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_enable_disable_users must be of type bool", "parameters[\"group_admins_can_enable_disable_users\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_modify_users") && !(parameters["group_admins_can_modify_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_modify_users must be of type bool", "parameters[\"group_admins_can_modify_users\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_reset_passwords") && !(parameters["group_admins_can_reset_passwords"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_reset_passwords must be of type bool", "parameters[\"group_admins_can_reset_passwords\"]");
             }
             if (parameters.ContainsKey("group_admins_can_set_user_password") && !(parameters["group_admins_can_set_user_password"] is bool))
             {

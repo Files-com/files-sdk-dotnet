@@ -213,6 +213,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("password_validity_days", null);
             }
+            if (!this.attributes.ContainsKey("primary_group_id"))
+            {
+                this.attributes.Add("primary_group_id", null);
+            }
             if (!this.attributes.ContainsKey("public_keys_count"))
             {
                 this.attributes.Add("public_keys_count", null);
@@ -864,6 +868,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Primary group ID for Group Admin scoping
+        /// </summary>
+        [JsonPropertyName("primary_group_id")]
+        public Nullable<Int64> PrimaryGroupId
+        {
+            get { return (Nullable<Int64>)attributes["primary_group_id"]; }
+            set { attributes["primary_group_id"] = value; }
+        }
+
+        /// <summary>
         /// Number of public keys associated with this user
         /// </summary>
         [JsonPropertyName("public_keys_count")]
@@ -1391,6 +1405,7 @@ namespace FilesCom.Models
         ///   partner_admin - boolean - Is this user a Partner administrator?
         ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
@@ -1565,6 +1580,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+            }
+            if (parameters.ContainsKey("primary_group_id") && !(parameters["primary_group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: primary_group_id must be of type Nullable<Int64>", "parameters[\"primary_group_id\"]");
             }
             if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
             {
@@ -1884,6 +1903,7 @@ namespace FilesCom.Models
         ///   partner_admin - boolean - Is this user a Partner administrator?
         ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
@@ -2053,6 +2073,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+            }
+            if (parameters.ContainsKey("primary_group_id") && !(parameters["primary_group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: primary_group_id must be of type Nullable<Int64>", "parameters[\"primary_group_id\"]");
             }
             if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
             {
@@ -2283,6 +2307,7 @@ namespace FilesCom.Models
         ///   partner_admin - boolean - Is this user a Partner administrator?
         ///   partner_id - int64 - Partner ID if this user belongs to a Partner
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
         ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
@@ -2465,6 +2490,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+            }
+            if (parameters.ContainsKey("primary_group_id") && !(parameters["primary_group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: primary_group_id must be of type Nullable<Int64>", "parameters[\"primary_group_id\"]");
             }
             if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
             {

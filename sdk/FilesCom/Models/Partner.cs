@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allow_bypassing_2fa_policies", false);
             }
+            if (!this.attributes.ContainsKey("allowed_ips"))
+            {
+                this.attributes.Add("allowed_ips", null);
+            }
             if (!this.attributes.ContainsKey("allow_credential_changes"))
             {
                 this.attributes.Add("allow_credential_changes", false);
@@ -104,6 +108,16 @@ namespace FilesCom.Models
         {
             get { return attributes["allow_bypassing_2fa_policies"] == null ? false : (bool)attributes["allow_bypassing_2fa_policies"]; }
             set { attributes["allow_bypassing_2fa_policies"] = value; }
+        }
+
+        /// <summary>
+        /// A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
+        /// </summary>
+        [JsonPropertyName("allowed_ips")]
+        public string AllowedIps
+        {
+            get { return (string)attributes["allowed_ips"]; }
+            set { attributes["allowed_ips"] = value; }
         }
 
         /// <summary>
@@ -221,6 +235,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
         ///   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -246,6 +261,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            {
+                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
             }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
@@ -433,6 +452,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
         ///   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -459,6 +479,10 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("root_folder") || parameters["root_folder"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: root_folder", "parameters[\"root_folder\"]");
+            }
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            {
+                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
             }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {
@@ -512,6 +536,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
         ///   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
@@ -545,6 +570,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            {
+                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
             }
             if (parameters.ContainsKey("allow_bypassing_2fa_policies") && !(parameters["allow_bypassing_2fa_policies"] is bool))
             {

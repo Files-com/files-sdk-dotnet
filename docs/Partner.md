@@ -5,6 +5,7 @@
 ```
 {
   "allow_bypassing_2fa_policies": true,
+  "allowed_ips": "10.0.0.0/8\n127.0.0.1",
   "allow_credential_changes": true,
   "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
@@ -28,6 +29,7 @@
 ```
 
 * `allow_bypassing_2fa_policies` / `AllowBypassing2faPolicies`  (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
+* `allowed_ips` / `AllowedIps`  (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_credential_changes` / `AllowCredentialChanges`  (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` / `AllowProvidingGpgKeys`  (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` / `AllowUserCreation`  (bool): Allow Partner Admins to create users.
@@ -92,6 +94,7 @@ Task<Partner> Partner.Create(
 
 ### Parameters
 
+* `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
@@ -118,6 +121,7 @@ Task<Partner> Partner.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+* `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
@@ -154,6 +158,7 @@ var Partner = Partner.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("allow_bypassing_2fa_policies", false);
 parameters.Add("allow_credential_changes", false);
 parameters.Add("allow_providing_gpg_keys", false);
@@ -169,6 +174,7 @@ Partner.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+* `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.

@@ -522,12 +522,6 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
-    public class BillingOrSiteAdminPermissionRequiredException : NotAuthorizedException
-    {
-        public BillingOrSiteAdminPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
-            : base(message, httpStatus, responseError, httpHeaders)
-        { }
-    }
     public class BillingPermissionRequiredException : NotAuthorizedException
     {
         public BillingPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -711,6 +705,36 @@ namespace FilesCom
     public class SelfManagedRequiredException : NotAuthorizedException
     {
         public SelfManagedRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SiteAdminOrPartnerAdminPermissionRequiredException : NotAuthorizedException
+    {
+        public SiteAdminOrPartnerAdminPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredException : NotAuthorizedException
+    {
+        public SiteAdminOrWorkspaceAdminOrFolderAdminPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SiteAdminOrWorkspaceAdminOrPartnerAdminOrFolderAdminPermissionRequiredException : NotAuthorizedException
+    {
+        public SiteAdminOrWorkspaceAdminOrPartnerAdminOrFolderAdminPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SiteAdminOrWorkspaceAdminOrPartnerAdminPermissionRequiredException : NotAuthorizedException
+    {
+        public SiteAdminOrWorkspaceAdminOrPartnerAdminPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class SiteAdminOrWorkspaceAdminPermissionRequiredException : NotAuthorizedException
+    {
+        public SiteAdminOrWorkspaceAdminPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }

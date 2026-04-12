@@ -88,6 +88,12 @@
   "non_sso_groups_allowed": true,
   "non_sso_users_allowed": true,
   "folder_permissions_groups_only": true,
+  "group_admins_can_add_users": true,
+  "group_admins_can_delete_users": true,
+  "group_admins_can_enable_disable_users": true,
+  "group_admins_can_modify_users": true,
+  "group_admins_can_reset_passwords": true,
+  "group_admins_can_set_user_password": true,
   "hipaa": true,
   "icon128": {
     "name": "My logo",
@@ -270,6 +276,7 @@
     "partner_name": "example",
     "password_set_at": "2000-01-01T01:00:00Z",
     "password_validity_days": 1,
+    "primary_group_id": 1,
     "public_keys_count": 1,
     "receive_admin_alerts": true,
     "require_2fa": "always_require",
@@ -315,8 +322,7 @@
   "welcome_email_subject": "example",
   "welcome_email_enabled": true,
   "welcome_screen": "user_controlled",
-  "windows_mode_ftp": true,
-  "group_admins_can_set_user_password": true
+  "windows_mode_ftp": true
 }
 ```
 
@@ -395,6 +401,12 @@
 * `non_sso_groups_allowed` / `NonSsoGroupsAllowed`  (bool): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
 * `non_sso_users_allowed` / `NonSsoUsersAllowed`  (bool): If true, users can be manually created / modified / deleted by Site Admins. Otherwise, users can only be managed via your SSO provider.
 * `folder_permissions_groups_only` / `FolderPermissionsGroupsOnly`  (bool): If true, permissions for this site must be bound to a group (not a user).
+* `group_admins_can_add_users` / `GroupAdminsCanAddUsers`  (bool): Allow group admins to create users in their groups
+* `group_admins_can_delete_users` / `GroupAdminsCanDeleteUsers`  (bool): Allow group admins to delete users in their groups
+* `group_admins_can_enable_disable_users` / `GroupAdminsCanEnableDisableUsers`  (bool): Allow group admins to enable or disable users in their groups
+* `group_admins_can_modify_users` / `GroupAdminsCanModifyUsers`  (bool): Allow group admins to modify users in their groups
+* `group_admins_can_reset_passwords` / `GroupAdminsCanResetPasswords`  (bool): Allow group admins to reset passwords for users in their groups
+* `group_admins_can_set_user_password` / `GroupAdminsCanSetUserPassword`  (bool): Allow group admins to set password authentication method
 * `hipaa` / `Hipaa`  (bool): Is there a signed HIPAA BAA between Files.com and this site?
 * `icon128` / `Icon128`  (Image): Branded icon 128x128
 * `icon16` / `Icon16`  (Image): Branded icon 16x16
@@ -496,7 +508,6 @@
 * `welcome_email_enabled` / `WelcomeEmailEnabled`  (bool): Will the welcome email be sent to new users?
 * `welcome_screen` / `WelcomeScreen`  (string): Does the welcome screen appear?
 * `windows_mode_ftp` / `WindowsModeFtp`  (bool): Does FTP user Windows emulation mode?
-* `group_admins_can_set_user_password` / `GroupAdminsCanSetUserPassword`  (bool): Allow group admins set password authentication method
 
 
 ---
@@ -644,7 +655,12 @@ Task<Site> Site.Update(
 * `protocol_access_groups_only` (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
 * `revoke_bundle_access_on_disable_or_delete` (bool): Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
 * `bundle_watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
-* `group_admins_can_set_user_password` (bool): Allow group admins set password authentication method
+* `group_admins_can_add_users` (bool): Allow group admins to create users in their groups
+* `group_admins_can_delete_users` (bool): Allow group admins to delete users in their groups
+* `group_admins_can_enable_disable_users` (bool): Allow group admins to enable or disable users in their groups
+* `group_admins_can_modify_users` (bool): Allow group admins to modify users in their groups
+* `group_admins_can_reset_passwords` (bool): Allow group admins to reset passwords for users in their groups
+* `group_admins_can_set_user_password` (bool): Allow group admins to set password authentication method
 * `bundle_recipient_blacklist_free_email_domains` (bool): Disallow free email domains for Bundle/Inbox recipients?
 * `bundle_recipient_blacklist_domains` (string[]): List of email domains to disallow when entering a Bundle/Inbox recipients
 * `admins_bypass_locked_subfolders` (bool): Allow admins to bypass the locked subfolders setting.
