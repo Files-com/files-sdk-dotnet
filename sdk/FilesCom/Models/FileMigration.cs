@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("dest_path", null);
             }
+            if (!this.attributes.ContainsKey("failure_message"))
+            {
+                this.attributes.Add("failure_message", null);
+            }
             if (!this.attributes.ContainsKey("files_moved"))
             {
                 this.attributes.Add("files_moved", null);
@@ -114,6 +118,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["dest_path"]; }
             private set { attributes["dest_path"] = value; }
+        }
+
+        /// <summary>
+        /// Reason for the failure, if applicable.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("failure_message")]
+        public string FailureMessage
+        {
+            get { return (string)attributes["failure_message"]; }
+            private set { attributes["failure_message"] = value; }
         }
 
         /// <summary>

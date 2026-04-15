@@ -7,6 +7,7 @@
   "id": 1,
   "path": "MyFolder",
   "dest_path": "MyFolder",
+  "failure_message": "example",
   "files_moved": 1,
   "files_total": 1,
   "operation": "move",
@@ -19,6 +20,7 @@
 * `id` / `Id`  (Nullable<Int64>): File migration ID
 * `path` / `Path`  (string): Source path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `dest_path` / `DestPath`  (string): Destination path
+* `failure_message` / `FailureMessage`  (string): Reason for the failure, if applicable.
 * `files_moved` / `FilesMoved`  (Nullable<Int64>): Number of files processed
 * `files_total` / `FilesTotal`  (Nullable<Int64>): 
 * `operation` / `Operation`  (string): The type of operation
