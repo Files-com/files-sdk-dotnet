@@ -5,7 +5,7 @@
 ```
 {
   "id": 1,
-  "authentication_method": "password",
+  "authentication_method": "all_non_sso",
   "group_ids": [
     1,
     2,
@@ -26,7 +26,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): User Lifecycle Rule ID
-* `authentication_method` / `AuthenticationMethod`  (string): User authentication method for which the rule will apply.
+* `authentication_method` / `AuthenticationMethod`  (string): User authentication method for which the rule will apply. Use `all_non_sso` to target every non-SSO authentication method with one rule.
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `action` / `Action`  (string): Action to take on inactive users (disable or delete)
 * `inactivity_days` / `InactivityDays`  (Nullable<Int64>): Number of days of inactivity before the rule applies
@@ -94,7 +94,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 
 * `action` (string): Action to take on inactive users (disable or delete)
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to users in all workspaces.
-* `authentication_method` (string): User authentication method for which the rule will apply.
+* `authentication_method` (string): User authentication method for which the rule will apply. Use `all_non_sso` to target every non-SSO authentication method with one rule.
 * `group_ids` (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): If true, the rule will apply to site admins.
@@ -123,7 +123,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
 * `action` (string): Action to take on inactive users (disable or delete)
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to users in all workspaces.
-* `authentication_method` (string): User authentication method for which the rule will apply.
+* `authentication_method` (string): User authentication method for which the rule will apply. Use `all_non_sso` to target every non-SSO authentication method with one rule.
 * `group_ids` (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): If true, the rule will apply to site admins.
@@ -162,7 +162,7 @@ var UserLifecycleRule = UserLifecycleRule.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("apply_to_all_workspaces", true);
-parameters.Add("authentication_method", "password");
+parameters.Add("authentication_method", "all_non_sso");
 parameters.Add("group_ids", [1,2,3]);
 parameters.Add("inactivity_days", 12);
 parameters.Add("include_site_admins", true);
@@ -181,7 +181,7 @@ UserLifecycleRule.Update(parameters);
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
 * `action` (string): Action to take on inactive users (disable or delete)
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to users in all workspaces.
-* `authentication_method` (string): User authentication method for which the rule will apply.
+* `authentication_method` (string): User authentication method for which the rule will apply. Use `all_non_sso` to target every non-SSO authentication method with one rule.
 * `group_ids` (Nullable<Int64>[]): Array of Group IDs to which the rule applies. If empty or not set, the rule applies to all users.
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies
 * `include_site_admins` (bool): If true, the rule will apply to site admins.
