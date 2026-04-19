@@ -92,6 +92,7 @@
   "group_admins_can_delete_users": true,
   "group_admins_can_enable_disable_users": true,
   "group_admins_can_modify_users": true,
+  "group_admins_can_bypass_user_lifecycle_rules": true,
   "group_admins_can_reset_passwords": true,
   "group_admins_can_set_user_password": true,
   "hipaa": true,
@@ -405,6 +406,7 @@
 * `group_admins_can_delete_users` / `GroupAdminsCanDeleteUsers`  (bool): Allow group admins to delete users in their groups
 * `group_admins_can_enable_disable_users` / `GroupAdminsCanEnableDisableUsers`  (bool): Allow group admins to enable or disable users in their groups
 * `group_admins_can_modify_users` / `GroupAdminsCanModifyUsers`  (bool): Allow group admins to modify users in their groups
+* `group_admins_can_bypass_user_lifecycle_rules` / `GroupAdminsCanBypassUserLifecycleRules`  (bool): Allow group admins to exempt users in their groups from lifecycle rules
 * `group_admins_can_reset_passwords` / `GroupAdminsCanResetPasswords`  (bool): Allow group admins to reset passwords for users in their groups
 * `group_admins_can_set_user_password` / `GroupAdminsCanSetUserPassword`  (bool): Allow group admins to set password authentication method
 * `hipaa` / `Hipaa`  (bool): Is there a signed HIPAA BAA between Files.com and this site?
@@ -659,6 +661,7 @@ Task<Site> Site.Update(
 * `group_admins_can_delete_users` (bool): Allow group admins to delete users in their groups
 * `group_admins_can_enable_disable_users` (bool): Allow group admins to enable or disable users in their groups
 * `group_admins_can_modify_users` (bool): Allow group admins to modify users in their groups
+* `group_admins_can_bypass_user_lifecycle_rules` (bool): Allow group admins to exempt users in their groups from lifecycle rules
 * `group_admins_can_reset_passwords` (bool): Allow group admins to reset passwords for users in their groups
 * `group_admins_can_set_user_password` (bool): Allow group admins to set password authentication method
 * `bundle_recipient_blacklist_free_email_domains` (bool): Disallow free email domains for Bundle/Inbox recipients?

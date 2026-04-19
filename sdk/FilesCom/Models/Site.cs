@@ -345,6 +345,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_admins_can_modify_users", false);
             }
+            if (!this.attributes.ContainsKey("group_admins_can_bypass_user_lifecycle_rules"))
+            {
+                this.attributes.Add("group_admins_can_bypass_user_lifecycle_rules", false);
+            }
             if (!this.attributes.ContainsKey("group_admins_can_reset_passwords"))
             {
                 this.attributes.Add("group_admins_can_reset_passwords", false);
@@ -1692,6 +1696,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Allow group admins to exempt users in their groups from lifecycle rules
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_bypass_user_lifecycle_rules")]
+        public bool GroupAdminsCanBypassUserLifecycleRules
+        {
+            get { return attributes["group_admins_can_bypass_user_lifecycle_rules"] == null ? false : (bool)attributes["group_admins_can_bypass_user_lifecycle_rules"]; }
+            private set { attributes["group_admins_can_bypass_user_lifecycle_rules"] = value; }
+        }
+
+        /// <summary>
         /// Allow group admins to reset passwords for users in their groups
         /// </summary>
         [JsonInclude]
@@ -3029,6 +3045,7 @@ namespace FilesCom.Models
         ///   group_admins_can_delete_users - boolean - Allow group admins to delete users in their groups
         ///   group_admins_can_enable_disable_users - boolean - Allow group admins to enable or disable users in their groups
         ///   group_admins_can_modify_users - boolean - Allow group admins to modify users in their groups
+        ///   group_admins_can_bypass_user_lifecycle_rules - boolean - Allow group admins to exempt users in their groups from lifecycle rules
         ///   group_admins_can_reset_passwords - boolean - Allow group admins to reset passwords for users in their groups
         ///   group_admins_can_set_user_password - boolean - Allow group admins to set password authentication method
         ///   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
@@ -3540,6 +3557,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_admins_can_modify_users") && !(parameters["group_admins_can_modify_users"] is bool))
             {
                 throw new ArgumentException("Bad parameter: group_admins_can_modify_users must be of type bool", "parameters[\"group_admins_can_modify_users\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_bypass_user_lifecycle_rules") && !(parameters["group_admins_can_bypass_user_lifecycle_rules"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_bypass_user_lifecycle_rules must be of type bool", "parameters[\"group_admins_can_bypass_user_lifecycle_rules\"]");
             }
             if (parameters.ContainsKey("group_admins_can_reset_passwords") && !(parameters["group_admins_can_reset_passwords"] is bool))
             {
