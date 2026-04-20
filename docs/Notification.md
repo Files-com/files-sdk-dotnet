@@ -29,6 +29,7 @@
   "notify_on_upload": true,
   "recursive": true,
   "send_interval": "fifteen_minutes",
+  "subject": "Vendor A CSV Activity",
   "message": "custom notification email message",
   "triggering_filenames": [
     "*.jpg",
@@ -59,6 +60,7 @@
 * `notify_on_upload` / `NotifyOnUpload`  (bool): Trigger on files created/uploaded/updated/changed in this path?
 * `recursive` / `Recursive`  (bool): Apply notification recursively?  This will enable notifications for each subfolder.
 * `send_interval` / `SendInterval`  (string): The time interval that notifications are aggregated to
+* `subject` / `Subject`  (string): Custom subject line to use for notification emails
 * `message` / `Message`  (string): Custom message to include in notification emails
 * `triggering_filenames` / `TriggeringFilenames`  (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `unsubscribed` / `Unsubscribed`  (bool): Is the user unsubscribed from this notification?
@@ -132,6 +134,7 @@ Task<Notification> Notification.Create(
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
 * `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+* `subject` (string): Custom subject line to use for notification emails
 * `message` (string): Custom message to include in notification emails
 * `triggering_filenames` (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
@@ -166,6 +169,7 @@ Task<Notification> Notification.Update(
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
 * `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+* `subject` (string): Custom subject line to use for notification emails
 * `message` (string): Custom message to include in notification emails
 * `triggering_filenames` (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
@@ -207,6 +211,7 @@ parameters.Add("notify_on_upload", true);
 parameters.Add("notify_user_actions", false);
 parameters.Add("recursive", false);
 parameters.Add("send_interval", "daily");
+parameters.Add("subject", "Vendor A CSV Activity");
 parameters.Add("message", "custom notification email message");
 parameters.Add("triggering_filenames", ["*.jpg","notify_file.txt"]);
 parameters.Add("triggering_group_ids", [1]);
@@ -227,6 +232,7 @@ Notification.Update(parameters);
 * `notify_user_actions` (bool): If `true` actions initiated by the user will still result in a notification
 * `recursive` (bool): If `true`, enable notifications for each subfolder in this path
 * `send_interval` (string): The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+* `subject` (string): Custom subject line to use for notification emails
 * `message` (string): Custom message to include in notification emails
 * `triggering_filenames` (string[]): Array of filenames (possibly with wildcards) to scope trigger
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups

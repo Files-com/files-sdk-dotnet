@@ -97,6 +97,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("send_interval", null);
             }
+            if (!this.attributes.ContainsKey("subject"))
+            {
+                this.attributes.Add("subject", null);
+            }
             if (!this.attributes.ContainsKey("message"))
             {
                 this.attributes.Add("message", null);
@@ -322,6 +326,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Custom subject line to use for notification emails
+        /// </summary>
+        [JsonPropertyName("subject")]
+        public string Subject
+        {
+            get { return (string)attributes["subject"]; }
+            set { attributes["subject"] = value; }
+        }
+
+        /// <summary>
         /// Custom message to include in notification emails
         /// </summary>
         [JsonPropertyName("message")]
@@ -403,6 +417,7 @@ namespace FilesCom.Models
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   subject - string - Custom subject line to use for notification emails
         ///   message - string - Custom message to include in notification emails
         ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
@@ -457,6 +472,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
+            }
+            if (parameters.ContainsKey("subject") && !(parameters["subject"] is string))
+            {
+                throw new ArgumentException("Bad parameter: subject must be of type string", "parameters[\"subject\"]");
             }
             if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
@@ -661,6 +680,7 @@ namespace FilesCom.Models
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   subject - string - Custom subject line to use for notification emails
         ///   message - string - Custom message to include in notification emails
         ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
@@ -715,6 +735,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
+            }
+            if (parameters.ContainsKey("subject") && !(parameters["subject"] is string))
+            {
+                throw new ArgumentException("Bad parameter: subject must be of type string", "parameters[\"subject\"]");
             }
             if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
@@ -776,6 +800,7 @@ namespace FilesCom.Models
         ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
         ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
         ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   subject - string - Custom subject line to use for notification emails
         ///   message - string - Custom message to include in notification emails
         ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
@@ -838,6 +863,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("send_interval") && !(parameters["send_interval"] is string))
             {
                 throw new ArgumentException("Bad parameter: send_interval must be of type string", "parameters[\"send_interval\"]");
+            }
+            if (parameters.ContainsKey("subject") && !(parameters["subject"] is string))
+            {
+                throw new ArgumentException("Bad parameter: subject must be of type string", "parameters[\"subject\"]");
             }
             if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
