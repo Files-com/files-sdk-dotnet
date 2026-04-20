@@ -16,7 +16,7 @@
 * `id` / `Id`  (Nullable<Int64>): Clickwrap ID
 * `name` / `Name`  (string): Name of the Clickwrap agreement (used when selecting from multiple Clickwrap agreements.)
 * `body` / `Body`  (string): Body text of Clickwrap (supports Markdown formatting).
-* `use_with_users` / `UseWithUsers`  (string): Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+* `use_with_users` / `UseWithUsers`  (string): Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
 * `use_with_bundles` / `UseWithBundles`  (string): Use this Clickwrap for Bundles?
 * `use_with_inboxes` / `UseWithInboxes`  (string): Use this Clickwrap for Inboxes?
 
@@ -75,7 +75,7 @@ Task<Clickwrap> Clickwrap.Create(
 * `body` (string): Body text of Clickwrap (supports Markdown formatting).
 * `use_with_bundles` (string): Use this Clickwrap for Bundles?
 * `use_with_inboxes` (string): Use this Clickwrap for Inboxes?
-* `use_with_users` (string): Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+* `use_with_users` (string): Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
 
 
 ---
@@ -97,7 +97,7 @@ Task<Clickwrap> Clickwrap.Update(
 * `body` (string): Body text of Clickwrap (supports Markdown formatting).
 * `use_with_bundles` (string): Use this Clickwrap for Bundles?
 * `use_with_inboxes` (string): Use this Clickwrap for Inboxes?
-* `use_with_users` (string): Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+* `use_with_users` (string): Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
 
 
 ---
@@ -142,7 +142,7 @@ Clickwrap.Update(parameters);
 * `body` (string): Body text of Clickwrap (supports Markdown formatting).
 * `use_with_bundles` (string): Use this Clickwrap for Bundles?
 * `use_with_inboxes` (string): Use this Clickwrap for Inboxes?
-* `use_with_users` (string): Use this Clickwrap for User Registrations?  Note: This only applies to User Registrations where the User is invited to your Files.com site using an E-Mail invitation process where they then set their own password.
+* `use_with_users` (string): Use this Clickwrap for Users?  Values: `none`, `require` (new user signup via email invitation only), `require_all_users_once` (show to all users at their next web login; once accepted, not shown again), `require_all_users_always` (show to all users on every web login).
 
 
 ---
