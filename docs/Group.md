@@ -15,6 +15,7 @@
   "sftp_permission": true,
   "dav_permission": true,
   "restapi_permission": true,
+  "desktop_configuration_profile_id": 1,
   "site_id": 1,
   "workspace_id": 1
 }
@@ -31,6 +32,7 @@
 * `sftp_permission` / `SftpPermission`  (bool): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` / `DavPermission`  (bool): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` / `RestapiPermission`  (bool): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+* `desktop_configuration_profile_id` / `DesktopConfigurationProfileId`  (Nullable<Int64>): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 
@@ -96,6 +98,7 @@ Task<Group> Group.Create(
 * `sftp_permission` (bool): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` (bool): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` (bool): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+* `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Required - Group name.
 * `workspace_id` (Nullable<Int64>): Workspace ID
@@ -123,6 +126,7 @@ Task<Group> Group.Update(
 * `sftp_permission` (bool): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` (bool): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` (bool): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+* `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Group name.
 
@@ -160,6 +164,7 @@ parameters.Add("ftp_permission", true);
 parameters.Add("sftp_permission", true);
 parameters.Add("dav_permission", true);
 parameters.Add("restapi_permission", true);
+parameters.Add("desktop_configuration_profile_id", 1);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("name", "owners");
 
@@ -176,6 +181,7 @@ Group.Update(parameters);
 * `sftp_permission` (bool): If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
 * `dav_permission` (bool): If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
 * `restapi_permission` (bool): If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+* `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Group name.
 
