@@ -221,6 +221,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("s3_compatible_region", null);
             }
+            if (!this.attributes.ContainsKey("s3_compatible_virtual_hosted_style"))
+            {
+                this.attributes.Add("s3_compatible_virtual_hosted_style", false);
+            }
             if (!this.attributes.ContainsKey("s3_compatible_access_key"))
             {
                 this.attributes.Add("s3_compatible_access_key", null);
@@ -880,6 +884,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("s3_compatible_virtual_hosted_style")]
+        public bool S3CompatibleVirtualHostedStyle
+        {
+            get { return attributes["s3_compatible_virtual_hosted_style"] == null ? false : (bool)attributes["s3_compatible_virtual_hosted_style"]; }
+            set { attributes["s3_compatible_virtual_hosted_style"] = value; }
+        }
+
+        /// <summary>
         /// S3-compatible: Access Key
         /// </summary>
         [JsonPropertyName("s3_compatible_access_key")]
@@ -1466,6 +1481,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
+        ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
@@ -1748,6 +1764,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
             }
             if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
             {
@@ -2051,6 +2071,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
+        ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
@@ -2327,6 +2348,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
             }
+            if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
+            }
             if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_region must be of type string", "parameters[\"s3_region\"]");
@@ -2588,6 +2613,7 @@ namespace FilesCom.Models
         ///   s3_compatible_bucket - string - S3-compatible: Bucket name
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
+        ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
@@ -2878,6 +2904,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
             }
             if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
             {

@@ -52,6 +52,7 @@
   "s3_compatible_bucket": "my-bucket",
   "s3_compatible_endpoint": "mys3platform.com",
   "s3_compatible_region": "us-east-1",
+  "s3_compatible_virtual_hosted_style": true,
   "s3_compatible_access_key": "example",
   "enable_dedicated_ips": true,
   "files_agent_permission_set": "read_write",
@@ -123,6 +124,7 @@
 * `s3_compatible_bucket` / `S3CompatibleBucket`  (string): S3-compatible: Bucket name
 * `s3_compatible_endpoint` / `S3CompatibleEndpoint`  (string): S3-compatible: endpoint
 * `s3_compatible_region` / `S3CompatibleRegion`  (string): S3-compatible: region
+* `s3_compatible_virtual_hosted_style` / `S3CompatibleVirtualHostedStyle`  (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible: Access Key
 * `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
 * `files_agent_permission_set` / `FilesAgentPermissionSet`  (string): Local permissions for files agent. read_only, write_only, or read_write
@@ -297,6 +299,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible: endpoint
 * `s3_compatible_region` (string): S3-compatible: region
+* `s3_compatible_virtual_hosted_style` (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_region` (string): S3 region
 * `server_certificate` (string): Remote server certificate
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
@@ -433,6 +436,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible: endpoint
 * `s3_compatible_region` (string): S3-compatible: region
+* `s3_compatible_virtual_hosted_style` (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_region` (string): S3 region
 * `server_certificate` (string): Remote server certificate
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
@@ -574,6 +578,7 @@ parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("s3_compatible_bucket", "my-bucket");
 parameters.Add("s3_compatible_endpoint", "mys3platform.com");
 parameters.Add("s3_compatible_region", "us-east-1");
+parameters.Add("s3_compatible_virtual_hosted_style", true);
 parameters.Add("s3_region", "us-east-1");
 parameters.Add("server_certificate", "require_match");
 parameters.Add("server_host_key", "[public key]");
@@ -654,6 +659,7 @@ RemoteServer.Update(parameters);
 * `s3_compatible_bucket` (string): S3-compatible: Bucket name
 * `s3_compatible_endpoint` (string): S3-compatible: endpoint
 * `s3_compatible_region` (string): S3-compatible: region
+* `s3_compatible_virtual_hosted_style` (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_region` (string): S3 region
 * `server_certificate` (string): Remote server certificate
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
