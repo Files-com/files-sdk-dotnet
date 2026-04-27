@@ -197,6 +197,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("enabled", false);
             }
+            if (!this.attributes.ContainsKey("display_on_login_page"))
+            {
+                this.attributes.Add("display_on_login_page", false);
+            }
             if (!this.attributes.ContainsKey("ldap_host"))
             {
                 this.attributes.Add("ldap_host", null);
@@ -711,6 +715,18 @@ namespace FilesCom.Models
         {
             get { return attributes["enabled"] == null ? false : (bool)attributes["enabled"]; }
             private set { attributes["enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Should this strategy be displayed on the login page?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("display_on_login_page")]
+        public bool DisplayOnLoginPage
+        {
+            get { return attributes["display_on_login_page"] == null ? false : (bool)attributes["display_on_login_page"]; }
+            private set { attributes["display_on_login_page"] = value; }
         }
 
         /// <summary>

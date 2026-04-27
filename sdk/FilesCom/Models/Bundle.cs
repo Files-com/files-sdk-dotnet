@@ -117,6 +117,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("bypasses_site_expiration_rules"))
+            {
+                this.attributes.Add("bypasses_site_expiration_rules", false);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -467,6 +471,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, this Share Link bypasses site-wide expiration rules. Only site admins may set this.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bypasses_site_expiration_rules")]
+        public bool BypassesSiteExpirationRules
+        {
+            get { return attributes["bypasses_site_expiration_rules"] == null ? false : (bool)attributes["bypasses_site_expiration_rules"]; }
+            set { attributes["bypasses_site_expiration_rules"] = value; }
+        }
+
+        /// <summary>
         /// Bundle created at date/time
         /// </summary>
         [JsonInclude]
@@ -781,6 +796,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   paths - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
+        ///   bypasses_site_expiration_rules - boolean - If true, this Share Link bypasses site-wide expiration rules. Only site admins may set this.
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -832,6 +848,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password") && !(parameters["password"] is string))
             {
                 throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+            }
+            if (parameters.ContainsKey("bypasses_site_expiration_rules") && !(parameters["bypasses_site_expiration_rules"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bypasses_site_expiration_rules must be of type bool", "parameters[\"bypasses_site_expiration_rules\"]");
             }
             if (parameters.ContainsKey("form_field_set_id") && !(parameters["form_field_set_id"] is Nullable<Int64>))
             {
@@ -999,7 +1019,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `expires_at`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `expires_at`, `code` or `user_id`. Valid field combinations are `[ user_id, expires_at ]`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `expires_at`, `code`, `user_id` or `bypasses_site_expiration_rules`. Valid field combinations are `[ user_id, expires_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at` and `expires_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at` and `expires_at`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `code`.
@@ -1124,6 +1144,7 @@ namespace FilesCom.Models
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   paths (required) - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
+        ///   bypasses_site_expiration_rules - boolean - If true, this Share Link bypasses site-wide expiration rules. Only site admins may set this.
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
         ///   create_snapshot - boolean - If true, create a snapshot of this bundle's contents.
         ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
@@ -1174,6 +1195,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password") && !(parameters["password"] is string))
             {
                 throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+            }
+            if (parameters.ContainsKey("bypasses_site_expiration_rules") && !(parameters["bypasses_site_expiration_rules"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bypasses_site_expiration_rules must be of type bool", "parameters[\"bypasses_site_expiration_rules\"]");
             }
             if (parameters.ContainsKey("form_field_set_id") && !(parameters["form_field_set_id"] is Nullable<Int64>))
             {
@@ -1343,6 +1368,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   paths - array(string) - A list of paths to include in this bundle.
         ///   password - string - Password for this bundle.
+        ///   bypasses_site_expiration_rules - boolean - If true, this Share Link bypasses site-wide expiration rules. Only site admins may set this.
         ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
         ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -1402,6 +1428,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("password") && !(parameters["password"] is string))
             {
                 throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+            }
+            if (parameters.ContainsKey("bypasses_site_expiration_rules") && !(parameters["bypasses_site_expiration_rules"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bypasses_site_expiration_rules must be of type bool", "parameters[\"bypasses_site_expiration_rules\"]");
             }
             if (parameters.ContainsKey("form_field_set_id") && !(parameters["form_field_set_id"] is Nullable<Int64>))
             {
