@@ -217,9 +217,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("ldap_port", null);
             }
+            if (!this.attributes.ContainsKey("ldap_provisioning_enabled"))
+            {
+                this.attributes.Add("ldap_provisioning_enabled", false);
+            }
             if (!this.attributes.ContainsKey("ldap_secure"))
             {
                 this.attributes.Add("ldap_secure", false);
+            }
+            if (!this.attributes.ContainsKey("ldap_type"))
+            {
+                this.attributes.Add("ldap_type", null);
             }
             if (!this.attributes.ContainsKey("ldap_username"))
             {
@@ -774,6 +782,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Use LDAP server settings for scheduled provisioning while using this SSO provider for authentication?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("ldap_provisioning_enabled")]
+        public bool LdapProvisioningEnabled
+        {
+            get { return attributes["ldap_provisioning_enabled"] == null ? false : (bool)attributes["ldap_provisioning_enabled"]; }
+            private set { attributes["ldap_provisioning_enabled"] = value; }
+        }
+
+        /// <summary>
         /// Use secure LDAP?
         /// </summary>
         [JsonInclude]
@@ -783,6 +803,17 @@ namespace FilesCom.Models
         {
             get { return attributes["ldap_secure"] == null ? false : (bool)attributes["ldap_secure"]; }
             private set { attributes["ldap_secure"] = value; }
+        }
+
+        /// <summary>
+        /// LDAP server type
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ldap_type")]
+        public string LdapType
+        {
+            get { return (string)attributes["ldap_type"]; }
+            private set { attributes["ldap_type"] = value; }
         }
 
         /// <summary>
