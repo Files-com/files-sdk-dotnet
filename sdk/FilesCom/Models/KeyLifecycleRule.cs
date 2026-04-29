@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("inactivity_days", null);
             }
+            if (!this.attributes.ContainsKey("expiration_days"))
+            {
+                this.attributes.Add("expiration_days", null);
+            }
             if (!this.attributes.ContainsKey("apply_to_all_workspaces"))
             {
                 this.attributes.Add("apply_to_all_workspaces", false);
@@ -102,6 +106,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Number of days after creation before an SSH key expires. Applies only to SSH keys.
+        /// </summary>
+        [JsonPropertyName("expiration_days")]
+        public Nullable<Int64> ExpirationDays
+        {
+            get { return (Nullable<Int64>)attributes["expiration_days"]; }
+            set { attributes["expiration_days"] = value; }
+        }
+
+        /// <summary>
         /// If true, a default-workspace rule also applies to keys in all workspaces.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -135,6 +149,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
+        ///   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
         ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
@@ -160,6 +175,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("expiration_days") && !(parameters["expiration_days"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: expiration_days must be of type Nullable<Int64>", "parameters[\"expiration_days\"]");
             }
             if (parameters.ContainsKey("key_type") && !(parameters["key_type"] is string))
             {
@@ -332,6 +351,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
+        ///   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
         ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
@@ -349,6 +369,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("expiration_days") && !(parameters["expiration_days"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: expiration_days must be of type Nullable<Int64>", "parameters[\"expiration_days\"]");
             }
             if (parameters.ContainsKey("key_type") && !(parameters["key_type"] is string))
             {
@@ -383,6 +407,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
+        ///   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
         ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
@@ -416,6 +441,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("expiration_days") && !(parameters["expiration_days"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: expiration_days must be of type Nullable<Int64>", "parameters[\"expiration_days\"]");
             }
             if (parameters.ContainsKey("key_type") && !(parameters["key_type"] is string))
             {

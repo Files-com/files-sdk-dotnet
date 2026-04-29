@@ -7,6 +7,7 @@
   "id": 1,
   "key_type": "gpg",
   "inactivity_days": 12,
+  "expiration_days": 365,
   "apply_to_all_workspaces": true,
   "name": "inactive gpg keys",
   "workspace_id": 12
@@ -16,6 +17,7 @@
 * `id` / `Id`  (Nullable<Int64>): Key Lifecycle Rule ID
 * `key_type` / `KeyType`  (string): Key type for which the rule will apply (gpg or ssh).
 * `inactivity_days` / `InactivityDays`  (Nullable<Int64>): Number of days of inactivity before the rule applies.
+* `expiration_days` / `ExpirationDays`  (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
 * `apply_to_all_workspaces` / `ApplyToAllWorkspaces`  (bool): If true, a default-workspace rule also applies to keys in all workspaces.
 * `name` / `Name`  (string): Key Lifecycle Rule name
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
@@ -73,6 +75,7 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Create(
 ### Parameters
 
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to keys in all workspaces.
+* `expiration_days` (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
 * `key_type` (string): Key type for which the rule will apply (gpg or ssh).
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `name` (string): Key Lifecycle Rule name
@@ -95,6 +98,7 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Update(
 
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to keys in all workspaces.
+* `expiration_days` (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
 * `key_type` (string): Key type for which the rule will apply (gpg or ssh).
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `name` (string): Key Lifecycle Rule name
@@ -128,6 +132,7 @@ var KeyLifecycleRule = KeyLifecycleRule.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("apply_to_all_workspaces", true);
+parameters.Add("expiration_days", 365);
 parameters.Add("key_type", "gpg");
 parameters.Add("inactivity_days", 12);
 parameters.Add("name", "inactive gpg keys");
@@ -140,6 +145,7 @@ KeyLifecycleRule.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to keys in all workspaces.
+* `expiration_days` (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
 * `key_type` (string): Key type for which the rule will apply (gpg or ssh).
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `name` (string): Key Lifecycle Rule name

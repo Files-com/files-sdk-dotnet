@@ -45,6 +45,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("expires_at"))
+            {
+                this.attributes.Add("expires_at", null);
+            }
+            if (!this.attributes.ContainsKey("expired"))
+            {
+                this.attributes.Add("expired", false);
+            }
             if (!this.attributes.ContainsKey("fingerprint"))
             {
                 this.attributes.Add("fingerprint", null);
@@ -154,6 +162,27 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// Public key expiration date/time
+        /// </summary>
+        [JsonPropertyName("expires_at")]
+        public Nullable<DateTime> ExpiresAt
+        {
+            get { return (Nullable<DateTime>)attributes["expires_at"]; }
+            set { attributes["expires_at"] = value; }
+        }
+
+        /// <summary>
+        /// Is this public key expired?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("expired")]
+        public bool Expired
+        {
+            get { return attributes["expired"] == null ? false : (bool)attributes["expired"]; }
+            set { attributes["expired"] = value; }
         }
 
         /// <summary>
