@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("use_for_all_users", false);
             }
+            if (!this.attributes.ContainsKey("disable_drive_mounting"))
+            {
+                this.attributes.Add("disable_drive_mounting", false);
+            }
             if (!this.attributes.ContainsKey("mount_mappings"))
             {
                 this.attributes.Add("mount_mappings", null);
@@ -109,6 +113,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("disable_drive_mounting")]
+        public bool DisableDriveMounting
+        {
+            get { return attributes["disable_drive_mounting"] == null ? false : (bool)attributes["disable_drive_mounting"]; }
+            set { attributes["disable_drive_mounting"] = value; }
+        }
+
+        /// <summary>
         /// Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         /// </summary>
         [JsonPropertyName("mount_mappings")]
@@ -124,6 +139,7 @@ namespace FilesCom.Models
         ///   workspace_id - int64 - Workspace ID
         ///   mount_mappings - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         ///   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
+        ///   disable_drive_mounting - boolean - Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
         /// </summary>
         public async Task<DesktopConfigurationProfile> Update(Dictionary<string, object> parameters)
         {
@@ -157,6 +173,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("use_for_all_users") && !(parameters["use_for_all_users"] is bool))
             {
                 throw new ArgumentException("Bad parameter: use_for_all_users must be of type bool", "parameters[\"use_for_all_users\"]");
+            }
+            if (parameters.ContainsKey("disable_drive_mounting") && !(parameters["disable_drive_mounting"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_drive_mounting must be of type bool", "parameters[\"disable_drive_mounting\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/desktop_configuration_profiles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -316,6 +336,7 @@ namespace FilesCom.Models
         ///   mount_mappings (required) - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         ///   workspace_id - int64 - Workspace ID
         ///   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
+        ///   disable_drive_mounting - boolean - Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
         /// </summary>
         public static async Task<DesktopConfigurationProfile> Create(
 
@@ -350,6 +371,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: use_for_all_users must be of type bool", "parameters[\"use_for_all_users\"]");
             }
+            if (parameters.ContainsKey("disable_drive_mounting") && !(parameters["disable_drive_mounting"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_drive_mounting must be of type bool", "parameters[\"disable_drive_mounting\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/desktop_configuration_profiles", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -370,6 +395,7 @@ namespace FilesCom.Models
         ///   workspace_id - int64 - Workspace ID
         ///   mount_mappings - object - Mount point mappings for the desktop app. Keys must be a single uppercase Windows drive letter other than A, B, or C, and values are Files.com paths to mount there.
         ///   use_for_all_users - boolean - Whether this profile applies to all users in the Workspace by default
+        ///   disable_drive_mounting - boolean - Whether the desktop app should hide drive mounting, prevent new drive mounts, and unmount active drive mounts for users with this profile
         /// </summary>
         public static async Task<DesktopConfigurationProfile> Update(
             Nullable<Int64> id,
@@ -411,6 +437,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("use_for_all_users") && !(parameters["use_for_all_users"] is bool))
             {
                 throw new ArgumentException("Bad parameter: use_for_all_users must be of type bool", "parameters[\"use_for_all_users\"]");
+            }
+            if (parameters.ContainsKey("disable_drive_mounting") && !(parameters["disable_drive_mounting"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_drive_mounting must be of type bool", "parameters[\"disable_drive_mounting\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/desktop_configuration_profiles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
