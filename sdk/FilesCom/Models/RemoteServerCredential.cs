@@ -161,6 +161,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("wasabi_secret_key", null);
             }
+            if (!this.attributes.ContainsKey("copy_values_from_credential_id"))
+            {
+                this.attributes.Add("copy_values_from_credential_id", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -507,6 +511,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["wasabi_secret_key"]; }
             set { attributes["wasabi_secret_key"] = value; }
+        }
+
+        /// <summary>
+        /// ID of Remote Server Credential to copy omitted values from.
+        /// </summary>
+        [JsonPropertyName("copy_values_from_credential_id")]
+        public Nullable<Int64> CopyValuesFromCredentialId
+        {
+            get { return (Nullable<Int64>)attributes["copy_values_from_credential_id"]; }
+            set { attributes["copy_values_from_credential_id"] = value; }
         }
 
         /// <summary>
@@ -869,6 +883,7 @@ namespace FilesCom.Models
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
         ///   wasabi_secret_key - string - Wasabi: Secret Key
         ///   workspace_id - int64 - Workspace ID (0 for default workspace)
+        ///   copy_values_from_credential_id - int64 - ID of Remote Server Credential to copy omitted values from.
         /// </summary>
         public static async Task<RemoteServerCredential> Create(
 
@@ -1002,6 +1017,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
+            if (parameters.ContainsKey("copy_values_from_credential_id") && !(parameters["copy_values_from_credential_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: copy_values_from_credential_id must be of type Nullable<Int64>", "parameters[\"copy_values_from_credential_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/remote_server_credentials", System.Net.Http.HttpMethod.Post, parameters, options);

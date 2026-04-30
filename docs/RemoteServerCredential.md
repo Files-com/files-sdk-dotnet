@@ -56,6 +56,7 @@
 * `linode_secret_key` / `LinodeSecretKey`  (string): Linode: Secret Key
 * `s3_compatible_secret_key` / `S3CompatibleSecretKey`  (string): S3-compatible: Secret Key
 * `wasabi_secret_key` / `WasabiSecretKey`  (string): Wasabi: Secret Key
+* `copy_values_from_credential_id` / `CopyValuesFromCredentialId`  (Nullable<Int64>): ID of Remote Server Credential to copy omitted values from.
 
 
 ---
@@ -141,6 +142,7 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
 * `s3_compatible_secret_key` (string): S3-compatible: Secret Key
 * `wasabi_secret_key` (string): Wasabi: Secret Key
 * `workspace_id` (Nullable<Int64>): Workspace ID (0 for default workspace)
+* `copy_values_from_credential_id` (Nullable<Int64>): ID of Remote Server Credential to copy omitted values from.
 
 
 ---
