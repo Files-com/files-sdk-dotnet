@@ -23,7 +23,7 @@
 
   ],
   "criteria_errors": [
-
+    "count expected exactly 2, got 1"
   ],
   "summary": null,
   "created_at": "2000-01-01T01:00:00Z",
@@ -45,7 +45,7 @@
 * `closed_at` / `ClosedAt`  (Nullable<DateTime>): When the evaluation row was finalized.
 * `matched_files` / `MatchedFiles`  (object[]): Captured evidence for files that matched the window.
 * `missing_files` / `MissingFiles`  (object[]): Captured evidence for required files that were missing.
-* `criteria_errors` / `CriteriaErrors`  (object[]): Captured criteria failures for the window.
+* `criteria_errors` / `CriteriaErrors`  (string[]): Captured criteria failures for the window.
 * `summary` / `Summary`  (object): Compact evaluator summary payload.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Creation time.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Last update time.

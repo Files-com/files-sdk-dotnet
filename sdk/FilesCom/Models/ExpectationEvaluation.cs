@@ -87,7 +87,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("criteria_errors"))
             {
-                this.attributes.Add("criteria_errors", new object[0]);
+                this.attributes.Add("criteria_errors", new string[0]);
             }
             if (!this.attributes.ContainsKey("summary"))
             {
@@ -278,9 +278,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("criteria_errors")]
-        public object[] CriteriaErrors
+        public string[] CriteriaErrors
         {
-            get { return (object[])attributes["criteria_errors"]; }
+            get { return (string[])attributes["criteria_errors"]; }
             private set { attributes["criteria_errors"] = value; }
         }
 
