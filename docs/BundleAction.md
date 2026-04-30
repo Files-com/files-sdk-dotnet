@@ -31,7 +31,11 @@
   "workspace_id": 1,
   "bundle_registration_name": "John Doe",
   "bundle_registration_email": "john@example.com",
-  "bundle_registration_ip": "127.0.0.1"
+  "bundle_registration_ip": "127.0.0.1",
+  "form_field_set_id": 1,
+  "form_field_data": {
+    "key": "example value"
+  }
 }
 ```
 
@@ -46,6 +50,8 @@
 * `bundle_registration_name` / `BundleRegistrationName`  (string): Name of the registrant who performed the action
 * `bundle_registration_email` / `BundleRegistrationEmail`  (string): Email of the registrant
 * `bundle_registration_ip` / `BundleRegistrationIp`  (string): IP address of the registrant
+* `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of associated form field set
+* `form_field_data` / `FormFieldData`  (object): Data for form field set with form field ids as keys and user data as values
 
 
 ---

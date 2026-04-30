@@ -73,6 +73,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_registration_ip", null);
             }
+            if (!this.attributes.ContainsKey("form_field_set_id"))
+            {
+                this.attributes.Add("form_field_set_id", null);
+            }
+            if (!this.attributes.ContainsKey("form_field_data"))
+            {
+                this.attributes.Add("form_field_data", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -210,6 +218,28 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["bundle_registration_ip"]; }
             private set { attributes["bundle_registration_ip"] = value; }
+        }
+
+        /// <summary>
+        /// Id of associated form field set
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("form_field_set_id")]
+        public Nullable<Int64> FormFieldSetId
+        {
+            get { return (Nullable<Int64>)attributes["form_field_set_id"]; }
+            private set { attributes["form_field_set_id"] = value; }
+        }
+
+        /// <summary>
+        /// Data for form field set with form field ids as keys and user data as values
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("form_field_data")]
+        public object FormFieldData
+        {
+            get { return (object)attributes["form_field_data"]; }
+            private set { attributes["form_field_data"] = value; }
         }
 
 
