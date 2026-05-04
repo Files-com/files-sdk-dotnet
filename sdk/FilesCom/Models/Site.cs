@@ -3111,6 +3111,7 @@ namespace FilesCom.Models
         ///   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
         ///   ldap_password_change - string - New LDAP password.
         ///   ldap_password_change_confirmation - string - Confirm new LDAP password.
+        ///   redirect_old_subdomain - boolean - If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the new Files.com subdomain.
         ///   smtp_password - string - Password for SMTP server.
         /// </summary>
         public static async Task<Site> Update(
@@ -3821,6 +3822,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ldap_password_change_confirmation") && !(parameters["ldap_password_change_confirmation"] is string))
             {
                 throw new ArgumentException("Bad parameter: ldap_password_change_confirmation must be of type string", "parameters[\"ldap_password_change_confirmation\"]");
+            }
+            if (parameters.ContainsKey("redirect_old_subdomain") && !(parameters["redirect_old_subdomain"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: redirect_old_subdomain must be of type bool", "parameters[\"redirect_old_subdomain\"]");
             }
             if (parameters.ContainsKey("smtp_password") && !(parameters["smtp_password"] is string))
             {
