@@ -17,6 +17,7 @@
   "include_site_admins": true,
   "apply_to_all_workspaces": true,
   "name": "password specific rules",
+  "notify_users": true,
   "partner_tag": "guest",
   "site_id": 1,
   "workspace_id": 12,
@@ -34,6 +35,7 @@
 * `include_site_admins` / `IncludeSiteAdmins`  (bool): If true, the rule will apply to site admins.
 * `apply_to_all_workspaces` / `ApplyToAllWorkspaces`  (bool): If true, a default-workspace rule also applies to users in all workspaces.
 * `name` / `Name`  (string): User Lifecycle Rule name
+* `notify_users` / `NotifyUsers`  (bool): If true, users will be emailed before the rule disables or deletes them.
 * `partner_tag` / `PartnerTag`  (string): If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
@@ -100,6 +102,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
 * `include_site_admins` (bool): If true, the rule will apply to site admins.
 * `include_folder_admins` (bool): If true, the rule will apply to folder admins.
 * `name` (string): User Lifecycle Rule name
+* `notify_users` (bool): If true, users will be emailed before the rule disables or deletes them.
 * `partner_tag` (string): If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
 * `user_tag` (string): If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
@@ -129,6 +132,7 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
 * `include_site_admins` (bool): If true, the rule will apply to site admins.
 * `include_folder_admins` (bool): If true, the rule will apply to folder admins.
 * `name` (string): User Lifecycle Rule name
+* `notify_users` (bool): If true, users will be emailed before the rule disables or deletes them.
 * `partner_tag` (string): If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
 * `user_tag` (string): If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
@@ -168,6 +172,7 @@ parameters.Add("inactivity_days", 12);
 parameters.Add("include_site_admins", true);
 parameters.Add("include_folder_admins", true);
 parameters.Add("name", "password specific rules");
+parameters.Add("notify_users", true);
 parameters.Add("partner_tag", "guest");
 parameters.Add("user_state", "inactive");
 parameters.Add("user_tag", "guest");
@@ -187,6 +192,7 @@ UserLifecycleRule.Update(parameters);
 * `include_site_admins` (bool): If true, the rule will apply to site admins.
 * `include_folder_admins` (bool): If true, the rule will apply to folder admins.
 * `name` (string): User Lifecycle Rule name
+* `notify_users` (bool): If true, users will be emailed before the rule disables or deletes them.
 * `partner_tag` (string): If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
 * `user_state` (string): State of the users to apply the rule to (inactive or disabled)
 * `user_tag` (string): If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.

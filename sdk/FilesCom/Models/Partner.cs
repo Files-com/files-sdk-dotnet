@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allow_user_creation", false);
             }
+            if (!this.attributes.ContainsKey("cc_emails_to_responsible_party"))
+            {
+                this.attributes.Add("cc_emails_to_responsible_party", false);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -68,6 +72,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("partner_admin_ids"))
             {
                 this.attributes.Add("partner_admin_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("responsible_group_id"))
+            {
+                this.attributes.Add("responsible_group_id", null);
+            }
+            if (!this.attributes.ContainsKey("responsible_user_id"))
+            {
+                this.attributes.Add("responsible_user_id", null);
             }
             if (!this.attributes.ContainsKey("root_folder"))
             {
@@ -154,6 +166,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// When `true`, emails sent to Partner users are copied to the responsible User or Group.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("cc_emails_to_responsible_party")]
+        public bool CcEmailsToResponsibleParty
+        {
+            get { return attributes["cc_emails_to_responsible_party"] == null ? false : (bool)attributes["cc_emails_to_responsible_party"]; }
+            set { attributes["cc_emails_to_responsible_party"] = value; }
+        }
+
+        /// <summary>
         /// The unique ID of the Partner.
         /// </summary>
         [JsonPropertyName("id")]
@@ -204,6 +227,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// ID of the Group responsible for this Partner.
+        /// </summary>
+        [JsonPropertyName("responsible_group_id")]
+        public Nullable<Int64> ResponsibleGroupId
+        {
+            get { return (Nullable<Int64>)attributes["responsible_group_id"]; }
+            set { attributes["responsible_group_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the User responsible for this Partner.
+        /// </summary>
+        [JsonPropertyName("responsible_user_id")]
+        public Nullable<Int64> ResponsibleUserId
+        {
+            get { return (Nullable<Int64>)attributes["responsible_user_id"]; }
+            set { attributes["responsible_user_id"] = value; }
+        }
+
+        /// <summary>
         /// The root folder path for this Partner.
         /// </summary>
         [JsonPropertyName("root_folder")]
@@ -240,7 +283,10 @@ namespace FilesCom.Models
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
+        ///   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
         ///   notes - string - Notes about this Partner.
+        ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
+        ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -282,9 +328,21 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: allow_user_creation must be of type bool", "parameters[\"allow_user_creation\"]");
             }
+            if (parameters.ContainsKey("cc_emails_to_responsible_party") && !(parameters["cc_emails_to_responsible_party"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: cc_emails_to_responsible_party must be of type bool", "parameters[\"cc_emails_to_responsible_party\"]");
+            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+            }
+            if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
+            }
+            if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
             }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
@@ -457,7 +515,10 @@ namespace FilesCom.Models
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
+        ///   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
         ///   notes - string - Notes about this Partner.
+        ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
+        ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name (required) - string - The name of the Partner.
         ///   root_folder (required) - string - The root folder path for this Partner.
@@ -500,9 +561,21 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: allow_user_creation must be of type bool", "parameters[\"allow_user_creation\"]");
             }
+            if (parameters.ContainsKey("cc_emails_to_responsible_party") && !(parameters["cc_emails_to_responsible_party"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: cc_emails_to_responsible_party must be of type bool", "parameters[\"cc_emails_to_responsible_party\"]");
+            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+            }
+            if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
+            }
+            if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
             }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
@@ -541,7 +614,10 @@ namespace FilesCom.Models
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
         ///   allow_providing_gpg_keys - boolean - Allow Partner Admins to provide GPG keys.
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
+        ///   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
         ///   notes - string - Notes about this Partner.
+        ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
+        ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -591,9 +667,21 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: allow_user_creation must be of type bool", "parameters[\"allow_user_creation\"]");
             }
+            if (parameters.ContainsKey("cc_emails_to_responsible_party") && !(parameters["cc_emails_to_responsible_party"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: cc_emails_to_responsible_party must be of type bool", "parameters[\"cc_emails_to_responsible_party\"]");
+            }
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+            }
+            if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
+            }
+            if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
             }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {

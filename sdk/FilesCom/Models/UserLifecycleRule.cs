@@ -65,6 +65,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("notify_users"))
+            {
+                this.attributes.Add("notify_users", false);
+            }
             if (!this.attributes.ContainsKey("partner_tag"))
             {
                 this.attributes.Add("partner_tag", null);
@@ -197,6 +201,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, users will be emailed before the rule disables or deletes them.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_users")]
+        public bool NotifyUsers
+        {
+            get { return attributes["notify_users"] == null ? false : (bool)attributes["notify_users"]; }
+            set { attributes["notify_users"] = value; }
+        }
+
+        /// <summary>
         /// If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         [JsonPropertyName("partner_tag")]
@@ -256,6 +271,7 @@ namespace FilesCom.Models
         ///   include_site_admins - boolean - If true, the rule will apply to site admins.
         ///   include_folder_admins - boolean - If true, the rule will apply to folder admins.
         ///   name - string - User Lifecycle Rule name
+        ///   notify_users - boolean - If true, users will be emailed before the rule disables or deletes them.
         ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
@@ -309,6 +325,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("notify_users") && !(parameters["notify_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_users must be of type bool", "parameters[\"notify_users\"]");
             }
             if (parameters.ContainsKey("partner_tag") && !(parameters["partner_tag"] is string))
             {
@@ -488,6 +508,7 @@ namespace FilesCom.Models
         ///   include_site_admins - boolean - If true, the rule will apply to site admins.
         ///   include_folder_admins - boolean - If true, the rule will apply to folder admins.
         ///   name - string - User Lifecycle Rule name
+        ///   notify_users - boolean - If true, users will be emailed before the rule disables or deletes them.
         ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
@@ -534,6 +555,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
+            if (parameters.ContainsKey("notify_users") && !(parameters["notify_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_users must be of type bool", "parameters[\"notify_users\"]");
+            }
             if (parameters.ContainsKey("partner_tag") && !(parameters["partner_tag"] is string))
             {
                 throw new ArgumentException("Bad parameter: partner_tag must be of type string", "parameters[\"partner_tag\"]");
@@ -574,6 +599,7 @@ namespace FilesCom.Models
         ///   include_site_admins - boolean - If true, the rule will apply to site admins.
         ///   include_folder_admins - boolean - If true, the rule will apply to folder admins.
         ///   name - string - User Lifecycle Rule name
+        ///   notify_users - boolean - If true, users will be emailed before the rule disables or deletes them.
         ///   partner_tag - string - If provided, only users belonging to Partners with this tag at the Partner level will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
         ///   user_state - string - State of the users to apply the rule to (inactive or disabled)
         ///   user_tag - string - If provided, only users with this tag will be affected by the rule. Tags must only contain lowercase letters, numbers, and hyphens.
@@ -635,6 +661,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("notify_users") && !(parameters["notify_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_users must be of type bool", "parameters[\"notify_users\"]");
             }
             if (parameters.ContainsKey("partner_tag") && !(parameters["partner_tag"] is string))
             {

@@ -9,6 +9,7 @@
   "allow_credential_changes": true,
   "allow_providing_gpg_keys": true,
   "allow_user_creation": true,
+  "cc_emails_to_responsible_party": true,
   "id": 1,
   "workspace_id": 1,
   "name": "Acme Corp",
@@ -18,6 +19,8 @@
     2,
     3
   ],
+  "responsible_group_id": 1,
+  "responsible_user_id": 1,
   "root_folder": "/AcmeCorp",
   "tags": "example",
   "user_ids": [
@@ -33,11 +36,14 @@
 * `allow_credential_changes` / `AllowCredentialChanges`  (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` / `AllowProvidingGpgKeys`  (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` / `AllowUserCreation`  (bool): Allow Partner Admins to create users.
+* `cc_emails_to_responsible_party` / `CcEmailsToResponsibleParty`  (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace associated with this Partner.
 * `name` / `Name`  (string): The name of the Partner.
 * `notes` / `Notes`  (string): Notes about this Partner.
 * `partner_admin_ids` / `PartnerAdminIds`  (Nullable<Int64>[]): Array of User IDs that are Partner Admins for this Partner.
+* `responsible_group_id` / `ResponsibleGroupId`  (Nullable<Int64>): ID of the Group responsible for this Partner.
+* `responsible_user_id` / `ResponsibleUserId`  (Nullable<Int64>): ID of the User responsible for this Partner.
 * `root_folder` / `RootFolder`  (string): The root folder path for this Partner.
 * `tags` / `Tags`  (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): Array of User IDs that belong to this Partner.
@@ -99,7 +105,10 @@ Task<Partner> Partner.Create(
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
+* `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `notes` (string): Notes about this Partner.
+* `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
+* `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): Required - The name of the Partner.
 * `root_folder` (string): Required - The root folder path for this Partner.
@@ -126,7 +135,10 @@ Task<Partner> Partner.Update(
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
+* `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `notes` (string): Notes about this Partner.
+* `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
+* `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
 * `root_folder` (string): The root folder path for this Partner.
@@ -163,7 +175,10 @@ parameters.Add("allow_bypassing_2fa_policies", false);
 parameters.Add("allow_credential_changes", false);
 parameters.Add("allow_providing_gpg_keys", false);
 parameters.Add("allow_user_creation", false);
+parameters.Add("cc_emails_to_responsible_party", false);
 parameters.Add("notes", "This is a note about the partner.");
+parameters.Add("responsible_group_id", 1);
+parameters.Add("responsible_user_id", 1);
 parameters.Add("tags", "example");
 parameters.Add("name", "Acme Corp");
 parameters.Add("root_folder", "/AcmeCorp");
@@ -179,7 +194,10 @@ Partner.Update(parameters);
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
+* `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `notes` (string): Notes about this Partner.
+* `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
+* `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
 * `root_folder` (string): The root folder path for this Partner.
