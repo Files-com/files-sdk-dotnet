@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class ExternalEvent
+    public class SsoEvent
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public ExternalEvent() : this(null, null) { }
+        public SsoEvent() : this(null, null) { }
 
-        public ExternalEvent(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public SsoEvent(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("body", null);
             }
+            if (!this.attributes.ContainsKey("event_errors"))
+            {
+                this.attributes.Add("event_errors", new string[0]);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -52,6 +56,34 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("body_url"))
             {
                 this.attributes.Add("body_url", null);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
+            if (!this.attributes.ContainsKey("username"))
+            {
+                this.attributes.Add("username", null);
+            }
+            if (!this.attributes.ContainsKey("idp_uid"))
+            {
+                this.attributes.Add("idp_uid", null);
+            }
+            if (!this.attributes.ContainsKey("provider"))
+            {
+                this.attributes.Add("provider", null);
+            }
+            if (!this.attributes.ContainsKey("provider_label"))
+            {
+                this.attributes.Add("provider_label", null);
+            }
+            if (!this.attributes.ContainsKey("ip"))
+            {
+                this.attributes.Add("ip", null);
+            }
+            if (!this.attributes.ContainsKey("region"))
+            {
+                this.attributes.Add("region", null);
             }
         }
 
@@ -74,45 +106,60 @@ namespace FilesCom.Models
         /// <summary>
         /// Event ID
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            private set { attributes["id"] = value; }
         }
 
         /// <summary>
-        /// Type of event being recorded.
+        /// Type of SSO event being recorded.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("event_type")]
         public string EventType
         {
             get { return (string)attributes["event_type"]; }
-            set { attributes["event_type"] = value; }
+            private set { attributes["event_type"] = value; }
         }
 
         /// <summary>
         /// Status of event.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("status")]
         public string Status
         {
             get { return (string)attributes["status"]; }
-            set { attributes["status"] = value; }
+            private set { attributes["status"] = value; }
         }
 
         /// <summary>
-        /// Event body
+        /// Event body.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("body")]
         public string Body
         {
             get { return (string)attributes["body"]; }
-            set { attributes["body"] = value; }
+            private set { attributes["body"] = value; }
         }
 
         /// <summary>
-        /// External event create date/time
+        /// Event errors.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("event_errors")]
+        public string[] EventErrors
+        {
+            get { return (string[])attributes["event_errors"]; }
+            private set { attributes["event_errors"] = value; }
+        }
+
+        /// <summary>
+        /// Event create date/time.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("created_at")]
@@ -125,39 +172,106 @@ namespace FilesCom.Models
         /// <summary>
         /// Link to log file.
         /// </summary>
+        [JsonInclude]
         [JsonPropertyName("body_url")]
         public string BodyUrl
         {
             get { return (string)attributes["body_url"]; }
-            set { attributes["body_url"] = value; }
+            private set { attributes["body_url"] = value; }
         }
 
-
-        public async Task Save()
+        /// <summary>
+        /// User ID.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
         {
-            if (this.attributes["id"] != null)
-            {
-                throw new NotImplementedException("The ExternalEvent object doesn't support updates.");
-            }
-            else
-            {
-                var newObj = await ExternalEvent.Create(this.attributes, this.options);
-                this.attributes = newObj.getAttributes();
-            }
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            private set { attributes["user_id"] = value; }
         }
+
+        /// <summary>
+        /// Username on Files.com for the SSO login attempt.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("username")]
+        public string Username
+        {
+            get { return (string)attributes["username"]; }
+            private set { attributes["username"] = value; }
+        }
+
+        /// <summary>
+        /// Identity Provider UID for the SSO login attempt.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("idp_uid")]
+        public string IdpUid
+        {
+            get { return (string)attributes["idp_uid"]; }
+            private set { attributes["idp_uid"] = value; }
+        }
+
+        /// <summary>
+        /// SSO provider for the SSO login attempt.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("provider")]
+        public string Provider
+        {
+            get { return (string)attributes["provider"]; }
+            private set { attributes["provider"] = value; }
+        }
+
+        /// <summary>
+        /// SSO provider label for the SSO login attempt.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("provider_label")]
+        public string ProviderLabel
+        {
+            get { return (string)attributes["provider_label"]; }
+            private set { attributes["provider_label"] = value; }
+        }
+
+        /// <summary>
+        /// IP address for the SSO login attempt.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ip")]
+        public string Ip
+        {
+            get { return (string)attributes["ip"]; }
+            private set { attributes["ip"] = value; }
+        }
+
+        /// <summary>
+        /// Region for the SSO login attempt.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("region")]
+        public string Region
+        {
+            get { return (string)attributes["region"]; }
+            private set { attributes["region"] = value; }
+        }
+
+
 
         /// <summary>
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10,000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status` or `event_type`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at` and `status`. Valid field combinations are `[ status, created_at ]`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `event_type`, `status` or `user_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `event_type`, `idp_uid`, `ip`, `provider`, `status`, `user_id` or `username`. Valid field combinations are `[ event_type, created_at ]`, `[ idp_uid, created_at ]`, `[ ip, created_at ]`, `[ provider, created_at ]`, `[ status, created_at ]`, `[ user_id, created_at ]`, `[ username, created_at ]`, `[ event_type, status ]`, `[ idp_uid, status ]`, `[ ip, status ]`, `[ provider, status ]`, `[ user_id, status ]`, `[ username, status ]`, `[ event_type, status, created_at ]`, `[ idp_uid, status, created_at ]`, `[ ip, status, created_at ]`, `[ provider, status, created_at ]`, `[ user_id, status, created_at ]` or `[ username, status, created_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `idp_uid`, `ip`, `provider` or `username`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
         /// </summary>
-        public static FilesList<ExternalEvent> List(
+        public static FilesList<SsoEvent> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -190,6 +304,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
             }
+            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+            }
             if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
@@ -199,10 +317,10 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            return new FilesList<ExternalEvent>($"/external_events", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<SsoEvent>($"/sso_events", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static FilesList<ExternalEvent> All(
+        public static FilesList<SsoEvent> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -213,9 +331,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   id (required) - int64 - External Event ID.
+        ///   id (required) - int64 - Sso Event ID.
         /// </summary>
-        public static async Task<ExternalEvent> Find(
+        public static async Task<SsoEvent> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -241,11 +359,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/external_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/sso_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             try
             {
-                return JsonSerializer.Deserialize<ExternalEvent>(responseJson, JsonUtil.Options);
+                return JsonSerializer.Deserialize<SsoEvent>(responseJson, JsonUtil.Options);
             }
             catch (JsonException)
             {
@@ -253,7 +371,7 @@ namespace FilesCom.Models
             }
         }
 
-        public static async Task<ExternalEvent> Get(
+        public static async Task<SsoEvent> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -261,50 +379,6 @@ namespace FilesCom.Models
         {
             return await Find(id, parameters, options);
         }
-
-        /// <summary>
-        /// Parameters:
-        ///   status (required) - string - Status of event.
-        ///   body (required) - string - Event body
-        /// </summary>
-        public static async Task<ExternalEvent> Create(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (!parameters.ContainsKey("status") || parameters["status"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: status", "parameters[\"status\"]");
-            }
-            if (!parameters.ContainsKey("body") || parameters["body"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: body", "parameters[\"body\"]");
-            }
-            if (parameters.ContainsKey("status") && !(parameters["status"] is string))
-            {
-                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
-            }
-            if (parameters.ContainsKey("body") && !(parameters["body"] is string))
-            {
-                throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/external_events", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonSerializer.Deserialize<ExternalEvent>(responseJson, JsonUtil.Options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
 
     }
 }

@@ -225,6 +225,38 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("receive_admin_alerts", false);
             }
+            if (!this.attributes.ContainsKey("notify_on_all_site_warnings"))
+            {
+                this.attributes.Add("notify_on_all_site_warnings", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_sso_failures"))
+            {
+                this.attributes.Add("notify_on_all_sso_failures", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_user_security_events"))
+            {
+                this.attributes.Add("notify_on_all_user_security_events", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_pending_work_failures"))
+            {
+                this.attributes.Add("notify_on_all_pending_work_failures", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_siem_http_destination_failures"))
+            {
+                this.attributes.Add("notify_on_all_siem_http_destination_failures", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_sync_failures"))
+            {
+                this.attributes.Add("notify_on_all_sync_failures", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_automation_failures"))
+            {
+                this.attributes.Add("notify_on_all_automation_failures", false);
+            }
+            if (!this.attributes.ContainsKey("notify_on_all_expectation_failures"))
+            {
+                this.attributes.Add("notify_on_all_expectation_failures", false);
+            }
             if (!this.attributes.ContainsKey("require_2fa"))
             {
                 this.attributes.Add("require_2fa", null);
@@ -888,7 +920,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Should the user receive admin alerts such a certificate expiration notifications and overages?
+        /// Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("receive_admin_alerts")]
@@ -896,6 +928,94 @@ namespace FilesCom.Models
         {
             get { return attributes["receive_admin_alerts"] == null ? false : (bool)attributes["receive_admin_alerts"]; }
             set { attributes["receive_admin_alerts"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive site warnings via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_site_warnings")]
+        public bool NotifyOnAllSiteWarnings
+        {
+            get { return attributes["notify_on_all_site_warnings"] == null ? false : (bool)attributes["notify_on_all_site_warnings"]; }
+            set { attributes["notify_on_all_site_warnings"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive sso/scim/ldap configuration/sync failures via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_sso_failures")]
+        public bool NotifyOnAllSsoFailures
+        {
+            get { return attributes["notify_on_all_sso_failures"] == null ? false : (bool)attributes["notify_on_all_sso_failures"]; }
+            set { attributes["notify_on_all_sso_failures"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive user security events via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_user_security_events")]
+        public bool NotifyOnAllUserSecurityEvents
+        {
+            get { return attributes["notify_on_all_user_security_events"] == null ? false : (bool)attributes["notify_on_all_user_security_events"]; }
+            set { attributes["notify_on_all_user_security_events"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive pending work failures via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_pending_work_failures")]
+        public bool NotifyOnAllPendingWorkFailures
+        {
+            get { return attributes["notify_on_all_pending_work_failures"] == null ? false : (bool)attributes["notify_on_all_pending_work_failures"]; }
+            set { attributes["notify_on_all_pending_work_failures"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive siem failures via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_siem_http_destination_failures")]
+        public bool NotifyOnAllSiemHttpDestinationFailures
+        {
+            get { return attributes["notify_on_all_siem_http_destination_failures"] == null ? false : (bool)attributes["notify_on_all_siem_http_destination_failures"]; }
+            set { attributes["notify_on_all_siem_http_destination_failures"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive sync failures via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_sync_failures")]
+        public bool NotifyOnAllSyncFailures
+        {
+            get { return attributes["notify_on_all_sync_failures"] == null ? false : (bool)attributes["notify_on_all_sync_failures"]; }
+            set { attributes["notify_on_all_sync_failures"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive automation failures via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_automation_failures")]
+        public bool NotifyOnAllAutomationFailures
+        {
+            get { return attributes["notify_on_all_automation_failures"] == null ? false : (bool)attributes["notify_on_all_automation_failures"]; }
+            set { attributes["notify_on_all_automation_failures"] = value; }
+        }
+
+        /// <summary>
+        /// Should the user receive expectation failures and misses via email?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_on_all_expectation_failures")]
+        public bool NotifyOnAllExpectationFailures
+        {
+            get { return attributes["notify_on_all_expectation_failures"] == null ? false : (bool)attributes["notify_on_all_expectation_failures"]; }
+            set { attributes["notify_on_all_expectation_failures"] = value; }
         }
 
         /// <summary>
@@ -1407,7 +1527,15 @@ namespace FilesCom.Models
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
-        ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+        ///   receive_admin_alerts - boolean - Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+        ///   notify_on_all_site_warnings - boolean - Should the user receive site warnings via email?
+        ///   notify_on_all_sso_failures - boolean - Should the user receive sso/scim/ldap configuration/sync failures via email?
+        ///   notify_on_all_user_security_events - boolean - Should the user receive user security events via email?
+        ///   notify_on_all_pending_work_failures - boolean - Should the user receive pending work failures via email?
+        ///   notify_on_all_siem_http_destination_failures - boolean - Should the user receive siem failures via email?
+        ///   notify_on_all_sync_failures - boolean - Should the user receive sync failures via email?
+        ///   notify_on_all_automation_failures - boolean - Should the user receive automation failures via email?
+        ///   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
         ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -1592,6 +1720,38 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_site_warnings") && !(parameters["notify_on_all_site_warnings"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_site_warnings must be of type bool", "parameters[\"notify_on_all_site_warnings\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_sso_failures") && !(parameters["notify_on_all_sso_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_sso_failures must be of type bool", "parameters[\"notify_on_all_sso_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_user_security_events") && !(parameters["notify_on_all_user_security_events"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_user_security_events must be of type bool", "parameters[\"notify_on_all_user_security_events\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_pending_work_failures") && !(parameters["notify_on_all_pending_work_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_pending_work_failures must be of type bool", "parameters[\"notify_on_all_pending_work_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_siem_http_destination_failures") && !(parameters["notify_on_all_siem_http_destination_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "parameters[\"notify_on_all_siem_http_destination_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_sync_failures") && !(parameters["notify_on_all_sync_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_sync_failures must be of type bool", "parameters[\"notify_on_all_sync_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_automation_failures") && !(parameters["notify_on_all_automation_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_automation_failures must be of type bool", "parameters[\"notify_on_all_automation_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_expectation_failures") && !(parameters["notify_on_all_expectation_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_expectation_failures must be of type bool", "parameters[\"notify_on_all_expectation_failures\"]");
             }
             if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
             {
@@ -1905,7 +2065,15 @@ namespace FilesCom.Models
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
-        ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+        ///   receive_admin_alerts - boolean - Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+        ///   notify_on_all_site_warnings - boolean - Should the user receive site warnings via email?
+        ///   notify_on_all_sso_failures - boolean - Should the user receive sso/scim/ldap configuration/sync failures via email?
+        ///   notify_on_all_user_security_events - boolean - Should the user receive user security events via email?
+        ///   notify_on_all_pending_work_failures - boolean - Should the user receive pending work failures via email?
+        ///   notify_on_all_siem_http_destination_failures - boolean - Should the user receive siem failures via email?
+        ///   notify_on_all_sync_failures - boolean - Should the user receive sync failures via email?
+        ///   notify_on_all_automation_failures - boolean - Should the user receive automation failures via email?
+        ///   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
         ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -2085,6 +2253,38 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_site_warnings") && !(parameters["notify_on_all_site_warnings"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_site_warnings must be of type bool", "parameters[\"notify_on_all_site_warnings\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_sso_failures") && !(parameters["notify_on_all_sso_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_sso_failures must be of type bool", "parameters[\"notify_on_all_sso_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_user_security_events") && !(parameters["notify_on_all_user_security_events"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_user_security_events must be of type bool", "parameters[\"notify_on_all_user_security_events\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_pending_work_failures") && !(parameters["notify_on_all_pending_work_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_pending_work_failures must be of type bool", "parameters[\"notify_on_all_pending_work_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_siem_http_destination_failures") && !(parameters["notify_on_all_siem_http_destination_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "parameters[\"notify_on_all_siem_http_destination_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_sync_failures") && !(parameters["notify_on_all_sync_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_sync_failures must be of type bool", "parameters[\"notify_on_all_sync_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_automation_failures") && !(parameters["notify_on_all_automation_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_automation_failures must be of type bool", "parameters[\"notify_on_all_automation_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_expectation_failures") && !(parameters["notify_on_all_expectation_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_expectation_failures must be of type bool", "parameters[\"notify_on_all_expectation_failures\"]");
             }
             if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
             {
@@ -2309,7 +2509,15 @@ namespace FilesCom.Models
         ///   password_validity_days - int64 - Number of days to allow user to use the same password
         ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
         ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
-        ///   receive_admin_alerts - boolean - Should the user receive admin alerts such a certificate expiration notifications and overages?
+        ///   receive_admin_alerts - boolean - Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+        ///   notify_on_all_site_warnings - boolean - Should the user receive site warnings via email?
+        ///   notify_on_all_sso_failures - boolean - Should the user receive sso/scim/ldap configuration/sync failures via email?
+        ///   notify_on_all_user_security_events - boolean - Should the user receive user security events via email?
+        ///   notify_on_all_pending_work_failures - boolean - Should the user receive pending work failures via email?
+        ///   notify_on_all_siem_http_destination_failures - boolean - Should the user receive siem failures via email?
+        ///   notify_on_all_sync_failures - boolean - Should the user receive sync failures via email?
+        ///   notify_on_all_automation_failures - boolean - Should the user receive automation failures via email?
+        ///   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
         ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
         ///   require_password_change - boolean - Is a password change required upon next user login?
         ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
@@ -2502,6 +2710,38 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_site_warnings") && !(parameters["notify_on_all_site_warnings"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_site_warnings must be of type bool", "parameters[\"notify_on_all_site_warnings\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_sso_failures") && !(parameters["notify_on_all_sso_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_sso_failures must be of type bool", "parameters[\"notify_on_all_sso_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_user_security_events") && !(parameters["notify_on_all_user_security_events"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_user_security_events must be of type bool", "parameters[\"notify_on_all_user_security_events\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_pending_work_failures") && !(parameters["notify_on_all_pending_work_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_pending_work_failures must be of type bool", "parameters[\"notify_on_all_pending_work_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_siem_http_destination_failures") && !(parameters["notify_on_all_siem_http_destination_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "parameters[\"notify_on_all_siem_http_destination_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_sync_failures") && !(parameters["notify_on_all_sync_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_sync_failures must be of type bool", "parameters[\"notify_on_all_sync_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_automation_failures") && !(parameters["notify_on_all_automation_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_automation_failures must be of type bool", "parameters[\"notify_on_all_automation_failures\"]");
+            }
+            if (parameters.ContainsKey("notify_on_all_expectation_failures") && !(parameters["notify_on_all_expectation_failures"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: notify_on_all_expectation_failures must be of type bool", "parameters[\"notify_on_all_expectation_failures\"]");
             }
             if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
             {
