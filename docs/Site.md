@@ -184,6 +184,7 @@
     "site_id": 1,
     "ssl_required": true,
     "timeout_at": "2000-01-01T01:00:00Z",
+    "trusted": true,
     "two_factor_setup_needed": false,
     "allowed_2fa_method_sms": true,
     "allowed_2fa_method_totp": true,
