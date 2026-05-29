@@ -1169,6 +1169,7 @@ namespace FilesCom.Models
         ///   restart - int64 - File byte offset to restart from.
         ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
         ///   with_rename - boolean - Allow file rename instead of overwrite?
+        ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         /// </summary>
         public async Task<FileUploadPart[]> BeginUpload(Dictionary<string, object> parameters)
         {
@@ -1214,6 +1215,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
+            }
+            if (parameters.ContainsKey("buffered_upload") && !(parameters["buffered_upload"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: buffered_upload must be of type bool", "parameters[\"buffered_upload\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1870,6 +1875,7 @@ namespace FilesCom.Models
         ///   restart - int64 - File byte offset to restart from.
         ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
         ///   with_rename - boolean - Allow file rename instead of overwrite?
+        ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         /// </summary>
         public static async Task<FileUploadPart[]> BeginUpload(
             string path,
@@ -1923,6 +1929,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_rename") && !(parameters["with_rename"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_rename must be of type bool", "parameters[\"with_rename\"]");
+            }
+            if (parameters.ContainsKey("buffered_upload") && !(parameters["buffered_upload"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: buffered_upload must be of type bool", "parameters[\"buffered_upload\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);

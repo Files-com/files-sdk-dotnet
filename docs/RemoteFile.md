@@ -327,6 +327,7 @@ Task<FileUploadPart[]> RemoteFile.BeginUpload(
 * `restart` (Nullable<Int64>): File byte offset to restart from.
 * `size` (Nullable<Int64>): Total bytes of file being uploaded (include bytes being retained if appending/restarting).
 * `with_rename` (bool): Allow file rename instead of overwrite?
+* `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
 
 
 ---
@@ -502,6 +503,7 @@ parameters.Add("ref", "upload-1");
 parameters.Add("restart", 1);
 parameters.Add("size", 1);
 parameters.Add("with_rename", false);
+parameters.Add("buffered_upload", false);
 
 File.BeginUpload(parameters);
 ```
@@ -516,3 +518,4 @@ File.BeginUpload(parameters);
 * `restart` (Nullable<Int64>): File byte offset to restart from.
 * `size` (Nullable<Int64>): Total bytes of file being uploaded (include bytes being retained if appending/restarting).
 * `with_rename` (bool): Allow file rename instead of overwrite?
+* `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
