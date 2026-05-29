@@ -9,6 +9,14 @@
   "additional_text_file_types": [
     "example"
   ],
+  "ai_feature_availability": {
+    "in_app_ai_assistant": {
+      "site_admins": true,
+      "workspace_admins": true,
+      "folder_admins": true,
+      "all_users": true
+    }
+  },
   "allowed_2fa_method_sms": true,
   "allowed_2fa_method_totp": true,
   "allowed_2fa_method_webauthn": true,
@@ -76,6 +84,7 @@
   "mobile_app_session_ip_pinning": true,
   "mobile_app_session_lifetime": 1,
   "disallowed_countries": "US,DE",
+  "disable_all_ai_features": true,
   "disable_files_certificate_generation": true,
   "disable_notifications": true,
   "disable_password_reset": true,
@@ -339,6 +348,7 @@
 * `id` / `Id`  (Nullable<Int64>): Site Id
 * `name` / `Name`  (string): Site name
 * `additional_text_file_types` / `AdditionalTextFileTypes`  (string[]): Additional extensions that are considered text files
+* `ai_feature_availability` / `AiFeatureAvailability`  (object): Availability settings for AI features by user class
 * `allowed_2fa_method_sms` / `Allowed2faMethodSms`  (bool): Is SMS two factor authentication allowed?
 * `allowed_2fa_method_totp` / `Allowed2faMethodTotp`  (bool): Is TOTP two factor authentication allowed?
 * `allowed_2fa_method_webauthn` / `Allowed2faMethodWebauthn`  (bool): Is WebAuthn two factor authentication allowed?
@@ -399,6 +409,7 @@
 * `mobile_app_session_ip_pinning` / `MobileAppSessionIpPinning`  (bool): Is mobile app session IP pinning enabled?
 * `mobile_app_session_lifetime` / `MobileAppSessionLifetime`  (Nullable<Int64>): Mobile app session lifetime (in hours)
 * `disallowed_countries` / `DisallowedCountries`  (string): Comma separated list of disallowed Country codes
+* `disable_all_ai_features` / `DisableAllAiFeatures`  (bool): If true, all AI features are disabled for this site.
 * `disable_files_certificate_generation` / `DisableFilesCertificateGeneration`  (bool): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
 * `disable_notifications` / `DisableNotifications`  (bool): Are notifications disabled?
 * `disable_password_reset` / `DisablePasswordReset`  (bool): Is password reset disabled?
@@ -595,6 +606,8 @@ Task<Site> Site.Update(
 * `motd_use_for_ftp` (bool): Show message to users connecting via FTP
 * `motd_use_for_sftp` (bool): Show message to users connecting via SFTP
 * `left_navigation_visibility` (object): Visibility settings for account navigation
+* `disable_all_ai_features` (bool): If true, all AI features are disabled for this site.
+* `ai_feature_availability` (object): Availability settings for AI features by user class
 * `additional_text_file_types` (string[]): Additional extensions that are considered text files
 * `bundle_require_note` (bool): Do Bundles require internal notes?
 * `bundle_send_shared_receipts` (bool): Do Bundle creators receive receipts of invitations?

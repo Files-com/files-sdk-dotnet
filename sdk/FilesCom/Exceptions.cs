@@ -588,6 +588,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class InAppAiAssistantUnavailableException : NotAuthorizedException
+    {
+        public InAppAiAssistantUnavailableException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class InsufficientPermissionForParamsException : NotAuthorizedException
     {
         public InsufficientPermissionForParamsException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)

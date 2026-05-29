@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("additional_text_file_types", new string[0]);
             }
+            if (!this.attributes.ContainsKey("ai_feature_availability"))
+            {
+                this.attributes.Add("ai_feature_availability", null);
+            }
             if (!this.attributes.ContainsKey("allowed_2fa_method_sms"))
             {
                 this.attributes.Add("allowed_2fa_method_sms", false);
@@ -280,6 +284,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("disallowed_countries"))
             {
                 this.attributes.Add("disallowed_countries", null);
+            }
+            if (!this.attributes.ContainsKey("disable_all_ai_features"))
+            {
+                this.attributes.Add("disable_all_ai_features", false);
             }
             if (!this.attributes.ContainsKey("disable_files_certificate_generation"))
             {
@@ -810,6 +818,17 @@ namespace FilesCom.Models
         {
             get { return (string[])attributes["additional_text_file_types"]; }
             private set { attributes["additional_text_file_types"] = value; }
+        }
+
+        /// <summary>
+        /// Availability settings for AI features by user class
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ai_feature_availability")]
+        public object AiFeatureAvailability
+        {
+            get { return (object)attributes["ai_feature_availability"]; }
+            private set { attributes["ai_feature_availability"] = value; }
         }
 
         /// <summary>
@@ -1505,6 +1524,18 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["disallowed_countries"]; }
             private set { attributes["disallowed_countries"] = value; }
+        }
+
+        /// <summary>
+        /// If true, all AI features are disabled for this site.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("disable_all_ai_features")]
+        public bool DisableAllAiFeatures
+        {
+            get { return attributes["disable_all_ai_features"] == null ? false : (bool)attributes["disable_all_ai_features"]; }
+            private set { attributes["disable_all_ai_features"] = value; }
         }
 
         /// <summary>
@@ -2970,6 +3001,8 @@ namespace FilesCom.Models
         ///   motd_use_for_ftp - boolean - Show message to users connecting via FTP
         ///   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
         ///   left_navigation_visibility - object - Visibility settings for account navigation
+        ///   disable_all_ai_features - boolean - If true, all AI features are disabled for this site.
+        ///   ai_feature_availability - object - Availability settings for AI features by user class
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   bundle_require_note - boolean - Do Bundles require internal notes?
         ///   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?
@@ -3258,6 +3291,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("left_navigation_visibility") && !(parameters["left_navigation_visibility"] is object))
             {
                 throw new ArgumentException("Bad parameter: left_navigation_visibility must be of type object", "parameters[\"left_navigation_visibility\"]");
+            }
+            if (parameters.ContainsKey("disable_all_ai_features") && !(parameters["disable_all_ai_features"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: disable_all_ai_features must be of type bool", "parameters[\"disable_all_ai_features\"]");
+            }
+            if (parameters.ContainsKey("ai_feature_availability") && !(parameters["ai_feature_availability"] is object))
+            {
+                throw new ArgumentException("Bad parameter: ai_feature_availability must be of type object", "parameters[\"ai_feature_availability\"]");
             }
             if (parameters.ContainsKey("additional_text_file_types") && !(parameters["additional_text_file_types"] is string[]))
             {
