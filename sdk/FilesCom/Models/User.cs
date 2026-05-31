@@ -309,6 +309,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
+            if (!this.attributes.ContainsKey("default_workspace_id"))
+            {
+                this.attributes.Add("default_workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("skip_welcome_screen"))
             {
                 this.attributes.Add("skip_welcome_screen", false);
@@ -1158,6 +1162,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID the user should land in by default when more than one Workspace is available.
+        /// </summary>
+        [JsonPropertyName("default_workspace_id")]
+        public Nullable<Int64> DefaultWorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["default_workspace_id"]; }
+            set { attributes["default_workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Skip Welcome page in the UI?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -1512,6 +1526,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
+        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1656,6 +1671,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+            }
+            if (parameters.ContainsKey("default_workspace_id") && !(parameters["default_workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: default_workspace_id must be of type Nullable<Int64>", "parameters[\"default_workspace_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
@@ -2050,6 +2069,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
+        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -2189,6 +2209,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+            }
+            if (parameters.ContainsKey("default_workspace_id") && !(parameters["default_workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: default_workspace_id must be of type Nullable<Int64>", "parameters[\"default_workspace_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
@@ -2494,6 +2518,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
+        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -2646,6 +2671,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+            }
+            if (parameters.ContainsKey("default_workspace_id") && !(parameters["default_workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: default_workspace_id must be of type Nullable<Int64>", "parameters[\"default_workspace_id\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
