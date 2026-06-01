@@ -316,6 +316,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class RequestBodyTooLargeException : BadRequestException
+    {
+        public RequestBodyTooLargeException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class RequestParamsContainInvalidCharacterException : BadRequestException
     {
         public RequestParamsContainInvalidCharacterException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -705,6 +711,12 @@ namespace FilesCom
     public class RecaptchaFailedException : NotAuthorizedException
     {
         public RecaptchaFailedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class RemoteDesktopDebugLoggingDisabledException : NotAuthorizedException
+    {
+        public RemoteDesktopDebugLoggingDisabledException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
