@@ -8,7 +8,9 @@
   "path": "example",
   "client_ip": "example",
   "src_remote_server_id": 1,
+  "src_remote_server_name": "example",
   "dest_remote_server_id": 1,
+  "dest_remote_server_name": "example",
   "operation": "example",
   "error_message": "example",
   "error_operation": "example",
@@ -26,7 +28,9 @@
 * `path` / `Path`  (string): Remote Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `client_ip` / `ClientIp`  (string): End User IP
 * `src_remote_server_id` / `SrcRemoteServerId`  (Nullable<Int64>): Source Remote Server ID
+* `src_remote_server_name` / `SrcRemoteServerName`  (string): Source Remote Server name
 * `dest_remote_server_id` / `DestRemoteServerId`  (Nullable<Int64>): Destination Remote Server ID
+* `dest_remote_server_name` / `DestRemoteServerName`  (string): Destination Remote Server name
 * `operation` / `Operation`  (string): Operation Type
 * `error_message` / `ErrorMessage`  (string): Error message, if applicable
 * `error_operation` / `ErrorOperation`  (string): Error operation, if applicable

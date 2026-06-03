@@ -45,9 +45,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("src_remote_server_id", null);
             }
+            if (!this.attributes.ContainsKey("src_remote_server_name"))
+            {
+                this.attributes.Add("src_remote_server_name", null);
+            }
             if (!this.attributes.ContainsKey("dest_remote_server_id"))
             {
                 this.attributes.Add("dest_remote_server_id", null);
+            }
+            if (!this.attributes.ContainsKey("dest_remote_server_name"))
+            {
+                this.attributes.Add("dest_remote_server_name", null);
             }
             if (!this.attributes.ContainsKey("operation"))
             {
@@ -152,6 +160,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Source Remote Server name
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("src_remote_server_name")]
+        public string SrcRemoteServerName
+        {
+            get { return (string)attributes["src_remote_server_name"]; }
+            private set { attributes["src_remote_server_name"] = value; }
+        }
+
+        /// <summary>
         /// Destination Remote Server ID
         /// </summary>
         [JsonInclude]
@@ -160,6 +179,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["dest_remote_server_id"]; }
             private set { attributes["dest_remote_server_id"] = value; }
+        }
+
+        /// <summary>
+        /// Destination Remote Server name
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("dest_remote_server_name")]
+        public string DestRemoteServerName
+        {
+            get { return (string)attributes["dest_remote_server_name"]; }
+            private set { attributes["dest_remote_server_name"] = value; }
         }
 
         /// <summary>
