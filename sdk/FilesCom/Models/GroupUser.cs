@@ -252,10 +252,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   user_id - int64 - User ID.  If provided, will return group_users of this user.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   group_id - int64 - Group ID.  If provided, will return group_users of this group.
+        ///   user_id - int64 - User ID.  If provided, will return group_users of this user.
         /// </summary>
         public static FilesList<GroupUser> List(
 
@@ -266,10 +266,6 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
-            }
             if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
             {
                 throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
@@ -281,6 +277,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
             }
 
             return new FilesList<GroupUser>($"/group_users", System.Net.Http.HttpMethod.Get, parameters, options);
