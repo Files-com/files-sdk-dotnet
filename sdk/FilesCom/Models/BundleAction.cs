@@ -255,6 +255,8 @@ namespace FilesCom.Models
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
+        ///   bundle_id - int64 - Bundle ID
+        ///   bundle_registration_id - int64 - Bundle Registration ID
         /// </summary>
         public static FilesList<BundleAction> List(
 
@@ -300,6 +302,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+            }
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
+            }
+            if (parameters.ContainsKey("bundle_registration_id") && !(parameters["bundle_registration_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: bundle_registration_id must be of type Nullable<Int64>", "parameters[\"bundle_registration_id\"]");
             }
 
             return new FilesList<BundleAction>($"/bundle_actions", System.Net.Http.HttpMethod.Get, parameters, options);

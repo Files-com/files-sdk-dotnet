@@ -77,3 +77,5 @@ Task<FilesList<BundleAction>> BundleAction.List(
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
 * `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
 * `filter_lteq` (object): If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
+* `bundle_id` (Nullable<Int64>): Bundle ID
+* `bundle_registration_id` (Nullable<Int64>): Bundle Registration ID

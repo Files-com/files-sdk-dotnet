@@ -41,6 +41,7 @@ Task<FilesList<BundleNotification>> BundleNotification.List(
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `bundle_id`.
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
+* `bundle_id` (Nullable<Int64>): Bundle ID
 
 
 ---

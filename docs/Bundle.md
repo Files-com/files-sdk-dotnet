@@ -66,6 +66,7 @@
   "snapshot_id": 1,
   "user_id": 1,
   "username": "user",
+  "group_id": 1,
   "clickwrap_id": 1,
   "inbox_id": 1,
   "watermark_attachment": {
@@ -124,6 +125,7 @@
 * `snapshot_id` / `SnapshotId`  (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
 * `user_id` / `UserId`  (Nullable<Int64>): Bundle creator user ID
 * `username` / `Username`  (string): Bundle creator username
+* `group_id` / `GroupId`  (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `clickwrap_id` / `ClickwrapId`  (Nullable<Int64>): ID of the clickwrap to use with this bundle.
 * `inbox_id` / `InboxId`  (Nullable<Int64>): ID of the associated inbox, if available.
 * `watermark_attachment` / `WatermarkAttachment`  (Image): Preview watermark image applied to all bundle items.
@@ -209,6 +211,7 @@ Task<Bundle> Bundle.Create(
 * `expires_at` (string): Bundle expiration date/time
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `description` (string): Public description
 * `note` (string): Bundle internal note
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
@@ -278,6 +281,7 @@ Task<Bundle> Bundle.Update(
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `note` (string): Bundle internal note
 * `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
 * `path_template_time_zone` (string): Timezone to use when rendering timestamps in path templates.
@@ -359,6 +363,7 @@ parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("finalize_snapshot", false);
 parameters.Add("inbox_id", 1);
 parameters.Add("max_uses", 1);
+parameters.Add("group_id", 1);
 parameters.Add("note", "The internal note on the bundle.");
 parameters.Add("path_template", "{{name}}_{{ip}}");
 parameters.Add("path_template_time_zone", "Eastern Time (US & Canada)");
@@ -394,6 +399,7 @@ Bundle.Update(parameters);
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `note` (string): Bundle internal note
 * `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
 * `path_template_time_zone` (string): Timezone to use when rendering timestamps in path templates.

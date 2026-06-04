@@ -133,6 +133,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_password_required", false);
             }
+            if (!this.attributes.ContainsKey("bundles_default_owned_by_primary_group"))
+            {
+                this.attributes.Add("bundles_default_owned_by_primary_group", false);
+            }
             if (!this.attributes.ContainsKey("bundle_recipient_blacklist_domains"))
             {
                 this.attributes.Add("bundle_recipient_blacklist_domains", new string[0]);
@@ -1086,6 +1090,18 @@ namespace FilesCom.Models
         {
             get { return attributes["bundle_password_required"] == null ? false : (bool)attributes["bundle_password_required"]; }
             private set { attributes["bundle_password_required"] = value; }
+        }
+
+        /// <summary>
+        /// If true, new Share Links created by a user with a primary group will default to that group as owner.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bundles_default_owned_by_primary_group")]
+        public bool BundlesDefaultOwnedByPrimaryGroup
+        {
+            get { return attributes["bundles_default_owned_by_primary_group"] == null ? false : (bool)attributes["bundles_default_owned_by_primary_group"]; }
+            private set { attributes["bundles_default_owned_by_primary_group"] = value; }
         }
 
         /// <summary>
@@ -3006,6 +3022,7 @@ namespace FilesCom.Models
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   bundle_require_note - boolean - Do Bundles require internal notes?
         ///   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?
+        ///   bundles_default_owned_by_primary_group - boolean - If true, new Share Links created by a user with a primary group will default to that group as owner.
         ///   calculate_file_checksums_crc32 - boolean - Calculate CRC32 checksums for files?
         ///   calculate_file_checksums_md5 - boolean - Calculate MD5 checksums for files?
         ///   calculate_file_checksums_sha1 - boolean - Calculate SHA1 checksums for files?
@@ -3311,6 +3328,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_send_shared_receipts") && !(parameters["bundle_send_shared_receipts"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_send_shared_receipts must be of type bool", "parameters[\"bundle_send_shared_receipts\"]");
+            }
+            if (parameters.ContainsKey("bundles_default_owned_by_primary_group") && !(parameters["bundles_default_owned_by_primary_group"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bundles_default_owned_by_primary_group must be of type bool", "parameters[\"bundles_default_owned_by_primary_group\"]");
             }
             if (parameters.ContainsKey("calculate_file_checksums_crc32") && !(parameters["calculate_file_checksums_crc32"] is bool))
             {

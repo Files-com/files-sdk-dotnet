@@ -161,6 +161,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("username", null);
             }
+            if (!this.attributes.ContainsKey("group_id"))
+            {
+                this.attributes.Add("group_id", null);
+            }
             if (!this.attributes.ContainsKey("clickwrap_id"))
             {
                 this.attributes.Add("clickwrap_id", null);
@@ -585,6 +589,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+        /// </summary>
+        [JsonPropertyName("group_id")]
+        public Nullable<Int64> GroupId
+        {
+            get { return (Nullable<Int64>)attributes["group_id"]; }
+            set { attributes["group_id"] = value; }
+        }
+
+        /// <summary>
         /// ID of the clickwrap to use with this bundle.
         /// </summary>
         [JsonPropertyName("clickwrap_id")]
@@ -807,6 +821,7 @@ namespace FilesCom.Models
         ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
+        ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
         ///   note - string - Bundle internal note
         ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
         ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
@@ -892,6 +907,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
             if (parameters.ContainsKey("note") && !(parameters["note"] is string))
             {
@@ -1151,6 +1170,7 @@ namespace FilesCom.Models
         ///   expires_at - string - Bundle expiration date/time
         ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
+        ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
         ///   description - string - Public description
         ///   note - string - Bundle internal note
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -1223,6 +1243,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -1379,6 +1403,7 @@ namespace FilesCom.Models
         ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
+        ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
         ///   note - string - Bundle internal note
         ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
         ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
@@ -1472,6 +1497,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("max_uses") && !(parameters["max_uses"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: max_uses must be of type Nullable<Int64>", "parameters[\"max_uses\"]");
+            }
+            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
             }
             if (parameters.ContainsKey("note") && !(parameters["note"] is string))
             {

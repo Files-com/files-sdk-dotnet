@@ -240,6 +240,7 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `bundle_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `bundle_id`.
+        ///   bundle_id - int64 - Bundle ID
         /// </summary>
         public static FilesList<BundleNotification> List(
 
@@ -269,6 +270,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+            }
+            if (parameters.ContainsKey("bundle_id") && !(parameters["bundle_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
 
             return new FilesList<BundleNotification>($"/bundle_notifications", System.Net.Http.HttpMethod.Get, parameters, options);
