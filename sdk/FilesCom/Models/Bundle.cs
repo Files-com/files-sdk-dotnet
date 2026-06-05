@@ -125,6 +125,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("created_at", null);
             }
+            if (!this.attributes.ContainsKey("deleted"))
+            {
+                this.attributes.Add("deleted", false);
+            }
+            if (!this.attributes.ContainsKey("deleted_at"))
+            {
+                this.attributes.Add("deleted_at", null);
+            }
             if (!this.attributes.ContainsKey("dont_separate_submissions_by_folder"))
             {
                 this.attributes.Add("dont_separate_submissions_by_folder", false);
@@ -494,6 +502,27 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["created_at"]; }
             private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// Indicates if the bundle has been deleted.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("deleted")]
+        public bool Deleted
+        {
+            get { return attributes["deleted"] == null ? false : (bool)attributes["deleted"]; }
+            set { attributes["deleted"] = value; }
+        }
+
+        /// <summary>
+        /// Bundle deleted at date/time
+        /// </summary>
+        [JsonPropertyName("deleted_at")]
+        public Nullable<DateTime> DeletedAt
+        {
+            get { return (Nullable<DateTime>)attributes["deleted_at"]; }
+            set { attributes["deleted_at"] = value; }
         }
 
         /// <summary>
@@ -1044,6 +1073,7 @@ namespace FilesCom.Models
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `code`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at` and `expires_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at` and `expires_at`.
+        ///   deleted - boolean - If true, only list deleted Share Links.
         /// </summary>
         public static FilesList<Bundle> List(
 
@@ -1093,6 +1123,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
             {
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+            }
+            if (parameters.ContainsKey("deleted") && !(parameters["deleted"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: deleted must be of type bool", "parameters[\"deleted\"]");
             }
 
             return new FilesList<Bundle>($"/bundles", System.Net.Http.HttpMethod.Get, parameters, options);
