@@ -577,6 +577,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("require_2fa", false);
             }
+            if (!this.attributes.ContainsKey("require_2fa_exempt_all_sso_users"))
+            {
+                this.attributes.Add("require_2fa_exempt_all_sso_users", false);
+            }
             if (!this.attributes.ContainsKey("require_2fa_stop_time"))
             {
                 this.attributes.Add("require_2fa_stop_time", null);
@@ -2370,6 +2374,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("require_2fa_exempt_all_sso_users")]
+        public bool Require2faExemptAllSsoUsers
+        {
+            get { return attributes["require_2fa_exempt_all_sso_users"] == null ? false : (bool)attributes["require_2fa_exempt_all_sso_users"]; }
+            private set { attributes["require_2fa_exempt_all_sso_users"] = value; }
+        }
+
+        /// <summary>
         /// If set, requirement for two-factor authentication has been scheduled to end on this date-time.
         /// </summary>
         [JsonInclude]
@@ -3109,6 +3125,7 @@ namespace FilesCom.Models
         ///   allowed_2fa_method_static - boolean - Is OTP via static codes for two factor authentication allowed?
         ///   allowed_2fa_method_bypass_for_ftp_sftp_dav - boolean - Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
         ///   require_2fa - boolean - Require two-factor authentication for all users?
+        ///   require_2fa_exempt_all_sso_users - boolean - If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
         ///   require_2fa_user_type - string - What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
         ///   color2_top - string - Top bar background color
         ///   color2_left - string - Page link and button color
@@ -3676,6 +3693,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is bool))
             {
                 throw new ArgumentException("Bad parameter: require_2fa must be of type bool", "parameters[\"require_2fa\"]");
+            }
+            if (parameters.ContainsKey("require_2fa_exempt_all_sso_users") && !(parameters["require_2fa_exempt_all_sso_users"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: require_2fa_exempt_all_sso_users must be of type bool", "parameters[\"require_2fa_exempt_all_sso_users\"]");
             }
             if (parameters.ContainsKey("require_2fa_user_type") && !(parameters["require_2fa_user_type"] is string))
             {

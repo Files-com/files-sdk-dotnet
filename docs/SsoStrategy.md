@@ -95,7 +95,7 @@
 * `provision_sftp_permission` / `ProvisionSftpPermission`  (bool): Auto-provisioned users get SFTP permission?
 * `provision_time_zone` / `ProvisionTimeZone`  (string): Default time zone for auto provisioned users.
 * `provision_company` / `ProvisionCompany`  (string): Default company for auto provisioned users.
-* `provision_require_2fa` / `ProvisionRequire2fa`  (string): 2FA required setting for auto provisioned users.
+* `provision_require_2fa` / `ProvisionRequire2fa`  (string): 2FA required setting for auto provisioned users. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
 * `provision_filesystem_layout` / `ProvisionFilesystemLayout`  (string): File System layout to use for auto provisioned users.
 * `provider_identifier` / `ProviderIdentifier`  (string): URL-friendly, unique identifier for Azure SAML configuration
 * `ldap_base_dn` / `LdapBaseDn`  (string): Base DN for looking up users in LDAP server

@@ -175,6 +175,7 @@
   "prevent_root_permissions_for_non_site_admins": true,
   "protocol_access_groups_only": true,
   "require_2fa": true,
+  "require_2fa_exempt_all_sso_users": true,
   "require_2fa_stop_time": "2000-01-01T01:00:00Z",
   "revoke_bundle_access_on_disable_or_delete": true,
   "require_2fa_user_type": "`site_admins`",
@@ -485,6 +486,7 @@
 * `prevent_root_permissions_for_non_site_admins` / `PreventRootPermissionsForNonSiteAdmins`  (bool): If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
 * `protocol_access_groups_only` / `ProtocolAccessGroupsOnly`  (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
 * `require_2fa` / `Require2fa`  (bool): Require two-factor authentication for all users?
+* `require_2fa_exempt_all_sso_users` / `Require2faExemptAllSsoUsers`  (bool): If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
 * `require_2fa_stop_time` / `Require2faStopTime`  (Nullable<DateTime>): If set, requirement for two-factor authentication has been scheduled to end on this date-time.
 * `revoke_bundle_access_on_disable_or_delete` / `RevokeBundleAccessOnDisableOrDelete`  (bool): Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
 * `require_2fa_user_type` / `Require2faUserType`  (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
@@ -702,6 +704,7 @@ Task<Site> Site.Update(
 * `allowed_2fa_method_static` (bool): Is OTP via static codes for two factor authentication allowed?
 * `allowed_2fa_method_bypass_for_ftp_sftp_dav` (bool): Are users allowed to configure their two factor authentication to be bypassed for FTP/SFTP/WebDAV?
 * `require_2fa` (bool): Require two-factor authentication for all users?
+* `require_2fa_exempt_all_sso_users` (bool): If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
 * `require_2fa_user_type` (string): What type of user is required to use two-factor authentication (when require_2fa is set to `true` for this site)?
 * `color2_top` (string): Top bar background color
 * `color2_left` (string): Page link and button color
