@@ -101,7 +101,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Preview type. Can be image, pdf, pdf_native, video, or audio
+        /// Preview type. Can be image, pdf, pdf_native, video, audio, or text
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("type")]
