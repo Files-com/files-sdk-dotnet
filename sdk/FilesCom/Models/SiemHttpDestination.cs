@@ -73,6 +73,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("splunk_token_masked", null);
             }
+            if (!this.attributes.ContainsKey("crowdstrike_token_masked"))
+            {
+                this.attributes.Add("crowdstrike_token_masked", null);
+            }
             if (!this.attributes.ContainsKey("azure_dcr_immutable_id"))
             {
                 this.attributes.Add("azure_dcr_immutable_id", null);
@@ -249,6 +253,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("splunk_token", null);
             }
+            if (!this.attributes.ContainsKey("crowdstrike_token"))
+            {
+                this.attributes.Add("crowdstrike_token", null);
+            }
             if (!this.attributes.ContainsKey("azure_oauth_client_credentials_client_secret"))
             {
                 this.attributes.Add("azure_oauth_client_credentials_client_secret", null);
@@ -389,13 +397,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Applicable only for destination type: splunk. Authentication token provided by Splunk.
+        /// Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
         /// </summary>
         [JsonPropertyName("splunk_token_masked")]
         public string SplunkTokenMasked
         {
             get { return (string)attributes["splunk_token_masked"]; }
             set { attributes["splunk_token_masked"] = value; }
+        }
+
+        /// <summary>
+        /// Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
+        /// </summary>
+        [JsonPropertyName("crowdstrike_token_masked")]
+        public string CrowdstrikeTokenMasked
+        {
+            get { return (string)attributes["crowdstrike_token_masked"]; }
+            set { attributes["crowdstrike_token_masked"] = value; }
         }
 
         /// <summary>
@@ -842,13 +860,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Applicable only for destination type: splunk. Authentication token provided by Splunk.
+        /// Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
         /// </summary>
         [JsonPropertyName("splunk_token")]
         public string SplunkToken
         {
             get { return (string)attributes["splunk_token"]; }
             set { attributes["splunk_token"] = value; }
+        }
+
+        /// <summary>
+        /// Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
+        /// </summary>
+        [JsonPropertyName("crowdstrike_token")]
+        public string CrowdstrikeToken
+        {
+            get { return (string)attributes["crowdstrike_token"]; }
+            set { attributes["crowdstrike_token"] = value; }
         }
 
         /// <summary>
@@ -910,7 +938,8 @@ namespace FilesCom.Models
         ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
         ///   file_format - string - Applicable only for destination type: file. Generated file format.
         ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
-        ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
+        ///   splunk_token - string - Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
+        ///   crowdstrike_token - string - Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
         ///   azure_oauth_client_credentials_tenant_id - string - Applicable only for destination types: azure, azure_legacy. Client Credentials OAuth Tenant ID.
@@ -984,6 +1013,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+            }
+            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
             }
             if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
             {
@@ -1232,7 +1265,8 @@ namespace FilesCom.Models
         ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
         ///   file_format - string - Applicable only for destination type: file. Generated file format.
         ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
-        ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
+        ///   splunk_token - string - Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
+        ///   crowdstrike_token - string - Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
         ///   azure_oauth_client_credentials_tenant_id - string - Applicable only for destination types: azure, azure_legacy. Client Credentials OAuth Tenant ID.
@@ -1302,6 +1336,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+            }
+            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
             }
             if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
             {
@@ -1425,7 +1463,8 @@ namespace FilesCom.Models
         ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
         ///   file_format - string - Applicable only for destination type: file. Generated file format.
         ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
-        ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
+        ///   splunk_token - string - Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
+        ///   crowdstrike_token - string - Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
         ///   azure_oauth_client_credentials_tenant_id - string - Applicable only for destination types: azure, azure_legacy. Client Credentials OAuth Tenant ID.
@@ -1501,6 +1540,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+            }
+            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
             }
             if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
             {
@@ -1604,7 +1647,8 @@ namespace FilesCom.Models
         ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
         ///   file_format - string - Applicable only for destination type: file. Generated file format.
         ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
-        ///   splunk_token - string - Applicable only for destination type: splunk. Authentication token provided by Splunk.
+        ///   splunk_token - string - Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
+        ///   crowdstrike_token - string - Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
         ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
         ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
         ///   azure_oauth_client_credentials_tenant_id - string - Applicable only for destination types: azure, azure_legacy. Client Credentials OAuth Tenant ID.
@@ -1686,6 +1730,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
             {
                 throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+            }
+            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
             }
             if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
             {
