@@ -35,6 +35,7 @@
     "*.jpg",
     "notify_file.txt"
   ],
+  "workspace_id": 1,
   "unsubscribed": true,
   "unsubscribed_reason": "example",
   "user_id": 1,
@@ -63,6 +64,7 @@
 * `subject` / `Subject`  (string): Custom subject line to use for notification emails
 * `message` / `Message`  (string): Custom message to include in notification emails
 * `triggering_filenames` / `TriggeringFilenames`  (string[]): Array of filenames (possibly with wildcards) to scope trigger
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `unsubscribed` / `Unsubscribed`  (bool): Is the user unsubscribed from this notification?
 * `unsubscribed_reason` / `UnsubscribedReason`  (string): The reason that the user unsubscribed
 * `user_id` / `UserId`  (Nullable<Int64>): Notification user ID
@@ -86,8 +88,8 @@ Task<FilesList<Notification>> Notification.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path`, `user_id` or `group_id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id` or `group_id`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `path`, `user_id` or `group_id`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id`, `workspace_id` or `group_id`. Valid field combinations are `[ workspace_id, path ]`, `[ workspace_id, user_id ]`, `[ workspace_id, group_id ]` or `[ workspace_id, user_id, path ]`.
 * `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
 * `path` (string): Show notifications for this Path.
 * `include_ancestors` (bool): If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
@@ -140,6 +142,7 @@ Task<Notification> Notification.Create(
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
 * `triggering_user_ids` (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` (bool): Notify when actions are performed by a share recipient?
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `group_id` (Nullable<Int64>): The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
 * `group_ids` (string): Group IDs when the notification requires multiple groups. If sent as a string, it should be comma-delimited.
 * `path` (string): Path
@@ -175,6 +178,7 @@ Task<Notification> Notification.Update(
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
 * `triggering_user_ids` (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` (bool): Notify when actions are performed by a share recipient?
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
 ---
@@ -217,6 +221,7 @@ parameters.Add("triggering_filenames", ["*.jpg","notify_file.txt"]);
 parameters.Add("triggering_group_ids", [1]);
 parameters.Add("triggering_user_ids", [1]);
 parameters.Add("trigger_by_share_recipients", true);
+parameters.Add("workspace_id", 1);
 
 Notification.Update(parameters);
 ```
@@ -238,6 +243,7 @@ Notification.Update(parameters);
 * `triggering_group_ids` (Nullable<Int64>[]): If set, will only notify on actions made by a member of one of the specified groups
 * `triggering_user_ids` (Nullable<Int64>[]): If set, will only notify on actions made one of the specified users
 * `trigger_by_share_recipients` (bool): Notify when actions are performed by a share recipient?
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
 ---

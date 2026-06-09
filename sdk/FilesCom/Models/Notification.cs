@@ -109,6 +109,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("triggering_filenames", new string[0]);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("unsubscribed"))
             {
                 this.attributes.Add("unsubscribed", false);
@@ -356,6 +360,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID. `0` means the default workspace.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Is the user unsubscribed from this notification?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -423,6 +437,7 @@ namespace FilesCom.Models
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
         ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public async Task<Notification> Update(Dictionary<string, object> parameters)
         {
@@ -497,6 +512,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
@@ -557,8 +576,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `path`, `user_id` or `group_id`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id` or `group_id`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `path`, `user_id` or `group_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `path`, `user_id`, `workspace_id` or `group_id`. Valid field combinations are `[ workspace_id, path ]`, `[ workspace_id, user_id ]`, `[ workspace_id, group_id ]` or `[ workspace_id, user_id, path ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
         ///   path - string - Show notifications for this Path.
         ///   include_ancestors - boolean - If `include_ancestors` is `true` and `path` is specified, include notifications for any parent paths. Ignored if `path` is not specified.
@@ -686,6 +705,7 @@ namespace FilesCom.Models
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
         ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         ///   group_id - int64 - The ID of the group to notify.  Provide `user_id`, `username` or `group_id`.
         ///   group_ids - string - Group IDs when the notification requires multiple groups. If sent as a string, it should be comma-delimited.
         ///   path - string - Path
@@ -760,6 +780,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
             }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+            }
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
@@ -806,6 +830,7 @@ namespace FilesCom.Models
         ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
         ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<Notification> Update(
             Nullable<Int64> id,
@@ -887,6 +912,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_by_share_recipients") && !(parameters["trigger_by_share_recipients"] is bool))
             {
                 throw new ArgumentException("Bad parameter: trigger_by_share_recipients must be of type bool", "parameters[\"trigger_by_share_recipients\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
