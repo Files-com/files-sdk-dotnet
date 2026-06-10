@@ -22,6 +22,7 @@
   "disabled": true,
   "trigger": "example",
   "trigger_file": "example",
+  "always_write_trigger_file": true,
   "include_patterns": [
     "example"
   ],
@@ -102,6 +103,7 @@
 * `disabled` / `Disabled`  (bool): Is this sync disabled?
 * `trigger` / `Trigger`  (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` / `TriggerFile`  (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+* `always_write_trigger_file` / `AlwaysWriteTriggerFile`  (bool): If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
 * `include_patterns` / `IncludePatterns`  (string[]): Array of glob patterns to include
 * `exclude_patterns` / `ExcludePatterns`  (string[]): Array of glob patterns to exclude
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): When this sync was created
@@ -187,6 +189,7 @@ Task<Sync> Sync.Create(
 * `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+* `always_write_trigger_file` (bool): If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
 * `workspace_id` (Nullable<Int64>): Workspace ID this sync belongs to
 
 
@@ -259,6 +262,7 @@ Task<Sync> Sync.Update(
 * `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+* `always_write_trigger_file` (bool): If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
 
 
 ---
@@ -343,6 +347,7 @@ parameters.Add("src_remote_server_id", 1);
 parameters.Add("sync_interval_minutes", 1);
 parameters.Add("trigger", "example");
 parameters.Add("trigger_file", "example");
+parameters.Add("always_write_trigger_file", true);
 
 Sync.Update(parameters);
 ```
@@ -370,6 +375,7 @@ Sync.Update(parameters);
 * `sync_interval_minutes` (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `trigger` (string): Trigger type: daily, custom_schedule, or manual
 * `trigger_file` (string): Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+* `always_write_trigger_file` (bool): If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
 
 
 ---

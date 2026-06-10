@@ -101,6 +101,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("trigger_file", null);
             }
+            if (!this.attributes.ContainsKey("always_write_trigger_file"))
+            {
+                this.attributes.Add("always_write_trigger_file", false);
+            }
             if (!this.attributes.ContainsKey("include_patterns"))
             {
                 this.attributes.Add("include_patterns", new string[0]);
@@ -352,6 +356,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("always_write_trigger_file")]
+        public bool AlwaysWriteTriggerFile
+        {
+            get { return attributes["always_write_trigger_file"] == null ? false : (bool)attributes["always_write_trigger_file"]; }
+            set { attributes["always_write_trigger_file"] = value; }
+        }
+
+        /// <summary>
         /// Array of glob patterns to include
         /// </summary>
         [JsonPropertyName("include_patterns")]
@@ -545,6 +560,7 @@ namespace FilesCom.Models
         ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+        ///   always_write_trigger_file - boolean - If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
         /// </summary>
         public async Task<Sync> Update(Dictionary<string, object> parameters)
         {
@@ -642,6 +658,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
+            }
+            if (parameters.ContainsKey("always_write_trigger_file") && !(parameters["always_write_trigger_file"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_write_trigger_file must be of type bool", "parameters[\"always_write_trigger_file\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/syncs/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
@@ -817,6 +837,7 @@ namespace FilesCom.Models
         ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+        ///   always_write_trigger_file - boolean - If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
         ///   workspace_id - int64 - Workspace ID this sync belongs to
         /// </summary>
         public static async Task<Sync> Create(
@@ -907,6 +928,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
+            }
+            if (parameters.ContainsKey("always_write_trigger_file") && !(parameters["always_write_trigger_file"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_write_trigger_file must be of type bool", "parameters[\"always_write_trigger_file\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
@@ -1014,6 +1039,7 @@ namespace FilesCom.Models
         ///   sync_interval_minutes - int64 - Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
         ///   trigger - string - Trigger type: daily, custom_schedule, or manual
         ///   trigger_file - string - Some MFT services request an empty file (known as a trigger file) to signal the sync is complete and they can begin further processing. If trigger_file is set, a zero-byte file will be sent at the end of the sync.
+        ///   always_write_trigger_file - boolean - If true, the trigger file will be sent at the end of a successful sync even when no files were transferred.
         /// </summary>
         public static async Task<Sync> Update(
             Nullable<Int64> id,
@@ -1119,6 +1145,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("trigger_file") && !(parameters["trigger_file"] is string))
             {
                 throw new ArgumentException("Bad parameter: trigger_file must be of type string", "parameters[\"trigger_file\"]");
+            }
+            if (parameters.ContainsKey("always_write_trigger_file") && !(parameters["always_write_trigger_file"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: always_write_trigger_file must be of type bool", "parameters[\"always_write_trigger_file\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/syncs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
