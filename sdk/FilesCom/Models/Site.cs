@@ -749,6 +749,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("users_can_create_ssh_keys", false);
             }
+            if (!this.attributes.ContainsKey("username_display"))
+            {
+                this.attributes.Add("username_display", null);
+            }
             if (!this.attributes.ContainsKey("welcome_custom_text"))
             {
                 this.attributes.Add("welcome_custom_text", null);
@@ -2867,6 +2871,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("username_display")]
+        public string UsernameDisplay
+        {
+            get { return (string)attributes["username_display"]; }
+            private set { attributes["username_display"] = value; }
+        }
+
+        /// <summary>
         /// Custom text send in user welcome email
         /// </summary>
         [JsonInclude]
@@ -3046,6 +3061,7 @@ namespace FilesCom.Models
         ///   legacy_checksums_mode - boolean - Use legacy checksums mode?
         ///   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
         ///   as2_message_retention_days - int64 - Number of days to retain AS2 messages (incoming and outgoing).
+        ///   username_display - string - How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
         ///   session_expiry_minutes - int64 - Session expiry in minutes
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -3377,6 +3393,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("as2_message_retention_days") && !(parameters["as2_message_retention_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: as2_message_retention_days must be of type Nullable<Int64>", "parameters[\"as2_message_retention_days\"]");
+            }
+            if (parameters.ContainsKey("username_display") && !(parameters["username_display"] is string))
+            {
+                throw new ArgumentException("Bad parameter: username_display must be of type string", "parameters[\"username_display\"]");
             }
             if (parameters.ContainsKey("session_expiry_minutes") && !(parameters["session_expiry_minutes"] is Nullable<Int64>))
             {

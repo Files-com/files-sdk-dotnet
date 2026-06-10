@@ -86,7 +86,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Key type for which the rule will apply (gpg or ssh).
+        /// Key type for which the rule will apply (gpg, ssh, or api).
         /// </summary>
         [JsonPropertyName("key_type")]
         public string KeyType
@@ -150,7 +150,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
         ///   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
-        ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
+        ///   key_type - string - Key type for which the rule will apply (gpg, ssh, or api).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
@@ -352,7 +352,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
         ///   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
-        ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
+        ///   key_type - string - Key type for which the rule will apply (gpg, ssh, or api).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
@@ -408,7 +408,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, a default-workspace rule also applies to keys in all workspaces.
         ///   expiration_days - int64 - Number of days after creation before an SSH key expires. Applies only to SSH keys.
-        ///   key_type - string - Key type for which the rule will apply (gpg or ssh).
+        ///   key_type - string - Key type for which the rule will apply (gpg, ssh, or api).
         ///   inactivity_days - int64 - Number of days of inactivity before the rule applies.
         ///   name - string - Key Lifecycle Rule name
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.

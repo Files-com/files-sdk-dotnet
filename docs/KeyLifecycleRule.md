@@ -15,7 +15,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Key Lifecycle Rule ID
-* `key_type` / `KeyType`  (string): Key type for which the rule will apply (gpg or ssh).
+* `key_type` / `KeyType`  (string): Key type for which the rule will apply (gpg, ssh, or api).
 * `inactivity_days` / `InactivityDays`  (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `expiration_days` / `ExpirationDays`  (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
 * `apply_to_all_workspaces` / `ApplyToAllWorkspaces`  (bool): If true, a default-workspace rule also applies to keys in all workspaces.
@@ -76,7 +76,7 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Create(
 
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to keys in all workspaces.
 * `expiration_days` (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
-* `key_type` (string): Key type for which the rule will apply (gpg or ssh).
+* `key_type` (string): Key type for which the rule will apply (gpg, ssh, or api).
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `name` (string): Key Lifecycle Rule name
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
@@ -99,7 +99,7 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Update(
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to keys in all workspaces.
 * `expiration_days` (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
-* `key_type` (string): Key type for which the rule will apply (gpg or ssh).
+* `key_type` (string): Key type for which the rule will apply (gpg, ssh, or api).
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `name` (string): Key Lifecycle Rule name
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
@@ -146,7 +146,7 @@ KeyLifecycleRule.Update(parameters);
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
 * `apply_to_all_workspaces` (bool): If true, a default-workspace rule also applies to keys in all workspaces.
 * `expiration_days` (Nullable<Int64>): Number of days after creation before an SSH key expires. Applies only to SSH keys.
-* `key_type` (string): Key type for which the rule will apply (gpg or ssh).
+* `key_type` (string): Key type for which the rule will apply (gpg, ssh, or api).
 * `inactivity_days` (Nullable<Int64>): Number of days of inactivity before the rule applies.
 * `name` (string): Key Lifecycle Rule name
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.

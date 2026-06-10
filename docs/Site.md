@@ -339,6 +339,7 @@
   "user_requests_notify_admins": true,
   "users_can_create_api_keys": true,
   "users_can_create_ssh_keys": true,
+  "username_display": "username_only",
   "welcome_custom_text": "Welcome to my site!",
   "email_footer_custom_text": "Copyright © %Y MyCompany Inc.",
   "welcome_email_cc": "example",
@@ -529,6 +530,7 @@
 * `user_requests_notify_admins` / `UserRequestsNotifyAdmins`  (bool): Send email to site admins when a user request is received?
 * `users_can_create_api_keys` / `UsersCanCreateApiKeys`  (bool): Allow users to create their own API keys?
 * `users_can_create_ssh_keys` / `UsersCanCreateSshKeys`  (bool): Allow users to create their own SSH keys?
+* `username_display` / `UsernameDisplay`  (string): How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
 * `welcome_custom_text` / `WelcomeCustomText`  (string): Custom text send in user welcome email
 * `email_footer_custom_text` / `EmailFooterCustomText`  (string): Custom footer text for system-generated emails. Supports standard strftime date/time patterns like %Y (4-digit year), %m (month), %d (day).
 * `welcome_email_cc` / `WelcomeEmailCc`  (string): Include this email in welcome emails if enabled
@@ -625,6 +627,7 @@ Task<Site> Site.Update(
 * `legacy_checksums_mode` (bool): Use legacy checksums mode?
 * `migrate_remote_server_sync_to_sync` (bool): If true, we will migrate all remote server syncs to the new Sync model.
 * `as2_message_retention_days` (Nullable<Int64>): Number of days to retain AS2 messages (incoming and outgoing).
+* `username_display` (string): How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
 * `session_expiry_minutes` (Nullable<Int64>): Session expiry in minutes
 * `ssl_required` (bool): Is SSL required?  Disabling this is insecure.
 * `sftp_insecure_ciphers` (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
