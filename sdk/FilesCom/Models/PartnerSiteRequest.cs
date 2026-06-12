@@ -33,21 +33,21 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
-            if (!this.attributes.ContainsKey("partner_id"))
+            if (!this.attributes.ContainsKey("host_partner_id"))
             {
-                this.attributes.Add("partner_id", null);
+                this.attributes.Add("host_partner_id", null);
             }
-            if (!this.attributes.ContainsKey("linked_site_id"))
+            if (!this.attributes.ContainsKey("guest_site_id"))
             {
-                this.attributes.Add("linked_site_id", null);
+                this.attributes.Add("guest_site_id", null);
             }
             if (!this.attributes.ContainsKey("status"))
             {
                 this.attributes.Add("status", null);
             }
-            if (!this.attributes.ContainsKey("main_site_name"))
+            if (!this.attributes.ContainsKey("host_site_name"))
             {
-                this.attributes.Add("main_site_name", null);
+                this.attributes.Add("host_site_name", null);
             }
             if (!this.attributes.ContainsKey("pairing_key"))
             {
@@ -94,23 +94,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Partner ID
+        /// Host Partner ID
         /// </summary>
-        [JsonPropertyName("partner_id")]
-        public Nullable<Int64> PartnerId
+        [JsonPropertyName("host_partner_id")]
+        public Nullable<Int64> HostPartnerId
         {
-            get { return (Nullable<Int64>)attributes["partner_id"]; }
-            set { attributes["partner_id"] = value; }
+            get { return (Nullable<Int64>)attributes["host_partner_id"]; }
+            set { attributes["host_partner_id"] = value; }
         }
 
         /// <summary>
-        /// Linked Site ID
+        /// Guest Site ID
         /// </summary>
-        [JsonPropertyName("linked_site_id")]
-        public Nullable<Int64> LinkedSiteId
+        [JsonPropertyName("guest_site_id")]
+        public Nullable<Int64> GuestSiteId
         {
-            get { return (Nullable<Int64>)attributes["linked_site_id"]; }
-            set { attributes["linked_site_id"] = value; }
+            get { return (Nullable<Int64>)attributes["guest_site_id"]; }
+            set { attributes["guest_site_id"] = value; }
         }
 
         /// <summary>
@@ -124,17 +124,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Main Site Name
+        /// Host Site Name
         /// </summary>
-        [JsonPropertyName("main_site_name")]
-        public string MainSiteName
+        [JsonPropertyName("host_site_name")]
+        public string HostSiteName
         {
-            get { return (string)attributes["main_site_name"]; }
-            set { attributes["main_site_name"] = value; }
+            get { return (string)attributes["host_site_name"]; }
+            set { attributes["host_site_name"] = value; }
         }
 
         /// <summary>
-        /// Pairing key used to approve this request on the target site
+        /// Pairing key used to approve this request on the Guest Site
         /// </summary>
         [JsonPropertyName("pairing_key")]
         public string PairingKey
@@ -330,7 +330,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   partner_id (required) - int64 - Partner ID to link with
+        ///   host_partner_id (required) - int64 - Host Partner ID to link with
         ///   site_url (required) - string - Site URL to link to
         /// </summary>
         public static async Task<PartnerSiteRequest> Create(
@@ -342,17 +342,17 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (!parameters.ContainsKey("partner_id") || parameters["partner_id"] == null)
+            if (!parameters.ContainsKey("host_partner_id") || parameters["host_partner_id"] == null)
             {
-                throw new ArgumentNullException("Parameter missing: partner_id", "parameters[\"partner_id\"]");
+                throw new ArgumentNullException("Parameter missing: host_partner_id", "parameters[\"host_partner_id\"]");
             }
             if (!parameters.ContainsKey("site_url") || parameters["site_url"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: site_url", "parameters[\"site_url\"]");
             }
-            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            if (parameters.ContainsKey("host_partner_id") && !(parameters["host_partner_id"] is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+                throw new ArgumentException("Bad parameter: host_partner_id must be of type Nullable<Int64>", "parameters[\"host_partner_id\"]");
             }
             if (parameters.ContainsKey("site_url") && !(parameters["site_url"] is string))
             {

@@ -73,6 +73,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("partner_admin_ids", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("partnership_role"))
+            {
+                this.attributes.Add("partnership_role", null);
+            }
             if (!this.attributes.ContainsKey("responsible_group_id"))
             {
                 this.attributes.Add("responsible_group_id", null);
@@ -224,6 +228,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>[])attributes["partner_admin_ids"]; }
             set { attributes["partner_admin_ids"] = value; }
+        }
+
+        /// <summary>
+        /// This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
+        /// </summary>
+        [JsonPropertyName("partnership_role")]
+        public string PartnershipRole
+        {
+            get { return (string)attributes["partnership_role"]; }
+            set { attributes["partnership_role"] = value; }
         }
 
         /// <summary>

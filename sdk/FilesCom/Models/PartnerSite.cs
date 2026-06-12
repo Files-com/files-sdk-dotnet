@@ -29,29 +29,41 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("partner_id"))
+            if (!this.attributes.ContainsKey("host_partner_id"))
             {
-                this.attributes.Add("partner_id", null);
+                this.attributes.Add("host_partner_id", null);
             }
-            if (!this.attributes.ContainsKey("partner_name"))
+            if (!this.attributes.ContainsKey("host_partner_name"))
             {
-                this.attributes.Add("partner_name", null);
+                this.attributes.Add("host_partner_name", null);
             }
-            if (!this.attributes.ContainsKey("linked_site_id"))
+            if (!this.attributes.ContainsKey("guest_partner_id"))
             {
-                this.attributes.Add("linked_site_id", null);
+                this.attributes.Add("guest_partner_id", null);
             }
-            if (!this.attributes.ContainsKey("linked_site_name"))
+            if (!this.attributes.ContainsKey("guest_partner_name"))
             {
-                this.attributes.Add("linked_site_name", null);
+                this.attributes.Add("guest_partner_name", null);
             }
-            if (!this.attributes.ContainsKey("main_site_id"))
+            if (!this.attributes.ContainsKey("host_site_id"))
             {
-                this.attributes.Add("main_site_id", null);
+                this.attributes.Add("host_site_id", null);
             }
-            if (!this.attributes.ContainsKey("main_site_name"))
+            if (!this.attributes.ContainsKey("host_site_name"))
             {
-                this.attributes.Add("main_site_name", null);
+                this.attributes.Add("host_site_name", null);
+            }
+            if (!this.attributes.ContainsKey("guest_site_id"))
+            {
+                this.attributes.Add("guest_site_id", null);
+            }
+            if (!this.attributes.ContainsKey("guest_site_name"))
+            {
+                this.attributes.Add("guest_site_name", null);
+            }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
             }
         }
 
@@ -72,69 +84,102 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Partner ID
+        /// Host Partner ID
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("partner_id")]
-        public Nullable<Int64> PartnerId
+        [JsonPropertyName("host_partner_id")]
+        public Nullable<Int64> HostPartnerId
         {
-            get { return (Nullable<Int64>)attributes["partner_id"]; }
-            private set { attributes["partner_id"] = value; }
+            get { return (Nullable<Int64>)attributes["host_partner_id"]; }
+            private set { attributes["host_partner_id"] = value; }
         }
 
         /// <summary>
-        /// Partner Name
+        /// Host Partner Name
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("partner_name")]
-        public string PartnerName
+        [JsonPropertyName("host_partner_name")]
+        public string HostPartnerName
         {
-            get { return (string)attributes["partner_name"]; }
-            private set { attributes["partner_name"] = value; }
+            get { return (string)attributes["host_partner_name"]; }
+            private set { attributes["host_partner_name"] = value; }
         }
 
         /// <summary>
-        /// Linked Site ID
+        /// Guest Partner ID
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("linked_site_id")]
-        public Nullable<Int64> LinkedSiteId
+        [JsonPropertyName("guest_partner_id")]
+        public Nullable<Int64> GuestPartnerId
         {
-            get { return (Nullable<Int64>)attributes["linked_site_id"]; }
-            private set { attributes["linked_site_id"] = value; }
+            get { return (Nullable<Int64>)attributes["guest_partner_id"]; }
+            private set { attributes["guest_partner_id"] = value; }
         }
 
         /// <summary>
-        /// Linked Site Name
+        /// Guest Partner Name
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("linked_site_name")]
-        public string LinkedSiteName
+        [JsonPropertyName("guest_partner_name")]
+        public string GuestPartnerName
         {
-            get { return (string)attributes["linked_site_name"]; }
-            private set { attributes["linked_site_name"] = value; }
+            get { return (string)attributes["guest_partner_name"]; }
+            private set { attributes["guest_partner_name"] = value; }
         }
 
         /// <summary>
-        /// Main Site ID
+        /// Host Site ID
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("main_site_id")]
-        public Nullable<Int64> MainSiteId
+        [JsonPropertyName("host_site_id")]
+        public Nullable<Int64> HostSiteId
         {
-            get { return (Nullable<Int64>)attributes["main_site_id"]; }
-            private set { attributes["main_site_id"] = value; }
+            get { return (Nullable<Int64>)attributes["host_site_id"]; }
+            private set { attributes["host_site_id"] = value; }
         }
 
         /// <summary>
-        /// Main Site Name
+        /// Host Site Name
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("main_site_name")]
-        public string MainSiteName
+        [JsonPropertyName("host_site_name")]
+        public string HostSiteName
         {
-            get { return (string)attributes["main_site_name"]; }
-            private set { attributes["main_site_name"] = value; }
+            get { return (string)attributes["host_site_name"]; }
+            private set { attributes["host_site_name"] = value; }
+        }
+
+        /// <summary>
+        /// Guest Site ID
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("guest_site_id")]
+        public Nullable<Int64> GuestSiteId
+        {
+            get { return (Nullable<Int64>)attributes["guest_site_id"]; }
+            private set { attributes["guest_site_id"] = value; }
+        }
+
+        /// <summary>
+        /// Guest Site Name
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("guest_site_name")]
+        public string GuestSiteName
+        {
+            get { return (string)attributes["guest_site_name"]; }
+            private set { attributes["guest_site_name"] = value; }
+        }
+
+        /// <summary>
+        /// Workspace ID for the Host Partner
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            private set { attributes["workspace_id"] = value; }
         }
 
 
