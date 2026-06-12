@@ -1144,6 +1144,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Bundle ID.
+        ///   deleted - boolean - If true, show a deleted Share Link.
         /// </summary>
         public static async Task<Bundle> Find(
             Nullable<Int64> id,
@@ -1169,6 +1170,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("deleted") && !(parameters["deleted"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: deleted must be of type bool", "parameters[\"deleted\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);

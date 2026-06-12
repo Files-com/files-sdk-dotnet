@@ -190,6 +190,7 @@ Task<Bundle> Bundle.Find(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
+* `deleted` (bool): If true, show a deleted Share Link.
 
 
 ---
