@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("description"))
             {
                 this.attributes.Add("description", null);
@@ -96,6 +100,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Workspace ID. 0 means the default workspace.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
         /// Event Channel description.
         /// </summary>
         [JsonPropertyName("description")]
@@ -152,6 +166,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - Event Channel name.
+        ///   workspace_id - int64 - Workspace ID. 0 means the default workspace.
         ///   description - string - Event Channel description.
         ///   enabled - boolean - Whether this Event Channel can dispatch events.
         ///   default_channel - boolean - Whether this Event Channel is the default destination for newly published events.
@@ -176,6 +191,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -249,8 +268,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `enabled` or `default_channel`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `enabled` and `default_channel`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `enabled`, `default_channel` or `workspace_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `enabled`, `default_channel` or `workspace_id`. Valid field combinations are `[ workspace_id, enabled ]` and `[ workspace_id, default_channel ]`.
         /// </summary>
         public static FilesList<EventChannel> List(
 
@@ -344,6 +363,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name (required) - string - Event Channel name.
+        ///   workspace_id - int64 - Workspace ID. 0 means the default workspace.
         ///   description - string - Event Channel description.
         ///   enabled - boolean - Whether this Event Channel can dispatch events.
         ///   default_channel - boolean - Whether this Event Channel is the default destination for newly published events.
@@ -364,6 +384,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -394,6 +418,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - Event Channel name.
+        ///   workspace_id - int64 - Workspace ID. 0 means the default workspace.
         ///   description - string - Event Channel description.
         ///   enabled - boolean - Whether this Event Channel can dispatch events.
         ///   default_channel - boolean - Whether this Event Channel is the default destination for newly published events.
@@ -426,6 +451,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {

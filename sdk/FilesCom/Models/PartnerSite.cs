@@ -29,42 +29,6 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("host_partner_id"))
-            {
-                this.attributes.Add("host_partner_id", null);
-            }
-            if (!this.attributes.ContainsKey("host_partner_name"))
-            {
-                this.attributes.Add("host_partner_name", null);
-            }
-            if (!this.attributes.ContainsKey("guest_partner_id"))
-            {
-                this.attributes.Add("guest_partner_id", null);
-            }
-            if (!this.attributes.ContainsKey("guest_partner_name"))
-            {
-                this.attributes.Add("guest_partner_name", null);
-            }
-            if (!this.attributes.ContainsKey("host_site_id"))
-            {
-                this.attributes.Add("host_site_id", null);
-            }
-            if (!this.attributes.ContainsKey("host_site_name"))
-            {
-                this.attributes.Add("host_site_name", null);
-            }
-            if (!this.attributes.ContainsKey("guest_site_id"))
-            {
-                this.attributes.Add("guest_site_id", null);
-            }
-            if (!this.attributes.ContainsKey("guest_site_name"))
-            {
-                this.attributes.Add("guest_site_name", null);
-            }
-            if (!this.attributes.ContainsKey("workspace_id"))
-            {
-                this.attributes.Add("workspace_id", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -84,110 +48,39 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Host Partner ID
         /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("host_partner_id")]
-        public Nullable<Int64> HostPartnerId
+        public async Task Delete(Dictionary<string, object> parameters)
         {
-            get { return (Nullable<Int64>)attributes["host_partner_id"]; }
-            private set { attributes["host_partner_id"] = value; }
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/partner_sites/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-        /// <summary>
-        /// Host Partner Name
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("host_partner_name")]
-        public string HostPartnerName
+        public async void Destroy(Dictionary<string, object> parameters)
         {
-            get { return (string)attributes["host_partner_name"]; }
-            private set { attributes["host_partner_name"] = value; }
-        }
-
-        /// <summary>
-        /// Guest Partner ID
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("guest_partner_id")]
-        public Nullable<Int64> GuestPartnerId
-        {
-            get { return (Nullable<Int64>)attributes["guest_partner_id"]; }
-            private set { attributes["guest_partner_id"] = value; }
-        }
-
-        /// <summary>
-        /// Guest Partner Name
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("guest_partner_name")]
-        public string GuestPartnerName
-        {
-            get { return (string)attributes["guest_partner_name"]; }
-            private set { attributes["guest_partner_name"] = value; }
-        }
-
-        /// <summary>
-        /// Host Site ID
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("host_site_id")]
-        public Nullable<Int64> HostSiteId
-        {
-            get { return (Nullable<Int64>)attributes["host_site_id"]; }
-            private set { attributes["host_site_id"] = value; }
-        }
-
-        /// <summary>
-        /// Host Site Name
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("host_site_name")]
-        public string HostSiteName
-        {
-            get { return (string)attributes["host_site_name"]; }
-            private set { attributes["host_site_name"] = value; }
-        }
-
-        /// <summary>
-        /// Guest Site ID
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("guest_site_id")]
-        public Nullable<Int64> GuestSiteId
-        {
-            get { return (Nullable<Int64>)attributes["guest_site_id"]; }
-            private set { attributes["guest_site_id"] = value; }
-        }
-
-        /// <summary>
-        /// Guest Site Name
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("guest_site_name")]
-        public string GuestSiteName
-        {
-            get { return (string)attributes["guest_site_name"]; }
-            private set { attributes["guest_site_name"] = value; }
-        }
-
-        /// <summary>
-        /// Workspace ID for the Host Partner
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("workspace_id")]
-        public Nullable<Int64> WorkspaceId
-        {
-            get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            private set { attributes["workspace_id"] = value; }
+            Delete(parameters);
         }
 
 
 
         /// <summary>
         /// </summary>
-        public static async Task<PartnerSite[]> Linkeds(
-
+        public static async Task Delete(
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -195,53 +88,33 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-
-            string responseJson = await FilesClient.SendStringRequest($"/partner_sites/linked_partner_sites", System.Net.Http.HttpMethod.Get, parameters, options);
-
-            try
+            if (parameters.ContainsKey("id"))
             {
-                return JsonSerializer.Deserialize<PartnerSite[]>(responseJson, JsonUtil.Options);
+                parameters["id"] = id;
             }
-            catch (JsonException)
+            else
             {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+                parameters.Add("id", id);
             }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            await FilesClient.SendRequest($"/partner_sites/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
-
-        /// <summary>
-        /// Parameters:
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        /// </summary>
-        public static FilesList<PartnerSite> List(
-
+        public static async Task Destroy(
+            Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
-            {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
-            }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
-            }
-
-            return new FilesList<PartnerSite>($"/partner_sites", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<PartnerSite> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            await Delete(id, parameters, options);
         }
 
     }

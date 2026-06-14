@@ -6,6 +6,7 @@
 {
   "id": 1,
   "name": "example",
+  "workspace_id": 1,
   "description": "example",
   "enabled": true,
   "default_channel": true,
@@ -16,6 +17,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Event Channel ID
 * `name` / `Name`  (string): Event Channel name.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. 0 means the default workspace.
 * `description` / `Description`  (string): Event Channel description.
 * `enabled` / `Enabled`  (bool): Whether this Event Channel can dispatch events.
 * `default_channel` / `DefaultChannel`  (bool): Whether this Event Channel is the default destination for newly published events.
@@ -39,8 +41,8 @@ Task<FilesList<EventChannel>> EventChannel.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `enabled` or `default_channel`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `enabled` and `default_channel`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `name`, `enabled`, `default_channel` or `workspace_id`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `enabled`, `default_channel` or `workspace_id`. Valid field combinations are `[ workspace_id, enabled ]` and `[ workspace_id, default_channel ]`.
 
 
 ---
@@ -75,6 +77,7 @@ Task<EventChannel> EventChannel.Create(
 ### Parameters
 
 * `name` (string): Required - Event Channel name.
+* `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace.
 * `description` (string): Event Channel description.
 * `enabled` (bool): Whether this Event Channel can dispatch events.
 * `default_channel` (bool): Whether this Event Channel is the default destination for newly published events.
@@ -96,6 +99,7 @@ Task<EventChannel> EventChannel.Update(
 
 * `id` (Nullable<Int64>): Required - Event Channel ID.
 * `name` (string): Event Channel name.
+* `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace.
 * `description` (string): Event Channel description.
 * `enabled` (bool): Whether this Event Channel can dispatch events.
 * `default_channel` (bool): Whether this Event Channel is the default destination for newly published events.
@@ -128,6 +132,7 @@ var EventChannel = EventChannel.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "example");
+parameters.Add("workspace_id", 1);
 parameters.Add("description", "example");
 parameters.Add("enabled", true);
 parameters.Add("default_channel", true);
@@ -139,6 +144,7 @@ EventChannel.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Event Channel ID.
 * `name` (string): Event Channel name.
+* `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace.
 * `description` (string): Event Channel description.
 * `enabled` (bool): Whether this Event Channel can dispatch events.
 * `default_channel` (bool): Whether this Event Channel is the default destination for newly published events.

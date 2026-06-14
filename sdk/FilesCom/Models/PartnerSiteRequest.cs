@@ -37,9 +37,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("host_partner_id", null);
             }
-            if (!this.attributes.ContainsKey("guest_site_id"))
+            if (!this.attributes.ContainsKey("guest_site_url"))
             {
-                this.attributes.Add("guest_site_id", null);
+                this.attributes.Add("guest_site_url", null);
             }
             if (!this.attributes.ContainsKey("status"))
             {
@@ -60,10 +60,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("updated_at"))
             {
                 this.attributes.Add("updated_at", null);
-            }
-            if (!this.attributes.ContainsKey("site_url"))
-            {
-                this.attributes.Add("site_url", null);
             }
         }
 
@@ -104,13 +100,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Guest Site ID
+        /// Guest Site URL
         /// </summary>
-        [JsonPropertyName("guest_site_id")]
-        public Nullable<Int64> GuestSiteId
+        [JsonPropertyName("guest_site_url")]
+        public string GuestSiteUrl
         {
-            get { return (Nullable<Int64>)attributes["guest_site_id"]; }
-            set { attributes["guest_site_id"] = value; }
+            get { return (string)attributes["guest_site_url"]; }
+            set { attributes["guest_site_url"] = value; }
         }
 
         /// <summary>
@@ -166,66 +162,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Site URL to link to
-        /// </summary>
-        [JsonPropertyName("site_url")]
-        public string SiteUrl
-        {
-            get { return (string)attributes["site_url"]; }
-            set { attributes["site_url"] = value; }
-        }
-
-        /// <summary>
-        /// Reject partner site request
-        /// </summary>
-        public async Task Reject(Dictionary<string, object> parameters)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
-
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            await FilesClient.SendRequest($"/partner_site_requests/{System.Uri.EscapeDataString(attributes["id"].ToString())}/reject", System.Net.Http.HttpMethod.Post, parameters, options);
-        }
-
-
-        /// <summary>
-        /// Approve partner site request
-        /// </summary>
-        public async Task Approve(Dictionary<string, object> parameters)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
-
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            await FilesClient.SendRequest($"/partner_site_requests/{System.Uri.EscapeDataString(attributes["id"].ToString())}/approve", System.Net.Http.HttpMethod.Post, parameters, options);
-        }
-
-
-        /// <summary>
         /// </summary>
         public async Task Delete(Dictionary<string, object> parameters)
         {
@@ -271,6 +207,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `host_partner_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `host_partner_id`.
         /// </summary>
         public static FilesList<PartnerSiteRequest> List(
 
@@ -288,6 +226,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            {
+                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<PartnerSiteRequest>($"/partner_site_requests", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -331,7 +277,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   host_partner_id (required) - int64 - Host Partner ID to link with
-        ///   site_url (required) - string - Site URL to link to
+        ///   guest_site_url (required) - string - Guest Site URL to link to
         /// </summary>
         public static async Task<PartnerSiteRequest> Create(
 
@@ -346,17 +292,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: host_partner_id", "parameters[\"host_partner_id\"]");
             }
-            if (!parameters.ContainsKey("site_url") || parameters["site_url"] == null)
+            if (!parameters.ContainsKey("guest_site_url") || parameters["guest_site_url"] == null)
             {
-                throw new ArgumentNullException("Parameter missing: site_url", "parameters[\"site_url\"]");
+                throw new ArgumentNullException("Parameter missing: guest_site_url", "parameters[\"guest_site_url\"]");
             }
             if (parameters.ContainsKey("host_partner_id") && !(parameters["host_partner_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: host_partner_id must be of type Nullable<Int64>", "parameters[\"host_partner_id\"]");
             }
-            if (parameters.ContainsKey("site_url") && !(parameters["site_url"] is string))
+            if (parameters.ContainsKey("guest_site_url") && !(parameters["guest_site_url"] is string))
             {
-                throw new ArgumentException("Bad parameter: site_url must be of type string", "parameters[\"site_url\"]");
+                throw new ArgumentException("Bad parameter: guest_site_url must be of type string", "parameters[\"guest_site_url\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/partner_site_requests", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -373,10 +319,11 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Reject partner site request
+        /// Parameters:
+        ///   pairing_key (required) - string - Pairing key for the partner site request
         /// </summary>
         public static async Task Reject(
-            Nullable<Int64> id,
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -384,32 +331,25 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("id"))
+            if (!parameters.ContainsKey("pairing_key") || parameters["pairing_key"] == null)
             {
-                parameters["id"] = id;
+                throw new ArgumentNullException("Parameter missing: pairing_key", "parameters[\"pairing_key\"]");
             }
-            else
+            if (parameters.ContainsKey("pairing_key") && !(parameters["pairing_key"] is string))
             {
-                parameters.Add("id", id);
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new ArgumentException("Bad parameter: pairing_key must be of type string", "parameters[\"pairing_key\"]");
             }
 
-            await FilesClient.SendRequest($"/partner_site_requests/{System.Uri.EscapeDataString(parameters["id"].ToString())}/reject", System.Net.Http.HttpMethod.Post, parameters, options);
+            await FilesClient.SendRequest($"/partner_site_requests/reject", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 
         /// <summary>
-        /// Approve partner site request
+        /// Parameters:
+        ///   pairing_key (required) - string - Pairing key for the partner site request
         /// </summary>
         public static async Task Approve(
-            Nullable<Int64> id,
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -417,24 +357,16 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (parameters.ContainsKey("id"))
+            if (!parameters.ContainsKey("pairing_key") || parameters["pairing_key"] == null)
             {
-                parameters["id"] = id;
+                throw new ArgumentNullException("Parameter missing: pairing_key", "parameters[\"pairing_key\"]");
             }
-            else
+            if (parameters.ContainsKey("pairing_key") && !(parameters["pairing_key"] is string))
             {
-                parameters.Add("id", id);
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new ArgumentException("Bad parameter: pairing_key must be of type string", "parameters[\"pairing_key\"]");
             }
 
-            await FilesClient.SendRequest($"/partner_site_requests/{System.Uri.EscapeDataString(parameters["id"].ToString())}/approve", System.Net.Http.HttpMethod.Post, parameters, options);
+            await FilesClient.SendRequest($"/partner_site_requests/approve", System.Net.Http.HttpMethod.Post, parameters, options);
         }
 
 
