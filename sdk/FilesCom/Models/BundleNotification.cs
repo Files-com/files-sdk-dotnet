@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("notify_on_upload", false);
             }
+            if (!this.attributes.ContainsKey("notify_current_user"))
+            {
+                this.attributes.Add("notify_current_user", false);
+            }
             if (!this.attributes.ContainsKey("notify_user_id"))
             {
                 this.attributes.Add("notify_user_id", null);
@@ -115,6 +119,17 @@ namespace FilesCom.Models
         {
             get { return attributes["notify_on_upload"] == null ? false : (bool)attributes["notify_on_upload"]; }
             set { attributes["notify_on_upload"] = value; }
+        }
+
+        /// <summary>
+        /// Is the current user the user to notify?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("notify_current_user")]
+        public bool NotifyCurrentUser
+        {
+            get { return attributes["notify_current_user"] == null ? false : (bool)attributes["notify_current_user"]; }
+            set { attributes["notify_current_user"] = value; }
         }
 
         /// <summary>
