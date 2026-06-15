@@ -141,6 +141,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("google_cloud_storage_bucket", null);
             }
+            if (!this.attributes.ContainsKey("google_cloud_storage_authentication_method"))
+            {
+                this.attributes.Add("google_cloud_storage_authentication_method", null);
+            }
+            if (!this.attributes.ContainsKey("google_cloud_storage_oauth_scope"))
+            {
+                this.attributes.Add("google_cloud_storage_oauth_scope", null);
+            }
             if (!this.attributes.ContainsKey("google_cloud_storage_project_id"))
             {
                 this.attributes.Add("google_cloud_storage_project_id", null);
@@ -680,6 +688,26 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["google_cloud_storage_bucket"]; }
             set { attributes["google_cloud_storage_bucket"] = value; }
+        }
+
+        /// <summary>
+        /// Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
+        /// </summary>
+        [JsonPropertyName("google_cloud_storage_authentication_method")]
+        public string GoogleCloudStorageAuthenticationMethod
+        {
+            get { return (string)attributes["google_cloud_storage_authentication_method"]; }
+            set { attributes["google_cloud_storage_authentication_method"] = value; }
+        }
+
+        /// <summary>
+        /// Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
+        /// </summary>
+        [JsonPropertyName("google_cloud_storage_oauth_scope")]
+        public string GoogleCloudStorageOauthScope
+        {
+            get { return (string)attributes["google_cloud_storage_oauth_scope"]; }
+            set { attributes["google_cloud_storage_oauth_scope"] = value; }
         }
 
         /// <summary>
@@ -1460,7 +1488,9 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
+        ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   hostname - string - Hostname or IP address
@@ -1681,9 +1711,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
             }
+            if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
+            {
+                throw new ArgumentException("Bad parameter: google_cloud_storage_authentication_method must be of type string", "parameters[\"google_cloud_storage_authentication_method\"]");
+            }
             if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: google_cloud_storage_bucket must be of type string", "parameters[\"google_cloud_storage_bucket\"]");
+            }
+            if (parameters.ContainsKey("google_cloud_storage_oauth_scope") && !(parameters["google_cloud_storage_oauth_scope"] is string))
+            {
+                throw new ArgumentException("Bad parameter: google_cloud_storage_oauth_scope must be of type string", "parameters[\"google_cloud_storage_oauth_scope\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
             {
@@ -2050,7 +2088,9 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
+        ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   hostname - string - Hostname or IP address
@@ -2264,9 +2304,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
             }
+            if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
+            {
+                throw new ArgumentException("Bad parameter: google_cloud_storage_authentication_method must be of type string", "parameters[\"google_cloud_storage_authentication_method\"]");
+            }
             if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: google_cloud_storage_bucket must be of type string", "parameters[\"google_cloud_storage_bucket\"]");
+            }
+            if (parameters.ContainsKey("google_cloud_storage_oauth_scope") && !(parameters["google_cloud_storage_oauth_scope"] is string))
+            {
+                throw new ArgumentException("Bad parameter: google_cloud_storage_oauth_scope must be of type string", "parameters[\"google_cloud_storage_oauth_scope\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
             {
@@ -2592,7 +2640,9 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
+        ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
         ///   google_cloud_storage_project_id - string - Google Cloud Storage: Project ID
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   hostname - string - Hostname or IP address
@@ -2821,9 +2871,17 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
             }
+            if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
+            {
+                throw new ArgumentException("Bad parameter: google_cloud_storage_authentication_method must be of type string", "parameters[\"google_cloud_storage_authentication_method\"]");
+            }
             if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: google_cloud_storage_bucket must be of type string", "parameters[\"google_cloud_storage_bucket\"]");
+            }
+            if (parameters.ContainsKey("google_cloud_storage_oauth_scope") && !(parameters["google_cloud_storage_oauth_scope"] is string))
+            {
+                throw new ArgumentException("Bad parameter: google_cloud_storage_oauth_scope must be of type string", "parameters[\"google_cloud_storage_oauth_scope\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
             {
