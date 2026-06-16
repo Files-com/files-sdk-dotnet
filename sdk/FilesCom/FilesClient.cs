@@ -139,6 +139,11 @@ namespace FilesCom
             get { return config.SessionId; }
         }
 
+        public string WorkspaceId
+        {
+            get { return config.WorkspaceId; }
+        }
+
         public int ReadTimeout
         {
             get { return config.ReadTimeout; }

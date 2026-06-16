@@ -138,6 +138,8 @@ namespace FilesCom
 
             if (requiresAuth)
             {
+                object workspaceId = options.ContainsKey("workspace_id") ? options["workspace_id"] : filesClient.WorkspaceId;
+
                 if (options.ContainsKey("session_id"))
                 {
                     if (!(options["session_id"] is string))
@@ -167,6 +169,11 @@ namespace FilesCom
                 else
                 {
                     throw new InvalidOperationException($"Authentication required for API request: {verb} {uri}");
+                }
+
+                if (workspaceId != null && !string.IsNullOrWhiteSpace(workspaceId.ToString()))
+                {
+                    httpRequestMessage.Headers.Add("X-Files-Workspace-Id", workspaceId.ToString());
                 }
             }
 

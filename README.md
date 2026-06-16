@@ -577,29 +577,22 @@ Customers commonly group resources by project, department, client, or region. Wo
 
 Every Site has an implicit Default workspace (ID `0`). Resources that are not explicitly assigned to a named workspace are considered part of the Default workspace.
 
-### SDK Support
+The Files.com .NET SDK supports workspace scoping by using the `WorkspaceId` attribute on the `FilesConfiguration` object. Scope a single request by passing `workspace_id` in the request options.
+```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
+using System.Collections.Generic;
 
-We are still in the process of adding Workspaces support to each SDK. If you require Workspaces support right now, you need to use the REST API or the CLI.
-<div></div>
+var config = new FilesConfiguration();
+config.ApiKey = "YOUR_API_KEY";
+config.WorkspaceId = "123";
+new FilesClient(config);
 
-### Using Workspaces with the REST API
-
-To use Workspaces with the REST API, send the following request header:
-
-```http
-X-Files-Workspace-Id: <workspace_id>
+Folder.ListFor("/", null, new Dictionary<string, object>
+{
+    { "workspace_id", 456 }
+});
 ```
-
-This changes path mapping and "what you're looking at."
-
-When the `X-Files-Workspace-Id` header is provided:
-
-- List, show, update, and delete operations are constrained to that workspace for workspace-scoped models.
-- Create operations default `workspace_id` to the scoped workspace when not explicitly provided.
-- Attempts to provide a mismatching `workspace_id` are rejected with `not-authorized/insufficient-permission-for-params`.
-
-This header only works for sitewide keys, or keys related to users with permissions to more than one workspace.
-<div></div>
 
 ## Foreign Language Support
 

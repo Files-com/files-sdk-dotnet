@@ -18,6 +18,13 @@ namespace FilesCom
             set { this["SessionId"] = value; }
         }
 
+        [ConfigurationProperty("WorkspaceId")]
+        public string WorkspaceId
+        {
+            get { return (string)this["WorkspaceId"]; }
+            set { this["WorkspaceId"] = value; }
+        }
+
         [ConfigurationProperty("BaseUrl", DefaultValue = "https://app.files.com/")]
         public string BaseUrl
         {

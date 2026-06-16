@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using FilesCom;
 using FilesCom.Models;
 using WireMock.RequestBuilders;
@@ -26,6 +28,40 @@ namespace FilesTests
         }
     }
 
+    public class CapturingHttpMessageHandler : HttpMessageHandler
+    {
+        public HttpRequestMessage Request { get; private set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Request = request;
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("[]")
+            });
+        }
+    }
+
+    public class CapturingHttpClientFactory : IHttpClientFactory
+    {
+        private readonly CapturingHttpMessageHandler handler;
+        private readonly string baseUrl;
+
+        public CapturingHttpClientFactory(CapturingHttpMessageHandler handler, string baseUrl)
+        {
+            this.handler = handler;
+            this.baseUrl = baseUrl;
+        }
+
+        public HttpClient CreateClient(string name)
+        {
+            return new HttpClient(handler)
+            {
+                BaseAddress = new Uri(baseUrl)
+            };
+        }
+    }
+
     [TestClass]
     public class FilesApiServiceTest
     {
@@ -41,6 +77,68 @@ namespace FilesTests
             var resultPath = ExposedFilesApiService.ExposedParsePathParameters(path, parameters);
 
             Assert.AreEqual("/users/1234.json", resultPath);
+        }
+
+        [TestMethod]
+        public async Task TestUsesConfiguredWorkspaceId()
+        {
+            var handler = new CapturingHttpMessageHandler();
+            var service = new FilesApiService(new CapturingHttpClientFactory(handler, "http://example.test"));
+            var config = new FilesConfiguration
+            {
+                ApiKey = "my-key",
+                BaseUrl = "http://example.test",
+                WorkspaceId = "123"
+            };
+            new FilesClient(config);
+
+            await service.SendRequest("/api_keys", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>());
+
+            Assert.AreEqual("123", new List<string>(handler.Request.Headers.GetValues("X-Files-Workspace-Id"))[0]);
+        }
+
+        [TestMethod]
+        public async Task TestUsesPerCallWorkspaceId()
+        {
+            var handler = new CapturingHttpMessageHandler();
+            var service = new FilesApiService(new CapturingHttpClientFactory(handler, "http://example.test"));
+            var config = new FilesConfiguration
+            {
+                ApiKey = "my-key",
+                BaseUrl = "http://example.test",
+                WorkspaceId = "123"
+            };
+            new FilesClient(config);
+            var options = new Dictionary<string, object>()
+            {
+                { "workspace_id", 456 },
+            };
+
+            await service.SendRequest("/api_keys", HttpMethod.Get, new Dictionary<string, object>(), options);
+
+            Assert.AreEqual("456", new List<string>(handler.Request.Headers.GetValues("X-Files-Workspace-Id"))[0]);
+        }
+
+        [TestMethod]
+        public async Task TestAllowsPerCallWorkspaceIdToBeCleared()
+        {
+            var handler = new CapturingHttpMessageHandler();
+            var service = new FilesApiService(new CapturingHttpClientFactory(handler, "http://example.test"));
+            var config = new FilesConfiguration
+            {
+                ApiKey = "my-key",
+                BaseUrl = "http://example.test",
+                WorkspaceId = "123"
+            };
+            new FilesClient(config);
+            var options = new Dictionary<string, object>()
+            {
+                { "workspace_id", null },
+            };
+
+            await service.SendRequest("/api_keys", HttpMethod.Get, new Dictionary<string, object>(), options);
+
+            Assert.IsFalse(handler.Request.Headers.Contains("X-Files-Workspace-Id"));
         }
     }
 
