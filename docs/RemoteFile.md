@@ -268,6 +268,52 @@ Task<FileAction> RemoteFile.Move(
 
 ---
 
+## Decrypt a GPG-encrypted file and save it to a destination path
+
+```
+Task<FileAction> RemoteFile.GpgDecrypt(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the decrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for decryption.
+* `use_all_private_keys` (bool): Use every accessible private GPG key in the source workspace for decryption.
+* `ignore_mdc_error` (bool): Ignore errors from the MDC (modification detection code) check.
+* `overwrite` (bool): Overwrite existing file in the destination?
+
+
+---
+
+## Encrypt a file with GPG and save it to a destination path
+
+```
+Task<FileAction> RemoteFile.GpgEncrypt(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the encrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to encrypt with.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for encryption.
+* `signing_key_id` (Nullable<Int64>): Optional GPG Key ID to sign with.
+* `armor` (bool): Output ASCII-armored encrypted data.
+* `overwrite` (bool): Overwrite existing file in the destination?
+
+
+---
+
 ## Extract a ZIP file to a destination folder
 
 ```
@@ -462,6 +508,64 @@ File.Move(parameters);
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
 * `overwrite` (bool): Overwrite existing file(s) in the destination?
+
+
+---
+
+## Decrypt a GPG-encrypted file and save it to a destination path
+
+```
+var File = RemoteFile.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("gpg_key_partner_id", 1);
+parameters.Add("use_all_private_keys", false);
+parameters.Add("ignore_mdc_error", false);
+parameters.Add("overwrite", false);
+
+File.GpgDecrypt(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the decrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for decryption.
+* `use_all_private_keys` (bool): Use every accessible private GPG key in the source workspace for decryption.
+* `ignore_mdc_error` (bool): Ignore errors from the MDC (modification detection code) check.
+* `overwrite` (bool): Overwrite existing file in the destination?
+
+
+---
+
+## Encrypt a file with GPG and save it to a destination path
+
+```
+var File = RemoteFile.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("gpg_key_partner_id", 1);
+parameters.Add("signing_key_id", 1);
+parameters.Add("armor", false);
+parameters.Add("overwrite", false);
+
+File.GpgEncrypt(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the encrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to encrypt with.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for encryption.
+* `signing_key_id` (Nullable<Int64>): Optional GPG Key ID to sign with.
+* `armor` (bool): Output ASCII-armored encrypted data.
+* `overwrite` (bool): Overwrite existing file in the destination?
 
 
 ---

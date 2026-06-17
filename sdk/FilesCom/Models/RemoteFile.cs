@@ -1104,6 +1104,146 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Decrypt a GPG-encrypted file and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public async Task<FileAction> GpgDecrypt(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["path"] = attributes["path"];
+
+            if (!attributes.ContainsKey("path"))
+            {
+                throw new ArgumentException("Current object doesn't have a path");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_ids") && !(parameters["gpg_key_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "parameters[\"gpg_key_ids\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_partner_id") && !(parameters["gpg_key_partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "parameters[\"gpg_key_partner_id\"]");
+            }
+            if (parameters.ContainsKey("use_all_private_keys") && !(parameters["use_all_private_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_all_private_keys must be of type bool", "parameters[\"use_all_private_keys\"]");
+            }
+            if (parameters.ContainsKey("ignore_mdc_error") && !(parameters["ignore_mdc_error"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ignore_mdc_error must be of type bool", "parameters[\"ignore_mdc_error\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Encrypt a file with GPG and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public async Task<FileAction> GpgEncrypt(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["path"] = attributes["path"];
+
+            if (!attributes.ContainsKey("path"))
+            {
+                throw new ArgumentException("Current object doesn't have a path");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_ids") && !(parameters["gpg_key_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "parameters[\"gpg_key_ids\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_partner_id") && !(parameters["gpg_key_partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "parameters[\"gpg_key_partner_id\"]");
+            }
+            if (parameters.ContainsKey("signing_key_id") && !(parameters["signing_key_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: signing_key_id must be of type Nullable<Int64>", "parameters[\"signing_key_id\"]");
+            }
+            if (parameters.ContainsKey("armor") && !(parameters["armor"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: armor must be of type bool", "parameters[\"armor\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Extract a ZIP file to a destination folder
         ///
         /// Parameters:
@@ -1740,6 +1880,162 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Decrypt a GPG-encrypted file and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public static async Task<FileAction> GpgDecrypt(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_ids") && !(parameters["gpg_key_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "parameters[\"gpg_key_ids\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_partner_id") && !(parameters["gpg_key_partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "parameters[\"gpg_key_partner_id\"]");
+            }
+            if (parameters.ContainsKey("use_all_private_keys") && !(parameters["use_all_private_keys"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_all_private_keys must be of type bool", "parameters[\"use_all_private_keys\"]");
+            }
+            if (parameters.ContainsKey("ignore_mdc_error") && !(parameters["ignore_mdc_error"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: ignore_mdc_error must be of type bool", "parameters[\"ignore_mdc_error\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Encrypt a file with GPG and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public static async Task<FileAction> GpgEncrypt(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_ids") && !(parameters["gpg_key_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "parameters[\"gpg_key_ids\"]");
+            }
+            if (parameters.ContainsKey("gpg_key_partner_id") && !(parameters["gpg_key_partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "parameters[\"gpg_key_partner_id\"]");
+            }
+            if (parameters.ContainsKey("signing_key_id") && !(parameters["signing_key_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: signing_key_id must be of type Nullable<Int64>", "parameters[\"signing_key_id\"]");
+            }
+            if (parameters.ContainsKey("armor") && !(parameters["armor"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: armor must be of type bool", "parameters[\"armor\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {
