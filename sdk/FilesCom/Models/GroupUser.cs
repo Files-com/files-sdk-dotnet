@@ -45,9 +45,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("admin", false);
             }
-            if (!this.attributes.ContainsKey("usernames"))
+            if (!this.attributes.ContainsKey("username"))
             {
-                this.attributes.Add("usernames", null);
+                this.attributes.Add("username", null);
             }
             if (!this.attributes.ContainsKey("id"))
             {
@@ -113,13 +113,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Comma-delimited list of usernames who belong to this group (separated by commas).
+        /// Username of the user
         /// </summary>
-        [JsonPropertyName("usernames")]
-        public string Usernames
+        [JsonPropertyName("username")]
+        public string Username
         {
-            get { return (string)attributes["usernames"]; }
-            set { attributes["usernames"] = value; }
+            get { return (string)attributes["username"]; }
+            set { attributes["username"] = value; }
         }
 
         /// <summary>
