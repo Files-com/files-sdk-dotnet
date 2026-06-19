@@ -47,7 +47,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("errors"))
             {
-                this.attributes.Add("errors", new object[0]);
+                this.attributes.Add("errors", new Errors[0]);
             }
             if (!this.attributes.ContainsKey("clickwrap_id"))
             {
@@ -124,9 +124,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("errors")]
-        public object[] Errors
+        public Errors[] Errors
         {
-            get { return (object[])attributes["errors"]; }
+            get { return (Errors[])attributes["errors"]; }
             private set { attributes["errors"] = value; }
         }
 

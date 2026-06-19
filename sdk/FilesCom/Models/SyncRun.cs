@@ -119,7 +119,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("live_transfers"))
             {
-                this.attributes.Add("live_transfers", new object[0]);
+                this.attributes.Add("live_transfers", new SyncRunLiveTransfer[0]);
             }
         }
 
@@ -387,9 +387,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("live_transfers")]
-        public object[] LiveTransfers
+        public SyncRunLiveTransfer[] LiveTransfers
         {
-            get { return (object[])attributes["live_transfers"]; }
+            get { return (SyncRunLiveTransfer[])attributes["live_transfers"]; }
             private set { attributes["live_transfers"] = value; }
         }
 

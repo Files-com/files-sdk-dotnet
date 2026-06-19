@@ -55,7 +55,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("invoice_line_items"))
             {
-                this.attributes.Add("invoice_line_items", new object[0]);
+                this.attributes.Add("invoice_line_items", new InvoiceLineItem[0]);
             }
             if (!this.attributes.ContainsKey("method"))
             {
@@ -63,7 +63,7 @@ namespace FilesCom.Models
             }
             if (!this.attributes.ContainsKey("payment_line_items"))
             {
-                this.attributes.Add("payment_line_items", new object[0]);
+                this.attributes.Add("payment_line_items", new PaymentLineItem[0]);
             }
             if (!this.attributes.ContainsKey("payment_reversed_at"))
             {
@@ -170,9 +170,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("invoice_line_items")]
-        public object[] InvoiceLineItems
+        public InvoiceLineItem[] InvoiceLineItems
         {
-            get { return (object[])attributes["invoice_line_items"]; }
+            get { return (InvoiceLineItem[])attributes["invoice_line_items"]; }
             private set { attributes["invoice_line_items"] = value; }
         }
 
@@ -192,9 +192,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("payment_line_items")]
-        public object[] PaymentLineItems
+        public PaymentLineItem[] PaymentLineItems
         {
-            get { return (object[])attributes["payment_line_items"]; }
+            get { return (PaymentLineItem[])attributes["payment_line_items"]; }
             private set { attributes["payment_line_items"] = value; }
         }
 
