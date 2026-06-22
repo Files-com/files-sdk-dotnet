@@ -273,6 +273,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("migrate_remote_server_sync_to_sync", false);
             }
+            if (!this.attributes.ContainsKey("mcp_dcr_enabled"))
+            {
+                this.attributes.Add("mcp_dcr_enabled", false);
+            }
             if (!this.attributes.ContainsKey("mobile_app"))
             {
                 this.attributes.Add("mobile_app", false);
@@ -1502,6 +1506,18 @@ namespace FilesCom.Models
         {
             get { return attributes["migrate_remote_server_sync_to_sync"] == null ? false : (bool)attributes["migrate_remote_server_sync_to_sync"]; }
             private set { attributes["migrate_remote_server_sync_to_sync"] = value; }
+        }
+
+        /// <summary>
+        /// Is OAuth DCR (dynamic client registration) for MCP enabled?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("mcp_dcr_enabled")]
+        public bool McpDcrEnabled
+        {
+            get { return attributes["mcp_dcr_enabled"] == null ? false : (bool)attributes["mcp_dcr_enabled"]; }
+            private set { attributes["mcp_dcr_enabled"] = value; }
         }
 
         /// <summary>
@@ -3050,6 +3066,7 @@ namespace FilesCom.Models
         ///   left_navigation_visibility - object - Visibility settings for account navigation
         ///   disable_all_ai_features - boolean - If true, all AI features are disabled for this site.
         ///   ai_feature_availability - object - Availability settings for AI features by user class
+        ///   mcp_dcr_enabled - boolean - Is OAuth DCR (dynamic client registration) for MCP enabled?
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   bundle_require_note - boolean - Do Bundles require internal notes?
         ///   bundle_send_shared_receipts - boolean - Do Bundle creators receive receipts of invitations?
@@ -3349,6 +3366,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ai_feature_availability") && !(parameters["ai_feature_availability"] is object))
             {
                 throw new ArgumentException("Bad parameter: ai_feature_availability must be of type object", "parameters[\"ai_feature_availability\"]");
+            }
+            if (parameters.ContainsKey("mcp_dcr_enabled") && !(parameters["mcp_dcr_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: mcp_dcr_enabled must be of type bool", "parameters[\"mcp_dcr_enabled\"]");
             }
             if (parameters.ContainsKey("additional_text_file_types") && !(parameters["additional_text_file_types"] is string[]))
             {
