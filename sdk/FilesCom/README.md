@@ -757,6 +757,7 @@ Exception
 |`ApiKeyOnlyForDesktopAppException`|  `NotAuthorizedException` |
 |`ApiKeyOnlyForMobileAppException`|  `NotAuthorizedException` |
 |`ApiKeyOnlyForOfficeIntegrationException`|  `NotAuthorizedException` |
+|`BillingInformationHiddenException`|  `NotAuthorizedException` |
 |`BillingPermissionRequiredException`|  `NotAuthorizedException` |
 |`BundleMaximumUsesReachedException`|  `NotAuthorizedException` |
 |`BundlePermissionRequiredException`|  `NotAuthorizedException` |

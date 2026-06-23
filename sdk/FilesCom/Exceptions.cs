@@ -528,6 +528,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class BillingInformationHiddenException : NotAuthorizedException
+    {
+        public BillingInformationHiddenException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class BillingPermissionRequiredException : NotAuthorizedException
     {
         public BillingPermissionRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
