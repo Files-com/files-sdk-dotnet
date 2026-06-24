@@ -76,9 +76,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("id")]
-        public Nullable<Int64> Id
+        public string Id
         {
-            get { return (Nullable<Int64>)attributes["id"]; }
+            get { return (string)attributes["id"]; }
             private set { attributes["id"] = value; }
         }
 
@@ -176,10 +176,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   id (required) - int64 - Chat Session ID.
+        ///   id (required) - string - Chat Session ID.
         /// </summary>
         public static async Task<ChatSession> Find(
-            Nullable<Int64> id,
+            string id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
@@ -199,9 +199,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.ContainsKey("id") && !(parameters["id"] is string))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new ArgumentException("Bad parameter: id must be of type string", "parameters[\"id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/chat_sessions/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -217,7 +217,7 @@ namespace FilesCom.Models
         }
 
         public static async Task<ChatSession> Get(
-            Nullable<Int64> id,
+            string id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )

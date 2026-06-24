@@ -4,7 +4,7 @@
 
 ```
 {
-  "id": 1,
+  "id": "example",
   "user_id": 1,
   "workspace_id": 1,
   "last_active_at": "2000-01-01T01:00:00Z",
@@ -20,7 +20,7 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Chat Session ID.
+* `id` / `Id`  (string): Chat Session ID.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `last_active_at` / `LastActiveAt`  (Nullable<DateTime>): Most recent chat activity date/time.
@@ -52,7 +52,7 @@ Task<FilesList<ChatSession>> ChatSession.List(
 
 ```
 Task<ChatSession> ChatSession.Find(
-    Nullable<Int64> id, 
+    string id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -60,4 +60,4 @@ Task<ChatSession> ChatSession.Find(
 
 ### Parameters
 
-* `id` (Nullable<Int64>): Required - Chat Session ID.
+* `id` (string): Required - Chat Session ID.
