@@ -1638,7 +1638,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Letsencrypt chain to use when registering SSL Certificate for domain.
+        /// Letsencrypt chain to use when registering SSL Certificate for domain. No longer used as of 2026.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("domain_letsencrypt_chain")]
@@ -3034,7 +3034,7 @@ namespace FilesCom.Models
         ///   subdomain - string - Site subdomain
         ///   domain - string - Custom domain
         ///   domain_hsts_header - boolean - Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
-        ///   domain_letsencrypt_chain - string - Letsencrypt chain to use when registering SSL Certificate for domain.
+        ///   domain_letsencrypt_chain - string - Letsencrypt chain to use when registering SSL Certificate for domain. No longer used as of 2026.
         ///   email - string - Main email for this site
         ///   reply_to_email - string - Reply-to email for this site
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
