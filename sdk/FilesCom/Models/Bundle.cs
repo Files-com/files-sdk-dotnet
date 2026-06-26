@@ -141,6 +141,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("max_uses", null);
             }
+            if (!this.attributes.ContainsKey("internal_name"))
+            {
+                this.attributes.Add("internal_name", null);
+            }
             if (!this.attributes.ContainsKey("note"))
             {
                 this.attributes.Add("note", null);
@@ -547,6 +551,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Internal name for identifying this Share Link.
+        /// </summary>
+        [JsonPropertyName("internal_name")]
+        public string InternalName
+        {
+            get { return (string)attributes["internal_name"]; }
+            set { attributes["internal_name"] = value; }
+        }
+
+        /// <summary>
         /// Bundle internal note
         /// </summary>
         [JsonPropertyName("note")]
@@ -851,6 +865,7 @@ namespace FilesCom.Models
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+        ///   internal_name - string - Internal name for identifying this Share Link.
         ///   note - string - Bundle internal note
         ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
         ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
@@ -940,6 +955,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("internal_name") && !(parameters["internal_name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: internal_name must be of type string", "parameters[\"internal_name\"]");
             }
             if (parameters.ContainsKey("note") && !(parameters["note"] is string))
             {
@@ -1210,6 +1229,7 @@ namespace FilesCom.Models
         ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+        ///   internal_name - string - Internal name for identifying this Share Link.
         ///   description - string - Public description
         ///   note - string - Bundle internal note
         ///   code - string - Bundle code.  This code forms the end part of the Public URL.
@@ -1286,6 +1306,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("internal_name") && !(parameters["internal_name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: internal_name must be of type string", "parameters[\"internal_name\"]");
             }
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
@@ -1443,6 +1467,7 @@ namespace FilesCom.Models
         ///   inbox_id - int64 - ID of the associated inbox, if available.
         ///   max_uses - int64 - Maximum number of times bundle can be accessed
         ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+        ///   internal_name - string - Internal name for identifying this Share Link.
         ///   note - string - Bundle internal note
         ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
         ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
@@ -1540,6 +1565,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+            }
+            if (parameters.ContainsKey("internal_name") && !(parameters["internal_name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: internal_name must be of type string", "parameters[\"internal_name\"]");
             }
             if (parameters.ContainsKey("note") && !(parameters["note"] is string))
             {

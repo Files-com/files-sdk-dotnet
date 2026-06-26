@@ -61,6 +61,7 @@
   "deleted_at": "2000-01-01T01:00:00Z",
   "dont_separate_submissions_by_folder": true,
   "max_uses": 1,
+  "internal_name": "Quarterly reports",
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
   "path_template_time_zone": "Eastern Time (US & Canada)",
@@ -122,6 +123,7 @@
 * `deleted_at` / `DeletedAt`  (Nullable<DateTime>): Bundle deleted at date/time
 * `dont_separate_submissions_by_folder` / `DontSeparateSubmissionsByFolder`  (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `max_uses` / `MaxUses`  (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `internal_name` / `InternalName`  (string): Internal name for identifying this Share Link.
 * `note` / `Note`  (string): Bundle internal note
 * `path_template` / `PathTemplate`  (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
 * `path_template_time_zone` / `PathTemplateTimeZone`  (string): Timezone to use when rendering timestamps in path templates.
@@ -218,6 +220,7 @@ Task<Bundle> Bundle.Create(
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+* `internal_name` (string): Internal name for identifying this Share Link.
 * `description` (string): Public description
 * `note` (string): Bundle internal note
 * `code` (string): Bundle code.  This code forms the end part of the Public URL.
@@ -288,6 +291,7 @@ Task<Bundle> Bundle.Update(
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+* `internal_name` (string): Internal name for identifying this Share Link.
 * `note` (string): Bundle internal note
 * `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
 * `path_template_time_zone` (string): Timezone to use when rendering timestamps in path templates.
@@ -370,6 +374,7 @@ parameters.Add("finalize_snapshot", false);
 parameters.Add("inbox_id", 1);
 parameters.Add("max_uses", 1);
 parameters.Add("group_id", 1);
+parameters.Add("internal_name", "Quarterly reports");
 parameters.Add("note", "The internal note on the bundle.");
 parameters.Add("path_template", "{{name}}_{{ip}}");
 parameters.Add("path_template_time_zone", "Eastern Time (US & Canada)");
@@ -406,6 +411,7 @@ Bundle.Update(parameters);
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
 * `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
 * `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+* `internal_name` (string): Internal name for identifying this Share Link.
 * `note` (string): Bundle internal note
 * `path_template` (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
 * `path_template_time_zone` (string): Timezone to use when rendering timestamps in path templates.
