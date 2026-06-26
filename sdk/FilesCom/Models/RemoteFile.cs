@@ -1104,6 +1104,84 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Transform a file and save the output to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the transformed output.
+        ///   transform_type (required) - string - Transform type. Supported values are `image_convert` and `document_convert`.
+        ///   target_format (required) - string - Destination format to create.
+        ///   width - int64 - Maximum output width for image_convert.
+        ///   height - int64 - Maximum output height for image_convert.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public async Task<FileAction> Transform(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["path"] = attributes["path"];
+
+            if (!attributes.ContainsKey("path"))
+            {
+                throw new ArgumentException("Current object doesn't have a path");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (!parameters.ContainsKey("transform_type") || parameters["transform_type"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: transform_type", "parameters[\"transform_type\"]");
+            }
+            if (!parameters.ContainsKey("target_format") || parameters["target_format"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: target_format", "parameters[\"target_format\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("transform_type") && !(parameters["transform_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: transform_type must be of type string", "parameters[\"transform_type\"]");
+            }
+            if (parameters.ContainsKey("target_format") && !(parameters["target_format"] is string))
+            {
+                throw new ArgumentException("Bad parameter: target_format must be of type string", "parameters[\"target_format\"]");
+            }
+            if (parameters.ContainsKey("width") && !(parameters["width"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: width must be of type Nullable<Int64>", "parameters[\"width\"]");
+            }
+            if (parameters.ContainsKey("height") && !(parameters["height"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: height must be of type Nullable<Int64>", "parameters[\"height\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/transform/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Decrypt a GPG-encrypted file and save it to a destination path
         ///
         /// Parameters:
@@ -1880,6 +1958,92 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonSerializer.Deserialize<FileAction>(responseJson, JsonUtil.Options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Transform a file and save the output to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the transformed output.
+        ///   transform_type (required) - string - Transform type. Supported values are `image_convert` and `document_convert`.
+        ///   target_format (required) - string - Destination format to create.
+        ///   width - int64 - Maximum output width for image_convert.
+        ///   height - int64 - Maximum output height for image_convert.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public static async Task<FileAction> Transform(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (!parameters.ContainsKey("destination") || parameters["destination"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: destination", "parameters[\"destination\"]");
+            }
+            if (!parameters.ContainsKey("transform_type") || parameters["transform_type"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: transform_type", "parameters[\"transform_type\"]");
+            }
+            if (!parameters.ContainsKey("target_format") || parameters["target_format"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: target_format", "parameters[\"target_format\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
+            {
+                throw new ArgumentException("Bad parameter: destination must be of type string", "parameters[\"destination\"]");
+            }
+            if (parameters.ContainsKey("transform_type") && !(parameters["transform_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: transform_type must be of type string", "parameters[\"transform_type\"]");
+            }
+            if (parameters.ContainsKey("target_format") && !(parameters["target_format"] is string))
+            {
+                throw new ArgumentException("Bad parameter: target_format must be of type string", "parameters[\"target_format\"]");
+            }
+            if (parameters.ContainsKey("width") && !(parameters["width"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: width must be of type Nullable<Int64>", "parameters[\"width\"]");
+            }
+            if (parameters.ContainsKey("height") && !(parameters["height"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: height must be of type Nullable<Int64>", "parameters[\"height\"]");
+            }
+            if (parameters.ContainsKey("overwrite") && !(parameters["overwrite"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/file_actions/transform/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {

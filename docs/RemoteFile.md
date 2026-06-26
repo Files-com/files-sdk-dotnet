@@ -268,6 +268,29 @@ Task<FileAction> RemoteFile.Move(
 
 ---
 
+## Transform a file and save the output to a destination path
+
+```
+Task<FileAction> RemoteFile.Transform(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the transformed output.
+* `transform_type` (string): Required - Transform type. Supported values are `image_convert` and `document_convert`.
+* `target_format` (string): Required - Destination format to create.
+* `width` (Nullable<Int64>): Maximum output width for image_convert.
+* `height` (Nullable<Int64>): Maximum output height for image_convert.
+* `overwrite` (bool): Overwrite existing file in the destination?
+
+
+---
+
 ## Decrypt a GPG-encrypted file and save it to a destination path
 
 ```
@@ -508,6 +531,36 @@ File.Move(parameters);
 * `path` (string): Required - Path to operate on.
 * `destination` (string): Required - Move destination path.
 * `overwrite` (bool): Overwrite existing file(s) in the destination?
+
+
+---
+
+## Transform a file and save the output to a destination path
+
+```
+var File = RemoteFile.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("transform_type", "transform_type");
+parameters.Add("target_format", "target_format");
+parameters.Add("width", 1);
+parameters.Add("height", 1);
+parameters.Add("overwrite", false);
+
+File.Transform(parameters);
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the transformed output.
+* `transform_type` (string): Required - Transform type. Supported values are `image_convert` and `document_convert`.
+* `target_format` (string): Required - Destination format to create.
+* `width` (Nullable<Int64>): Maximum output width for image_convert.
+* `height` (Nullable<Int64>): Maximum output height for image_convert.
+* `overwrite` (bool): Overwrite existing file in the destination?
 
 
 ---
