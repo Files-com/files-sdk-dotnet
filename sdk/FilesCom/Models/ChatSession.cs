@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("user_id", null);
             }
+            if (!this.attributes.ContainsKey("ai_task_id"))
+            {
+                this.attributes.Add("ai_task_id", null);
+            }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
                 this.attributes.Add("workspace_id", null);
@@ -94,6 +98,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// AI Task ID. Present when the conversation was started by an AI Task.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ai_task_id")]
+        public Nullable<Int64> AiTaskId
+        {
+            get { return (Nullable<Int64>)attributes["ai_task_id"]; }
+            private set { attributes["ai_task_id"] = value; }
+        }
+
+        /// <summary>
         /// Workspace ID. `0` means the default workspace.
         /// </summary>
         [JsonInclude]
@@ -143,6 +158,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `ai_task_id`.
         /// </summary>
         public static FilesList<ChatSession> List(
 
@@ -160,6 +176,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<ChatSession>($"/chat_sessions", System.Net.Http.HttpMethod.Get, parameters, options);
