@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("ai_assistant_personality_id"))
+            {
+                this.attributes.Add("ai_assistant_personality_id", null);
+            }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
                 this.attributes.Add("workspace_id", null);
@@ -191,6 +195,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
+        /// </summary>
+        [JsonPropertyName("ai_assistant_personality_id")]
+        public Nullable<Int64> AiAssistantPersonalityId
+        {
+            get { return (Nullable<Int64>)attributes["ai_assistant_personality_id"]; }
+            set { attributes["ai_assistant_personality_id"] = value; }
+        }
+
+        /// <summary>
         /// ID of the Workspace associated with this Partner.
         /// </summary>
         [JsonPropertyName("workspace_id")]
@@ -292,6 +306,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
         ///   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -321,6 +336,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
@@ -524,6 +543,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
         ///   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -554,6 +574,10 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("root_folder") || parameters["root_folder"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: root_folder", "parameters[\"root_folder\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
@@ -623,6 +647,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
         ///   allow_bypassing_2fa_policies - boolean - Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
         ///   allow_credential_changes - boolean - Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -660,6 +685,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {

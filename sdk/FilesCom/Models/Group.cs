@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("usernames", null);
             }
+            if (!this.attributes.ContainsKey("ai_assistant_personality_id"))
+            {
+                this.attributes.Add("ai_assistant_personality_id", null);
+            }
             if (!this.attributes.ContainsKey("ftp_permission"))
             {
                 this.attributes.Add("ftp_permission", false);
@@ -174,6 +178,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
+        /// </summary>
+        [JsonPropertyName("ai_assistant_personality_id")]
+        public Nullable<Int64> AiAssistantPersonalityId
+        {
+            get { return (Nullable<Int64>)attributes["ai_assistant_personality_id"]; }
+            set { attributes["ai_assistant_personality_id"] = value; }
+        }
+
+        /// <summary>
         /// If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -252,6 +266,7 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
         ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -288,6 +303,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {
@@ -489,6 +508,7 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
         ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -522,6 +542,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {
@@ -574,6 +598,7 @@ namespace FilesCom.Models
         ///   notes - string - Group notes.
         ///   user_ids - string - A list of user ids. If sent as a string, should be comma-delimited.
         ///   admin_ids - string - A list of group admin user ids. If sent as a string, should be comma-delimited.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user or Partner assignment overrides it.
         ///   ftp_permission - boolean - If true, users in this group can use FTP to login.  This will override a false value of `ftp_permission` on the user level.
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
@@ -618,6 +643,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("admin_ids") && !(parameters["admin_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: admin_ids must be of type string", "parameters[\"admin_ids\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
             {

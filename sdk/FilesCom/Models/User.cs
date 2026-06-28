@@ -97,6 +97,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disabled_expired_or_inactive", false);
             }
+            if (!this.attributes.ContainsKey("ai_assistant_personality_id"))
+            {
+                this.attributes.Add("ai_assistant_personality_id", null);
+            }
             if (!this.attributes.ContainsKey("desktop_configuration_profile_id"))
             {
                 this.attributes.Add("desktop_configuration_profile_id", null);
@@ -608,6 +612,16 @@ namespace FilesCom.Models
         {
             get { return attributes["disabled_expired_or_inactive"] == null ? false : (bool)attributes["disabled_expired_or_inactive"]; }
             set { attributes["disabled_expired_or_inactive"] = value; }
+        }
+
+        /// <summary>
+        /// AI Assistant Personality ID assigned directly to this user, if any.
+        /// </summary>
+        [JsonPropertyName("ai_assistant_personality_id")]
+        public Nullable<Int64> AiAssistantPersonalityId
+        {
+            get { return (Nullable<Int64>)attributes["ai_assistant_personality_id"]; }
+            set { attributes["ai_assistant_personality_id"] = value; }
         }
 
         /// <summary>
@@ -1517,6 +1531,7 @@ namespace FilesCom.Models
         ///   password - string - User password.
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned directly to this user, if any.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
@@ -1636,6 +1651,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("announcements_read") && !(parameters["announcements_read"] is bool))
             {
                 throw new ArgumentException("Bad parameter: announcements_read must be of type bool", "parameters[\"announcements_read\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
@@ -2065,6 +2084,7 @@ namespace FilesCom.Models
         ///   password - string - User password.
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned directly to this user, if any.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
@@ -2178,6 +2198,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("announcements_read") && !(parameters["announcements_read"] is bool))
             {
                 throw new ArgumentException("Bad parameter: announcements_read must be of type bool", "parameters[\"announcements_read\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
@@ -2514,6 +2538,7 @@ namespace FilesCom.Models
         ///   password - string - User password.
         ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
         ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned directly to this user, if any.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
         ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
@@ -2641,6 +2666,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("announcements_read") && !(parameters["announcements_read"] is bool))
             {
                 throw new ArgumentException("Bad parameter: announcements_read must be of type bool", "parameters[\"announcements_read\"]");
+            }
+            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {

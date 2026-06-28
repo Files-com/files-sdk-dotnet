@@ -11,6 +11,7 @@
   "allow_user_creation": true,
   "cc_emails_to_responsible_party": true,
   "id": 1,
+  "ai_assistant_personality_id": 1,
   "workspace_id": 1,
   "name": "Acme Corp",
   "notes": "This is a note about the partner.",
@@ -39,6 +40,7 @@
 * `allow_user_creation` / `AllowUserCreation`  (bool): Allow Partner Admins to create users.
 * `cc_emails_to_responsible_party` / `CcEmailsToResponsibleParty`  (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner.
+* `ai_assistant_personality_id` / `AiAssistantPersonalityId`  (Nullable<Int64>): AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace associated with this Partner.
 * `name` / `Name`  (string): The name of the Partner.
 * `notes` / `Notes`  (string): Notes about this Partner.
@@ -102,6 +104,7 @@ Task<Partner> Partner.Create(
 
 ### Parameters
 
+* `ai_assistant_personality_id` (Nullable<Int64>): AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -132,6 +135,7 @@ Task<Partner> Partner.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+* `ai_assistant_personality_id` (Nullable<Int64>): AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
@@ -172,6 +176,7 @@ var Partner = Partner.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("ai_assistant_personality_id", 1);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("allow_bypassing_2fa_policies", false);
 parameters.Add("allow_credential_changes", false);
@@ -191,6 +196,7 @@ Partner.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+* `ai_assistant_personality_id` (Nullable<Int64>): AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs for this Partner. Newline delimited. Partner User IP access is allowed when the IP matches the Partner, User, or Site allowed IP lists.
 * `allow_bypassing_2fa_policies` (bool): Allow Partner Admins to change Two-Factor Authentication requirements for Partner Users.
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
