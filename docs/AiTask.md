@@ -9,6 +9,7 @@
   "name": "Summarize daily reports",
   "description": "Summarizes files uploaded by the accounting team.",
   "prompt": "Summarize the uploaded file and identify follow-up actions.",
+  "permission_set": "files_only",
   "path": "incoming/reports",
   "source": "*.pdf",
   "disabled": true,
@@ -41,6 +42,7 @@
 * `name` / `Name`  (string): AI Task name.
 * `description` / `Description`  (string): AI Task description.
 * `prompt` / `Prompt`  (string): Prompt sent when this AI Task is invoked.
+* `permission_set` / `PermissionSet`  (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `path` / `Path`  (string): Path scope used for action-triggered AI Tasks. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `source` / `Source`  (string): Source glob used with `path` for action-triggered AI Tasks.
 * `disabled` / `Disabled`  (bool): If true, this AI Task will not run.
@@ -116,6 +118,7 @@ Task<AiTask> AiTask.Create(
 * `interval` (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `name` (string): Required - AI Task name.
 * `path` (string): Path scope used for action-triggered AI Tasks.
+* `permission_set` (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `prompt` (string): Required - Prompt sent when this AI Task is invoked.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
@@ -165,6 +168,7 @@ Task<AiTask> AiTask.Update(
 * `interval` (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `name` (string): AI Task name.
 * `path` (string): Path scope used for action-triggered AI Tasks.
+* `permission_set` (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `prompt` (string): Prompt sent when this AI Task is invoked.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
@@ -226,6 +230,7 @@ parameters.Add("holiday_region", "us");
 parameters.Add("interval", "day");
 parameters.Add("name", "Summarize daily reports");
 parameters.Add("path", "incoming/reports");
+parameters.Add("permission_set", "files_only");
 parameters.Add("prompt", "Summarize the uploaded file and identify follow-up actions.");
 parameters.Add("recurring_day", 1);
 parameters.Add("schedule_days_of_week", [1,3,5]);
@@ -248,6 +253,7 @@ AiTask.Update(parameters);
 * `interval` (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `name` (string): AI Task name.
 * `path` (string): Path scope used for action-triggered AI Tasks.
+* `permission_set` (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `prompt` (string): Prompt sent when this AI Task is invoked.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.

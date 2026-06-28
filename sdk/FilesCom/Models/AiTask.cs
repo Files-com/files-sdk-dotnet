@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("prompt", null);
             }
+            if (!this.attributes.ContainsKey("permission_set"))
+            {
+                this.attributes.Add("permission_set", null);
+            }
             if (!this.attributes.ContainsKey("path"))
             {
                 this.attributes.Add("path", null);
@@ -179,6 +183,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["prompt"]; }
             set { attributes["prompt"] = value; }
+        }
+
+        /// <summary>
+        /// Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
+        /// </summary>
+        [JsonPropertyName("permission_set")]
+        public string PermissionSet
+        {
+            get { return (string)attributes["permission_set"]; }
+            set { attributes["permission_set"] = value; }
         }
 
         /// <summary>
@@ -377,6 +391,7 @@ namespace FilesCom.Models
         ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
         ///   name - string - AI Task name.
         ///   path - string - Path scope used for action-triggered AI Tasks.
+        ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
@@ -427,6 +442,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
             if (parameters.ContainsKey("prompt") && !(parameters["prompt"] is string))
             {
@@ -624,6 +643,7 @@ namespace FilesCom.Models
         ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
         ///   name (required) - string - AI Task name.
         ///   path - string - Path scope used for action-triggered AI Tasks.
+        ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt (required) - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
@@ -674,6 +694,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
             if (parameters.ContainsKey("prompt") && !(parameters["prompt"] is string))
             {
@@ -766,6 +790,7 @@ namespace FilesCom.Models
         ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
         ///   name - string - AI Task name.
         ///   path - string - Path scope used for action-triggered AI Tasks.
+        ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
@@ -824,6 +849,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
+            {
+                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
             }
             if (parameters.ContainsKey("prompt") && !(parameters["prompt"] is string))
             {

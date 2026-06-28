@@ -20,7 +20,8 @@
   "site_id": 1,
   "site_name": "example",
   "url": "example",
-  "user_id": 1
+  "user_id": 1,
+  "workspace_id": 1
 }
 ```
 
@@ -35,12 +36,13 @@
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS Secret Key to use with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
 * `last_use_at` / `LastUseAt`  (Nullable<DateTime>): API Key last used - note this value is only updated once per 3 hour period, so the 'actual' time of last use may be up to 3 hours later than this timestamp.
 * `name` / `Name`  (string): Internal name for the API Key.  For your use.
-* `permission_set` / `PermissionSet`  (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` / `PermissionSet`  (string): Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user.
 * `platform` / `Platform`  (string): If this API key represents a Desktop app, what platform was it created on?
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `site_name` / `SiteName`  (string): Site Name
 * `url` / `Url`  (string): URL for API host.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID for the owner of this API Key.  May be blank for Site-wide API Keys.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID for this API Key. `0` means the default workspace.
 * `path` / `Path`  (string): Folder path restriction for `office_integration` permission set API keys.
 
 
@@ -61,7 +63,7 @@ Task<FilesList<ApiKey>> ApiKey.List(
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id` and `workspace_id`.
 * `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `aws_style_credentials` and `expires_at`.
 * `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `expires_at`.
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `expires_at`.
@@ -119,7 +121,8 @@ Task<ApiKey> ApiKey.Create(
 * `name` (string): Required - Internal name for the API Key.  For your use.
 * `aws_style_credentials` (bool): If `true`, this API key will be usable with AWS-compatible endpoints, such as our Inbound S3-compatible endpoint.
 * `path` (string): Folder path restriction for `office_integration` permission set API keys.
-* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user.
+* `workspace_id` (Nullable<Int64>): Workspace ID for this API Key. `0` means the default workspace.
 
 
 ---
@@ -138,7 +141,7 @@ Task<ApiKey> ApiKey.UpdateCurrent(
 
 * `expires_at` (string): API Key expiration date
 * `name` (string): Internal name for the API Key.  For your use.
-* `permission_set` (string): Permissions for this API Key. It must be full for site-wide API Keys.  Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Additional permission sets may become available in the future, such as for a Site Admin to give a key with no administrator privileges.  If you have ideas for permission sets, please let us know.
+* `permission_set` (string): Permissions for this API Key. Keys with the `desktop_app` permission set only have the ability to do the functions provided in our Desktop App (File and Share Link operations). Keys with the `office_integration` permission set are auto generated, and automatically expire, to allow users to interact with office integration platforms. Keys with the `files_only` permission set can perform file operations as a full-access file user in the key's workspace scope, but cannot use site admin, workspace admin, folder admin, group admin, partner admin, or billing privileges from the owning user.
 
 
 ---
