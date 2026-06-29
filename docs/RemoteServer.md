@@ -67,6 +67,7 @@
   "outbound_agent_id": 1,
   "filebase_bucket": "my-bucket",
   "filebase_access_key": "example",
+  "files_api_key_prefix": "example",
   "cloudflare_bucket": "my-bucket",
   "cloudflare_access_key": "example",
   "cloudflare_endpoint": "https://<ACCOUNT_ID>.r2.cloudflarestorage.com",
@@ -141,6 +142,7 @@
 * `outbound_agent_id` / `OutboundAgentId`  (Nullable<Int64>): Route traffic to outbound on a files-agent
 * `filebase_bucket` / `FilebaseBucket`  (string): Filebase: Bucket name
 * `filebase_access_key` / `FilebaseAccessKey`  (string): Filebase: Access Key.
+* `files_api_key_prefix` / `FilesApiKeyPrefix`  (string): Files.com direct link: paired API key prefix.
 * `cloudflare_bucket` / `CloudflareBucket`  (string): Cloudflare: Bucket name
 * `cloudflare_access_key` / `CloudflareAccessKey`  (string): Cloudflare: Access Key.
 * `cloudflare_endpoint` / `CloudflareEndpoint`  (string): Cloudflare: endpoint
@@ -168,6 +170,7 @@
 * `linode_secret_key` / `LinodeSecretKey`  (string): Linode: Secret Key
 * `s3_compatible_secret_key` / `S3CompatibleSecretKey`  (string): S3-compatible: Secret Key
 * `wasabi_secret_key` / `WasabiSecretKey`  (string): Wasabi: Secret Key
+* `files_api_key` / `FilesApiKey`  (string): Files.com direct link: API key used once to pair the remote server.
 
 
 ---
@@ -278,6 +281,7 @@ Task<RemoteServer> RemoteServer.Create(
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `filebase_access_key` (string): Filebase: Access Key.
 * `filebase_bucket` (string): Filebase: Bucket name
+* `files_api_key` (string): Files.com direct link: API key used once to pair the remote server.
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
@@ -417,6 +421,7 @@ Task<RemoteServer> RemoteServer.Update(
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `filebase_access_key` (string): Filebase: Access Key.
 * `filebase_bucket` (string): Filebase: Bucket name
+* `files_api_key` (string): Files.com direct link: API key used once to pair the remote server.
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
@@ -644,6 +649,7 @@ RemoteServer.Update(parameters);
 * `enable_dedicated_ips` (bool): `true` if remote server only accepts connections from dedicated IPs
 * `filebase_access_key` (string): Filebase: Access Key.
 * `filebase_bucket` (string): Filebase: Bucket name
+* `files_api_key` (string): Files.com direct link: API key used once to pair the remote server.
 * `files_agent_permission_set` (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version

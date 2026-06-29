@@ -281,6 +281,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("filebase_access_key", null);
             }
+            if (!this.attributes.ContainsKey("files_api_key_prefix"))
+            {
+                this.attributes.Add("files_api_key_prefix", null);
+            }
             if (!this.attributes.ContainsKey("cloudflare_bucket"))
             {
                 this.attributes.Add("cloudflare_bucket", null);
@@ -388,6 +392,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("wasabi_secret_key"))
             {
                 this.attributes.Add("wasabi_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("files_api_key"))
+            {
+                this.attributes.Add("files_api_key", null);
             }
         }
 
@@ -1046,6 +1054,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Files.com direct link: paired API key prefix.
+        /// </summary>
+        [JsonPropertyName("files_api_key_prefix")]
+        public string FilesApiKeyPrefix
+        {
+            get { return (string)attributes["files_api_key_prefix"]; }
+            set { attributes["files_api_key_prefix"] = value; }
+        }
+
+        /// <summary>
         /// Cloudflare: Bucket name
         /// </summary>
         [JsonPropertyName("cloudflare_bucket")]
@@ -1319,6 +1337,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Files.com direct link: API key used once to pair the remote server.
+        /// </summary>
+        [JsonPropertyName("files_api_key")]
+        public string FilesApiKey
+        {
+            get { return (string)attributes["files_api_key"]; }
+            set { attributes["files_api_key"] = value; }
+        }
+
+        /// <summary>
         /// Push update to Files Agent
         /// </summary>
         public async Task<AgentPushUpdate> AgentPushUpdate(Dictionary<string, object> parameters)
@@ -1484,6 +1512,7 @@ namespace FilesCom.Models
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   filebase_bucket - string - Filebase: Bucket name
+        ///   files_api_key - string - Files.com direct link: API key used once to pair the remote server.
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
@@ -1694,6 +1723,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
+            if (parameters.ContainsKey("files_api_key") && !(parameters["files_api_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: files_api_key must be of type string", "parameters[\"files_api_key\"]");
             }
             if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
             {
@@ -2084,6 +2117,7 @@ namespace FilesCom.Models
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   filebase_bucket - string - Filebase: Bucket name
+        ///   files_api_key - string - Files.com direct link: API key used once to pair the remote server.
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
@@ -2287,6 +2321,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
+            if (parameters.ContainsKey("files_api_key") && !(parameters["files_api_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: files_api_key must be of type string", "parameters[\"files_api_key\"]");
             }
             if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
             {
@@ -2636,6 +2674,7 @@ namespace FilesCom.Models
         ///   enable_dedicated_ips - boolean - `true` if remote server only accepts connections from dedicated IPs
         ///   filebase_access_key - string - Filebase: Access Key.
         ///   filebase_bucket - string - Filebase: Bucket name
+        ///   files_api_key - string - Files.com direct link: API key used once to pair the remote server.
         ///   files_agent_permission_set - string - Local permissions for files agent. read_only, write_only, or read_write
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
@@ -2854,6 +2893,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
             {
                 throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+            }
+            if (parameters.ContainsKey("files_api_key") && !(parameters["files_api_key"] is string))
+            {
+                throw new ArgumentException("Bad parameter: files_api_key must be of type string", "parameters[\"files_api_key\"]");
             }
             if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
             {
