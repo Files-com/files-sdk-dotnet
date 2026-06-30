@@ -1108,8 +1108,9 @@ namespace FilesCom.Models
         ///
         /// Parameters:
         ///   destination (required) - string - Destination file path for the transformed output.
-        ///   transform_type (required) - string - Transform type. Supported values are `image_convert` and `document_convert`.
+        ///   transform_type (required) - string - Transform type. Supported values are `image_convert`, `document_convert`, and `files_transform_script_execute`.
         ///   target_format (required) - string - Destination format to create.
+        ///   script - string - Files TransformScript source. Required when transform_type is `files_transform_script_execute`.
         ///   width - int64 - Maximum output width for image_convert.
         ///   height - int64 - Maximum output height for image_convert.
         ///   overwrite - boolean - Overwrite existing file in the destination?
@@ -1154,6 +1155,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("target_format") && !(parameters["target_format"] is string))
             {
                 throw new ArgumentException("Bad parameter: target_format must be of type string", "parameters[\"target_format\"]");
+            }
+            if (parameters.ContainsKey("script") && !(parameters["script"] is string))
+            {
+                throw new ArgumentException("Bad parameter: script must be of type string", "parameters[\"script\"]");
             }
             if (parameters.ContainsKey("width") && !(parameters["width"] is Nullable<Int64>))
             {
@@ -1975,8 +1980,9 @@ namespace FilesCom.Models
         ///
         /// Parameters:
         ///   destination (required) - string - Destination file path for the transformed output.
-        ///   transform_type (required) - string - Transform type. Supported values are `image_convert` and `document_convert`.
+        ///   transform_type (required) - string - Transform type. Supported values are `image_convert`, `document_convert`, and `files_transform_script_execute`.
         ///   target_format (required) - string - Destination format to create.
+        ///   script - string - Files TransformScript source. Required when transform_type is `files_transform_script_execute`.
         ///   width - int64 - Maximum output width for image_convert.
         ///   height - int64 - Maximum output height for image_convert.
         ///   overwrite - boolean - Overwrite existing file in the destination?
@@ -2029,6 +2035,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("target_format") && !(parameters["target_format"] is string))
             {
                 throw new ArgumentException("Bad parameter: target_format must be of type string", "parameters[\"target_format\"]");
+            }
+            if (parameters.ContainsKey("script") && !(parameters["script"] is string))
+            {
+                throw new ArgumentException("Bad parameter: script must be of type string", "parameters[\"script\"]");
             }
             if (parameters.ContainsKey("width") && !(parameters["width"] is Nullable<Int64>))
             {
