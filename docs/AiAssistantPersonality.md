@@ -6,6 +6,7 @@
 {
   "id": 1,
   "workspace_id": 1,
+  "name": "Concise Assistant",
   "system_prompt": "Respond as a concise operations assistant.",
   "use_by_default": true,
   "apply_to_all_workspaces": true,
@@ -16,6 +17,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): AI Assistant Personality ID.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
+* `name` / `Name`  (string): AI Assistant Personality name.
 * `system_prompt` / `SystemPrompt`  (string): System prompt injected into the in-app AI Assistant.
 * `use_by_default` / `UseByDefault`  (bool): Whether this personality is the default personality for the Workspace.
 * `apply_to_all_workspaces` / `ApplyToAllWorkspaces`  (bool): If true, this default-workspace personality can apply to users in all workspaces.
@@ -75,6 +77,7 @@ Task<AiAssistantPersonality> AiAssistantPersonality.Create(
 ### Parameters
 
 * `apply_to_all_workspaces` (bool): If true, this default-workspace personality can apply to users in all workspaces.
+* `name` (string): Required - AI Assistant Personality name.
 * `system_prompt` (string): Required - System prompt injected into the in-app AI Assistant.
 * `use_by_default` (bool): Whether this personality is the default personality for the Workspace.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
@@ -96,6 +99,7 @@ Task<AiAssistantPersonality> AiAssistantPersonality.Update(
 
 * `id` (Nullable<Int64>): Required - Ai Assistant Personality ID.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace personality can apply to users in all workspaces.
+* `name` (string): AI Assistant Personality name.
 * `system_prompt` (string): System prompt injected into the in-app AI Assistant.
 * `use_by_default` (bool): Whether this personality is the default personality for the Workspace.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
@@ -128,6 +132,7 @@ var AiAssistantPersonality = AiAssistantPersonality.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("apply_to_all_workspaces", false);
+parameters.Add("name", "Concise Assistant");
 parameters.Add("system_prompt", "Respond as a concise operations assistant.");
 parameters.Add("use_by_default", false);
 parameters.Add("workspace_id", 0);
@@ -139,6 +144,7 @@ AiAssistantPersonality.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Ai Assistant Personality ID.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace personality can apply to users in all workspaces.
+* `name` (string): AI Assistant Personality name.
 * `system_prompt` (string): System prompt injected into the in-app AI Assistant.
 * `use_by_default` (bool): Whether this personality is the default personality for the Workspace.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.

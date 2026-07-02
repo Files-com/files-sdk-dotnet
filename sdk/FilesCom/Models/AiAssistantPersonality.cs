@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
+            if (!this.attributes.ContainsKey("name"))
+            {
+                this.attributes.Add("name", null);
+            }
             if (!this.attributes.ContainsKey("system_prompt"))
             {
                 this.attributes.Add("system_prompt", null);
@@ -96,6 +100,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// AI Assistant Personality name.
+        /// </summary>
+        [JsonPropertyName("name")]
+        public string Name
+        {
+            get { return (string)attributes["name"]; }
+            set { attributes["name"] = value; }
+        }
+
+        /// <summary>
         /// System prompt injected into the in-app AI Assistant.
         /// </summary>
         [JsonPropertyName("system_prompt")]
@@ -152,6 +166,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace personality can apply to users in all workspaces.
+        ///   name - string - AI Assistant Personality name.
         ///   system_prompt - string - System prompt injected into the in-app AI Assistant.
         ///   use_by_default - boolean - Whether this personality is the default personality for the Workspace.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
@@ -176,6 +191,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("system_prompt") && !(parameters["system_prompt"] is string))
             {
@@ -344,6 +363,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace personality can apply to users in all workspaces.
+        ///   name (required) - string - AI Assistant Personality name.
         ///   system_prompt (required) - string - System prompt injected into the in-app AI Assistant.
         ///   use_by_default - boolean - Whether this personality is the default personality for the Workspace.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
@@ -357,6 +377,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("name") || parameters["name"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
+            }
             if (!parameters.ContainsKey("system_prompt") || parameters["system_prompt"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: system_prompt", "parameters[\"system_prompt\"]");
@@ -364,6 +388,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("system_prompt") && !(parameters["system_prompt"] is string))
             {
@@ -394,6 +422,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace personality can apply to users in all workspaces.
+        ///   name - string - AI Assistant Personality name.
         ///   system_prompt - string - System prompt injected into the in-app AI Assistant.
         ///   use_by_default - boolean - Whether this personality is the default personality for the Workspace.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
@@ -426,6 +455,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("system_prompt") && !(parameters["system_prompt"] is string))
             {
