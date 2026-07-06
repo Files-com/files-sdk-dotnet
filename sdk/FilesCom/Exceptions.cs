@@ -244,6 +244,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class InvalidSearchQueryException : BadRequestException
+    {
+        public InvalidSearchQueryException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class InvalidSortFieldException : BadRequestException
     {
         public InvalidSortFieldException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
