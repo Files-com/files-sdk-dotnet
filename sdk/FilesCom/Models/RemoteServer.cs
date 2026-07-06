@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class RemoteServer
+    public class RemoteServer : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
@@ -407,6 +407,11 @@ namespace FilesCom.Models
         public object GetOption(string name)
         {
             return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        void IModel.SetOptions(Dictionary<string, object> options)
+        {
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
 
         public void SetOption(string name, object value)
@@ -1371,7 +1376,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<AgentPushUpdate>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -1462,7 +1467,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerConfigurationFile>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -1881,7 +1886,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -2016,7 +2021,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -2067,7 +2072,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerConfigurationFile>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -2483,7 +2488,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -2525,7 +2530,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<AgentPushUpdate>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<AgentPushUpdate>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -2624,7 +2629,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServerConfigurationFile>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerConfigurationFile>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -3051,7 +3056,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<RemoteServer>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, options);
             }
             catch (JsonException)
             {

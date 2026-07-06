@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class Behavior
+    public class Behavior : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
@@ -83,6 +83,11 @@ namespace FilesCom.Models
         public object GetOption(string name)
         {
             return (this.options.ContainsKey(name) ? this.options[name] : null);
+        }
+
+        void IModel.SetOptions(Dictionary<string, object> options)
+        {
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
 
         public void SetOption(string name, object value)
@@ -264,7 +269,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Behavior>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<Behavior>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -394,7 +399,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Behavior>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<Behavior>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -535,7 +540,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Behavior>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<Behavior>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -663,7 +668,7 @@ namespace FilesCom.Models
 
             try
             {
-                return JsonSerializer.Deserialize<Behavior>(responseJson, JsonUtil.Options);
+                return JsonUtil.DeserializeWithOptions<Behavior>(responseJson, options);
             }
             catch (JsonException)
             {

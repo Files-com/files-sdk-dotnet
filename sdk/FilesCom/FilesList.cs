@@ -56,7 +56,7 @@ namespace FilesCom
                 string body = await response.Content.ReadAsStringAsync();
                 try
                 {
-                    data = JsonSerializer.Deserialize<List<T>>(body, JsonUtil.Options);
+                    data = JsonUtil.DeserializeWithOptions<List<T>>(body, options);
                 }
                 catch (JsonException)
                 {
