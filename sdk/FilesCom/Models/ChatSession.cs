@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("title"))
+            {
+                this.attributes.Add("title", null);
+            }
             if (!this.attributes.ContainsKey("user_id"))
             {
                 this.attributes.Add("user_id", null);
@@ -89,6 +93,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["id"]; }
             private set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Short AI-generated chat title.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("title")]
+        public string Title
+        {
+            get { return (string)attributes["title"]; }
+            private set { attributes["title"] = value; }
         }
 
         /// <summary>
