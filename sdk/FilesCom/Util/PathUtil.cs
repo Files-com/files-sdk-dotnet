@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+
+[assembly: InternalsVisibleTo("FilesTests")]
 
 namespace FilesCom.Util
 {
@@ -222,15 +225,15 @@ namespace FilesCom.Util
             return newStr;
         }
 
-        private static string normalize(params string[] args)
+        internal static string normalize(params string[] args)
         {
             List<string> all_paths = new List<string>();
             foreach (string arg in args)
             {
-                string[] paths = arg.Split('/');
+                string[] paths = Regex.Replace(arg, BACKSLASH, "/").Split('/');
                 foreach (string path in paths)
                 {
-                    string clnPath = Regex.Replace(Regex.Replace(path, NULL_BYTE, ""), BACKSLASH, "/");
+                    string clnPath = cleanpath(Regex.Replace(path, NULL_BYTE, ""));
                     if (clnPath != null && clnPath.Length > 0)
                     {
                         all_paths.Add(clnPath);

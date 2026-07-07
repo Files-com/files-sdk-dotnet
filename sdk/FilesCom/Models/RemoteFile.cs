@@ -37,6 +37,16 @@ namespace FilesCom.Models
             return f;
         }
 
+        private static string UnderscoreDestinationPath(string root, long id, string relativePath = null)
+        {
+            return PathUtil.normalize("_", root, id.ToString(), relativePath ?? "");
+        }
+
+        internal static string UnderscoreUploadDestinationPath(string root, long id, string localPath, string destinationPath = null)
+        {
+            return UnderscoreDestinationPath(root, id, destinationPath ?? System.IO.Path.GetFileName(localPath));
+        }
+
         private static async Task<Tuple<Int64, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
         {
             if (parameters == null)
@@ -74,6 +84,121 @@ namespace FilesCom.Models
             System.IO.Stream readStream = System.IO.File.OpenRead(localPath);
             return await UploadFile(destinationPath, readStream, fileLength, mTime, options, parameters);
         }
+
+        public static async Task<bool> UploadToRemoteServer(string localPath, long remoteServerId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return await UploadFile(localPath, UnderscoreUploadDestinationPath("RemoteServers", remoteServerId, localPath, destinationPath), options, parameters);
+        }
+
+        public static async Task<bool> UploadToRemoteServer(long remoteServerId, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return await UploadFile(UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath), readStream, fileLength, mTime, options, parameters);
+        }
+
+        public static async Task<FileAction> CopyToRemoteServer(string path, long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
+            return await Copy(path, parameters, options);
+        }
+
+        public static async Task<FileAction> MoveToRemoteServer(string path, long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
+            return await Move(path, parameters, options);
+        }
+
+        public async Task<FileAction> CopyToRemoteServer(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
+            return await Copy(parameters);
+        }
+
+        public async Task<FileAction> MoveToRemoteServer(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
+            return await Move(parameters);
+        }
+
+        public static async Task<bool> UploadToSnapshot(string localPath, long snapshotId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return await UploadFile(localPath, UnderscoreUploadDestinationPath("Snapshots", snapshotId, localPath, destinationPath), options, parameters);
+        }
+
+        public static async Task<bool> UploadToSnapshot(long snapshotId, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return await UploadFile(UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath), readStream, fileLength, mTime, options, parameters);
+        }
+
+        public static async Task<FileAction> CopyToSnapshot(string path, long snapshotId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
+            return await Copy(path, parameters, options);
+        }
+
+        public static async Task<FileAction> MoveToSnapshot(string path, long snapshotId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
+            return await Move(path, parameters, options);
+        }
+
+        public async Task<FileAction> CopyToSnapshot(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
+            return await Copy(parameters);
+        }
+
+        public async Task<FileAction> MoveToSnapshot(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
+            return await Move(parameters);
+        }
+
+        public static async Task<bool> UploadToChildSite(string localPath, long siteId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return await UploadFile(localPath, UnderscoreUploadDestinationPath("Sites", siteId, localPath, destinationPath), options, parameters);
+        }
+
+        public static async Task<bool> UploadToChildSite(long siteId, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return await UploadFile(UnderscoreDestinationPath("Sites", siteId, destinationPath), readStream, fileLength, mTime, options, parameters);
+        }
+
+        public static async Task<FileAction> CopyToChildSite(string path, long siteId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Sites", siteId, destinationPath);
+            return await Copy(path, parameters, options);
+        }
+
+        public static async Task<FileAction> MoveToChildSite(string path, long siteId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Sites", siteId, destinationPath);
+            return await Move(path, parameters, options);
+        }
+
+        public async Task<FileAction> CopyToChildSite(long siteId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Sites", siteId, destinationPath);
+            return await Copy(parameters);
+        }
+
+        public async Task<FileAction> MoveToChildSite(long siteId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Sites", siteId, destinationPath);
+            return await Move(parameters);
+        }
+
 
         public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
         {

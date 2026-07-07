@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Text.Json;
 using FilesCom;
+using FilesCom.Models;
 using FilesCom.Util;
 
 namespace FilesTests.PathUtilTest
@@ -33,6 +34,17 @@ namespace FilesTests.PathUtilTest
         public void TestSame(string a, string b)
         {
             Assert.IsTrue(PathUtil.same(a, b));
+        }
+
+        [TestMethod]
+        public void TestNormalizePreservesPathIdentity()
+        {
+            Assert.AreEqual("remote/path/to/file.txt", PathUtil.normalize("/../../remote\\path//./to/file.txt"));
+            Assert.AreEqual("remote/path/to/file.txt", PathUtil.normalize("remote/../path/to/file.txt"));
+            Assert.AreEqual("_/RemoteServers/42/remote/path/to/file.txt",
+                PathUtil.normalize("_", "RemoteServers", "42", "/../../remote\\path//./to/file.txt"));
+            Assert.AreEqual("_/RemoteServers/42/file.txt",
+                RemoteFile.UnderscoreUploadDestinationPath("RemoteServers", 42, "local/path/to/file.txt"));
         }
     }
 }
