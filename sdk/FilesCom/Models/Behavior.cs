@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("value", null);
             }
+            if (!this.attributes.ContainsKey("public_hosting_url"))
+            {
+                this.attributes.Add("public_hosting_url", null);
+            }
             if (!this.attributes.ContainsKey("disable_parent_folder_behavior"))
             {
                 this.attributes.Add("disable_parent_folder_behavior", false);
@@ -164,6 +168,16 @@ namespace FilesCom.Models
         {
             get { return (object)attributes["value"]; }
             set { attributes["value"] = value; }
+        }
+
+        /// <summary>
+        /// Public URL for this publicly hosted folder when the `Serve Publicly` behavior has a key configured.  When a Custom Domain with `public_hosting` destination is attached to this behavior, the URL uses that domain.  Otherwise it uses the site's `subdomain.hosted-by-files.com` host.
+        /// </summary>
+        [JsonPropertyName("public_hosting_url")]
+        public string PublicHostingUrl
+        {
+            get { return (string)attributes["public_hosting_url"]; }
+            set { attributes["public_hosting_url"] = value; }
         }
 
         /// <summary>

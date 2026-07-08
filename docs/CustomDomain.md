@@ -18,11 +18,11 @@
 
 * `id` / `Id`  (Nullable<Int64>): Custom Domain ID.
 * `domain` / `Domain`  (string): Customer-owned domain name.
-* `destination` / `Destination`  (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
+* `destination` / `Destination`  (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
 * `dns_status` / `DnsStatus`  (string): Current DNS verification status.
 * `ssl_certificate_id` / `SslCertificateId`  (Nullable<Int64>): Current SSL certificate ID.
 * `brick_managed` / `BrickManaged`  (bool): Is this domain's SSL certificate automatically managed and renewed by Files.com?
-* `folder_behavior_id` / `FolderBehaviorId`  (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+* `folder_behavior_id` / `FolderBehaviorId`  (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): When this Custom Domain was created.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): When this Custom Domain was last updated.
 
@@ -77,8 +77,8 @@ Task<CustomDomain> CustomDomain.Create(
 
 ### Parameters
 
-* `destination` (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
-* `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+* `destination` (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
+* `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
 * `ssl_certificate_id` (Nullable<Int64>): Current SSL certificate ID.
 * `domain` (string): Required - Customer-owned domain name.
 
@@ -98,8 +98,8 @@ Task<CustomDomain> CustomDomain.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
-* `destination` (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
-* `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+* `destination` (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
+* `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
 * `ssl_certificate_id` (Nullable<Int64>): Current SSL certificate ID.
 * `domain` (string): Customer-owned domain name.
 
@@ -141,8 +141,8 @@ CustomDomain.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
-* `destination` (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, or `s3_endpoint`.
-* `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.
+* `destination` (string): Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
+* `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
 * `ssl_certificate_id` (Nullable<Int64>): Current SSL certificate ID.
 * `domain` (string): Customer-owned domain name.
 
