@@ -77,6 +77,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("partner_admin_ids", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("partner_channel_template_id"))
+            {
+                this.attributes.Add("partner_channel_template_id", null);
+            }
             if (!this.attributes.ContainsKey("partnership_role"))
             {
                 this.attributes.Add("partnership_role", null);
@@ -250,6 +254,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// ID of the Partner Channel Template assigned to this Partner.
+        /// </summary>
+        [JsonPropertyName("partner_channel_template_id")]
+        public Nullable<Int64> PartnerChannelTemplateId
+        {
+            get { return (Nullable<Int64>)attributes["partner_channel_template_id"]; }
+            set { attributes["partner_channel_template_id"] = value; }
+        }
+
+        /// <summary>
         /// This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
         /// </summary>
         [JsonPropertyName("partnership_role")]
@@ -319,6 +333,7 @@ namespace FilesCom.Models
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
         ///   notes - string - Notes about this Partner.
+        ///   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
         ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
         ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -373,6 +388,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+            }
+            if (parameters.ContainsKey("partner_channel_template_id") && !(parameters["partner_channel_template_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_channel_template_id must be of type Nullable<Int64>", "parameters[\"partner_channel_template_id\"]");
             }
             if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
             {
@@ -556,6 +575,7 @@ namespace FilesCom.Models
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
         ///   notes - string - Notes about this Partner.
+        ///   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
         ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
         ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -612,6 +632,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
             }
+            if (parameters.ContainsKey("partner_channel_template_id") && !(parameters["partner_channel_template_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_channel_template_id must be of type Nullable<Int64>", "parameters[\"partner_channel_template_id\"]");
+            }
             if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
@@ -660,6 +684,7 @@ namespace FilesCom.Models
         ///   allow_user_creation - boolean - Allow Partner Admins to create users.
         ///   cc_emails_to_responsible_party - boolean - When `true`, emails sent to Partner users are copied to the responsible User or Group.
         ///   notes - string - Notes about this Partner.
+        ///   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
         ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
         ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -722,6 +747,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
             {
                 throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+            }
+            if (parameters.ContainsKey("partner_channel_template_id") && !(parameters["partner_channel_template_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_channel_template_id must be of type Nullable<Int64>", "parameters[\"partner_channel_template_id\"]");
             }
             if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
             {

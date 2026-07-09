@@ -20,6 +20,7 @@
     2,
     3
   ],
+  "partner_channel_template_id": 1,
   "partnership_role": "host",
   "responsible_group_id": 1,
   "responsible_user_id": 1,
@@ -45,6 +46,7 @@
 * `name` / `Name`  (string): The name of the Partner.
 * `notes` / `Notes`  (string): Notes about this Partner.
 * `partner_admin_ids` / `PartnerAdminIds`  (Nullable<Int64>[]): Array of User IDs that are Partner Admins for this Partner.
+* `partner_channel_template_id` / `PartnerChannelTemplateId`  (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `partnership_role` / `PartnershipRole`  (string): This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
 * `responsible_group_id` / `ResponsibleGroupId`  (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` / `ResponsibleUserId`  (Nullable<Int64>): ID of the User responsible for this Partner.
@@ -112,6 +114,7 @@ Task<Partner> Partner.Create(
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `notes` (string): Notes about this Partner.
+* `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -143,6 +146,7 @@ Task<Partner> Partner.Update(
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `notes` (string): Notes about this Partner.
+* `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -184,6 +188,7 @@ parameters.Add("allow_providing_gpg_keys", false);
 parameters.Add("allow_user_creation", false);
 parameters.Add("cc_emails_to_responsible_party", false);
 parameters.Add("notes", "This is a note about the partner.");
+parameters.Add("partner_channel_template_id", 1);
 parameters.Add("responsible_group_id", 1);
 parameters.Add("responsible_user_id", 1);
 parameters.Add("tags", "example");
@@ -204,6 +209,7 @@ Partner.Update(parameters);
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
 * `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
 * `notes` (string): Notes about this Partner.
+* `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.

@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class PartnerChannel : IModel
+    public class PartnerChannelTemplate : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public PartnerChannel() : this(null, null) { }
+        public PartnerChannelTemplate() : this(null, null) { }
 
-        public PartnerChannel(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public PartnerChannelTemplate(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -37,13 +37,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
-            if (!this.attributes.ContainsKey("partner_id"))
+            if (!this.attributes.ContainsKey("name"))
             {
-                this.attributes.Add("partner_id", null);
-            }
-            if (!this.attributes.ContainsKey("partner_channel_template_id"))
-            {
-                this.attributes.Add("partner_channel_template_id", null);
+                this.attributes.Add("name", null);
             }
             if (!this.attributes.ContainsKey("path"))
             {
@@ -81,18 +77,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("effective_from_partner_folder_name", null);
             }
-            if (!this.attributes.ContainsKey("channel_path"))
-            {
-                this.attributes.Add("channel_path", null);
-            }
-            if (!this.attributes.ContainsKey("to_partner_folder_path"))
-            {
-                this.attributes.Add("to_partner_folder_path", null);
-            }
-            if (!this.attributes.ContainsKey("from_partner_folder_path"))
-            {
-                this.attributes.Add("from_partner_folder_path", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -117,7 +101,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// The unique ID of the Partner Channel.
+        /// The unique ID of the Partner Channel Template.
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
@@ -127,7 +111,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the Workspace associated with this Partner Channel.
+        /// ID of the Workspace associated with this Partner Channel Template.
         /// </summary>
         [JsonPropertyName("workspace_id")]
         public Nullable<Int64> WorkspaceId
@@ -137,23 +121,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the Partner this Channel belongs to.
+        /// The name of the Partner Channel Template.
         /// </summary>
-        [JsonPropertyName("partner_id")]
-        public Nullable<Int64> PartnerId
+        [JsonPropertyName("name")]
+        public string Name
         {
-            get { return (Nullable<Int64>)attributes["partner_id"]; }
-            set { attributes["partner_id"] = value; }
-        }
-
-        /// <summary>
-        /// ID of the Partner Channel Template that manages this Channel, if any.
-        /// </summary>
-        [JsonPropertyName("partner_channel_template_id")]
-        public Nullable<Int64> PartnerChannelTemplateId
-        {
-            get { return (Nullable<Int64>)attributes["partner_channel_template_id"]; }
-            set { attributes["partner_channel_template_id"] = value; }
+            get { return (string)attributes["name"]; }
+            set { attributes["name"] = value; }
         }
 
         /// <summary>
@@ -227,7 +201,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Resolved to-Partner folder name after Channel override and default.
+        /// Resolved to-Partner folder name after Template override and default.
         /// </summary>
         [JsonPropertyName("effective_to_partner_folder_name")]
         public string EffectiveToPartnerFolderName
@@ -237,43 +211,13 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Resolved from-Partner folder name after Channel override and default.
+        /// Resolved from-Partner folder name after Template override and default.
         /// </summary>
         [JsonPropertyName("effective_from_partner_folder_name")]
         public string EffectiveFromPartnerFolderName
         {
             get { return (string)attributes["effective_from_partner_folder_name"]; }
             set { attributes["effective_from_partner_folder_name"] = value; }
-        }
-
-        /// <summary>
-        /// Resolved Channel folder path.
-        /// </summary>
-        [JsonPropertyName("channel_path")]
-        public string ChannelPath
-        {
-            get { return (string)attributes["channel_path"]; }
-            set { attributes["channel_path"] = value; }
-        }
-
-        /// <summary>
-        /// Resolved to-Partner folder path.
-        /// </summary>
-        [JsonPropertyName("to_partner_folder_path")]
-        public string ToPartnerFolderPath
-        {
-            get { return (string)attributes["to_partner_folder_path"]; }
-            set { attributes["to_partner_folder_path"] = value; }
-        }
-
-        /// <summary>
-        /// Resolved from-Partner folder path.
-        /// </summary>
-        [JsonPropertyName("from_partner_folder_path")]
-        public string FromPartnerFolderPath
-        {
-            get { return (string)attributes["from_partner_folder_path"]; }
-            set { attributes["from_partner_folder_path"] = value; }
         }
 
         /// <summary>
@@ -284,9 +228,10 @@ namespace FilesCom.Models
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
         ///   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+        ///   name - string - The name of the Partner Channel Template.
         ///   path - string - Channel path relative to the Partner root folder.
         /// </summary>
-        public async Task<PartnerChannel> Update(Dictionary<string, object> parameters)
+        public async Task<PartnerChannelTemplate> Update(Dictionary<string, object> parameters)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -327,16 +272,20 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: to_partner_route_path must be of type string", "parameters[\"to_partner_route_path\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/partner_channels/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/partner_channel_templates/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<PartnerChannel>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<PartnerChannelTemplate>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -365,7 +314,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/partner_channels/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            await FilesClient.SendRequest($"/partner_channel_templates/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public async void Destroy(Dictionary<string, object> parameters)
@@ -382,7 +331,7 @@ namespace FilesCom.Models
             }
             else
             {
-                var newObj = await PartnerChannel.Create(this.attributes, this.options);
+                var newObj = await PartnerChannelTemplate.Create(this.attributes, this.options);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -391,10 +340,10 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `path` or `partner_id`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `partner_id` and `workspace_id`. Valid field combinations are `[ workspace_id, partner_id ]`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `name`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
-        public static FilesList<PartnerChannel> List(
+        public static FilesList<PartnerChannelTemplate> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -420,10 +369,10 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
-            return new FilesList<PartnerChannel>($"/partner_channels", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<PartnerChannelTemplate>($"/partner_channel_templates", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
-        public static FilesList<PartnerChannel> All(
+        public static FilesList<PartnerChannelTemplate> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -434,9 +383,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   id (required) - int64 - Partner Channel ID.
+        ///   id (required) - int64 - Partner Channel Template ID.
         /// </summary>
-        public static async Task<PartnerChannel> Find(
+        public static async Task<PartnerChannelTemplate> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -462,11 +411,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/partner_channels/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/partner_channel_templates/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<PartnerChannel>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<PartnerChannelTemplate>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -474,7 +423,7 @@ namespace FilesCom.Models
             }
         }
 
-        public static async Task<PartnerChannel> Get(
+        public static async Task<PartnerChannelTemplate> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -491,11 +440,11 @@ namespace FilesCom.Models
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
         ///   to_partner_route_path - string - Optional route path for files delivered to the Partner.
-        ///   partner_id (required) - int64 - ID of the Partner this Channel belongs to.
+        ///   name (required) - string - The name of the Partner Channel Template.
         ///   path (required) - string - Channel path relative to the Partner root folder.
-        ///   workspace_id - int64 - ID of the Workspace associated with this Partner Channel.
+        ///   workspace_id - int64 - ID of the Workspace associated with this Partner Channel Template.
         /// </summary>
-        public static async Task<PartnerChannel> Create(
+        public static async Task<PartnerChannelTemplate> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -504,9 +453,9 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
-            if (!parameters.ContainsKey("partner_id") || parameters["partner_id"] == null)
+            if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
-                throw new ArgumentNullException("Parameter missing: partner_id", "parameters[\"partner_id\"]");
+                throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
@@ -536,9 +485,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: to_partner_route_path must be of type string", "parameters[\"to_partner_route_path\"]");
             }
-            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
-                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
             }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
@@ -549,11 +498,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/partner_channels", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/partner_channel_templates", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<PartnerChannel>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<PartnerChannelTemplate>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -570,9 +519,10 @@ namespace FilesCom.Models
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
         ///   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+        ///   name - string - The name of the Partner Channel Template.
         ///   path - string - Channel path relative to the Partner root folder.
         /// </summary>
-        public static async Task<PartnerChannel> Update(
+        public static async Task<PartnerChannelTemplate> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -621,16 +571,20 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: to_partner_route_path must be of type string", "parameters[\"to_partner_route_path\"]");
             }
+            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            {
+                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/partner_channels/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest($"/partner_channel_templates/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<PartnerChannel>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<PartnerChannelTemplate>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -667,7 +621,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/partner_channels/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            await FilesClient.SendRequest($"/partner_channel_templates/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
         }
 
         public static async Task Destroy(
