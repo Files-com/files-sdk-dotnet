@@ -53,13 +53,13 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("from_partner_folder_name", null);
             }
-            if (!this.attributes.ContainsKey("from_partner_route_path"))
+            if (!this.attributes.ContainsKey("from_partner_route_path_pattern"))
             {
-                this.attributes.Add("from_partner_route_path", null);
+                this.attributes.Add("from_partner_route_path_pattern", null);
             }
-            if (!this.attributes.ContainsKey("to_partner_route_path"))
+            if (!this.attributes.ContainsKey("to_partner_route_path_pattern"))
             {
-                this.attributes.Add("to_partner_route_path", null);
+                this.attributes.Add("to_partner_route_path_pattern", null);
             }
             if (!this.attributes.ContainsKey("to_partner_managed_folder_paths"))
             {
@@ -161,23 +161,23 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Optional route path for files uploaded by the Partner.
+        /// Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
         /// </summary>
-        [JsonPropertyName("from_partner_route_path")]
-        public string FromPartnerRoutePath
+        [JsonPropertyName("from_partner_route_path_pattern")]
+        public string FromPartnerRoutePathPattern
         {
-            get { return (string)attributes["from_partner_route_path"]; }
-            set { attributes["from_partner_route_path"] = value; }
+            get { return (string)attributes["from_partner_route_path_pattern"]; }
+            set { attributes["from_partner_route_path_pattern"] = value; }
         }
 
         /// <summary>
-        /// Optional route path for files delivered to the Partner.
+        /// Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
         /// </summary>
-        [JsonPropertyName("to_partner_route_path")]
-        public string ToPartnerRoutePath
+        [JsonPropertyName("to_partner_route_path_pattern")]
+        public string ToPartnerRoutePathPattern
         {
-            get { return (string)attributes["to_partner_route_path"]; }
-            set { attributes["to_partner_route_path"] = value; }
+            get { return (string)attributes["to_partner_route_path_pattern"]; }
+            set { attributes["to_partner_route_path_pattern"] = value; }
         }
 
         /// <summary>
@@ -224,10 +224,10 @@ namespace FilesCom.Models
         /// Parameters:
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
-        ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
+        ///   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
-        ///   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+        ///   to_partner_route_path_pattern - string - Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
         ///   name - string - The name of the Partner Channel Template.
         ///   path - string - Channel path relative to the Partner root folder.
         /// </summary>
@@ -256,9 +256,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: from_partner_managed_folder_paths must be of type string[]", "parameters[\"from_partner_managed_folder_paths\"]");
             }
-            if (parameters.ContainsKey("from_partner_route_path") && !(parameters["from_partner_route_path"] is string))
+            if (parameters.ContainsKey("from_partner_route_path_pattern") && !(parameters["from_partner_route_path_pattern"] is string))
             {
-                throw new ArgumentException("Bad parameter: from_partner_route_path must be of type string", "parameters[\"from_partner_route_path\"]");
+                throw new ArgumentException("Bad parameter: from_partner_route_path_pattern must be of type string", "parameters[\"from_partner_route_path_pattern\"]");
             }
             if (parameters.ContainsKey("to_partner_folder_name") && !(parameters["to_partner_folder_name"] is string))
             {
@@ -268,9 +268,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: to_partner_managed_folder_paths must be of type string[]", "parameters[\"to_partner_managed_folder_paths\"]");
             }
-            if (parameters.ContainsKey("to_partner_route_path") && !(parameters["to_partner_route_path"] is string))
+            if (parameters.ContainsKey("to_partner_route_path_pattern") && !(parameters["to_partner_route_path_pattern"] is string))
             {
-                throw new ArgumentException("Bad parameter: to_partner_route_path must be of type string", "parameters[\"to_partner_route_path\"]");
+                throw new ArgumentException("Bad parameter: to_partner_route_path_pattern must be of type string", "parameters[\"to_partner_route_path_pattern\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -436,10 +436,10 @@ namespace FilesCom.Models
         /// Parameters:
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
-        ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
+        ///   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
-        ///   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+        ///   to_partner_route_path_pattern - string - Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
         ///   name (required) - string - The name of the Partner Channel Template.
         ///   path (required) - string - Channel path relative to the Partner root folder.
         ///   workspace_id - int64 - ID of the Workspace associated with this Partner Channel Template.
@@ -469,9 +469,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: from_partner_managed_folder_paths must be of type string[]", "parameters[\"from_partner_managed_folder_paths\"]");
             }
-            if (parameters.ContainsKey("from_partner_route_path") && !(parameters["from_partner_route_path"] is string))
+            if (parameters.ContainsKey("from_partner_route_path_pattern") && !(parameters["from_partner_route_path_pattern"] is string))
             {
-                throw new ArgumentException("Bad parameter: from_partner_route_path must be of type string", "parameters[\"from_partner_route_path\"]");
+                throw new ArgumentException("Bad parameter: from_partner_route_path_pattern must be of type string", "parameters[\"from_partner_route_path_pattern\"]");
             }
             if (parameters.ContainsKey("to_partner_folder_name") && !(parameters["to_partner_folder_name"] is string))
             {
@@ -481,9 +481,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: to_partner_managed_folder_paths must be of type string[]", "parameters[\"to_partner_managed_folder_paths\"]");
             }
-            if (parameters.ContainsKey("to_partner_route_path") && !(parameters["to_partner_route_path"] is string))
+            if (parameters.ContainsKey("to_partner_route_path_pattern") && !(parameters["to_partner_route_path_pattern"] is string))
             {
-                throw new ArgumentException("Bad parameter: to_partner_route_path must be of type string", "parameters[\"to_partner_route_path\"]");
+                throw new ArgumentException("Bad parameter: to_partner_route_path_pattern must be of type string", "parameters[\"to_partner_route_path_pattern\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -515,10 +515,10 @@ namespace FilesCom.Models
         /// Parameters:
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
-        ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
+        ///   from_partner_route_path_pattern - string - Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
-        ///   to_partner_route_path - string - Optional route path for files delivered to the Partner.
+        ///   to_partner_route_path_pattern - string - Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
         ///   name - string - The name of the Partner Channel Template.
         ///   path - string - Channel path relative to the Partner root folder.
         /// </summary>
@@ -555,9 +555,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: from_partner_managed_folder_paths must be of type string[]", "parameters[\"from_partner_managed_folder_paths\"]");
             }
-            if (parameters.ContainsKey("from_partner_route_path") && !(parameters["from_partner_route_path"] is string))
+            if (parameters.ContainsKey("from_partner_route_path_pattern") && !(parameters["from_partner_route_path_pattern"] is string))
             {
-                throw new ArgumentException("Bad parameter: from_partner_route_path must be of type string", "parameters[\"from_partner_route_path\"]");
+                throw new ArgumentException("Bad parameter: from_partner_route_path_pattern must be of type string", "parameters[\"from_partner_route_path_pattern\"]");
             }
             if (parameters.ContainsKey("to_partner_folder_name") && !(parameters["to_partner_folder_name"] is string))
             {
@@ -567,9 +567,9 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: to_partner_managed_folder_paths must be of type string[]", "parameters[\"to_partner_managed_folder_paths\"]");
             }
-            if (parameters.ContainsKey("to_partner_route_path") && !(parameters["to_partner_route_path"] is string))
+            if (parameters.ContainsKey("to_partner_route_path_pattern") && !(parameters["to_partner_route_path_pattern"] is string))
             {
-                throw new ArgumentException("Bad parameter: to_partner_route_path must be of type string", "parameters[\"to_partner_route_path\"]");
+                throw new ArgumentException("Bad parameter: to_partner_route_path_pattern must be of type string", "parameters[\"to_partner_route_path_pattern\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
