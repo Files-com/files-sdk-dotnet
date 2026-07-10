@@ -25,6 +25,7 @@
   "disabled_expired_or_inactive": true,
   "ai_assistant_personality_id": 1,
   "desktop_configuration_profile_id": 1,
+  "integration_centric_profile_id": 1,
   "email": "john.doe@files.com",
   "filesystem_layout": "site_root",
   "first_login_at": "2000-01-01T01:00:00Z",
@@ -113,6 +114,7 @@
 * `disabled_expired_or_inactive` / `DisabledExpiredOrInactive`  (bool): Computed property that returns true if user disabled or expired or inactive.
 * `ai_assistant_personality_id` / `AiAssistantPersonalityId`  (Nullable<Int64>): AI Assistant Personality ID assigned directly to this user, if any.
 * `desktop_configuration_profile_id` / `DesktopConfigurationProfileId`  (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
+* `integration_centric_profile_id` / `IntegrationCentricProfileId`  (Nullable<Int64>): Integration Centric Profile ID assigned directly to this user, if any.
 * `email` / `Email`  (string): User email address
 * `filesystem_layout` / `FilesystemLayout`  (string): File system layout
 * `first_login_at` / `FirstLoginAt`  (Nullable<DateTime>): User's first login time
@@ -279,6 +281,7 @@ Task<User> User.Create(
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
+* `integration_centric_profile_id` (Nullable<Int64>): Integration Centric Profile ID assigned directly to this user, if any.
 * `language` (string): Preferred language
 * `notification_daily_send_time` (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
@@ -412,6 +415,7 @@ Task<User> User.Update(
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
+* `integration_centric_profile_id` (Nullable<Int64>): Integration Centric Profile ID assigned directly to this user, if any.
 * `language` (string): Preferred language
 * `notification_daily_send_time` (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name
@@ -555,6 +559,7 @@ parameters.Add("disabled", true);
 parameters.Add("filesystem_layout", "site_root");
 parameters.Add("ftp_permission", true);
 parameters.Add("header_text", "User-specific message.");
+parameters.Add("integration_centric_profile_id", 1);
 parameters.Add("language", "en");
 parameters.Add("notification_daily_send_time", 18);
 parameters.Add("name", "John Doe");
@@ -629,6 +634,7 @@ User.Update(parameters);
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
 * `header_text` (string): Text to display to the user in the header of the UI
+* `integration_centric_profile_id` (Nullable<Int64>): Integration Centric Profile ID assigned directly to this user, if any.
 * `language` (string): Preferred language
 * `notification_daily_send_time` (Nullable<Int64>): Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
 * `name` (string): User's full name

@@ -81,6 +81,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("desktop_configuration_profile_id", null);
             }
+            if (!this.attributes.ContainsKey("integration_centric_profile_id"))
+            {
+                this.attributes.Add("integration_centric_profile_id", null);
+            }
             if (!this.attributes.ContainsKey("site_id"))
             {
                 this.attributes.Add("site_id", null);
@@ -247,6 +251,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+        /// </summary>
+        [JsonPropertyName("integration_centric_profile_id")]
+        public Nullable<Int64> IntegrationCentricProfileId
+        {
+            get { return (Nullable<Int64>)attributes["integration_centric_profile_id"]; }
+            set { attributes["integration_centric_profile_id"] = value; }
+        }
+
+        /// <summary>
         /// Site ID
         /// </summary>
         [JsonPropertyName("site_id")]
@@ -277,6 +291,7 @@ namespace FilesCom.Models
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
         /// </summary>
@@ -332,6 +347,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+            }
+            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
@@ -519,6 +538,7 @@ namespace FilesCom.Models
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name (required) - string - Group name.
         ///   workspace_id - int64 - Workspace ID
@@ -572,6 +592,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
             }
+            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
+            }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {
                 throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
@@ -609,6 +633,7 @@ namespace FilesCom.Models
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
         /// </summary>
@@ -672,6 +697,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+            }
+            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
             }
             if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
             {

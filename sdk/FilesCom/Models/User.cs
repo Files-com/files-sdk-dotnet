@@ -105,6 +105,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("desktop_configuration_profile_id", null);
             }
+            if (!this.attributes.ContainsKey("integration_centric_profile_id"))
+            {
+                this.attributes.Add("integration_centric_profile_id", null);
+            }
             if (!this.attributes.ContainsKey("email"))
             {
                 this.attributes.Add("email", "");
@@ -637,6 +641,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["desktop_configuration_profile_id"]; }
             set { attributes["desktop_configuration_profile_id"] = value; }
+        }
+
+        /// <summary>
+        /// Integration Centric Profile ID assigned directly to this user, if any.
+        /// </summary>
+        [JsonPropertyName("integration_centric_profile_id")]
+        public Nullable<Int64> IntegrationCentricProfileId
+        {
+            get { return (Nullable<Int64>)attributes["integration_centric_profile_id"]; }
+            set { attributes["integration_centric_profile_id"] = value; }
         }
 
         /// <summary>
@@ -1551,6 +1565,7 @@ namespace FilesCom.Models
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned directly to this user, if any.
         ///   language - string - Preferred language
         ///   notification_daily_send_time - int64 - Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
         ///   name - string - User's full name
@@ -1716,6 +1731,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("header_text") && !(parameters["header_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: header_text must be of type string", "parameters[\"header_text\"]");
+            }
+            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
             }
             if (parameters.ContainsKey("language") && !(parameters["language"] is string))
             {
@@ -2104,6 +2123,7 @@ namespace FilesCom.Models
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned directly to this user, if any.
         ///   language - string - Preferred language
         ///   notification_daily_send_time - int64 - Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
         ///   name - string - User's full name
@@ -2263,6 +2283,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("header_text") && !(parameters["header_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: header_text must be of type string", "parameters[\"header_text\"]");
+            }
+            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
             }
             if (parameters.ContainsKey("language") && !(parameters["language"] is string))
             {
@@ -2558,6 +2582,7 @@ namespace FilesCom.Models
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
         ///   header_text - string - Text to display to the user in the header of the UI
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned directly to this user, if any.
         ///   language - string - Preferred language
         ///   notification_daily_send_time - int64 - Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
         ///   name - string - User's full name
@@ -2731,6 +2756,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("header_text") && !(parameters["header_text"] is string))
             {
                 throw new ArgumentException("Bad parameter: header_text must be of type string", "parameters[\"header_text\"]");
+            }
+            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
             }
             if (parameters.ContainsKey("language") && !(parameters["language"] is string))
             {
