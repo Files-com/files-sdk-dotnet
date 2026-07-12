@@ -349,6 +349,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("group_admins_can_add_users", false);
             }
+            if (!this.attributes.ContainsKey("group_admins_can_manage_group_memberships"))
+            {
+                this.attributes.Add("group_admins_can_manage_group_memberships", false);
+            }
             if (!this.attributes.ContainsKey("group_admins_can_delete_users"))
             {
                 this.attributes.Add("group_admins_can_delete_users", false);
@@ -1733,6 +1737,18 @@ namespace FilesCom.Models
         {
             get { return attributes["group_admins_can_add_users"] == null ? false : (bool)attributes["group_admins_can_add_users"]; }
             private set { attributes["group_admins_can_add_users"] = value; }
+        }
+
+        /// <summary>
+        /// Allow group admins to add or remove existing users in their groups
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("group_admins_can_manage_group_memberships")]
+        public bool GroupAdminsCanManageGroupMemberships
+        {
+            get { return attributes["group_admins_can_manage_group_memberships"] == null ? false : (bool)attributes["group_admins_can_manage_group_memberships"]; }
+            private set { attributes["group_admins_can_manage_group_memberships"] = value; }
         }
 
         /// <summary>
@@ -3146,6 +3162,7 @@ namespace FilesCom.Models
         ///   revoke_bundle_access_on_disable_or_delete - boolean - Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   group_admins_can_add_users - boolean - Allow group admins to create users in their groups
+        ///   group_admins_can_manage_group_memberships - boolean - Allow group admins to add or remove existing users in their groups
         ///   group_admins_can_delete_users - boolean - Allow group admins to delete users in their groups
         ///   group_admins_can_enable_disable_users - boolean - Allow group admins to enable or disable users in their groups
         ///   group_admins_can_modify_users - boolean - Allow group admins to modify users in their groups
@@ -3671,6 +3688,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_admins_can_add_users") && !(parameters["group_admins_can_add_users"] is bool))
             {
                 throw new ArgumentException("Bad parameter: group_admins_can_add_users must be of type bool", "parameters[\"group_admins_can_add_users\"]");
+            }
+            if (parameters.ContainsKey("group_admins_can_manage_group_memberships") && !(parameters["group_admins_can_manage_group_memberships"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: group_admins_can_manage_group_memberships must be of type bool", "parameters[\"group_admins_can_manage_group_memberships\"]");
             }
             if (parameters.ContainsKey("group_admins_can_delete_users") && !(parameters["group_admins_can_delete_users"] is bool))
             {
