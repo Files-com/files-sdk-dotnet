@@ -8,6 +8,7 @@
   "automation_id": 1,
   "automation_version_id": 1,
   "workspace_id": 1,
+  "cancel_requested_at": "2000-01-01T01:00:00Z",
   "completed_at": "2000-01-01T01:00:00Z",
   "created_at": "2000-01-01T01:00:00Z",
   "retry_at": "2000-01-01T01:00:00Z",
@@ -19,6 +20,7 @@
   "successful_operations": 1,
   "failed_operations": 1,
   "definition": "example",
+  "node_states": "example",
   "journal_url": "example",
   "status_messages_url": "https://www.example.com/log_file.txt"
 }
@@ -28,6 +30,7 @@
 * `automation_id` / `AutomationId`  (Nullable<Int64>): ID of the associated Automation.
 * `automation_version_id` / `AutomationVersionId`  (Nullable<Int64>): ID of the immutable Automation version pinned by this run.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID.
+* `cancel_requested_at` / `CancelRequestedAt`  (Nullable<DateTime>): Date/time at which cancellation was requested.
 * `completed_at` / `CompletedAt`  (Nullable<DateTime>): Automation run completion/failure date/time.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Automation run start date/time.
 * `retry_at` / `RetryAt`  (Nullable<DateTime>): If set, this automation will be retried at this date/time due to `failure` or `partial_failure`.
@@ -35,10 +38,11 @@
 * `retried_in_run_id` / `RetriedInRunId`  (Nullable<Int64>): ID of the run that is or will be retrying this run.
 * `retry_of_run_id` / `RetryOfRunId`  (Nullable<Int64>): ID of the original run that this run is retrying.
 * `runtime` / `Runtime`  (Nullable<double>): Automation run runtime.
-* `status` / `Status`  (string): The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
+* `status` / `Status`  (string): The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
 * `successful_operations` / `SuccessfulOperations`  (Nullable<Int64>): Count of successful operations.
 * `failed_operations` / `FailedOperations`  (Nullable<Int64>): Count of failed operations.
 * `definition` / `Definition`  (object): Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
+* `node_states` / `NodeStates`  (object): Status and execution stage for each node in this run. For performance reasons, this is not provided when listing Automation runs.
 * `journal_url` / `JournalUrl`  (string): Link to the run journal artifact.
 * `status_messages_url` / `StatusMessagesUrl`  (string): Link to status messages log file.
 
@@ -75,6 +79,41 @@ Task<AutomationRun> AutomationRun.Find(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation Run ID.
+
+
+---
+
+## Cancel Automation Run
+
+```
+Task<AutomationRun> AutomationRun.Cancel(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation Run ID.
+
+
+---
+
+## Cancel Automation Run
+
+```
+var AutomationRun = AutomationRun.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+
+AutomationRun.Cancel
 ```
 
 ### Parameters

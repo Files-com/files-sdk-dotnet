@@ -45,6 +45,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
+            if (!this.attributes.ContainsKey("cancel_requested_at"))
+            {
+                this.attributes.Add("cancel_requested_at", null);
+            }
             if (!this.attributes.ContainsKey("completed_at"))
             {
                 this.attributes.Add("completed_at", null);
@@ -88,6 +92,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("definition"))
             {
                 this.attributes.Add("definition", null);
+            }
+            if (!this.attributes.ContainsKey("node_states"))
+            {
+                this.attributes.Add("node_states", null);
             }
             if (!this.attributes.ContainsKey("journal_url"))
             {
@@ -162,6 +170,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
             private set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
+        /// Date/time at which cancellation was requested.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("cancel_requested_at")]
+        public Nullable<DateTime> CancelRequestedAt
+        {
+            get { return (Nullable<DateTime>)attributes["cancel_requested_at"]; }
+            private set { attributes["cancel_requested_at"] = value; }
         }
 
         /// <summary>
@@ -242,7 +261,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The success status of the AutomationRun. One of `running`, `success`, `partial_failure`, or `failure`.
+        /// The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("status")]
@@ -286,6 +305,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Status and execution stage for each node in this run. For performance reasons, this is not provided when listing Automation runs.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("node_states")]
+        public object NodeStates
+        {
+            get { return (object)attributes["node_states"]; }
+            private set { attributes["node_states"] = value; }
+        }
+
+        /// <summary>
         /// Link to the run journal artifact.
         /// </summary>
         [JsonInclude]
@@ -306,6 +336,40 @@ namespace FilesCom.Models
             get { return (string)attributes["status_messages_url"]; }
             private set { attributes["status_messages_url"] = value; }
         }
+
+        /// <summary>
+        /// Cancel Automation Run
+        /// </summary>
+        public async Task<AutomationRun> Cancel(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
 
 
 
@@ -418,6 +482,48 @@ namespace FilesCom.Models
         {
             return await Find(id, parameters, options);
         }
+
+        /// <summary>
+        /// Cancel Automation Run
+        /// </summary>
+        public static async Task<AutomationRun> Cancel(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
 
     }
 }
