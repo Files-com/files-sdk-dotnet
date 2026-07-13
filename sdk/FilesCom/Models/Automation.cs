@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("description", null);
             }
+            if (!this.attributes.ContainsKey("definition"))
+            {
+                this.attributes.Add("definition", null);
+            }
             if (!this.attributes.ContainsKey("destination_replace_from"))
             {
                 this.attributes.Add("destination_replace_from", null);
@@ -120,6 +124,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("path_time_zone"))
             {
                 this.attributes.Add("path_time_zone", null);
+            }
+            if (!this.attributes.ContainsKey("version"))
+            {
+                this.attributes.Add("version", null);
             }
             if (!this.attributes.ContainsKey("recurring_day"))
             {
@@ -290,6 +298,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Automation v2 graph definition.
+        /// </summary>
+        [JsonPropertyName("definition")]
+        public object Definition
+        {
+            get { return (object)attributes["definition"]; }
+            set { attributes["definition"] = value; }
+        }
+
+        /// <summary>
         /// If set, this string in the destination path will be replaced with the value in `destination_replace_to`.
         /// </summary>
         [JsonPropertyName("destination_replace_from")]
@@ -452,6 +470,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["path_time_zone"]; }
             set { attributes["path_time_zone"] = value; }
+        }
+
+        /// <summary>
+        /// Current Automation v2 definition version.
+        /// </summary>
+        [JsonPropertyName("version")]
+        public Nullable<Int64> Version
+        {
+            get { return (Nullable<Int64>)attributes["version"]; }
+            set { attributes["version"] = value; }
         }
 
         /// <summary>

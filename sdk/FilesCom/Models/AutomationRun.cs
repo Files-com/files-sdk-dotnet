@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("automation_id", null);
             }
+            if (!this.attributes.ContainsKey("automation_version_id"))
+            {
+                this.attributes.Add("automation_version_id", null);
+            }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
                 this.attributes.Add("workspace_id", null);
@@ -80,6 +84,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("failed_operations"))
             {
                 this.attributes.Add("failed_operations", null);
+            }
+            if (!this.attributes.ContainsKey("definition"))
+            {
+                this.attributes.Add("definition", null);
+            }
+            if (!this.attributes.ContainsKey("journal_url"))
+            {
+                this.attributes.Add("journal_url", null);
             }
             if (!this.attributes.ContainsKey("status_messages_url"))
             {
@@ -128,6 +140,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["automation_id"]; }
             private set { attributes["automation_id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the immutable Automation version pinned by this run.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("automation_version_id")]
+        public Nullable<Int64> AutomationVersionId
+        {
+            get { return (Nullable<Int64>)attributes["automation_version_id"]; }
+            private set { attributes["automation_version_id"] = value; }
         }
 
         /// <summary>
@@ -249,6 +272,28 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["failed_operations"]; }
             private set { attributes["failed_operations"] = value; }
+        }
+
+        /// <summary>
+        /// Automation definition snapshot pinned by this run. For performance reasons, this is not provided when listing Automation runs.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("definition")]
+        public object Definition
+        {
+            get { return (object)attributes["definition"]; }
+            private set { attributes["definition"] = value; }
+        }
+
+        /// <summary>
+        /// Link to the run journal artifact.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("journal_url")]
+        public string JournalUrl
+        {
+            get { return (string)attributes["journal_url"]; }
+            private set { attributes["journal_url"] = value; }
         }
 
         /// <summary>
