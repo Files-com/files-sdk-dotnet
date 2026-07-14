@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("definition_schema", null);
             }
+            if (!this.attributes.ContainsKey("error_families"))
+            {
+                this.attributes.Add("error_families", new object[0]);
+            }
             if (!this.attributes.ContainsKey("nodes"))
             {
                 this.attributes.Add("nodes", new object[0]);
@@ -69,6 +73,17 @@ namespace FilesCom.Models
         {
             get { return (object)attributes["definition_schema"]; }
             private set { attributes["definition_schema"] = value; }
+        }
+
+        /// <summary>
+        /// Typed error families accepted by Automation v2 on_error rules.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("error_families")]
+        public object[] ErrorFamilies
+        {
+            get { return (object[])attributes["error_families"]; }
+            private set { attributes["error_families"] = value; }
         }
 
         /// <summary>
