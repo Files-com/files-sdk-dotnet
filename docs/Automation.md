@@ -186,6 +186,19 @@ Task<Automation> Automation.Find(
 
 ---
 
+## Show the Automation v2 authoring schema and active node catalog
+
+```
+Task<AutomationAuthoringSchema> Automation.GetAuthoringSchema(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+
+---
+
 ## Create Automation
 
 ```

@@ -1045,6 +1045,31 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// </summary>
+        public static async Task<AutomationAuthoringSchema> GetAuthoringSchema(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+
+            string responseJson = await FilesClient.SendStringRequest($"/automations/authoring_schema", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AutomationAuthoringSchema>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Parameters:
         ///   source - string - Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
         ///   destinations - array(string) - A list of destination paths. Use a trailing slash for folder destinations and omit it for file destinations.
