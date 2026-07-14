@@ -85,6 +85,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("import_urls", new object[0]);
             }
+            if (!this.attributes.ContainsKey("inbound_email_address"))
+            {
+                this.attributes.Add("inbound_email_address", null);
+            }
             if (!this.attributes.ContainsKey("flatten_destination_structure"))
             {
                 this.attributes.Add("flatten_destination_structure", false);
@@ -366,6 +370,16 @@ namespace FilesCom.Models
         {
             get { return (object[])attributes["import_urls"]; }
             set { attributes["import_urls"] = value; }
+        }
+
+        /// <summary>
+        /// If trigger is `email`, this is the address that triggers the Automation.
+        /// </summary>
+        [JsonPropertyName("inbound_email_address")]
+        public string InboundEmailAddress
+        {
+            get { return (string)attributes["inbound_email_address"]; }
+            set { attributes["inbound_email_address"] = value; }
         }
 
         /// <summary>
@@ -663,7 +677,10 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Manually Run Automation
+        /// Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+        ///
+        /// Parameters:
+        ///   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
         /// </summary>
         public async Task ManualRun(Dictionary<string, object> parameters)
         {
@@ -681,6 +698,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("items") && !(parameters["items"] is object[]))
+            {
+                throw new ArgumentException("Bad parameter: items must be of type object[]", "parameters[\"items\"]");
             }
 
             await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -1270,7 +1291,10 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Manually Run Automation
+        /// Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+        ///
+        /// Parameters:
+        ///   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
         /// </summary>
         public static async Task ManualRun(
             Nullable<Int64> id,
@@ -1296,6 +1320,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("items") && !(parameters["items"] is object[]))
+            {
+                throw new ArgumentException("Bad parameter: items must be of type object[]", "parameters[\"items\"]");
             }
 
             await FilesClient.SendRequest($"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options);

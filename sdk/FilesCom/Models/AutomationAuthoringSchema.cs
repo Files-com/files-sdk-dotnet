@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("nodes", new object[0]);
             }
+            if (!this.attributes.ContainsKey("schema_url"))
+            {
+                this.attributes.Add("schema_url", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -95,6 +99,17 @@ namespace FilesCom.Models
         {
             get { return (object[])attributes["nodes"]; }
             private set { attributes["nodes"] = value; }
+        }
+
+        /// <summary>
+        /// Stable public URL for the Automation v2 graph definition JSON Schema.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("schema_url")]
+        public string SchemaUrl
+        {
+            get { return (string)attributes["schema_url"]; }
+            private set { attributes["schema_url"] = value; }
         }
 
 

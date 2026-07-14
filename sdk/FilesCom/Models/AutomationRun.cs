@@ -73,6 +73,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("retry_of_run_id", null);
             }
+            if (!this.attributes.ContainsKey("rerun_of_run_id"))
+            {
+                this.attributes.Add("rerun_of_run_id", null);
+            }
+            if (!this.attributes.ContainsKey("rerun_from_node_id"))
+            {
+                this.attributes.Add("rerun_from_node_id", null);
+            }
             if (!this.attributes.ContainsKey("runtime"))
             {
                 this.attributes.Add("runtime", null);
@@ -96,6 +104,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("node_states"))
             {
                 this.attributes.Add("node_states", null);
+            }
+            if (!this.attributes.ContainsKey("execution_nodes"))
+            {
+                this.attributes.Add("execution_nodes", new AutomationExecutionNode[0]);
             }
             if (!this.attributes.ContainsKey("journal_url"))
             {
@@ -250,6 +262,28 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// ID of the run whose persisted node outputs this run reused.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("rerun_of_run_id")]
+        public Nullable<Int64> RerunOfRunId
+        {
+            get { return (Nullable<Int64>)attributes["rerun_of_run_id"]; }
+            private set { attributes["rerun_of_run_id"] = value; }
+        }
+
+        /// <summary>
+        /// Node at which this run resumed execution.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("rerun_from_node_id")]
+        public string RerunFromNodeId
+        {
+            get { return (string)attributes["rerun_from_node_id"]; }
+            private set { attributes["rerun_from_node_id"] = value; }
+        }
+
+        /// <summary>
         /// Automation run runtime.
         /// </summary>
         [JsonInclude]
@@ -316,6 +350,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Execution status, timing, and bounded output summaries for each node. For performance reasons, this is not provided when listing Automation runs.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("execution_nodes")]
+        public AutomationExecutionNode[] ExecutionNodes
+        {
+            get { return (AutomationExecutionNode[])attributes["execution_nodes"]; }
+            private set { attributes["execution_nodes"] = value; }
+        }
+
+        /// <summary>
         /// Link to the run journal artifact.
         /// </summary>
         [JsonInclude]
@@ -359,6 +404,51 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Re-run Automation from Node
+        ///
+        /// Parameters:
+        ///   node_id (required) - string - Node ID at which execution should resume.
+        /// </summary>
+        public async Task<AutomationRun> Rerun(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("node_id") || parameters["node_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: node_id", "parameters[\"node_id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("node_id") && !(parameters["node_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: node_id must be of type string", "parameters[\"node_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/rerun", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {
@@ -484,6 +574,58 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Automation Run ID.
+        ///   node_id (required) - string - Node ID from the pinned Automation definition.
+        /// </summary>
+        public static async Task<AutomationExecutionNode> FindNode(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("node_id") || parameters["node_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: node_id", "parameters[\"node_id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("node_id") && !(parameters["node_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: node_id must be of type string", "parameters[\"node_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/node", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AutomationExecutionNode>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Cancel Automation Run
         /// </summary>
         public static async Task<AutomationRun> Cancel(
@@ -513,6 +655,59 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
+        /// Re-run Automation from Node
+        ///
+        /// Parameters:
+        ///   node_id (required) - string - Node ID at which execution should resume.
+        /// </summary>
+        public static async Task<AutomationRun> Rerun(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("node_id") || parameters["node_id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: node_id", "parameters[\"node_id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("node_id") && !(parameters["node_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: node_id must be of type string", "parameters[\"node_id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/rerun", System.Net.Http.HttpMethod.Post, parameters, options);
 
             try
             {

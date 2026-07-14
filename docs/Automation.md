@@ -32,6 +32,7 @@
       }
     }
   ],
+  "inbound_email_address": "example-automation-abc123@inbox.files.com",
   "flatten_destination_structure": true,
   "group_ids": [
     1,
@@ -112,6 +113,7 @@
 * `disabled` / `Disabled`  (bool): If true, this automation will not run.
 * `exclude_pattern` / `ExcludePattern`  (string): If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
 * `import_urls` / `ImportUrls`  (object[]): List of URLs to be imported and names to be used.
+* `inbound_email_address` / `InboundEmailAddress`  (string): If trigger is `email`, this is the address that triggers the Automation.
 * `flatten_destination_structure` / `FlattenDestinationStructure`  (bool): Normally copy and move automations that use globs will implicitly preserve the source folder structure in the destination.  If this flag is `true`, the source folder structure will be flattened in the destination.  This is useful for copying or moving files from multiple folders into a single destination folder.
 * `group_ids` / `GroupIds`  (Nullable<Int64>[]): IDs of Groups for the Automation (i.e. who to Request File from)
 * `ignore_locked_folders` / `IgnoreLockedFolders`  (bool): If true, the Lock Folders behavior will be disregarded for automated actions.
@@ -249,7 +251,7 @@ Task<Automation> Automation.Create(
 
 ---
 
-## Manually Run Automation
+## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
 
 ```
 Task Automation.ManualRun(
@@ -262,6 +264,7 @@ Task Automation.ManualRun(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
+* `items` (object[]): Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
 
 
 ---
@@ -333,20 +336,22 @@ Task Automation.Delete(
 
 ---
 
-## Manually Run Automation
+## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
 
 ```
 var Automation = Automation.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("items", [{"file":"incoming/report.csv"},{"data":{"customer":"Acme"}}]);
 
-Automation.ManualRun
+Automation.ManualRun(parameters);
 ```
 
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
+* `items` (object[]): Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
 
 
 ---
