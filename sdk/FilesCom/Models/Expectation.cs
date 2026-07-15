@@ -362,7 +362,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Structured criteria v1 definition for the expectation.
+        /// Versioned success criteria definition for the expectation. Criteria v2 supports optional FTS content validation.
         /// </summary>
         [JsonPropertyName("criteria")]
         public object Criteria
@@ -486,7 +486,7 @@ namespace FilesCom.Models
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
         ///   max_open_interval - int64 - Hard-stop duration in seconds for unscheduled expectations.
-        ///   criteria - object - Structured criteria v1 definition for the expectation.
+        ///   criteria - object - Versioned success criteria definition for the expectation, including optional Files Transform Script content validation in criteria v2.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public async Task<Expectation> Update(Dictionary<string, object> parameters)
@@ -753,7 +753,7 @@ namespace FilesCom.Models
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
         ///   max_open_interval - int64 - Hard-stop duration in seconds for unscheduled expectations.
-        ///   criteria - object - Structured criteria v1 definition for the expectation.
+        ///   criteria - object - Versioned success criteria definition for the expectation, including optional Files Transform Script content validation in criteria v2.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<Expectation> Create(
@@ -916,7 +916,7 @@ namespace FilesCom.Models
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
         ///   max_open_interval - int64 - Hard-stop duration in seconds for unscheduled expectations.
-        ///   criteria - object - Structured criteria v1 definition for the expectation.
+        ///   criteria - object - Versioned success criteria definition for the expectation, including optional Files Transform Script content validation in criteria v2.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<Expectation> Update(

@@ -279,7 +279,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Captured criteria failures for the window.
+        /// Captured criteria failures for the window, including file-scoped FTS errors and returned validation details.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("criteria_errors")]

@@ -12,7 +12,7 @@
   "source": "*.csv",
   "exclude_pattern": "*.tmp",
   "disabled": true,
-  "expectations_version": 1,
+  "expectations_version": 2,
   "trigger": "manual",
   "interval": "day",
   "recurring_day": 3,
@@ -67,7 +67,7 @@
 * `late_acceptance_interval` / `LateAcceptanceInterval`  (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` / `InactivityInterval`  (Nullable<Int64>): How many quiet seconds are required before final closure.
 * `max_open_interval` / `MaxOpenInterval`  (Nullable<Int64>): Hard-stop duration in seconds for unscheduled expectations.
-* `criteria` / `Criteria`  (object): Structured criteria v1 definition for the expectation.
+* `criteria` / `Criteria`  (object): Versioned success criteria definition for the expectation. Criteria v2 supports optional FTS content validation.
 * `last_evaluated_at` / `LastEvaluatedAt`  (Nullable<DateTime>): Last time this expectation was evaluated.
 * `last_success_at` / `LastSuccessAt`  (Nullable<DateTime>): Last time this expectation closed successfully.
 * `last_failure_at` / `LastFailureAt`  (Nullable<DateTime>): Last time this expectation closed with a failure result.
@@ -144,7 +144,7 @@ Task<Expectation> Expectation.Create(
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
 * `max_open_interval` (Nullable<Int64>): Hard-stop duration in seconds for unscheduled expectations.
-* `criteria` (object): Structured criteria v1 definition for the expectation.
+* `criteria` (object): Versioned success criteria definition for the expectation, including optional Files Transform Script content validation in criteria v2.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
@@ -197,7 +197,7 @@ Task<Expectation> Expectation.Update(
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
 * `max_open_interval` (Nullable<Int64>): Hard-stop duration in seconds for unscheduled expectations.
-* `criteria` (object): Structured criteria v1 definition for the expectation.
+* `criteria` (object): Versioned success criteria definition for the expectation, including optional Files Transform Script content validation in criteria v2.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
@@ -288,7 +288,7 @@ Expectation.Update(parameters);
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
 * `max_open_interval` (Nullable<Int64>): Hard-stop duration in seconds for unscheduled expectations.
-* `criteria` (object): Structured criteria v1 definition for the expectation.
+* `criteria` (object): Versioned success criteria definition for the expectation, including optional Files Transform Script content validation in criteria v2.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
