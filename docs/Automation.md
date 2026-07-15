@@ -251,6 +251,23 @@ Task<Automation> Automation.Create(
 
 ---
 
+## Upgrade a legacy Automation to Automation v2
+
+```
+Task<Automation> Automation.Upgrade(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation ID.
+
+
+---
+
 ## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
 
 ```
@@ -327,6 +344,24 @@ Task Automation.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation ID.
+
+
+---
+
+## Upgrade a legacy Automation to Automation v2
+
+```
+var Automation = Automation.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+
+Automation.Upgrade
 ```
 
 ### Parameters
