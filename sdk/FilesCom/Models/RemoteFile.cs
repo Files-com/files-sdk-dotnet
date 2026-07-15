@@ -405,6 +405,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("download_uri", null);
             }
+            if (!this.attributes.ContainsKey("direct_connection_info"))
+            {
+                this.attributes.Add("direct_connection_info", null);
+            }
             if (!this.attributes.ContainsKey("priority_color"))
             {
                 this.attributes.Add("priority_color", null);
@@ -460,6 +464,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("buffered_upload"))
             {
                 this.attributes.Add("buffered_upload", false);
+            }
+            if (!this.attributes.ContainsKey("with_direct_connection_info"))
+            {
+                this.attributes.Add("with_direct_connection_info", false);
             }
         }
 
@@ -808,6 +816,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Optional direct connection information for direct Agent transfer attempts
+        /// </summary>
+        [JsonPropertyName("direct_connection_info")]
+        public DirectConnectionInfo DirectConnectionInfo
+        {
+            get { return (DirectConnectionInfo)attributes["direct_connection_info"]; }
+            set { attributes["direct_connection_info"] = value; }
+        }
+
+        /// <summary>
         /// Bookmark/priority color of file/folder
         /// </summary>
         [JsonPropertyName("priority_color")]
@@ -951,6 +969,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Include optional direct connection information for a direct Agent transfer attempt?
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("with_direct_connection_info")]
+        public bool WithDirectConnectionInfo
+        {
+            get { return attributes["with_direct_connection_info"] == null ? false : (bool)attributes["with_direct_connection_info"]; }
+            set { attributes["with_direct_connection_info"] = value; }
+        }
+
+        /// <summary>
         /// Download File
         ///
         /// Parameters:
@@ -958,6 +987,7 @@ namespace FilesCom.Models
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
         public async Task<RemoteFile> Download(Dictionary<string, object> parameters)
         {
@@ -991,6 +1021,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
+            }
+            if (parameters.ContainsKey("with_direct_connection_info") && !(parameters["with_direct_connection_info"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -1523,6 +1557,7 @@ namespace FilesCom.Models
         ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
         public async Task<FileUploadPart[]> BeginUpload(Dictionary<string, object> parameters)
         {
@@ -1573,6 +1608,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: buffered_upload must be of type bool", "parameters[\"buffered_upload\"]");
             }
+            if (parameters.ContainsKey("with_direct_connection_info") && !(parameters["with_direct_connection_info"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1602,6 +1641,7 @@ namespace FilesCom.Models
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
         public static async Task<RemoteFile> Download(
             string path,
@@ -1644,6 +1684,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
             }
+            if (parameters.ContainsKey("with_direct_connection_info") && !(parameters["with_direct_connection_info"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
 
@@ -1676,6 +1720,7 @@ namespace FilesCom.Models
         ///   structure - string - If copying folder, copy just the structure?
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
         public static async Task<RemoteFile> Create(
             string path,
@@ -1753,6 +1798,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("buffered_upload") && !(parameters["buffered_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: buffered_upload must be of type bool", "parameters[\"buffered_upload\"]");
+            }
+            if (parameters.ContainsKey("with_direct_connection_info") && !(parameters["with_direct_connection_info"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -2476,6 +2525,7 @@ namespace FilesCom.Models
         ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
         ///   with_rename - boolean - Allow file rename instead of overwrite?
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
         public static async Task<FileUploadPart[]> BeginUpload(
             string path,
@@ -2533,6 +2583,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("buffered_upload") && !(parameters["buffered_upload"] is bool))
             {
                 throw new ArgumentException("Bad parameter: buffered_upload must be of type bool", "parameters[\"buffered_upload\"]");
+            }
+            if (parameters.ContainsKey("with_direct_connection_info") && !(parameters["with_direct_connection_info"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);

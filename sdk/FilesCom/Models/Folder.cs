@@ -157,6 +157,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("download_uri", null);
             }
+            if (!this.attributes.ContainsKey("direct_connection_info"))
+            {
+                this.attributes.Add("direct_connection_info", null);
+            }
             if (!this.attributes.ContainsKey("priority_color"))
             {
                 this.attributes.Add("priority_color", null);
@@ -517,6 +521,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["download_uri"]; }
             set { attributes["download_uri"] = value; }
+        }
+
+        /// <summary>
+        /// Optional direct connection information for direct Agent transfer attempts
+        /// </summary>
+        [JsonPropertyName("direct_connection_info")]
+        public DirectConnectionInfo DirectConnectionInfo
+        {
+            get { return (DirectConnectionInfo)attributes["direct_connection_info"]; }
+            set { attributes["direct_connection_info"] = value; }
         }
 
         /// <summary>

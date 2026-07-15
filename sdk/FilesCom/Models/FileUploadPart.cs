@@ -93,6 +93,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("upload_uri", null);
             }
+            if (!this.attributes.ContainsKey("direct_connection_info"))
+            {
+                this.attributes.Add("direct_connection_info", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -293,6 +297,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["upload_uri"]; }
             private set { attributes["upload_uri"] = value; }
+        }
+
+        /// <summary>
+        /// Optional direct connection information for direct Agent transfer attempts
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("direct_connection_info")]
+        public DirectConnectionInfo DirectConnectionInfo
+        {
+            get { return (DirectConnectionInfo)attributes["direct_connection_info"]; }
+            private set { attributes["direct_connection_info"] = value; }
         }
 
 

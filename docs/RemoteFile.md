@@ -38,6 +38,15 @@
   "subfolders_locked?": true,
   "is_locked": true,
   "download_uri": "https://mysite.files.com/...",
+  "direct_connection_info": {
+    "version": 1,
+    "server_name": "example",
+    "addresses": [
+      "example"
+    ],
+    "direct_uri": "example",
+    "ca_pem": "example"
+  },
   "priority_color": "red",
   "preview_id": 1,
   "preview": {
@@ -82,6 +91,7 @@
 * `subfolders_locked?` / `SubfoldersLocked`  (bool): Are subfolders locked and unable to be modified?
 * `is_locked` / `IsLocked`  (bool): Is this folder locked and unable to be modified?
 * `download_uri` / `DownloadUri`  (string): Link to download file. Provided only in response to a download request.
+* `direct_connection_info` / `DirectConnectionInfo`  (DirectConnectionInfo): Optional direct connection information for direct Agent transfer attempts
 * `priority_color` / `PriorityColor`  (string): Bookmark/priority color of file/folder
 * `preview_id` / `PreviewId`  (Nullable<Int64>): File preview ID
 * `preview` / `Preview`  (Preview): File preview
@@ -96,6 +106,7 @@
 * `structure` / `Structure`  (string): If copying folder, copy just the structure?
 * `with_rename` / `WithRename`  (bool): Allow file rename instead of overwrite?
 * `buffered_upload` / `BufferedUpload`  (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+* `with_direct_connection_info` / `WithDirectConnectionInfo`  (bool): Include optional direct connection information for a direct Agent transfer attempt?
 
 
 ---
@@ -117,6 +128,7 @@ Task<RemoteFile> RemoteFile.Download(
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `with_previews` (bool): Include file preview information?
 * `with_priority_color` (bool): Include file priority color information?
+* `with_direct_connection_info` (bool): Include optional direct connection information for a direct Agent transfer attempt?
 
 
 ---
@@ -149,6 +161,7 @@ Task<RemoteFile> RemoteFile.Create(
 * `structure` (string): If copying folder, copy just the structure?
 * `with_rename` (bool): Allow file rename instead of overwrite?
 * `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+* `with_direct_connection_info` (bool): Include optional direct connection information for a direct Agent transfer attempt?
 
 
 ---
@@ -398,6 +411,7 @@ Task<FileUploadPart[]> RemoteFile.BeginUpload(
 * `size` (Nullable<Int64>): Total bytes of file being uploaded (include bytes being retained if appending/restarting).
 * `with_rename` (bool): Allow file rename instead of overwrite?
 * `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+* `with_direct_connection_info` (bool): Include optional direct connection information for a direct Agent transfer attempt?
 
 
 ---
@@ -411,6 +425,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("with_previews", false);
 parameters.Add("with_priority_color", false);
+parameters.Add("with_direct_connection_info", false);
 
 File.Download(parameters);
 ```
@@ -422,6 +437,7 @@ File.Download(parameters);
 * `preview_size` (string): Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
 * `with_previews` (bool): Include file preview information?
 * `with_priority_color` (bool): Include file priority color information?
+* `with_direct_connection_info` (bool): Include optional direct connection information for a direct Agent transfer attempt?
 
 
 ---
@@ -663,6 +679,7 @@ parameters.Add("restart", 1);
 parameters.Add("size", 1);
 parameters.Add("with_rename", false);
 parameters.Add("buffered_upload", false);
+parameters.Add("with_direct_connection_info", false);
 
 File.BeginUpload(parameters);
 ```
@@ -678,3 +695,4 @@ File.BeginUpload(parameters);
 * `size` (Nullable<Int64>): Total bytes of file being uploaded (include bytes being retained if appending/restarting).
 * `with_rename` (bool): Allow file rename instead of overwrite?
 * `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+* `with_direct_connection_info` (bool): Include optional direct connection information for a direct Agent transfer attempt?
