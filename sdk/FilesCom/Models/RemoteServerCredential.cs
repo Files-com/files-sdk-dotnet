@@ -89,6 +89,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("linode_access_key", null);
             }
+            if (!this.attributes.ContainsKey("sharepoint_tenant_id"))
+            {
+                this.attributes.Add("sharepoint_tenant_id", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_client_id"))
+            {
+                this.attributes.Add("sharepoint_client_id", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_app_credential_type"))
+            {
+                this.attributes.Add("sharepoint_app_credential_type", null);
+            }
             if (!this.attributes.ContainsKey("username"))
             {
                 this.attributes.Add("username", null);
@@ -156,6 +168,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("s3_compatible_secret_key"))
             {
                 this.attributes.Add("s3_compatible_secret_key", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_client_certificate"))
+            {
+                this.attributes.Add("sharepoint_client_certificate", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_client_secret"))
+            {
+                this.attributes.Add("sharepoint_client_secret", null);
             }
             if (!this.attributes.ContainsKey("wasabi_secret_key"))
             {
@@ -339,6 +359,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// SharePoint: Microsoft Entra tenant ID for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_tenant_id")]
+        public string SharepointTenantId
+        {
+            get { return (string)attributes["sharepoint_tenant_id"]; }
+            set { attributes["sharepoint_tenant_id"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: Microsoft Entra application client ID for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_client_id")]
+        public string SharepointClientId
+        {
+            get { return (string)attributes["sharepoint_client_id"]; }
+            set { attributes["sharepoint_client_id"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: App-only credential type. Either secret or certificate.
+        /// </summary>
+        [JsonPropertyName("sharepoint_app_credential_type")]
+        public string SharepointAppCredentialType
+        {
+            get { return (string)attributes["sharepoint_app_credential_type"]; }
+            set { attributes["sharepoint_app_credential_type"] = value; }
+        }
+
+        /// <summary>
         /// Remote server username.
         /// </summary>
         [JsonPropertyName("username")]
@@ -509,6 +559,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_client_certificate")]
+        public string SharepointClientCertificate
+        {
+            get { return (string)attributes["sharepoint_client_certificate"]; }
+            set { attributes["sharepoint_client_certificate"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: Microsoft Entra application client secret for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_client_secret")]
+        public string SharepointClientSecret
+        {
+            get { return (string)attributes["sharepoint_client_secret"]; }
+            set { attributes["sharepoint_client_secret"] = value; }
+        }
+
+        /// <summary>
         /// Wasabi: Secret Key
         /// </summary>
         [JsonPropertyName("wasabi_secret_key")]
@@ -541,6 +611,8 @@ namespace FilesCom.Models
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   linode_access_key - string - Linode: Access Key
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
         ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   password - string - Password, if needed.
@@ -559,6 +631,8 @@ namespace FilesCom.Models
         ///   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   wasabi_secret_key - string - Wasabi: Secret Key
         /// </summary>
         public async Task<RemoteServerCredential> Update(Dictionary<string, object> parameters)
@@ -621,6 +695,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
             }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
@@ -693,6 +775,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
             }
             if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
             {
@@ -868,6 +958,8 @@ namespace FilesCom.Models
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   linode_access_key - string - Linode: Access Key
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
         ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   password - string - Password, if needed.
@@ -886,6 +978,8 @@ namespace FilesCom.Models
         ///   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   wasabi_secret_key - string - Wasabi: Secret Key
         ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         ///   copy_values_from_credential_id - int64 - ID of Remote Server Credential to copy omitted values from.
@@ -942,6 +1036,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
             }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
@@ -1015,6 +1117,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
             }
+            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
+            }
             if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
@@ -1054,6 +1164,8 @@ namespace FilesCom.Models
         ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
         ///   linode_access_key - string - Linode: Access Key
         ///   s3_compatible_access_key - string - S3-compatible: Access Key
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
         ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
         ///   password - string - Password, if needed.
@@ -1072,6 +1184,8 @@ namespace FilesCom.Models
         ///   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
         ///   linode_secret_key - string - Linode: Secret Key
         ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   wasabi_secret_key - string - Wasabi: Secret Key
         /// </summary>
         public static async Task<RemoteServerCredential> Update(
@@ -1143,6 +1257,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
             }
+            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
+            }
             if (parameters.ContainsKey("username") && !(parameters["username"] is string))
             {
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
@@ -1214,6 +1336,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
             }
             if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
             {

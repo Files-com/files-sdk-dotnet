@@ -189,6 +189,26 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("one_drive_account_type", null);
             }
+            if (!this.attributes.ContainsKey("sharepoint_tenant_id"))
+            {
+                this.attributes.Add("sharepoint_tenant_id", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_client_id"))
+            {
+                this.attributes.Add("sharepoint_client_id", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_app_authentication"))
+            {
+                this.attributes.Add("sharepoint_app_authentication", false);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_app_credential_type"))
+            {
+                this.attributes.Add("sharepoint_app_credential_type", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_site_url"))
+            {
+                this.attributes.Add("sharepoint_site_url", null);
+            }
             if (!this.attributes.ContainsKey("azure_blob_storage_account"))
             {
                 this.attributes.Add("azure_blob_storage_account", null);
@@ -336,6 +356,14 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("reset_authentication"))
             {
                 this.attributes.Add("reset_authentication", false);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_client_certificate"))
+            {
+                this.attributes.Add("sharepoint_client_certificate", null);
+            }
+            if (!this.attributes.ContainsKey("sharepoint_client_secret"))
+            {
+                this.attributes.Add("sharepoint_client_secret", null);
             }
             if (!this.attributes.ContainsKey("ssl_certificate"))
             {
@@ -828,6 +856,57 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// SharePoint: Microsoft Entra tenant ID for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_tenant_id")]
+        public string SharepointTenantId
+        {
+            get { return (string)attributes["sharepoint_tenant_id"]; }
+            set { attributes["sharepoint_tenant_id"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: Microsoft Entra application client ID for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_client_id")]
+        public string SharepointClientId
+        {
+            get { return (string)attributes["sharepoint_client_id"]; }
+            set { attributes["sharepoint_client_id"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: If true, this remote server uses Microsoft Entra app-only authentication.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("sharepoint_app_authentication")]
+        public bool SharepointAppAuthentication
+        {
+            get { return attributes["sharepoint_app_authentication"] == null ? false : (bool)attributes["sharepoint_app_authentication"]; }
+            set { attributes["sharepoint_app_authentication"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: App-only credential type. Either secret or certificate.
+        /// </summary>
+        [JsonPropertyName("sharepoint_app_credential_type")]
+        public string SharepointAppCredentialType
+        {
+            get { return (string)attributes["sharepoint_app_credential_type"]; }
+            set { attributes["sharepoint_app_credential_type"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+        /// </summary>
+        [JsonPropertyName("sharepoint_site_url")]
+        public string SharepointSiteUrl
+        {
+            get { return (string)attributes["sharepoint_site_url"]; }
+            set { attributes["sharepoint_site_url"] = value; }
+        }
+
+        /// <summary>
         /// Azure Blob Storage: Account name
         /// </summary>
         [JsonPropertyName("azure_blob_storage_account")]
@@ -1206,6 +1285,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_client_certificate")]
+        public string SharepointClientCertificate
+        {
+            get { return (string)attributes["sharepoint_client_certificate"]; }
+            set { attributes["sharepoint_client_certificate"] = value; }
+        }
+
+        /// <summary>
+        /// SharePoint: Microsoft Entra application client secret for app-only authentication.
+        /// </summary>
+        [JsonPropertyName("sharepoint_client_secret")]
+        public string SharepointClientSecret
+        {
+            get { return (string)attributes["sharepoint_client_secret"]; }
+            set { attributes["sharepoint_client_secret"] = value; }
+        }
+
+        /// <summary>
         /// SSL client certificate.
         /// </summary>
         [JsonPropertyName("ssl_certificate")]
@@ -1496,6 +1595,8 @@ namespace FilesCom.Models
         ///   private_key - string - Private key, if needed.
         ///   private_key_passphrase - string - Passphrase for private key if needed.
         ///   reset_authentication - boolean - Reset authenticated account?
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   ssl_certificate - string - SSL client certificate.
         ///   aws_secret_key - string - AWS: secret key.
         ///   azure_blob_storage_access_key - string - Azure Blob Storage: Access Key
@@ -1564,6 +1665,9 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
         ///   server_type - string - Remote server type.
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
         ///   ssl - string - Should we require SSL?
         ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
@@ -1602,6 +1706,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool))
             {
                 throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
             }
             if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string))
             {
@@ -1874,6 +1986,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_type") && !(parameters["server_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_type must be of type string", "parameters[\"server_type\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_site_url") && !(parameters["sharepoint_site_url"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_site_url must be of type string", "parameters[\"sharepoint_site_url\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
             }
             if (parameters.ContainsKey("ssl") && !(parameters["ssl"] is string))
             {
@@ -2107,6 +2231,8 @@ namespace FilesCom.Models
         ///   private_key - string - Private key, if needed.
         ///   private_key_passphrase - string - Passphrase for private key if needed.
         ///   reset_authentication - boolean - Reset authenticated account?
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   ssl_certificate - string - SSL client certificate.
         ///   aws_secret_key - string - AWS: secret key.
         ///   azure_blob_storage_access_key - string - Azure Blob Storage: Access Key
@@ -2175,6 +2301,9 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
         ///   server_type - string - Remote server type.
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
         ///   ssl - string - Should we require SSL?
         ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
@@ -2210,6 +2339,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool))
             {
                 throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
             }
             if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string))
             {
@@ -2482,6 +2619,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_type") && !(parameters["server_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_type must be of type string", "parameters[\"server_type\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_site_url") && !(parameters["sharepoint_site_url"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_site_url must be of type string", "parameters[\"sharepoint_site_url\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
             }
             if (parameters.ContainsKey("ssl") && !(parameters["ssl"] is string))
             {
@@ -2668,6 +2817,8 @@ namespace FilesCom.Models
         ///   private_key - string - Private key, if needed.
         ///   private_key_passphrase - string - Passphrase for private key if needed.
         ///   reset_authentication - boolean - Reset authenticated account?
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   ssl_certificate - string - SSL client certificate.
         ///   aws_secret_key - string - AWS: secret key.
         ///   azure_blob_storage_access_key - string - Azure Blob Storage: Access Key
@@ -2736,6 +2887,9 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
         ///   server_type - string - Remote server type.
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
         ///   ssl - string - Should we require SSL?
         ///   username - string - Remote server username.
         ///   wasabi_access_key - string - Wasabi: Access Key.
@@ -2782,6 +2936,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool))
             {
                 throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
             }
             if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string))
             {
@@ -3054,6 +3216,18 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("server_type") && !(parameters["server_type"] is string))
             {
                 throw new ArgumentException("Bad parameter: server_type must be of type string", "parameters[\"server_type\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_site_url") && !(parameters["sharepoint_site_url"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_site_url must be of type string", "parameters[\"sharepoint_site_url\"]");
+            }
+            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
             }
             if (parameters.ContainsKey("ssl") && !(parameters["ssl"] is string))
             {

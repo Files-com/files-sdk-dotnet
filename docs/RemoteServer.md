@@ -44,6 +44,11 @@
   "auth_status": "in_setup",
   "auth_account_name": "me@example.com",
   "one_drive_account_type": "personal",
+  "sharepoint_tenant_id": "00000000-0000-0000-0000-000000000000",
+  "sharepoint_client_id": "00000000-0000-0000-0000-000000000000",
+  "sharepoint_app_authentication": true,
+  "sharepoint_app_credential_type": "secret",
+  "sharepoint_site_url": "https://example.sharepoint.com/sites/accounting",
   "azure_blob_storage_account": "storage-account-name",
   "azure_blob_storage_container": "container-name",
   "azure_blob_storage_hierarchical_namespace": true,
@@ -119,6 +124,11 @@
 * `auth_status` / `AuthStatus`  (string): Either `in_setup` or `complete`
 * `auth_account_name` / `AuthAccountName`  (string): Describes the authorized account
 * `one_drive_account_type` / `OneDriveAccountType`  (string): OneDrive: Either personal or business_other account types
+* `sharepoint_tenant_id` / `SharepointTenantId`  (string): SharePoint: Microsoft Entra tenant ID for app-only authentication.
+* `sharepoint_client_id` / `SharepointClientId`  (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
+* `sharepoint_app_authentication` / `SharepointAppAuthentication`  (bool): SharePoint: If true, this remote server uses Microsoft Entra app-only authentication.
+* `sharepoint_app_credential_type` / `SharepointAppCredentialType`  (string): SharePoint: App-only credential type. Either secret or certificate.
+* `sharepoint_site_url` / `SharepointSiteUrl`  (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
 * `azure_blob_storage_account` / `AzureBlobStorageAccount`  (string): Azure Blob Storage: Account name
 * `azure_blob_storage_container` / `AzureBlobStorageContainer`  (string): Azure Blob Storage: Container name
 * `azure_blob_storage_hierarchical_namespace` / `AzureBlobStorageHierarchicalNamespace`  (bool): Azure Blob Storage: Does the storage account has hierarchical namespace feature enabled?
@@ -156,6 +166,8 @@
 * `private_key` / `PrivateKey`  (string): Private key, if needed.
 * `private_key_passphrase` / `PrivateKeyPassphrase`  (string): Passphrase for private key if needed.
 * `reset_authentication` / `ResetAuthentication`  (bool): Reset authenticated account?
+* `sharepoint_client_certificate` / `SharepointClientCertificate`  (string): SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+* `sharepoint_client_secret` / `SharepointClientSecret`  (string): SharePoint: Microsoft Entra application client secret for app-only authentication.
 * `ssl_certificate` / `SslCertificate`  (string): SSL client certificate.
 * `aws_secret_key` / `AwsSecretKey`  (string): AWS: secret key.
 * `azure_blob_storage_access_key` / `AzureBlobStorageAccessKey`  (string): Azure Blob Storage: Access Key
@@ -249,6 +261,8 @@ Task<RemoteServer> RemoteServer.Create(
 * `private_key` (string): Private key, if needed.
 * `private_key_passphrase` (string): Passphrase for private key if needed.
 * `reset_authentication` (bool): Reset authenticated account?
+* `sharepoint_client_certificate` (string): SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+* `sharepoint_client_secret` (string): SharePoint: Microsoft Entra application client secret for app-only authentication.
 * `ssl_certificate` (string): SSL client certificate.
 * `aws_secret_key` (string): AWS: secret key.
 * `azure_blob_storage_access_key` (string): Azure Blob Storage: Access Key
@@ -317,6 +331,9 @@ Task<RemoteServer> RemoteServer.Create(
 * `server_certificate` (string): Remote server certificate
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` (string): Remote server type.
+* `sharepoint_client_id` (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
+* `sharepoint_site_url` (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+* `sharepoint_tenant_id` (string): SharePoint: Microsoft Entra tenant ID for app-only authentication.
 * `ssl` (string): Should we require SSL?
 * `username` (string): Remote server username.
 * `wasabi_access_key` (string): Wasabi: Access Key.
@@ -389,6 +406,8 @@ Task<RemoteServer> RemoteServer.Update(
 * `private_key` (string): Private key, if needed.
 * `private_key_passphrase` (string): Passphrase for private key if needed.
 * `reset_authentication` (bool): Reset authenticated account?
+* `sharepoint_client_certificate` (string): SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+* `sharepoint_client_secret` (string): SharePoint: Microsoft Entra application client secret for app-only authentication.
 * `ssl_certificate` (string): SSL client certificate.
 * `aws_secret_key` (string): AWS: secret key.
 * `azure_blob_storage_access_key` (string): Azure Blob Storage: Access Key
@@ -457,6 +476,9 @@ Task<RemoteServer> RemoteServer.Update(
 * `server_certificate` (string): Remote server certificate
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` (string): Remote server type.
+* `sharepoint_client_id` (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
+* `sharepoint_site_url` (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+* `sharepoint_tenant_id` (string): SharePoint: Microsoft Entra tenant ID for app-only authentication.
 * `ssl` (string): Should we require SSL?
 * `username` (string): Remote server username.
 * `wasabi_access_key` (string): Wasabi: Access Key.
@@ -601,6 +623,9 @@ parameters.Add("s3_region", "us-east-1");
 parameters.Add("server_certificate", "require_match");
 parameters.Add("server_host_key", "[public key]");
 parameters.Add("server_type", "s3");
+parameters.Add("sharepoint_client_id", "00000000-0000-0000-0000-000000000000");
+parameters.Add("sharepoint_site_url", "https://example.sharepoint.com/sites/accounting");
+parameters.Add("sharepoint_tenant_id", "00000000-0000-0000-0000-000000000000");
 parameters.Add("ssl", "if_available");
 parameters.Add("username", "user");
 parameters.Add("wasabi_access_key", "example");
@@ -617,6 +642,8 @@ RemoteServer.Update(parameters);
 * `private_key` (string): Private key, if needed.
 * `private_key_passphrase` (string): Passphrase for private key if needed.
 * `reset_authentication` (bool): Reset authenticated account?
+* `sharepoint_client_certificate` (string): SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+* `sharepoint_client_secret` (string): SharePoint: Microsoft Entra application client secret for app-only authentication.
 * `ssl_certificate` (string): SSL client certificate.
 * `aws_secret_key` (string): AWS: secret key.
 * `azure_blob_storage_access_key` (string): Azure Blob Storage: Access Key
@@ -685,6 +712,9 @@ RemoteServer.Update(parameters);
 * `server_certificate` (string): Remote server certificate
 * `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
 * `server_type` (string): Remote server type.
+* `sharepoint_client_id` (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
+* `sharepoint_site_url` (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
+* `sharepoint_tenant_id` (string): SharePoint: Microsoft Entra tenant ID for app-only authentication.
 * `ssl` (string): Should we require SSL?
 * `username` (string): Remote server username.
 * `wasabi_access_key` (string): Wasabi: Access Key.
