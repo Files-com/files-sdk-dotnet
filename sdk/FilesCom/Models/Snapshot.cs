@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("paths"))
             {
                 this.attributes.Add("paths", new string[0]);
@@ -138,6 +142,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["bundle_id"]; }
             set { attributes["bundle_id"] = value; }
+        }
+
+        /// <summary>
+        /// Workspace ID. `0` means the default workspace.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
         }
 
         /// <summary>
@@ -357,6 +371,7 @@ namespace FilesCom.Models
         ///   expires_at - string - When the snapshot expires.
         ///   name - string - A name for the snapshot.
         ///   paths - array(string) - An array of paths to add to the snapshot.
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<Snapshot> Create(
 
@@ -378,6 +393,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("paths") && !(parameters["paths"] is string[]))
             {
                 throw new ArgumentException("Bad parameter: paths must be of type string[]", "parameters[\"paths\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/snapshots", System.Net.Http.HttpMethod.Post, parameters, options);

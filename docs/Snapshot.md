@@ -9,7 +9,8 @@
   "finalized_at": "2000-01-01T01:00:00Z",
   "name": "My Snapshot",
   "user_id": 1,
-  "bundle_id": 1
+  "bundle_id": 1,
+  "workspace_id": 1
 }
 ```
 
@@ -19,6 +20,7 @@
 * `name` / `Name`  (string): A name for the snapshot.
 * `user_id` / `UserId`  (Nullable<Int64>): The user that created this snapshot, if applicable.
 * `bundle_id` / `BundleId`  (Nullable<Int64>): The bundle using this snapshot, if applicable.
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `paths` / `Paths`  (string[]): An array of paths to add to the snapshot.
 
 
@@ -74,6 +76,7 @@ Task<Snapshot> Snapshot.Create(
 * `expires_at` (string): When the snapshot expires.
 * `name` (string): A name for the snapshot.
 * `paths` (string[]): An array of paths to add to the snapshot.
+* `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
 ---
