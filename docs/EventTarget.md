@@ -23,8 +23,8 @@
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` / `ApplyToAllWorkspaces`  (bool): If true, this default-workspace target can receive events from all workspaces.
 * `enabled` / `Enabled`  (bool): Whether this Event Target can receive events.
-* `config` / `Config`  (object): Event Target configuration.
-* `delivery_policy` / `DeliveryPolicy`  (object): Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+* `config` / `Config`  (object): Event Target configuration. Folder targets accept path and format (json or csv).
+* `delivery_policy` / `DeliveryPolicy`  (object): Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Event Target create date/time.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Event Target update date/time.
 
@@ -83,10 +83,10 @@ Task<EventTarget> EventTarget.Create(
 * `name` (string): Required - Event Target name.
 * `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace target can receive events from all workspaces.
-* `target_type` (string): Required - Event Target type.
 * `enabled` (bool): Whether this Event Target can receive events.
-* `config` (object): Required - Event Target configuration.
-* `delivery_policy` (object): Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+* `config` (object): Required - Event Target configuration. Folder targets accept path and format (json or csv).
+* `delivery_policy` (object): Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
+* `target_type` (string): Required - Event Target type.
 
 
 ---
@@ -107,10 +107,9 @@ Task<EventTarget> EventTarget.Update(
 * `name` (string): Event Target name.
 * `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace target can receive events from all workspaces.
-* `target_type` (string): Event Target type.
 * `enabled` (bool): Whether this Event Target can receive events.
-* `config` (object): Event Target configuration.
-* `delivery_policy` (object): Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+* `config` (object): Event Target configuration. Folder targets accept path and format (json or csv).
+* `delivery_policy` (object): Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
 
 
 ---
@@ -142,7 +141,6 @@ var parameters = new Dictionary<string, object>();
 parameters.Add("name", "example");
 parameters.Add("workspace_id", 1);
 parameters.Add("apply_to_all_workspaces", true);
-parameters.Add("target_type", "example");
 parameters.Add("enabled", true);
 parameters.Add("config", "example");
 parameters.Add("delivery_policy", "example");
@@ -156,10 +154,9 @@ EventTarget.Update(parameters);
 * `name` (string): Event Target name.
 * `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace target can receive events from all workspaces.
-* `target_type` (string): Event Target type.
 * `enabled` (bool): Whether this Event Target can receive events.
-* `config` (object): Event Target configuration.
-* `delivery_policy` (object): Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+* `config` (object): Event Target configuration. Folder targets accept path and format (json or csv).
+* `delivery_policy` (object): Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
 
 
 ---

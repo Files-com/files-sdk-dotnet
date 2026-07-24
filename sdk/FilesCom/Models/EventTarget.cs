@@ -155,7 +155,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Event Target configuration.
+        /// Event Target configuration. Folder targets accept path and format (json or csv).
         /// </summary>
         [JsonPropertyName("config")]
         public object Config
@@ -165,7 +165,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+        /// Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
         /// </summary>
         [JsonPropertyName("delivery_policy")]
         public object DeliveryPolicy
@@ -201,10 +201,9 @@ namespace FilesCom.Models
         ///   name - string - Event Target name.
         ///   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
-        ///   target_type - string - Event Target type.
         ///   enabled - boolean - Whether this Event Target can receive events.
-        ///   config - object - Event Target configuration.
-        ///   delivery_policy - object - Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+        ///   config - object - Event Target configuration. Folder targets accept path and format (json or csv).
+        ///   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
         /// </summary>
         public async Task<EventTarget> Update(Dictionary<string, object> parameters)
         {
@@ -234,10 +233,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
-            }
-            if (parameters.ContainsKey("target_type") && !(parameters["target_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: target_type must be of type string", "parameters[\"target_type\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -408,10 +403,10 @@ namespace FilesCom.Models
         ///   name (required) - string - Event Target name.
         ///   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
-        ///   target_type (required) - string - Event Target type.
         ///   enabled - boolean - Whether this Event Target can receive events.
-        ///   config (required) - object - Event Target configuration.
-        ///   delivery_policy - object - Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+        ///   config (required) - object - Event Target configuration. Folder targets accept path and format (json or csv).
+        ///   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
+        ///   target_type (required) - string - Event Target type.
         /// </summary>
         public static async Task<EventTarget> Create(
 
@@ -426,13 +421,13 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
-            if (!parameters.ContainsKey("target_type") || parameters["target_type"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: target_type", "parameters[\"target_type\"]");
-            }
             if (!parameters.ContainsKey("config") || parameters["config"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: config", "parameters[\"config\"]");
+            }
+            if (!parameters.ContainsKey("target_type") || parameters["target_type"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: target_type", "parameters[\"target_type\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -446,10 +441,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
             }
-            if (parameters.ContainsKey("target_type") && !(parameters["target_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: target_type must be of type string", "parameters[\"target_type\"]");
-            }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: enabled must be of type bool", "parameters[\"enabled\"]");
@@ -461,6 +452,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("delivery_policy") && !(parameters["delivery_policy"] is object))
             {
                 throw new ArgumentException("Bad parameter: delivery_policy must be of type object", "parameters[\"delivery_policy\"]");
+            }
+            if (parameters.ContainsKey("target_type") && !(parameters["target_type"] is string))
+            {
+                throw new ArgumentException("Bad parameter: target_type must be of type string", "parameters[\"target_type\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest($"/event_targets", System.Net.Http.HttpMethod.Post, parameters, options);
@@ -481,10 +476,9 @@ namespace FilesCom.Models
         ///   name - string - Event Target name.
         ///   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace target can receive events from all workspaces.
-        ///   target_type - string - Event Target type.
         ///   enabled - boolean - Whether this Event Target can receive events.
-        ///   config - object - Event Target configuration.
-        ///   delivery_policy - object - Event Target delivery policy. Email targets support batch_interval in seconds, between 600 and 86400.
+        ///   config - object - Event Target configuration. Folder targets accept path and format (json or csv).
+        ///   delivery_policy - object - Event Target delivery policy. Email and folder targets support batch_interval in seconds, between 600 and 86400.
         /// </summary>
         public static async Task<EventTarget> Update(
             Nullable<Int64> id,
@@ -522,10 +516,6 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("apply_to_all_workspaces") && !(parameters["apply_to_all_workspaces"] is bool))
             {
                 throw new ArgumentException("Bad parameter: apply_to_all_workspaces must be of type bool", "parameters[\"apply_to_all_workspaces\"]");
-            }
-            if (parameters.ContainsKey("target_type") && !(parameters["target_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: target_type must be of type string", "parameters[\"target_type\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
