@@ -57,6 +57,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("skip_child_site_ids", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("child_site_ids"))
+            {
+                this.attributes.Add("child_site_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("default_policy"))
+            {
+                this.attributes.Add("default_policy", false);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -149,13 +157,34 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        /// IDs of child sites excluded from this default policy.
         /// </summary>
         [JsonPropertyName("skip_child_site_ids")]
         public Nullable<Int64>[] SkipChildSiteIds
         {
             get { return (Nullable<Int64>[])attributes["skip_child_site_ids"]; }
             set { attributes["skip_child_site_ids"] = value; }
+        }
+
+        /// <summary>
+        /// IDs of child sites explicitly assigned to this non-default policy.
+        /// </summary>
+        [JsonPropertyName("child_site_ids")]
+        public Nullable<Int64>[] ChildSiteIds
+        {
+            get { return (Nullable<Int64>[])attributes["child_site_ids"]; }
+            set { attributes["child_site_ids"] = value; }
+        }
+
+        /// <summary>
+        /// Whether this policy applies to child sites not explicitly assigned to another policy.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("default_policy")]
+        public bool DefaultPolicy
+        {
+            get { return attributes["default_policy"] == null ? false : (bool)attributes["default_policy"]; }
+            set { attributes["default_policy"] = value; }
         }
 
         /// <summary>
@@ -183,7 +212,9 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
-        ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        ///   skip_child_site_ids - array(int64) - IDs of child sites excluded from this default policy.
+        ///   child_site_ids - array(int64) - IDs of child sites explicitly assigned to this non-default policy.
+        ///   default_policy - boolean - Whether this policy applies to child sites not explicitly assigned to another policy.
         ///   policy_type - string - Type of policy.  Valid values: `settings`.
         ///   name - string - Name for this policy.
         ///   description - string - Description for this policy.
@@ -212,6 +243,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: skip_child_site_ids must be of type Nullable<Int64>[]", "parameters[\"skip_child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("child_site_ids") && !(parameters["child_site_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: child_site_ids must be of type Nullable<Int64>[]", "parameters[\"child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("default_policy") && !(parameters["default_policy"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: default_policy must be of type bool", "parameters[\"default_policy\"]");
             }
             if (parameters.ContainsKey("policy_type") && !(parameters["policy_type"] is string))
             {
@@ -370,7 +409,9 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
-        ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        ///   skip_child_site_ids - array(int64) - IDs of child sites excluded from this default policy.
+        ///   child_site_ids - array(int64) - IDs of child sites explicitly assigned to this non-default policy.
+        ///   default_policy - boolean - Whether this policy applies to child sites not explicitly assigned to another policy.
         ///   policy_type (required) - string - Type of policy.  Valid values: `settings`.
         ///   name - string - Name for this policy.
         ///   description - string - Description for this policy.
@@ -395,6 +436,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: skip_child_site_ids must be of type Nullable<Int64>[]", "parameters[\"skip_child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("child_site_ids") && !(parameters["child_site_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: child_site_ids must be of type Nullable<Int64>[]", "parameters[\"child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("default_policy") && !(parameters["default_policy"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: default_policy must be of type bool", "parameters[\"default_policy\"]");
             }
             if (parameters.ContainsKey("policy_type") && !(parameters["policy_type"] is string))
             {
@@ -425,7 +474,9 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   value - object - Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
-        ///   skip_child_site_ids - array(int64) - IDs of child sites that this policy has been exempted from. If `skip_child_site_ids` is empty, the policy will be applied to all child sites. To apply a policy to a child site that has been exempted, remove it from `skip_child_site_ids` or set it to an empty array (`[]`).
+        ///   skip_child_site_ids - array(int64) - IDs of child sites excluded from this default policy.
+        ///   child_site_ids - array(int64) - IDs of child sites explicitly assigned to this non-default policy.
+        ///   default_policy - boolean - Whether this policy applies to child sites not explicitly assigned to another policy.
         ///   policy_type - string - Type of policy.  Valid values: `settings`.
         ///   name - string - Name for this policy.
         ///   description - string - Description for this policy.
@@ -462,6 +513,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("skip_child_site_ids") && !(parameters["skip_child_site_ids"] is Nullable<Int64>[]))
             {
                 throw new ArgumentException("Bad parameter: skip_child_site_ids must be of type Nullable<Int64>[]", "parameters[\"skip_child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("child_site_ids") && !(parameters["child_site_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: child_site_ids must be of type Nullable<Int64>[]", "parameters[\"child_site_ids\"]");
+            }
+            if (parameters.ContainsKey("default_policy") && !(parameters["default_policy"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: default_policy must be of type bool", "parameters[\"default_policy\"]");
             }
             if (parameters.ContainsKey("policy_type") && !(parameters["policy_type"] is string))
             {
