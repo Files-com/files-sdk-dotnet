@@ -70,6 +70,8 @@
   "active_2fa": true,
   "require_password_change": true,
   "password_expired": true,
+  "responsible_group_id": 1,
+  "responsible_user_id": 1,
   "readonly_site_admin": true,
   "restapi_permission": true,
   "self_managed": true,
@@ -159,6 +161,8 @@
 * `active_2fa` / `Active2fa`  (bool): Is 2fa active for the user?
 * `require_password_change` / `RequirePasswordChange`  (bool): Is a password change required upon next user login?
 * `password_expired` / `PasswordExpired`  (bool): Is user's password expired?
+* `responsible_group_id` / `ResponsibleGroupId`  (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
+* `responsible_user_id` / `ResponsibleUserId`  (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `readonly_site_admin` / `ReadonlySiteAdmin`  (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `restapi_permission` / `RestapiPermission`  (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
 * `self_managed` / `SelfManaged`  (bool): Does this user manage it's own credentials or is it a shared/bot user?
@@ -304,6 +308,8 @@ Task<User> User.Create(
 * `notify_on_all_expectation_failures` (bool): Should the user receive expectation failures and misses via email?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
+* `responsible_group_id` (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
+* `responsible_user_id` (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `restapi_permission` (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (bool): Can the user access with SFTP?
@@ -438,6 +444,8 @@ Task<User> User.Update(
 * `notify_on_all_expectation_failures` (bool): Should the user receive expectation failures and misses via email?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
+* `responsible_group_id` (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
+* `responsible_user_id` (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `restapi_permission` (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (bool): Can the user access with SFTP?
@@ -582,6 +590,8 @@ parameters.Add("notify_on_all_automation_failures", true);
 parameters.Add("notify_on_all_expectation_failures", true);
 parameters.Add("require_login_by", "2000-01-01T01:00:00Z");
 parameters.Add("require_password_change", true);
+parameters.Add("responsible_group_id", 1);
+parameters.Add("responsible_user_id", 1);
 parameters.Add("restapi_permission", true);
 parameters.Add("self_managed", true);
 parameters.Add("sftp_permission", true);
@@ -657,6 +667,8 @@ User.Update(parameters);
 * `notify_on_all_expectation_failures` (bool): Should the user receive expectation failures and misses via email?
 * `require_login_by` (string): Require user to login by specified date otherwise it will be disabled.
 * `require_password_change` (bool): Is a password change required upon next user login?
+* `responsible_group_id` (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
+* `responsible_user_id` (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `restapi_permission` (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (bool): Can the user access with SFTP?

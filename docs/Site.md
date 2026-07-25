@@ -312,6 +312,8 @@
     "active_2fa": true,
     "require_password_change": true,
     "password_expired": true,
+    "responsible_group_id": 1,
+    "responsible_user_id": 1,
     "readonly_site_admin": true,
     "restapi_permission": true,
     "self_managed": true,
