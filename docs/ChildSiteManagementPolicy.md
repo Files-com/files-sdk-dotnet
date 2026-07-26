@@ -8,7 +8,7 @@
   "policy_type": "settings",
   "name": "example",
   "description": "example",
-  "value": "{ \"color2_left\": \"#000000\" }",
+  "value": "{ \"color2_left\": \"#000000\", \"folder_behaviors\": [{ \"behavior\": \"file_expiration\", \"value\": { \"days_to_retain\": 30 } }] }",
   "applied_child_site_ids": [
     1,
     2
@@ -31,7 +31,7 @@
 * `policy_type` / `PolicyType`  (string): Type of policy.  Valid values: `settings`.
 * `name` / `Name`  (string): Name for this policy.
 * `description` / `Description`  (string): Description for this policy.
-* `value` / `Value`  (object): Policy configuration data. Attributes differ by policy type. For more information, refer to the Value Hash section of the developer documentation.
+* `value` / `Value`  (object): Policy configuration data. Settings policies accept site settings plus an optional `folder_behaviors` array for parent-managed root behaviors on child sites. For more information, refer to the Value Hash section of the developer documentation.
 * `applied_child_site_ids` / `AppliedChildSiteIds`  (Nullable<Int64>[]): IDs of child sites that this policy has been applied to. This field is read-only.
 * `skip_child_site_ids` / `SkipChildSiteIds`  (Nullable<Int64>[]): IDs of child sites excluded from this default policy.
 * `child_site_ids` / `ChildSiteIds`  (Nullable<Int64>[]): IDs of child sites explicitly assigned to this non-default policy.
