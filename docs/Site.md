@@ -177,6 +177,8 @@
   "prevent_root_permissions_for_non_site_admins": true,
   "protocol_access_groups_only": true,
   "require_2fa": true,
+  "restrict_root_folder_behaviors_to_site_admins": true,
+  "root_folder_behaviors_apply_to_workspaces": true,
   "require_2fa_exempt_all_sso_users": true,
   "require_2fa_stop_time": "2000-01-01T01:00:00Z",
   "revoke_bundle_access_on_disable_or_delete": true,
@@ -497,6 +499,8 @@
 * `prevent_root_permissions_for_non_site_admins` / `PreventRootPermissionsForNonSiteAdmins`  (bool): If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
 * `protocol_access_groups_only` / `ProtocolAccessGroupsOnly`  (bool): If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
 * `require_2fa` / `Require2fa`  (bool): Require two-factor authentication for all users?
+* `restrict_root_folder_behaviors_to_site_admins` / `RestrictRootFolderBehaviorsToSiteAdmins`  (bool): If true, only site admins may create, modify, or delete any behavior at the site root, or a skip that would disable one.
+* `root_folder_behaviors_apply_to_workspaces` / `RootFolderBehaviorsApplyToWorkspaces`  (bool): If true, supported protective behaviors at the site root also apply within named workspaces. Requires restrict_root_folder_behaviors_to_site_admins to be enabled.
 * `require_2fa_exempt_all_sso_users` / `Require2faExemptAllSsoUsers`  (bool): If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
 * `require_2fa_stop_time` / `Require2faStopTime`  (Nullable<DateTime>): If set, requirement for two-factor authentication has been scheduled to end on this date-time.
 * `revoke_bundle_access_on_disable_or_delete` / `RevokeBundleAccessOnDisableOrDelete`  (bool): Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
@@ -679,6 +683,8 @@ Task<Site> Site.Update(
 * `document_edits_in_bundle_allowed` (bool): If true, allow public viewers of Bundles with full permissions to use document editing integrations.
 * `password_requirements_apply_to_bundles` (bool): Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
 * `prevent_root_permissions_for_non_site_admins` (bool): If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
+* `restrict_root_folder_behaviors_to_site_admins` (bool): If true, only site admins may create, modify, or delete any behavior at the site root, or a skip that would disable one.
+* `root_folder_behaviors_apply_to_workspaces` (bool): If true, supported protective behaviors at the site root also apply within named workspaces. Requires restrict_root_folder_behaviors_to_site_admins to be enabled.
 * `opt_out_global` (bool): Use servers in the USA only?
 * `use_provided_modified_at` (bool): Allow uploaders to set `provided_modified_at` for uploaded files?
 * `custom_namespace` (bool): Is this site using a custom namespace for users?

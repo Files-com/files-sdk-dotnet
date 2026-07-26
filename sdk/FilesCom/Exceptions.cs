@@ -732,6 +732,18 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class RootFolderBehaviorSiteAdminRequiredException : NotAuthorizedException
+    {
+        public RootFolderBehaviorSiteAdminRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class RootFolderBehaviorSkipSiteAdminRequiredException : NotAuthorizedException
+    {
+        public RootFolderBehaviorSkipSiteAdminRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class SelfManagedRequiredException : NotAuthorizedException
     {
         public SelfManagedRequiredException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)

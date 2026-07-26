@@ -69,6 +69,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recursive", false);
             }
+            if (!this.attributes.ContainsKey("inherited"))
+            {
+                this.attributes.Add("inherited", false);
+            }
+            if (!this.attributes.ContainsKey("managed"))
+            {
+                this.attributes.Add("managed", false);
+            }
+            if (!this.attributes.ContainsKey("root_behavior_site_admin_only"))
+            {
+                this.attributes.Add("root_behavior_site_admin_only", false);
+            }
             if (!this.attributes.ContainsKey("attachment_file"))
             {
                 this.attributes.Add("attachment_file", null);
@@ -200,6 +212,39 @@ namespace FilesCom.Models
         {
             get { return attributes["recursive"] == null ? false : (bool)attributes["recursive"]; }
             set { attributes["recursive"] = value; }
+        }
+
+        /// <summary>
+        /// If true, this behavior is inherited from a higher scope rather than owned by the requested workspace.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("inherited")]
+        public bool Inherited
+        {
+            get { return attributes["inherited"] == null ? false : (bool)attributes["inherited"]; }
+            set { attributes["inherited"] = value; }
+        }
+
+        /// <summary>
+        /// If true, this behavior is controlled by a parent-site policy and cannot be modified locally.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("managed")]
+        public bool Managed
+        {
+            get { return attributes["managed"] == null ? false : (bool)attributes["managed"]; }
+            set { attributes["managed"] = value; }
+        }
+
+        /// <summary>
+        /// If true, this behavior may only be modified by a site admin because it is at the site root or disables a root behavior.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("root_behavior_site_admin_only")]
+        public bool RootBehaviorSiteAdminOnly
+        {
+            get { return attributes["root_behavior_site_admin_only"] == null ? false : (bool)attributes["root_behavior_site_admin_only"]; }
+            set { attributes["root_behavior_site_admin_only"] = value; }
         }
 
         /// <summary>

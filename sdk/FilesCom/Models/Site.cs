@@ -585,6 +585,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("require_2fa", false);
             }
+            if (!this.attributes.ContainsKey("restrict_root_folder_behaviors_to_site_admins"))
+            {
+                this.attributes.Add("restrict_root_folder_behaviors_to_site_admins", false);
+            }
+            if (!this.attributes.ContainsKey("root_folder_behaviors_apply_to_workspaces"))
+            {
+                this.attributes.Add("root_folder_behaviors_apply_to_workspaces", false);
+            }
             if (!this.attributes.ContainsKey("require_2fa_exempt_all_sso_users"))
             {
                 this.attributes.Add("require_2fa_exempt_all_sso_users", false);
@@ -2415,6 +2423,30 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, only site admins may create, modify, or delete any behavior at the site root, or a skip that would disable one.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("restrict_root_folder_behaviors_to_site_admins")]
+        public bool RestrictRootFolderBehaviorsToSiteAdmins
+        {
+            get { return attributes["restrict_root_folder_behaviors_to_site_admins"] == null ? false : (bool)attributes["restrict_root_folder_behaviors_to_site_admins"]; }
+            private set { attributes["restrict_root_folder_behaviors_to_site_admins"] = value; }
+        }
+
+        /// <summary>
+        /// If true, supported protective behaviors at the site root also apply within named workspaces. Requires restrict_root_folder_behaviors_to_site_admins to be enabled.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("root_folder_behaviors_apply_to_workspaces")]
+        public bool RootFolderBehaviorsApplyToWorkspaces
+        {
+            get { return attributes["root_folder_behaviors_apply_to_workspaces"] == null ? false : (bool)attributes["root_folder_behaviors_apply_to_workspaces"]; }
+            private set { attributes["root_folder_behaviors_apply_to_workspaces"] = value; }
+        }
+
+        /// <summary>
         /// If true, SSO users using the default user-level two-factor authentication setting are exempt from the site-wide two-factor authentication requirement.
         /// </summary>
         [JsonInclude]
@@ -3140,6 +3172,8 @@ namespace FilesCom.Models
         ///   document_edits_in_bundle_allowed - boolean - If true, allow public viewers of Bundles with full permissions to use document editing integrations.
         ///   password_requirements_apply_to_bundles - boolean - Require bundles' passwords, and passwords for other items (inboxes, public shares, etc.) to conform to the same requirements as users' passwords?
         ///   prevent_root_permissions_for_non_site_admins - boolean - If true, we will prevent non-administrators from receiving any permissions directly on the root folder.  This is commonly used to prevent the accidental application of permissions.
+        ///   restrict_root_folder_behaviors_to_site_admins - boolean - If true, only site admins may create, modify, or delete any behavior at the site root, or a skip that would disable one.
+        ///   root_folder_behaviors_apply_to_workspaces - boolean - If true, supported protective behaviors at the site root also apply within named workspaces. Requires restrict_root_folder_behaviors_to_site_admins to be enabled.
         ///   opt_out_global - boolean - Use servers in the USA only?
         ///   use_provided_modified_at - boolean - Allow uploaders to set `provided_modified_at` for uploaded files?
         ///   custom_namespace - boolean - Is this site using a custom namespace for users?
@@ -3600,6 +3634,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("prevent_root_permissions_for_non_site_admins") && !(parameters["prevent_root_permissions_for_non_site_admins"] is bool))
             {
                 throw new ArgumentException("Bad parameter: prevent_root_permissions_for_non_site_admins must be of type bool", "parameters[\"prevent_root_permissions_for_non_site_admins\"]");
+            }
+            if (parameters.ContainsKey("restrict_root_folder_behaviors_to_site_admins") && !(parameters["restrict_root_folder_behaviors_to_site_admins"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: restrict_root_folder_behaviors_to_site_admins must be of type bool", "parameters[\"restrict_root_folder_behaviors_to_site_admins\"]");
+            }
+            if (parameters.ContainsKey("root_folder_behaviors_apply_to_workspaces") && !(parameters["root_folder_behaviors_apply_to_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: root_folder_behaviors_apply_to_workspaces must be of type bool", "parameters[\"root_folder_behaviors_apply_to_workspaces\"]");
             }
             if (parameters.ContainsKey("opt_out_global") && !(parameters["opt_out_global"] is bool))
             {
