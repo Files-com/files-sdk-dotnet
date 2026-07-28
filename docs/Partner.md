@@ -25,6 +25,7 @@
   "responsible_group_id": 1,
   "responsible_user_id": 1,
   "root_folder": "/AcmeCorp",
+  "show_partner_channel_home_page": true,
   "tags": "example",
   "user_ids": [
     1,
@@ -51,6 +52,7 @@
 * `responsible_group_id` / `ResponsibleGroupId`  (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` / `ResponsibleUserId`  (Nullable<Int64>): ID of the User responsible for this Partner.
 * `root_folder` / `RootFolder`  (string): The root folder path for this Partner.
+* `show_partner_channel_home_page` / `ShowPartnerChannelHomePage`  (bool): Show Partner users a simplified home page built from this Partner's Channels.
 * `tags` / `Tags`  (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): Array of User IDs that belong to this Partner.
 
@@ -117,6 +119,7 @@ Task<Partner> Partner.Create(
 * `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
+* `show_partner_channel_home_page` (bool): Show Partner users a simplified home page built from this Partner's Channels.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): Required - The name of the Partner.
 * `root_folder` (string): Required - The root folder path for this Partner.
@@ -149,6 +152,7 @@ Task<Partner> Partner.Update(
 * `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
+* `show_partner_channel_home_page` (bool): Show Partner users a simplified home page built from this Partner's Channels.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
 * `root_folder` (string): The root folder path for this Partner.
@@ -191,6 +195,7 @@ parameters.Add("notes", "This is a note about the partner.");
 parameters.Add("partner_channel_template_id", 1);
 parameters.Add("responsible_group_id", 1);
 parameters.Add("responsible_user_id", 1);
+parameters.Add("show_partner_channel_home_page", false);
 parameters.Add("tags", "example");
 parameters.Add("name", "Acme Corp");
 parameters.Add("root_folder", "/AcmeCorp");
@@ -212,6 +217,7 @@ Partner.Update(parameters);
 * `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` (Nullable<Int64>): ID of the User responsible for this Partner.
+* `show_partner_channel_home_page` (bool): Show Partner users a simplified home page built from this Partner's Channels.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
 * `root_folder` (string): The root folder path for this Partner.

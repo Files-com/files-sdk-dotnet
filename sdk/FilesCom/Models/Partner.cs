@@ -97,6 +97,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("root_folder", null);
             }
+            if (!this.attributes.ContainsKey("show_partner_channel_home_page"))
+            {
+                this.attributes.Add("show_partner_channel_home_page", false);
+            }
             if (!this.attributes.ContainsKey("tags"))
             {
                 this.attributes.Add("tags", null);
@@ -304,6 +308,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Show Partner users a simplified home page built from this Partner's Channels.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("show_partner_channel_home_page")]
+        public bool ShowPartnerChannelHomePage
+        {
+            get { return attributes["show_partner_channel_home_page"] == null ? false : (bool)attributes["show_partner_channel_home_page"]; }
+            set { attributes["show_partner_channel_home_page"] = value; }
+        }
+
+        /// <summary>
         /// Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         /// </summary>
         [JsonPropertyName("tags")]
@@ -336,6 +351,7 @@ namespace FilesCom.Models
         ///   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
         ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
         ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
+        ///   show_partner_channel_home_page - boolean - Show Partner users a simplified home page built from this Partner's Channels.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -400,6 +416,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
+            }
+            if (parameters.ContainsKey("show_partner_channel_home_page") && !(parameters["show_partner_channel_home_page"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: show_partner_channel_home_page must be of type bool", "parameters[\"show_partner_channel_home_page\"]");
             }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
@@ -578,6 +598,7 @@ namespace FilesCom.Models
         ///   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
         ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
         ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
+        ///   show_partner_channel_home_page - boolean - Show Partner users a simplified home page built from this Partner's Channels.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name (required) - string - The name of the Partner.
         ///   root_folder (required) - string - The root folder path for this Partner.
@@ -644,6 +665,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
             }
+            if (parameters.ContainsKey("show_partner_channel_home_page") && !(parameters["show_partner_channel_home_page"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: show_partner_channel_home_page must be of type bool", "parameters[\"show_partner_channel_home_page\"]");
+            }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
                 throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
@@ -687,6 +712,7 @@ namespace FilesCom.Models
         ///   partner_channel_template_id - int64 - ID of the Partner Channel Template assigned to this Partner.
         ///   responsible_group_id - int64 - ID of the Group responsible for this Partner.
         ///   responsible_user_id - int64 - ID of the User responsible for this Partner.
+        ///   show_partner_channel_home_page - boolean - Show Partner users a simplified home page built from this Partner's Channels.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
         ///   root_folder - string - The root folder path for this Partner.
@@ -759,6 +785,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
+            }
+            if (parameters.ContainsKey("show_partner_channel_home_page") && !(parameters["show_partner_channel_home_page"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: show_partner_channel_home_page must be of type bool", "parameters[\"show_partner_channel_home_page\"]");
             }
             if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
             {
