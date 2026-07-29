@@ -325,6 +325,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("email", "");
             }
+            if (!this.attributes.ContainsKey("fedramp"))
+            {
+                this.attributes.Add("fedramp", false);
+            }
             if (!this.attributes.ContainsKey("ftp_enabled"))
             {
                 this.attributes.Add("ftp_enabled", false);
@@ -1674,6 +1678,18 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["email"]; }
             private set { attributes["email"] = value; }
+        }
+
+        /// <summary>
+        /// Are FedRAMP security restrictions enabled for this site?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("fedramp")]
+        public bool Fedramp
+        {
+            get { return attributes["fedramp"] == null ? false : (bool)attributes["fedramp"]; }
+            private set { attributes["fedramp"] = value; }
         }
 
         /// <summary>
@@ -3137,6 +3153,7 @@ namespace FilesCom.Models
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
         ///   sftp_insecure_diffie_hellman - boolean - If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
         ///   disable_files_certificate_generation - boolean - If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
+        ///   fedramp - boolean - Are FedRAMP security restrictions enabled for this site?
         ///   user_lockout - boolean - Will users be locked out after incorrect login attempts?
         ///   user_lockout_tries - int64 - Number of login tries within `user_lockout_within` hours before users are locked out
         ///   user_lockout_within - int64 - Number of hours for user lockout window
@@ -3494,6 +3511,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("disable_files_certificate_generation") && !(parameters["disable_files_certificate_generation"] is bool))
             {
                 throw new ArgumentException("Bad parameter: disable_files_certificate_generation must be of type bool", "parameters[\"disable_files_certificate_generation\"]");
+            }
+            if (parameters.ContainsKey("fedramp") && !(parameters["fedramp"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: fedramp must be of type bool", "parameters[\"fedramp\"]");
             }
             if (parameters.ContainsKey("user_lockout") && !(parameters["user_lockout"] is bool))
             {

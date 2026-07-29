@@ -94,6 +94,7 @@
   "domain_hsts_header": true,
   "domain_letsencrypt_chain": "example",
   "email": "john.doe@files.com",
+  "fedramp": true,
   "ftp_enabled": true,
   "reply_to_email": "jane.doe@files.com",
   "non_sso_groups_allowed": true,
@@ -434,6 +435,7 @@
 * `domain_hsts_header` / `DomainHstsHeader`  (bool): Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
 * `domain_letsencrypt_chain` / `DomainLetsencryptChain`  (string): Letsencrypt chain to use when registering SSL Certificate for domain. No longer used as of 2026.
 * `email` / `Email`  (string): Main email for this site
+* `fedramp` / `Fedramp`  (bool): Are FedRAMP security restrictions enabled for this site?
 * `ftp_enabled` / `FtpEnabled`  (bool): Is FTP enabled?
 * `reply_to_email` / `ReplyToEmail`  (string): Reply-to email for this site
 * `non_sso_groups_allowed` / `NonSsoGroupsAllowed`  (bool): If true, groups can be manually created / modified / deleted by Site Admins. Otherwise, groups can only be managed via your SSO provider.
@@ -648,6 +650,7 @@ Task<Site> Site.Update(
 * `sftp_insecure_ciphers` (bool): If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
 * `sftp_insecure_diffie_hellman` (bool): If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
 * `disable_files_certificate_generation` (bool): If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
+* `fedramp` (bool): Are FedRAMP security restrictions enabled for this site?
 * `user_lockout` (bool): Will users be locked out after incorrect login attempts?
 * `user_lockout_tries` (Nullable<Int64>): Number of login tries within `user_lockout_within` hours before users are locked out
 * `user_lockout_within` (Nullable<Int64>): Number of hours for user lockout window
