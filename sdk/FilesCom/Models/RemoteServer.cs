@@ -289,6 +289,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("files_agent_supports_push_updates", false);
             }
+            if (!this.attributes.ContainsKey("direct_transfer_available"))
+            {
+                this.attributes.Add("direct_transfer_available", false);
+            }
             if (!this.attributes.ContainsKey("outbound_agent_id"))
             {
                 this.attributes.Add("outbound_agent_id", null);
@@ -1109,6 +1113,17 @@ namespace FilesCom.Models
         {
             get { return attributes["files_agent_supports_push_updates"] == null ? false : (bool)attributes["files_agent_supports_push_updates"]; }
             set { attributes["files_agent_supports_push_updates"] = value; }
+        }
+
+        /// <summary>
+        /// Whether the Files Agent Proxy recently validated a direct transfer connection. `true` means a direct connection was recently validated (actual availability can vary by client network), `false` means direct transfers are enabled but not currently available, and `null` means direct transfers are disabled or unsupported. Only provided for a connected Files Agent when showing a single Remote Server.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("direct_transfer_available")]
+        public bool DirectTransferAvailable
+        {
+            get { return attributes["direct_transfer_available"] == null ? false : (bool)attributes["direct_transfer_available"]; }
+            set { attributes["direct_transfer_available"] = value; }
         }
 
         /// <summary>
