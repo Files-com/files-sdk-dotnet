@@ -304,6 +304,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class OffsetUploadNotAllowedWithMalwareScanningException : BadRequestException
+    {
+        public OffsetUploadNotAllowedWithMalwareScanningException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class PartNumberTooLargeException : BadRequestException
     {
         public PartNumberTooLargeException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)

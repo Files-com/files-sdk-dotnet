@@ -722,6 +722,7 @@ Exception
 |`MethodNotAllowedException`|  `BadRequestException` |
 |`MultipleSortParamsNotAllowedException`|  `BadRequestException` |
 |`NoValidInputParamsException`|  `BadRequestException` |
+|`OffsetUploadNotAllowedWithMalwareScanningException`|  `BadRequestException` |
 |`PartNumberTooLargeException`|  `BadRequestException` |
 |`PathCannotHaveTrailingWhitespaceException`|  `BadRequestException` |
 |`ReauthenticationNeededFieldsException`|  `BadRequestException` |
