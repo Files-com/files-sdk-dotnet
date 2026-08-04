@@ -127,9 +127,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("version")]
-        public Nullable<Int64> Version
+        public Nullable<double> Version
         {
-            get { return (Nullable<Int64>)attributes["version"]; }
+            get { return (Nullable<double>)attributes["version"]; }
             private set { attributes["version"] = value; }
         }
 

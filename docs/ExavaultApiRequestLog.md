@@ -6,7 +6,7 @@
 {
   "timestamp": "2000-01-01T01:00:00Z",
   "endpoint": "example",
-  "version": 1,
+  "version": 1.0,
   "request_ip": "example",
   "request_method": "example",
   "error_type": "example",
@@ -21,7 +21,7 @@
 
 * `timestamp` / `Timestamp`  (Nullable<DateTime>): Start Time of Action. Deprecrated: Use created_at.
 * `endpoint` / `Endpoint`  (string): Name of API Endpoint
-* `version` / `Version`  (Nullable<Int64>): Exavault API Version
+* `version` / `Version`  (Nullable<double>): Exavault API Version
 * `request_ip` / `RequestIp`  (string): IP of requesting client
 * `request_method` / `RequestMethod`  (string): HTTP Method
 * `error_type` / `ErrorType`  (string): Error type, if applicable

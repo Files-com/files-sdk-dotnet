@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("root", null);
             }
+            if (!this.attributes.ContainsKey("node_name"))
+            {
+                this.attributes.Add("node_name", null);
+            }
             if (!this.attributes.ContainsKey("follow_links"))
             {
                 this.attributes.Add("follow_links", false);
@@ -205,6 +209,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["root"]; }
             private set { attributes["root"] = value; }
+        }
+
+        /// <summary>
+        /// Optional customer-facing name for this Agent installation
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("node_name")]
+        public string NodeName
+        {
+            get { return (string)attributes["node_name"]; }
+            private set { attributes["node_name"] = value; }
         }
 
         /// <summary>

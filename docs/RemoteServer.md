@@ -229,6 +229,23 @@ Task<RemoteServer> RemoteServer.Find(
 
 ---
 
+## List Files.com Agent nodes
+
+```
+Task<AgentNode> RemoteServer.AgentNodes(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
 ## Download configuration file (required for some Remote Server integrations, such as the Files.com Agent)
 
 ```
@@ -498,6 +515,24 @@ Task RemoteServer.Delete(
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
+## List Files.com Agent nodes
+
+```
+var RemoteServer = RemoteServer.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+
+RemoteServer.AgentNodes
 ```
 
 ### Parameters

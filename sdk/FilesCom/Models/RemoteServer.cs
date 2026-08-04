@@ -1480,6 +1480,40 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// List Files.com Agent nodes
+        /// </summary>
+        public async Task<AgentNode> AgentNodes(Dictionary<string, object> parameters)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["id"] = attributes["id"];
+
+            if (!attributes.ContainsKey("id"))
+            {
+                throw new ArgumentException("Current object doesn't have a id");
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/agent_nodes", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AgentNode>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+
+        /// <summary>
         /// Push update to Files Agent
         /// </summary>
         public async Task<AgentPushUpdate> AgentPushUpdate(Dictionary<string, object> parameters)
@@ -2195,6 +2229,48 @@ namespace FilesCom.Models
         {
             return await Find(id, parameters, options);
         }
+
+        /// <summary>
+        /// List Files.com Agent nodes
+        /// </summary>
+        public static async Task<AgentNode> AgentNodes(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/agent_nodes", System.Net.Http.HttpMethod.Get, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<AgentNode>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
 
         /// <summary>
         /// Parameters:
