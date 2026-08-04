@@ -49,6 +49,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("enabled"))
+            {
+                this.attributes.Add("enabled", false);
+            }
             if (!this.attributes.ContainsKey("user_count"))
             {
                 this.attributes.Add("user_count", null);
@@ -193,10 +197,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("ldap_domain", null);
             }
-            if (!this.attributes.ContainsKey("enabled"))
-            {
-                this.attributes.Add("enabled", false);
-            }
             if (!this.attributes.ContainsKey("display_on_login_page"))
             {
                 this.attributes.Add("display_on_login_page", false);
@@ -313,6 +313,18 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("enabled")]
+        public bool Enabled
+        {
+            get { return attributes["enabled"] == null ? false : (bool)attributes["enabled"]; }
+            private set { attributes["enabled"] = value; }
         }
 
         /// <summary>
@@ -716,18 +728,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["ldap_domain"]; }
             private set { attributes["ldap_domain"] = value; }
-        }
-
-        /// <summary>
-        /// Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("enabled")]
-        public bool Enabled
-        {
-            get { return attributes["enabled"] == null ? false : (bool)attributes["enabled"]; }
-            private set { attributes["enabled"] = value; }
         }
 
         /// <summary>

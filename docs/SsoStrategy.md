@@ -9,6 +9,7 @@
   "label": "My Corporate SSO Provider",
   "logo_url": "https://mysite.files.com/.../logo.png",
   "id": 1,
+  "enabled": true,
   "user_count": 1,
   "saml_provider_cert_fingerprint": "example",
   "saml_provider_issuer_url": "example",
@@ -45,7 +46,6 @@
   "provider_identifier": "",
   "ldap_base_dn": "example",
   "ldap_domain": "mysite.com",
-  "enabled": true,
   "display_on_login_page": true,
   "ldap_host": "ldap.site.com",
   "ldap_host_2": "ldap2.site.com",
@@ -64,6 +64,7 @@
 * `label` / `Label`  (string): Custom label for the SSO provider on the login page.
 * `logo_url` / `LogoUrl`  (string): URL holding a custom logo for the SSO provider on the login page.
 * `id` / `Id`  (Nullable<Int64>): ID
+* `enabled` / `Enabled`  (bool): Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
 * `user_count` / `UserCount`  (Nullable<Int64>): Count of users with this SSO Strategy
 * `saml_provider_cert_fingerprint` / `SamlProviderCertFingerprint`  (string): Identity provider sha256 cert fingerprint if saml_provider_metadata_url is not available.
 * `saml_provider_issuer_url` / `SamlProviderIssuerUrl`  (string): Identity provider issuer url
@@ -100,7 +101,6 @@
 * `provider_identifier` / `ProviderIdentifier`  (string): URL-friendly, unique identifier for Azure SAML configuration
 * `ldap_base_dn` / `LdapBaseDn`  (string): Base DN for looking up users in LDAP server
 * `ldap_domain` / `LdapDomain`  (string): Domain name that will be appended to LDAP usernames
-* `enabled` / `Enabled`  (bool): Is strategy enabled?  This may become automatically set to `false` after a high number and duration of failures.
 * `display_on_login_page` / `DisplayOnLoginPage`  (bool): Should this strategy be displayed on the login page?
 * `ldap_host` / `LdapHost`  (string): LDAP host
 * `ldap_host_2` / `LdapHost2`  (string): LDAP backup host
