@@ -268,7 +268,7 @@ Task<Automation> Automation.Upgrade(
 
 ---
 
-## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+## Manually Run Automation
 
 ```
 Task Automation.ManualRun(
@@ -371,7 +371,7 @@ Automation.Upgrade
 
 ---
 
-## Manually Run Automation. v2 Automations require Site or Workspace Admin permission
+## Manually Run Automation
 
 ```
 var Automation = Automation.Find(1);
