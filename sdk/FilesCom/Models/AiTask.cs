@@ -81,6 +81,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("schedule_id"))
+            {
+                this.attributes.Add("schedule_id", null);
+            }
             if (!this.attributes.ContainsKey("schedule_days_of_week"))
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
@@ -272,6 +276,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
+        /// </summary>
+        [JsonPropertyName("schedule_id")]
+        public Nullable<Int64> ScheduleId
+        {
+            get { return (Nullable<Int64>)attributes["schedule_id"]; }
+            set { attributes["schedule_id"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         /// </summary>
         [JsonPropertyName("schedule_days_of_week")]
@@ -282,7 +296,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Times of day in HH:MM format for scheduled AI Tasks.
+        /// Times of day in HH:MM format for the AI Task schedule.
         /// </summary>
         [JsonPropertyName("schedule_times_of_day")]
         public string[] ScheduleTimesOfDay
@@ -302,7 +316,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Optional holiday region used by scheduled AI Tasks.
+        /// Optional holiday region used by the AI Task schedule.
         /// </summary>
         [JsonPropertyName("holiday_region")]
         public string HolidayRegion
@@ -392,16 +406,17 @@ namespace FilesCom.Models
         /// Parameters:
         ///   description - string - AI Task description.
         ///   disabled - boolean - If true, this AI Task will not run.
-        ///   holiday_region - string - Optional holiday region used by scheduled AI Tasks.
+        ///   holiday_region - string - Optional holiday region used by the AI Task schedule.
         ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
         ///   name - string - AI Task name.
         ///   path - string - Path scope used for action-triggered AI Tasks.
         ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
-        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for scheduled AI Tasks.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the AI Task schedule.
         ///   source - string - Source glob used with `path` for action-triggered AI Tasks.
         ///   trigger - string - How this AI Task is triggered.
         ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
@@ -459,6 +474,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -644,16 +663,17 @@ namespace FilesCom.Models
         /// Parameters:
         ///   description - string - AI Task description.
         ///   disabled - boolean - If true, this AI Task will not run.
-        ///   holiday_region - string - Optional holiday region used by scheduled AI Tasks.
+        ///   holiday_region - string - Optional holiday region used by the AI Task schedule.
         ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
         ///   name (required) - string - AI Task name.
         ///   path - string - Path scope used for action-triggered AI Tasks.
         ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt (required) - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
-        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for scheduled AI Tasks.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the AI Task schedule.
         ///   source - string - Source glob used with `path` for action-triggered AI Tasks.
         ///   trigger - string - How this AI Task is triggered.
         ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
@@ -711,6 +731,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -791,16 +815,17 @@ namespace FilesCom.Models
         /// Parameters:
         ///   description - string - AI Task description.
         ///   disabled - boolean - If true, this AI Task will not run.
-        ///   holiday_region - string - Optional holiday region used by scheduled AI Tasks.
+        ///   holiday_region - string - Optional holiday region used by the AI Task schedule.
         ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
         ///   name - string - AI Task name.
         ///   path - string - Path scope used for action-triggered AI Tasks.
         ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
-        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for scheduled AI Tasks.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the AI Task schedule.
         ///   source - string - Source glob used with `path` for action-triggered AI Tasks.
         ///   trigger - string - How this AI Task is triggered.
         ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
@@ -866,6 +891,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {

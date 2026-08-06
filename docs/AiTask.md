@@ -19,6 +19,7 @@
   ],
   "interval": "day",
   "recurring_day": 1,
+  "schedule_id": 1,
   "schedule_days_of_week": [
     1,
     3,
@@ -50,10 +51,11 @@
 * `trigger_actions` / `TriggerActions`  (string[]): If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for scheduled AI Tasks.
+* `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for the AI Task schedule.
 * `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the AI Task schedule.
-* `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by scheduled AI Tasks.
+* `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by the AI Task schedule.
 * `human_readable_schedule` / `HumanReadableSchedule`  (string): Human-readable schedule description.
 * `last_run_at` / `LastRunAt`  (Nullable<DateTime>): Most recent successful invocation time.
 * `master_admin_user_id` / `MasterAdminUserId`  (Nullable<Int64>): Master User ID used for AI Task invocations.
@@ -114,16 +116,17 @@ Task<AiTask> AiTask.Create(
 
 * `description` (string): AI Task description.
 * `disabled` (bool): If true, this AI Task will not run.
-* `holiday_region` (string): Optional holiday region used by scheduled AI Tasks.
+* `holiday_region` (string): Optional holiday region used by the AI Task schedule.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `name` (string): Required - AI Task name.
 * `path` (string): Path scope used for action-triggered AI Tasks.
 * `permission_set` (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `prompt` (string): Required - Prompt sent when this AI Task is invoked.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_time_zone` (string): Time zone used by the AI Task schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for scheduled AI Tasks.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the AI Task schedule.
 * `source` (string): Source glob used with `path` for action-triggered AI Tasks.
 * `trigger` (string): How this AI Task is triggered.
 * `trigger_actions` (string[]): If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
@@ -164,16 +167,17 @@ Task<AiTask> AiTask.Update(
 * `id` (Nullable<Int64>): Required - Ai Task ID.
 * `description` (string): AI Task description.
 * `disabled` (bool): If true, this AI Task will not run.
-* `holiday_region` (string): Optional holiday region used by scheduled AI Tasks.
+* `holiday_region` (string): Optional holiday region used by the AI Task schedule.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `name` (string): AI Task name.
 * `path` (string): Path scope used for action-triggered AI Tasks.
 * `permission_set` (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `prompt` (string): Prompt sent when this AI Task is invoked.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_time_zone` (string): Time zone used by the AI Task schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for scheduled AI Tasks.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the AI Task schedule.
 * `source` (string): Source glob used with `path` for action-triggered AI Tasks.
 * `trigger` (string): How this AI Task is triggered.
 * `trigger_actions` (string[]): If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
@@ -233,6 +237,7 @@ parameters.Add("path", "incoming/reports");
 parameters.Add("permission_set", "files_only");
 parameters.Add("prompt", "Summarize the uploaded file and identify follow-up actions.");
 parameters.Add("recurring_day", 1);
+parameters.Add("schedule_id", 1);
 parameters.Add("schedule_days_of_week", [1,3,5]);
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("schedule_times_of_day", ["06:30"]);
@@ -249,16 +254,17 @@ AiTask.Update(parameters);
 * `id` (Nullable<Int64>): Required - Ai Task ID.
 * `description` (string): AI Task description.
 * `disabled` (bool): If true, this AI Task will not run.
-* `holiday_region` (string): Optional holiday region used by scheduled AI Tasks.
+* `holiday_region` (string): Optional holiday region used by the AI Task schedule.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the AI Task.
 * `name` (string): AI Task name.
 * `path` (string): Path scope used for action-triggered AI Tasks.
 * `permission_set` (string): Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
 * `prompt` (string): Prompt sent when this AI Task is invoked.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_time_zone` (string): Time zone used by the AI Task schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for scheduled AI Tasks.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the AI Task schedule.
 * `source` (string): Source glob used with `path` for action-triggered AI Tasks.
 * `trigger` (string): How this AI Task is triggered.
 * `trigger_actions` (string[]): If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.

@@ -137,6 +137,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("schedule_id"))
+            {
+                this.attributes.Add("schedule_id", null);
+            }
             if (!this.attributes.ContainsKey("retry_on_failure_interval_in_minutes"))
             {
                 this.attributes.Add("retry_on_failure_interval_in_minutes", null);
@@ -507,6 +511,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        /// </summary>
+        [JsonPropertyName("schedule_id")]
+        public Nullable<Int64> ScheduleId
+        {
+            get { return (Nullable<Int64>)attributes["schedule_id"]; }
+            set { attributes["schedule_id"] = value; }
+        }
+
+        /// <summary>
         /// If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
         /// </summary>
         [JsonPropertyName("retry_on_failure_interval_in_minutes")]
@@ -547,7 +561,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        /// If trigger is `custom_schedule`, Custom schedule description for when the automation should be run. 0 is Sunday, 1 is Monday, etc.
         /// </summary>
         [JsonPropertyName("schedule_days_of_week")]
         public Nullable<Int64>[] ScheduleDaysOfWeek
@@ -567,7 +581,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Time zone for scheduled times. If not set, times are interpreted as UTC.
+        /// Time zone for the schedule. If not set, times are interpreted as UTC.
         /// </summary>
         [JsonPropertyName("schedule_time_zone")]
         public string ScheduleTimeZone
@@ -667,7 +681,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Skip automation if there is a formal, observed holiday for this region.
+        /// Skip the automation if there is a formal, observed holiday for this region.
         /// </summary>
         [JsonPropertyName("holiday_region")]
         public string HolidayRegion
@@ -754,10 +768,11 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` triggers. Optional for `daily` triggers - if not set, runs at midnight UTC.
-        ///   schedule_time_zone - string - Time zone for scheduled times. Optional for both `custom_schedule` and `daily` triggers. If not set, times are interpreted as UTC.
-        ///   holiday_region - string - Skip automation on holidays in this region. Optional for both `custom_schedule` and `daily` triggers.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
+        ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
         ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
@@ -834,6 +849,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -1136,10 +1155,11 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` triggers. Optional for `daily` triggers - if not set, runs at midnight UTC.
-        ///   schedule_time_zone - string - Time zone for scheduled times. Optional for both `custom_schedule` and `daily` triggers. If not set, times are interpreted as UTC.
-        ///   holiday_region - string - Skip automation on holidays in this region. Optional for both `custom_schedule` and `daily` triggers.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
+        ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
         ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
@@ -1213,6 +1233,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -1418,10 +1442,11 @@ namespace FilesCom.Models
         ///   sync_ids - string - A list of sync IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
-        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`. A list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` triggers. Optional for `daily` triggers - if not set, runs at midnight UTC.
-        ///   schedule_time_zone - string - Time zone for scheduled times. Optional for both `custom_schedule` and `daily` triggers. If not set, times are interpreted as UTC.
-        ///   holiday_region - string - Skip automation on holidays in this region. Optional for both `custom_schedule` and `daily` triggers.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
+        ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
         ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
@@ -1506,6 +1531,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
             {
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {

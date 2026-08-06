@@ -16,6 +16,7 @@
   "trigger": "daily",
   "interval": "month",
   "recurring_day": 1,
+  "schedule_id": 1,
   "schedule_days_of_week": [
     1,
     3,
@@ -44,10 +45,11 @@
 * `trigger` / `Trigger`  (string): Schedule trigger type: `daily` or `custom_schedule`.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run the scheduled export.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the scheduled export's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for schedule-driven exports.
-* `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the scheduled export.
-* `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by schedule-driven exports.
+* `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for the scheduled export schedule.
+* `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the scheduled export schedule.
+* `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by the scheduled export schedule.
 * `human_readable_schedule` / `HumanReadableSchedule`  (string): Human-readable schedule description.
 * `last_run_at` / `LastRunAt`  (Nullable<DateTime>): Most recent scheduled run time.
 * `last_export_id` / `LastExportId`  (Nullable<Int64>): Most recent Export ID created by this schedule.
@@ -115,10 +117,11 @@ Task<ScheduledExport> ScheduledExport.Create(
 * `trigger` (string): Schedule trigger type: `daily` or `custom_schedule`.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the scheduled export.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the scheduled export's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for schedule-driven exports.
-* `schedule_time_zone` (string): Time zone used by the scheduled export.
-* `holiday_region` (string): Optional holiday region used by schedule-driven exports.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the scheduled export schedule.
+* `schedule_time_zone` (string): Time zone used by the scheduled export schedule.
+* `holiday_region` (string): Optional holiday region used by the scheduled export schedule.
 
 
 ---
@@ -144,10 +147,11 @@ Task<ScheduledExport> ScheduledExport.Update(
 * `trigger` (string): Schedule trigger type: `daily` or `custom_schedule`.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the scheduled export.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the scheduled export's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for schedule-driven exports.
-* `schedule_time_zone` (string): Time zone used by the scheduled export.
-* `holiday_region` (string): Optional holiday region used by schedule-driven exports.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the scheduled export schedule.
+* `schedule_time_zone` (string): Time zone used by the scheduled export schedule.
+* `holiday_region` (string): Optional holiday region used by the scheduled export schedule.
 
 
 ---
@@ -184,6 +188,7 @@ parameters.Add("disabled", true);
 parameters.Add("trigger", "daily");
 parameters.Add("interval", "month");
 parameters.Add("recurring_day", 1);
+parameters.Add("schedule_id", 1);
 parameters.Add("schedule_days_of_week", [1,3,5]);
 parameters.Add("schedule_times_of_day", ["06:30"]);
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
@@ -203,10 +208,11 @@ ScheduledExport.Update(parameters);
 * `trigger` (string): Schedule trigger type: `daily` or `custom_schedule`.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the scheduled export.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the scheduled export's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for schedule-driven exports.
-* `schedule_time_zone` (string): Time zone used by the scheduled export.
-* `holiday_region` (string): Optional holiday region used by schedule-driven exports.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the scheduled export schedule.
+* `schedule_time_zone` (string): Time zone used by the scheduled export schedule.
+* `holiday_region` (string): Optional holiday region used by the scheduled export schedule.
 
 
 ---

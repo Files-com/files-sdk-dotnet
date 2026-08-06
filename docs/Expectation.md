@@ -16,6 +16,7 @@
   "trigger": "manual",
   "interval": "day",
   "recurring_day": 3,
+  "schedule_id": 1,
   "schedule_days_of_week": [
     1,
     3,
@@ -59,10 +60,11 @@
 * `trigger` / `Trigger`  (string): How this expectation opens windows.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for schedule-driven expectations.
-* `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the expectation schedule.
-* `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by schedule-driven expectations.
+* `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for the Expectation schedule.
+* `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the Expectation schedule.
+* `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by the Expectation schedule.
 * `lookback_interval` / `LookbackInterval`  (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` / `LateAcceptanceInterval`  (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` / `InactivityInterval`  (Nullable<Int64>): How many quiet seconds are required before final closure.
@@ -136,10 +138,11 @@ Task<Expectation> Expectation.Create(
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for schedule-driven expectations.
-* `schedule_time_zone` (string): Time zone used by the expectation schedule.
-* `holiday_region` (string): Optional holiday region used by schedule-driven expectations.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
+* `schedule_time_zone` (string): Time zone used by the Expectation schedule.
+* `holiday_region` (string): Optional holiday region used by the Expectation schedule.
 * `lookback_interval` (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
@@ -189,10 +192,11 @@ Task<Expectation> Expectation.Update(
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for schedule-driven expectations.
-* `schedule_time_zone` (string): Time zone used by the expectation schedule.
-* `holiday_region` (string): Optional holiday region used by schedule-driven expectations.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
+* `schedule_time_zone` (string): Time zone used by the Expectation schedule.
+* `holiday_region` (string): Optional holiday region used by the Expectation schedule.
 * `lookback_interval` (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
@@ -254,6 +258,7 @@ parameters.Add("disabled", true);
 parameters.Add("trigger", "manual");
 parameters.Add("interval", "day");
 parameters.Add("recurring_day", 3);
+parameters.Add("schedule_id", 1);
 parameters.Add("schedule_days_of_week", [1,3,5]);
 parameters.Add("schedule_times_of_day", ["06:00"]);
 parameters.Add("schedule_time_zone", "UTC");
@@ -280,10 +285,11 @@ Expectation.Update(parameters);
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-* `schedule_times_of_day` (string[]): Times of day in HH:MM format for schedule-driven expectations.
-* `schedule_time_zone` (string): Time zone used by the expectation schedule.
-* `holiday_region` (string): Optional holiday region used by schedule-driven expectations.
+* `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
+* `schedule_time_zone` (string): Time zone used by the Expectation schedule.
+* `holiday_region` (string): Optional holiday region used by the Expectation schedule.
 * `lookback_interval` (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.

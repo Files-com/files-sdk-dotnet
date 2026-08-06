@@ -77,6 +77,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("schedule_id"))
+            {
+                this.attributes.Add("schedule_id", null);
+            }
             if (!this.attributes.ContainsKey("schedule_days_of_week"))
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
@@ -282,6 +286,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
+        /// </summary>
+        [JsonPropertyName("schedule_id")]
+        public Nullable<Int64> ScheduleId
+        {
+            get { return (Nullable<Int64>)attributes["schedule_id"]; }
+            set { attributes["schedule_id"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         /// </summary>
         [JsonPropertyName("schedule_days_of_week")]
@@ -292,7 +306,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Times of day in HH:MM format for schedule-driven expectations.
+        /// Times of day in HH:MM format for the Expectation schedule.
         /// </summary>
         [JsonPropertyName("schedule_times_of_day")]
         public string[] ScheduleTimesOfDay
@@ -302,7 +316,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Time zone used by the expectation schedule.
+        /// Time zone used by the Expectation schedule.
         /// </summary>
         [JsonPropertyName("schedule_time_zone")]
         public string ScheduleTimeZone
@@ -312,7 +326,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Optional holiday region used by schedule-driven expectations.
+        /// Optional holiday region used by the Expectation schedule.
         /// </summary>
         [JsonPropertyName("holiday_region")]
         public string HolidayRegion
@@ -478,10 +492,11 @@ namespace FilesCom.Models
         ///   trigger - string - How this expectation opens windows.
         ///   interval - string - If trigger is `daily`, this specifies how often to run the expectation.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for schedule-driven expectations.
-        ///   schedule_time_zone - string - Time zone used by the expectation schedule.
-        ///   holiday_region - string - Optional holiday region used by schedule-driven expectations.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
+        ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
+        ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -541,6 +556,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -745,10 +764,11 @@ namespace FilesCom.Models
         ///   trigger - string - How this expectation opens windows.
         ///   interval - string - If trigger is `daily`, this specifies how often to run the expectation.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for schedule-driven expectations.
-        ///   schedule_time_zone - string - Time zone used by the expectation schedule.
-        ///   holiday_region - string - Optional holiday region used by schedule-driven expectations.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
+        ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
+        ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -800,6 +820,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -908,10 +932,11 @@ namespace FilesCom.Models
         ///   trigger - string - How this expectation opens windows.
         ///   interval - string - If trigger is `daily`, this specifies how often to run the expectation.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
-        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for schedule-driven expectations.
-        ///   schedule_time_zone - string - Time zone used by the expectation schedule.
-        ///   holiday_region - string - Optional holiday region used by schedule-driven expectations.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
+        ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
+        ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -979,6 +1004,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {

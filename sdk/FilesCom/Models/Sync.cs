@@ -133,6 +133,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("schedule_id"))
+            {
+                this.attributes.Add("schedule_id", null);
+            }
             if (!this.attributes.ContainsKey("schedule_days_of_week"))
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
@@ -444,6 +448,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
+        /// </summary>
+        [JsonPropertyName("schedule_id")]
+        public Nullable<Int64> ScheduleId
+        {
+            get { return (Nullable<Int64>)attributes["schedule_id"]; }
+            set { attributes["schedule_id"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
         /// </summary>
         [JsonPropertyName("schedule_days_of_week")]
@@ -464,7 +478,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Time zone for scheduled times. If not set, times are interpreted as UTC.
+        /// Time zone for the schedule. If not set, times are interpreted as UTC.
         /// </summary>
         [JsonPropertyName("schedule_time_zone")]
         public string ScheduleTimeZone
@@ -474,7 +488,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Skip sync if there is a formal, observed holiday for this region.
+        /// Skip the sync if there is a formal, observed holiday for this region.
         /// </summary>
         [JsonPropertyName("holiday_region")]
         public string HolidayRegion
@@ -551,14 +565,15 @@ namespace FilesCom.Models
         ///   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
         ///   disabled - boolean - Is this sync disabled?
         ///   exclude_patterns - array(string) - Array of glob patterns to exclude
-        ///   holiday_region - string - Skip sync if there is a formal, observed holiday for this region.
+        ///   holiday_region - string - Skip the sync if there is a formal, observed holiday for this region.
         ///   include_patterns - array(string) - Array of glob patterns to include
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   name - string - Name for this sync job
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_time_zone - string - Time zone for scheduled times. If not set, times are interpreted as UTC.
+        ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
         ///   src_remote_server_id - int64 - Remote server ID for the source (if remote)
@@ -631,6 +646,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -828,14 +847,15 @@ namespace FilesCom.Models
         ///   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
         ///   disabled - boolean - Is this sync disabled?
         ///   exclude_patterns - array(string) - Array of glob patterns to exclude
-        ///   holiday_region - string - Skip sync if there is a formal, observed holiday for this region.
+        ///   holiday_region - string - Skip the sync if there is a formal, observed holiday for this region.
         ///   include_patterns - array(string) - Array of glob patterns to include
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   name - string - Name for this sync job
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_time_zone - string - Time zone for scheduled times. If not set, times are interpreted as UTC.
+        ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
         ///   src_remote_server_id - int64 - Remote server ID for the source (if remote)
@@ -901,6 +921,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
@@ -1030,14 +1054,15 @@ namespace FilesCom.Models
         ///   dest_remote_server_id - int64 - Remote server ID for the destination (if remote)
         ///   disabled - boolean - Is this sync disabled?
         ///   exclude_patterns - array(string) - Array of glob patterns to exclude
-        ///   holiday_region - string - Skip sync if there is a formal, observed holiday for this region.
+        ///   holiday_region - string - Skip the sync if there is a formal, observed holiday for this region.
         ///   include_patterns - array(string) - Array of glob patterns to include
         ///   interval - string - If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   name - string - Name for this sync job
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_time_zone - string - Time zone for scheduled times. If not set, times are interpreted as UTC.
+        ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
         ///   src_remote_server_id - int64 - Remote server ID for the source (if remote)
@@ -1118,6 +1143,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
             }
             if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
             {
