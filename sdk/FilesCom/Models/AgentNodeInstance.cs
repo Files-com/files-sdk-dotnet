@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class AgentNode : IModel
+    public class AgentNodeInstance : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
-        public AgentNode() : this(null, null) { }
+        public AgentNodeInstance() : this(null, null) { }
 
-        public AgentNode(Dictionary<string, object> attributes, Dictionary<string, object> options)
+        public AgentNodeInstance(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
             this.attributes = attributes;
             this.options = options;
@@ -29,21 +29,13 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
-            if (!this.attributes.ContainsKey("node_id"))
+            if (!this.attributes.ContainsKey("instance_id"))
             {
-                this.attributes.Add("node_id", null);
+                this.attributes.Add("instance_id", null);
             }
-            if (!this.attributes.ContainsKey("name"))
+            if (!this.attributes.ContainsKey("process_state"))
             {
-                this.attributes.Add("name", null);
-            }
-            if (!this.attributes.ContainsKey("hostname"))
-            {
-                this.attributes.Add("hostname", null);
-            }
-            if (!this.attributes.ContainsKey("availability_role"))
-            {
-                this.attributes.Add("availability_role", null);
+                this.attributes.Add("process_state", null);
             }
             if (!this.attributes.ContainsKey("status"))
             {
@@ -53,17 +45,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("is_default", false);
             }
-            if (!this.attributes.ContainsKey("direct_transfer_available"))
+            if (!this.attributes.ContainsKey("agent_version"))
             {
-                this.attributes.Add("direct_transfer_available", false);
+                this.attributes.Add("agent_version", null);
             }
             if (!this.attributes.ContainsKey("last_seen_at"))
             {
                 this.attributes.Add("last_seen_at", null);
             }
-            if (!this.attributes.ContainsKey("instances"))
+            if (!this.attributes.ContainsKey("connections"))
             {
-                this.attributes.Add("instances", new AgentNodeInstance[0]);
+                this.attributes.Add("connections", new AgentNodeConnection[0]);
             }
         }
 
@@ -89,51 +81,29 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Stable Agent installation ID
+        /// Ephemeral ID for this running Agent process
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("node_id")]
-        public string NodeId
+        [JsonPropertyName("instance_id")]
+        public string InstanceId
         {
-            get { return (string)attributes["node_id"]; }
-            private set { attributes["node_id"] = value; }
+            get { return (string)attributes["instance_id"]; }
+            private set { attributes["instance_id"] = value; }
         }
 
         /// <summary>
-        /// Customer-configured Agent node name
+        /// Role of this process during an Agent update
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("name")]
-        public string Name
+        [JsonPropertyName("process_state")]
+        public string ProcessState
         {
-            get { return (string)attributes["name"]; }
-            private set { attributes["name"] = value; }
+            get { return (string)attributes["process_state"]; }
+            private set { attributes["process_state"] = value; }
         }
 
         /// <summary>
-        /// Hostname reported by the Agent
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("hostname")]
-        public string Hostname
-        {
-            get { return (string)attributes["hostname"]; }
-            private set { attributes["hostname"] = value; }
-        }
-
-        /// <summary>
-        /// Configured traffic preference
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("availability_role")]
-        public string AvailabilityRole
-        {
-            get { return (string)attributes["availability_role"]; }
-            private set { attributes["availability_role"] = value; }
-        }
-
-        /// <summary>
-        /// Whether this node currently has an available Agent instance
+        /// Whether this process has an available proxy connection
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("status")]
@@ -144,7 +114,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Whether this node is the current default route for new unscoped work
+        /// Whether this process receives new unscoped work for its node
         /// </summary>
         [JsonInclude]
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -156,19 +126,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Whether the proxy recently validated a direct connection to this Agent node. False means direct transfers are enabled but not currently available; null means disabled or unsupported.
+        /// Agent version reported by this process
         /// </summary>
         [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("direct_transfer_available")]
-        public bool DirectTransferAvailable
+        [JsonPropertyName("agent_version")]
+        public string AgentVersion
         {
-            get { return attributes["direct_transfer_available"] == null ? false : (bool)attributes["direct_transfer_available"]; }
-            private set { attributes["direct_transfer_available"] = value; }
+            get { return (string)attributes["agent_version"]; }
+            private set { attributes["agent_version"] = value; }
         }
 
         /// <summary>
-        /// Most recent successful node observation
+        /// Most recent successful observation for this process
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("last_seen_at")]
@@ -179,14 +148,14 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Current Agent processes for this node
+        /// Proxy connections observed for this process
         /// </summary>
         [JsonInclude]
-        [JsonPropertyName("instances")]
-        public AgentNodeInstance[] Instances
+        [JsonPropertyName("connections")]
+        public AgentNodeConnection[] Connections
         {
-            get { return (AgentNodeInstance[])attributes["instances"]; }
-            private set { attributes["instances"] = value; }
+            get { return (AgentNodeConnection[])attributes["connections"]; }
+            private set { attributes["connections"] = value; }
         }
 
 
