@@ -34,6 +34,10 @@
   "sync_interval_minutes": 1,
   "interval": "week",
   "recurring_day": 25,
+  "recurring_days": [
+    1,
+    15
+  ],
   "schedule_id": 1,
   "schedule_days_of_week": [
     0,
@@ -112,6 +116,7 @@
 * `sync_interval_minutes` / `SyncIntervalMinutes`  (Nullable<Int64>): Frequency in minutes between syncs. If set, this value must be greater than or equal to the `remote_sync_interval` value for the site's plan. If left blank, the plan's `remote_sync_interval` will be used. This setting is only used if `trigger` is empty.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run this sync.  One of: `day`, `week`, `week_end`, `month`, `month_end`, `quarter`, `quarter_end`, `year`, `year_end`
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` / `RecurringDays`  (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
 * `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
@@ -183,6 +188,7 @@ Task<Sync> Sync.Create(
 * `keep_after_copy` (bool): Keep files after copying?
 * `name` (string): Name for this sync job
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
 * `schedule_time_zone` (string): Time zone for the schedule. If not set, times are interpreted as UTC.
@@ -257,6 +263,7 @@ Task<Sync> Sync.Update(
 * `keep_after_copy` (bool): Keep files after copying?
 * `name` (string): Name for this sync job
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
 * `schedule_time_zone` (string): Time zone for the schedule. If not set, times are interpreted as UTC.
@@ -343,6 +350,7 @@ parameters.Add("interval", "week");
 parameters.Add("keep_after_copy", true);
 parameters.Add("name", "example");
 parameters.Add("recurring_day", 25);
+parameters.Add("recurring_days", [1,15]);
 parameters.Add("schedule_id", 1);
 parameters.Add("schedule_days_of_week", [0,2,4]);
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
@@ -372,6 +380,7 @@ Sync.Update(parameters);
 * `keep_after_copy` (bool): Keep files after copying?
 * `name` (string): Name for this sync job
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
 * `schedule_time_zone` (string): Time zone for the schedule. If not set, times are interpreted as UTC.

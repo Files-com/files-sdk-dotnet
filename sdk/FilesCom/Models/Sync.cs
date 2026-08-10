@@ -133,6 +133,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("recurring_days"))
+            {
+                this.attributes.Add("recurring_days", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("schedule_id"))
             {
                 this.attributes.Add("schedule_id", null);
@@ -448,6 +452,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        /// </summary>
+        [JsonPropertyName("recurring_days")]
+        public Nullable<Int64>[] RecurringDays
+        {
+            get { return (Nullable<Int64>[])attributes["recurring_days"]; }
+            set { attributes["recurring_days"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         /// </summary>
         [JsonPropertyName("schedule_id")]
@@ -571,6 +585,7 @@ namespace FilesCom.Models
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   name - string - Name for this sync job
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
@@ -646,6 +661,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
             }
             if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
             {
@@ -853,6 +872,7 @@ namespace FilesCom.Models
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   name - string - Name for this sync job
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
@@ -921,6 +941,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
             }
             if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
             {
@@ -1060,6 +1084,7 @@ namespace FilesCom.Models
         ///   keep_after_copy - boolean - Keep files after copying?
         ///   name - string - Name for this sync job
         ///   recurring_day - int64 - If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+        ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
@@ -1143,6 +1168,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
             }
             if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
             {

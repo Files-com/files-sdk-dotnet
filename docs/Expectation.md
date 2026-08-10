@@ -16,6 +16,10 @@
   "trigger": "manual",
   "interval": "day",
   "recurring_day": 3,
+  "recurring_days": [
+    1,
+    15
+  ],
   "schedule_id": 1,
   "schedule_days_of_week": [
     1,
@@ -60,6 +64,7 @@
 * `trigger` / `Trigger`  (string): How this expectation opens windows.
 * `interval` / `Interval`  (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` / `RecurringDays`  (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for the Expectation schedule.
@@ -138,6 +143,7 @@ Task<Expectation> Expectation.Create(
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
@@ -192,6 +198,7 @@ Task<Expectation> Expectation.Update(
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
@@ -258,6 +265,7 @@ parameters.Add("disabled", true);
 parameters.Add("trigger", "manual");
 parameters.Add("interval", "day");
 parameters.Add("recurring_day", 3);
+parameters.Add("recurring_days", [1,15]);
 parameters.Add("schedule_id", 1);
 parameters.Add("schedule_days_of_week", [1,3,5]);
 parameters.Add("schedule_times_of_day", ["06:00"]);
@@ -285,6 +293,7 @@ Expectation.Update(parameters);
 * `trigger` (string): How this expectation opens windows.
 * `interval` (string): If trigger is `daily`, this specifies how often to run the expectation.
 * `recurring_day` (Nullable<Int64>): If trigger is `daily`, this selects the day number inside the chosen interval.
+* `recurring_days` (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.

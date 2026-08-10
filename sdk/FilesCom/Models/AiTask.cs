@@ -81,6 +81,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("recurring_day", null);
             }
+            if (!this.attributes.ContainsKey("recurring_days"))
+            {
+                this.attributes.Add("recurring_days", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("schedule_id"))
             {
                 this.attributes.Add("schedule_id", null);
@@ -276,6 +280,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
+        /// </summary>
+        [JsonPropertyName("recurring_days")]
+        public Nullable<Int64>[] RecurringDays
+        {
+            get { return (Nullable<Int64>[])attributes["recurring_days"]; }
+            set { attributes["recurring_days"] = value; }
+        }
+
+        /// <summary>
         /// If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         /// </summary>
         [JsonPropertyName("schedule_id")]
@@ -413,6 +427,7 @@ namespace FilesCom.Models
         ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
@@ -474,6 +489,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
             }
             if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
             {
@@ -670,6 +689,7 @@ namespace FilesCom.Models
         ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt (required) - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
@@ -731,6 +751,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
             }
             if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
             {
@@ -822,6 +846,7 @@ namespace FilesCom.Models
         ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
         ///   prompt - string - Prompt sent when this AI Task is invoked.
         ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
         ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
@@ -891,6 +916,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+            }
+            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
             }
             if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
             {

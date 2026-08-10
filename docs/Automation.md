@@ -48,6 +48,10 @@
   "path_time_zone": "Eastern Time (US & Canada)",
   "version": 1,
   "recurring_day": 25,
+  "recurring_days": [
+    1,
+    15
+  ],
   "schedule_id": 1,
   "retry_on_failure_interval_in_minutes": 60,
   "retry_on_failure_number_of_attempts": 10,
@@ -127,6 +131,7 @@
 * `path_time_zone` / `PathTimeZone`  (string): Timezone to use when rendering timestamps in paths.
 * `version` / `Version`  (Nullable<Int64>): Current Automation v2 definition version.
 * `recurring_day` / `RecurringDay`  (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` / `RecurringDays`  (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
 * `retry_on_failure_interval_in_minutes` / `RetryOnFailureIntervalInMinutes`  (Nullable<Int64>): If the Automation fails, retry at this interval (in minutes).  Acceptable values are 5 through 1440 (one day).  Set to null to disable.
 * `retry_on_failure_number_of_attempts` / `RetryOnFailureNumberOfAttempts`  (Nullable<Int64>): If the Automation fails, retry at most this many times.  Maximum allowed value: 10.  Set to null to disable.
@@ -248,6 +253,7 @@ Task<Automation> Automation.Create(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `automation` (string): Required - Automation type
 * `workspace_id` (Nullable<Int64>): Workspace ID
 
@@ -335,6 +341,7 @@ Task<Automation> Automation.Update(
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `automation` (string): Automation type
 
 
@@ -435,6 +442,7 @@ parameters.Add("trigger", "daily");
 parameters.Add("trigger_actions", ["create"]);
 parameters.Add("value", {"limit":"1"});
 parameters.Add("recurring_day", 25);
+parameters.Add("recurring_days", [1,15]);
 parameters.Add("automation", "create_folder");
 
 Automation.Update(parameters);
@@ -476,6 +484,7 @@ Automation.Update(parameters);
 * `trigger_actions` (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `value` (object): A Hash of attributes specific to the automation type.
 * `recurring_day` (Nullable<Int64>): If trigger type is `daily`, this specifies a day number to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
+* `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `automation` (string): Automation type
 
 
