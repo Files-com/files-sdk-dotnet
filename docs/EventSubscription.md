@@ -9,6 +9,8 @@
   "workspace_id": 1,
   "apply_to_all_workspaces": true,
   "name": "example",
+  "subject": "example",
+  "message": "example",
   "enabled": true,
   "event_types": [
     "example"
@@ -28,6 +30,8 @@
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` / `ApplyToAllWorkspaces`  (bool): If true, this default-workspace subscription applies to events from all workspaces.
 * `name` / `Name`  (string): Event Subscription name.
+* `subject` / `Subject`  (string): Custom subject line to use for notification emails.
+* `message` / `Message`  (string): Custom message to include in notification emails.
 * `enabled` / `Enabled`  (bool): Whether this Event Subscription can dispatch events.
 * `event_types` / `EventTypes`  (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` / `Filter`  (object): Structured event payload filter.
@@ -92,6 +96,8 @@ Task<EventSubscription> EventSubscription.Create(
 * `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace subscription applies to events from all workspaces.
 * `name` (string): Required - Event Subscription name.
+* `subject` (string): Custom subject line to use for notification emails.
+* `message` (string): Custom message to include in notification emails.
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` (object): Structured event payload filter.
@@ -118,6 +124,8 @@ Task<EventSubscription> EventSubscription.Update(
 * `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace subscription applies to events from all workspaces.
 * `name` (string): Event Subscription name.
+* `subject` (string): Custom subject line to use for notification emails.
+* `message` (string): Custom message to include in notification emails.
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` (object): Structured event payload filter.
@@ -155,6 +163,8 @@ parameters.Add("event_channel_id", 1);
 parameters.Add("workspace_id", 1);
 parameters.Add("apply_to_all_workspaces", true);
 parameters.Add("name", "example");
+parameters.Add("subject", "example");
+parameters.Add("message", "example");
 parameters.Add("enabled", true);
 parameters.Add("event_types", ["example"]);
 parameters.Add("delivery_policy", "example");
@@ -170,6 +180,8 @@ EventSubscription.Update(parameters);
 * `workspace_id` (Nullable<Int64>): Workspace ID. 0 means the default workspace or site-wide.
 * `apply_to_all_workspaces` (bool): If true, this default-workspace subscription applies to events from all workspaces.
 * `name` (string): Event Subscription name.
+* `subject` (string): Custom subject line to use for notification emails.
+* `message` (string): Custom message to include in notification emails.
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` (object): Structured event payload filter.

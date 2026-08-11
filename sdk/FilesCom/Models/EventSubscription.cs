@@ -49,6 +49,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("name", null);
             }
+            if (!this.attributes.ContainsKey("subject"))
+            {
+                this.attributes.Add("subject", null);
+            }
+            if (!this.attributes.ContainsKey("message"))
+            {
+                this.attributes.Add("message", null);
+            }
             if (!this.attributes.ContainsKey("enabled"))
             {
                 this.attributes.Add("enabled", false);
@@ -152,6 +160,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Custom subject line to use for notification emails.
+        /// </summary>
+        [JsonPropertyName("subject")]
+        public string Subject
+        {
+            get { return (string)attributes["subject"]; }
+            set { attributes["subject"] = value; }
+        }
+
+        /// <summary>
+        /// Custom message to include in notification emails.
+        /// </summary>
+        [JsonPropertyName("message")]
+        public string Message
+        {
+            get { return (string)attributes["message"]; }
+            set { attributes["message"] = value; }
+        }
+
+        /// <summary>
         /// Whether this Event Subscription can dispatch events.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -230,6 +258,8 @@ namespace FilesCom.Models
         ///   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace subscription applies to events from all workspaces.
         ///   name - string - Event Subscription name.
+        ///   subject - string - Custom subject line to use for notification emails.
+        ///   message - string - Custom message to include in notification emails.
         ///   enabled - boolean - Whether this Event Subscription can dispatch events.
         ///   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
         ///   filter - object - Structured event payload filter.
@@ -268,6 +298,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("subject") && !(parameters["subject"] is string))
+            {
+                throw new ArgumentException("Bad parameter: subject must be of type string", "parameters[\"subject\"]");
+            }
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string))
+            {
+                throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -447,6 +485,8 @@ namespace FilesCom.Models
         ///   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace subscription applies to events from all workspaces.
         ///   name (required) - string - Event Subscription name.
+        ///   subject - string - Custom subject line to use for notification emails.
+        ///   message - string - Custom message to include in notification emails.
         ///   enabled - boolean - Whether this Event Subscription can dispatch events.
         ///   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
         ///   filter - object - Structured event payload filter.
@@ -481,6 +521,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("subject") && !(parameters["subject"] is string))
+            {
+                throw new ArgumentException("Bad parameter: subject must be of type string", "parameters[\"subject\"]");
+            }
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string))
+            {
+                throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -522,6 +570,8 @@ namespace FilesCom.Models
         ///   workspace_id - int64 - Workspace ID. 0 means the default workspace or site-wide.
         ///   apply_to_all_workspaces - boolean - If true, this default-workspace subscription applies to events from all workspaces.
         ///   name - string - Event Subscription name.
+        ///   subject - string - Custom subject line to use for notification emails.
+        ///   message - string - Custom message to include in notification emails.
         ///   enabled - boolean - Whether this Event Subscription can dispatch events.
         ///   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
         ///   filter - object - Structured event payload filter.
@@ -568,6 +618,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("subject") && !(parameters["subject"] is string))
+            {
+                throw new ArgumentException("Bad parameter: subject must be of type string", "parameters[\"subject\"]");
+            }
+            if (parameters.ContainsKey("message") && !(parameters["message"] is string))
+            {
+                throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
