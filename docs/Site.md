@@ -47,6 +47,7 @@
   "bundle_registration_notifications": "never",
   "bundle_require_registration": true,
   "bundle_require_share_recipient": true,
+  "bundle_send_one_time_password_to_recipient_at_registration": true,
   "bundle_require_note": true,
   "bundle_send_shared_receipts": true,
   "bundle_upload_receipt_notifications": "never",
@@ -393,6 +394,7 @@
 * `bundle_registration_notifications` / `BundleRegistrationNotifications`  (string): Do Bundle owners receive registration notification?
 * `bundle_require_registration` / `BundleRequireRegistration`  (bool): Do Bundles require registration?
 * `bundle_require_share_recipient` / `BundleRequireShareRecipient`  (bool): Do Bundles require recipients for sharing?
+* `bundle_send_one_time_password_to_recipient_at_registration` / `BundleSendOneTimePasswordToRecipientAtRegistration`  (bool): If true, new Share Links must send a one-time password to the recipient when they register. Requires bundle_require_share_recipient and cannot be enabled with bundle_password_required.
 * `bundle_require_note` / `BundleRequireNote`  (bool): Do Bundles require internal notes?
 * `bundle_send_shared_receipts` / `BundleSendSharedReceipts`  (bool): Do Bundle creators receive receipts of invitations?
 * `bundle_upload_receipt_notifications` / `BundleUploadReceiptNotifications`  (string): Do Bundle uploaders receive upload confirmation notifications?
@@ -680,6 +682,7 @@ Task<Site> Site.Update(
 * `bundle_password_required` (bool): Do Bundles require password protection?
 * `bundle_require_registration` (bool): Do Bundles require registration?
 * `bundle_require_share_recipient` (bool): Do Bundles require recipients for sharing?
+* `bundle_send_one_time_password_to_recipient_at_registration` (bool): If true, new Share Links must send a one-time password to the recipient when they register. Requires bundle_require_share_recipient and cannot be enabled with bundle_password_required.
 * `bundle_registration_notifications` (string): Do Bundle owners receive registration notification?
 * `bundle_activity_notifications` (string): Do Bundle owners receive activity notifications?
 * `bundle_upload_receipt_notifications` (string): Do Bundle uploaders receive upload confirmation notifications?

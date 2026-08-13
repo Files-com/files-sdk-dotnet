@@ -157,6 +157,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_require_share_recipient", false);
             }
+            if (!this.attributes.ContainsKey("bundle_send_one_time_password_to_recipient_at_registration"))
+            {
+                this.attributes.Add("bundle_send_one_time_password_to_recipient_at_registration", false);
+            }
             if (!this.attributes.ContainsKey("bundle_require_note"))
             {
                 this.attributes.Add("bundle_require_note", false);
@@ -1193,6 +1197,18 @@ namespace FilesCom.Models
         {
             get { return attributes["bundle_require_share_recipient"] == null ? false : (bool)attributes["bundle_require_share_recipient"]; }
             private set { attributes["bundle_require_share_recipient"] = value; }
+        }
+
+        /// <summary>
+        /// If true, new Share Links must send a one-time password to the recipient when they register. Requires bundle_require_share_recipient and cannot be enabled with bundle_password_required.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("bundle_send_one_time_password_to_recipient_at_registration")]
+        public bool BundleSendOneTimePasswordToRecipientAtRegistration
+        {
+            get { return attributes["bundle_send_one_time_password_to_recipient_at_registration"] == null ? false : (bool)attributes["bundle_send_one_time_password_to_recipient_at_registration"]; }
+            private set { attributes["bundle_send_one_time_password_to_recipient_at_registration"] = value; }
         }
 
         /// <summary>
@@ -3183,6 +3199,7 @@ namespace FilesCom.Models
         ///   bundle_password_required - boolean - Do Bundles require password protection?
         ///   bundle_require_registration - boolean - Do Bundles require registration?
         ///   bundle_require_share_recipient - boolean - Do Bundles require recipients for sharing?
+        ///   bundle_send_one_time_password_to_recipient_at_registration - boolean - If true, new Share Links must send a one-time password to the recipient when they register. Requires bundle_require_share_recipient and cannot be enabled with bundle_password_required.
         ///   bundle_registration_notifications - string - Do Bundle owners receive registration notification?
         ///   bundle_activity_notifications - string - Do Bundle owners receive activity notifications?
         ///   bundle_upload_receipt_notifications - string - Do Bundle uploaders receive upload confirmation notifications?
@@ -3631,6 +3648,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool))
             {
                 throw new ArgumentException("Bad parameter: bundle_require_share_recipient must be of type bool", "parameters[\"bundle_require_share_recipient\"]");
+            }
+            if (parameters.ContainsKey("bundle_send_one_time_password_to_recipient_at_registration") && !(parameters["bundle_send_one_time_password_to_recipient_at_registration"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: bundle_send_one_time_password_to_recipient_at_registration must be of type bool", "parameters[\"bundle_send_one_time_password_to_recipient_at_registration\"]");
             }
             if (parameters.ContainsKey("bundle_registration_notifications") && !(parameters["bundle_registration_notifications"] is string))
             {
