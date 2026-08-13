@@ -83,6 +83,9 @@
   "workspace_id": 1,
   "has_inbox": true,
   "dont_allow_folders_in_uploads": true,
+  "requested_upload_slots": [
+    "example"
+  ],
   "paths": [
     "file.txt"
   ],
@@ -140,6 +143,7 @@
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `has_inbox` / `HasInbox`  (bool): Does this bundle have an associated inbox?
 * `dont_allow_folders_in_uploads` / `DontAllowFoldersInUploads`  (bool): Should folder uploads be prevented?
+* `requested_upload_slots` / `RequestedUploadSlots`  (object[]): Upload slots requested by the associated Inbox. Each slot contains a name used as its label and destination subfolder name.
 * `paths` / `Paths`  (string[]): A list of paths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `bundlepaths` / `Bundlepaths`  (BundlePath[]): A list of bundlepaths in this bundle.  For performance reasons, this is not provided when listing bundles.
 * `password` / `Password`  (string): Password for this bundle.

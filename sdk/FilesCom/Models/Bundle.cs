@@ -209,6 +209,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("dont_allow_folders_in_uploads", false);
             }
+            if (!this.attributes.ContainsKey("requested_upload_slots"))
+            {
+                this.attributes.Add("requested_upload_slots", new object[0]);
+            }
             if (!this.attributes.ContainsKey("paths"))
             {
                 this.attributes.Add("paths", new string[0]);
@@ -727,6 +731,16 @@ namespace FilesCom.Models
         {
             get { return attributes["dont_allow_folders_in_uploads"] == null ? false : (bool)attributes["dont_allow_folders_in_uploads"]; }
             set { attributes["dont_allow_folders_in_uploads"] = value; }
+        }
+
+        /// <summary>
+        /// Upload slots requested by the associated Inbox. Each slot contains a name used as its label and destination subfolder name.
+        /// </summary>
+        [JsonPropertyName("requested_upload_slots")]
+        public object[] RequestedUploadSlots
+        {
+            get { return (object[])attributes["requested_upload_slots"]; }
+            set { attributes["requested_upload_slots"] = value; }
         }
 
         /// <summary>
