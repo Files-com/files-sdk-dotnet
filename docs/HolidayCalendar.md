@@ -12,9 +12,9 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Holiday Calendar ID. Use `custom_<id>` as a scheduled resource's `holiday_region`.
+* `id` / `Id`  (Nullable<Int64>): Holiday Calendar ID. Set a scheduled resource's `holiday_region` to `custom_` followed by this ID to make it skip the days in this calendar.
 * `name` / `Name`  (string): Holiday Calendar name.
-* `definition` / `Definition`  (object): Holiday rules for the calendar. For more information, refer to the Holiday Calendars section of the Files.com documentation.
+* `definition` / `Definition`  (object): Holiday rules for the calendar.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Creation time.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Last update time.
 
@@ -69,6 +69,7 @@ Task<HolidayCalendar> HolidayCalendar.Create(
 
 ### Parameters
 
+* `definition` (object): Required - Holiday rules for the calendar.
 * `name` (string): Required - Holiday Calendar name.
 
 
@@ -87,6 +88,7 @@ Task<HolidayCalendar> HolidayCalendar.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Holiday Calendar ID.
+* `definition` (object): Holiday rules for the calendar.
 * `name` (string): Holiday Calendar name.
 
 
@@ -116,6 +118,7 @@ var HolidayCalendar = HolidayCalendar.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("definition", "example");
 parameters.Add("name", "Company Holidays");
 
 HolidayCalendar.Update(parameters);
@@ -124,6 +127,7 @@ HolidayCalendar.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Holiday Calendar ID.
+* `definition` (object): Holiday rules for the calendar.
 * `name` (string): Holiday Calendar name.
 
 

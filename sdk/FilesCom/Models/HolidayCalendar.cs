@@ -73,7 +73,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Holiday Calendar ID. Use `custom_<id>` as a scheduled resource's `holiday_region`.
+        /// Holiday Calendar ID. Set a scheduled resource's `holiday_region` to `custom_` followed by this ID to make it skip the days in this calendar.
         /// </summary>
         [JsonPropertyName("id")]
         public Nullable<Int64> Id
@@ -93,7 +93,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Holiday rules for the calendar. For more information, refer to the Holiday Calendars section of the Files.com documentation.
+        /// Holiday rules for the calendar.
         /// </summary>
         [JsonPropertyName("definition")]
         public object Definition
@@ -126,6 +126,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   definition - object - Holiday rules for the calendar.
         ///   name - string - Holiday Calendar name.
         /// </summary>
         public async Task<HolidayCalendar> Update(Dictionary<string, object> parameters)
@@ -144,6 +145,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            {
+                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -298,6 +303,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   definition (required) - object - Holiday rules for the calendar.
         ///   name (required) - string - Holiday Calendar name.
         /// </summary>
         public static async Task<HolidayCalendar> Create(
@@ -309,9 +315,17 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (!parameters.ContainsKey("definition") || parameters["definition"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: definition", "parameters[\"definition\"]");
+            }
             if (!parameters.ContainsKey("name") || parameters["name"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            {
+                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -333,6 +347,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   definition - object - Holiday rules for the calendar.
         ///   name - string - Holiday Calendar name.
         /// </summary>
         public static async Task<HolidayCalendar> Update(
@@ -359,6 +374,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            {
+                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {

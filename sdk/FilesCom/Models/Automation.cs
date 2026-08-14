@@ -790,6 +790,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
         ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
+        ///   definition - object - Automation v2 graph definition.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
         ///   import_urls - array(object) - List of URLs to be imported and names to be used.
@@ -896,6 +897,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            {
+                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
@@ -1182,6 +1187,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
         ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
+        ///   definition - object - Automation v2 graph definition.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
         ///   import_urls - array(object) - List of URLs to be imported and names to be used.
@@ -1285,6 +1291,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            {
+                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
@@ -1474,6 +1484,7 @@ namespace FilesCom.Models
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
         ///   always_serialize_jobs - boolean - Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
         ///   description - string - Description for the this Automation.
+        ///   definition - object - Automation v2 graph definition.
         ///   disabled - boolean - If true, this automation will not run.
         ///   exclude_pattern - string - If set, this glob pattern will exclude files from the automation. Supports globs, except on remote mounts.
         ///   import_urls - array(object) - List of URLs to be imported and names to be used.
@@ -1588,6 +1599,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("description") && !(parameters["description"] is string))
             {
                 throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+            }
+            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            {
+                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
             }
             if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
             {
