@@ -16,7 +16,7 @@
   "destination": "DestFolder",
   "ip": "127.0.0.1",
   "username": "jerry",
-  "user_is_from_parent_site": true,
+  "user_is_from_parent_site": false,
   "action": "read",
   "failure_type": "bad_password",
   "interface": "ftp",

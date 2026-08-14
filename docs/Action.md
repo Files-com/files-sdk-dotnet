@@ -11,10 +11,11 @@
   "display": "Actual text of the action here.",
   "ip": "192.283.128.182",
   "source": "/from_path",
-  "targets": null,
+  "targets": {
+  },
   "user_id": 1,
   "username": "user",
-  "user_is_from_parent_site": true,
+  "user_is_from_parent_site": false,
   "action": "create",
   "failure_type": "none",
   "interface": "web"

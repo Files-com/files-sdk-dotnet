@@ -11,7 +11,30 @@
   "automation": "create_folder",
   "deleted": true,
   "description": "example",
-  "definition": "example",
+  "definition": {
+    "schema_version": 1,
+    "nodes": [
+      {
+        "id": "trigger",
+        "type": "trigger_manual"
+      },
+      {
+        "id": "create_reports",
+        "type": "create_folder",
+        "config": {
+          "destinations": [
+            "reports/"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "trigger",
+        "to": "create_reports"
+      }
+    ]
+  },
   "destination_replace_from": "example",
   "destination_replace_to": "example",
   "destinations": [
@@ -41,7 +64,7 @@
   "ignore_locked_folders": true,
   "interval": "week",
   "last_modified_at": "2000-01-01T01:00:00Z",
-  "legacy_folder_matching": true,
+  "legacy_folder_matching": false,
   "name": "example",
   "overwrite_files": true,
   "path": "example",
@@ -429,7 +452,7 @@ parameters.Add("holiday_region", "us_dc");
 parameters.Add("always_overwrite_size_matching_files", true);
 parameters.Add("always_serialize_jobs", true);
 parameters.Add("description", "example");
-parameters.Add("definition", "example");
+parameters.Add("definition", {"schema_version":1,"nodes":[{"id":"trigger","type":"trigger_manual"},{"id":"create_reports","type":"create_folder","config":{"destinations":["reports/"]}}],"edges":[{"from":"trigger","to":"create_reports"}]});
 parameters.Add("disabled", true);
 parameters.Add("exclude_pattern", "path/to/exclude/*");
 parameters.Add("import_urls", [{"name":"users.json","url":"http://example.com/users","method":"POST","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}]);

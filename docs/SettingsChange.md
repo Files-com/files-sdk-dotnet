@@ -10,8 +10,8 @@
   ],
   "created_at": "2000-01-01T01:00:00Z",
   "user_id": 1,
-  "user_is_files_support": true,
-  "user_is_from_parent_site": true,
+  "user_is_files_support": false,
+  "user_is_from_parent_site": false,
   "username": "some_user"
 }
 ```

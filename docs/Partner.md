@@ -4,12 +4,12 @@
 
 ```
 {
-  "allow_bypassing_2fa_policies": true,
+  "allow_bypassing_2fa_policies": false,
   "allowed_ips": "10.0.0.0/8\n127.0.0.1",
-  "allow_credential_changes": true,
-  "allow_providing_gpg_keys": true,
-  "allow_user_creation": true,
-  "cc_emails_to_responsible_party": true,
+  "allow_credential_changes": false,
+  "allow_providing_gpg_keys": false,
+  "allow_user_creation": false,
+  "cc_emails_to_responsible_party": false,
   "id": 1,
   "ai_assistant_personality_id": 1,
   "workspace_id": 1,
@@ -25,7 +25,7 @@
   "responsible_group_id": 1,
   "responsible_user_id": 1,
   "root_folder": "/AcmeCorp",
-  "show_partner_channel_home_page": true,
+  "show_partner_channel_home_page": false,
   "tags": "example",
   "user_ids": [
     1,
