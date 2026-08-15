@@ -41,6 +41,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("automation_version_id", null);
             }
+            if (!this.attributes.ContainsKey("version"))
+            {
+                this.attributes.Add("version", null);
+            }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
                 this.attributes.Add("workspace_id", null);
@@ -171,6 +175,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["automation_version_id"]; }
             private set { attributes["automation_version_id"] = value; }
+        }
+
+        /// <summary>
+        /// Pinned Automation v2 definition version.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("version")]
+        public Nullable<Int64> Version
+        {
+            get { return (Nullable<Int64>)attributes["version"]; }
+            private set { attributes["version"] = value; }
         }
 
         /// <summary>
