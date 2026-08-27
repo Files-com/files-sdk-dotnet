@@ -641,6 +641,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("active_sftp_host_key_id", null);
             }
+            if (!this.attributes.ContainsKey("active_sftp_host_key_ids"))
+            {
+                this.attributes.Add("active_sftp_host_key_ids", new Nullable<Int64>[0]);
+            }
             if (!this.attributes.ContainsKey("sftp_insecure_ciphers"))
             {
                 this.attributes.Add("sftp_insecure_ciphers", false);
@@ -2594,6 +2598,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Ids of the selected custom SFTP Host Keys
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("active_sftp_host_key_ids")]
+        public Nullable<Int64>[] ActiveSftpHostKeyIds
+        {
+            get { return (Nullable<Int64>[])attributes["active_sftp_host_key_ids"]; }
+            private set { attributes["active_sftp_host_key_ids"] = value; }
+        }
+
+        /// <summary>
         /// If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
         /// </summary>
         [JsonInclude]
@@ -3226,6 +3241,7 @@ namespace FilesCom.Models
         ///   show_user_notifications_log_in_link - boolean - Show log in link in user notifications?
         ///   sftp_host_key_type - string - Sftp Host Key Type
         ///   active_sftp_host_key_id - int64 - Id of the currently selected custom SFTP Host Key
+        ///   active_sftp_host_key_ids - array(int64) - Ids of the selected custom SFTP Host Keys
         ///   protocol_access_groups_only - boolean - If true, protocol access permissions on users will be ignored, and only protocol access permissions set on Groups will be honored.  Make sure that your current user is a member of a group with API permission when changing this value to avoid locking yourself out of your site.
         ///   revoke_bundle_access_on_disable_or_delete - boolean - Auto-removes bundles for disabled/deleted users and enforces bundle expiry within user access period.
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
@@ -3756,6 +3772,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("active_sftp_host_key_id") && !(parameters["active_sftp_host_key_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: active_sftp_host_key_id must be of type Nullable<Int64>", "parameters[\"active_sftp_host_key_id\"]");
+            }
+            if (parameters.ContainsKey("active_sftp_host_key_ids") && !(parameters["active_sftp_host_key_ids"] is Nullable<Int64>[]))
+            {
+                throw new ArgumentException("Bad parameter: active_sftp_host_key_ids must be of type Nullable<Int64>[]", "parameters[\"active_sftp_host_key_ids\"]");
             }
             if (parameters.ContainsKey("protocol_access_groups_only") && !(parameters["protocol_access_groups_only"] is bool))
             {

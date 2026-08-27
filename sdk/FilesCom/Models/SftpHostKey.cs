@@ -29,6 +29,10 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("active"))
+            {
+                this.attributes.Add("active", false);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -36,6 +40,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("key_type"))
+            {
+                this.attributes.Add("key_type", null);
             }
             if (!this.attributes.ContainsKey("fingerprint_md5"))
             {
@@ -73,6 +81,17 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// If true, use this SFTP Host Key.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("active")]
+        public bool Active
+        {
+            get { return attributes["active"] == null ? false : (bool)attributes["active"]; }
+            set { attributes["active"] = value; }
+        }
+
+        /// <summary>
         /// SFTP Host Key ID
         /// </summary>
         [JsonPropertyName("id")]
@@ -90,6 +109,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["name"]; }
             set { attributes["name"] = value; }
+        }
+
+        /// <summary>
+        /// SSH key type
+        /// </summary>
+        [JsonPropertyName("key_type")]
+        public string KeyType
+        {
+            get { return (string)attributes["key_type"]; }
+            set { attributes["key_type"] = value; }
         }
 
         /// <summary>
@@ -124,6 +153,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   active - boolean - If true, use this SFTP Host Key.
         ///   name - string - The friendly name of this SFTP Host Key.
         ///   private_key - string - The private key data.
         /// </summary>
@@ -143,6 +173,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("active") && !(parameters["active"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: active must be of type bool", "parameters[\"active\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -296,6 +330,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   active - boolean - If true, use this SFTP Host Key.
         ///   name - string - The friendly name of this SFTP Host Key.
         ///   private_key - string - The private key data.
         /// </summary>
@@ -308,6 +343,10 @@ namespace FilesCom.Models
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
+            if (parameters.ContainsKey("active") && !(parameters["active"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: active must be of type bool", "parameters[\"active\"]");
+            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -332,6 +371,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   active - boolean - If true, use this SFTP Host Key.
         ///   name - string - The friendly name of this SFTP Host Key.
         ///   private_key - string - The private key data.
         /// </summary>
@@ -359,6 +399,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("active") && !(parameters["active"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: active must be of type bool", "parameters[\"active\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {

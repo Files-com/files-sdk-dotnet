@@ -4,15 +4,19 @@
 
 ```
 {
+  "active": true,
   "id": 1,
   "name": "My Key",
+  "key_type": "ssh-rsa",
   "fingerprint_md5": "12:7e:f8:61:78:a4:b2:c2:ee:12:51:92:25:a7:42:cc",
   "fingerprint_sha256": "SHA256:5ANRkDpXWA+PgOquzZAG9RtQ1Bt8KXYAH2hecr7LQk8"
 }
 ```
 
+* `active` / `Active`  (bool): If true, use this SFTP Host Key.
 * `id` / `Id`  (Nullable<Int64>): SFTP Host Key ID
 * `name` / `Name`  (string): The friendly name of this SFTP Host Key.
+* `key_type` / `KeyType`  (string): SSH key type
 * `fingerprint_md5` / `FingerprintMd5`  (string): MD5 Fingerprint of the public key
 * `fingerprint_sha256` / `FingerprintSha256`  (string): SHA256 Fingerprint of the public key
 * `private_key` / `PrivateKey`  (string): The private key data.
@@ -67,6 +71,7 @@ Task<SftpHostKey> SftpHostKey.Create(
 
 ### Parameters
 
+* `active` (bool): If true, use this SFTP Host Key.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -86,6 +91,7 @@ Task<SftpHostKey> SftpHostKey.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Sftp Host Key ID.
+* `active` (bool): If true, use this SFTP Host Key.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -116,6 +122,7 @@ var SftpHostKey = SftpHostKey.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("active", true);
 parameters.Add("name", "My Key");
 
 SftpHostKey.Update(parameters);
@@ -124,6 +131,7 @@ SftpHostKey.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Sftp Host Key ID.
+* `active` (bool): If true, use this SFTP Host Key.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
