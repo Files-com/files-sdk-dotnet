@@ -6,6 +6,7 @@
 {
   "id": 1,
   "workspace_id": 1,
+  "direction": "two_way",
   "name": "Claims Template",
   "path": "claims/medical",
   "to_partner_folder_name": "outgoing",
@@ -25,6 +26,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner Channel Template.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace associated with this Partner Channel Template.
+* `direction` / `Direction`  (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `name` / `Name`  (string): The name of the Partner Channel Template.
 * `path` / `Path`  (string): Channel path relative to the Partner root folder. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `to_partner_folder_name` / `ToPartnerFolderName`  (string): Optional Channel-level to-Partner folder name override.
@@ -88,6 +90,7 @@ Task<PartnerChannelTemplate> PartnerChannelTemplate.Create(
 
 ### Parameters
 
+* `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path_pattern` (string): Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
@@ -114,6 +117,7 @@ Task<PartnerChannelTemplate> PartnerChannelTemplate.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
+* `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path_pattern` (string): Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
@@ -150,6 +154,7 @@ var PartnerChannelTemplate = PartnerChannelTemplate.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("direction", "two_way");
 parameters.Add("from_partner_folder_name", "incoming");
 parameters.Add("from_partner_managed_folder_paths", ["claims/received"]);
 parameters.Add("from_partner_route_path_pattern", "processing/{{partner_name}}/from-partner");
@@ -165,6 +170,7 @@ PartnerChannelTemplate.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
+* `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path_pattern` (string): Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.

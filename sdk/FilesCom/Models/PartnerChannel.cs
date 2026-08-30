@@ -37,6 +37,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
+            if (!this.attributes.ContainsKey("direction"))
+            {
+                this.attributes.Add("direction", null);
+            }
             if (!this.attributes.ContainsKey("partner_id"))
             {
                 this.attributes.Add("partner_id", null);
@@ -134,6 +138,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
             set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
+        /// Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+        /// </summary>
+        [JsonPropertyName("direction")]
+        public string Direction
+        {
+            get { return (string)attributes["direction"]; }
+            set { attributes["direction"] = value; }
         }
 
         /// <summary>
@@ -278,6 +292,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -302,6 +317,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("direction") && !(parameters["direction"] is string))
+            {
+                throw new ArgumentException("Bad parameter: direction must be of type string", "parameters[\"direction\"]");
             }
             if (parameters.ContainsKey("from_partner_folder_name") && !(parameters["from_partner_folder_name"] is string))
             {
@@ -485,6 +504,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -511,6 +531,10 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("path") || parameters["path"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("direction") && !(parameters["direction"] is string))
+            {
+                throw new ArgumentException("Bad parameter: direction must be of type string", "parameters[\"direction\"]");
             }
             if (parameters.ContainsKey("from_partner_folder_name") && !(parameters["from_partner_folder_name"] is string))
             {
@@ -564,6 +588,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -596,6 +621,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("direction") && !(parameters["direction"] is string))
+            {
+                throw new ArgumentException("Bad parameter: direction must be of type string", "parameters[\"direction\"]");
             }
             if (parameters.ContainsKey("from_partner_folder_name") && !(parameters["from_partner_folder_name"] is string))
             {

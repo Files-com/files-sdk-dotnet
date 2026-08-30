@@ -6,6 +6,7 @@
 {
   "id": 1,
   "workspace_id": 1,
+  "direction": "two_way",
   "partner_id": 1,
   "partner_channel_template_id": 1,
   "path": "claims/medical",
@@ -29,6 +30,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner Channel.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace associated with this Partner Channel.
+* `direction` / `Direction`  (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `partner_id` / `PartnerId`  (Nullable<Int64>): ID of the Partner this Channel belongs to.
 * `partner_channel_template_id` / `PartnerChannelTemplateId`  (Nullable<Int64>): ID of the Partner Channel Template that manages this Channel, if any.
 * `path` / `Path`  (string): Channel path relative to the Partner root folder. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
@@ -96,6 +98,7 @@ Task<PartnerChannel> PartnerChannel.Create(
 
 ### Parameters
 
+* `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
@@ -122,6 +125,7 @@ Task<PartnerChannel> PartnerChannel.Update(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel ID.
+* `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
@@ -157,6 +161,7 @@ var PartnerChannel = PartnerChannel.Find(1);
 
 var parameters = new Dictionary<string, object>();
 
+parameters.Add("direction", "two_way");
 parameters.Add("from_partner_folder_name", "incoming");
 parameters.Add("from_partner_managed_folder_paths", ["claims/received"]);
 parameters.Add("from_partner_route_path", "processing/from-partner");
@@ -171,6 +176,7 @@ PartnerChannel.Update(parameters);
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel ID.
+* `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
