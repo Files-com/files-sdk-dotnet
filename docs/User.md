@@ -196,7 +196,7 @@
 * `password_confirmation` / `PasswordConfirmation`  (string): Optional, but if provided, we will ensure that it matches the value sent in `password`.
 * `announcements_read` / `AnnouncementsRead`  (bool): Signifies that the user has read all the announcements in the UI.
 * `clear_2fa` / `Clear2fa`  (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
-* `convert_to_partner_user` / `ConvertToPartnerUser`  (bool): If true, convert this user to a partner user by assigning the partner_id provided.
+* `convert_to_partner_user` / `ConvertToPartnerUser`  (bool): Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
 
 
 ---
@@ -463,7 +463,7 @@ Task<User> User.Update(
 * `username` (string): User's username
 * `workspace_id` (Nullable<Int64>): Workspace ID
 * `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
-* `convert_to_partner_user` (bool): If true, convert this user to a partner user by assigning the partner_id provided.
+* `convert_to_partner_user` (bool): Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
 
 
 ---
@@ -686,7 +686,7 @@ User.Update(parameters);
 * `username` (string): User's username
 * `workspace_id` (Nullable<Int64>): Workspace ID
 * `clear_2fa` (bool): If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
-* `convert_to_partner_user` (bool): If true, convert this user to a partner user by assigning the partner_id provided.
+* `convert_to_partner_user` (bool): Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
 
 
 ---

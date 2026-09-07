@@ -1479,7 +1479,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If true, convert this user to a partner user by assigning the partner_id provided.
+        /// Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("convert_to_partner_user")]
@@ -1635,7 +1635,7 @@ namespace FilesCom.Models
         ///   username - string - User's username
         ///   workspace_id - int64 - Workspace ID
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
-        ///   convert_to_partner_user - boolean - If true, convert this user to a partner user by assigning the partner_id provided.
+        ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
         public async Task<User> Update(Dictionary<string, object> parameters)
         {
@@ -2672,7 +2672,7 @@ namespace FilesCom.Models
         ///   username - string - User's username
         ///   workspace_id - int64 - Workspace ID
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
-        ///   convert_to_partner_user - boolean - If true, convert this user to a partner user by assigning the partner_id provided.
+        ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
         public static async Task<User> Update(
             Nullable<Int64> id,
