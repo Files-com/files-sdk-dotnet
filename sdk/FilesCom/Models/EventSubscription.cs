@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("message", null);
             }
+            if (!this.attributes.ContainsKey("message_only"))
+            {
+                this.attributes.Add("message_only", false);
+            }
             if (!this.attributes.ContainsKey("enabled"))
             {
                 this.attributes.Add("enabled", false);
@@ -180,6 +184,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("message_only")]
+        public bool MessageOnly
+        {
+            get { return attributes["message_only"] == null ? false : (bool)attributes["message_only"]; }
+            set { attributes["message_only"] = value; }
+        }
+
+        /// <summary>
         /// Whether this Event Subscription can dispatch events.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -260,6 +275,7 @@ namespace FilesCom.Models
         ///   name - string - Event Subscription name.
         ///   subject - string - Custom subject line to use for notification emails.
         ///   message - string - Custom message to include in notification emails.
+        ///   message_only - boolean - If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
         ///   enabled - boolean - Whether this Event Subscription can dispatch events.
         ///   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
         ///   filter - object - Structured event payload filter.
@@ -306,6 +322,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
+            }
+            if (parameters.ContainsKey("message_only") && !(parameters["message_only"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: message_only must be of type bool", "parameters[\"message_only\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
@@ -487,6 +507,7 @@ namespace FilesCom.Models
         ///   name (required) - string - Event Subscription name.
         ///   subject - string - Custom subject line to use for notification emails.
         ///   message - string - Custom message to include in notification emails.
+        ///   message_only - boolean - If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
         ///   enabled - boolean - Whether this Event Subscription can dispatch events.
         ///   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
         ///   filter - object - Structured event payload filter.
@@ -530,6 +551,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
             }
+            if (parameters.ContainsKey("message_only") && !(parameters["message_only"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: message_only must be of type bool", "parameters[\"message_only\"]");
+            }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: enabled must be of type bool", "parameters[\"enabled\"]");
@@ -572,6 +597,7 @@ namespace FilesCom.Models
         ///   name - string - Event Subscription name.
         ///   subject - string - Custom subject line to use for notification emails.
         ///   message - string - Custom message to include in notification emails.
+        ///   message_only - boolean - If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
         ///   enabled - boolean - Whether this Event Subscription can dispatch events.
         ///   event_types - array(string) - Event type strings matched by this subscription. Blank means all event types.
         ///   filter - object - Structured event payload filter.
@@ -626,6 +652,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("message") && !(parameters["message"] is string))
             {
                 throw new ArgumentException("Bad parameter: message must be of type string", "parameters[\"message\"]");
+            }
+            if (parameters.ContainsKey("message_only") && !(parameters["message_only"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: message_only must be of type bool", "parameters[\"message_only\"]");
             }
             if (parameters.ContainsKey("enabled") && !(parameters["enabled"] is bool))
             {

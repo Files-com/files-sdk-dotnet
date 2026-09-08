@@ -11,6 +11,7 @@
   "name": "example",
   "subject": "example",
   "message": "example",
+  "message_only": true,
   "enabled": true,
   "event_types": [
     "example"
@@ -32,6 +33,7 @@
 * `name` / `Name`  (string): Event Subscription name.
 * `subject` / `Subject`  (string): Custom subject line to use for notification emails.
 * `message` / `Message`  (string): Custom message to include in notification emails.
+* `message_only` / `MessageOnly`  (bool): If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
 * `enabled` / `Enabled`  (bool): Whether this Event Subscription can dispatch events.
 * `event_types` / `EventTypes`  (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` / `Filter`  (object): Structured event payload filter.
@@ -98,6 +100,7 @@ Task<EventSubscription> EventSubscription.Create(
 * `name` (string): Required - Event Subscription name.
 * `subject` (string): Custom subject line to use for notification emails.
 * `message` (string): Custom message to include in notification emails.
+* `message_only` (bool): If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` (object): Structured event payload filter.
@@ -126,6 +129,7 @@ Task<EventSubscription> EventSubscription.Update(
 * `name` (string): Event Subscription name.
 * `subject` (string): Custom subject line to use for notification emails.
 * `message` (string): Custom message to include in notification emails.
+* `message_only` (bool): If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` (object): Structured event payload filter.
@@ -165,6 +169,7 @@ parameters.Add("apply_to_all_workspaces", true);
 parameters.Add("name", "example");
 parameters.Add("subject", "example");
 parameters.Add("message", "example");
+parameters.Add("message_only", true);
 parameters.Add("enabled", true);
 parameters.Add("event_types", ["example"]);
 parameters.Add("delivery_policy", "example");
@@ -182,6 +187,7 @@ EventSubscription.Update(parameters);
 * `name` (string): Event Subscription name.
 * `subject` (string): Custom subject line to use for notification emails.
 * `message` (string): Custom message to include in notification emails.
+* `message_only` (bool): If true, notification email bodies contain only the custom message, omitting event details and the review button. Requires a custom message, defaults to false, and does not affect non-email targets.
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types.
 * `filter` (object): Structured event payload filter.
