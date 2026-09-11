@@ -157,7 +157,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Transformation and AI credits used on this day. Note: initially this tracks GPG encrypt, decrypt, and recrypt usage.
+        /// Transformation and AI credits used on this day. Note: only updated for days before the current day.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("transformation_credits_usage")]
