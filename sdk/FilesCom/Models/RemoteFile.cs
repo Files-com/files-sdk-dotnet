@@ -1706,6 +1706,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   path (required) - string - Path to operate on.
         ///   action - string - The action to perform.  Can be `append`, `attachment`, `end`, `upload`, `put`, or may not exist
+        ///   custom_metadata - object - Custom metadata map to save when `action=end` completes the upload.  Replaces existing metadata; an empty map clears it.  No separate metadata-edit permission is required.  Supported on native files and configured remote mounts, excluding remote server automount paths.  Limited to 32 keys, 256 characters per key and 1024 characters per value.
         ///   etags[etag] (required) - array(string) - etag identifier.
         ///   etags[part] (required) - array(int64) - Part number.
         ///   length - int64 - Length of file.
@@ -1750,6 +1751,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("action") && !(parameters["action"] is string))
             {
                 throw new ArgumentException("Bad parameter: action must be of type string", "parameters[\"action\"]");
+            }
+            if (parameters.ContainsKey("custom_metadata") && !(parameters["custom_metadata"] is object))
+            {
+                throw new ArgumentException("Bad parameter: custom_metadata must be of type object", "parameters[\"custom_metadata\"]");
             }
             if (parameters.ContainsKey("length") && !(parameters["length"] is Nullable<Int64>))
             {
