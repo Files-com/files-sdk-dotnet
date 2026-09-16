@@ -33,6 +33,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("active", false);
             }
+            if (!this.attributes.ContainsKey("custom_domain_id"))
+            {
+                this.attributes.Add("custom_domain_id", null);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -89,6 +93,16 @@ namespace FilesCom.Models
         {
             get { return attributes["active"] == null ? false : (bool)attributes["active"]; }
             set { attributes["active"] = value; }
+        }
+
+        /// <summary>
+        /// Custom Domain ID. If set, this key is used only for that Custom Domain.
+        /// </summary>
+        [JsonPropertyName("custom_domain_id")]
+        public Nullable<Int64> CustomDomainId
+        {
+            get { return (Nullable<Int64>)attributes["custom_domain_id"]; }
+            set { attributes["custom_domain_id"] = value; }
         }
 
         /// <summary>
@@ -154,6 +168,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   active - boolean - If true, use this SFTP Host Key.
+        ///   custom_domain_id - int64 - Custom Domain ID. If set, this key is used only for that Custom Domain.
         ///   name - string - The friendly name of this SFTP Host Key.
         ///   private_key - string - The private key data.
         /// </summary>
@@ -177,6 +192,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("active") && !(parameters["active"] is bool))
             {
                 throw new ArgumentException("Bad parameter: active must be of type bool", "parameters[\"active\"]");
+            }
+            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -331,6 +350,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   active - boolean - If true, use this SFTP Host Key.
+        ///   custom_domain_id - int64 - Custom Domain ID. If set, this key is used only for that Custom Domain.
         ///   name - string - The friendly name of this SFTP Host Key.
         ///   private_key - string - The private key data.
         /// </summary>
@@ -346,6 +366,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("active") && !(parameters["active"] is bool))
             {
                 throw new ArgumentException("Bad parameter: active must be of type bool", "parameters[\"active\"]");
+            }
+            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
@@ -372,6 +396,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   active - boolean - If true, use this SFTP Host Key.
+        ///   custom_domain_id - int64 - Custom Domain ID. If set, this key is used only for that Custom Domain.
         ///   name - string - The friendly name of this SFTP Host Key.
         ///   private_key - string - The private key data.
         /// </summary>
@@ -403,6 +428,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("active") && !(parameters["active"] is bool))
             {
                 throw new ArgumentException("Bad parameter: active must be of type bool", "parameters[\"active\"]");
+            }
+            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
             }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {

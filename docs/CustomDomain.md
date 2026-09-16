@@ -11,6 +11,10 @@
   "ssl_certificate_id": 1,
   "brick_managed": true,
   "folder_behavior_id": 1,
+  "ip_addresses": [
+    "203.0.113.1",
+    "203.0.113.2"
+  ],
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z"
 }
@@ -23,6 +27,7 @@
 * `ssl_certificate_id` / `SslCertificateId`  (Nullable<Int64>): Current SSL certificate ID.
 * `brick_managed` / `BrickManaged`  (bool): Is this domain's SSL certificate automatically managed and renewed by Files.com?
 * `folder_behavior_id` / `FolderBehaviorId`  (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
+* `ip_addresses` / `IpAddresses`  (string[]): Dedicated public IP addresses allocated to this Custom Domain.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): When this Custom Domain was created.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): When this Custom Domain was last updated.
 
@@ -61,6 +66,24 @@ Task<CustomDomain> CustomDomain.Find(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
+
+
+---
+
+## Allocate dedicated IP addresses to this Custom Domain
+
+```
+Task<CustomDomain> CustomDomain.CreateAllocateIp(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Custom Domain ID.
+* `count` (Nullable<Int64>): Required - Number of dedicated IP addresses to allocate.
 
 
 ---

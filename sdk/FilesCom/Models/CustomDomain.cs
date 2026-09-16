@@ -57,6 +57,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("folder_behavior_id", null);
             }
+            if (!this.attributes.ContainsKey("ip_addresses"))
+            {
+                this.attributes.Add("ip_addresses", new string[0]);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -157,6 +161,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["folder_behavior_id"]; }
             set { attributes["folder_behavior_id"] = value; }
+        }
+
+        /// <summary>
+        /// Dedicated public IP addresses allocated to this Custom Domain.
+        /// </summary>
+        [JsonPropertyName("ip_addresses")]
+        public string[] IpAddresses
+        {
+            get { return (string[])attributes["ip_addresses"]; }
+            set { attributes["ip_addresses"] = value; }
         }
 
         /// <summary>
@@ -367,6 +381,58 @@ namespace FilesCom.Models
         {
             return await Find(id, parameters, options);
         }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Custom Domain ID.
+        ///   count (required) - int64 - Number of dedicated IP addresses to allocate.
+        /// </summary>
+        public static async Task<CustomDomain> CreateAllocateIp(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+            }
+            if (!parameters.ContainsKey("count") || parameters["count"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: count", "parameters[\"count\"]");
+            }
+            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("count") && !(parameters["count"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: count must be of type Nullable<Int64>", "parameters[\"count\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest($"/custom_domains/{System.Uri.EscapeDataString(parameters["id"].ToString())}/allocate_ips", System.Net.Http.HttpMethod.Post, parameters, options);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<CustomDomain>(responseJson, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
 
         /// <summary>
         /// Parameters:

@@ -5,6 +5,7 @@
 ```
 {
   "active": true,
+  "custom_domain_id": 1,
   "id": 1,
   "name": "My Key",
   "key_type": "ssh-rsa",
@@ -14,6 +15,7 @@
 ```
 
 * `active` / `Active`  (bool): If true, use this SFTP Host Key.
+* `custom_domain_id` / `CustomDomainId`  (Nullable<Int64>): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `id` / `Id`  (Nullable<Int64>): SFTP Host Key ID
 * `name` / `Name`  (string): The friendly name of this SFTP Host Key.
 * `key_type` / `KeyType`  (string): SSH key type
@@ -72,6 +74,7 @@ Task<SftpHostKey> SftpHostKey.Create(
 ### Parameters
 
 * `active` (bool): If true, use this SFTP Host Key.
+* `custom_domain_id` (Nullable<Int64>): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -92,6 +95,7 @@ Task<SftpHostKey> SftpHostKey.Update(
 
 * `id` (Nullable<Int64>): Required - Sftp Host Key ID.
 * `active` (bool): If true, use this SFTP Host Key.
+* `custom_domain_id` (Nullable<Int64>): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
@@ -123,6 +127,7 @@ var SftpHostKey = SftpHostKey.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("active", true);
+parameters.Add("custom_domain_id", 1);
 parameters.Add("name", "My Key");
 
 SftpHostKey.Update(parameters);
@@ -132,6 +137,7 @@ SftpHostKey.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Sftp Host Key ID.
 * `active` (bool): If true, use this SFTP Host Key.
+* `custom_domain_id` (Nullable<Int64>): Custom Domain ID. If set, this key is used only for that Custom Domain.
 * `name` (string): The friendly name of this SFTP Host Key.
 * `private_key` (string): The private key data.
 
