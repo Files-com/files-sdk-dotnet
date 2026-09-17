@@ -325,6 +325,7 @@
     "responsible_user_id": 1,
     "readonly_site_admin": true,
     "restapi_permission": true,
+    "s3_compatible_endpoint_permission": true,
     "self_managed": true,
     "sftp_permission": true,
     "site_admin": true,

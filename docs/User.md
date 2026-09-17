@@ -74,6 +74,7 @@
   "responsible_user_id": 1,
   "readonly_site_admin": true,
   "restapi_permission": true,
+  "s3_compatible_endpoint_permission": true,
   "self_managed": true,
   "sftp_permission": true,
   "site_admin": true,
@@ -165,6 +166,7 @@
 * `responsible_user_id` / `ResponsibleUserId`  (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `readonly_site_admin` / `ReadonlySiteAdmin`  (bool): Is the user an allowed to view all (non-billing) site configuration for this site?
 * `restapi_permission` / `RestapiPermission`  (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+* `s3_compatible_endpoint_permission` / `S3CompatibleEndpointPermission`  (bool): Can the user access the S3-compatible endpoint? Defaults to true.
 * `self_managed` / `SelfManaged`  (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` / `SftpPermission`  (bool): Can the user access with SFTP?
 * `site_admin` / `SiteAdmin`  (bool): Is the user an administrator for this site?
@@ -311,6 +313,7 @@ Task<User> User.Create(
 * `responsible_group_id` (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
 * `responsible_user_id` (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `restapi_permission` (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+* `s3_compatible_endpoint_permission` (bool): Can the user access the S3-compatible endpoint? Defaults to true.
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (bool): Can the user access with SFTP?
 * `site_admin` (bool): Is the user an administrator for this site?
@@ -447,6 +450,7 @@ Task<User> User.Update(
 * `responsible_group_id` (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
 * `responsible_user_id` (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `restapi_permission` (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+* `s3_compatible_endpoint_permission` (bool): Can the user access the S3-compatible endpoint? Defaults to true.
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (bool): Can the user access with SFTP?
 * `site_admin` (bool): Is the user an administrator for this site?
@@ -593,6 +597,7 @@ parameters.Add("require_password_change", true);
 parameters.Add("responsible_group_id", 1);
 parameters.Add("responsible_user_id", 1);
 parameters.Add("restapi_permission", true);
+parameters.Add("s3_compatible_endpoint_permission", true);
 parameters.Add("self_managed", true);
 parameters.Add("sftp_permission", true);
 parameters.Add("site_admin", true);
@@ -670,6 +675,7 @@ User.Update(parameters);
 * `responsible_group_id` (Nullable<Int64>): ID of the internal Group responsible for this Partner User, overriding the Partner default.
 * `responsible_user_id` (Nullable<Int64>): ID of the internal User responsible for this Partner User, overriding the Partner default.
 * `restapi_permission` (bool): Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+* `s3_compatible_endpoint_permission` (bool): Can the user access the S3-compatible endpoint? Defaults to true.
 * `self_managed` (bool): Does this user manage it's own credentials or is it a shared/bot user?
 * `sftp_permission` (bool): Can the user access with SFTP?
 * `site_admin` (bool): Is the user an administrator for this site?

@@ -301,6 +301,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("restapi_permission", false);
             }
+            if (!this.attributes.ContainsKey("s3_compatible_endpoint_permission"))
+            {
+                this.attributes.Add("s3_compatible_endpoint_permission", false);
+            }
             if (!this.attributes.ContainsKey("self_managed"))
             {
                 this.attributes.Add("self_managed", false);
@@ -1159,6 +1163,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Can the user access the S3-compatible endpoint? Defaults to true.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("s3_compatible_endpoint_permission")]
+        public bool S3CompatibleEndpointPermission
+        {
+            get { return attributes["s3_compatible_endpoint_permission"] == null ? false : (bool)attributes["s3_compatible_endpoint_permission"]; }
+            set { attributes["s3_compatible_endpoint_permission"] = value; }
+        }
+
+        /// <summary>
         /// Does this user manage it's own credentials or is it a shared/bot user?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -1619,6 +1634,7 @@ namespace FilesCom.Models
         ///   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
         ///   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
         ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+        ///   s3_compatible_endpoint_permission - boolean - Can the user access the S3-compatible endpoint? Defaults to true.
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
         ///   sftp_permission - boolean - Can the user access with SFTP?
         ///   site_admin - boolean - Is the user an administrator for this site?
@@ -1865,6 +1881,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
             }
             if (parameters.ContainsKey("self_managed") && !(parameters["self_managed"] is bool))
             {
@@ -2187,6 +2207,7 @@ namespace FilesCom.Models
         ///   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
         ///   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
         ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+        ///   s3_compatible_endpoint_permission - boolean - Can the user access the S3-compatible endpoint? Defaults to true.
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
         ///   sftp_permission - boolean - Can the user access with SFTP?
         ///   site_admin - boolean - Is the user an administrator for this site?
@@ -2428,6 +2449,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
             }
+            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
+            }
             if (parameters.ContainsKey("self_managed") && !(parameters["self_managed"] is bool))
             {
                 throw new ArgumentException("Bad parameter: self_managed must be of type bool", "parameters[\"self_managed\"]");
@@ -2656,6 +2681,7 @@ namespace FilesCom.Models
         ///   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
         ///   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
         ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+        ///   s3_compatible_endpoint_permission - boolean - Can the user access the S3-compatible endpoint? Defaults to true.
         ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
         ///   sftp_permission - boolean - Can the user access with SFTP?
         ///   site_admin - boolean - Is the user an administrator for this site?
@@ -2910,6 +2936,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
             }
             if (parameters.ContainsKey("self_managed") && !(parameters["self_managed"] is bool))
             {

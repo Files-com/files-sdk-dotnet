@@ -77,6 +77,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("restapi_permission", false);
             }
+            if (!this.attributes.ContainsKey("s3_compatible_endpoint_permission"))
+            {
+                this.attributes.Add("s3_compatible_endpoint_permission", false);
+            }
             if (!this.attributes.ContainsKey("desktop_configuration_profile_id"))
             {
                 this.attributes.Add("desktop_configuration_profile_id", null);
@@ -241,6 +245,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("s3_compatible_endpoint_permission")]
+        public bool S3CompatibleEndpointPermission
+        {
+            get { return attributes["s3_compatible_endpoint_permission"] == null ? false : (bool)attributes["s3_compatible_endpoint_permission"]; }
+            set { attributes["s3_compatible_endpoint_permission"] = value; }
+        }
+
+        /// <summary>
         /// Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         /// </summary>
         [JsonPropertyName("desktop_configuration_profile_id")]
@@ -290,6 +305,7 @@ namespace FilesCom.Models
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        ///   s3_compatible_endpoint_permission - boolean - If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false.
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
@@ -343,6 +359,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
             }
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
@@ -537,6 +557,7 @@ namespace FilesCom.Models
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        ///   s3_compatible_endpoint_permission - boolean - If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false.
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
@@ -588,6 +609,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
             }
+            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
+            }
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
@@ -632,6 +657,7 @@ namespace FilesCom.Models
         ///   sftp_permission - boolean - If true, users in this group can use SFTP to login.  This will override a false value of `sftp_permission` on the user level.
         ///   dav_permission - boolean - If true, users in this group can use WebDAV to login.  This will override a false value of `dav_permission` on the user level.
         ///   restapi_permission - boolean - If true, users in this group can use the REST API to login.  This will override a false value of `restapi_permission` on the user level.
+        ///   s3_compatible_endpoint_permission - boolean - If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false.
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
@@ -693,6 +719,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
             {
                 throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
             }
             if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
             {
