@@ -64,7 +64,6 @@
   "enable_dedicated_ips": true,
   "files_agent_permission_set": "read_write",
   "files_agent_root": "example",
-  "files_agent_api_token": "example",
   "files_agent_version": "example",
   "files_agent_up_to_date": true,
   "files_agent_latest_version": "example",
@@ -86,7 +85,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Remote Server ID
-* `disabled` / `Disabled`  (bool): If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+* `disabled` / `Disabled`  (bool): If true, this Remote Server is disabled. Updating it clears this flag, except for retired Agent v1 records, which remain disabled.
 * `authentication_method` / `AuthenticationMethod`  (string): Type of authentication method to use
 * `hostname` / `Hostname`  (string): Hostname or IP address
 * `remote_home_path` / `RemoteHomePath`  (string): Initial home folder on remote server
@@ -145,7 +144,6 @@
 * `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
 * `files_agent_permission_set` / `FilesAgentPermissionSet`  (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
-* `files_agent_api_token` / `FilesAgentApiToken`  (string): Files Agent API Token
 * `files_agent_version` / `FilesAgentVersion`  (string): Files Agent version
 * `files_agent_up_to_date` / `FilesAgentUpToDate`  (bool): If true, the Files Agent is up to date.
 * `files_agent_latest_version` / `FilesAgentLatestVersion`  (string): Latest available Files Agent version
@@ -380,34 +378,6 @@ Task<AgentPushUpdate> RemoteServer.AgentPushUpdate(
 
 ---
 
-## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
-
-```
-Task<RemoteServerConfigurationFile> RemoteServer.ConfigurationFile(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Remote Server ID.
-* `api_token` (string): Files Agent API Token
-* `permission_set` (string): The permission set for the agent ['read_write', 'read_only', 'write_only']
-* `root` (string): The root directory for the agent
-* `hostname` (string): 
-* `port` (Nullable<Int64>): Incoming port for files agent connections
-* `status` (string): either running or shutdown
-* `config_version` (string): agent config version
-* `private_key` (string): The private key for the agent
-* `public_key` (string): public key
-* `server_host_key` (string): 
-* `subdomain` (string): Files.com subdomain site name
-
-
----
-
 ## Update Remote Server
 
 ```
@@ -556,46 +526,6 @@ RemoteServer.AgentPushUpdate
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
-
-
----
-
-## Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
-
-```
-var RemoteServer = RemoteServer.Find(1);
-
-var parameters = new Dictionary<string, object>();
-
-parameters.Add("api_token", "example");
-parameters.Add("permission_set", "example");
-parameters.Add("root", "C:\\Users\\");
-parameters.Add("hostname", "example");
-parameters.Add("port", 1);
-parameters.Add("status", "example");
-parameters.Add("config_version", "example");
-parameters.Add("private_key", "example");
-parameters.Add("public_key", "example");
-parameters.Add("server_host_key", "example");
-parameters.Add("subdomain", "example");
-
-RemoteServer.ConfigurationFile(parameters);
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Remote Server ID.
-* `api_token` (string): Files Agent API Token
-* `permission_set` (string): The permission set for the agent ['read_write', 'read_only', 'write_only']
-* `root` (string): The root directory for the agent
-* `hostname` (string): 
-* `port` (Nullable<Int64>): Incoming port for files agent connections
-* `status` (string): either running or shutdown
-* `config_version` (string): agent config version
-* `private_key` (string): The private key for the agent
-* `public_key` (string): public key
-* `server_host_key` (string): 
-* `subdomain` (string): Files.com subdomain site name
 
 
 ---

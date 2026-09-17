@@ -269,10 +269,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("files_agent_root", null);
             }
-            if (!this.attributes.ContainsKey("files_agent_api_token"))
-            {
-                this.attributes.Add("files_agent_api_token", null);
-            }
             if (!this.attributes.ContainsKey("files_agent_version"))
             {
                 this.attributes.Add("files_agent_version", null);
@@ -467,7 +463,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If true, this Remote Server has been disabled due to failures.  Make any change or set disabled to false to clear this flag.
+        /// If true, this Remote Server is disabled. Updating it clears this flag, except for retired Agent v1 records, which remain disabled.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("disabled")]
@@ -1064,16 +1060,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Files Agent API Token
-        /// </summary>
-        [JsonPropertyName("files_agent_api_token")]
-        public string FilesAgentApiToken
-        {
-            get { return (string)attributes["files_agent_api_token"]; }
-            set { attributes["files_agent_api_token"] = value; }
-        }
-
-        /// <summary>
         /// Files Agent version
         /// </summary>
         [JsonPropertyName("files_agent_version")]
@@ -1539,97 +1525,6 @@ namespace FilesCom.Models
             try
             {
                 return JsonUtil.DeserializeWithOptions<AgentPushUpdate>(responseJson, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
-        ///
-        /// Parameters:
-        ///   api_token - string - Files Agent API Token
-        ///   permission_set - string - The permission set for the agent ['read_write', 'read_only', 'write_only']
-        ///   root - string - The root directory for the agent
-        ///   hostname - string
-        ///   port - int64 - Incoming port for files agent connections
-        ///   status - string - either running or shutdown
-        ///   config_version - string - agent config version
-        ///   private_key - string - The private key for the agent
-        ///   public_key - string - public key
-        ///   server_host_key - string
-        ///   subdomain - string - Files.com subdomain site name
-        /// </summary>
-        public async Task<RemoteServerConfigurationFile> ConfigurationFile(Dictionary<string, object> parameters)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
-
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("api_token") && !(parameters["api_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: api_token must be of type string", "parameters[\"api_token\"]");
-            }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
-            {
-                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
-            }
-            if (parameters.ContainsKey("root") && !(parameters["root"] is string))
-            {
-                throw new ArgumentException("Bad parameter: root must be of type string", "parameters[\"root\"]");
-            }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
-            {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
-            }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
-            }
-            if (parameters.ContainsKey("status") && !(parameters["status"] is string))
-            {
-                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
-            }
-            if (parameters.ContainsKey("config_version") && !(parameters["config_version"] is string))
-            {
-                throw new ArgumentException("Bad parameter: config_version must be of type string", "parameters[\"config_version\"]");
-            }
-            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
-            }
-            if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
-            }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
-            }
-            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
-            {
-                throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServerConfigurationFile>(responseJson, options);
             }
             catch (JsonException)
             {
@@ -2795,105 +2690,6 @@ namespace FilesCom.Models
             try
             {
                 return JsonUtil.DeserializeWithOptions<AgentPushUpdate>(responseJson, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
-        }
-
-
-        /// <summary>
-        /// Post local changes, check in, and download configuration file (used by some Remote Server integrations, such as the Files.com Agent)
-        ///
-        /// Parameters:
-        ///   api_token - string - Files Agent API Token
-        ///   permission_set - string - The permission set for the agent ['read_write', 'read_only', 'write_only']
-        ///   root - string - The root directory for the agent
-        ///   hostname - string
-        ///   port - int64 - Incoming port for files agent connections
-        ///   status - string - either running or shutdown
-        ///   config_version - string - agent config version
-        ///   private_key - string - The private key for the agent
-        ///   public_key - string - public key
-        ///   server_host_key - string
-        ///   subdomain - string - Files.com subdomain site name
-        /// </summary>
-        public static async Task<RemoteServerConfigurationFile> ConfigurationFile(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-
-            if (parameters.ContainsKey("id"))
-            {
-                parameters["id"] = id;
-            }
-            else
-            {
-                parameters.Add("id", id);
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("api_token") && !(parameters["api_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: api_token must be of type string", "parameters[\"api_token\"]");
-            }
-            if (parameters.ContainsKey("permission_set") && !(parameters["permission_set"] is string))
-            {
-                throw new ArgumentException("Bad parameter: permission_set must be of type string", "parameters[\"permission_set\"]");
-            }
-            if (parameters.ContainsKey("root") && !(parameters["root"] is string))
-            {
-                throw new ArgumentException("Bad parameter: root must be of type string", "parameters[\"root\"]");
-            }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
-            {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
-            }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
-            }
-            if (parameters.ContainsKey("status") && !(parameters["status"] is string))
-            {
-                throw new ArgumentException("Bad parameter: status must be of type string", "parameters[\"status\"]");
-            }
-            if (parameters.ContainsKey("config_version") && !(parameters["config_version"] is string))
-            {
-                throw new ArgumentException("Bad parameter: config_version must be of type string", "parameters[\"config_version\"]");
-            }
-            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
-            }
-            if (parameters.ContainsKey("public_key") && !(parameters["public_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: public_key must be of type string", "parameters[\"public_key\"]");
-            }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
-            }
-            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
-            {
-                throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest($"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Post, parameters, options);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServerConfigurationFile>(responseJson, options);
             }
             catch (JsonException)
             {

@@ -105,34 +105,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("auto_update_policy", null);
             }
-            if (!this.attributes.ContainsKey("api_token"))
-            {
-                this.attributes.Add("api_token", null);
-            }
-            if (!this.attributes.ContainsKey("port"))
-            {
-                this.attributes.Add("port", null);
-            }
-            if (!this.attributes.ContainsKey("hostname"))
-            {
-                this.attributes.Add("hostname", null);
-            }
-            if (!this.attributes.ContainsKey("public_key"))
-            {
-                this.attributes.Add("public_key", null);
-            }
-            if (!this.attributes.ContainsKey("status"))
-            {
-                this.attributes.Add("status", null);
-            }
-            if (!this.attributes.ContainsKey("server_host_key"))
-            {
-                this.attributes.Add("server_host_key", null);
-            }
-            if (!this.attributes.ContainsKey("config_version"))
-            {
-                this.attributes.Add("config_version", null);
-            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -375,81 +347,6 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["auto_update_policy"]; }
             private set { attributes["auto_update_policy"] = value; }
-        }
-
-        /// <summary>
-        /// Files Agent API Token
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("api_token")]
-        public string ApiToken
-        {
-            get { return (string)attributes["api_token"]; }
-            private set { attributes["api_token"] = value; }
-        }
-
-        /// <summary>
-        /// Incoming port for files agent connections
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("port")]
-        public Nullable<Int64> Port
-        {
-            get { return (Nullable<Int64>)attributes["port"]; }
-            private set { attributes["port"] = value; }
-        }
-
-        /// <summary>
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("hostname")]
-        public string Hostname
-        {
-            get { return (string)attributes["hostname"]; }
-            private set { attributes["hostname"] = value; }
-        }
-
-        /// <summary>
-        /// public key
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("public_key")]
-        public string PublicKey
-        {
-            get { return (string)attributes["public_key"]; }
-            private set { attributes["public_key"] = value; }
-        }
-
-        /// <summary>
-        /// either running or shutdown
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("status")]
-        public string Status
-        {
-            get { return (string)attributes["status"]; }
-            private set { attributes["status"] = value; }
-        }
-
-        /// <summary>
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("server_host_key")]
-        public string ServerHostKey
-        {
-            get { return (string)attributes["server_host_key"]; }
-            private set { attributes["server_host_key"] = value; }
-        }
-
-        /// <summary>
-        /// agent config version
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("config_version")]
-        public string ConfigVersion
-        {
-            get { return (string)attributes["config_version"]; }
-            private set { attributes["config_version"] = value; }
         }
 
 
