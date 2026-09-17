@@ -427,7 +427,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// SCIM OAuth Access Token.
+        /// SCIM OAuth Access Token. Only returned when the token is first issued or reset.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("scim_oauth_access_token")]
