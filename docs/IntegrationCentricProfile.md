@@ -9,7 +9,10 @@
   "workspace_id": 1,
   "use_for_all_users": false,
   "expected_remote_servers": [
-    "example"
+    {
+      "server_type": "dropbox",
+      "name": "Dropbox"
+    }
   ]
 }
 ```
@@ -127,7 +130,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Business Systems Onboarding");
 parameters.Add("workspace_id", 1);
-parameters.Add("expected_remote_servers", ["example"]);
+parameters.Add("expected_remote_servers", [{"server_type":"dropbox","name":"Dropbox"}]);
 parameters.Add("use_for_all_users", false);
 
 IntegrationCentricProfile.Update(parameters);

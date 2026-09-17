@@ -10,7 +10,7 @@
   "use_for_all_users": false,
   "disable_drive_mounting": false,
   "mount_mappings": {
-    "key": "example value"
+    "W": "Americas"
   }
 }
 ```
@@ -131,7 +131,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "North America Desktop Profile");
 parameters.Add("workspace_id", 1);
-parameters.Add("mount_mappings", {"key":"example value"});
+parameters.Add("mount_mappings", {"W":"Americas"});
 parameters.Add("use_for_all_users", false);
 parameters.Add("disable_drive_mounting", false);
 

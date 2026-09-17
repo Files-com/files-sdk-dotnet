@@ -10,7 +10,7 @@
   "description": "Used by production API integrations.",
   "secret_type": "token",
   "metadata": {
-    "key": "example value"
+    "header_name": "Authorization"
   },
   "value_field_names": [
     "example"
@@ -140,7 +140,7 @@ var parameters = new Dictionary<string, object>();
 parameters.Add("name", "Production API token");
 parameters.Add("description", "Used by production API integrations.");
 parameters.Add("secret_type", "token");
-parameters.Add("metadata", {"key":"example value"});
+parameters.Add("metadata", {"header_name":"Authorization"});
 
 Secret.Update(parameters);
 ```

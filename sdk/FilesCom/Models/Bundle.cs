@@ -900,6 +900,7 @@ namespace FilesCom.Models
         ///   user_id - int64 - The owning user id. Only site admins can set this.
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+        ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public async Task<Bundle> Update(Dictionary<string, object> parameters)
@@ -1038,6 +1039,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
+            }
+            if (parameters.ContainsKey("watermark_value") && !(parameters["watermark_value"] is object))
+            {
+                throw new ArgumentException("Bad parameter: watermark_value must be of type object", "parameters[\"watermark_value\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
@@ -1268,6 +1273,7 @@ namespace FilesCom.Models
         ///   snapshot_id - int64 - ID of the snapshot containing this bundle's contents.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+        ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         /// </summary>
         public static async Task<Bundle> Create(
 
@@ -1406,6 +1412,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
             }
+            if (parameters.ContainsKey("watermark_value") && !(parameters["watermark_value"] is object))
+            {
+                throw new ArgumentException("Bad parameter: watermark_value must be of type object", "parameters[\"watermark_value\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest($"/bundles", System.Net.Http.HttpMethod.Post, parameters, options);
 
@@ -1502,6 +1512,7 @@ namespace FilesCom.Models
         ///   user_id - int64 - The owning user id. Only site admins can set this.
         ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+        ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
         public static async Task<Bundle> Update(
@@ -1648,6 +1659,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("watermark_attachment_file") && !(parameters["watermark_attachment_file"] is System.Net.Http.ByteArrayContent))
             {
                 throw new ArgumentException("Bad parameter: watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"watermark_attachment_file\"]");
+            }
+            if (parameters.ContainsKey("watermark_value") && !(parameters["watermark_value"] is object))
+            {
+                throw new ArgumentException("Bad parameter: watermark_value must be of type object", "parameters[\"watermark_value\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {

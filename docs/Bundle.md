@@ -77,14 +77,18 @@
     "uri": "https://mysite.files.com/.../my_image.png"
   },
   "watermark_value": {
-    "key": "example value"
+    "gravity": "SouthWest",
+    "max_height_or_width": 20,
+    "transparency": 25
   },
   "send_one_time_password_to_recipient_at_registration": true,
   "workspace_id": 1,
   "has_inbox": true,
   "dont_allow_folders_in_uploads": true,
   "requested_upload_slots": [
-    "example"
+    {
+      "name": "Photo ID"
+    }
   ],
   "paths": [
     "file.txt"
@@ -244,6 +248,7 @@ Task<Bundle> Bundle.Create(
 * `snapshot_id` (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 
 
 ---
@@ -311,6 +316,7 @@ Task<Bundle> Bundle.Update(
 * `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 
@@ -393,6 +399,7 @@ parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
 parameters.Add("user_id", 1);
 parameters.Add("watermark_attachment_delete", false);
+parameters.Add("watermark_value", {"gravity":"SouthWest","max_height_or_width":20,"transparency":25});
 parameters.Add("workspace_id", 1);
 
 Bundle.Update(parameters);
@@ -431,6 +438,7 @@ Bundle.Update(parameters);
 * `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
 * `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
 

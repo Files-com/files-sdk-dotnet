@@ -12,7 +12,7 @@
   "server_certificate": "require_match",
   "http_auth_username": "username",
   "additional_http_headers": {
-    "key": "example value"
+    "X-Partner": "acme"
   },
   "default_mime_type": "application/octet-stream",
   "mdn_validation_level": "none",
@@ -177,7 +177,7 @@ parameters.Add("mdn_validation_level", "none");
 parameters.Add("signature_validation_level", "normal");
 parameters.Add("server_certificate", "require_match");
 parameters.Add("default_mime_type", "application/octet-stream");
-parameters.Add("additional_http_headers", {"key":"example value"});
+parameters.Add("additional_http_headers", {"X-Partner":"acme"});
 parameters.Add("name", "AS2 Partner Name");
 parameters.Add("uri", "example");
 parameters.Add("public_certificate", "example");

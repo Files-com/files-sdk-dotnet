@@ -12,7 +12,7 @@
   "file_format": "example",
   "file_interval_minutes": 1,
   "additional_headers": {
-    "key": "example value"
+    "Authorization": "Bearer YOUR_TOKEN"
   },
   "sending_active": true,
   "generic_payload_type": "example",
@@ -339,7 +339,7 @@ var SiemHttpDestination = SiemHttpDestination.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "example");
-parameters.Add("additional_headers", {"key":"example value"});
+parameters.Add("additional_headers", {"Authorization":"Bearer YOUR_TOKEN"});
 parameters.Add("sending_active", true);
 parameters.Add("generic_payload_type", "example");
 parameters.Add("file_destination_path", "example");
