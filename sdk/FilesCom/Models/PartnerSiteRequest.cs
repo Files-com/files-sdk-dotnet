@@ -352,6 +352,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   pairing_key (required) - string - Pairing key for the partner site request
+        ///   partner_id - int64 - ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
         /// </summary>
         public static async Task Approve(
 
@@ -369,6 +370,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("pairing_key") && !(parameters["pairing_key"] is string))
             {
                 throw new ArgumentException("Bad parameter: pairing_key must be of type string", "parameters[\"pairing_key\"]");
+            }
+            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
             }
 
             await FilesClient.SendRequest($"/partner_site_requests/approve", System.Net.Http.HttpMethod.Post, parameters, options);

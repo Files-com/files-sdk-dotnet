@@ -48,7 +48,7 @@
 * `notes` / `Notes`  (string): Notes about this Partner.
 * `partner_admin_ids` / `PartnerAdminIds`  (Nullable<Int64>[]): Array of User IDs that are Partner Admins for this Partner.
 * `partner_channel_template_id` / `PartnerChannelTemplateId`  (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
-* `partnership_role` / `PartnershipRole`  (string): This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
+* `partnership_role` / `PartnershipRole`  (string): This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
 * `responsible_group_id` / `ResponsibleGroupId`  (Nullable<Int64>): ID of the Group responsible for this Partner.
 * `responsible_user_id` / `ResponsibleUserId`  (Nullable<Int64>): ID of the User responsible for this Partner.
 * `root_folder` / `RootFolder`  (string): The root folder path for this Partner.
@@ -155,6 +155,7 @@ Task<Partner> Partner.Update(
 * `show_partner_channel_home_page` (bool): Show Partner users a simplified home page built from this Partner's Channels.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
+* `partnership_role` (string): This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
 * `root_folder` (string): The root folder path for this Partner.
 
 
@@ -198,6 +199,7 @@ parameters.Add("responsible_user_id", 1);
 parameters.Add("show_partner_channel_home_page", false);
 parameters.Add("tags", "example");
 parameters.Add("name", "Acme Corp");
+parameters.Add("partnership_role", "host");
 parameters.Add("root_folder", "/AcmeCorp");
 
 Partner.Update(parameters);
@@ -220,6 +222,7 @@ Partner.Update(parameters);
 * `show_partner_channel_home_page` (bool): Show Partner users a simplified home page built from this Partner's Channels.
 * `tags` (string): Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
 * `name` (string): The name of the Partner.
+* `partnership_role` (string): This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
 * `root_folder` (string): The root folder path for this Partner.
 
 

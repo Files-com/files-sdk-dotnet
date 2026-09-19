@@ -268,7 +268,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// This site's role in Partner Site relationships for this Partner. Can be `host`, `guest`, `host_and_guest`, or null.
+        /// This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
         /// </summary>
         [JsonPropertyName("partnership_role")]
         public string PartnershipRole
@@ -354,6 +354,7 @@ namespace FilesCom.Models
         ///   show_partner_channel_home_page - boolean - Show Partner users a simplified home page built from this Partner's Channels.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
+        ///   partnership_role - string - This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
         ///   root_folder - string - The root folder path for this Partner.
         /// </summary>
         public async Task<Partner> Update(Dictionary<string, object> parameters)
@@ -428,6 +429,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("partnership_role") && !(parameters["partnership_role"] is string))
+            {
+                throw new ArgumentException("Bad parameter: partnership_role must be of type string", "parameters[\"partnership_role\"]");
             }
             if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
             {
@@ -715,6 +720,7 @@ namespace FilesCom.Models
         ///   show_partner_channel_home_page - boolean - Show Partner users a simplified home page built from this Partner's Channels.
         ///   tags - string - Comma-separated list of Tags for this Partner. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   name - string - The name of the Partner.
+        ///   partnership_role - string - This site's role for this Partner in Connected Sites relationships. `host` is a Partner this site configured. `guest` is a Partner created by approving another site's connection request; it has no root folder and cannot hold users, permissions, or Partner Channels, or host a connection. `host_and_guest` is a configured Partner that is also the guest side of a connection. Promote a `guest` Partner by setting this to `host_and_guest` together with a `root_folder`.
         ///   root_folder - string - The root folder path for this Partner.
         /// </summary>
         public static async Task<Partner> Update(
@@ -797,6 +803,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+            }
+            if (parameters.ContainsKey("partnership_role") && !(parameters["partnership_role"] is string))
+            {
+                throw new ArgumentException("Bad parameter: partnership_role must be of type string", "parameters[\"partnership_role\"]");
             }
             if (parameters.ContainsKey("root_folder") && !(parameters["root_folder"] is string))
             {
