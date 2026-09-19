@@ -34,7 +34,7 @@
 * `description` / `Description`  (string): Description for this behavior.
 * `value` / `Value`  (object): Settings for this behavior.  See the section above for an example value to provide here.  Formatting is different for each Behavior type.  May be sent as nested JSON or a single JSON-encoded string.  If using XML encoding for the API call, this data must be sent as a JSON-encoded string.
 * `public_hosting_url` / `PublicHostingUrl`  (string): Public URL for this publicly hosted folder when the `Serve Publicly` behavior has a key configured. When a Custom Domain with `public_hosting` destination is attached to this behavior, the URL uses that domain. Otherwise it uses the site's `subdomain.hosted-by-files.com` host, unless `custom_domain_only` is enabled, in which case no URL is returned.
-* `disable_parent_folder_behavior` / `DisableParentFolderBehavior`  (bool): If true, the parent folder's behavior will be disabled for this folder and its children.
+* `disable_parent_folder_behavior` / `DisableParentFolderBehavior`  (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` / `Recursive`  (bool): Whether this behavior is recursive for this record. `always` behaviors are always `true`, `never` behaviors are always `false`, and `sometimes` behaviors may be either value.
 * `inherited` / `Inherited`  (bool): If true, this behavior is inherited from a higher scope rather than owned by the requested workspace.
 * `managed` / `Managed`  (bool): If true, this behavior is controlled by a parent-site policy and cannot be modified locally.
@@ -118,7 +118,7 @@ Task<Behavior> Behavior.Create(
 
 * `value` (object): This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
-* `disable_parent_folder_behavior` (bool): If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
+* `disable_parent_folder_behavior` (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` (bool): Whether the behavior should apply to child folders. This is only configurable for behavior types whose recursion mode is `sometimes`; `always` behaviors stay recursive and `never` behaviors stay non-recursive.
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
@@ -165,7 +165,7 @@ Task<Behavior> Behavior.Update(
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (object): This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
-* `disable_parent_folder_behavior` (bool): If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
+* `disable_parent_folder_behavior` (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` (bool): Whether the behavior should apply to child folders. This is only configurable for behavior types whose recursion mode is `sometimes`; `always` behaviors stay recursive and `never` behaviors stay non-recursive.
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
@@ -199,7 +199,7 @@ var Behavior = Behavior.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("value", {"urls":["https://example.com/webhook"],"method":"POST","encoding":"JSON"});
-parameters.Add("disable_parent_folder_behavior", false);
+parameters.Add("disable_parent_folder_behavior", true);
 parameters.Add("recursive", false);
 parameters.Add("name", "example");
 parameters.Add("description", "example");
@@ -213,7 +213,7 @@ Behavior.Update(parameters);
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (object): This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.
 * `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
-* `disable_parent_folder_behavior` (bool): If `true`, the parent folder's behavior will be disabled for this folder and its children. This is the main mechanism for canceling out a `recursive` behavior higher in the folder tree.
+* `disable_parent_folder_behavior` (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` (bool): Whether the behavior should apply to child folders. This is only configurable for behavior types whose recursion mode is `sometimes`; `always` behaviors stay recursive and `never` behaviors stay non-recursive.
 * `name` (string): Name for this behavior.
 * `description` (string): Description for this behavior.
