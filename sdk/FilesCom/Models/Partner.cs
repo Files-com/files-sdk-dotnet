@@ -53,6 +53,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("cc_emails_to_responsible_party", false);
             }
+            if (!this.attributes.ContainsKey("connections"))
+            {
+                this.attributes.Add("connections", new PartnerConnection[0]);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -195,6 +199,16 @@ namespace FilesCom.Models
         {
             get { return attributes["cc_emails_to_responsible_party"] == null ? false : (bool)attributes["cc_emails_to_responsible_party"]; }
             set { attributes["cc_emails_to_responsible_party"] = value; }
+        }
+
+        /// <summary>
+        /// Approved Connected Sites relationships for this Partner, in both directions. Empty when this Partner has no connections. Read-only.
+        /// </summary>
+        [JsonPropertyName("connections")]
+        public PartnerConnection[] Connections
+        {
+            get { return (PartnerConnection[])attributes["connections"]; }
+            set { attributes["connections"] = value; }
         }
 
         /// <summary>
