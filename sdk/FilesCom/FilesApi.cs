@@ -147,7 +147,7 @@ namespace FilesCom
                         throw new ArgumentException("Bad option: session_id must be of type Int64", "options[\"session_id\"]");
                     }
 
-                    httpRequestMessage.Headers.Add("X-FilesApi-Auth", options["session_id"].ToString());
+                    httpRequestMessage.Headers.Add("X-FilesAPI-Auth", options["session_id"].ToString());
                 }
                 else if (options.ContainsKey("api_key"))
                 {
@@ -156,15 +156,15 @@ namespace FilesCom
                         throw new ArgumentException("Bad option: api_key must be of type string", "options[\"api_key\"]");
                     }
 
-                    httpRequestMessage.Headers.Add("X-FilesApi-Key", (string)options["api_key"]);
+                    httpRequestMessage.Headers.Add("X-FilesAPI-Key", (string)options["api_key"]);
                 }
                 else if (filesClient.SessionId != null && filesClient.SessionId.Length > 0)
                 {
-                    httpRequestMessage.Headers.Add("X-FilesApi-Auth", filesClient.SessionId.ToString());
+                    httpRequestMessage.Headers.Add("X-FilesAPI-Auth", filesClient.SessionId.ToString());
                 }
                 else if (filesClient.ApiKey != null && filesClient.ApiKey.Length > 0)
                 {
-                    httpRequestMessage.Headers.Add("X-FilesApi-Key", filesClient.ApiKey);
+                    httpRequestMessage.Headers.Add("X-FilesAPI-Key", filesClient.ApiKey);
                 }
                 else
                 {

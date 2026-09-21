@@ -64,6 +64,8 @@ namespace FilesCom
             var builder = new HostBuilder()
                 .ConfigureServices((HostExecutionContext, services) =>
                 {
+                    services.AddTransient<FilesRedirectHandler>();
+
                     TimeSpan[] retries = new TimeSpan[this.config.MaxNetworkRetries];
                     Random rand = new Random();
                     for (int i = 0; i < retries.Length; i++)
@@ -95,10 +97,17 @@ namespace FilesCom
 #if NETCOREAPP2_1_OR_GREATER
                     .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
                     {
+                        AllowAutoRedirect = false,
                         ConnectTimeout = TimeSpan.FromSeconds(this.config.ConnectTimeout)
                     })
+#else
+                    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                    {
+                        AllowAutoRedirect = false
+                    })
 #endif
-                    .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries));
+                    .AddTransientHttpErrorPolicy(newBuilder => newBuilder.WaitAndRetryAsync(retries))
+                    .AddHttpMessageHandler<FilesRedirectHandler>();
 
                     services.AddHttpClient(HttpUpload, client =>
                     {

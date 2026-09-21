@@ -44,10 +44,10 @@ namespace FilesTests
 
     public class CapturingHttpClientFactory : IHttpClientFactory
     {
-        private readonly CapturingHttpMessageHandler handler;
+        private readonly HttpMessageHandler handler;
         private readonly string baseUrl;
 
-        public CapturingHttpClientFactory(CapturingHttpMessageHandler handler, string baseUrl)
+        public CapturingHttpClientFactory(HttpMessageHandler handler, string baseUrl)
         {
             this.handler = handler;
             this.baseUrl = baseUrl;
@@ -55,10 +55,65 @@ namespace FilesTests
 
         public HttpClient CreateClient(string name)
         {
-            return new HttpClient(handler)
+            HttpMessageHandler clientHandler = handler;
+            if (name == FilesClient.HttpFilesApi)
+            {
+                clientHandler = new FilesRedirectHandler
+                {
+                    InnerHandler = handler
+                };
+            }
+
+            return new HttpClient(clientHandler)
             {
                 BaseAddress = new Uri(baseUrl)
             };
+        }
+    }
+
+    public class RedirectingHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly Queue<Uri> redirectUris = new Queue<Uri>();
+        private readonly HttpStatusCode redirectStatusCode;
+        public List<HttpRequestMessage> Requests { get; } = new List<HttpRequestMessage>();
+
+        public RedirectingHttpMessageHandler(params string[] redirectUrls)
+            : this(HttpStatusCode.Redirect, redirectUrls)
+        {
+        }
+
+        public RedirectingHttpMessageHandler(HttpStatusCode redirectStatusCode, params string[] redirectUrls)
+        {
+            this.redirectStatusCode = redirectStatusCode;
+            foreach (string redirectUrl in redirectUrls)
+            {
+                redirectUris.Enqueue(new Uri(redirectUrl));
+            }
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var requestSnapshot = new HttpRequestMessage(request.Method, request.RequestUri);
+            foreach (var header in request.Headers)
+            {
+                requestSnapshot.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
+            Requests.Add(requestSnapshot);
+
+            if (redirectUris.Count > 0)
+            {
+                var redirect = new HttpResponseMessage(redirectStatusCode)
+                {
+                    Content = new StringContent("{\"error\":\"redirect\"}")
+                };
+                redirect.Headers.Location = redirectUris.Dequeue();
+                return Task.FromResult(redirect);
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("[]")
+            });
         }
     }
 
@@ -140,6 +195,91 @@ namespace FilesTests
 
             Assert.IsFalse(handler.Request.Headers.Contains("X-Files-Workspace-Id"));
         }
+
+        [TestMethod]
+        public async Task TestCrossOriginRedirectStripsFilesAuthHeaders()
+        {
+            var authOptions = new[]
+            {
+                new Dictionary<string, object> { { "api_key", "my-key" } },
+                new Dictionary<string, object> { { "session_id", "my-session" } }
+            };
+
+            foreach (var options in authOptions)
+            {
+                var handler = new RedirectingHttpMessageHandler(
+                    "http://storage.example.test/download",
+                    "http://api.example.test/returned"
+                );
+                var service = new FilesApiService(new CapturingHttpClientFactory(handler, "http://api.example.test"));
+                var config = new FilesConfiguration
+                {
+                    ApiKey = "configured-key",
+                    BaseUrl = "http://api.example.test",
+                    WorkspaceId = "123"
+                };
+                new FilesClient(config);
+
+                await service.SendRequest("/files/test", HttpMethod.Get, new Dictionary<string, object>(), options);
+
+                Assert.AreEqual(3, handler.Requests.Count);
+                Assert.IsTrue(
+                    handler.Requests[0].Headers.Contains(options.ContainsKey("api_key") ? "X-FilesAPI-Key" : "X-FilesAPI-Auth")
+                );
+                Assert.IsTrue(handler.Requests[0].Headers.Contains("X-Files-Workspace-Id"));
+                for (int i = 1; i < handler.Requests.Count; i++)
+                {
+                    Assert.IsFalse(handler.Requests[i].Headers.Contains("X-FilesAPI-Key"));
+                    Assert.IsFalse(handler.Requests[i].Headers.Contains("X-FilesAPI-Auth"));
+                    Assert.IsFalse(handler.Requests[i].Headers.Contains("X-Files-Workspace-Id"));
+                }
+            }
+        }
+
+        [TestMethod]
+        public async Task TestSameOriginRedirectKeepsFilesAuthHeaders()
+        {
+            var redirectUrls = new string[50];
+            for (int i = 0; i < redirectUrls.Length; i++)
+            {
+                redirectUrls[i] = "http://api.example.test/redirected";
+            }
+            var handler = new RedirectingHttpMessageHandler(HttpStatusCode.MultipleChoices, redirectUrls);
+            var service = new FilesApiService(new CapturingHttpClientFactory(handler, "http://api.example.test"));
+            var config = new FilesConfiguration
+            {
+                ApiKey = "my-key",
+                BaseUrl = "http://api.example.test",
+                WorkspaceId = "123"
+            };
+            new FilesClient(config);
+
+            await service.SendRequest("/files/test", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>());
+
+            Assert.AreEqual(51, handler.Requests.Count);
+            Assert.AreEqual("my-key", new List<string>(handler.Requests[50].Headers.GetValues("X-FilesAPI-Key"))[0]);
+            Assert.AreEqual("123", new List<string>(handler.Requests[50].Headers.GetValues("X-Files-Workspace-Id"))[0]);
+        }
+
+        [TestMethod]
+        public async Task TestDoesNotFollowHttpsToHttpRedirectOnModernDotNet()
+        {
+            var handler = new RedirectingHttpMessageHandler("http://storage.example.test/download");
+            var service = new FilesApiService(new CapturingHttpClientFactory(handler, "https://api.example.test"));
+            var config = new FilesConfiguration
+            {
+                ApiKey = "my-key",
+                BaseUrl = "https://api.example.test"
+            };
+            new FilesClient(config);
+
+            await Assert.ThrowsExceptionAsync<ApiException>(() =>
+                service.SendRequest("/files/test", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>())
+            );
+
+            Assert.AreEqual(1, handler.Requests.Count);
+        }
+
     }
 
     [TestClass]
