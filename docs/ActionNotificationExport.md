@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "workspace_id": 1,
   "export_version": "20201213.2",
   "start_at": "2000-01-01T01:00:00Z",
   "end_at": "2000-01-01T01:00:00Z",
@@ -21,6 +22,7 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): History Export ID
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace whose logs are exported. Set to `0` for the default workspace. A null value means a site-wide export.
 * `export_version` / `ExportVersion`  (string): Version of the underlying records for the export.
 * `start_at` / `StartAt`  (Nullable<DateTime>): Start date/time of export range.
 * `end_at` / `EndAt`  (Nullable<DateTime>): End date/time of export range.
@@ -68,6 +70,7 @@ Task<ActionNotificationExport> ActionNotificationExport.Create(
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
+* `workspace_id` (Nullable<Int64>): Workspace whose logs are exported. Set to `0` for the default workspace. A null value means a site-wide export.
 * `start_at` (string): Start date/time of export range.
 * `end_at` (string): End date/time of export range.
 * `query_message` (string): Error message associated with the request, if any.
