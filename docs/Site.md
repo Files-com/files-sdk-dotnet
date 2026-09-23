@@ -557,7 +557,7 @@
 * `users_can_create_ssh_keys` / `UsersCanCreateSshKeys`  (bool): Allow users to create their own SSH keys?
 * `username_display` / `UsernameDisplay`  (string): How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
 * `welcome_custom_text` / `WelcomeCustomText`  (string): Custom text send in user welcome email
-* `email_footer_custom_text` / `EmailFooterCustomText`  (string): Custom footer text for system-generated emails. Supports standard strftime date/time patterns like %Y (4-digit year), %m (month), %d (day).
+* `email_footer_custom_text` / `EmailFooterCustomText`  (string): Custom footer text for system-generated emails (as Markdown). Supports standard strftime date/time patterns like %Y (4-digit year), %m (month), %d (day).
 * `welcome_email_cc` / `WelcomeEmailCc`  (string): Include this email in welcome emails if enabled
 * `welcome_email_subject` / `WelcomeEmailSubject`  (string): Include this email subject in welcome emails if enabled
 * `welcome_email_enabled` / `WelcomeEmailEnabled`  (bool): Will the welcome email be sent to new users?
@@ -751,7 +751,7 @@ Task<Site> Site.Update(
 * `site_public_footer` (string): Custom site footer text for public pages
 * `login_help_text` (string): Login help text
 * `use_dedicated_ips_for_smtp` (bool): If using custom SMTP, should we use dedicated IPs to deliver emails?
-* `email_footer_custom_text` (string): Custom footer text for system-generated emails. Supports standard strftime date/time patterns like %Y (4-digit year), %m (month), %d (day).
+* `email_footer_custom_text` (string): Custom footer text for system-generated emails (as Markdown). Supports standard strftime date/time patterns like %Y (4-digit year), %m (month), %d (day).
 * `smtp_address` (string): SMTP server hostname or IP
 * `smtp_authentication` (string): SMTP server authentication type
 * `smtp_from` (string): From address to use when mailing through custom SMTP
