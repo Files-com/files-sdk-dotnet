@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System;
 using System.IO;
+using System.Globalization;
 using System.Text.Json;
 using FilesCom;
 using FilesCom.Models;
@@ -33,7 +34,29 @@ namespace FilesTests.PathUtilTest
         [TestMethod, DynamicData(nameof(GetComparisons), DynamicDataSourceType.Method)]
         public void TestSame(string a, string b)
         {
+            Assert.AreEqual(b, PathUtil.normalize_for_comparison(a));
+            Assert.AreEqual(b, PathUtil.normalize_for_comparison(b));
             Assert.IsTrue(PathUtil.same(a, b));
+        }
+
+        [TestMethod]
+        public void TestServerComparisonExamplesAreLocaleIndependent()
+        {
+            var previous = CultureInfo.CurrentCulture;
+            try
+            {
+                CultureInfo.CurrentCulture = new CultureInfo("tr-TR");
+                Assert.AreEqual("ii", PathUtil.normalize_for_comparison("Iİ"));
+                string json = File.ReadAllText("../../../../../shared/comparison_examples.json");
+                foreach (var pair in JsonSerializer.Deserialize<string[][]>(json))
+                {
+                    Assert.AreEqual(pair[1], PathUtil.normalize_for_comparison(pair[0]));
+                }
+            }
+            finally
+            {
+                CultureInfo.CurrentCulture = previous;
+            }
         }
 
         [TestMethod]
