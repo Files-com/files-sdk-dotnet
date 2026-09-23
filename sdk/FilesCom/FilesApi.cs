@@ -36,19 +36,27 @@ namespace FilesCom
             _clientFactory = clientFactory;
         }
 
-        private async Task HandleErrorResponse(HttpResponseMessage response)
+        private async Task HandleErrorResponse(HttpResponseMessage response, bool isTransfer = false)
         {
             ResponseError responseError;
             string body = await response.Content.ReadAsStringAsync();
+            if (isTransfer)
+            {
+                log.Debug($"Transfer response: {body}");
+            }
             try
             {
                 responseError = JsonSerializer.Deserialize<ResponseError>(body, JsonUtil.Options);
             }
             catch (JsonException)
             {
-                throw new InvalidResponseException("Unexpected data received from server: " + body);
+                throw new InvalidResponseException(isTransfer
+                    ? $"Transfer request failed (HTTP {(int)response.StatusCode})"
+                    : "Unexpected data received from server: " + body);
             }
-            string message = $"HTTP request failed with code {(int)response.StatusCode}: {responseError.error} {responseError.type}";
+            string message = isTransfer
+                ? $"Transfer request failed (HTTP {(int)response.StatusCode})"
+                : $"HTTP request failed with code {(int)response.StatusCode}: {responseError.error} {responseError.type}";
             log.Error(message);
             if (responseError.type == null)
             {
@@ -61,7 +69,10 @@ namespace FilesCom
                 string errorClassName = String.Join("", Array.ConvertAll(errorType.Split('-'), part => part[0].ToString().ToUpper() + part.Substring(1))) + "Exception";
 
                 Type type = Type.GetType("FilesCom." + errorClassName);
-                message = responseError.error;
+                if (!isTransfer)
+                {
+                    message = responseError.error;
+                }
                 throw (ApiException)Activator.CreateInstance(type, new object[] { message, (int)response.StatusCode, responseError, response.Headers });
             }
         }
@@ -221,17 +232,19 @@ namespace FilesCom
             }
             catch (HttpRequestException e)
             {
-                throw new ApiConnectionException(e.Message);
+                log.Debug("Download transport error", e);
+                throw new ApiConnectionException("Download request failed (HttpRequestException)");
             }
             catch (Exception e) when (e is InvalidOperationException || e is UriFormatException)
             {
-                throw new InvalidParameterException(e.Message);
+                log.Debug("Download parameter error", e);
+                throw new InvalidParameterException("Invalid download request");
             }
             using (response)
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    await this.HandleErrorResponse(response);
+                    await this.HandleErrorResponse(response, isTransfer: true);
                 }
 
                 using (Stream responseStream = await response.Content.ReadAsStreamAsync())
@@ -269,7 +282,8 @@ namespace FilesCom
                 Content = httpContent,
             };
 
-            log.Info($"Sending {verb} request: {uri}");
+            log.Info($"Sending {verb} upload request");
+            log.Debug($"Sending {verb} request: {uri}");
             log.Debug($"content: {readLength} bytes");
 
             HttpResponseMessage response;
@@ -279,17 +293,19 @@ namespace FilesCom
             }
             catch (HttpRequestException e)
             {
-                throw new ApiConnectionException(e.Message);
+                log.Debug("Upload transport error", e);
+                throw new ApiConnectionException("Upload request failed (HttpRequestException)");
             }
             catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
             {
-                throw new InvalidParameterException(e.Message);
+                log.Debug("Upload parameter error", e);
+                throw new InvalidParameterException("Invalid upload request");
             }
             using (response)
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    await this.HandleErrorResponse(response);
+                    await this.HandleErrorResponse(response, isTransfer: true);
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
 

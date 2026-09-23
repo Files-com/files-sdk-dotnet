@@ -219,7 +219,8 @@ namespace FilesCom
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to stream download from {uri}", ex);
+                    log.Error("Failed to stream download");
+                    log.Debug($"Failed to stream download from {uri}", ex);
                     throw;
                 }
             }
@@ -243,7 +244,8 @@ namespace FilesCom
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to upload chunk to {uri}", ex);
+                    log.Error("Failed to upload chunk");
+                    log.Debug($"Failed to upload chunk to {uri}", ex);
                     throw;
                 }
             }
