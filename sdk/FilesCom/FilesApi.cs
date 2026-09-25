@@ -263,13 +263,21 @@ namespace FilesCom
 
         public async Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, Int64 readLength)
         {
+            if (readStream == null)
+            {
+                throw new ArgumentNullException(nameof(readStream));
+            }
+            // The existing implementation buffers a part in a single byte array.
+            if (readLength < 0 || readLength > int.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException(nameof(readLength), readLength, "An upload part must be from 0 to Int32.MaxValue bytes long.");
+            }
+
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpUpload);
             Uri uri = new Uri(uriString);
-            byte[] buffer = new byte[readLength];
-            HttpContent httpContent = new ByteArrayContent(buffer);
-
-            // Note: Casting to Integer here (int) means each part has a 2GB max length.  This is largely ok in the Files.com API design.
-            await readStream.ReadAsync(buffer, 0, (int)readLength);
+            // Reading the whole part before sending means a retried request resends these same bytes.
+            byte[] part = await ReadPart(readStream, (int)readLength);
+            HttpContent httpContent = new ByteArrayContent(part);
 
             var httpRequestMessage = new HttpRequestMessage
             {
@@ -311,6 +319,24 @@ namespace FilesCom
 
                 log.Debug(responseJson);
             }
+        }
+
+        // ReadAsync may return fewer bytes than requested, so keep reading until the part is full. Reading stops at
+        // the part's length, which leaves the rest of the stream for the next part.
+        private static async Task<byte[]> ReadPart(Stream readStream, int partLength)
+        {
+            byte[] part = new byte[partLength];
+            int bytesRead = 0;
+            while (bytesRead < partLength)
+            {
+                int count = await readStream.ReadAsync(part, bytesRead, partLength - bytesRead);
+                if (count == 0)
+                {
+                    throw new EndOfStreamException($"The upload stream ended after {bytesRead} of the {partLength} bytes expected for this part.");
+                }
+                bytesRead += count;
+            }
+            return part;
         }
 
         protected static string ParsePathParameters(string path, Dictionary<string, object> parameters)

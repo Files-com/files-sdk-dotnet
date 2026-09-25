@@ -226,6 +226,17 @@ namespace FilesCom
             }
         }
 
+        /// <summary>
+        /// Uploads one part: reads exactly <paramref name="readLength"/> bytes from <paramref name="readStream"/>,
+        /// starting at its current position, and sends them to <paramref name="uri"/>.
+        /// </summary>
+        /// <remarks>
+        /// The part is buffered in memory, so a retried request resends the same bytes. The stream is left open,
+        /// positioned just after the part.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="readStream"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="readLength"/> is negative or greater than Int32.MaxValue.</exception>
+        /// <exception cref="EndOfStreamException">The stream ended before <paramref name="readLength"/> bytes were read. The part was not sent.</exception>
         public static async Task ChunkUpload(HttpMethod verb, string uri, Stream readStream, Int64 readLength)
         {
             if (Instance == null)
