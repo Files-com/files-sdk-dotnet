@@ -244,7 +244,23 @@ namespace FilesCom.Models
         public async Task DownloadFile(string outputFile)
         {
             System.IO.FileStream fileStream = new System.IO.FileStream(outputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None);
-            await DownloadFile(fileStream);
+            try
+            {
+                await DownloadFile(fileStream);
+            }
+            catch
+            {
+                try
+                {
+                    fileStream.Dispose();
+                }
+                catch (Exception)
+                {
+                    // Dispose releases the file even when flushing it fails; report the download failure instead.
+                }
+                throw;
+            }
+            fileStream.Dispose();
         }
 
         public async Task DownloadFile(System.IO.Stream writeStream)
