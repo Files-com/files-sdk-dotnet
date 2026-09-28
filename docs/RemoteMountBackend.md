@@ -66,6 +66,16 @@ Task<FilesList<RemoteMountBackend>> RemoteMountBackend.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<RemoteMountBackend> client.RemoteMountBackends.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -85,6 +95,17 @@ Task<RemoteMountBackend> RemoteMountBackend.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteMountBackend> client.RemoteMountBackends.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
@@ -99,6 +120,17 @@ Task<RemoteMountBackend> RemoteMountBackend.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteMountBackend> client.RemoteMountBackends.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -131,6 +163,17 @@ Task RemoteMountBackend.ResetStatus(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.RemoteMountBackends.ResetStatusAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
@@ -145,6 +188,17 @@ Task<RemoteMountBackend> RemoteMountBackend.Update(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteMountBackend> client.RemoteMountBackends.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -177,6 +231,17 @@ Task RemoteMountBackend.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.RemoteMountBackends.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
@@ -194,6 +259,8 @@ var parameters = new Dictionary<string, object>();
 
 RemoteMountBackend.ResetStatus
 ```
+
+`ResetStatusAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -225,6 +292,8 @@ parameters.Add("remote_server_id", 1);
 RemoteMountBackend.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
@@ -254,6 +323,8 @@ var parameters = new Dictionary<string, object>();
 
 RemoteMountBackend.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

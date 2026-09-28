@@ -73,5 +73,17 @@ namespace FilesCom
             get { return (double)this["MaxNetworkRetryDelay"]; }
             set { this["MaxNetworkRetryDelay"] = value; }
         }
+
+        // Copies every setting, including ones added later, so that a client given the copy keeps these values
+        // however this configuration changes afterward.
+        internal FilesConfiguration Copy()
+        {
+            FilesConfiguration copy = new FilesConfiguration();
+            foreach (ConfigurationProperty property in Properties)
+            {
+                copy[property] = this[property];
+            }
+            return copy;
+        }
     }
 }

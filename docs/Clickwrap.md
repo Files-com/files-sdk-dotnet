@@ -33,6 +33,16 @@ Task<FilesList<Clickwrap>> Clickwrap.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Clickwrap> client.Clickwraps.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -52,6 +62,17 @@ Task<Clickwrap> Clickwrap.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<Clickwrap> client.Clickwraps.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Clickwrap ID.
@@ -66,6 +87,17 @@ Task<Clickwrap> Clickwrap.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<Clickwrap> client.Clickwraps.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -90,6 +122,17 @@ Task<Clickwrap> Clickwrap.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<Clickwrap> client.Clickwraps.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Clickwrap ID.
@@ -109,6 +152,17 @@ Task Clickwrap.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.Clickwraps.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -135,6 +189,8 @@ parameters.Add("use_with_users", "example");
 Clickwrap.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Clickwrap ID.
@@ -157,6 +213,8 @@ var parameters = new Dictionary<string, object>();
 
 Clickwrap.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

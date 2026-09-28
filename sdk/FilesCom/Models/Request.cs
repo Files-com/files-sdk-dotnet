@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public Request() : this(null, null) { }
 
         public Request(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -73,9 +75,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -166,7 +174,32 @@ namespace FilesCom.Models
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// </summary>
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -184,16 +217,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/requests/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/requests/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
@@ -201,7 +238,7 @@ namespace FilesCom.Models
             }
             else
             {
-                var newObj = await Request.Create(this.attributes, this.options);
+                var newObj = await Request.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -218,6 +255,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<Request> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<Request> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -244,16 +300,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            return new FilesList<Request>($"/requests", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<Request> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<Request>(client, $"/requests", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -268,6 +315,16 @@ namespace FilesCom.Models
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return GetFolderCore(FilesClient.Instance, path, parameters, options);
+        }
+
+        internal static FilesList<Request> GetFolderCore(
+            FilesClient client,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -306,9 +363,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            return new FilesList<Request>($"/requests/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<Request>(client, $"/requests/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
-
 
         /// <summary>
         /// Parameters:
@@ -317,10 +373,21 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs to request the file from. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs to request the file from. If sent as a string, it should be comma-delimited.
         /// </summary>
-        public static async Task<Request> Create(
+        public static Task<Request> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<Request> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -351,11 +418,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/requests", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/requests", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Request>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Request>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -363,13 +430,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -392,16 +478,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/requests/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/requests/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

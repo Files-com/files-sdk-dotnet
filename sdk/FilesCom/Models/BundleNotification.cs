@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public BundleNotification() : this(null, null) { }
 
         public BundleNotification(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -73,9 +75,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -172,7 +180,23 @@ namespace FilesCom.Models
         ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
         ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         /// </summary>
-        public async Task<BundleNotification> Update(Dictionary<string, object> parameters)
+        public Task<BundleNotification> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
+        ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
+        /// </summary>
+        public Task<BundleNotification> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<BundleNotification> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -198,11 +222,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -210,10 +237,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -231,24 +282,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/bundle_notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await BundleNotification.Create(this.attributes, this.options);
+                var newObj = await BundleNotification.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -266,6 +321,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<BundleNotification> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<BundleNotification> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -296,26 +370,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
 
-            return new FilesList<BundleNotification>($"/bundle_notifications", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<BundleNotification> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<BundleNotification>(client, $"/bundle_notifications", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Bundle Notification ID.
         /// </summary>
-        public static async Task<BundleNotification> Find(
+        public static Task<BundleNotification> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<BundleNotification> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<BundleNotification> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -338,25 +423,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<BundleNotification> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -367,10 +443,21 @@ namespace FilesCom.Models
         ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
         ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         /// </summary>
-        public static async Task<BundleNotification> Create(
+        public static Task<BundleNotification> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<BundleNotification> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -401,11 +488,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundle_notifications", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -413,16 +500,26 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Parameters:
         ///   notify_on_registration - boolean - Triggers bundle notification when a registration action occurs for it.
         ///   notify_on_upload - boolean - Triggers bundle notification when a upload action occurs for it.
         /// </summary>
-        public static async Task<BundleNotification> Update(
+        public static Task<BundleNotification> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<BundleNotification> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -453,11 +550,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: notify_on_upload must be of type bool", "parameters[\"notify_on_upload\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<BundleNotification>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -465,13 +562,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -494,16 +610,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/bundle_notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

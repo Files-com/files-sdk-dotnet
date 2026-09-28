@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public SsoStrategy() : this(null, null) { }
 
         public SsoStrategy(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -249,9 +251,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -846,7 +854,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Synchronize provisioning data with the SSO remote server
         /// </summary>
-        public async Task Sync(Dictionary<string, object> parameters)
+        public Task Sync(Dictionary<string, object> parameters)
+        {
+            return SyncCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Synchronize provisioning data with the SSO remote server
+        /// </summary>
+        public Task SyncAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return SyncCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task SyncCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -864,9 +886,12 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(attributes["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/sso_strategies/{System.Uri.EscapeDataString(attributes["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
 
 
@@ -880,6 +905,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<SsoStrategy> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<SsoStrategy> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -898,26 +942,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
             }
 
-            return new FilesList<SsoStrategy>($"/sso_strategies", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<SsoStrategy> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<SsoStrategy>(client, $"/sso_strategies", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Sso Strategy ID.
         /// </summary>
-        public static async Task<SsoStrategy> Find(
+        public static Task<SsoStrategy> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<SsoStrategy> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<SsoStrategy> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -940,11 +995,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<SsoStrategy>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<SsoStrategy>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -952,22 +1007,24 @@ namespace FilesCom.Models
             }
         }
 
-        public static async Task<SsoStrategy> Get(
+        /// <summary>
+        /// Synchronize provisioning data with the SSO remote server
+        /// </summary>
+        public static Task Sync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Find(id, parameters, options);
+            return SyncCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
-        /// <summary>
-        /// Synchronize provisioning data with the SSO remote server
-        /// </summary>
-        public static async Task Sync(
+        internal static async Task SyncCore(
+            OperationContext context,
             Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -990,9 +1047,9 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/sso_strategies/{System.Uri.EscapeDataString(parameters["id"].ToString())}/sync", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
     }
 }

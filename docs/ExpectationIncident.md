@@ -52,6 +52,16 @@ Task<FilesList<ExpectationIncident>> ExpectationIncident.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<ExpectationIncident> client.ExpectationIncidents.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -72,6 +82,17 @@ Task<ExpectationIncident> ExpectationIncident.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ExpectationIncident> client.ExpectationIncidents.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Expectation Incident ID.
@@ -89,6 +110,17 @@ Task<ExpectationIncident> ExpectationIncident.Resolve(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ExpectationIncident> client.ExpectationIncidents.ResolveAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Expectation Incident ID.
@@ -103,6 +135,17 @@ Task<ExpectationIncident> ExpectationIncident.Snooze(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ExpectationIncident> client.ExpectationIncidents.SnoozeAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -124,6 +167,17 @@ Task<ExpectationIncident> ExpectationIncident.Acknowledge(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ExpectationIncident> client.ExpectationIncidents.AcknowledgeAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Expectation Incident ID.
@@ -141,6 +195,8 @@ var parameters = new Dictionary<string, object>();
 
 ExpectationIncident.Resolve
 ```
+
+`ResolveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -161,6 +217,8 @@ parameters.Add("snoozed_until", "snoozed_until");
 ExpectationIncident.Snooze(parameters);
 ```
 
+`SnoozeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Expectation Incident ID.
@@ -179,6 +237,8 @@ var parameters = new Dictionary<string, object>();
 
 ExpectationIncident.Acknowledge
 ```
+
+`AcknowledgeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

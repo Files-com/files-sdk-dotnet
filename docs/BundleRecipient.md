@@ -36,6 +36,16 @@ Task<FilesList<BundleRecipient>> BundleRecipient.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<BundleRecipient> client.BundleRecipients.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -55,6 +65,17 @@ Task<BundleRecipient> BundleRecipient.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<BundleRecipient> client.BundleRecipients.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 

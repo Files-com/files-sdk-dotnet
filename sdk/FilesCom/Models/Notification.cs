@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public Notification() : this(null, null) { }
 
         public Notification(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -145,9 +147,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -444,7 +452,36 @@ namespace FilesCom.Models
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public async Task<Notification> Update(Dictionary<string, object> parameters)
+        public Task<Notification> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   notify_on_copy - boolean - If `true`, copying or moving resources into this path will trigger a notification, in addition to just uploads.
+        ///   notify_on_delete - boolean - Trigger on files deleted in this path?
+        ///   notify_on_download - boolean - Trigger on files downloaded in this path?
+        ///   notify_on_move - boolean - Trigger on files moved to this path?
+        ///   notify_on_upload - boolean - Trigger on files created/uploaded/updated/changed in this path?
+        ///   notify_user_actions - boolean - If `true` actions initiated by the user will still result in a notification
+        ///   recursive - boolean - If `true`, enable notifications for each subfolder in this path
+        ///   send_interval - string - The time interval that notifications are aggregated by.  Can be `five_minutes`, `fifteen_minutes`, `hourly`, or `daily`.
+        ///   subject - string - Custom subject line to use for notification emails
+        ///   message - string - Custom message to include in notification emails
+        ///   triggering_filenames - array(string) - Array of filenames (possibly with wildcards) to scope trigger
+        ///   triggering_group_ids - array(int64) - If set, will only notify on actions made by a member of one of the specified groups
+        ///   triggering_user_ids - array(int64) - If set, will only notify on actions made one of the specified users
+        ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
+        /// </summary>
+        public Task<Notification> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<Notification> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -522,11 +559,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -534,10 +574,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -555,24 +619,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/notifications/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await Notification.Create(this.attributes, this.options);
+                var newObj = await Notification.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -592,6 +660,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<Notification> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<Notification> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -630,26 +717,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: group_id must be of type string", "parameters[\"group_id\"]");
             }
 
-            return new FilesList<Notification>($"/notifications", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<Notification> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<Notification>(client, $"/notifications", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Notification ID.
         /// </summary>
-        public static async Task<Notification> Find(
+        public static Task<Notification> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<Notification> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<Notification> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -672,25 +770,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<Notification> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -716,10 +805,21 @@ namespace FilesCom.Models
         ///   path - string - Path
         ///   username - string - The username of the user to notify.  Provide `user_id`, `username` or `group_id`.
         /// </summary>
-        public static async Task<Notification> Create(
+        public static Task<Notification> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<Notification> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -806,18 +906,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/notifications", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/notifications", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Parameters:
@@ -837,10 +936,21 @@ namespace FilesCom.Models
         ///   trigger_by_share_recipients - boolean - Notify when actions are performed by a share recipient?
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public static async Task<Notification> Update(
+        public static Task<Notification> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<Notification> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -923,11 +1033,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Notification>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -935,13 +1045,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -964,16 +1093,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/notifications/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

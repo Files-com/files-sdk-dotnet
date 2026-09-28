@@ -50,6 +50,17 @@ Task<ActionNotificationExport> ActionNotificationExport.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ActionNotificationExport> client.ActionNotificationExports.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Action Notification Export ID.
@@ -64,6 +75,17 @@ Task<ActionNotificationExport> ActionNotificationExport.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ActionNotificationExport> client.ActionNotificationExports.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 

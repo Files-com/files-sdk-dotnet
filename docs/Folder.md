@@ -110,6 +110,16 @@ Task<FilesList<RemoteFile>> Folder.ListFor(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<RemoteFile> client.Folders.ListFor(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
@@ -135,6 +145,17 @@ Task<RemoteFile> Folder.Create(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteFile> client.Folders.CreateAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 

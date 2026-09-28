@@ -44,6 +44,16 @@ Task<FilesList<CustomDomain>> CustomDomain.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<CustomDomain> client.CustomDomains.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -60,6 +70,17 @@ Task<CustomDomain> CustomDomain.Find(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<CustomDomain> client.CustomDomains.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -80,6 +101,17 @@ Task<CustomDomain> CustomDomain.CreateAllocateIp(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<CustomDomain> client.CustomDomains.CreateAllocateIpAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
@@ -95,6 +127,17 @@ Task<CustomDomain> CustomDomain.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<CustomDomain> client.CustomDomains.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -118,6 +161,17 @@ Task<CustomDomain> CustomDomain.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<CustomDomain> client.CustomDomains.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
@@ -136,6 +190,17 @@ Task CustomDomain.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.CustomDomains.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -161,6 +226,8 @@ parameters.Add("domain", "files.example.com");
 CustomDomain.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
@@ -182,6 +249,8 @@ var parameters = new Dictionary<string, object>();
 
 CustomDomain.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

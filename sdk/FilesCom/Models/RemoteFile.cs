@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(RemoteFile));
 
@@ -20,24 +22,41 @@ namespace FilesCom.Models
             return (RemoteFile)await RemoteFile.Create((string)parameters["path"], parameters, options);
         }
 
-        public static async Task<RemoteFile> DownloadFile(string path, string localPath = null, Dictionary<string, object> options = null)
+        public static Task<RemoteFile> DownloadFile(string path, string localPath = null, Dictionary<string, object> options = null)
+        {
+            return DownloadFileCore(FilesClient.Instance, path, localPath, options, CancellationToken.None);
+        }
+
+        public static Task<RemoteFile> DownloadFile(string path, System.IO.Stream stream, Dictionary<string, object> options = null)
+        {
+            return DownloadFileCore(FilesClient.Instance, path, stream, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteFile> DownloadFileCore(FilesClient client, string path, string localPath, Dictionary<string, object> options, CancellationToken cancellationToken)
         {
             localPath = localPath != null ? localPath : (System.IO.Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + path.Substring(path.LastIndexOf('/') + 1));
-            RemoteFile f = new RemoteFile(null, options);
-            f.Path = path;
-            await f.DownloadFile(localPath);
+            RemoteFile f = ForPath(client, path, options);
+            await f.DownloadFileAsync(localPath, cancellationToken);
             return f;
         }
 
-        public static async Task<RemoteFile> DownloadFile(string path, System.IO.Stream stream, Dictionary<string, object> options = null)
+        internal static async Task<RemoteFile> DownloadFileCore(FilesClient client, string path, System.IO.Stream stream, Dictionary<string, object> options, CancellationToken cancellationToken)
         {
-            RemoteFile f = new RemoteFile(null, options);
-            f.Path = path;
-            await f.DownloadFile(stream);
+            RemoteFile f = ForPath(client, path, options);
+            await f.DownloadFileAsync(stream, cancellationToken);
             return f;
         }
 
-        private static string UnderscoreDestinationPath(string root, long id, string relativePath = null)
+        // A RemoteFile for path that belongs to client, or, when client is null, to the default client from its first request.
+        private static RemoteFile ForPath(FilesClient client, string path, Dictionary<string, object> options)
+        {
+            RemoteFile f = new RemoteFile(null, null);
+            ((IModel)f).SetContext(client, options);
+            f.Path = path;
+            return f;
+        }
+
+        internal static string UnderscoreDestinationPath(string root, long id, string relativePath = null)
         {
             return PathUtil.normalize("_", root, id.ToString(), relativePath ?? "");
         }
@@ -47,7 +66,7 @@ namespace FilesCom.Models
             return UnderscoreDestinationPath(root, id, destinationPath ?? System.IO.Path.GetFileName(localPath));
         }
 
-        private static async Task<Tuple<Int64, string>> UploadChunk(string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        private static async Task<Tuple<Int64, string>> UploadChunk(OperationContext context, string path, System.IO.Stream readStream, string fileRef, Int64 partNumber, Int64 offset, Int64 fileLength, Dictionary<string, object> options, Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             if (parameters == null)
             {
@@ -59,17 +78,22 @@ namespace FilesCom.Models
             }
             parameters["part"] = partNumber;
 
-            FileUploadPart[] uploadActions = await BeginUpload(path, parameters, options);
+            FileUploadPart[] uploadActions = await BeginUploadCore(context, path, parameters, options, cancellationToken);
             FileUploadPart uploadAction = uploadActions[0];
             Int64 chunkLength = Math.Min(fileLength - offset, (Int64)uploadAction.Partsize);
             System.Net.Http.HttpMethod httpMethod = new System.Net.Http.HttpMethod(uploadAction.HttpMethod);
 
-            await FilesClient.ChunkUpload(httpMethod, uploadAction.UploadUri, readStream, chunkLength);
+            await FilesClient.ChunkUpload(context, httpMethod, uploadAction.UploadUri, readStream, chunkLength, cancellationToken);
 
             return Tuple.Create(chunkLength, uploadAction.Ref);
         }
 
-        public static async Task<bool> UploadFile(string localPath, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        public static Task<bool> UploadFile(string localPath, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return UploadFileCore(OperationContext.OfDefaultClient(), localPath, destinationPath, options, parameters, CancellationToken.None);
+        }
+
+        internal static async Task<bool> UploadFileCore(OperationContext context, string localPath, string destinationPath, Dictionary<string, object> options, Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             System.IO.FileInfo fileInfo = new System.IO.FileInfo(localPath);
 
@@ -82,7 +106,7 @@ namespace FilesCom.Models
             Int64 fileLength = fileInfo.Length;
 
             System.IO.Stream readStream = System.IO.File.OpenRead(localPath);
-            return await UploadFile(destinationPath, readStream, fileLength, mTime, options, parameters);
+            return await UploadFileCore(context, destinationPath, readStream, fileLength, mTime, options, parameters, cancellationToken);
         }
 
         public static async Task<bool> UploadToRemoteServer(string localPath, long remoteServerId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
@@ -109,18 +133,28 @@ namespace FilesCom.Models
             return await Move(path, parameters, options);
         }
 
-        public async Task<FileAction> CopyToRemoteServer(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null)
+        public Task<FileAction> CopyToRemoteServer(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null)
         {
-            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
-            parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
-            return await Copy(parameters);
+            return CopyToRemoteServerAsync(remoteServerId, destinationPath, parameters, CancellationToken.None);
         }
 
-        public async Task<FileAction> MoveToRemoteServer(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null)
+        public Task<FileAction> CopyToRemoteServerAsync(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
             parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
-            return await Move(parameters);
+            return CopyAsync(parameters, cancellationToken);
+        }
+
+        public Task<FileAction> MoveToRemoteServer(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            return MoveToRemoteServerAsync(remoteServerId, destinationPath, parameters, CancellationToken.None);
+        }
+
+        public Task<FileAction> MoveToRemoteServerAsync(long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath);
+            return MoveAsync(parameters, cancellationToken);
         }
 
         public static async Task<bool> UploadToSnapshot(string localPath, long snapshotId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
@@ -147,18 +181,28 @@ namespace FilesCom.Models
             return await Move(path, parameters, options);
         }
 
-        public async Task<FileAction> CopyToSnapshot(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null)
+        public Task<FileAction> CopyToSnapshot(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null)
         {
-            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
-            parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
-            return await Copy(parameters);
+            return CopyToSnapshotAsync(snapshotId, destinationPath, parameters, CancellationToken.None);
         }
 
-        public async Task<FileAction> MoveToSnapshot(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null)
+        public Task<FileAction> CopyToSnapshotAsync(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
             parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
-            return await Move(parameters);
+            return CopyAsync(parameters, cancellationToken);
+        }
+
+        public Task<FileAction> MoveToSnapshot(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            return MoveToSnapshotAsync(snapshotId, destinationPath, parameters, CancellationToken.None);
+        }
+
+        public Task<FileAction> MoveToSnapshotAsync(long snapshotId, string destinationPath, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
+            parameters["destination"] = UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath);
+            return MoveAsync(parameters, cancellationToken);
         }
 
         public static async Task<bool> UploadToChildSite(string localPath, long siteId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
@@ -185,36 +229,55 @@ namespace FilesCom.Models
             return await Move(path, parameters, options);
         }
 
-        public async Task<FileAction> CopyToChildSite(long siteId, string destinationPath, Dictionary<string, object> parameters = null)
+        public Task<FileAction> CopyToChildSite(long siteId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            return CopyToChildSiteAsync(siteId, destinationPath, parameters, CancellationToken.None);
+        }
+
+        public Task<FileAction> CopyToChildSiteAsync(long siteId, string destinationPath, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
             parameters["destination"] = UnderscoreDestinationPath("Sites", siteId, destinationPath);
-            return await Copy(parameters);
+            return CopyAsync(parameters, cancellationToken);
         }
 
-        public async Task<FileAction> MoveToChildSite(long siteId, string destinationPath, Dictionary<string, object> parameters = null)
+        public Task<FileAction> MoveToChildSite(long siteId, string destinationPath, Dictionary<string, object> parameters = null)
+        {
+            return MoveToChildSiteAsync(siteId, destinationPath, parameters, CancellationToken.None);
+        }
+
+        public Task<FileAction> MoveToChildSiteAsync(long siteId, string destinationPath, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
             parameters["destination"] = UnderscoreDestinationPath("Sites", siteId, destinationPath);
-            return await Move(parameters);
+            return MoveAsync(parameters, cancellationToken);
         }
 
 
-        public static async Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        public static Task<bool> UploadFile(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null)
+        {
+            return UploadFileCore(OperationContext.OfDefaultClient(), destinationPath, readStream, fileLength, mTime, options, parameters, CancellationToken.None);
+        }
+
+        // Uploads the stream part by part, then finalizes the upload. Every stage runs with context and one copy of
+        // options. The upload owns readStream and disposes it when it ends, however it ends.
+        internal static async Task<bool> UploadFileCore(OperationContext context, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options, Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             bool success = false;
 
             using (readStream)
             {
+                options = DictionaryUtil.Copy(options);
                 Int64 parts = 0;
                 Int64 bytesWritten = 0;
                 string fileRef = null;
 
                 // TODO: Set up multiple parallel streams instead of looping serial uploads here.
+                // Each request checks the token before it is sent, so cancellation starts no further part or the final request.
                 while (bytesWritten < fileLength || parts == 0)
                 {
                     parts++;
-                    Tuple<Int64, string> result = await UploadChunk(destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options, parameters);
+                    Tuple<Int64, string> result = await UploadChunk(context, destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options, parameters, cancellationToken);
                     bytesWritten += result.Item1;
                     fileRef = result.Item2;
                 }
@@ -225,28 +288,56 @@ namespace FilesCom.Models
                 createParams["ref"] = fileRef;
                 createParams["size"] = fileLength;
 
-                await RemoteFile.Create(destinationPath, createParams, options);
+                await RemoteFile.CreateCore(context, destinationPath, createParams, options, cancellationToken);
                 success = true;
             }
             return success;
         }
 
-        public async Task<string> GetDownloadUriWithLoad()
+        public Task<string> GetDownloadUriWithLoad()
+        {
+            return GetDownloadUriWithLoadAsync(CancellationToken.None);
+        }
+
+        public async Task<string> GetDownloadUriWithLoadAsync(CancellationToken cancellationToken = default)
+        {
+            if (DownloadUri != null)
+            {
+                return DownloadUri;
+            }
+            return await LoadDownloadUri(new OperationContext(FilesClient.Bind(ref client)), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        // Asks the API for a download URI, unless this file already has one.
+        private async Task<string> LoadDownloadUri(OperationContext context, Dictionary<string, object> requestOptions, CancellationToken cancellationToken)
         {
             if (DownloadUri == null)
             {
-                RemoteFile f = (RemoteFile)await RemoteFile.Download(Path, null, options);
+                RemoteFile f = await RemoteFile.DownloadCore(context, Path, null, requestOptions, cancellationToken);
                 attributes = f.attributes;
             }
             return DownloadUri;
         }
 
-        public async Task DownloadFile(string outputFile)
+        public Task DownloadFile(string outputFile)
         {
+            return DownloadFileAsync(outputFile, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Downloads the file to <paramref name="outputFile"/>, creating or replacing it.
+        /// </summary>
+        /// <remarks>
+        /// The local file is closed when the task ends, whether the download succeeds, fails or is cancelled. After a
+        /// failure or cancellation it may be left partly written.
+        /// </remarks>
+        public async Task DownloadFileAsync(string outputFile, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             System.IO.FileStream fileStream = new System.IO.FileStream(outputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None);
             try
             {
-                await DownloadFile(fileStream);
+                await DownloadFileAsync(fileStream, cancellationToken);
             }
             catch
             {
@@ -263,14 +354,27 @@ namespace FilesCom.Models
             fileStream.Dispose();
         }
 
-        public async Task DownloadFile(System.IO.Stream writeStream)
+        public Task DownloadFile(System.IO.Stream writeStream)
+        {
+            return DownloadFileAsync(writeStream, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Downloads the file into <paramref name="writeStream"/>, from the stream's current position.
+        /// </summary>
+        /// <remarks>
+        /// The stream is borrowed: it is left open, including when the download fails or is cancelled. The file's
+        /// details, if a download URI must be requested, and its contents come from this file's client.
+        /// </remarks>
+        public async Task DownloadFileAsync(System.IO.Stream writeStream, CancellationToken cancellationToken = default)
         {
             try
             {
-                string uri = await GetDownloadUriWithLoad();
-                await FilesClient.StreamDownload(uri, writeStream);
+                OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+                string uri = await LoadDownloadUri(context, DictionaryUtil.Copy(options), cancellationToken);
+                await FilesClient.StreamDownload(context, uri, writeStream, cancellationToken);
             }
-            catch (Exception e)
+            catch (Exception e) when (!FilesClient.IsRequestedCancellation(e, cancellationToken))
             {
                 log.Error($"DownloadFile failed for {Path}: {e.ToString()}");
                 throw;
@@ -497,9 +601,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[] { DirectConnectionInfo, Preview }; }
         }
 
         public void SetOption(string name, object value)
@@ -1005,7 +1115,28 @@ namespace FilesCom.Models
         ///   with_priority_color - boolean - Include file priority color information?
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public async Task<RemoteFile> Download(Dictionary<string, object> parameters)
+        public Task<RemoteFile> Download(Dictionary<string, object> parameters)
+        {
+            return DownloadCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Download File
+        ///
+        /// Parameters:
+        ///   action - string - Can be blank, `redirect` or `stat`.  If set to `stat`, we will return file information but without a download URL, and without logging a download.  If set to `redirect` we will serve a 302 redirect directly to the file.  This is used for integrations with Zapier, and is not recommended for most integrations.
+        ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
+        ///   with_previews - boolean - Include file preview information?
+        ///   with_priority_color - boolean - Include file priority color information?
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
+        /// </summary>
+        public Task<RemoteFile> DownloadAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DownloadCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<RemoteFile> DownloadCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1043,11 +1174,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -1055,6 +1189,16 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   custom_metadata - object - Custom metadata map of keys and values. Limited to 32 keys, 256 characters per key and 1024 characters per value.
+        ///   provided_mtime - string - Modified time of file.
+        ///   priority_color - string - Priority/Bookmark color of file.
+        /// </summary>
+        public Task<RemoteFile> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// Parameters:
@@ -1062,7 +1206,13 @@ namespace FilesCom.Models
         ///   provided_mtime - string - Modified time of file.
         ///   priority_color - string - Priority/Bookmark color of file.
         /// </summary>
-        public async Task<RemoteFile> Update(Dictionary<string, object> parameters)
+        public Task<RemoteFile> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<RemoteFile> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1092,11 +1242,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: priority_color must be of type string", "parameters[\"priority_color\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -1104,12 +1257,38 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1131,18 +1310,31 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
 
-            await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public async void Destroy(Dictionary<string, object> parameters)
-        {
-            Delete(parameters);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/files/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
         /// <summary>
         /// List the contents of a ZIP file
         /// </summary>
-        public async Task<ZipListEntry[]> ZipListContents(Dictionary<string, object> parameters)
+        public Task<ZipListEntry[]> ZipListContents(Dictionary<string, object> parameters)
+        {
+            return ZipListContentsCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// List the contents of a ZIP file
+        /// </summary>
+        public Task<ZipListEntry[]> ZipListContentsAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return ZipListContentsCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<ZipListEntry[]> ZipListContentsCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1160,18 +1352,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/zip_list/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip_list/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<ZipListEntry[]>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<ZipListEntry[]>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Copy File/Folder
@@ -1182,7 +1376,27 @@ namespace FilesCom.Models
         ///   structure - boolean - Copy structure only?
         ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
-        public async Task<FileAction> Copy(Dictionary<string, object> parameters)
+        public Task<FileAction> Copy(Dictionary<string, object> parameters)
+        {
+            return CopyCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Copy File/Folder
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Copy destination path.
+        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+        ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        /// </summary>
+        public Task<FileAction> CopyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return CopyCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> CopyCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1220,18 +1434,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Move File/Folder
@@ -1240,7 +1456,25 @@ namespace FilesCom.Models
         ///   destination (required) - string - Move destination path.
         ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
-        public async Task<FileAction> Move(Dictionary<string, object> parameters)
+        public Task<FileAction> Move(Dictionary<string, object> parameters)
+        {
+            return MoveCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Move File/Folder
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        /// </summary>
+        public Task<FileAction> MoveAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return MoveCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> MoveCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1270,18 +1504,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Transform a file and save the output to a destination path
@@ -1295,7 +1531,30 @@ namespace FilesCom.Models
         ///   height - int64 - Maximum output height for image_convert.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public async Task<FileAction> Transform(Dictionary<string, object> parameters)
+        public Task<FileAction> Transform(Dictionary<string, object> parameters)
+        {
+            return TransformCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Transform a file and save the output to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the transformed output.
+        ///   transform_type (required) - string - Transform type. Supported values are `image_convert`, `document_convert`, and `files_transform_script_execute`.
+        ///   target_format (required) - string - Destination format to create.
+        ///   script - string - Files TransformScript source. Required when transform_type is `files_transform_script_execute`.
+        ///   width - int64 - Maximum output width for image_convert.
+        ///   height - int64 - Maximum output height for image_convert.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public Task<FileAction> TransformAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return TransformCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> TransformCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1353,18 +1612,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/transform/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/transform/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Decrypt a GPG-encrypted file and save it to a destination path
@@ -1377,7 +1638,29 @@ namespace FilesCom.Models
         ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public async Task<FileAction> GpgDecrypt(Dictionary<string, object> parameters)
+        public Task<FileAction> GpgDecrypt(Dictionary<string, object> parameters)
+        {
+            return GpgDecryptCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Decrypt a GPG-encrypted file and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public Task<FileAction> GpgDecryptAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return GpgDecryptCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> GpgDecryptCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1423,18 +1706,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Encrypt a file with GPG and save it to a destination path
@@ -1447,7 +1732,29 @@ namespace FilesCom.Models
         ///   armor - boolean - Output ASCII-armored encrypted data.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public async Task<FileAction> GpgEncrypt(Dictionary<string, object> parameters)
+        public Task<FileAction> GpgEncrypt(Dictionary<string, object> parameters)
+        {
+            return GpgEncryptCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Encrypt a file with GPG and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        public Task<FileAction> GpgEncryptAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return GpgEncryptCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> GpgEncryptCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1493,18 +1800,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Extract a ZIP file to a destination folder
@@ -1514,7 +1823,26 @@ namespace FilesCom.Models
         ///   filename - string - Optional single entry filename to extract.
         ///   overwrite - boolean - Overwrite existing files in the destination?
         /// </summary>
-        public async Task<FileAction> Unzip(Dictionary<string, object> parameters)
+        public Task<FileAction> Unzip(Dictionary<string, object> parameters)
+        {
+            return UnzipCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Extract a ZIP file to a destination folder
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
+        /// </summary>
+        public Task<FileAction> UnzipAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UnzipCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> UnzipCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1548,18 +1876,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Begin File Upload
@@ -1575,7 +1905,32 @@ namespace FilesCom.Models
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public async Task<FileUploadPart[]> BeginUpload(Dictionary<string, object> parameters)
+        public Task<FileUploadPart[]> BeginUpload(Dictionary<string, object> parameters)
+        {
+            return BeginUploadCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Begin File Upload
+        ///
+        /// Parameters:
+        ///   mkdir_parents - boolean - Create parent directories if they do not exist?
+        ///   part - int64 - Part if uploading a part.
+        ///   parts - int64 - How many parts to fetch?
+        ///   ref - string -
+        ///   restart - int64 - File byte offset to restart from.
+        ///   size - int64 - Total bytes of file being uploaded (include bytes being retained if appending/restarting).
+        ///   with_rename - boolean - Allow file rename instead of overwrite?
+        ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
+        ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
+        /// </summary>
+        public Task<FileUploadPart[]> BeginUploadAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return BeginUploadCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileUploadPart[]> BeginUploadCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["path"] = attributes["path"];
@@ -1629,11 +1984,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/begin_upload/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileUploadPart[]>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileUploadPart[]>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -1642,10 +2000,14 @@ namespace FilesCom.Models
         }
 
 
-
-        public async Task Save()
+        public Task Save()
         {
-            var newObj = await RemoteFile.Create(Path, this.attributes, this.options);
+            return SaveAsync(CancellationToken.None);
+        }
+
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
+        {
+            var newObj = await RemoteFile.CreateCore(new OperationContext(FilesClient.Bind(ref client)), Path, this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
             this.attributes = newObj.getAttributes();
         }
 
@@ -1659,10 +2021,21 @@ namespace FilesCom.Models
         ///   with_priority_color - boolean - Include file priority color information?
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public static async Task<RemoteFile> Download(
+        public static Task<RemoteFile> Download(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DownloadCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteFile> DownloadCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1705,18 +2078,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Parameters:
@@ -1739,10 +2111,21 @@ namespace FilesCom.Models
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public static async Task<RemoteFile> Create(
+        public static Task<RemoteFile> Create(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteFile> CreateCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1825,11 +2208,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -1837,17 +2220,27 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Parameters:
         ///   custom_metadata - object - Custom metadata map of keys and values. Limited to 32 keys, 256 characters per key and 1024 characters per value.
         ///   provided_mtime - string - Modified time of file.
         ///   priority_color - string - Priority/Bookmark color of file.
         /// </summary>
-        public static async Task<RemoteFile> Update(
+        public static Task<RemoteFile> Update(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteFile> UpdateCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1882,11 +2275,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: priority_color must be of type string", "parameters[\"priority_color\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -1894,15 +2287,34 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(path, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1929,16 +2341,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
             }
 
-            await FilesClient.SendRequest($"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(path, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
         /// <summary>
@@ -1948,10 +2352,30 @@ namespace FilesCom.Models
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public static async Task<RemoteFile> Find(
+        public static Task<RemoteFile> Find(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<RemoteFile> Get(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(path, parameters, options);
+        }
+
+        internal static async Task<RemoteFile> FindCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1986,11 +2410,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/metadata/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/metadata/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -1998,22 +2422,24 @@ namespace FilesCom.Models
             }
         }
 
-        public static async Task<RemoteFile> Get(
+        /// <summary>
+        /// List the contents of a ZIP file
+        /// </summary>
+        public static Task<ZipListEntry[]> ZipListContents(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return await Find(path, parameters, options);
+            return ZipListContentsCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
-        /// <summary>
-        /// List the contents of a ZIP file
-        /// </summary>
-        public static async Task<ZipListEntry[]> ZipListContents(
+        internal static async Task<ZipListEntry[]> ZipListContentsCore(
+            OperationContext context,
             string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2036,18 +2462,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/zip_list/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip_list/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<ZipListEntry[]>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<ZipListEntry[]>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Copy File/Folder
@@ -2058,10 +2483,21 @@ namespace FilesCom.Models
         ///   structure - boolean - Copy structure only?
         ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
-        public static async Task<FileAction> Copy(
+        public static Task<FileAction> Copy(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CopyCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> CopyCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2104,18 +2540,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Move File/Folder
@@ -2124,10 +2559,21 @@ namespace FilesCom.Models
         ///   destination (required) - string - Move destination path.
         ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
-        public static async Task<FileAction> Move(
+        public static Task<FileAction> Move(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return MoveCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> MoveCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2162,18 +2608,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Transform a file and save the output to a destination path
@@ -2187,10 +2632,21 @@ namespace FilesCom.Models
         ///   height - int64 - Maximum output height for image_convert.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public static async Task<FileAction> Transform(
+        public static Task<FileAction> Transform(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return TransformCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> TransformCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2253,18 +2709,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/transform/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/transform/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Decrypt a GPG-encrypted file and save it to a destination path
@@ -2277,10 +2732,21 @@ namespace FilesCom.Models
         ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public static async Task<FileAction> GpgDecrypt(
+        public static Task<FileAction> GpgDecrypt(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return GpgDecryptCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> GpgDecryptCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2331,18 +2797,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Encrypt a file with GPG and save it to a destination path
@@ -2355,10 +2820,21 @@ namespace FilesCom.Models
         ///   armor - boolean - Output ASCII-armored encrypted data.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public static async Task<FileAction> GpgEncrypt(
+        public static Task<FileAction> GpgEncrypt(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return GpgEncryptCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> GpgEncryptCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2409,18 +2885,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Extract a ZIP file to a destination folder
@@ -2430,10 +2905,21 @@ namespace FilesCom.Models
         ///   filename - string - Optional single entry filename to extract.
         ///   overwrite - boolean - Overwrite existing files in the destination?
         /// </summary>
-        public static async Task<FileAction> Unzip(
+        public static Task<FileAction> Unzip(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UnzipCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> UnzipCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2472,11 +2958,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -2484,17 +2970,27 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Parameters:
         ///   paths (required) - array(string) - Paths to include in the ZIP.
         ///   destination (required) - string - Destination file path for the ZIP.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public static async Task<FileAction> Zip(
+        public static Task<FileAction> Zip(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ZipCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> ZipCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2521,18 +3017,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: overwrite must be of type bool", "parameters[\"overwrite\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/zip", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Begin File Upload
@@ -2548,10 +3043,21 @@ namespace FilesCom.Models
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public static async Task<FileUploadPart[]> BeginUpload(
+        public static Task<FileUploadPart[]> BeginUpload(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return BeginUploadCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileUploadPart[]> BeginUploadCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2610,18 +3116,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: with_direct_connection_info must be of type bool", "parameters[\"with_direct_connection_info\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/file_actions/begin_upload/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/begin_upload/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<FileUploadPart[]>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<FileUploadPart[]>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
     }
 }

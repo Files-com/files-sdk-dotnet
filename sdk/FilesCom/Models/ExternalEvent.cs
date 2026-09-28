@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public ExternalEvent() : this(null, null) { }
 
         public ExternalEvent(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -65,9 +67,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -138,7 +146,12 @@ namespace FilesCom.Models
         }
 
 
-        public async Task Save()
+        public Task Save()
+        {
+            return SaveAsync(CancellationToken.None);
+        }
+
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
@@ -146,7 +159,7 @@ namespace FilesCom.Models
             }
             else
             {
-                var newObj = await ExternalEvent.Create(this.attributes, this.options);
+                var newObj = await ExternalEvent.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -166,6 +179,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<ExternalEvent> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<ExternalEvent> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -204,26 +236,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
             }
 
-            return new FilesList<ExternalEvent>($"/external_events", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<ExternalEvent> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<ExternalEvent>(client, $"/external_events", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - External Event ID.
         /// </summary>
-        public static async Task<ExternalEvent> Find(
+        public static Task<ExternalEvent> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<ExternalEvent> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<ExternalEvent> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -246,11 +289,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/external_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/external_events/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<ExternalEvent>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<ExternalEvent>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -258,24 +301,26 @@ namespace FilesCom.Models
             }
         }
 
-        public static async Task<ExternalEvent> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
-        }
-
         /// <summary>
         /// Parameters:
         ///   status (required) - string - Status of event.
         ///   body (required) - string - Event body
         /// </summary>
-        public static async Task<ExternalEvent> Create(
+        public static Task<ExternalEvent> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<ExternalEvent> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -298,18 +343,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: body must be of type string", "parameters[\"body\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/external_events", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/external_events", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<ExternalEvent>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<ExternalEvent>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
     }
 }

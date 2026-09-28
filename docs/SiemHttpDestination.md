@@ -140,6 +140,16 @@ Task<FilesList<SiemHttpDestination>> SiemHttpDestination.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<SiemHttpDestination> client.SiemHttpDestinations.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -158,6 +168,17 @@ Task<SiemHttpDestination> SiemHttpDestination.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<SiemHttpDestination> client.SiemHttpDestinations.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Siem Http Destination ID.
@@ -172,6 +193,17 @@ Task<SiemHttpDestination> SiemHttpDestination.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<SiemHttpDestination> client.SiemHttpDestinations.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -221,6 +253,17 @@ Task SiemHttpDestination.SendTestEntry(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.SiemHttpDestinations.SendTestEntryAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -274,6 +317,17 @@ Task<SiemHttpDestination> SiemHttpDestination.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<SiemHttpDestination> client.SiemHttpDestinations.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Siem Http Destination ID.
@@ -324,6 +378,17 @@ Task SiemHttpDestination.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.SiemHttpDestinations.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Siem Http Destination ID.
@@ -367,6 +432,8 @@ parameters.Add("destination_url", "example");
 
 SiemHttpDestination.Update(parameters);
 ```
+
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -418,6 +485,8 @@ var parameters = new Dictionary<string, object>();
 
 SiemHttpDestination.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

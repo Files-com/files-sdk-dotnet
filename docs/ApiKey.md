@@ -58,6 +58,16 @@ Task<FilesList<ApiKey>> ApiKey.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<ApiKey> client.ApiKeys.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -83,6 +93,17 @@ Task<ApiKey> ApiKey.FindCurrent(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ApiKey> client.ApiKeys.FindCurrentAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 
 ---
 
@@ -93,6 +114,17 @@ Task<ApiKey> ApiKey.Find(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ApiKey> client.ApiKeys.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -110,6 +142,17 @@ Task<ApiKey> ApiKey.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ApiKey> client.ApiKeys.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -137,6 +180,17 @@ Task<ApiKey> ApiKey.UpdateCurrent(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ApiKey> client.ApiKeys.UpdateCurrentAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `expires_at` (string): API Key expiration date
@@ -153,6 +207,17 @@ Task<ApiKey> ApiKey.Update(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ApiKey> client.ApiKeys.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -176,6 +241,17 @@ Task ApiKey.DeleteCurrent(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.ApiKeys.DeleteCurrentAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 
 ---
 
@@ -186,6 +262,17 @@ Task ApiKey.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.ApiKeys.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -210,6 +297,8 @@ parameters.Add("name", "My Main API Key");
 ApiKey.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Api Key ID.
@@ -230,6 +319,8 @@ var parameters = new Dictionary<string, object>();
 
 ApiKey.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

@@ -37,6 +37,16 @@ Task<FilesList<ShareGroup>> ShareGroup.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<ShareGroup> client.ShareGroups.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -56,6 +66,17 @@ Task<ShareGroup> ShareGroup.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ShareGroup> client.ShareGroups.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Share Group ID.
@@ -70,6 +91,17 @@ Task<ShareGroup> ShareGroup.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ShareGroup> client.ShareGroups.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -93,6 +125,17 @@ Task<ShareGroup> ShareGroup.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ShareGroup> client.ShareGroups.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Share Group ID.
@@ -110,6 +153,17 @@ Task ShareGroup.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.ShareGroups.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -134,6 +188,8 @@ parameters.Add("members", [{"name":"John Doe","company":"Acme Ltd","email":"john
 ShareGroup.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Share Group ID.
@@ -154,6 +210,8 @@ var parameters = new Dictionary<string, object>();
 
 ShareGroup.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

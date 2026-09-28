@@ -35,6 +35,17 @@ Task<Style> Style.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<Style> client.Styles.FindAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Style path.
@@ -49,6 +60,17 @@ Task<Style> Style.Update(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<Style> client.Styles.UpdateAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -71,6 +93,17 @@ Task Style.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.Styles.DeleteAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Style path.
@@ -89,6 +122,8 @@ parameters.Add("logo_click_href", "https://www.example.com");
 
 Style.Update(parameters);
 ```
+
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -109,6 +144,8 @@ var parameters = new Dictionary<string, object>();
 
 Style.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

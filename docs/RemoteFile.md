@@ -121,6 +121,17 @@ Task<RemoteFile> RemoteFile.Download(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteFile> client.RemoteFiles.DownloadAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -140,6 +151,17 @@ Task<RemoteFile> RemoteFile.Create(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteFile> client.RemoteFiles.CreateAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -177,6 +199,17 @@ Task<RemoteFile> RemoteFile.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteFile> client.RemoteFiles.UpdateAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -197,6 +230,17 @@ Task RemoteFile.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.RemoteFiles.DeleteAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -212,6 +256,17 @@ Task<RemoteFile> RemoteFile.Find(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteFile> client.RemoteFiles.FindAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -235,6 +290,17 @@ Task<ZipListEntry[]> RemoteFile.ZipListContents(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ZipListEntry[]> client.RemoteFiles.ZipListContentsAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -249,6 +315,17 @@ Task<FileAction> RemoteFile.Copy(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.CopyAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -273,6 +350,17 @@ Task<FileAction> RemoteFile.Move(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.MoveAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -289,6 +377,17 @@ Task<FileAction> RemoteFile.Transform(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.TransformAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -316,6 +415,17 @@ Task<FileAction> RemoteFile.GpgDecrypt(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.GpgDecryptAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -336,6 +446,17 @@ Task<FileAction> RemoteFile.GpgEncrypt(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.GpgEncryptAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -362,6 +483,17 @@ Task<FileAction> RemoteFile.Unzip(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.UnzipAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `path` (string): Required - ZIP file path to extract.
@@ -382,6 +514,17 @@ Task<FileAction> RemoteFile.Zip(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.ZipAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `paths` (string[]): Required - Paths to include in the ZIP.
@@ -398,6 +541,17 @@ Task<FileUploadPart[]> RemoteFile.BeginUpload(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileUploadPart[]> client.RemoteFiles.BeginUploadAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -431,6 +585,8 @@ parameters.Add("with_direct_connection_info", false);
 File.Download(parameters);
 ```
 
+`DownloadAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -457,6 +613,8 @@ parameters.Add("priority_color", "red");
 File.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -479,6 +637,8 @@ parameters.Add("recursive", false);
 File.Delete(parameters);
 ```
 
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -497,6 +657,8 @@ var parameters = new Dictionary<string, object>();
 
 File.ZipListContents
 ```
+
+`ZipListContentsAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -519,6 +681,8 @@ parameters.Add("overwrite", false);
 
 File.Copy(parameters);
 ```
+
+`CopyAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -543,6 +707,8 @@ parameters.Add("overwrite", false);
 
 File.Move(parameters);
 ```
+
+`MoveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -569,6 +735,8 @@ parameters.Add("overwrite", false);
 
 File.Transform(parameters);
 ```
+
+`TransformAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -600,6 +768,8 @@ parameters.Add("overwrite", false);
 File.GpgDecrypt(parameters);
 ```
 
+`GpgDecryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -629,6 +799,8 @@ parameters.Add("overwrite", false);
 File.GpgEncrypt(parameters);
 ```
 
+`GpgEncryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
@@ -654,6 +826,8 @@ parameters.Add("overwrite", false);
 
 File.Unzip(parameters);
 ```
+
+`UnzipAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -684,6 +858,8 @@ parameters.Add("with_direct_connection_info", false);
 
 File.BeginUpload(parameters);
 ```
+
+`BeginUploadAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

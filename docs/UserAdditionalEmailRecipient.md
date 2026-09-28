@@ -31,6 +31,16 @@ Task<FilesList<UserAdditionalEmailRecipient>> UserAdditionalEmailRecipient.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<UserAdditionalEmailRecipient> client.UserAdditionalEmailRecipients.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -53,6 +63,17 @@ Task<UserAdditionalEmailRecipient> UserAdditionalEmailRecipient.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<UserAdditionalEmailRecipient> client.UserAdditionalEmailRecipients.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Additional Email Recipient ID.
@@ -67,6 +88,17 @@ Task<UserAdditionalEmailRecipient> UserAdditionalEmailRecipient.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<UserAdditionalEmailRecipient> client.UserAdditionalEmailRecipients.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -88,6 +120,17 @@ Task<UserAdditionalEmailRecipient> UserAdditionalEmailRecipient.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<UserAdditionalEmailRecipient> client.UserAdditionalEmailRecipients.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Additional Email Recipient ID.
@@ -103,6 +146,17 @@ Task UserAdditionalEmailRecipient.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.UserAdditionalEmailRecipients.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -125,6 +179,8 @@ parameters.Add("email", "user-copy@example.com");
 UserAdditionalEmailRecipient.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Additional Email Recipient ID.
@@ -143,6 +199,8 @@ var parameters = new Dictionary<string, object>();
 
 UserAdditionalEmailRecipient.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

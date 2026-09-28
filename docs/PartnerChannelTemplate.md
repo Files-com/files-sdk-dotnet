@@ -51,6 +51,16 @@ Task<FilesList<PartnerChannelTemplate>> PartnerChannelTemplate.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<PartnerChannelTemplate> client.PartnerChannelTemplates.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -71,6 +81,17 @@ Task<PartnerChannelTemplate> PartnerChannelTemplate.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<PartnerChannelTemplate> client.PartnerChannelTemplates.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
@@ -85,6 +106,17 @@ Task<PartnerChannelTemplate> PartnerChannelTemplate.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<PartnerChannelTemplate> client.PartnerChannelTemplates.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -114,6 +146,17 @@ Task<PartnerChannelTemplate> PartnerChannelTemplate.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<PartnerChannelTemplate> client.PartnerChannelTemplates.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
@@ -137,6 +180,17 @@ Task PartnerChannelTemplate.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.PartnerChannelTemplates.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -167,6 +221,8 @@ parameters.Add("path", "claims/medical");
 PartnerChannelTemplate.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
@@ -193,6 +249,8 @@ var parameters = new Dictionary<string, object>();
 
 PartnerChannelTemplate.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

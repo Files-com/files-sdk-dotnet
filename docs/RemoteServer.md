@@ -198,6 +198,16 @@ Task<FilesList<RemoteServer>> RemoteServer.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<RemoteServer> client.RemoteServers.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -220,6 +230,17 @@ Task<RemoteServer> RemoteServer.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServer> client.RemoteServers.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
@@ -234,6 +255,17 @@ Task<AgentNode> RemoteServer.AgentNodes(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AgentNode> client.RemoteServers.AgentNodesAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -254,6 +286,17 @@ Task<RemoteServerConfigurationFile> RemoteServer.FindConfigurationFile(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServerConfigurationFile> client.RemoteServers.FindConfigurationFileAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
@@ -268,6 +311,17 @@ Task<RemoteServer> RemoteServer.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServer> client.RemoteServers.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -371,6 +425,17 @@ Task<AgentPushUpdate> RemoteServer.AgentPushUpdate(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AgentPushUpdate> client.RemoteServers.AgentPushUpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
@@ -385,6 +450,17 @@ Task<RemoteServer> RemoteServer.Update(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServer> client.RemoteServers.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -487,6 +563,17 @@ Task RemoteServer.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.RemoteServers.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
@@ -505,6 +592,8 @@ var parameters = new Dictionary<string, object>();
 RemoteServer.AgentNodes
 ```
 
+`AgentNodesAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
@@ -522,6 +611,8 @@ var parameters = new Dictionary<string, object>();
 
 RemoteServer.AgentPushUpdate
 ```
+
+`AgentPushUpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -601,6 +692,8 @@ parameters.Add("wasabi_region", "us-west-1");
 
 RemoteServer.Update(parameters);
 ```
+
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -701,6 +794,8 @@ var parameters = new Dictionary<string, object>();
 
 RemoteServer.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

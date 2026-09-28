@@ -35,6 +35,16 @@ Task<FilesList<KeyLifecycleRule>> KeyLifecycleRule.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<KeyLifecycleRule> client.KeyLifecycleRules.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -55,6 +65,17 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<KeyLifecycleRule> client.KeyLifecycleRules.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
@@ -69,6 +90,17 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<KeyLifecycleRule> client.KeyLifecycleRules.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -94,6 +126,17 @@ Task<KeyLifecycleRule> KeyLifecycleRule.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<KeyLifecycleRule> client.KeyLifecycleRules.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
@@ -114,6 +157,17 @@ Task KeyLifecycleRule.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.KeyLifecycleRules.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -141,6 +195,8 @@ parameters.Add("workspace_id", 12);
 KeyLifecycleRule.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
@@ -164,6 +220,8 @@ var parameters = new Dictionary<string, object>();
 
 KeyLifecycleRule.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

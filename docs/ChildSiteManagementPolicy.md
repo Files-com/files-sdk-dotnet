@@ -52,6 +52,16 @@ Task<FilesList<ChildSiteManagementPolicy>> ChildSiteManagementPolicy.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<ChildSiteManagementPolicy> client.ChildSiteManagementPolicies.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -70,6 +80,17 @@ Task<ChildSiteManagementPolicy> ChildSiteManagementPolicy.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ChildSiteManagementPolicy> client.ChildSiteManagementPolicies.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Child Site Management Policy ID.
@@ -84,6 +105,17 @@ Task<ChildSiteManagementPolicy> ChildSiteManagementPolicy.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ChildSiteManagementPolicy> client.ChildSiteManagementPolicies.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -110,6 +142,17 @@ Task<ChildSiteManagementPolicy> ChildSiteManagementPolicy.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ChildSiteManagementPolicy> client.ChildSiteManagementPolicies.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Child Site Management Policy ID.
@@ -131,6 +174,17 @@ Task ChildSiteManagementPolicy.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.ChildSiteManagementPolicies.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -159,6 +213,8 @@ parameters.Add("description", "example");
 ChildSiteManagementPolicy.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Child Site Management Policy ID.
@@ -183,6 +239,8 @@ var parameters = new Dictionary<string, object>();
 
 ChildSiteManagementPolicy.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

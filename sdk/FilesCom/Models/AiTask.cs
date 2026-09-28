@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public AiTask() : this(null, null) { }
 
         public AiTask(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -137,9 +139,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -394,7 +402,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Manually Run AI Task
         /// </summary>
-        public async Task ManualRun(Dictionary<string, object> parameters)
+        public Task ManualRun(Dictionary<string, object> parameters)
+        {
+            return ManualRunCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Manually Run AI Task
+        /// </summary>
+        public Task ManualRunAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return ManualRunCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task ManualRunCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -412,9 +434,12 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/ai_tasks/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -437,7 +462,39 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public async Task<AiTask> Update(Dictionary<string, object> parameters)
+        public Task<AiTask> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   description - string - AI Task description.
+        ///   disabled - boolean - If true, this AI Task will not run.
+        ///   holiday_region - string - Optional holiday region used by the AI Task schedule.
+        ///   interval - string - If trigger is `daily`, this specifies how often to run the AI Task.
+        ///   name - string - AI Task name.
+        ///   path - string - Path scope used for action-triggered AI Tasks.
+        ///   permission_set - string - Permissions used by the internal API key for this AI Task. Valid values are `full` and `files_only`.
+        ///   prompt - string - Prompt sent when this AI Task is invoked.
+        ///   recurring_day - int64 - If trigger is `daily`, this selects the day number inside the chosen interval.
+        ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
+        ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the AI Task's schedule fields.
+        ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+        ///   schedule_time_zone - string - Time zone used by the AI Task schedule.
+        ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the AI Task schedule.
+        ///   source - string - Source glob used with `path` for action-triggered AI Tasks.
+        ///   trigger - string - How this AI Task is triggered.
+        ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
+        /// </summary>
+        public Task<AiTask> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<AiTask> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -527,11 +584,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/ai_tasks/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -539,10 +599,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -560,24 +644,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/ai_tasks/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await AiTask.Create(this.attributes, this.options);
+                var newObj = await AiTask.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -593,6 +681,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<AiTask> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<AiTask> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -615,26 +722,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
-            return new FilesList<AiTask>($"/ai_tasks", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<AiTask> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<AiTask>(client, $"/ai_tasks", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Ai Task ID.
         /// </summary>
-        public static async Task<AiTask> Find(
+        public static Task<AiTask> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<AiTask> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<AiTask> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -657,25 +775,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<AiTask> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -699,10 +808,21 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public static async Task<AiTask> Create(
+        public static Task<AiTask> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<AiTask> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -789,11 +909,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/ai_tasks", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/ai_tasks", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -801,14 +921,24 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Manually Run AI Task
         /// </summary>
-        public static async Task ManualRun(
+        public static Task ManualRun(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ManualRunCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task ManualRunCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -831,9 +961,9 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -856,10 +986,21 @@ namespace FilesCom.Models
         ///   trigger_actions - array(string) - If trigger is `action`, the file action types that invoke this AI Task. Valid actions are create, copy, move, archived_delete, update, read, destroy.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public static async Task<AiTask> Update(
+        public static Task<AiTask> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<AiTask> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -954,11 +1095,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AiTask>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -966,13 +1107,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -995,16 +1155,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/ai_tasks/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

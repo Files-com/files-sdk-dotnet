@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public RemoteMountBackend() : this(null, null) { }
 
         public RemoteMountBackend(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -109,9 +111,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -296,7 +304,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Reset backend status to healthy
         /// </summary>
-        public async Task ResetStatus(Dictionary<string, object> parameters)
+        public Task ResetStatus(Dictionary<string, object> parameters)
+        {
+            return ResetStatusCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Reset backend status to healthy
+        /// </summary>
+        public Task ResetStatusAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return ResetStatusCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task ResetStatusCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -314,9 +336,12 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}/reset_status", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}/reset_status", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -333,7 +358,33 @@ namespace FilesCom.Models
         ///   canary_file_path - string - Path to the canary file used for health checks.
         ///   remote_server_id - int64 - The remote server that this backend is associated with.
         /// </summary>
-        public async Task<RemoteMountBackend> Update(Dictionary<string, object> parameters)
+        public Task<RemoteMountBackend> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   enabled - boolean - True if this backend is enabled.
+        ///   fall - int64 - Number of consecutive failures before considering the backend unhealthy.
+        ///   health_check_enabled - boolean - True if health checks are enabled for this backend.
+        ///   health_check_type - string - Type of health check to perform.
+        ///   interval - int64 - Interval in seconds between health checks.
+        ///   min_free_cpu - double - Minimum free CPU percentage required for this backend to be considered healthy.
+        ///   min_free_mem - double - Minimum free memory percentage required for this backend to be considered healthy.
+        ///   priority - int64 - Priority of this backend.
+        ///   remote_path - string - Path on the remote server to treat as the root of this mount.
+        ///   rise - int64 - Number of consecutive successes before considering the backend healthy.
+        ///   canary_file_path - string - Path to the canary file used for health checks.
+        ///   remote_server_id - int64 - The remote server that this backend is associated with.
+        /// </summary>
+        public Task<RemoteMountBackend> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<RemoteMountBackend> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -399,11 +450,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -411,10 +465,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -432,24 +510,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await RemoteMountBackend.Create(this.attributes, this.options);
+                var newObj = await RemoteMountBackend.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -464,6 +546,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<RemoteMountBackend> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<RemoteMountBackend> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -482,26 +583,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
-            return new FilesList<RemoteMountBackend>($"/remote_mount_backends", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<RemoteMountBackend> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<RemoteMountBackend>(client, $"/remote_mount_backends", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Remote Mount Backend ID.
         /// </summary>
-        public static async Task<RemoteMountBackend> Find(
+        public static Task<RemoteMountBackend> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<RemoteMountBackend> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<RemoteMountBackend> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -524,25 +636,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<RemoteMountBackend> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -561,10 +664,21 @@ namespace FilesCom.Models
         ///   remote_server_mount_id (required) - int64 - The mount ID of the Remote Server Mount that this backend is associated with.
         ///   remote_server_id (required) - int64 - The remote server that this backend is associated with.
         /// </summary>
-        public static async Task<RemoteMountBackend> Create(
+        public static Task<RemoteMountBackend> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteMountBackend> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -635,11 +749,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_mount_backends", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -647,14 +761,24 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Reset backend status to healthy
         /// </summary>
-        public static async Task ResetStatus(
+        public static Task ResetStatus(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ResetStatusCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task ResetStatusCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -677,9 +801,9 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}/reset_status", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}/reset_status", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -696,10 +820,21 @@ namespace FilesCom.Models
         ///   canary_file_path - string - Path to the canary file used for health checks.
         ///   remote_server_id - int64 - The remote server that this backend is associated with.
         /// </summary>
-        public static async Task<RemoteMountBackend> Update(
+        public static Task<RemoteMountBackend> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteMountBackend> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -770,11 +905,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: remote_server_id must be of type Nullable<Int64>", "parameters[\"remote_server_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteMountBackend>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -782,13 +917,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -811,16 +965,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_mount_backends/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

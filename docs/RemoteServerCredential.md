@@ -79,6 +79,16 @@ Task<FilesList<RemoteServerCredential>> RemoteServerCredential.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<RemoteServerCredential> client.RemoteServerCredentials.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -100,6 +110,17 @@ Task<RemoteServerCredential> RemoteServerCredential.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServerCredential> client.RemoteServerCredentials.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
@@ -114,6 +135,17 @@ Task<RemoteServerCredential> RemoteServerCredential.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServerCredential> client.RemoteServerCredentials.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -169,6 +201,17 @@ Task<RemoteServerCredential> RemoteServerCredential.Update(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<RemoteServerCredential> client.RemoteServerCredentials.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
@@ -220,6 +263,17 @@ Task RemoteServerCredential.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.RemoteServerCredentials.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
@@ -252,6 +306,8 @@ parameters.Add("wasabi_access_key", "example");
 
 RemoteServerCredential.Update(parameters);
 ```
+
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -304,6 +360,8 @@ var parameters = new Dictionary<string, object>();
 
 RemoteServerCredential.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

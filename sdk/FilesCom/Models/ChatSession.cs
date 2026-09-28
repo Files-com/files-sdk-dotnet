@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -73,9 +74,14 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[] { Messages }; }
         }
 
         public void SetOption(string name, object value)
@@ -187,6 +193,25 @@ namespace FilesCom.Models
             Dictionary<string, object> options = null
         )
         {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<ChatSession> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<ChatSession> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
@@ -207,26 +232,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
-            return new FilesList<ChatSession>($"/chat_sessions", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<ChatSession> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<ChatSession>(client, $"/chat_sessions", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - string - Chat Session ID.
         /// </summary>
-        public static async Task<ChatSession> Find(
+        public static Task<ChatSession> Find(
             string id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<ChatSession> Get(
+            string id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<ChatSession> FindCore(
+            OperationContext context,
+            string id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -249,25 +285,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type string", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/chat_sessions/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/chat_sessions/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<ChatSession>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<ChatSession>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<ChatSession> Get(
-            string id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
     }

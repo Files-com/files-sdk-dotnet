@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public AutomationRun() : this(null, null) { }
 
         public AutomationRun(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -133,9 +135,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[] { ExecutionNodes }; }
         }
 
         public void SetOption(string name, object value)
@@ -400,7 +408,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Cancel Automation Run
         /// </summary>
-        public async Task<AutomationRun> Cancel(Dictionary<string, object> parameters)
+        public Task<AutomationRun> Cancel(Dictionary<string, object> parameters)
+        {
+            return CancelCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Cancel Automation Run
+        /// </summary>
+        public Task<AutomationRun> CancelAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return CancelCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<AutomationRun> CancelCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -418,11 +440,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -430,6 +455,16 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// Re-run Automation from Node
+        ///
+        /// Parameters:
+        ///   node_id (required) - string - Node ID at which execution should resume.
+        /// </summary>
+        public Task<AutomationRun> Rerun(Dictionary<string, object> parameters)
+        {
+            return RerunCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// Re-run Automation from Node
@@ -437,7 +472,13 @@ namespace FilesCom.Models
         /// Parameters:
         ///   node_id (required) - string - Node ID at which execution should resume.
         /// </summary>
-        public async Task<AutomationRun> Rerun(Dictionary<string, object> parameters)
+        public Task<AutomationRun> RerunAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return RerunCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<AutomationRun> RerunCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -463,18 +504,20 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: node_id must be of type string", "parameters[\"node_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/rerun", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/automation_runs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/rerun", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
 
 
@@ -491,6 +534,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<AutomationRun> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<AutomationRun> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -525,26 +587,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: automation_id must be of type Nullable<Int64>", "parameters[\"automation_id\"]");
             }
 
-            return new FilesList<AutomationRun>($"/automation_runs", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<AutomationRun> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<AutomationRun>(client, $"/automation_runs", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Automation Run ID.
         /// </summary>
-        public static async Task<AutomationRun> Find(
+        public static Task<AutomationRun> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<AutomationRun> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<AutomationRun> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -567,25 +640,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<AutomationRun> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -593,10 +657,21 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Automation Run ID.
         ///   node_id (required) - string - Node ID from the pinned Automation definition.
         /// </summary>
-        public static async Task<AutomationExecutionNode> FindNode(
+        public static Task<AutomationExecutionNode> FindNode(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindNodeCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<AutomationExecutionNode> FindNodeCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -627,11 +702,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: node_id must be of type string", "parameters[\"node_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/node", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/node", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AutomationExecutionNode>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AutomationExecutionNode>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -639,14 +714,24 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Cancel Automation Run
         /// </summary>
-        public static async Task<AutomationRun> Cancel(
+        public static Task<AutomationRun> Cancel(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CancelCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<AutomationRun> CancelCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -669,18 +754,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/cancel", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Re-run Automation from Node
@@ -688,10 +772,21 @@ namespace FilesCom.Models
         /// Parameters:
         ///   node_id (required) - string - Node ID at which execution should resume.
         /// </summary>
-        public static async Task<AutomationRun> Rerun(
+        public static Task<AutomationRun> Rerun(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return RerunCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<AutomationRun> RerunCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -722,18 +817,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: node_id must be of type string", "parameters[\"node_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/rerun", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/automation_runs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/rerun", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<AutomationRun>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
     }
 }

@@ -39,6 +39,16 @@ Task<FilesList<SiemHttpDestinationEvent>> SiemHttpDestinationEvent.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<SiemHttpDestinationEvent> client.SiemHttpDestinationEvents.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -60,6 +70,17 @@ Task<SiemHttpDestinationEvent> SiemHttpDestinationEvent.Find(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<SiemHttpDestinationEvent> client.SiemHttpDestinationEvents.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 

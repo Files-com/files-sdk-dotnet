@@ -40,6 +40,16 @@ Task<FilesList<MetadataCategory>> MetadataCategory.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<MetadataCategory> client.MetadataCategories.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -59,6 +69,17 @@ Task<MetadataCategory> MetadataCategory.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<MetadataCategory> client.MetadataCategories.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Metadata Category ID.
@@ -70,6 +91,16 @@ Task<MetadataCategory> MetadataCategory.Find(
 
 ```
 Task<FilesList<MetadataCategory>> MetadataCategory.ListFor(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<MetadataCategory> client.MetadataCategories.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -95,6 +126,17 @@ Task<MetadataCategory> MetadataCategory.Create(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<MetadataCategory> client.MetadataCategories.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `name` (string): Required - Name of the metadata category.
@@ -110,6 +152,17 @@ Task<MetadataCategory> MetadataCategory.Update(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<MetadataCategory> client.MetadataCategories.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -129,6 +182,17 @@ Task MetadataCategory.Delete(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.MetadataCategories.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -152,6 +216,8 @@ parameters.Add("default_columns", ["Approval Status"]);
 MetadataCategory.Update(parameters);
 ```
 
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Metadata Category ID.
@@ -171,6 +237,8 @@ var parameters = new Dictionary<string, object>();
 
 MetadataCategory.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

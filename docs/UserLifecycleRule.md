@@ -55,6 +55,16 @@ Task<FilesList<UserLifecycleRule>> UserLifecycleRule.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<UserLifecycleRule> client.UserLifecycleRules.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -75,6 +85,17 @@ Task<UserLifecycleRule> UserLifecycleRule.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<UserLifecycleRule> client.UserLifecycleRules.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
@@ -89,6 +110,17 @@ Task<UserLifecycleRule> UserLifecycleRule.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<UserLifecycleRule> client.UserLifecycleRules.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -118,6 +150,17 @@ Task<UserLifecycleRule> UserLifecycleRule.Update(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<UserLifecycleRule> client.UserLifecycleRules.UpdateAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -151,6 +194,17 @@ Task UserLifecycleRule.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.UserLifecycleRules.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
@@ -180,6 +234,8 @@ parameters.Add("workspace_id", 12);
 
 UserLifecycleRule.Update(parameters);
 ```
+
+`UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -211,6 +267,8 @@ var parameters = new Dictionary<string, object>();
 
 UserLifecycleRule.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

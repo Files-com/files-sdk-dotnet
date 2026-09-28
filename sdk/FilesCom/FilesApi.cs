@@ -36,10 +36,10 @@ namespace FilesCom
             _clientFactory = clientFactory;
         }
 
-        private async Task HandleErrorResponse(HttpResponseMessage response, bool isTransfer = false)
+        private async Task HandleErrorResponse(HttpResponseMessage response, CancellationToken cancellationToken, bool isTransfer = false)
         {
             ResponseError responseError;
-            string body = await response.Content.ReadAsStringAsync();
+            string body = await ReadBody(response.Content, cancellationToken);
             if (isTransfer)
             {
                 log.Debug($"Transfer response: {body}");
@@ -77,6 +77,8 @@ namespace FilesCom
             }
         }
 
+        // The IFilesApiService methods run with the default client's settings, looked up once per call. The SDK's
+        // own requests use the overloads that take the settings their operation captured.
         public async Task<HttpResponseMessage> SendRequest(
             string path,
             HttpMethod verb,
@@ -84,16 +86,44 @@ namespace FilesCom
             Dictionary<string, object> options
         )
         {
-            FilesClient filesClient = FilesClient.Instance;
+            return await SendRequest(DefaultClientContext(), path, verb, parameters, options, CancellationToken.None);
+        }
 
-            if (filesClient == null)
+        public async Task StreamDownload(string uriString, Stream writeStream)
+        {
+            await StreamDownload(DefaultClientContext(), uriString, writeStream, CancellationToken.None);
+        }
+
+        public Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, Int64 readLength)
+        {
+            return ChunkUpload(verb, uriString, readStream, readLength, CancellationToken.None);
+        }
+
+        private static OperationContext DefaultClientContext()
+        {
+            OperationContext context = OperationContext.OfDefaultClient();
+            if (context == null)
             {
                 throw new InvalidOperationException("FilesClient instance must be created before sending API requests.");
             }
+            return context;
+        }
+
+        internal async Task<HttpResponseMessage> SendRequest(
+            OperationContext context,
+            string path,
+            HttpMethod verb,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             string parsedPath = ParsePathParameters(path, parameters);
-            UriBuilder uri = new UriBuilder(httpClient.BaseAddress.ToString());
+            // A factory given to the public constructor may set its own base address; the SDK's clients have none.
+            UriBuilder uri = new UriBuilder((httpClient.BaseAddress ?? new Uri(context.BaseUrl)).ToString());
             uri.Path = $"api/rest/v1{parsedPath}";
             string jsonString = "";
             HttpContent httpContent = null;
@@ -149,7 +179,7 @@ namespace FilesCom
 
             if (requiresAuth)
             {
-                object workspaceId = options.ContainsKey("workspace_id") ? options["workspace_id"] : filesClient.WorkspaceId;
+                object workspaceId = options.ContainsKey("workspace_id") ? options["workspace_id"] : context.WorkspaceId;
 
                 if (options.ContainsKey("session_id"))
                 {
@@ -169,13 +199,13 @@ namespace FilesCom
 
                     httpRequestMessage.Headers.Add("X-FilesAPI-Key", (string)options["api_key"]);
                 }
-                else if (filesClient.SessionId != null && filesClient.SessionId.Length > 0)
+                else if (context.SessionId != null && context.SessionId.Length > 0)
                 {
-                    httpRequestMessage.Headers.Add("X-FilesAPI-Auth", filesClient.SessionId.ToString());
+                    httpRequestMessage.Headers.Add("X-FilesAPI-Auth", context.SessionId);
                 }
-                else if (filesClient.ApiKey != null && filesClient.ApiKey.Length > 0)
+                else if (context.ApiKey != null && context.ApiKey.Length > 0)
                 {
-                    httpRequestMessage.Headers.Add("X-FilesAPI-Key", filesClient.ApiKey);
+                    httpRequestMessage.Headers.Add("X-FilesAPI-Key", context.ApiKey);
                 }
                 else
                 {
@@ -188,47 +218,57 @@ namespace FilesCom
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(filesClient.Language))
+            if (!string.IsNullOrWhiteSpace(context.Language))
             {
-                httpRequestMessage.Headers.Add("Accept-Language", filesClient.Language);
+                httpRequestMessage.Headers.Add("Accept-Language", context.Language);
             }
 
             log.Info($"Sending {verb} request: {uri}");
             log.Debug($"content: {jsonString}");
 
             HttpResponseMessage response;
-            try
+            using (httpRequestMessage)
             {
-                response = await httpClient.SendAsync(httpRequestMessage);
-            }
-            catch (HttpRequestException e)
-            {
-                throw new ApiConnectionException(e.Message);
-            }
-            catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
-            {
-                throw new InvalidParameterException(e.Message);
+                try
+                {
+                    // Buffers the response body too, so the token covers the whole exchange.
+                    response = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new ApiConnectionException(e.Message);
+                }
+                catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
+                {
+                    throw new InvalidParameterException(e.Message);
+                }
             }
             if (!response.IsSuccessStatusCode)
             {
-                await this.HandleErrorResponse(response);
+                using (response)
+                {
+                    await this.HandleErrorResponse(response, cancellationToken);
+                }
             }
             return response;
         }
 
-        public async Task StreamDownload(string uriString, Stream writeStream)
+        internal async Task StreamDownload(OperationContext context, string uriString, Stream writeStream, CancellationToken cancellationToken)
         {
-            FilesClient filesClient = FilesClient.Instance;
+            cancellationToken.ThrowIfCancellationRequested();
+
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpFilesApi);
             Uri uri = new Uri(uriString);
             HttpResponseMessage response;
 
             try
             {
-                var cts = new CancellationTokenSource();
-                cts.CancelAfter(TimeSpan.FromSeconds(filesClient.ReadTimeout));
-
-                response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+                // ReadTimeout limits only the wait for the response headers; the caller's token also covers the body.
+                using (var headersTimeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
+                {
+                    headersTimeout.CancelAfter(TimeSpan.FromSeconds(context.ReadTimeout));
+                    response = await httpClient.GetAsync(uri, HttpCompletionOption.ResponseHeadersRead, headersTimeout.Token);
+                }
             }
             catch (HttpRequestException e)
             {
@@ -244,7 +284,7 @@ namespace FilesCom
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    await this.HandleErrorResponse(response, isTransfer: true);
+                    await this.HandleErrorResponse(response, cancellationToken, isTransfer: true);
                 }
 
                 using (Stream responseStream = await response.Content.ReadAsStreamAsync())
@@ -252,16 +292,16 @@ namespace FilesCom
                     byte[] buffer = new byte[2 * 1024 * 1024]; // 2MB
                     int bytesRead;
 
-                    while ((bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    while ((bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
                     {
-                        await writeStream.WriteAsync(buffer, 0, bytesRead);
+                        await writeStream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
                     }
                 }
                 log.Debug($"Successfully downloaded {uri}");
             }
         }
 
-        public async Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, Int64 readLength)
+        internal async Task ChunkUpload(HttpMethod verb, string uriString, Stream readStream, Int64 readLength, CancellationToken cancellationToken)
         {
             if (readStream == null)
             {
@@ -272,11 +312,12 @@ namespace FilesCom
             {
                 throw new ArgumentOutOfRangeException(nameof(readLength), readLength, "An upload part must be from 0 to Int32.MaxValue bytes long.");
             }
+            cancellationToken.ThrowIfCancellationRequested();
 
             HttpClient httpClient = _clientFactory.CreateClient(FilesClient.HttpUpload);
             Uri uri = new Uri(uriString);
             // Reading the whole part before sending means a retried request resends these same bytes.
-            byte[] part = await ReadPart(readStream, (int)readLength);
+            byte[] part = await ReadPart(readStream, (int)readLength, cancellationToken);
             HttpContent httpContent = new ByteArrayContent(part);
 
             var httpRequestMessage = new HttpRequestMessage
@@ -295,25 +336,28 @@ namespace FilesCom
             log.Debug($"content: {readLength} bytes");
 
             HttpResponseMessage response;
-            try
+            using (httpRequestMessage)
             {
-                response = await httpClient.SendAsync(httpRequestMessage);
-            }
-            catch (HttpRequestException e)
-            {
-                log.Debug("Upload transport error", e);
-                throw new ApiConnectionException("Upload request failed (HttpRequestException)");
-            }
-            catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
-            {
-                log.Debug("Upload parameter error", e);
-                throw new InvalidParameterException("Invalid upload request");
+                try
+                {
+                    response = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
+                }
+                catch (HttpRequestException e)
+                {
+                    log.Debug("Upload transport error", e);
+                    throw new ApiConnectionException("Upload request failed (HttpRequestException)");
+                }
+                catch (Exception e) when (e is InvalidOperationException || e is ArgumentNullException)
+                {
+                    log.Debug("Upload parameter error", e);
+                    throw new InvalidParameterException("Invalid upload request");
+                }
             }
             using (response)
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    await this.HandleErrorResponse(response, isTransfer: true);
+                    await this.HandleErrorResponse(response, cancellationToken, isTransfer: true);
                 }
                 string responseJson = await response.Content.ReadAsStringAsync();
 
@@ -323,13 +367,13 @@ namespace FilesCom
 
         // ReadAsync may return fewer bytes than requested, so keep reading until the part is full. Reading stops at
         // the part's length, which leaves the rest of the stream for the next part.
-        private static async Task<byte[]> ReadPart(Stream readStream, int partLength)
+        private static async Task<byte[]> ReadPart(Stream readStream, int partLength, CancellationToken cancellationToken)
         {
             byte[] part = new byte[partLength];
             int bytesRead = 0;
             while (bytesRead < partLength)
             {
-                int count = await readStream.ReadAsync(part, bytesRead, partLength - bytesRead);
+                int count = await readStream.ReadAsync(part, bytesRead, partLength - bytesRead, cancellationToken);
                 if (count == 0)
                 {
                     throw new EndOfStreamException($"The upload stream ended after {bytesRead} of the {partLength} bytes expected for this part.");
@@ -337,6 +381,25 @@ namespace FilesCom
                 bytesRead += count;
             }
             return part;
+        }
+
+        // Reads an error response body with the caller's token: a download's body is not buffered yet, so without it
+        // cancellation could not stop this read. The bytes read are then decoded by HttpContent itself, under the
+        // response's Content-Type, so its charset and byte order mark rules apply unchanged.
+        private static async Task<string> ReadBody(HttpContent content, CancellationToken cancellationToken)
+        {
+            byte[] body;
+            using (Stream stream = await content.ReadAsStreamAsync())
+            using (MemoryStream buffer = new MemoryStream())
+            {
+                await stream.CopyToAsync(buffer, 81920, cancellationToken);
+                body = buffer.ToArray();
+            }
+            using (ByteArrayContent received = new ByteArrayContent(body))
+            {
+                received.Headers.ContentType = content.Headers.ContentType;
+                return await received.ReadAsStringAsync();
+            }
         }
 
         protected static string ParsePathParameters(string path, Dictionary<string, object> parameters)

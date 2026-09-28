@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public BundleRecipient() : this(null, null) { }
 
         public BundleRecipient(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -77,9 +79,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -180,7 +188,12 @@ namespace FilesCom.Models
         }
 
 
-        public async Task Save()
+        public Task Save()
+        {
+            return SaveAsync(CancellationToken.None);
+        }
+
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
@@ -188,7 +201,7 @@ namespace FilesCom.Models
             }
             else
             {
-                var newObj = await BundleRecipient.Create(this.attributes, this.options);
+                var newObj = await BundleRecipient.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -206,6 +219,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<BundleRecipient> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<BundleRecipient> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -240,16 +272,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: bundle_id must be of type Nullable<Int64>", "parameters[\"bundle_id\"]");
             }
 
-            return new FilesList<BundleRecipient>($"/bundle_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<BundleRecipient> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<BundleRecipient>(client, $"/bundle_recipients", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -262,10 +285,21 @@ namespace FilesCom.Models
         ///   note - string - Note to include in email.
         ///   share_after_create - boolean - Set to true to share the link with the recipient upon creation.
         /// </summary>
-        public static async Task<BundleRecipient> Create(
+        public static Task<BundleRecipient> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<BundleRecipient> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -308,18 +342,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: share_after_create must be of type bool", "parameters[\"share_after_create\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundle_recipients", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundle_recipients", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<BundleRecipient>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<BundleRecipient>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
     }
 }

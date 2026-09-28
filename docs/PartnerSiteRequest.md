@@ -37,6 +37,16 @@ Task<FilesList<PartnerSiteRequest>> PartnerSiteRequest.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<PartnerSiteRequest> client.PartnerSiteRequests.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
@@ -57,6 +67,17 @@ Task PartnerSiteRequest.FindByPairingKey(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.PartnerSiteRequests.FindByPairingKeyAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `pairing_key` (string): Required - Pairing key for the partner site request
@@ -71,6 +92,17 @@ Task<PartnerSiteRequest> PartnerSiteRequest.Create(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<PartnerSiteRequest> client.PartnerSiteRequests.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -92,6 +124,17 @@ Task PartnerSiteRequest.Reject(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.PartnerSiteRequests.RejectAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `pairing_key` (string): Required - Pairing key for the partner site request
@@ -106,6 +149,17 @@ Task PartnerSiteRequest.Approve(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.PartnerSiteRequests.ApproveAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -127,6 +181,17 @@ Task PartnerSiteRequest.Delete(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.PartnerSiteRequests.DeleteAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Site Request ID.
@@ -144,6 +209,8 @@ var parameters = new Dictionary<string, object>();
 
 PartnerSiteRequest.Delete
 ```
+
+`DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

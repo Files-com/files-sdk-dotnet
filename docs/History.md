@@ -50,6 +50,16 @@ Task<FilesList<Action>> History.ListForFile(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Action> client.Histories.ListForFile(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
@@ -67,6 +77,16 @@ Task<FilesList<Action>> History.ListForFile(
 
 ```
 Task<FilesList<Action>> History.ListForFolder(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Action> client.Histories.ListForFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -96,6 +116,16 @@ Task<FilesList<Action>> History.ListForUser(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Action> client.Histories.ListForUser(
+    Nullable<Int64> user_id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
@@ -119,6 +149,16 @@ Task<FilesList<Action>> History.ListLogins(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Action> client.Histories.ListLogins(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
@@ -135,6 +175,16 @@ Task<FilesList<Action>> History.ListLogins(
 
 ```
 Task<FilesList<Action>> History.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Action> client.Histories.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

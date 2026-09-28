@@ -103,7 +103,11 @@ using FilesCom.Models;
 var config = new FilesConfiguration();
 config.ApiKey = "YOUR_API_KEY";
 
+// ...as the default client, which static methods such as User.Find use
 new FilesClient(config);
+
+// ...or as an independent client, used through its properties such as client.Users
+FilesClient client = FilesClient.Create(config);
 
 // In app.config
 <configSections>
@@ -120,13 +124,14 @@ new FilesClient(config);
 
 new FilesClient();
 
-// You may also specify the API key on a per-request basis in the final parameter to static methods.
+// You may also specify the API key on a per-request basis in the options parameter.
 var options = new Dictionary<string, object>();
 options.Add("api_key", "YOUR_API_KEY");
 
 try
 {
-    User.Find(id, params, options);
+    User user = await User.Find(id, null, options);
+    User sameUser = await client.Users.FindAsync(id, null, options);
 }
 catch (FilesCom.NotAuthenticatedException e)
 {
@@ -166,13 +171,13 @@ using FilesCom;
 using FilesCom.Models;
 
 Dictionary<string, object> paramsDict = new Dictionary<string, object>();
-FilesClient client = new FilesClient(filesConfig);
+FilesClient client = FilesClient.Create(filesConfig);
 paramsDict.Add("username", "username");
 paramsDict.Add("password", "password");
 
 try
 {
-    Session session = await Session.Create(paramsDict);
+    Session session = await client.Sessions.CreateAsync(paramsDict);
 }
 catch (FilesCom.NotAuthenticatedException e)
 {
@@ -192,27 +197,23 @@ Once a session has been created, you can store the session globally, use the ses
 using FilesCom;
 using FilesCom.Models;
 
-// You may set the returned session to be used by default for subsequent requests.
-FilesConfiguration filesConfig = new FilesConfiguration();
-filesConfig.SessionId = session.Id;
+// You may make a client that uses the returned session for all of its requests,
+// or pass the configuration to new FilesClient to make it the default for static methods.
+FilesConfiguration sessionConfig = new FilesConfiguration();
+sessionConfig.SessionId = session.Id;
+FilesClient sessionClient = FilesClient.Create(sessionConfig);
 
 // Alternatively, you can specify the session ID on a per-object basis
 // in the second parameter to a model constructor.
-
-user = new User(params, requestOptions);
-Dictionary<string, object> paramsDict = new Dictionary<string, object>();
 Dictionary<string, object> optionsDict = new Dictionary<string, object>();
 optionsDict.Add("session_id", session.Id);
-User user = new User(paramsDict, optionsDict);
+User user = new User(new Dictionary<string, object>(), optionsDict);
 
-// You may also specify the session ID on a per-request basis in the final parameter to static methods.
-Dictionary<string, object> paramsDict = new Dictionary<string, object>();
-Dictionary<string, object> optionsDict = new Dictionary<string, object>();
-optionsDict.Add("session_id", session.Id);
-
+// You may also specify the session ID on a per-request basis in the options parameter.
 try
 {
-    await Folder.ListFor("/", paramsDict, optionsDict).All();
+    await sessionClient.Folders.ListFor("/").AllAsync();
+    await client.Folders.ListFor("/", null, optionsDict).AllAsync();
 }
 catch (FilesCom.NotAuthenticatedException e)
 {
@@ -246,6 +247,45 @@ catch (FilesCom.SdkException e)
 ```
 
 ## Configuration
+
+### Clients
+
+A `FilesClient` connects to one Files.com site with one set of credentials. `FilesClient.Create(config)` makes an
+independent client. Its properties, such as `client.Users` or `client.RemoteFiles`, run operations with that
+client, and the objects and lists they return keep using it. Make one client for each site or user you work
+with; clients can be used at the same time.
+
+`Create` keeps a copy of the configuration, so later changes to `config` do not affect the client. Create a
+client once and reuse it: each client has its own connection pool.
+
+`new FilesClient(config)` makes the default client, which static methods such as `User.Find(id)` use. Making
+another replaces the default for later static calls, but an object keeps the client it came from. A client made
+this way reads `config` as each operation starts, so changes you make apply to operations started afterward.
+
+```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
+
+var config = new FilesConfiguration();
+config.BaseUrl = "https://MY-SUBDOMAIN.files.com";
+config.ApiKey = "YOUR_API_KEY";
+
+FilesClient client = FilesClient.Create(config);
+
+try
+{
+    User user = await client.Users.FindAsync(id);
+    await user.UpdateAsync(new Dictionary<string, object> { { "name", "New Name" } });
+}
+catch (FilesCom.NotAuthenticatedException e)
+{
+    Console.WriteLine($"Authentication Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+catch (FilesCom.SdkException e)
+{
+    Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
+}
+```
 
 ### Configuration Options
 
@@ -293,7 +333,7 @@ Initial retry delay in seconds. The default value is 0.5.
 using FilesCom;
 
 var config = new FilesConfiguration();
-config.InitialNetworkRetryDelay = 1;
+config.InitialNetworkRequestDelay = 1;
 ```
 
 #### Maximum Network Retries
@@ -896,16 +936,24 @@ the API will paginate the results.
 
 The Files.com DotNet SDK provides multiple ways to paginate through lists of objects.
 
+Creating a list, such as `client.Folders.ListFor("/")`, sends no request; pages are requested as you
+load them. Every page comes from the client the list was made with. Lists made with static methods,
+such as `Folder.ListFor("/")`, use the default client.
+
 ### Automatic Pagination
 
 The `ListAutoPaging` method automatically paginates and loads each page into memory.
+
+Pass a `CancellationToken` to stop before the next page is loaded. With a token, failures are thrown as they
+are, such as `NotFoundException` or `OperationCanceledException`. Without one, they are wrapped in an
+`AggregateException`.
 
 ```csharp title="Example Request"
 using FilesCom.Models;
 
 try
 {
-    foreach (var file in Folder.ListFor("/").ListAutoPaging())
+    foreach (var file in client.Folders.ListFor("/").ListAutoPaging(cancellationToken))
     {
         Console.WriteLine("- Path: {0}", file.Path);
     }
@@ -922,17 +970,17 @@ catch (FilesCom.SdkException e)
 
 ### Manual Pagination
 
-The `LoadNextPage/HasNextPage` methods allow for manual pagination and loading of each page into memory.
+The `LoadNextPageAsync/HasNextPage` methods allow for manual pagination and loading of each page into memory.
 
 ```csharp title="Example Request"
 using FilesCom.Models;
 
 try
 {
-    FilesList<RemoteFile> listing = Folder.ListFor("/");
+    FilesList<RemoteFile> listing = client.Folders.ListFor("/");
     do
     {
-        foreach (var file in await listing.LoadNextPage())
+        foreach (var file in await listing.LoadNextPageAsync(cancellationToken))
         {
             Console.WriteLine("- Path: {0}", file.Path);
         }
@@ -950,14 +998,14 @@ catch (FilesCom.SdkException e)
 
 ### Load All Items
 
-The `All` method loads all items into memory.
+The `AllAsync` method loads all items into memory.
 
 ```csharp title="Example Request"
 using FilesCom.Models;
 
 try
 {
-    var files = await Folder.ListFor("/").All();
+    var files = await client.Folders.ListFor("/").AllAsync(cancellationToken);
     foreach (var file in files)
     {
         Console.WriteLine("- Path: {0}", file.Path);
@@ -972,6 +1020,53 @@ catch (FilesCom.SdkException e)
     Console.WriteLine($"Unknown Error Occurred ({e.GetType().Name}): " + e.Message);
 }
 ```
+
+## Cancellation
+
+Every method that sends a request has an `Async` form that takes a `CancellationToken`: client operations such
+as `client.Users.FindAsync`, object methods such as `user.UpdateAsync` and `SaveAsync`, the list methods
+`LoadNextPageAsync`, `AllAsync` and `ListAutoPaging(cancellationToken)`, and the file transfers
+`client.RemoteFiles.UploadFileAsync` and `DownloadFileAsync`.
+
+Cancelling the token stops the operation wherever it is: waiting for a response, waiting to retry, reading or
+writing file contents, or between pages and upload parts. The operation then ends with an
+`OperationCanceledException` (or a `TaskCanceledException`, which derives from it), and it starts no further
+request, retry, page or part.
+
+The methods without a token, such as `User.Find` and `LoadNextPage`, work as before and cannot be cancelled.
+
+```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
+
+using (var cancellation = new CancellationTokenSource(TimeSpan.FromMinutes(10)))
+{
+    try
+    {
+        await client.RemoteFiles.UploadFileAsync(localPath, destinationPath, cancellationToken: cancellation.Token);
+    }
+    catch (OperationCanceledException)
+    {
+        Console.WriteLine("The upload was cancelled.");
+    }
+}
+```
+
+### What Cancellation Leaves Behind
+
+Cancellation stops the SDK; it does not undo requests Files.com has already received. If the last request of
+an upload was sent before you cancelled, the file may still be completed.
+
+The SDK passes the token to the streams you give it. A stream that ignores its token finishes its current read
+or write before the operation stops.
+
+- `UploadFileAsync(destinationPath, stream, ...)` disposes the stream when it ends, including when it is cancelled.
+- `DownloadFileAsync(path, stream)` leaves your stream open.
+- `DownloadFileAsync(path, localPath)` closes the local file when it ends. After a failure or cancellation, the
+  file may be partly written.
+
+The `ReadTimeout` setting limits only the wait for a download's response headers. To limit a whole operation,
+use a token that cancels itself, as in the example.
 
 ## Logs
 

@@ -1,5 +1,4 @@
 using FilesCom.Models;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -20,32 +19,20 @@ namespace FilesCom.Util
         public static T DeserializeWithOptions<T>(string json, Dictionary<string, object> requestOptions)
         {
             T value = JsonSerializer.Deserialize<T>(json, Options);
-            ApplyOptions(value, requestOptions);
+            if (requestOptions != null)
+            {
+                ModelContext.SetForResponse(value, null, requestOptions);
+            }
             return value;
         }
 
-        private static void ApplyOptions(object value, Dictionary<string, object> requestOptions)
+        // Deserializes the response to a request made with client and requestOptions. The models in it, including
+        // nested ones, belong to client and keep a copy of requestOptions, even when requestOptions is null.
+        internal static T DeserializeWithOptions<T>(string json, FilesClient client, Dictionary<string, object> requestOptions)
         {
-            if (value == null || requestOptions == null)
-            {
-                return;
-            }
-
-            if (value is IEnumerable enumerable && !(value is string))
-            {
-                foreach (object item in enumerable)
-                {
-                    ApplyOptions(item, requestOptions);
-                }
-                return;
-            }
-
-            if (!(value is IModel model))
-            {
-                return;
-            }
-
-            model.SetOptions(requestOptions);
+            T value = JsonSerializer.Deserialize<T>(json, Options);
+            ModelContext.SetForResponse(value, client, requestOptions);
+            return value;
         }
     }
 }

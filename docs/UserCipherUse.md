@@ -37,6 +37,16 @@ Task<FilesList<UserCipherUse>> UserCipherUse.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<UserCipherUse> client.UserCipherUses.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID. If provided, will return uses for this user.

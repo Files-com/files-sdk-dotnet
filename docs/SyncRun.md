@@ -79,6 +79,16 @@ Task<FilesList<SyncRun>> SyncRun.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<SyncRun> client.SyncRuns.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -101,6 +111,17 @@ Task<SyncRun> SyncRun.Find(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<SyncRun> client.SyncRuns.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 

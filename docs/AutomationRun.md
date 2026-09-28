@@ -86,6 +86,16 @@ Task<FilesList<AutomationRun>> AutomationRun.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<AutomationRun> client.AutomationRuns.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
@@ -108,6 +118,17 @@ Task<AutomationRun> AutomationRun.Find(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AutomationRun> client.AutomationRuns.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation Run ID.
@@ -122,6 +143,17 @@ Task<AutomationExecutionNode> AutomationRun.FindNode(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AutomationExecutionNode> client.AutomationRuns.FindNodeAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -143,6 +175,17 @@ Task<AutomationRun> AutomationRun.Cancel(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AutomationRun> client.AutomationRuns.CancelAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation Run ID.
@@ -157,6 +200,17 @@ Task<AutomationRun> AutomationRun.Rerun(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AutomationRun> client.AutomationRuns.RerunAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
 )
 ```
 
@@ -179,6 +233,8 @@ var parameters = new Dictionary<string, object>();
 AutomationRun.Cancel
 ```
 
+`CancelAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation Run ID.
@@ -197,6 +253,8 @@ parameters.Add("node_id", "node_id");
 
 AutomationRun.Rerun(parameters);
 ```
+
+`RerunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

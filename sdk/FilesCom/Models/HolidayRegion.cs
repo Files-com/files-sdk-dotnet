@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -49,9 +50,14 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -95,6 +101,16 @@ namespace FilesCom.Models
             Dictionary<string, object> options = null
         )
         {
+            return GetSupportedCore(FilesClient.Instance, parameters, options);
+        }
+
+        internal static FilesList<HolidayRegion> GetSupportedCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
@@ -107,9 +123,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
 
-            return new FilesList<HolidayRegion>($"/holiday_regions/supported", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<HolidayRegion>(client, $"/holiday_regions/supported", System.Net.Http.HttpMethod.Get, parameters, options);
         }
-
 
     }
 }

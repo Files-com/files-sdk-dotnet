@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public Session() : this(null, null) { }
 
         public Session(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -73,9 +75,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -167,7 +175,12 @@ namespace FilesCom.Models
         }
 
 
-        public async Task Save()
+        public Task Save()
+        {
+            return SaveAsync(CancellationToken.None);
+        }
+
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
@@ -175,7 +188,7 @@ namespace FilesCom.Models
             }
             else
             {
-                var newObj = await Session.Create(this.attributes, this.options);
+                var newObj = await Session.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -187,10 +200,21 @@ namespace FilesCom.Models
         ///   otp - string - If this user has a 2FA device, provide its OTP or code here.
         ///   partial_session_id - string - Identifier for a partially-completed login
         /// </summary>
-        public static async Task<Session> Create(
+        public static Task<Session> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<Session> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -213,11 +237,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: partial_session_id must be of type string", "parameters[\"partial_session_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/sessions", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/sessions", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Session>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Session>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -225,29 +249,40 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
 
-            await FilesClient.SendRequest($"/sessions", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/sessions", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

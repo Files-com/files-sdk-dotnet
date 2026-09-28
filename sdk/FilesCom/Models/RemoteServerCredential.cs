@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public RemoteServerCredential() : this(null, null) { }
 
         public RemoteServerCredential(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -197,9 +199,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -635,7 +643,55 @@ namespace FilesCom.Models
         ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   wasabi_secret_key - string - Wasabi: Secret Key
         /// </summary>
-        public async Task<RemoteServerCredential> Update(Dictionary<string, object> parameters)
+        public Task<RemoteServerCredential> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   name - string - Internal name for your reference
+        ///   description - string - Internal description for your reference
+        ///   server_type - string - Remote server type.  Remote Server Credentials are only valid for a single type of Remote Server.
+        ///   aws_access_key - string - AWS Access Key.
+        ///   s3_assume_role_arn - string - AWS IAM Role ARN for AssumeRole authentication.
+        ///   s3_assume_role_duration_seconds - int64 - Session duration in seconds for AssumeRole authentication (900-43200).
+        ///   cloudflare_access_key - string - Cloudflare: Access Key.
+        ///   filebase_access_key - string - Filebase: Access Key.
+        ///   google_cloud_storage_s3_compatible_access_key - string - Google Cloud Storage: S3-compatible Access Key.
+        ///   linode_access_key - string - Linode: Access Key
+        ///   s3_compatible_access_key - string - S3-compatible: Access Key
+        ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
+        ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
+        ///   username - string - Remote server username.
+        ///   wasabi_access_key - string - Wasabi: Access Key.
+        ///   password - string - Password, if needed.
+        ///   private_key - string - Private key, if needed.
+        ///   private_key_passphrase - string - Passphrase for private key if needed.
+        ///   aws_secret_key - string - AWS: secret key.
+        ///   azure_blob_storage_access_key - string - Azure Blob Storage: Access Key
+        ///   azure_blob_storage_sas_token - string - Azure Blob Storage: Shared Access Signature (SAS) token
+        ///   azure_files_storage_access_key - string - Azure File Storage: Access Key
+        ///   azure_files_storage_sas_token - string - Azure File Storage: Shared Access Signature (SAS) token
+        ///   backblaze_b2_application_key - string - Backblaze B2 Cloud Storage: applicationKey
+        ///   backblaze_b2_key_id - string - Backblaze B2 Cloud Storage: keyID
+        ///   cloudflare_secret_key - string - Cloudflare: Secret Key
+        ///   filebase_secret_key - string - Filebase: Secret Key
+        ///   google_cloud_storage_credentials_json - string - Google Cloud Storage: JSON file that contains the private key. To generate see https://cloud.google.com/storage/docs/json_api/v1/how-tos/authorizing#APIKey
+        ///   google_cloud_storage_s3_compatible_secret_key - string - Google Cloud Storage: S3-compatible secret key
+        ///   linode_secret_key - string - Linode: Secret Key
+        ///   s3_compatible_secret_key - string - S3-compatible: Secret Key
+        ///   sharepoint_client_certificate - string - SharePoint: PEM-encoded certificate and unencrypted private key for app-only authentication.
+        ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
+        ///   wasabi_secret_key - string - Wasabi: Secret Key
+        /// </summary>
+        public Task<RemoteServerCredential> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<RemoteServerCredential> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -789,11 +845,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_server_credentials/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_server_credentials/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -801,10 +860,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -822,24 +905,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/remote_server_credentials/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_server_credentials/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await RemoteServerCredential.Create(this.attributes, this.options);
+                var newObj = await RemoteServerCredential.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -856,6 +943,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<RemoteServerCredential> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<RemoteServerCredential> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -882,26 +988,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
             }
 
-            return new FilesList<RemoteServerCredential>($"/remote_server_credentials", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<RemoteServerCredential> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<RemoteServerCredential>(client, $"/remote_server_credentials", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Remote Server Credential ID.
         /// </summary>
-        public static async Task<RemoteServerCredential> Find(
+        public static Task<RemoteServerCredential> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<RemoteServerCredential> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<RemoteServerCredential> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -924,25 +1041,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_server_credentials/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_server_credentials/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<RemoteServerCredential> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -984,10 +1092,21 @@ namespace FilesCom.Models
         ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         ///   copy_values_from_credential_id - int64 - ID of Remote Server Credential to copy omitted values from.
         /// </summary>
-        public static async Task<RemoteServerCredential> Create(
+        public static Task<RemoteServerCredential> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteServerCredential> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1138,18 +1257,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: copy_values_from_credential_id must be of type Nullable<Int64>", "parameters[\"copy_values_from_credential_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_server_credentials", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_server_credentials", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Parameters:
@@ -1188,10 +1306,21 @@ namespace FilesCom.Models
         ///   sharepoint_client_secret - string - SharePoint: Microsoft Entra application client secret for app-only authentication.
         ///   wasabi_secret_key - string - Wasabi: Secret Key
         /// </summary>
-        public static async Task<RemoteServerCredential> Update(
+        public static Task<RemoteServerCredential> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteServerCredential> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1350,11 +1479,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/remote_server_credentials/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/remote_server_credentials/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteServerCredential>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -1362,13 +1491,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1391,16 +1539,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/remote_server_credentials/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_server_credentials/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

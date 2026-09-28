@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public User() : this(null, null) { }
 
         public User(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -445,9 +447,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -1507,7 +1515,21 @@ namespace FilesCom.Models
         /// <summary>
         /// Unlock user who has been locked out due to failed logins
         /// </summary>
-        public async Task Unlock(Dictionary<string, object> parameters)
+        public Task Unlock(Dictionary<string, object> parameters)
+        {
+            return UnlockCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Unlock user who has been locked out due to failed logins
+        /// </summary>
+        public Task UnlockAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UnlockCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task UnlockCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1525,14 +1547,31 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Resend user welcome email
         /// </summary>
-        public async Task ResendWelcomeEmail(Dictionary<string, object> parameters)
+        public Task ResendWelcomeEmail(Dictionary<string, object> parameters)
+        {
+            return ResendWelcomeEmailCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Resend user welcome email
+        /// </summary>
+        public Task ResendWelcomeEmailAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return ResendWelcomeEmailCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task ResendWelcomeEmailCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1550,14 +1589,31 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
-        public async Task User2faReset(Dictionary<string, object> parameters)
+        public Task User2faReset(Dictionary<string, object> parameters)
+        {
+            return User2faResetCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+        /// </summary>
+        public Task User2faResetAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return User2faResetCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task User2faResetCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1575,9 +1631,12 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -1653,7 +1712,92 @@ namespace FilesCom.Models
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
-        public async Task<User> Update(Dictionary<string, object> parameters)
+        public Task<User> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   avatar_file - file - An image file for your user avatar.
+        ///   avatar_delete - boolean - If true, the avatar will be deleted.
+        ///   change_password - string - Used for changing a password on an existing user.
+        ///   change_password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
+        ///   email - string - User's email.
+        ///   grant_permission - string - Permission to grant on the User Root upon user creation. Can be blank or `full`, `read`, `write`, `list`, `read+write`, or `list+write`
+        ///   group_id - int64 - Group ID to associate this user with.
+        ///   group_ids - string - A list of group ids to associate this user with.  Comma delimited.
+        ///   imported_password_hash - string - Pre-calculated hash of the user's password. If supplied, this will be used to authenticate the user on first login. Supported hash methods are MD5, SHA1, and SHA256.
+        ///   password - string - User password.
+        ///   password_confirmation - string - Optional, but if provided, we will ensure that it matches the value sent in `password`.
+        ///   announcements_read - boolean - Signifies that the user has read all the announcements in the UI.
+        ///   ai_assistant_personality_id - int64 - AI Assistant Personality ID assigned directly to this user, if any.
+        ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
+        ///   attachments_permission - boolean - DEPRECATED: If `true`, the user can user create Bundles (aka Share Links). Use the bundle permission instead.
+        ///   authenticate_until - string - Scheduled Date/Time at which user will be deactivated
+        ///   authentication_method - string - How is this user authenticated?
+        ///   billing_permission - boolean - Allow this user to perform operations on the account, payments, and invoices?
+        ///   bypass_user_lifecycle_rules - boolean - Exempt this user from user lifecycle rules?
+        ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
+        ///   dav_permission - boolean - Can the user connect with WebDAV?
+        ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
+        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
+        ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
+        ///   filesystem_layout - string - File system layout
+        ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
+        ///   header_text - string - Text to display to the user in the header of the UI
+        ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned directly to this user, if any.
+        ///   language - string - Preferred language
+        ///   notification_daily_send_time - int64 - Hour of the day at which daily notifications should be sent. Can be in range 0 to 23
+        ///   name - string - User's full name
+        ///   company - string - User's company
+        ///   notes - string - Any internal notes on the user
+        ///   office_integration_enabled - boolean - Enable integration with Office for the web?
+        ///   partner_admin - boolean - Is this user a Partner administrator?
+        ///   partner_id - int64 - Partner ID if this user belongs to a Partner
+        ///   password_validity_days - int64 - Number of days to allow user to use the same password
+        ///   primary_group_id - int64 - Primary group ID for Group Admin scoping
+        ///   readonly_site_admin - boolean - Is the user an allowed to view all (non-billing) site configuration for this site?
+        ///   receive_admin_alerts - boolean - Deprecated. Use notify_on_all_site_warnings and granular failure notification preferences instead.
+        ///   notify_on_all_site_warnings - boolean - Should the user receive site warnings via email?
+        ///   notify_on_all_sso_failures - boolean - Should the user receive sso/scim/ldap configuration/sync failures via email?
+        ///   notify_on_all_user_security_events - boolean - Should the user receive user security events via email?
+        ///   notify_on_all_pending_work_failures - boolean - Should the user receive pending work failures via email?
+        ///   notify_on_all_siem_http_destination_failures - boolean - Should the user receive siem failures via email?
+        ///   notify_on_all_sync_failures - boolean - Should the user receive sync failures via email?
+        ///   notify_on_all_automation_failures - boolean - Should the user receive automation failures via email?
+        ///   notify_on_all_expectation_failures - boolean - Should the user receive expectation failures and misses via email?
+        ///   require_login_by - string - Require user to login by specified date otherwise it will be disabled.
+        ///   require_password_change - boolean - Is a password change required upon next user login?
+        ///   responsible_group_id - int64 - ID of the internal Group responsible for this Partner User, overriding the Partner default.
+        ///   responsible_user_id - int64 - ID of the internal User responsible for this Partner User, overriding the Partner default.
+        ///   restapi_permission - boolean - Can this user access the Web app, Desktop app, SDKs, or REST API?  (All of these tools use the API internally, so this is one unified permission set.)
+        ///   s3_compatible_endpoint_permission - boolean - Can the user access the S3-compatible endpoint? Defaults to true.
+        ///   self_managed - boolean - Does this user manage it's own credentials or is it a shared/bot user?
+        ///   sftp_permission - boolean - Can the user access with SFTP?
+        ///   site_admin - boolean - Is the user an administrator for this site?
+        ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
+        ///   ssl_required - string - SSL required setting
+        ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
+        ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
+        ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
+        ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
+        ///   time_zone - string - User time zone
+        ///   user_root - string - If filesystem layout is user_root, this path is the root path the user is fixed to for all interfaces. If the filesystem layout is site_root or partner_root, this acts as a root folder only for FTP and SFTP (SFTP applicability also requires a site-wide setting to be set). For partner_root layout, this path is relative to the Partner root folder for all callers and blank opts out of an additional protocol root. In this situation, this path is not applied to the API, Desktop, or Web interface.
+        ///   user_home - string - Home folder for FTP/SFTP. For users with the partner_root filesystem layout, this path is relative to the Partner root folder. In all other cases, it is an absolute path. Only applies to FTP and SFTP, and not any other interface.
+        ///   workspace_admin - boolean - Is the user a Workspace administrator?  Applicable only to the workspace ID related to this user, if one is set.
+        ///   username - string - User's username
+        ///   workspace_id - int64 - Workspace ID. Only Site Administrators can change this field. Values supplied by Workspace Administrators, Group Administrators, or other non-Site Administrators using `/user` are ignored.
+        ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
+        ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
+        /// </summary>
+        public Task<User> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<User> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1955,11 +2099,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: convert_to_partner_user must be of type bool", "parameters[\"convert_to_partner_user\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -1967,12 +2114,38 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// Parameters:
         ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1994,24 +2167,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: new_owner_id must be of type Nullable<Int64>", "parameters[\"new_owner_id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await User.Create(this.attributes, this.options);
+                var newObj = await User.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -2035,6 +2212,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<User> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<User> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2089,26 +2285,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: search must be of type string", "parameters[\"search\"]");
             }
 
-            return new FilesList<User>($"/users", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<User> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<User>(client, $"/users", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - User ID.
         /// </summary>
-        public static async Task<User> Find(
+        public static Task<User> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<User> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<User> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2131,25 +2338,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<User> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -2224,10 +2422,21 @@ namespace FilesCom.Models
         ///   username (required) - string - User's username
         ///   workspace_id - int64 - Workspace ID
         /// </summary>
-        public static async Task<User> Create(
+        public static Task<User> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<User> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2514,11 +2723,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/users", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/users", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -2526,14 +2735,24 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Unlock user who has been locked out due to failed logins
         /// </summary>
-        public static async Task Unlock(
+        public static Task Unlock(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UnlockCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task UnlockCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2556,17 +2775,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Resend user welcome email
         /// </summary>
-        public static async Task ResendWelcomeEmail(
+        public static Task ResendWelcomeEmail(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ResendWelcomeEmailCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task ResendWelcomeEmailCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2589,17 +2819,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
-        public static async Task User2faReset(
+        public static Task User2faReset(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return User2faResetCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task User2faResetCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -2622,9 +2863,9 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -2700,10 +2941,21 @@ namespace FilesCom.Models
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
-        public static async Task<User> Update(
+        public static Task<User> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<User> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -3010,11 +3262,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: convert_to_partner_user must be of type bool", "parameters[\"convert_to_partner_user\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -3022,15 +3274,34 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// Parameters:
         ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -3057,16 +3328,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: new_owner_id must be of type Nullable<Int64>", "parameters[\"new_owner_id\"]");
             }
 
-            await FilesClient.SendRequest($"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

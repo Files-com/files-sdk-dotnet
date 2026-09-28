@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "files-cli", "files-cli\files-cli.csproj", "{C852FA95-75ED-40A7-AD18-99A9259E2ED9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client-journey", "client-journey\client-journey.csproj", "{6444DED7-C04D-4228-A637-C3D70A56FE39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{C852FA95-75ED-40A7-AD18-99A9259E2ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C852FA95-75ED-40A7-AD18-99A9259E2ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C852FA95-75ED-40A7-AD18-99A9259E2ED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6444DED7-C04D-4228-A637-C3D70A56FE39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6444DED7-C04D-4228-A637-C3D70A56FE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6444DED7-C04D-4228-A637-C3D70A56FE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6444DED7-C04D-4228-A637-C3D70A56FE39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

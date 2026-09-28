@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public Folder() : this(null, null) { }
 
         public Folder(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -189,9 +191,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[] { DirectConnectionInfo, Preview }; }
         }
 
         public void SetOption(string name, object value)
@@ -575,9 +583,14 @@ namespace FilesCom.Models
         }
 
 
-        public async Task Save()
+        public Task Save()
         {
-            var newObj = await Folder.Create(Path, this.attributes, this.options);
+            return SaveAsync(CancellationToken.None);
+        }
+
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
+        {
+            var newObj = await Folder.CreateCore(new OperationContext(FilesClient.Bind(ref client)), Path, this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
             this.attributes = newObj.getAttributes();
         }
 
@@ -600,6 +613,16 @@ namespace FilesCom.Models
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListForCore(FilesClient.Instance, path, parameters, options);
+        }
+
+        internal static FilesList<RemoteFile> ListForCore(
+            FilesClient client,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -666,9 +689,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: modified_at_datetime must be of type string", "parameters[\"modified_at_datetime\"]");
             }
 
-            return new FilesList<RemoteFile>($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<RemoteFile>(client, $"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
-
 
         /// <summary>
         /// Parameters:
@@ -676,10 +698,21 @@ namespace FilesCom.Models
         ///   mkdir_parents - boolean - Create parent directories if they do not exist?
         ///   provided_mtime - string - User provided modification time.
         /// </summary>
-        public static async Task<RemoteFile> Create(
+        public static Task<RemoteFile> Create(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<RemoteFile> CreateCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -710,18 +743,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
     }
 }

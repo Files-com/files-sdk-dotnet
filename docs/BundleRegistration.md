@@ -51,6 +51,16 @@ Task<FilesList<BundleRegistration>> BundleRegistration.List(
 )
 ```
 
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<BundleRegistration> client.BundleRegistrations.List(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
 ### Parameters
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.

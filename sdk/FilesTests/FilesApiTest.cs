@@ -1,7 +1,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,6 +72,26 @@ namespace FilesTests
             {
                 BaseAddress = new Uri(baseUrl)
             };
+        }
+    }
+
+    // Answers every request with a not-found error whose body is exactly the given bytes, with the given charset.
+    public class ErrorBodyHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly byte[] body;
+        private readonly string charset;
+
+        public ErrorBodyHttpMessageHandler(byte[] body, string charset)
+        {
+            this.body = body;
+            this.charset = charset;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new ByteArrayContent(body) };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = charset };
+            return Task.FromResult(response);
         }
     }
 
@@ -280,6 +304,54 @@ namespace FilesTests
             Assert.AreEqual(1, handler.Requests.Count);
         }
 
+        // Error bodies are decoded as HttpContent decodes text: by the declared charset, else by a byte order mark,
+        // else as UTF-8. API, upload and download errors all read them the same way.
+        [DataTestMethod]
+        [DataRow("utf-8", "utf-8", false, DisplayName = "declared UTF-8")]
+        [DataRow("utf-16", "utf-16", false, DisplayName = "declared UTF-16 without a byte order mark")]
+        [DataRow("iso-8859-1", "iso-8859-1", false, DisplayName = "declared Latin-1")]
+        [DataRow("utf-16", null, true, DisplayName = "UTF-16 byte order mark without a charset")]
+        [DataRow("utf-8", null, false, DisplayName = "no charset or byte order mark")]
+        public async Task ErrorResponsesKeepTheirTypeAndTextInTheirCharset(string encodingName, string charset, bool byteOrderMark)
+        {
+            Encoding encoding = Encoding.GetEncoding(encodingName);
+            byte[] body = encoding.GetBytes(@"{""type"":""not-found"",""error"":""café"",""http-code"":404}");
+            if (byteOrderMark)
+            {
+                body = encoding.GetPreamble().Concat(body).ToArray();
+            }
+            FilesApiService service = ServiceAnswering(body, charset);
+
+            NotFoundException apiError = await Assert.ThrowsExceptionAsync<NotFoundException>(() =>
+                service.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
+            NotFoundException uploadError = await Assert.ThrowsExceptionAsync<NotFoundException>(() =>
+                service.ChunkUpload(HttpMethod.Put, "http://example.test/part", new MemoryStream(new byte[] { 1 }), 1));
+            NotFoundException downloadError = await Assert.ThrowsExceptionAsync<NotFoundException>(() =>
+                service.StreamDownload("http://example.test/file", new MemoryStream()));
+
+            Assert.AreEqual("café", apiError.Message);
+            Assert.AreEqual("Transfer request failed (HTTP 404)", uploadError.Message);
+            Assert.AreEqual("Transfer request failed (HTTP 404)", downloadError.Message);
+        }
+
+        [TestMethod]
+        public async Task ErrorResponseWithAnUnknownCharsetFailsAsHttpContentDoes()
+        {
+            FilesApiService service = ServiceAnswering(Encoding.UTF8.GetBytes(@"{""type"":""not-found"",""error"":""Not Found""}"), "no-such-charset");
+
+            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                service.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
+            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                service.ChunkUpload(HttpMethod.Put, "http://example.test/part", new MemoryStream(new byte[] { 1 }), 1));
+            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+                service.StreamDownload("http://example.test/file", new MemoryStream()));
+        }
+
+        private static FilesApiService ServiceAnswering(byte[] errorBody, string charset)
+        {
+            new FilesClient(new FilesConfiguration { ApiKey = "my-key", BaseUrl = "http://example.test", MaxNetworkRetries = 0 });
+            return new FilesApiService(new CapturingHttpClientFactory(new ErrorBodyHttpMessageHandler(errorBody, charset), "http://example.test"));
+        }
     }
 
     [TestClass]

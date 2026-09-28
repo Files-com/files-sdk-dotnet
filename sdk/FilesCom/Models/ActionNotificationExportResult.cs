@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -81,9 +82,14 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -218,6 +224,25 @@ namespace FilesCom.Models
             Dictionary<string, object> options = null
         )
         {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<ActionNotificationExportResult> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<ActionNotificationExportResult> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
@@ -242,16 +267,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: action_notification_export_id must be of type Nullable<Int64>", "parameters[\"action_notification_export_id\"]");
             }
 
-            return new FilesList<ActionNotificationExportResult>($"/action_notification_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<ActionNotificationExportResult> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<ActionNotificationExportResult>(client, $"/action_notification_export_results", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
     }

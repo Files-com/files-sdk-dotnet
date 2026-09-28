@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public Bundle() : this(null, null) { }
 
         public Bundle(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -261,9 +263,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[] { FormFieldSet, WatermarkAttachment, Bundlepaths }; }
         }
 
         public void SetOption(string name, object value)
@@ -848,7 +856,26 @@ namespace FilesCom.Models
         ///   note - string - Note to include in email.
         ///   recipients - array(object) - A list of recipients to share this bundle with. Required unless `to` is used.
         /// </summary>
-        public async Task Share(Dictionary<string, object> parameters)
+        public Task Share(Dictionary<string, object> parameters)
+        {
+            return ShareCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Send email(s) with a link to bundle
+        ///
+        /// Parameters:
+        ///   to - array(string) - A list of email addresses to share this bundle with. Required unless `recipients` is used.
+        ///   note - string - Note to include in email.
+        ///   recipients - array(object) - A list of recipients to share this bundle with. Required unless `to` is used.
+        /// </summary>
+        public Task ShareAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return ShareCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task ShareCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -878,9 +905,12 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: recipients must be of type object[]", "parameters[\"recipients\"]");
             }
 
-            await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}/share", System.Net.Http.HttpMethod.Post, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}/share", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -917,7 +947,53 @@ namespace FilesCom.Models
         ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public async Task<Bundle> Update(Dictionary<string, object> parameters)
+        public Task<Bundle> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   paths - array(string) - A list of paths to include in this bundle.
+        ///   password - string - Password for this bundle.
+        ///   bypasses_site_expiration_rules - boolean - If true, this Share Link bypasses site-wide expiration rules. Only site admins may set this.
+        ///   form_field_set_id - int64 - Id of Form Field Set to use with this bundle
+        ///   clickwrap_id - int64 - ID of the clickwrap to use with this bundle.
+        ///   code - string - Bundle code.  This code forms the end part of the Public URL.
+        ///   create_snapshot - boolean - If true, create a snapshot of this bundle's contents.
+        ///   description - string - Public description
+        ///   dont_separate_submissions_by_folder - boolean - Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
+        ///   expires_at - string - Explicit Bundle expiration date/time. If not set, the site-wide expiration setting may apply.
+        ///   finalize_snapshot - boolean - If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
+        ///   inbox_id - int64 - ID of the associated inbox, if available.
+        ///   max_uses - int64 - Maximum number of times bundle can be accessed
+        ///   group_id - int64 - Owning group ID. If set, members of this group can view, edit, and share this Share Link.
+        ///   internal_name - string - Internal name for identifying this Share Link.
+        ///   note - string - Bundle internal note
+        ///   path_template - string - Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
+        ///   path_template_time_zone - string - Timezone to use when rendering timestamps in path templates.
+        ///   permissions - string - Permissions that apply to Folders in this Share Link.
+        ///   require_registration - boolean - Show a registration page that captures the downloader's name and email address?
+        ///   require_share_recipient - boolean - Only allow access to recipients who have explicitly received the share via an email sent through the Files.com UI?
+        ///   send_one_time_password_to_recipient_at_registration - boolean - If true, require_share_recipient bundles will send a one-time password to the recipient when they register. Cannot be enabled if the bundle has a password set.
+        ///   send_email_receipt_to_uploader - boolean - Send delivery receipt to the uploader. Note: For writable share only
+        ///   skip_company - boolean - BundleRegistrations can be saved without providing company?
+        ///   start_access_on_date - string - Date when share will start to be accessible. If `nil` access granted right after create.
+        ///   skip_email - boolean - BundleRegistrations can be saved without providing email?
+        ///   skip_name - boolean - BundleRegistrations can be saved without providing name?
+        ///   user_id - int64 - The owning user id. Only site admins can set this.
+        ///   watermark_attachment_delete - boolean - If true, will delete the file stored in watermark_attachment
+        ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
+        ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
+        ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
+        /// </summary>
+        public Task<Bundle> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<Bundle> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1063,11 +1139,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -1075,10 +1154,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1096,24 +1199,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await Bundle.Create(this.attributes, this.options);
+                var newObj = await Bundle.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -1136,6 +1243,25 @@ namespace FilesCom.Models
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<Bundle> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<Bundle> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1186,16 +1312,7 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: deleted must be of type bool", "parameters[\"deleted\"]");
             }
 
-            return new FilesList<Bundle>($"/bundles", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<Bundle> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<Bundle>(client, $"/bundles", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -1203,10 +1320,30 @@ namespace FilesCom.Models
         ///   id (required) - int64 - Bundle ID.
         ///   deleted - boolean - If true, show a deleted Share Link.
         /// </summary>
-        public static async Task<Bundle> Find(
+        public static Task<Bundle> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<Bundle> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<Bundle> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1233,25 +1370,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: deleted must be of type bool", "parameters[\"deleted\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<Bundle> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -1289,10 +1417,21 @@ namespace FilesCom.Models
         ///   watermark_attachment_file - file - Preview watermark image applied to all bundle items.
         ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         /// </summary>
-        public static async Task<Bundle> Create(
+        public static Task<Bundle> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<Bundle> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1431,18 +1570,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: watermark_value must be of type object", "parameters[\"watermark_value\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundles", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundles", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Send email(s) with a link to bundle
@@ -1452,10 +1590,21 @@ namespace FilesCom.Models
         ///   note - string - Note to include in email.
         ///   recipients - array(object) - A list of recipients to share this bundle with. Required unless `to` is used.
         /// </summary>
-        public static async Task Share(
+        public static Task Share(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return ShareCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task ShareCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1490,9 +1639,9 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: recipients must be of type object[]", "parameters[\"recipients\"]");
             }
 
-            await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}/share", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}/share", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -1529,10 +1678,21 @@ namespace FilesCom.Models
         ///   watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public static async Task<Bundle> Update(
+        public static Task<Bundle> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<Bundle> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1683,11 +1843,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<Bundle>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -1695,13 +1855,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1724,16 +1903,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }

@@ -41,6 +41,17 @@ Task<WebhookTest> WebhookTest.Create(
 )
 ```
 
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<WebhookTest> client.WebhookTests.CreateAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
 ### Parameters
 
 * `url` (string): Required - URL for testing the webhook.

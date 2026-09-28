@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FilesCom.Models
@@ -12,6 +13,7 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
         public SiemHttpDestination() : this(null, null) { }
 
         public SiemHttpDestination(Dictionary<string, object> attributes, Dictionary<string, object> options)
@@ -289,9 +291,15 @@ namespace FilesCom.Models
             return (this.options.ContainsKey(name) ? this.options[name] : null);
         }
 
-        void IModel.SetOptions(Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
         {
+            this.client = client;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+        }
+
+        IEnumerable<object> IModel.NestedModels
+        {
+            get { return new object[0]; }
         }
 
         public void SetOption(string name, object value)
@@ -970,7 +978,54 @@ namespace FilesCom.Models
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
-        public async Task<SiemHttpDestination> Update(Dictionary<string, object> parameters)
+        public Task<SiemHttpDestination> Update(Dictionary<string, object> parameters)
+        {
+            return UpdateCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   name - string - Name for this Destination
+        ///   additional_headers - object - Additional HTTP Headers included in calls to the destination URL
+        ///   sending_active - boolean - Whether this SIEM HTTP Destination is currently being sent to or not
+        ///   generic_payload_type - string - Applicable only for destination type: generic. Indicates the type of HTTP body. Can be json_newline or json_array. json_newline is multiple log entries as JSON separated by newlines. json_array is a single JSON array containing multiple log entries as JSON.
+        ///   file_destination_path - string - Applicable only for destination type: file. Destination folder path on Files.com.
+        ///   file_format - string - Applicable only for destination type: file. Generated file format.
+        ///   file_interval_minutes - int64 - Applicable only for destination type: file. Interval, in minutes, between file deliveries. Valid values are 5, 10, 15, 20, 30, 60, 90, 180, 240, 360.
+        ///   splunk_token - string - Applicable only for destination types: splunk, splunk_compatible. Authentication token for the destination.
+        ///   crowdstrike_token - string - Applicable only for destination type: crowdstrike. Authentication token provided by Crowdstrike.
+        ///   azure_dcr_immutable_id - string - Applicable only for destination types: azure, azure_legacy. Immutable ID of the Data Collection Rule.
+        ///   azure_stream_name - string - Applicable only for destination type: azure. Name of the stream in the DCR that represents the destination table.
+        ///   azure_oauth_client_credentials_tenant_id - string - Applicable only for destination types: azure, azure_legacy. Client Credentials OAuth Tenant ID.
+        ///   azure_oauth_client_credentials_client_id - string - Applicable only for destination types: azure, azure_legacy. Client Credentials OAuth Client ID.
+        ///   azure_oauth_client_credentials_client_secret - string - Applicable only for destination type: azure. Client Credentials OAuth Client Secret.
+        ///   qradar_username - string - Applicable only for destination type: qradar. Basic auth username provided by QRadar.
+        ///   qradar_password - string - Applicable only for destination type: qradar. Basic auth password provided by QRadar.
+        ///   solar_winds_token - string - Applicable only for destination type: solar_winds. Authentication token provided by Solar Winds.
+        ///   new_relic_api_key - string - Applicable only for destination type: new_relic. API key provided by New Relic.
+        ///   datadog_api_key - string - Applicable only for destination type: datadog. API key provided by Datadog.
+        ///   action_send_enabled - boolean - Whether or not sending is enabled for action logs.
+        ///   sftp_action_send_enabled - boolean - Whether or not sending is enabled for sftp_action logs.
+        ///   ftp_action_send_enabled - boolean - Whether or not sending is enabled for ftp_action logs.
+        ///   web_dav_action_send_enabled - boolean - Whether or not sending is enabled for web_dav_action logs.
+        ///   sync_send_enabled - boolean - Whether or not sending is enabled for sync logs.
+        ///   outbound_connection_send_enabled - boolean - Whether or not sending is enabled for outbound_connection logs.
+        ///   automation_send_enabled - boolean - Whether or not sending is enabled for automation logs.
+        ///   api_request_send_enabled - boolean - Whether or not sending is enabled for api_request logs.
+        ///   public_hosting_request_send_enabled - boolean - Whether or not sending is enabled for public_hosting_request logs.
+        ///   email_send_enabled - boolean - Whether or not sending is enabled for email logs.
+        ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
+        ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
+        ///   destination_type - string - Destination Type
+        ///   destination_url - string - Destination Url
+        /// </summary>
+        public Task<SiemHttpDestination> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<SiemHttpDestination> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1120,11 +1175,14 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, requestOptions);
             }
             catch (JsonException)
             {
@@ -1132,10 +1190,34 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// </summary>
+        public Task Delete(Dictionary<string, object> parameters)
+        {
+            return DeleteCore(parameters, CancellationToken.None);
+        }
 
         /// <summary>
         /// </summary>
-        public async Task Delete(Dictionary<string, object> parameters)
+        public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+        public async void Destroy(Dictionary<string, object> parameters)
+        {
+            Delete(parameters);
+        }
+
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>.
+        /// </summary>
+        public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DeleteAsync(parameters, cancellationToken);
+        }
+
+        private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             parameters["id"] = attributes["id"];
@@ -1153,24 +1235,28 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            response.Dispose();
         }
 
-        public async void Destroy(Dictionary<string, object> parameters)
+
+        public Task Save()
         {
-            Delete(parameters);
+            return SaveAsync(CancellationToken.None);
         }
 
-
-        public async Task Save()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await this.Update(this.attributes);
+                await UpdateCore(this.attributes, cancellationToken);
             }
             else
             {
-                var newObj = await SiemHttpDestination.Create(this.attributes, this.options);
+                var newObj = await SiemHttpDestination.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
                 this.attributes = newObj.getAttributes();
             }
         }
@@ -1186,6 +1272,25 @@ namespace FilesCom.Models
             Dictionary<string, object> options = null
         )
         {
+            return ListCore(FilesClient.Instance, parameters, options);
+        }
+
+        public static FilesList<SiemHttpDestination> All(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return List(parameters, options);
+        }
+
+        internal static FilesList<SiemHttpDestination> ListCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
 
@@ -1198,26 +1303,37 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
             }
 
-            return new FilesList<SiemHttpDestination>($"/siem_http_destinations", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        public static FilesList<SiemHttpDestination> All(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return List(parameters, options);
+            return new FilesList<SiemHttpDestination>(client, $"/siem_http_destinations", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Siem Http Destination ID.
         /// </summary>
-        public static async Task<SiemHttpDestination> Find(
+        public static Task<SiemHttpDestination> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task<SiemHttpDestination> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<SiemHttpDestination> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1240,25 +1356,16 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
-        }
-
-        public static async Task<SiemHttpDestination> Get(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return await Find(id, parameters, options);
         }
 
         /// <summary>
@@ -1297,10 +1404,21 @@ namespace FilesCom.Models
         ///   destination_type (required) - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
-        public static async Task<SiemHttpDestination> Create(
+        public static Task<SiemHttpDestination> Create(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return CreateCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<SiemHttpDestination> CreateCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1443,18 +1561,17 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/siem_http_destinations", System.Net.Http.HttpMethod.Post, parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
                 throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
             }
         }
-
 
         /// <summary>
         /// Parameters:
@@ -1493,10 +1610,21 @@ namespace FilesCom.Models
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
         ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         /// </summary>
-        public static async Task SendTestEntry(
+        public static Task SendTestEntry(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return SendTestEntryCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task SendTestEntryCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1639,9 +1767,9 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
             }
 
-            await FilesClient.SendRequest($"/siem_http_destinations/send_test_entry", System.Net.Http.HttpMethod.Post, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/siem_http_destinations/send_test_entry", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            response.Dispose();
         }
-
 
         /// <summary>
         /// Parameters:
@@ -1679,10 +1807,21 @@ namespace FilesCom.Models
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
-        public static async Task<SiemHttpDestination> Update(
+        public static Task<SiemHttpDestination> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return UpdateCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<SiemHttpDestination> UpdateCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1837,11 +1976,11 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
             }
 
-            string responseJson = await FilesClient.SendStringRequest($"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             try
             {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, options);
+                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
@@ -1849,13 +1988,32 @@ namespace FilesCom.Models
             }
         }
 
-
         /// <summary>
         /// </summary>
-        public static async Task Delete(
+        public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
+        )
+        {
+            return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        public static Task Destroy(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Delete(id, parameters, options);
+        }
+
+        internal static async Task DeleteCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
         )
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
@@ -1878,16 +2036,8 @@ namespace FilesCom.Models
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
             }
 
-            await FilesClient.SendRequest($"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options);
-        }
-
-        public static async Task Destroy(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            await Delete(id, parameters, options);
+            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
+            response.Dispose();
         }
 
     }
