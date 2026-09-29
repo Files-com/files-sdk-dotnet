@@ -35,6 +35,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
+            if (!this.attributes.ContainsKey("available_to_all_workspaces"))
+            {
+                this.attributes.Add("available_to_all_workspaces", false);
+            }
+            if (!this.attributes.ContainsKey("outbound_ip_addresses"))
+            {
+                this.attributes.Add("outbound_ip_addresses", new string[0]);
+            }
             if (!this.attributes.ContainsKey("domain"))
             {
                 this.attributes.Add("domain", null);
@@ -108,6 +120,37 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// Workspace ID (0 for the default workspace).
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
+
+        /// <summary>
+        /// Allow all workspaces to use this default-workspace Custom Domain.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("available_to_all_workspaces")]
+        public bool AvailableToAllWorkspaces
+        {
+            get { return attributes["available_to_all_workspaces"] == null ? false : (bool)attributes["available_to_all_workspaces"]; }
+            set { attributes["available_to_all_workspaces"] = value; }
+        }
+
+        /// <summary>
+        /// Eligible public IP addresses for Remote Server outbound connections. Empty when this Custom Domain is not eligible for outbound selection.
+        /// </summary>
+        [JsonPropertyName("outbound_ip_addresses")]
+        public string[] OutboundIpAddresses
+        {
+            get { return (string[])attributes["outbound_ip_addresses"]; }
+            set { attributes["outbound_ip_addresses"] = value; }
         }
 
         /// <summary>
@@ -205,6 +248,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
+        ///   workspace_id - int64 - Workspace ID (0 for the default workspace).
         ///   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
         ///   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
         ///   ssl_certificate_id - int64 - Current SSL certificate ID.
@@ -217,6 +262,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
+        ///   workspace_id - int64 - Workspace ID (0 for the default workspace).
         ///   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
         ///   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
         ///   ssl_certificate_id - int64 - Current SSL certificate ID.
@@ -244,6 +291,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("available_to_all_workspaces") && !(parameters["available_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: available_to_all_workspaces must be of type bool", "parameters[\"available_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
@@ -352,7 +407,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `id`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `id` or `available_to_all_workspaces`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
         public static FilesList<CustomDomain> List(
 
@@ -393,6 +449,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
             {
                 throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+            }
+            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            {
+                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
             }
 
             return new FilesList<CustomDomain>(client, $"/custom_domains", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -524,6 +584,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
+        ///   workspace_id - int64 - Workspace ID (0 for the default workspace).
         ///   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
         ///   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
         ///   ssl_certificate_id - int64 - Current SSL certificate ID.
@@ -552,6 +614,14 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("domain") || parameters["domain"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: domain", "parameters[\"domain\"]");
+            }
+            if (parameters.ContainsKey("available_to_all_workspaces") && !(parameters["available_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: available_to_all_workspaces must be of type bool", "parameters[\"available_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {
@@ -584,6 +654,8 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
+        ///   workspace_id - int64 - Workspace ID (0 for the default workspace).
         ///   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
         ///   folder_behavior_id - int64 - Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
         ///   ssl_certificate_id - int64 - Current SSL certificate ID.
@@ -624,6 +696,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+            }
+            if (parameters.ContainsKey("available_to_all_workspaces") && !(parameters["available_to_all_workspaces"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: available_to_all_workspaces must be of type bool", "parameters[\"available_to_all_workspaces\"]");
+            }
+            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
             }
             if (parameters.ContainsKey("destination") && !(parameters["destination"] is string))
             {

@@ -62,6 +62,11 @@
   "s3_compatible_virtual_hosted_style": true,
   "s3_compatible_access_key": "example",
   "enable_dedicated_ips": true,
+  "custom_domain_id": 1,
+  "outbound_ip_addresses": [
+    "203.0.113.1",
+    "203.0.113.2"
+  ],
   "files_agent_permission_set": "read_write",
   "files_agent_root": "example",
   "files_agent_version": "example",
@@ -142,6 +147,8 @@
 * `s3_compatible_virtual_hosted_style` / `S3CompatibleVirtualHostedStyle`  (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_compatible_access_key` / `S3CompatibleAccessKey`  (string): S3-compatible: Access Key
 * `enable_dedicated_ips` / `EnableDedicatedIps`  (bool): `true` if remote server only accepts connections from dedicated IPs
+* `custom_domain_id` / `CustomDomainId`  (Nullable<Int64>): Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
+* `outbound_ip_addresses` / `OutboundIpAddresses`  (string[]): Current eligible public IP addresses for the selected Custom Domain. Any address in this list may originate a connection. Empty when no domain is selected or its configuration is unavailable. Only included in responses for a single Remote Server.
 * `files_agent_permission_set` / `FilesAgentPermissionSet`  (string): Local permissions for files agent. read_only, write_only, or read_write
 * `files_agent_root` / `FilesAgentRoot`  (string): Agent local root path
 * `files_agent_version` / `FilesAgentVersion`  (string): Files Agent version
@@ -374,6 +381,7 @@ Task<RemoteServer> client.RemoteServers.CreateAsync(
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
 * `outbound_agent_id` (Nullable<Int64>): Route traffic to outbound on a files-agent
+* `custom_domain_id` (Nullable<Int64>): Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
 * `google_cloud_storage_authentication_method` (string): Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_oauth_scope` (string): Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -513,6 +521,7 @@ Task<RemoteServer> client.RemoteServers.UpdateAsync(
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
 * `outbound_agent_id` (Nullable<Int64>): Route traffic to outbound on a files-agent
+* `custom_domain_id` (Nullable<Int64>): Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
 * `google_cloud_storage_authentication_method` (string): Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_oauth_scope` (string): Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -653,6 +662,7 @@ parameters.Add("files_agent_permission_set", "read_write");
 parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_version", "example");
 parameters.Add("outbound_agent_id", 1);
+parameters.Add("custom_domain_id", 1);
 parameters.Add("google_cloud_storage_authentication_method", "json");
 parameters.Add("google_cloud_storage_bucket", "my-bucket");
 parameters.Add("google_cloud_storage_oauth_scope", "https://www.googleapis.com/auth/devstorage.read_only");
@@ -744,6 +754,7 @@ RemoteServer.Update(parameters);
 * `files_agent_root` (string): Agent local root path
 * `files_agent_version` (string): Files Agent version
 * `outbound_agent_id` (Nullable<Int64>): Route traffic to outbound on a files-agent
+* `custom_domain_id` (Nullable<Int64>): Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
 * `google_cloud_storage_authentication_method` (string): Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
 * `google_cloud_storage_bucket` (string): Google Cloud Storage: Bucket Name
 * `google_cloud_storage_oauth_scope` (string): Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.

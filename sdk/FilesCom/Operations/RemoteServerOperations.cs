@@ -177,6 +177,7 @@ namespace FilesCom.Operations
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   custom_domain_id - int64 - Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
         ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -286,6 +287,7 @@ namespace FilesCom.Operations
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   custom_domain_id - int64 - Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
         ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.

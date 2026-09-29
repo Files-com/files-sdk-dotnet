@@ -263,6 +263,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("enable_dedicated_ips", false);
             }
+            if (!this.attributes.ContainsKey("custom_domain_id"))
+            {
+                this.attributes.Add("custom_domain_id", null);
+            }
+            if (!this.attributes.ContainsKey("outbound_ip_addresses"))
+            {
+                this.attributes.Add("outbound_ip_addresses", new string[0]);
+            }
             if (!this.attributes.ContainsKey("files_agent_permission_set"))
             {
                 this.attributes.Add("files_agent_permission_set", null);
@@ -1048,6 +1056,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
+        /// </summary>
+        [JsonPropertyName("custom_domain_id")]
+        public Nullable<Int64> CustomDomainId
+        {
+            get { return (Nullable<Int64>)attributes["custom_domain_id"]; }
+            set { attributes["custom_domain_id"] = value; }
+        }
+
+        /// <summary>
+        /// Current eligible public IP addresses for the selected Custom Domain. Any address in this list may originate a connection. Empty when no domain is selected or its configuration is unavailable. Only included in responses for a single Remote Server.
+        /// </summary>
+        [JsonPropertyName("outbound_ip_addresses")]
+        public string[] OutboundIpAddresses
+        {
+            get { return (string[])attributes["outbound_ip_addresses"]; }
+            set { attributes["outbound_ip_addresses"] = value; }
+        }
+
+        /// <summary>
         /// Local permissions for files agent. read_only, write_only, or read_write
         /// </summary>
         [JsonPropertyName("files_agent_permission_set")]
@@ -1621,6 +1649,7 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   custom_domain_id - int64 - Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
         ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -1711,6 +1740,7 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   custom_domain_id - int64 - Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
         ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -1954,6 +1984,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
+            }
+            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
             {
@@ -2467,6 +2501,7 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   custom_domain_id - int64 - Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
         ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -2712,6 +2747,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
+            }
+            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
             {
@@ -2974,6 +3013,7 @@ namespace FilesCom.Models
         ///   files_agent_root - string - Agent local root path
         ///   files_agent_version - string - Files Agent version
         ///   outbound_agent_id - int64 - Route traffic to outbound on a files-agent
+        ///   custom_domain_id - int64 - Custom Domain ID whose dedicated IP addresses are selected when this Remote Server uses dedicated IPs. Must be available to this Remote Server's workspace. Requires enable_dedicated_ips and cannot be combined with an outbound Agent. Set to null to use the site's default dedicated IPs.
         ///   google_cloud_storage_authentication_method - string - Google Cloud Storage: Authentication method. Can be json, hmac, or oauth.
         ///   google_cloud_storage_bucket - string - Google Cloud Storage: Bucket Name
         ///   google_cloud_storage_oauth_scope - string - Google Cloud Storage: OAuth scope. Can be https://www.googleapis.com/auth/devstorage.read_only or https://www.googleapis.com/auth/devstorage.read_write.
@@ -3230,6 +3270,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
+            }
+            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            {
+                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
             }
             if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
             {
