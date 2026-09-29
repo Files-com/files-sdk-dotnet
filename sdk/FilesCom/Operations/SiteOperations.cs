@@ -211,6 +211,7 @@ namespace FilesCom.Operations
         ///   ldap_host_3 - string - LDAP backup host
         ///   ldap_port - int64 - LDAP port
         ///   ldap_secure - boolean - Use secure LDAP?
+        ///   ldap_server_certificate - string - How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
         ///   ldap_username - string - Username for signing in to LDAP server.
         ///   ldap_username_field - string - LDAP username field
         ///   ldap_domain - string - Domain name that will be appended to usernames

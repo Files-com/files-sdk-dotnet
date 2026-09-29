@@ -227,6 +227,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("ldap_secure", false);
             }
+            if (!this.attributes.ContainsKey("ldap_server_certificate"))
+            {
+                this.attributes.Add("ldap_server_certificate", null);
+            }
             if (!this.attributes.ContainsKey("ldap_type"))
             {
                 this.attributes.Add("ldap_type", null);
@@ -816,6 +820,17 @@ namespace FilesCom.Models
         {
             get { return attributes["ldap_secure"] == null ? false : (bool)attributes["ldap_secure"]; }
             private set { attributes["ldap_secure"] = value; }
+        }
+
+        /// <summary>
+        /// How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ldap_server_certificate")]
+        public string LdapServerCertificate
+        {
+            get { return (string)attributes["ldap_server_certificate"]; }
+            private set { attributes["ldap_server_certificate"] = value; }
         }
 
         /// <summary>

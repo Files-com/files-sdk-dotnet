@@ -462,6 +462,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("ldap_secure", false);
             }
+            if (!this.attributes.ContainsKey("ldap_server_certificate"))
+            {
+                this.attributes.Add("ldap_server_certificate", null);
+            }
             if (!this.attributes.ContainsKey("ldap_type"))
             {
                 this.attributes.Add("ldap_type", null);
@@ -2087,6 +2091,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("ldap_server_certificate")]
+        public string LdapServerCertificate
+        {
+            get { return (string)attributes["ldap_server_certificate"]; }
+            private set { attributes["ldap_server_certificate"] = value; }
+        }
+
+        /// <summary>
         /// LDAP type
         /// </summary>
         [JsonInclude]
@@ -3315,6 +3330,7 @@ namespace FilesCom.Models
         ///   ldap_host_3 - string - LDAP backup host
         ///   ldap_port - int64 - LDAP port
         ///   ldap_secure - boolean - Use secure LDAP?
+        ///   ldap_server_certificate - string - How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
         ///   ldap_username - string - Username for signing in to LDAP server.
         ///   ldap_username_field - string - LDAP username field
         ///   ldap_domain - string - Domain name that will be appended to usernames
@@ -4001,6 +4017,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ldap_secure") && !(parameters["ldap_secure"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ldap_secure must be of type bool", "parameters[\"ldap_secure\"]");
+            }
+            if (parameters.ContainsKey("ldap_server_certificate") && !(parameters["ldap_server_certificate"] is string))
+            {
+                throw new ArgumentException("Bad parameter: ldap_server_certificate must be of type string", "parameters[\"ldap_server_certificate\"]");
             }
             if (parameters.ContainsKey("ldap_username") && !(parameters["ldap_username"] is string))
             {

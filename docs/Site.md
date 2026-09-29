@@ -142,6 +142,7 @@
   "ldap_host_3": "ldap3.site.com",
   "ldap_port": 1,
   "ldap_secure": true,
+  "ldap_server_certificate": "require_match",
   "ldap_type": "open_ldap",
   "ldap_user_action": "disabled",
   "ldap_user_include_groups": "example",
@@ -476,6 +477,7 @@
 * `ldap_host_3` / `LdapHost3`  (string): LDAP backup host
 * `ldap_port` / `LdapPort`  (Nullable<Int64>): LDAP port
 * `ldap_secure` / `LdapSecure`  (bool): Use secure LDAP?
+* `ldap_server_certificate` / `LdapServerCertificate`  (string): How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
 * `ldap_type` / `LdapType`  (string): LDAP type
 * `ldap_user_action` / `LdapUserAction`  (string): Should we sync users from LDAP server?
 * `ldap_user_include_groups` / `LdapUserIncludeGroups`  (string): Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
@@ -797,6 +799,7 @@ Task<Site> client.Sites.UpdateAsync(
 * `ldap_host_3` (string): LDAP backup host
 * `ldap_port` (Nullable<Int64>): LDAP port
 * `ldap_secure` (bool): Use secure LDAP?
+* `ldap_server_certificate` (string): How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
 * `ldap_username` (string): Username for signing in to LDAP server.
 * `ldap_username_field` (string): LDAP username field
 * `ldap_domain` (string): Domain name that will be appended to usernames
