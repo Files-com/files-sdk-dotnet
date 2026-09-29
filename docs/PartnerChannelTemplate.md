@@ -7,6 +7,7 @@
   "id": 1,
   "workspace_id": 1,
   "direction": "two_way",
+  "use_channel_root": false,
   "name": "Claims Template",
   "path": "claims/medical",
   "to_partner_folder_name": "outgoing",
@@ -27,6 +28,7 @@
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner Channel Template.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace associated with this Partner Channel Template.
 * `direction` / `Direction`  (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` / `UseChannelRoot`  (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Template must remain one-way.
 * `name` / `Name`  (string): The name of the Partner Channel Template.
 * `path` / `Path`  (string): Channel path relative to the Partner root folder. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `to_partner_folder_name` / `ToPartnerFolderName`  (string): Optional Channel-level to-Partner folder name override.
@@ -35,8 +37,8 @@
 * `to_partner_route_path_pattern` / `ToPartnerRoutePathPattern`  (string): Optional route path pattern for files delivered to the Partner. Supports {{partner_name}}.
 * `to_partner_managed_folder_paths` / `ToPartnerManagedFolderPaths`  (string[]): Managed folder paths inside the to-Partner folder.
 * `from_partner_managed_folder_paths` / `FromPartnerManagedFolderPaths`  (string[]): Managed folder paths inside the from-Partner folder.
-* `effective_to_partner_folder_name` / `EffectiveToPartnerFolderName`  (string): Resolved to-Partner folder name after Template override and default.
-* `effective_from_partner_folder_name` / `EffectiveFromPartnerFolderName`  (string): Resolved from-Partner folder name after Template override and default.
+* `effective_to_partner_folder_name` / `EffectiveToPartnerFolderName`  (string): Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
+* `effective_from_partner_folder_name` / `EffectiveFromPartnerFolderName`  (string): Resolved from-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
 
 
 ---
@@ -123,6 +125,7 @@ Task<PartnerChannelTemplate> client.PartnerChannelTemplates.CreateAsync(
 ### Parameters
 
 * `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Template must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path_pattern` (string): Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
@@ -161,6 +164,7 @@ Task<PartnerChannelTemplate> client.PartnerChannelTemplates.UpdateAsync(
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
 * `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Template must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path_pattern` (string): Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.
@@ -209,6 +213,7 @@ var PartnerChannelTemplate = PartnerChannelTemplate.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("direction", "two_way");
+parameters.Add("use_channel_root", false);
 parameters.Add("from_partner_folder_name", "incoming");
 parameters.Add("from_partner_managed_folder_paths", ["claims/received"]);
 parameters.Add("from_partner_route_path_pattern", "processing/{{partner_name}}/from-partner");
@@ -227,6 +232,7 @@ PartnerChannelTemplate.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
 * `direction` (string): Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+* `use_channel_root` (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Template must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
 * `from_partner_route_path_pattern` (string): Optional route path pattern for files uploaded by the Partner. Supports {{partner_name}}.

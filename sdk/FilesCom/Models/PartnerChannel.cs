@@ -43,6 +43,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("direction", null);
             }
+            if (!this.attributes.ContainsKey("use_channel_root"))
+            {
+                this.attributes.Add("use_channel_root", false);
+            }
             if (!this.attributes.ContainsKey("partner_id"))
             {
                 this.attributes.Add("partner_id", null);
@@ -159,6 +163,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("use_channel_root")]
+        public bool UseChannelRoot
+        {
+            get { return attributes["use_channel_root"] == null ? false : (bool)attributes["use_channel_root"]; }
+            set { attributes["use_channel_root"] = value; }
+        }
+
+        /// <summary>
         /// ID of the Partner this Channel belongs to.
         /// </summary>
         [JsonPropertyName("partner_id")]
@@ -249,7 +264,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Resolved to-Partner folder name after Channel override and default.
+        /// Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
         /// </summary>
         [JsonPropertyName("effective_to_partner_folder_name")]
         public string EffectiveToPartnerFolderName
@@ -259,7 +274,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Resolved from-Partner folder name after Channel override and default.
+        /// Resolved from-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
         /// </summary>
         [JsonPropertyName("effective_from_partner_folder_name")]
         public string EffectiveFromPartnerFolderName
@@ -301,6 +316,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+        ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -317,6 +333,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+        ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -351,6 +368,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("direction") && !(parameters["direction"] is string))
             {
                 throw new ArgumentException("Bad parameter: direction must be of type string", "parameters[\"direction\"]");
+            }
+            if (parameters.ContainsKey("use_channel_root") && !(parameters["use_channel_root"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_channel_root must be of type bool", "parameters[\"use_channel_root\"]");
             }
             if (parameters.ContainsKey("from_partner_folder_name") && !(parameters["from_partner_folder_name"] is string))
             {
@@ -587,6 +608,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+        ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -628,6 +650,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("direction") && !(parameters["direction"] is string))
             {
                 throw new ArgumentException("Bad parameter: direction must be of type string", "parameters[\"direction\"]");
+            }
+            if (parameters.ContainsKey("use_channel_root") && !(parameters["use_channel_root"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_channel_root must be of type bool", "parameters[\"use_channel_root\"]");
             }
             if (parameters.ContainsKey("from_partner_folder_name") && !(parameters["from_partner_folder_name"] is string))
             {
@@ -681,6 +707,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   direction - string - Channel directions. `two_way` enables both directions, `to_partner` enables outgoing downloads, and `from_partner` enables incoming uploads.
+        ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
@@ -728,6 +755,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("direction") && !(parameters["direction"] is string))
             {
                 throw new ArgumentException("Bad parameter: direction must be of type string", "parameters[\"direction\"]");
+            }
+            if (parameters.ContainsKey("use_channel_root") && !(parameters["use_channel_root"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: use_channel_root must be of type bool", "parameters[\"use_channel_root\"]");
             }
             if (parameters.ContainsKey("from_partner_folder_name") && !(parameters["from_partner_folder_name"] is string))
             {
