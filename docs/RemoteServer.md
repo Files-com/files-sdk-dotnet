@@ -111,7 +111,7 @@
 * `s3_assume_role_duration_seconds` / `S3AssumeRoleDurationSeconds`  (Nullable<Int64>): Session duration in seconds for AssumeRole authentication (900-43200).
 * `s3_assume_role_external_id` / `S3AssumeRoleExternalId`  (string): External ID for AssumeRole authentication.
 * `server_certificate` / `ServerCertificate`  (string): Remote server certificate
-* `server_host_key` / `ServerHostKey`  (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
+* `server_host_key` / `ServerHostKey`  (string): Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key.
 * `server_type` / `ServerType`  (string): Remote server type.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID (0 for default workspace)
 * `ssl` / `Ssl`  (string): Should we require SSL?
@@ -408,7 +408,7 @@ Task<RemoteServer> client.RemoteServers.CreateAsync(
 * `s3_compatible_virtual_hosted_style` (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_region` (string): S3 region
 * `server_certificate` (string): Remote server certificate
-* `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
+* `server_host_key` (string): Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key.
 * `server_type` (string): Remote server type.
 * `sharepoint_client_id` (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
 * `sharepoint_site_url` (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
@@ -548,7 +548,7 @@ Task<RemoteServer> client.RemoteServers.UpdateAsync(
 * `s3_compatible_virtual_hosted_style` (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_region` (string): S3 region
 * `server_certificate` (string): Remote server certificate
-* `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
+* `server_host_key` (string): Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key.
 * `server_type` (string): Remote server type.
 * `sharepoint_client_id` (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
 * `sharepoint_site_url` (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
@@ -781,7 +781,7 @@ RemoteServer.Update(parameters);
 * `s3_compatible_virtual_hosted_style` (bool): S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
 * `s3_region` (string): S3 region
 * `server_certificate` (string): Remote server certificate
-* `server_host_key` (string): Remote server SSH Host Key. If provided, we will require that the server host key matches the provided key. Uses OpenSSH format similar to what would go into ~/.ssh/known_hosts
+* `server_host_key` (string): Pinned plain SSH host key for SFTP, in OpenSSH public key format. If omitted, Files.com detects and stores the server's plain host key, including when the server offers an OpenSSH host certificate. With `server_certificate=require_match` (the default), the server must present the pinned key and prove it holds the matching private key. The pin remains in force until an administrator updates `server_host_key`. Files.com does not authenticate remote hosts through SSH certificates and does not check their CA signatures, principals, or validity periods. Certificate expiration does not end the pin; update `server_host_key` to retire a host key.
 * `server_type` (string): Remote server type.
 * `sharepoint_client_id` (string): SharePoint: Microsoft Entra application client ID for app-only authentication.
 * `sharepoint_site_url` (string): SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
