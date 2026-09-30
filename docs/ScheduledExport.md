@@ -34,6 +34,7 @@
   "human_readable_schedule": "Runs every month at 06:30 AM UTC TZ.",
   "last_run_at": "2000-01-01T01:00:00Z",
   "last_export_id": 1,
+  "last_error": "example",
   "created_at": "2000-01-01T01:00:00Z",
   "updated_at": "2000-01-01T01:00:00Z"
 }
@@ -56,8 +57,9 @@
 * `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the scheduled export schedule.
 * `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by the scheduled export schedule.
 * `human_readable_schedule` / `HumanReadableSchedule`  (string): Human-readable schedule description.
-* `last_run_at` / `LastRunAt`  (Nullable<DateTime>): Most recent scheduled run time.
+* `last_run_at` / `LastRunAt`  (Nullable<DateTime>): Most recent scheduled attempt time, including attempts that failed validation.
 * `last_export_id` / `LastExportId`  (Nullable<Int64>): Most recent Export ID created by this schedule.
+* `last_error` / `LastError`  (string): Validation error from the most recent scheduled attempt. The schedule remains enabled and retries at its next scheduled time. Cleared when an export is successfully created; does not describe errors during export generation.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Creation time.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Last update time.
 

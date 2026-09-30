@@ -107,6 +107,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("last_export_id", null);
             }
+            if (!this.attributes.ContainsKey("last_error"))
+            {
+                this.attributes.Add("last_error", null);
+            }
             if (!this.attributes.ContainsKey("created_at"))
             {
                 this.attributes.Add("created_at", null);
@@ -316,7 +320,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Most recent scheduled run time.
+        /// Most recent scheduled attempt time, including attempts that failed validation.
         /// </summary>
         [JsonPropertyName("last_run_at")]
         public Nullable<DateTime> LastRunAt
@@ -333,6 +337,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["last_export_id"]; }
             set { attributes["last_export_id"] = value; }
+        }
+
+        /// <summary>
+        /// Validation error from the most recent scheduled attempt. The schedule remains enabled and retries at its next scheduled time. Cleared when an export is successfully created; does not describe errors during export generation.
+        /// </summary>
+        [JsonPropertyName("last_error")]
+        public string LastError
+        {
+            get { return (string)attributes["last_error"]; }
+            set { attributes["last_error"] = value; }
         }
 
         /// <summary>
