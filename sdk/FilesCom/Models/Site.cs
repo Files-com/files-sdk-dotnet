@@ -630,6 +630,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("session", null);
             }
+            if (!this.attributes.ContainsKey("s3_compatible_endpoint_enabled"))
+            {
+                this.attributes.Add("s3_compatible_endpoint_enabled", false);
+            }
             if (!this.attributes.ContainsKey("sftp_enabled"))
             {
                 this.attributes.Add("sftp_enabled", false);
@@ -876,7 +880,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Availability settings for AI features by user class
+        /// Availability settings for AI features. Each feature requires the site_admins, workspace_admins, folder_admins, and all_users keys. Optional selected_group_members defaults to false; when true, members of at least one group in group_ids get access regardless of the other options. All availability options are additive: any enabled option matching the user grants access. Optional group_ids is an array of integer IDs of active groups on this site, from any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not affect other options. Disabling all AI features overrides these settings.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("ai_feature_availability")]
@@ -2573,6 +2577,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("s3_compatible_endpoint_enabled")]
+        public bool S3CompatibleEndpointEnabled
+        {
+            get { return attributes["s3_compatible_endpoint_enabled"] == null ? false : (bool)attributes["s3_compatible_endpoint_enabled"]; }
+            private set { attributes["s3_compatible_endpoint_enabled"] = value; }
+        }
+
+        /// <summary>
         /// Is SFTP enabled?
         /// </summary>
         [JsonInclude]
@@ -3206,7 +3222,7 @@ namespace FilesCom.Models
         ///   motd_use_for_sftp - boolean - Show message to users connecting via SFTP
         ///   left_navigation_visibility - object - Visibility settings for account navigation
         ///   disable_all_ai_features - boolean - If true, all AI features are disabled for this site.
-        ///   ai_feature_availability - object - Availability settings for AI features by user class
+        ///   ai_feature_availability - object - Availability settings for AI features. Each feature requires the site_admins, workspace_admins, folder_admins, and all_users keys. Optional selected_group_members defaults to false; when true, members of at least one group in group_ids get access regardless of the other options. All availability options are additive: any enabled option matching the user grants access. Optional group_ids is an array of integer IDs of active groups on this site, from any workspace. Omitted or empty group_ids grants no access through selected_group_members and does not affect other options. Disabling all AI features overrides these settings.
         ///   mcp_dcr_enabled - boolean - Is OAuth DCR (dynamic client registration) for MCP enabled?
         ///   additional_text_file_types - array(string) - Additional extensions that are considered text files
         ///   bundle_require_note - boolean - Do Bundles require internal notes?
@@ -3275,6 +3291,7 @@ namespace FilesCom.Models
         ///   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
         ///   dav_enabled - boolean - Is WebDAV enabled?
         ///   ftp_enabled - boolean - Is FTP enabled?
+        ///   s3_compatible_endpoint_enabled - boolean - Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access.
         ///   sftp_enabled - boolean - Is SFTP enabled?
         ///   sftp_finalize_partial_uploads - boolean - Finalize partial SFTP uploads from interrupted connections? Default: true.
         ///   users_can_create_api_keys - boolean - Allow users to create their own API keys?
@@ -3797,6 +3814,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: ftp_enabled must be of type bool", "parameters[\"ftp_enabled\"]");
+            }
+            if (parameters.ContainsKey("s3_compatible_endpoint_enabled") && !(parameters["s3_compatible_endpoint_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_enabled must be of type bool", "parameters[\"s3_compatible_endpoint_enabled\"]");
             }
             if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool))
             {

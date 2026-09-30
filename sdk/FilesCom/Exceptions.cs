@@ -564,6 +564,12 @@ namespace FilesCom
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
+    public class CannotAdministerHigherLevelUserException : NotAuthorizedException
+    {
+        public CannotAdministerHigherLevelUserException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
     public class CannotLoginWhileUsingKeyException : NotAuthorizedException
     {
         public CannotLoginWhileUsingKeyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
@@ -1181,6 +1187,12 @@ namespace FilesCom
     public class RecipientAlreadySharedException : ProcessingFailureException
     {
         public RecipientAlreadySharedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    public class RemoteEntryReadOnlyException : ProcessingFailureException
+    {
+        public RemoteEntryReadOnlyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
             : base(message, httpStatus, responseError, httpHeaders)
         { }
     }
