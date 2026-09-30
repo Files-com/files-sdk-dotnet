@@ -129,6 +129,19 @@ namespace FilesTests
             }
         }
 
+        [TestMethod]
+        public async Task DownloadWithoutLocalPathRefusesDriveAndStreamNames()
+        {
+            RequireColonInvalidInFileNames();
+
+            foreach (string remotePath in new[] { "folder/C:victim.txt", "folder/victim.txt::$DATA" })
+            {
+                Exception error = await CaptureException(() => RemoteFile.DownloadFile(remotePath));
+
+                Assert.IsInstanceOfType(error, typeof(ArgumentException), remotePath);
+            }
+        }
+
         private static RemoteFile DownloadableFile(string downloadUri)
         {
             return new RemoteFile(new Dictionary<string, object> { { "path", "remote.bin" }, { "download_uri", downloadUri } }, null);
@@ -153,6 +166,14 @@ namespace FilesTests
             // An exclusive open fails while any other handle to the file is still open.
             using (new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
             {
+            }
+        }
+
+        private static void RequireColonInvalidInFileNames()
+        {
+            if (Array.IndexOf(Path.GetInvalidFileNameChars(), ':') < 0)
+            {
+                Assert.Inconclusive("Requires a platform where a colon is not valid in a file name, such as Windows.");
             }
         }
 

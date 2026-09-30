@@ -34,10 +34,24 @@ namespace FilesCom.Models
 
         internal static async Task<RemoteFile> DownloadFileCore(FilesClient client, string path, string localPath, Dictionary<string, object> options, CancellationToken cancellationToken)
         {
-            localPath = localPath != null ? localPath : (System.IO.Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + path.Substring(path.LastIndexOf('/') + 1));
+            localPath = localPath != null ? localPath : DefaultLocalPath(path);
             RemoteFile f = ForPath(client, path, options);
             await f.DownloadFileAsync(localPath, cancellationToken);
             return f;
+        }
+
+        // The remote file's name in the working directory. A name that is not a valid local file name is refused: on
+        // Windows a colon would make it a drive-relative path or an NTFS stream, which can write outside the working
+        // directory or onto another file.
+        private static string DefaultLocalPath(string path)
+        {
+            string normalizedPath = PathUtil.normalize(path);
+            string name = normalizedPath.Substring(normalizedPath.LastIndexOf('/') + 1);
+            if (name.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
+            {
+                throw new ArgumentException($"Bad parameter: localPath is required because \"{name}\" is not a valid local file name", "localPath");
+            }
+            return System.IO.Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + name;
         }
 
         internal static async Task<RemoteFile> DownloadFileCore(FilesClient client, string path, System.IO.Stream stream, Dictionary<string, object> options, CancellationToken cancellationToken)
