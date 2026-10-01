@@ -546,7 +546,7 @@
 * `smtp_authentication` / `SmtpAuthentication`  (string): SMTP server authentication type
 * `smtp_from` / `SmtpFrom`  (string): From address to use when mailing through custom SMTP
 * `smtp_port` / `SmtpPort`  (Nullable<Int64>): SMTP server port
-* `smtp_ssl` / `SmtpSsl`  (string): Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address.
+* `smtp_ssl` / `SmtpSsl`  (string): Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
 * `smtp_username` / `SmtpUsername`  (string): SMTP server username
 * `session_expiry_minutes` / `SessionExpiryMinutes`  (Nullable<Int64>): Session expiry in minutes
 * `snapshot_sharing_enabled` / `SnapshotSharingEnabled`  (bool): Allow snapshot share links creation
@@ -802,7 +802,7 @@ Task<Site> client.Sites.UpdateAsync(
 * `smtp_from` (string): From address to use when mailing through custom SMTP
 * `smtp_username` (string): SMTP server username
 * `smtp_port` (Nullable<Int64>): SMTP server port
-* `smtp_ssl` (string): Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address.
+* `smtp_ssl` (string): Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
 * `ldap_enabled` (bool): Main LDAP setting: is LDAP enabled?
 * `ldap_type` (string): LDAP type
 * `ldap_host` (string): LDAP host
