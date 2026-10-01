@@ -710,6 +710,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("smtp_port", null);
             }
+            if (!this.attributes.ContainsKey("smtp_ssl"))
+            {
+                this.attributes.Add("smtp_ssl", null);
+            }
             if (!this.attributes.ContainsKey("smtp_username"))
             {
                 this.attributes.Add("smtp_username", null);
@@ -2806,6 +2810,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("smtp_ssl")]
+        public string SmtpSsl
+        {
+            get { return (string)attributes["smtp_ssl"]; }
+            private set { attributes["smtp_ssl"] = value; }
+        }
+
+        /// <summary>
         /// SMTP server username
         /// </summary>
         [JsonInclude]
@@ -3340,6 +3355,7 @@ namespace FilesCom.Models
         ///   smtp_from - string - From address to use when mailing through custom SMTP
         ///   smtp_username - string - SMTP server username
         ///   smtp_port - int64 - SMTP server port
+        ///   smtp_ssl - string - Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted; require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address.
         ///   ldap_enabled - boolean - Main LDAP setting: is LDAP enabled?
         ///   ldap_type - string - LDAP type
         ///   ldap_host - string - LDAP host
@@ -4010,6 +4026,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("smtp_port") && !(parameters["smtp_port"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: smtp_port must be of type Nullable<Int64>", "parameters[\"smtp_port\"]");
+            }
+            if (parameters.ContainsKey("smtp_ssl") && !(parameters["smtp_ssl"] is string))
+            {
+                throw new ArgumentException("Bad parameter: smtp_ssl must be of type string", "parameters[\"smtp_ssl\"]");
             }
             if (parameters.ContainsKey("ldap_enabled") && !(parameters["ldap_enabled"] is bool))
             {
