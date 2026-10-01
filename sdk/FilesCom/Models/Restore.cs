@@ -149,7 +149,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
+        /// Restore files or users deleted on or after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
         /// </summary>
         [JsonPropertyName("earliest_date")]
         public Nullable<DateTime> EarliestDate
@@ -229,7 +229,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
+        /// Prefix of the files/folders to restore, or a case-insensitive username prefix for a user restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items of the selected restoration type, specify an empty string (`''`) in the prefix field or omit the field from the request.
         /// </summary>
         [JsonPropertyName("prefix")]
         public string Prefix
@@ -239,7 +239,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records.
+        /// Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records removed as part of deleting those users.
         /// </summary>
         [JsonPropertyName("restoration_type")]
         public string RestorationType
@@ -260,7 +260,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If true, we will also restore any Permissions that match the same path prefix from the same dates.
+        /// If true, restore permissions removed as part of deleting the selected users for a user restore, or permissions matching the selected path prefix and deletion dates for a file restore.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("restore_deleted_permissions")]
@@ -447,10 +447,10 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   earliest_date (required) - string - Restore all files deleted after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
-        ///   prefix - string - Prefix of the files/folders to restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items, specify an empty string (`''`) in the prefix field or omit the field from the request.
-        ///   restoration_type - string - Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records.
-        ///   restore_deleted_permissions - boolean - If true, we will also restore any Permissions that match the same path prefix from the same dates.
+        ///   earliest_date (required) - string - Restore files or users deleted on or after this date/time. Don't set this earlier than you need. Can not be greater than 365 days prior to the restore request.
+        ///   prefix - string - Prefix of the files/folders to restore, or a case-insensitive username prefix for a user restore. To restore a folder, add a trailing slash to the folder name. Do not use a leading slash. To restore all deleted items of the selected restoration type, specify an empty string (`''`) in the prefix field or omit the field from the request.
+        ///   restoration_type - string - Type of restoration to perform. `files` restores deleted filesystem items. `users` restores deleted users and associated access/authentication records removed as part of deleting those users.
+        ///   restore_deleted_permissions - boolean - If true, restore permissions removed as part of deleting the selected users for a user restore, or permissions matching the selected path prefix and deletion dates for a file restore.
         ///   restore_in_place - boolean - If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
         ///   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
         ///   workspace_id - int64 - Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.
