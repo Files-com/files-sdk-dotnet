@@ -334,6 +334,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("fedramp", false);
             }
+            if (!this.attributes.ContainsKey("files_com_remote_server_enabled"))
+            {
+                this.attributes.Add("files_com_remote_server_enabled", false);
+            }
             if (!this.attributes.ContainsKey("ftp_enabled"))
             {
                 this.attributes.Add("ftp_enabled", false);
@@ -1728,6 +1732,18 @@ namespace FilesCom.Models
         {
             get { return attributes["fedramp"] == null ? false : (bool)attributes["fedramp"]; }
             private set { attributes["fedramp"] = value; }
+        }
+
+        /// <summary>
+        /// Allow other Files.com sites to use this site's API keys for native Files.com Remote Server connections? Defaults to true and applies to all keys and workspaces on this site. When false, new pairings and access through existing connections are rejected without revoking keys or deleting connections. Re-enabling permits access again with usable keys. Does not disable this site's connections to other sites, ordinary API access, or Connected Sites.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("files_com_remote_server_enabled")]
+        public bool FilesComRemoteServerEnabled
+        {
+            get { return attributes["files_com_remote_server_enabled"] == null ? false : (bool)attributes["files_com_remote_server_enabled"]; }
+            private set { attributes["files_com_remote_server_enabled"] = value; }
         }
 
         /// <summary>
@@ -3305,6 +3321,7 @@ namespace FilesCom.Models
         ///   user_requests_enabled - boolean - Enable User Requests feature
         ///   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
         ///   dav_enabled - boolean - Is WebDAV enabled?
+        ///   files_com_remote_server_enabled - boolean - Allow other Files.com sites to use this site's API keys for native Files.com Remote Server connections? Defaults to true and applies to all keys and workspaces on this site. When false, new pairings and access through existing connections are rejected without revoking keys or deleting connections. Re-enabling permits access again with usable keys. Does not disable this site's connections to other sites, ordinary API access, or Connected Sites.
         ///   ftp_enabled - boolean - Is FTP enabled?
         ///   s3_compatible_endpoint_enabled - boolean - Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access.
         ///   sftp_enabled - boolean - Is SFTP enabled?
@@ -3826,6 +3843,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("dav_enabled") && !(parameters["dav_enabled"] is bool))
             {
                 throw new ArgumentException("Bad parameter: dav_enabled must be of type bool", "parameters[\"dav_enabled\"]");
+            }
+            if (parameters.ContainsKey("files_com_remote_server_enabled") && !(parameters["files_com_remote_server_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: files_com_remote_server_enabled must be of type bool", "parameters[\"files_com_remote_server_enabled\"]");
             }
             if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool))
             {

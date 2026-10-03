@@ -155,6 +155,7 @@ namespace FilesCom.Operations
         ///   user_requests_enabled - boolean - Enable User Requests feature
         ///   user_requests_notify_admins - boolean - Send email to site admins when a user request is received?
         ///   dav_enabled - boolean - Is WebDAV enabled?
+        ///   files_com_remote_server_enabled - boolean - Allow other Files.com sites to use this site's API keys for native Files.com Remote Server connections? Defaults to true and applies to all keys and workspaces on this site. When false, new pairings and access through existing connections are rejected without revoking keys or deleting connections. Re-enabling permits access again with usable keys. Does not disable this site's connections to other sites, ordinary API access, or Connected Sites.
         ///   ftp_enabled - boolean - Is FTP enabled?
         ///   s3_compatible_endpoint_enabled - boolean - Is the S3-compatible endpoint enabled for all users and workspaces on this site? Defaults to true. When false, user and group S3 permissions do not allow access.
         ///   sftp_enabled - boolean - Is SFTP enabled?
