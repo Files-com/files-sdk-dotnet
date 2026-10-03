@@ -31,6 +31,10 @@ namespace FilesCom.Models
                 this.options = new Dictionary<string, object>();
             }
 
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
@@ -163,6 +167,16 @@ namespace FilesCom.Models
             this.options[name] = value;
         }
 
+
+        /// <summary>
+        /// Workspace of the export. 0 represents the default workspace. A null value means a site-wide export.
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; }
+        }
 
         /// <summary>
         /// History Export ID
