@@ -123,7 +123,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+        /// Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
         /// </summary>
         [JsonPropertyName("path")]
         public string Path
@@ -173,7 +173,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Group IDs when this permission requires multiple groups
+        /// Group IDs when this Permission requires membership in every listed group.
         /// </summary>
         [JsonPropertyName("group_ids")]
         public Nullable<Int64>[] GroupIds
@@ -223,7 +223,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Recursive: does this permission apply to subfolders?
+        /// Whether this Permission applies to subfolders. Must be true for `admin` Permissions.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("recursive")]
@@ -403,9 +403,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   path (required) - string - Folder path
         ///   group_id - int64 - Group ID. Provide `group_name` or `group_id`
-        ///   group_ids - string - Group IDs when the permission requires multiple groups. If sent as a string, it should be comma-delimited.
+        ///   group_ids - string - Group IDs when the Permission requires membership in every listed group. If sent as a string, it should be comma-delimited.
         ///   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
-        ///   recursive - boolean - Apply to subfolders recursively?
+        ///   recursive - boolean - Apply to subfolders recursively? Must be true for `admin` Permissions.
         ///   partner_id - int64 - Partner ID if this Permission belongs to a partner.
         ///   user_id - int64 - User ID.  Provide `username` or `user_id`
         ///   username - string - User username.  Provide `username` or `user_id`

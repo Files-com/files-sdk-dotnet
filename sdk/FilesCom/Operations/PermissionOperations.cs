@@ -85,9 +85,9 @@ namespace FilesCom.Operations
         /// Parameters:
         ///   path (required) - string - Folder path
         ///   group_id - int64 - Group ID. Provide `group_name` or `group_id`
-        ///   group_ids - string - Group IDs when the permission requires multiple groups. If sent as a string, it should be comma-delimited.
+        ///   group_ids - string - Group IDs when the Permission requires membership in every listed group. If sent as a string, it should be comma-delimited.
         ///   permission - string - Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
-        ///   recursive - boolean - Apply to subfolders recursively?
+        ///   recursive - boolean - Apply to subfolders recursively? Must be true for `admin` Permissions.
         ///   partner_id - int64 - Partner ID if this Permission belongs to a partner.
         ///   user_id - int64 - User ID.  Provide `username` or `user_id`
         ///   username - string - User username.  Provide `username` or `user_id`

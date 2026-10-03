@@ -25,17 +25,17 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Permission ID
-* `path` / `Path`  (string): Path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
+* `path` / `Path`  (string): Folder path. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `user_id` / `UserId`  (Nullable<Int64>): User ID
 * `username` / `Username`  (string): Username (if applicable)
 * `group_id` / `GroupId`  (Nullable<Int64>): Group ID
 * `group_name` / `GroupName`  (string): Group name (if applicable)
-* `group_ids` / `GroupIds`  (Nullable<Int64>[]): Group IDs when this permission requires multiple groups
+* `group_ids` / `GroupIds`  (Nullable<Int64>[]): Group IDs when this Permission requires membership in every listed group.
 * `group_names` / `GroupNames`  (string[]): Group names when this permission requires multiple groups
 * `partner_id` / `PartnerId`  (Nullable<Int64>): Partner ID (if applicable)
 * `partner_name` / `PartnerName`  (string): Partner name (if applicable)
 * `permission` / `PermissionType`  (string): Permission type.  See the table referenced in the documentation for an explanation of each permission.
-* `recursive` / `Recursive`  (bool): Recursive: does this permission apply to subfolders?
+* `recursive` / `Recursive`  (bool): Whether this Permission applies to subfolders. Must be true for `admin` Permissions.
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 
 
@@ -102,9 +102,9 @@ Task<Permission> client.Permissions.CreateAsync(
 
 * `path` (string): Required - Folder path
 * `group_id` (Nullable<Int64>): Group ID. Provide `group_name` or `group_id`
-* `group_ids` (string): Group IDs when the permission requires multiple groups. If sent as a string, it should be comma-delimited.
+* `group_ids` (string): Group IDs when the Permission requires membership in every listed group. If sent as a string, it should be comma-delimited.
 * `permission` (string): Permission type.  Can be `admin`, `full`, `readonly`, `writeonly`, `list`, or `history`
-* `recursive` (bool): Apply to subfolders recursively?
+* `recursive` (bool): Apply to subfolders recursively? Must be true for `admin` Permissions.
 * `partner_id` (Nullable<Int64>): Partner ID if this Permission belongs to a partner.
 * `user_id` (Nullable<Int64>): User ID.  Provide `username` or `user_id`
 * `username` (string): User username.  Provide `username` or `user_id`
