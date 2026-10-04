@@ -56,6 +56,8 @@ namespace FilesCom.Operations
         /// <summary>
         /// Parameters:
         ///   path (required) - string - Path
+        ///   token - string - Lock token. With expected_token, use the same value to refresh or a different value to replace the existing token.
+        ///   expected_token - string - Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace.
         ///   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
         ///   exclusive - boolean - Is lock exclusive?
         ///   recursive - boolean - Does lock apply to subfolders?

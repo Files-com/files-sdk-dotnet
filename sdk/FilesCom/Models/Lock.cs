@@ -79,6 +79,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("username", null);
             }
+            if (!this.attributes.ContainsKey("expected_token"))
+            {
+                this.attributes.Add("expected_token", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -229,6 +233,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace.
+        /// </summary>
+        [JsonPropertyName("expected_token")]
+        public string ExpectedToken
+        {
+            get { return (string)attributes["expected_token"]; }
+            set { attributes["expected_token"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
@@ -365,6 +379,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   path (required) - string - Path
+        ///   token - string - Lock token. With expected_token, use the same value to refresh or a different value to replace the existing token.
+        ///   expected_token - string - Require this existing, unexpired token before refreshing or replacing a lock. Set token to the same value to refresh, or a different value to replace.
         ///   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
         ///   exclusive - boolean - Is lock exclusive?
         ///   recursive - boolean - Does lock apply to subfolders?
@@ -405,6 +421,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("path") && !(parameters["path"] is string))
             {
                 throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
+            }
+            if (parameters.ContainsKey("expected_token") && !(parameters["expected_token"] is string))
+            {
+                throw new ArgumentException("Bad parameter: expected_token must be of type string", "parameters[\"expected_token\"]");
             }
             if (parameters.ContainsKey("allow_access_by_any_user") && !(parameters["allow_access_by_any_user"] is bool))
             {
