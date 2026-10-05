@@ -131,7 +131,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Associated form fields
+        /// Associated form field definitions; authenticated form field set responses include historical definitions, while form_layout identifies current fields
         /// </summary>
         [JsonPropertyName("form_fields")]
         public FormField[] FormFields
