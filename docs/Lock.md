@@ -23,7 +23,7 @@
 * `timeout` / `Timeout`  (Nullable<Int64>): Lock timeout in seconds
 * `depth` / `Depth`  (string): 
 * `recursive` / `Recursive`  (bool): Does lock apply to subfolders?
-* `owner` / `Owner`  (string): Owner of the lock.  This can be any arbitrary string.
+* `owner` / `Owner`  (string): Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
 * `scope` / `Scope`  (string): 
 * `exclusive` / `Exclusive`  (bool): Is lock exclusive?
 * `token` / `Token`  (string): Lock token.  Use to release lock.
@@ -95,6 +95,7 @@ Task<Lock> client.Locks.CreateAsync(
 * `allow_access_by_any_user` (bool): Can lock be modified by users other than its creator?
 * `exclusive` (bool): Is lock exclusive?
 * `recursive` (bool): Does lock apply to subfolders?
+* `owner` (string): Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
 * `timeout` (Nullable<Int64>): Lock timeout in seconds
 
 

@@ -153,7 +153,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Owner of the lock.  This can be any arbitrary string.
+        /// Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
         /// </summary>
         [JsonPropertyName("owner")]
         public string Owner
@@ -384,6 +384,7 @@ namespace FilesCom.Models
         ///   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
         ///   exclusive - boolean - Is lock exclusive?
         ///   recursive - boolean - Does lock apply to subfolders?
+        ///   owner - string - Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
         ///   timeout - int64 - Lock timeout in seconds
         /// </summary>
         public static Task<Lock> Create(
@@ -441,6 +442,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
             {
                 throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
+            }
+            if (parameters.ContainsKey("owner") && !(parameters["owner"] is string))
+            {
+                throw new ArgumentException("Bad parameter: owner must be of type string", "parameters[\"owner\"]");
             }
             if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64>))
             {

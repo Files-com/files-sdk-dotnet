@@ -61,6 +61,7 @@ namespace FilesCom.Operations
         ///   allow_access_by_any_user - boolean - Can lock be modified by users other than its creator?
         ///   exclusive - boolean - Is lock exclusive?
         ///   recursive - boolean - Does lock apply to subfolders?
+        ///   owner - string - Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
         ///   timeout - int64 - Lock timeout in seconds
         /// </summary>
         public Task<Lock> CreateAsync(
