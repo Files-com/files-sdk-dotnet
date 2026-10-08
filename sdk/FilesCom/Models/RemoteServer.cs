@@ -99,6 +99,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("s3_region", null);
             }
+            if (!this.attributes.ContainsKey("s3_kms_key_id"))
+            {
+                this.attributes.Add("s3_kms_key_id", null);
+            }
             if (!this.attributes.ContainsKey("aws_access_key"))
             {
                 this.attributes.Add("aws_access_key", null);
@@ -639,6 +643,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["s3_region"]; }
             set { attributes["s3_region"] = value; }
+        }
+
+        /// <summary>
+        /// ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
+        /// </summary>
+        [JsonPropertyName("s3_kms_key_id")]
+        public string S3KmsKeyId
+        {
+            get { return (string)attributes["s3_kms_key_id"]; }
+            set { attributes["s3_kms_key_id"] = value; }
         }
 
         /// <summary>
@@ -1674,6 +1688,7 @@ namespace FilesCom.Models
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
         ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+        ///   s3_kms_key_id - string - ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
@@ -1765,6 +1780,7 @@ namespace FilesCom.Models
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
         ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+        ///   s3_kms_key_id - string - ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
@@ -2084,6 +2100,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
+            }
+            if (parameters.ContainsKey("s3_kms_key_id") && !(parameters["s3_kms_key_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_kms_key_id must be of type string", "parameters[\"s3_kms_key_id\"]");
             }
             if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
             {
@@ -2526,6 +2546,7 @@ namespace FilesCom.Models
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
         ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+        ///   s3_kms_key_id - string - ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
@@ -2848,6 +2869,10 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
             }
+            if (parameters.ContainsKey("s3_kms_key_id") && !(parameters["s3_kms_key_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_kms_key_id must be of type string", "parameters[\"s3_kms_key_id\"]");
+            }
             if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
             {
                 throw new ArgumentException("Bad parameter: s3_region must be of type string", "parameters[\"s3_region\"]");
@@ -3038,6 +3063,7 @@ namespace FilesCom.Models
         ///   s3_compatible_endpoint - string - S3-compatible: endpoint
         ///   s3_compatible_region - string - S3-compatible: region
         ///   s3_compatible_virtual_hosted_style - boolean - S3-compatible: If true, use virtual-hosted-style URLs instead of path-style URLs
+        ///   s3_kms_key_id - string - ARN of the AWS KMS key that encrypts files written to the bucket (SSE-KMS). Leave blank unless your bucket requires a specific key.
         ///   s3_region - string - S3 region
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
@@ -3370,6 +3396,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
             {
                 throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
+            }
+            if (parameters.ContainsKey("s3_kms_key_id") && !(parameters["s3_kms_key_id"] is string))
+            {
+                throw new ArgumentException("Bad parameter: s3_kms_key_id must be of type string", "parameters[\"s3_kms_key_id\"]");
             }
             if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
             {
