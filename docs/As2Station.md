@@ -37,8 +37,10 @@
 * `public_certificate_not_before` / `PublicCertificateNotBefore`  (string): Not before value of public certificate used for message security.
 * `public_certificate_not_after` / `PublicCertificateNotAfter`  (string): Not after value of public certificate used for message security.
 * `private_key_password_md5` / `PrivateKeyPasswordMd5`  (string): MD5 hash of private key password used for message security.
-* `private_key` / `PrivateKey`  (string): 
-* `private_key_password` / `PrivateKeyPassword`  (string): 
+* `private_key` / `PrivateKey`  (string): PEM-encoded private key matching public_certificate.
+* `private_key_password` / `PrivateKeyPassword`  (string): Password for the PEM-encoded private key.
+* `pkcs12` / `Pkcs12`  (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+* `pkcs12_password` / `Pkcs12Password`  (string): Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
 
 
 ---
@@ -126,9 +128,11 @@ Task<As2Station> client.As2Stations.CreateAsync(
 
 * `name` (string): Required - The station's formal AS2 name.
 * `workspace_id` (Nullable<Int64>): ID of the Workspace associated with this AS2 Station.
-* `public_certificate` (string): Required - 
-* `private_key` (string): Required - 
-* `private_key_password` (string): 
+* `public_certificate` (string): Public certificate used for message security.
+* `private_key` (string): PEM-encoded private key matching public_certificate.
+* `private_key_password` (string): Password for the PEM-encoded private key.
+* `pkcs12` (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+* `pkcs12_password` (string): Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
 
 
 ---
@@ -158,9 +162,11 @@ Task<As2Station> client.As2Stations.UpdateAsync(
 
 * `id` (Nullable<Int64>): Required - As2 Station ID.
 * `name` (string): The station's formal AS2 name.
-* `public_certificate` (string): 
-* `private_key` (string): 
-* `private_key_password` (string): 
+* `public_certificate` (string): Public certificate used for message security.
+* `private_key` (string): PEM-encoded private key matching public_certificate.
+* `private_key_password` (string): Password for the PEM-encoded private key.
+* `pkcs12` (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+* `pkcs12_password` (string): Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
 
 
 ---
@@ -212,9 +218,11 @@ As2Station.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - As2 Station ID.
 * `name` (string): The station's formal AS2 name.
-* `public_certificate` (string): 
-* `private_key` (string): 
-* `private_key_password` (string): 
+* `public_certificate` (string): Public certificate used for message security.
+* `private_key` (string): PEM-encoded private key matching public_certificate.
+* `private_key_password` (string): Password for the PEM-encoded private key.
+* `pkcs12` (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+* `pkcs12_password` (string): Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
 
 
 ---

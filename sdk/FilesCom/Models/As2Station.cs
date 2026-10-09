@@ -99,6 +99,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("private_key_password", null);
             }
+            if (!this.attributes.ContainsKey("pkcs12"))
+            {
+                this.attributes.Add("pkcs12", null);
+            }
+            if (!this.attributes.ContainsKey("pkcs12_password"))
+            {
+                this.attributes.Add("pkcs12_password", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -279,6 +287,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// PEM-encoded private key matching public_certificate.
         /// </summary>
         [JsonPropertyName("private_key")]
         public string PrivateKey
@@ -288,6 +297,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Password for the PEM-encoded private key.
         /// </summary>
         [JsonPropertyName("private_key_password")]
         public string PrivateKeyPassword
@@ -297,11 +307,33 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+        /// </summary>
+        [JsonPropertyName("pkcs12")]
+        public string Pkcs12
+        {
+            get { return (string)attributes["pkcs12"]; }
+            set { attributes["pkcs12"] = value; }
+        }
+
+        /// <summary>
+        /// Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
+        /// </summary>
+        [JsonPropertyName("pkcs12_password")]
+        public string Pkcs12Password
+        {
+            get { return (string)attributes["pkcs12_password"]; }
+            set { attributes["pkcs12_password"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   name - string - The station's formal AS2 name.
-        ///   public_certificate - string
-        ///   private_key - string
-        ///   private_key_password - string
+        ///   public_certificate - string - Public certificate used for message security.
+        ///   private_key - string - PEM-encoded private key matching public_certificate.
+        ///   private_key_password - string - Password for the PEM-encoded private key.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
         /// </summary>
         public Task<As2Station> Update(Dictionary<string, object> parameters)
         {
@@ -311,9 +343,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - The station's formal AS2 name.
-        ///   public_certificate - string
-        ///   private_key - string
-        ///   private_key_password - string
+        ///   public_certificate - string - Public certificate used for message security.
+        ///   private_key - string - PEM-encoded private key matching public_certificate.
+        ///   private_key_password - string - Password for the PEM-encoded private key.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
         /// </summary>
         public Task<As2Station> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
@@ -353,6 +387,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
+            }
+            if (parameters.ContainsKey("pkcs12") && !(parameters["pkcs12"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12 must be of type string", "parameters[\"pkcs12\"]");
+            }
+            if (parameters.ContainsKey("pkcs12_password") && !(parameters["pkcs12_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12_password must be of type string", "parameters[\"pkcs12_password\"]");
             }
 
             OperationContext context = new OperationContext(FilesClient.Bind(ref client));
@@ -562,9 +604,11 @@ namespace FilesCom.Models
         /// Parameters:
         ///   name (required) - string - The station's formal AS2 name.
         ///   workspace_id - int64 - ID of the Workspace associated with this AS2 Station.
-        ///   public_certificate (required) - string
-        ///   private_key (required) - string
-        ///   private_key_password - string
+        ///   public_certificate - string - Public certificate used for message security.
+        ///   private_key - string - PEM-encoded private key matching public_certificate.
+        ///   private_key_password - string - Password for the PEM-encoded private key.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
         /// </summary>
         public static Task<As2Station> Create(
 
@@ -590,14 +634,6 @@ namespace FilesCom.Models
             {
                 throw new ArgumentNullException("Parameter missing: name", "parameters[\"name\"]");
             }
-            if (!parameters.ContainsKey("public_certificate") || parameters["public_certificate"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: public_certificate", "parameters[\"public_certificate\"]");
-            }
-            if (!parameters.ContainsKey("private_key") || parameters["private_key"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: private_key", "parameters[\"private_key\"]");
-            }
             if (parameters.ContainsKey("name") && !(parameters["name"] is string))
             {
                 throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
@@ -618,6 +654,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
             }
+            if (parameters.ContainsKey("pkcs12") && !(parameters["pkcs12"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12 must be of type string", "parameters[\"pkcs12\"]");
+            }
+            if (parameters.ContainsKey("pkcs12_password") && !(parameters["pkcs12_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12_password must be of type string", "parameters[\"pkcs12_password\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/as2_stations", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
@@ -634,9 +678,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   name - string - The station's formal AS2 name.
-        ///   public_certificate - string
-        ///   private_key - string
-        ///   private_key_password - string
+        ///   public_certificate - string - Public certificate used for message security.
+        ///   private_key - string - PEM-encoded private key matching public_certificate.
+        ///   private_key_password - string - Password for the PEM-encoded private key.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
         /// </summary>
         public static Task<As2Station> Update(
             Nullable<Int64> id,
@@ -689,6 +735,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("private_key_password") && !(parameters["private_key_password"] is string))
             {
                 throw new ArgumentException("Bad parameter: private_key_password must be of type string", "parameters[\"private_key_password\"]");
+            }
+            if (parameters.ContainsKey("pkcs12") && !(parameters["pkcs12"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12 must be of type string", "parameters[\"pkcs12\"]");
+            }
+            if (parameters.ContainsKey("pkcs12_password") && !(parameters["pkcs12_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12_password must be of type string", "parameters[\"pkcs12_password\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/as2_stations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);

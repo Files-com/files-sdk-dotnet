@@ -50,6 +50,8 @@
 * `public_certificate_not_before` / `PublicCertificateNotBefore`  (string): Not before value of public certificate used for message security.
 * `public_certificate_not_after` / `PublicCertificateNotAfter`  (string): Not after value of public certificate used for message security.
 * `http_auth_password` / `HttpAuthPassword`  (string): Password to send to server for HTTP Authentication.
+* `pkcs12` / `Pkcs12`  (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+* `pkcs12_password` / `Pkcs12Password`  (string): Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
 
 
 ---
@@ -146,7 +148,9 @@ Task<As2Partner> client.As2Partners.CreateAsync(
 * `as2_station_id` (Nullable<Int64>): Required - ID of the AS2 Station associated with this partner.
 * `name` (string): Required - The partner's formal AS2 name.
 * `uri` (string): Required - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
-* `public_certificate` (string): Required - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+* `public_certificate` (string): Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+* `pkcs12` (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+* `pkcs12_password` (string): Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
 
 
 ---
@@ -186,6 +190,8 @@ Task<As2Partner> client.As2Partners.UpdateAsync(
 * `name` (string): The partner's formal AS2 name.
 * `uri` (string): Public URI where we will send the AS2 messages (via HTTP/HTTPS).
 * `public_certificate` (string): Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+* `pkcs12` (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+* `pkcs12_password` (string): Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
 
 
 ---
@@ -255,6 +261,8 @@ As2Partner.Update(parameters);
 * `name` (string): The partner's formal AS2 name.
 * `uri` (string): Public URI where we will send the AS2 messages (via HTTP/HTTPS).
 * `public_certificate` (string): Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+* `pkcs12` (string): Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+* `pkcs12_password` (string): Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
 
 
 ---

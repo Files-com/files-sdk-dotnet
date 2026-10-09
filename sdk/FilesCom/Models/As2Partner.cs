@@ -115,6 +115,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("http_auth_password", null);
             }
+            if (!this.attributes.ContainsKey("pkcs12"))
+            {
+                this.attributes.Add("pkcs12", null);
+            }
+            if (!this.attributes.ContainsKey("pkcs12_password"))
+            {
+                this.attributes.Add("pkcs12_password", null);
+            }
         }
 
         public Dictionary<string, object> getAttributes()
@@ -356,6 +364,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+        /// </summary>
+        [JsonPropertyName("pkcs12")]
+        public string Pkcs12
+        {
+            get { return (string)attributes["pkcs12"]; }
+            set { attributes["pkcs12"] = value; }
+        }
+
+        /// <summary>
+        /// Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
+        /// </summary>
+        [JsonPropertyName("pkcs12_password")]
+        public string Pkcs12Password
+        {
+            get { return (string)attributes["pkcs12_password"]; }
+            set { attributes["pkcs12_password"] = value; }
+        }
+
+        /// <summary>
         /// Parameters:
         ///   enable_dedicated_ips - boolean - If `true`, we will use your site's dedicated IPs for all outbound connections to this AS2 Partner.
         ///   http_auth_username - string - Username to send to server for HTTP Authentication.
@@ -368,6 +396,8 @@ namespace FilesCom.Models
         ///   name - string - The partner's formal AS2 name.
         ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
         ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
         /// </summary>
         public Task<As2Partner> Update(Dictionary<string, object> parameters)
         {
@@ -387,6 +417,8 @@ namespace FilesCom.Models
         ///   name - string - The partner's formal AS2 name.
         ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
         ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
         /// </summary>
         public Task<As2Partner> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
@@ -454,6 +486,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
+            }
+            if (parameters.ContainsKey("pkcs12") && !(parameters["pkcs12"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12 must be of type string", "parameters[\"pkcs12\"]");
+            }
+            if (parameters.ContainsKey("pkcs12_password") && !(parameters["pkcs12_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12_password must be of type string", "parameters[\"pkcs12_password\"]");
             }
 
             OperationContext context = new OperationContext(FilesClient.Bind(ref client));
@@ -672,7 +712,9 @@ namespace FilesCom.Models
         ///   as2_station_id (required) - int64 - ID of the AS2 Station associated with this partner.
         ///   name (required) - string - The partner's formal AS2 name.
         ///   uri (required) - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
-        ///   public_certificate (required) - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+        ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
         /// </summary>
         public static Task<As2Partner> Create(
 
@@ -705,10 +747,6 @@ namespace FilesCom.Models
             if (!parameters.ContainsKey("uri") || parameters["uri"] == null)
             {
                 throw new ArgumentNullException("Parameter missing: uri", "parameters[\"uri\"]");
-            }
-            if (!parameters.ContainsKey("public_certificate") || parameters["public_certificate"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: public_certificate", "parameters[\"public_certificate\"]");
             }
             if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
             {
@@ -758,6 +796,14 @@ namespace FilesCom.Models
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
             }
+            if (parameters.ContainsKey("pkcs12") && !(parameters["pkcs12"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12 must be of type string", "parameters[\"pkcs12\"]");
+            }
+            if (parameters.ContainsKey("pkcs12_password") && !(parameters["pkcs12_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12_password must be of type string", "parameters[\"pkcs12_password\"]");
+            }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/as2_partners", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
@@ -784,6 +830,8 @@ namespace FilesCom.Models
         ///   name - string - The partner's formal AS2 name.
         ///   uri - string - Public URI where we will send the AS2 messages (via HTTP/HTTPS).
         ///   public_certificate - string - Public certificate for AS2 Partner.  Note: This is the certificate for AS2 message security, not a certificate used for HTTPS authentication.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the partner's public certificate. Provide this instead of public_certificate. Any private key in the file is discarded. A public-only file must contain exactly one certificate.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted public certificate is stored as PEM.
         /// </summary>
         public static Task<As2Partner> Update(
             Nullable<Int64> id,
@@ -864,6 +912,14 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("public_certificate") && !(parameters["public_certificate"] is string))
             {
                 throw new ArgumentException("Bad parameter: public_certificate must be of type string", "parameters[\"public_certificate\"]");
+            }
+            if (parameters.ContainsKey("pkcs12") && !(parameters["pkcs12"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12 must be of type string", "parameters[\"pkcs12\"]");
+            }
+            if (parameters.ContainsKey("pkcs12_password") && !(parameters["pkcs12_password"] is string))
+            {
+                throw new ArgumentException("Bad parameter: pkcs12_password must be of type string", "parameters[\"pkcs12_password\"]");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/as2_partners/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);

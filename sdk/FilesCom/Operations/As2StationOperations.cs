@@ -101,9 +101,11 @@ namespace FilesCom.Operations
         /// Parameters:
         ///   name (required) - string - The station's formal AS2 name.
         ///   workspace_id - int64 - ID of the Workspace associated with this AS2 Station.
-        ///   public_certificate (required) - string
-        ///   private_key (required) - string
-        ///   private_key_password - string
+        ///   public_certificate - string - Public certificate used for message security.
+        ///   private_key - string - PEM-encoded private key matching public_certificate.
+        ///   private_key_password - string - Password for the PEM-encoded private key.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's certificate and private key. Provide this instead of public_certificate and private_key.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
         /// </summary>
         public Task<As2Station> CreateAsync(
 
@@ -118,9 +120,11 @@ namespace FilesCom.Operations
         /// <summary>
         /// Parameters:
         ///   name - string - The station's formal AS2 name.
-        ///   public_certificate - string
-        ///   private_key - string
-        ///   private_key_password - string
+        ///   public_certificate - string - Public certificate used for message security.
+        ///   private_key - string - PEM-encoded private key matching public_certificate.
+        ///   private_key_password - string - Password for the PEM-encoded private key.
+        ///   pkcs12 - string - Base64-encoded PKCS#12 (.pfx or .p12) file containing the identity's replacement certificate and private key. Provide this instead of public_certificate and private_key.
+        ///   pkcs12_password - string - Password for pkcs12. The file and password are used only for import; the extracted certificate and private key are stored as PEM.
         /// </summary>
         public Task<As2Station> UpdateAsync(
             Nullable<Int64> id,
