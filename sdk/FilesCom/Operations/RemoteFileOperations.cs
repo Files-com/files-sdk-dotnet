@@ -180,6 +180,22 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        ///
+        /// Parameters:
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        /// </summary>
+        public Task<FileAction> BeginDeleteAsync(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return RemoteFile.BeginDeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
         /// Copy File/Folder
         ///
         /// Parameters:

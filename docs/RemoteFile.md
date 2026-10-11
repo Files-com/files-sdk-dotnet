@@ -308,6 +308,35 @@ Task<ZipListEntry[]> client.RemoteFiles.ZipListContentsAsync(
 
 ---
 
+## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+
+```
+Task<FileAction> RemoteFile.BeginDelete(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.BeginDeleteAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+
+
+---
+
 ## Copy File/Folder
 
 ```
@@ -663,6 +692,28 @@ File.ZipListContents
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
+
+
+---
+
+## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+
+```
+var File = RemoteFile.Find(1);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("recursive", false);
+
+File.BeginDelete(parameters);
+```
+
+`BeginDeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
 
 
 ---

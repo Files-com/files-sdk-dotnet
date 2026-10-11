@@ -1382,6 +1382,66 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        ///
+        /// Parameters:
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        /// </summary>
+        public Task<FileAction> BeginDelete(Dictionary<string, object> parameters)
+        {
+            return BeginDeleteCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        ///
+        /// Parameters:
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        /// </summary>
+        public Task<FileAction> BeginDeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return BeginDeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> BeginDeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            parameters["path"] = attributes["path"];
+
+            if (!attributes.ContainsKey("path"))
+            {
+                throw new ArgumentException("Current object doesn't have a path");
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
+            }
+
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/delete/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, requestOptions);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+        /// <summary>
         /// Copy File/Folder
         ///
         /// Parameters:
@@ -2481,6 +2541,65 @@ namespace FilesCom.Models
             try
             {
                 return JsonUtil.DeserializeWithOptions<ZipListEntry[]>(responseJson, context.Client, options);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
+            }
+        }
+
+        /// <summary>
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        ///
+        /// Parameters:
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        /// </summary>
+        public static Task<FileAction> BeginDelete(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return BeginDeleteCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> BeginDeleteCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            {
+                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            {
+                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+            }
+            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/delete/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+
+            try
+            {
+                return JsonUtil.DeserializeWithOptions<FileAction>(responseJson, context.Client, options);
             }
             catch (JsonException)
             {
