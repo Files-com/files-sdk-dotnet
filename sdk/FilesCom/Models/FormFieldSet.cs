@@ -39,6 +39,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("title", null);
             }
+            if (!this.attributes.ContainsKey("require_complete_metadata_capture"))
+            {
+                this.attributes.Add("require_complete_metadata_capture", false);
+            }
             if (!this.attributes.ContainsKey("form_layout"))
             {
                 this.attributes.Add("form_layout", new Nullable<Int64>[0]);
@@ -118,6 +122,17 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["title"]; }
             set { attributes["title"] = value; }
+        }
+
+        /// <summary>
+        /// Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("require_complete_metadata_capture")]
+        public bool RequireCompleteMetadataCapture
+        {
+            get { return attributes["require_complete_metadata_capture"] == null ? false : (bool)attributes["require_complete_metadata_capture"]; }
+            set { attributes["require_complete_metadata_capture"] = value; }
         }
 
         /// <summary>
@@ -207,6 +222,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   title - string - Title to be displayed
+        ///   require_complete_metadata_capture - boolean - Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
         ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
@@ -221,6 +237,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   title - string - Title to be displayed
+        ///   require_complete_metadata_capture - boolean - Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
         ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
@@ -253,6 +270,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("title") && !(parameters["title"] is string))
             {
                 throw new ArgumentException("Bad parameter: title must be of type string", "parameters[\"title\"]");
+            }
+            if (parameters.ContainsKey("require_complete_metadata_capture") && !(parameters["require_complete_metadata_capture"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: require_complete_metadata_capture must be of type bool", "parameters[\"require_complete_metadata_capture\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
@@ -477,6 +498,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   title - string - Title to be displayed
+        ///   require_complete_metadata_capture - boolean - Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
         ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
@@ -510,6 +532,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("title") && !(parameters["title"] is string))
             {
                 throw new ArgumentException("Bad parameter: title must be of type string", "parameters[\"title\"]");
+            }
+            if (parameters.ContainsKey("require_complete_metadata_capture") && !(parameters["require_complete_metadata_capture"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: require_complete_metadata_capture must be of type bool", "parameters[\"require_complete_metadata_capture\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {
@@ -547,6 +573,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   title - string - Title to be displayed
+        ///   require_complete_metadata_capture - boolean - Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
         ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
@@ -592,6 +619,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("title") && !(parameters["title"] is string))
             {
                 throw new ArgumentException("Bad parameter: title must be of type string", "parameters[\"title\"]");
+            }
+            if (parameters.ContainsKey("require_complete_metadata_capture") && !(parameters["require_complete_metadata_capture"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: require_complete_metadata_capture must be of type bool", "parameters[\"require_complete_metadata_capture\"]");
             }
             if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
             {

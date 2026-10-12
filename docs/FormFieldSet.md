@@ -6,6 +6,7 @@
 {
   "id": 1,
   "title": "Sample Form Title",
+  "require_complete_metadata_capture": false,
   "form_layout": [
     1,
     2,
@@ -37,6 +38,7 @@
 
 * `id` / `Id`  (Nullable<Int64>): Form field set id
 * `title` / `Title`  (string): Title to be displayed
+* `require_complete_metadata_capture` / `RequireCompleteMetadataCapture`  (bool): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `form_layout` / `FormLayout`  (Nullable<Int64>[]): Layout of the form
 * `form_fields` / `FormFields`  (FormField[]): Associated form field definitions; authenticated form field set responses include historical definitions, while form_layout identifies current fields
 * `skip_name` / `SkipName`  (bool): Any associated InboxRegistrations or BundleRegistrations can be saved without providing name
@@ -131,6 +133,7 @@ Task<FormFieldSet> client.FormFieldSets.CreateAsync(
 
 * `user_id` (Nullable<Int64>): User ID.  Provide a value of `0` to operate the current session's user.
 * `title` (string): Title to be displayed
+* `require_complete_metadata_capture` (bool): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `workspace_id` (Nullable<Int64>): Workspace ID
 * `skip_email` (bool): Skip validating form email
 * `skip_name` (bool): Skip validating form name
@@ -165,6 +168,7 @@ Task<FormFieldSet> client.FormFieldSets.UpdateAsync(
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `require_complete_metadata_capture` (bool): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `workspace_id` (Nullable<Int64>): Workspace ID
 * `skip_email` (bool): Skip validating form email
 * `skip_name` (bool): Skip validating form name
@@ -210,6 +214,7 @@ var FormFieldSet = FormFieldSet.Find(1);
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("title", "Sample Form Title");
+parameters.Add("require_complete_metadata_capture", false);
 parameters.Add("workspace_id", 1);
 parameters.Add("skip_email", false);
 parameters.Add("skip_name", false);
@@ -225,6 +230,7 @@ FormFieldSet.Update(parameters);
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
 * `title` (string): Title to be displayed
+* `require_complete_metadata_capture` (bool): Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
 * `workspace_id` (Nullable<Int64>): Workspace ID
 * `skip_email` (bool): Skip validating form email
 * `skip_name` (bool): Skip validating form name

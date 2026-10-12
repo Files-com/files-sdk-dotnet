@@ -310,6 +310,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("disable_notifications", false);
             }
+            if (!this.attributes.ContainsKey("file_activity_events_enabled"))
+            {
+                this.attributes.Add("file_activity_events_enabled", false);
+            }
             if (!this.attributes.ContainsKey("disable_password_reset"))
             {
                 this.attributes.Add("disable_password_reset", false);
@@ -1663,6 +1667,18 @@ namespace FilesCom.Models
         {
             get { return attributes["disable_notifications"] == null ? false : (bool)attributes["disable_notifications"]; }
             private set { attributes["disable_notifications"] = value; }
+        }
+
+        /// <summary>
+        /// If true, file operations produce file_action.activity.v1 EventChannel events in all workspaces. Defaults to false; subscription filters and workspace access still control delivery.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("file_activity_events_enabled")]
+        public bool FileActivityEventsEnabled
+        {
+            get { return attributes["file_activity_events_enabled"] == null ? false : (bool)attributes["file_activity_events_enabled"]; }
+            private set { attributes["file_activity_events_enabled"] = value; }
         }
 
         /// <summary>
@@ -3266,6 +3282,7 @@ namespace FilesCom.Models
         ///   legacy_checksums_mode - boolean - Use legacy checksums mode?
         ///   migrate_remote_server_sync_to_sync - boolean - If true, we will migrate all remote server syncs to the new Sync model.
         ///   as2_message_retention_days - int64 - Number of days to retain AS2 messages (incoming and outgoing).
+        ///   file_activity_events_enabled - boolean - If true, file operations produce file_action.activity.v1 EventChannel events in all workspaces. Defaults to false; subscription filters and workspace access still control delivery.
         ///   username_display - string - How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
         ///   session_expiry_minutes - int64 - Session expiry in minutes
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
@@ -3623,6 +3640,10 @@ namespace FilesCom.Models
             if (parameters.ContainsKey("as2_message_retention_days") && !(parameters["as2_message_retention_days"] is Nullable<Int64>))
             {
                 throw new ArgumentException("Bad parameter: as2_message_retention_days must be of type Nullable<Int64>", "parameters[\"as2_message_retention_days\"]");
+            }
+            if (parameters.ContainsKey("file_activity_events_enabled") && !(parameters["file_activity_events_enabled"] is bool))
+            {
+                throw new ArgumentException("Bad parameter: file_activity_events_enabled must be of type bool", "parameters[\"file_activity_events_enabled\"]");
             }
             if (parameters.ContainsKey("username_display") && !(parameters["username_display"] is string))
             {

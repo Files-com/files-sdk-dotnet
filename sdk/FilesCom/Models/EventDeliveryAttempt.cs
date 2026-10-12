@@ -46,6 +46,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("event_target_id", null);
             }
+            if (!this.attributes.ContainsKey("activity_notification_batch_id"))
+            {
+                this.attributes.Add("activity_notification_batch_id", null);
+            }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
                 this.attributes.Add("workspace_id", null);
@@ -160,6 +164,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["event_target_id"]; }
             private set { attributes["event_target_id"] = value; }
+        }
+
+        /// <summary>
+        /// Shared summary ID when this event is delivered in a Slack or Teams subfolder summary. All events in a summary share its delivery outcome.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("activity_notification_batch_id")]
+        public Nullable<Int64> ActivityNotificationBatchId
+        {
+            get { return (Nullable<Int64>)attributes["activity_notification_batch_id"]; }
+            private set { attributes["activity_notification_batch_id"] = value; }
         }
 
         /// <summary>

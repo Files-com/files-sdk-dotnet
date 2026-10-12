@@ -99,6 +99,7 @@ namespace FilesCom.Operations
         /// Parameters:
         ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
         ///   title - string - Title to be displayed
+        ///   require_complete_metadata_capture - boolean - Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
         ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
@@ -118,6 +119,7 @@ namespace FilesCom.Operations
         /// <summary>
         /// Parameters:
         ///   title - string - Title to be displayed
+        ///   require_complete_metadata_capture - boolean - Reject answers over 1024 characters or more than 32 answered custom fields to ensure complete file metadata capture
         ///   workspace_id - int64 - Workspace ID
         ///   skip_email - boolean - Skip validating form email
         ///   skip_name - boolean - Skip validating form name
