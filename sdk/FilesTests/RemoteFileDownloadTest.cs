@@ -130,11 +130,11 @@ namespace FilesTests
         }
 
         [TestMethod]
-        public async Task DownloadWithoutLocalPathRefusesDriveAndStreamNames()
+        public async Task DownloadWithoutLocalPathRefusesDriveStreamAndDeviceNames()
         {
-            RequireColonInvalidInFileNames();
+            RequireWindows();
 
-            foreach (string remotePath in new[] { "folder/C:victim.txt", "folder/victim.txt::$DATA" })
+            foreach (string remotePath in new[] { "folder/C:victim.txt", "folder/victim.txt::$DATA", "folder/NUL", "folder/con", "folder/COM1", "folder/CONIN$" })
             {
                 Exception error = await CaptureException(() => RemoteFile.DownloadFile(remotePath));
 
@@ -169,11 +169,11 @@ namespace FilesTests
             }
         }
 
-        private static void RequireColonInvalidInFileNames()
+        private static void RequireWindows()
         {
-            if (Array.IndexOf(Path.GetInvalidFileNameChars(), ':') < 0)
+            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
             {
-                Assert.Inconclusive("Requires a platform where a colon is not valid in a file name, such as Windows.");
+                Assert.Inconclusive("Requires Windows.");
             }
         }
 

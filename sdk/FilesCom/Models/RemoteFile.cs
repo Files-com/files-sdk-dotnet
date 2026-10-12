@@ -17,6 +17,13 @@ namespace FilesCom.Models
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(RemoteFile));
 
+        private static readonly HashSet<string> WindowsDeviceNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "CON", "PRN", "AUX", "NUL", "CONIN$", "CONOUT$",
+            "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "COM\u00b9", "COM\u00b2", "COM\u00b3",
+            "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9", "LPT\u00b9", "LPT\u00b2", "LPT\u00b3",
+        };
+
         public static async Task<RemoteFile> Create(Dictionary<string, object> parameters = null, Dictionary<string, object> options = null)
         {
             return (RemoteFile)await RemoteFile.Create((string)parameters["path"], parameters, options);
@@ -42,16 +49,33 @@ namespace FilesCom.Models
 
         // The remote file's name in the working directory. A name that is not a valid local file name is refused: on
         // Windows a colon would make it a drive-relative path or an NTFS stream, which can write outside the working
-        // directory or onto another file.
+        // directory or onto another file, and a device name such as NUL would write to the device instead of a file.
         private static string DefaultLocalPath(string path)
         {
             string normalizedPath = PathUtil.normalize(path);
             string name = normalizedPath.Substring(normalizedPath.LastIndexOf('/') + 1);
-            if (name.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0)
+            if (name.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0 || IsWindowsDeviceName(name))
             {
                 throw new ArgumentException($"Bad parameter: localPath is required because \"{name}\" is not a valid local file name", "localPath");
             }
             return System.IO.Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + name;
+        }
+
+        // Whether Windows opens name as a device rather than a file. A bare device name is always a device. Anything
+        // after it, such as the extension in NUL.txt, makes it a device on some Windows versions and a file on others,
+        // so Windows decides those names: it resolves a device to a \\.\ path.
+        private static bool IsWindowsDeviceName(string name)
+        {
+            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                return false;
+            }
+            string baseName = name.Split('.')[0].TrimEnd(' ');
+            if (!WindowsDeviceNames.Contains(baseName))
+            {
+                return false;
+            }
+            return baseName == name || System.IO.Path.GetFullPath(name).StartsWith(@"\\.\", StringComparison.Ordinal);
         }
 
         internal static async Task<RemoteFile> DownloadFileCore(FilesClient client, string path, System.IO.Stream stream, Dictionary<string, object> options, CancellationToken cancellationToken)
