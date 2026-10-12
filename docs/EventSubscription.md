@@ -233,6 +233,7 @@ parameters.Add("message", "example");
 parameters.Add("message_only", true);
 parameters.Add("enabled", true);
 parameters.Add("event_types", ["sync_run.failure.v1"]);
+parameters.Add("filter", {"payload.sync_name":{"prefix":"Nightly"},"payload.event_errors":{"exists":true}});
 parameters.Add("delivery_policy", "example");
 parameters.Add("event_target_ids", [1]);
 
