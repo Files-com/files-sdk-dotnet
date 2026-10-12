@@ -145,7 +145,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Policy configuration data. Settings policies accept site settings plus an optional `folder_behaviors` array for parent-managed root behaviors on child sites. For more information, refer to the Value Hash section of the developer documentation.
+        /// Policy configuration data. On a Child Site, contains only managed setting names with null values. Settings policies accept site settings plus an optional `folder_behaviors` array for parent-managed root behaviors on child sites. For more information, refer to the Value Hash section of the developer documentation.
         /// </summary>
         [JsonPropertyName("value")]
         public object Value

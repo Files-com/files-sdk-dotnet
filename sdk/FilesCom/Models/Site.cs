@@ -2241,7 +2241,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// List of site settings managed by the parent site
+        /// Site settings managed by the parent site. Each key identifies a managed setting, with a null value. Non-secret effective values are returned in their own Site settings fields.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("managed_site_settings")]
