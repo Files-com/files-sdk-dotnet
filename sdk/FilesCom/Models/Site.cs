@@ -200,6 +200,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("calculate_file_checksums_sha256", false);
             }
+            if (!this.attributes.ContainsKey("child_site_folder_admins_can_see_parent_site_directory"))
+            {
+                this.attributes.Add("child_site_folder_admins_can_see_parent_site_directory", false);
+            }
             if (!this.attributes.ContainsKey("uploads_via_email_authentication"))
             {
                 this.attributes.Add("uploads_via_email_authentication", false);
@@ -1361,6 +1365,18 @@ namespace FilesCom.Models
         {
             get { return attributes["calculate_file_checksums_sha256"] == null ? false : (bool)attributes["calculate_file_checksums_sha256"]; }
             private set { attributes["calculate_file_checksums_sha256"] = value; }
+        }
+
+        /// <summary>
+        /// If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("child_site_folder_admins_can_see_parent_site_directory")]
+        public bool ChildSiteFolderAdminsCanSeeParentSiteDirectory
+        {
+            get { return attributes["child_site_folder_admins_can_see_parent_site_directory"] == null ? false : (bool)attributes["child_site_folder_admins_can_see_parent_site_directory"]; }
+            private set { attributes["child_site_folder_admins_can_see_parent_site_directory"] = value; }
         }
 
         /// <summary>
@@ -3368,6 +3384,7 @@ namespace FilesCom.Models
         ///   group_admins_can_bypass_user_lifecycle_rules - boolean - Allow group admins to exempt users in their groups from lifecycle rules
         ///   group_admins_can_reset_passwords - boolean - Allow group admins to reset passwords for users in their groups
         ///   group_admins_can_set_user_password - boolean - Allow group admins to set password authentication method
+        ///   child_site_folder_admins_can_see_parent_site_directory - boolean - If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
         ///   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
         ///   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
         ///   admins_bypass_locked_subfolders - boolean - Allow admins to bypass the locked subfolders setting.
@@ -3960,6 +3977,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("group_admins_can_set_user_password", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_set_user_password is null, which cannot be sent" : "Bad parameter: group_admins_can_set_user_password must be of type bool", "group_admins_can_set_user_password");
+            }
+            if (parameters.TryGetValue("child_site_folder_admins_can_see_parent_site_directory", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: child_site_folder_admins_can_see_parent_site_directory is null, which cannot be sent" : "Bad parameter: child_site_folder_admins_can_see_parent_site_directory must be of type bool", "child_site_folder_admins_can_see_parent_site_directory");
             }
             if (parameters.TryGetValue("bundle_recipient_blacklist_free_email_domains", out parameterValue) && !(parameterValue is bool))
             {

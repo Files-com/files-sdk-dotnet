@@ -69,6 +69,7 @@
   "calculate_file_checksums_md5": true,
   "calculate_file_checksums_sha1": true,
   "calculate_file_checksums_sha256": true,
+  "child_site_folder_admins_can_see_parent_site_directory": true,
   "uploads_via_email_authentication": true,
   "color2_left": "#0066a7",
   "color2_link": "#d34f5d",
@@ -420,6 +421,7 @@
 * `calculate_file_checksums_md5` / `CalculateFileChecksumsMd5`  (bool): Calculate MD5 checksums for files?
 * `calculate_file_checksums_sha1` / `CalculateFileChecksumsSha1`  (bool): Calculate SHA1 checksums for files?
 * `calculate_file_checksums_sha256` / `CalculateFileChecksumsSha256`  (bool): Calculate SHA256 checksums for files?
+* `child_site_folder_admins_can_see_parent_site_directory` / `ChildSiteFolderAdminsCanSeeParentSiteDirectory`  (bool): If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
 * `uploads_via_email_authentication` / `UploadsViaEmailAuthentication`  (bool): Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?
 * `color2_left` / `Color2Left`  (string): Page link and button color
 * `color2_link` / `Color2Link`  (string): Top bar link color
@@ -778,6 +780,7 @@ Task<Site> client.Sites.UpdateAsync(
 * `group_admins_can_bypass_user_lifecycle_rules` (bool): Allow group admins to exempt users in their groups from lifecycle rules
 * `group_admins_can_reset_passwords` (bool): Allow group admins to reset passwords for users in their groups
 * `group_admins_can_set_user_password` (bool): Allow group admins to set password authentication method
+* `child_site_folder_admins_can_see_parent_site_directory` (bool): If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
 * `bundle_recipient_blacklist_free_email_domains` (bool): Disallow free email domains for Bundle/Inbox recipients?
 * `bundle_recipient_blacklist_domains` (string[]): List of email domains to disallow when entering a Bundle/Inbox recipients
 * `admins_bypass_locked_subfolders` (bool): Allow admins to bypass the locked subfolders setting.

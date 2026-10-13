@@ -5009,6 +5009,7 @@
         "calculate_file_checksums_md5": "CalculateFileChecksumsMd5",
         "calculate_file_checksums_sha1": "CalculateFileChecksumsSha1",
         "calculate_file_checksums_sha256": "CalculateFileChecksumsSha256",
+        "child_site_folder_admins_can_see_parent_site_directory": "ChildSiteFolderAdminsCanSeeParentSiteDirectory",
         "color2_left": "Color2Left",
         "color2_link": "Color2Link",
         "color2_text": "Color2Text",
