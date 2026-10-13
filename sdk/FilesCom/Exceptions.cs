@@ -309,12 +309,16 @@ namespace FilesCom
     }
 
     /// <summary>
-    /// An error response from Files.com. Its class comes from the response's error type, never from its HTTP
-    /// status: a type the SDK knows has its own class, such as <see cref="NotFoundException"/>, and any other type
-    /// is an ApiException with the response's error, status and headers.
+    /// An error response from Files.com. For a JSON error object, its class comes from the response's error type,
+    /// never from its HTTP status: a type the SDK knows has its own class, such as <see cref="NotFoundException"/>,
+    /// and any other type is an ApiException with the response's error, status and headers. Files.com's former
+    /// plain-text answer that a site is served from another region, an HTTP 403 whose body starts with
+    /// <c>You have connected to a URL</c> and that has an <c>X-Files-Host</c> header, is a
+    /// <see cref="LockoutRegionMismatchException"/> with no <see cref="responseError"/>, whose message does not quote
+    /// the body.
     /// </summary>
     /// <remarks>
-    /// Its message is the response's error text, with the user information, query and fragment of any URL in it
+    /// A JSON error's message is its error text, with the user information, query and fragment of any URL in it
     /// removed, since a signed URL keeps its credentials there. <see cref="error"/> and <see cref="responseError"/>
     /// keep the response as it came. An error does not show by itself that a request which changes something was not
     /// carried out: <see cref="SdkException.RequestMayHaveBeenProcessed"/> is true when it may have been.

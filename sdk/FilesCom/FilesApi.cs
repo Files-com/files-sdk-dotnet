@@ -96,8 +96,10 @@ namespace FilesCom
         }
 
         // The exception for an error response whose body has been read: an ApiException, of the class its error type
-        // names, for a JSON error object, and otherwise an InvalidResponseException. The body, and why it could not be
-        // read, are logged only at DEBUG: the exception's message and inner exceptions never quote the response, whose
+        // names, for a JSON error object, a LockoutRegionMismatchException for Files.com's former plain-text answer that
+        // the site is served from another region (RegionRelocation.IsFormerMismatch), and otherwise an
+        // InvalidResponseException. The body, and why it could not be read, are logged only at DEBUG: the exception's
+        // message and inner exceptions never quote the response, whose
         // JSON property names can be a signed URL. An API error's message is its error text with the credentials of
         // any URL in it removed, while ApiException.error keeps the text as sent. A transfer's message has only its
         // status, and whether storage said its URL has expired or the request timed out. The body is decoded by
@@ -124,6 +126,12 @@ namespace FilesCom
             }
             if (responseError == null)
             {
+                if (!isTransfer && !truncated && RegionRelocation.IsFormerMismatch(status, body, response.Headers))
+                {
+                    var former = new LockoutRegionMismatchException($"HTTP request failed with code {status}: Files.com answered that the site is served from another region.", status, null, response.Headers);
+                    former.AnsweredTo(response.RequestMessage);
+                    return former;
+                }
                 bool expired = isTransfer && SignedUrl.RefusedAsExpired(status, received);
                 // Only a whole body can say so: the start of a longer one is never parsed.
                 bool timedOut = isTransfer && !truncated && RetryPolicy.StorageTimedOut(status, body);

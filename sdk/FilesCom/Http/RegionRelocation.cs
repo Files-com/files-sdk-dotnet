@@ -1,13 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace FilesCom.Http
 {
     // Whether an operation moves to the address a LockoutRegionMismatchException names, by the operation's
     // RegionRelocationPolicy. Files.com answers 403 with the type not-authenticated/lockout-region-mismatch when a
-    // site is served from another region's address, and names it in data.host: the site's domain, or its full URL.
+    // site is served from another region's address, and names it in data.host: the site's domain, or its full URL. It
+    // names it in X-Files-Host too, which is read when data.host gives none. Files.com's former answer is a 403 in
+    // plain text that names the address in X-Files-Host alone (IsFormerMismatch), and it is the same mismatch.
     //
     // Only the address the request went to may send the operation elsewhere, since the operation already trusts it with
     // its credentials: the answer must come from the operation's current origin, not after a redirect to another origin,
@@ -15,6 +20,19 @@ namespace FilesCom.Http
     // move is a retry of the operation, with no wait: it needs a retry left and uses one, and happens once at most.
     internal static class RegionRelocation
     {
+        private const string HostHeader = "X-Files-Host";
+
+        // How the body of Files.com's former answer starts.
+        private const string FormerMismatchText = "You have connected to a URL";
+
+        // Whether an API error response that is not a Files.com error object is Files.com's former answer that the site
+        // is served from another region: a 403 whose body starts with its text and that has X-Files-Host. Another
+        // status, other text or no X-Files-Host is not.
+        internal static bool IsFormerMismatch(int status, string body, HttpHeaders headers)
+        {
+            return status == 403 && body.StartsWith(FormerMismatchText, StringComparison.Ordinal) && headers.Contains(HostHeader);
+        }
+
         // The failure an attempt ends with for a mismatch: a Requested move, which RetryPolicy retries at once, or the
         // mismatch refused, with why.
         internal static Exception Consider(LockoutRegionMismatchException mismatch, OperationContext context)
@@ -90,22 +108,25 @@ namespace FilesCom.Http
             return string.Equals(address.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase);
         }
 
+        // The address the answer names: data.host when it is text, and otherwise X-Files-Host when the answer has one.
         private static string HostOf(LockoutRegionMismatchException mismatch)
         {
             object host = null;
-            if (mismatch.data?.TryGetValue("host", out host) != true)
-            {
-                return null;
-            }
+            mismatch.data?.TryGetValue("host", out host);
             switch (host)
             {
                 case JsonElement element when element.ValueKind == JsonValueKind.String:
                     return element.GetString();
                 case string text:
                     return text;
-                default:
-                    return null;
             }
+            if (mismatch.httpHeaders == null || !mismatch.httpHeaders.TryGetValues(HostHeader, out IEnumerable<string> values))
+            {
+                return null;
+            }
+            // More than one names no single address.
+            string[] hosts = values.ToArray();
+            return hosts.Length == 1 ? hosts[0] : null;
         }
 
         // Why an answer cannot be trusted to name the site's address (RegionRelocationRefusal.UntrustedIssuer): the first

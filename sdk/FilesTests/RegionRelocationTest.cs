@@ -27,6 +27,9 @@ namespace FilesTests
         private const string Other = "other.relocation-test.net";
         private const string Impostor = "impostor.relocation-test.net";
 
+        // Files.com's former answer that the site is served from another region: plain text, which starts as it did.
+        private const string FormerAnswer = "You have connected to a URL that does not serve this site.";
+
         private static TestCertificateAuthority authority;
         private static TestCertificateAuthority stranger;
         private static X509Certificate2 trusted;
@@ -244,6 +247,60 @@ namespace FilesTests
 
             Assert.AreEqual(RegionRelocationRefusal.InvalidHost, error.Refusal);
             Assert.IsNull(error.RequestedOrigin);
+            Assert.AreEqual(1, sites.Received.Count);
+        }
+
+        // X-Files-Host names the address when data.host does not: in a mismatch whose data gives no host, and in
+        // Files.com's former answer, which is plain text. A data.host is the address whatever X-Files-Host says. The
+        // operation moves there with the same request, or, with relocation disabled, the error names it.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow("data.host, with another X-Files-Host")]
+        [DataRow("X-Files-Host, with no data.host")]
+        [DataRow("the former answer")]
+        public async Task XFilesHostNamesTheAddressWhenDataHostDoesNot(string answer)
+        {
+            sites.On(App, "PATCH /users/1", request => answer == "the former answer" ? Answer.Json(FormerAnswer, $"X-Files-Host: {Eu}\r\n", 403)
+                : answer == "X-Files-Host, with no data.host" ? Answer.Json(MismatchJson("{}"), $"X-Files-Host: {Eu}\r\n", 403)
+                : Answer.Json(MismatchJson($"{{\"host\":\"{Eu}\"}}"), $"X-Files-Host: {Other}\r\n", 403));
+            sites.On(Eu, "PATCH /users/1", request => Answer.Json("{\"id\":1,\"name\":\"Moved\"}"));
+
+            User user = await Client().Users.UpdateAsync(1, new Dictionary<string, object> { { "name", "Moved" } });
+            LockoutRegionMismatchException error = await Assert.ThrowsExactlyAsync<LockoutRegionMismatchException>(
+                () => Client(policy: RegionRelocationPolicy.Disabled).Users.UpdateAsync(1, new Dictionary<string, object> { { "name", "Moved" } }));
+
+            Assert.AreEqual("Moved", user.Name);
+            CollectionAssert.AreEqual(
+                new[] { $"{App} PATCH /users/1", $"{Eu} PATCH /users/1", $"{App} PATCH /users/1" },
+                sites.Received.Select(request => request.ToString()).ToArray(),
+                string.Join(" | ", sites.Received));
+            CollectionAssert.AreEqual(sites.Received[0].Body, sites.Received[1].Body, "The same body goes to the new address.");
+            Assert.AreEqual("key-a", sites.Received[1].Headers["X-FilesAPI-Key"]);
+            Assert.AreEqual(RegionRelocationRefusal.Disabled, error.Refusal);
+            Assert.AreEqual("https://eu.relocation-test.net", error.RequestedOrigin);
+            if (answer == "the former answer")
+            {
+                Assert.AreEqual("HTTP request failed with code 403: Files.com answered that the site is served from another region. The request was not sent to https://eu.relocation-test.net: FilesConfiguration.RegionRelocation is Disabled.",
+                    error.Message, "The message does not quote the answer.");
+            }
+        }
+
+        // X-Files-Host does not make another answer a mismatch: another error type, other text or another status; nor
+        // is the former answer's text one without it. The error is what the answer is, and nothing more is sent.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow(403, "{\"error\":\"Denied\",\"http-code\":403,\"type\":\"not-authorized/folder-admin-permission-required\"}", true, typeof(FolderAdminPermissionRequiredException))]
+        [DataRow(403, "Forbidden", true, typeof(InvalidResponseException))]
+        [DataRow(401, FormerAnswer, true, typeof(InvalidResponseException))]
+        [DataRow(403, FormerAnswer, false, typeof(InvalidResponseException))]
+        public async Task XFilesHostDoesNotMakeAnotherAnswerAMismatch(int status, string body, bool namesHost, Type expected)
+        {
+            sites.On(App, "GET /users/1", request => Answer.Json(body, namesHost ? $"X-Files-Host: {Eu}\r\n" : "", status));
+            FilesClient client = Client();
+
+            SdkException error = await Assert.ThrowsAsync<SdkException>(() => client.Users.FindAsync(1));
+
+            Assert.AreEqual(expected, error.GetType());
             Assert.AreEqual(1, sites.Received.Count);
         }
 
