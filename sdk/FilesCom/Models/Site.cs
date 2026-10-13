@@ -9,26 +9,28 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
+    /// <summary>
+    /// SiteEntity model
+    /// </summary>
     public class Site : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        /// <summary>
+        /// Makes a Site with no attributes set and no options.
+        /// </summary>
         public Site() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a Site with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public Site(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -832,26 +834,41 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => null;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[] { BundleWatermarkAttachment, Icon128, Icon16, Icon32, Icon48, Logo, LoginPageBackgroundImage, Session, User }; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
@@ -2291,9 +2308,9 @@ namespace FilesCom.Models
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("next_billing_amount")]
-        public decimal NextBillingAmount
+        public Nullable<decimal> NextBillingAmount
         {
-            get { return (decimal)attributes["next_billing_amount"]; }
+            get { return (Nullable<decimal>)attributes["next_billing_amount"]; }
             private set { attributes["next_billing_amount"] = value; }
         }
 
@@ -3163,7 +3180,10 @@ namespace FilesCom.Models
 
 
         /// <summary>
+        /// Sends GET /site to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Site> Get(
 
             Dictionary<string, object> parameters = null,
@@ -3187,18 +3207,14 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/site", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Site>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Site>(responseJson, context, options);
         }
 
         /// <summary>
+        /// Sends GET /site/usage to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<UsageSnapshot> GetUsage(
 
             Dictionary<string, object> parameters = null,
@@ -3222,14 +3238,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/site/usage", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<UsageSnapshot>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<UsageSnapshot>(responseJson, context, options);
         }
 
         /// <summary>
@@ -3429,6 +3438,8 @@ namespace FilesCom.Models
         ///   redirect_old_subdomain - boolean - If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the new Files.com subdomain.
         ///   smtp_password - string - Password for SMTP server.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Site> Update(
 
             Dictionary<string, object> parameters = null,
@@ -3448,794 +3459,788 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("subdomain") && !(parameters["subdomain"] is string))
+            if (parameters.TryGetValue("subdomain", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: subdomain must be of type string", "parameters[\"subdomain\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subdomain is null, which cannot be sent" : "Bad parameter: subdomain must be of type string", "subdomain");
             }
-            if (parameters.ContainsKey("domain") && !(parameters["domain"] is string))
+            if (parameters.TryGetValue("domain", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: domain must be of type string", "parameters[\"domain\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: domain is null, which cannot be sent" : "Bad parameter: domain must be of type string", "domain");
             }
-            if (parameters.ContainsKey("domain_hsts_header") && !(parameters["domain_hsts_header"] is bool))
+            if (parameters.TryGetValue("domain_hsts_header", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: domain_hsts_header must be of type bool", "parameters[\"domain_hsts_header\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: domain_hsts_header is null, which cannot be sent" : "Bad parameter: domain_hsts_header must be of type bool", "domain_hsts_header");
             }
-            if (parameters.ContainsKey("domain_letsencrypt_chain") && !(parameters["domain_letsencrypt_chain"] is string))
+            if (parameters.TryGetValue("domain_letsencrypt_chain", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: domain_letsencrypt_chain must be of type string", "parameters[\"domain_letsencrypt_chain\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: domain_letsencrypt_chain is null, which cannot be sent" : "Bad parameter: domain_letsencrypt_chain must be of type string", "domain_letsencrypt_chain");
             }
-            if (parameters.ContainsKey("email") && !(parameters["email"] is string))
+            if (parameters.TryGetValue("email", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email is null, which cannot be sent" : "Bad parameter: email must be of type string", "email");
             }
-            if (parameters.ContainsKey("reply_to_email") && !(parameters["reply_to_email"] is string))
+            if (parameters.TryGetValue("reply_to_email", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: reply_to_email must be of type string", "parameters[\"reply_to_email\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: reply_to_email is null, which cannot be sent" : "Bad parameter: reply_to_email must be of type string", "reply_to_email");
             }
-            if (parameters.ContainsKey("allow_bundle_names") && !(parameters["allow_bundle_names"] is bool))
+            if (parameters.TryGetValue("allow_bundle_names", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_bundle_names must be of type bool", "parameters[\"allow_bundle_names\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_bundle_names is null, which cannot be sent" : "Bad parameter: allow_bundle_names must be of type bool", "allow_bundle_names");
             }
-            if (parameters.ContainsKey("bundle_expiration") && !(parameters["bundle_expiration"] is Nullable<Int64>))
+            if (parameters.TryGetValue("bundle_expiration", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: bundle_expiration must be of type Nullable<Int64>", "parameters[\"bundle_expiration\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_expiration is null, which cannot be sent" : "Bad parameter: bundle_expiration must be of type Nullable<Int64>", "bundle_expiration");
             }
-            if (parameters.ContainsKey("welcome_email_enabled") && !(parameters["welcome_email_enabled"] is bool))
+            if (parameters.TryGetValue("welcome_email_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: welcome_email_enabled must be of type bool", "parameters[\"welcome_email_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: welcome_email_enabled is null, which cannot be sent" : "Bad parameter: welcome_email_enabled must be of type bool", "welcome_email_enabled");
             }
-            if (parameters.ContainsKey("ask_about_overwrites") && !(parameters["ask_about_overwrites"] is bool))
+            if (parameters.TryGetValue("ask_about_overwrites", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ask_about_overwrites must be of type bool", "parameters[\"ask_about_overwrites\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ask_about_overwrites is null, which cannot be sent" : "Bad parameter: ask_about_overwrites must be of type bool", "ask_about_overwrites");
             }
-            if (parameters.ContainsKey("show_request_access_link") && !(parameters["show_request_access_link"] is bool))
+            if (parameters.TryGetValue("show_request_access_link", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: show_request_access_link must be of type bool", "parameters[\"show_request_access_link\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: show_request_access_link is null, which cannot be sent" : "Bad parameter: show_request_access_link must be of type bool", "show_request_access_link");
             }
-            if (parameters.ContainsKey("always_mkdir_parents") && !(parameters["always_mkdir_parents"] is bool))
+            if (parameters.TryGetValue("always_mkdir_parents", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: always_mkdir_parents must be of type bool", "parameters[\"always_mkdir_parents\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_mkdir_parents is null, which cannot be sent" : "Bad parameter: always_mkdir_parents must be of type bool", "always_mkdir_parents");
             }
-            if (parameters.ContainsKey("welcome_email_cc") && !(parameters["welcome_email_cc"] is string))
+            if (parameters.TryGetValue("welcome_email_cc", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: welcome_email_cc must be of type string", "parameters[\"welcome_email_cc\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: welcome_email_cc is null, which cannot be sent" : "Bad parameter: welcome_email_cc must be of type string", "welcome_email_cc");
             }
-            if (parameters.ContainsKey("welcome_email_subject") && !(parameters["welcome_email_subject"] is string))
+            if (parameters.TryGetValue("welcome_email_subject", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: welcome_email_subject must be of type string", "parameters[\"welcome_email_subject\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: welcome_email_subject is null, which cannot be sent" : "Bad parameter: welcome_email_subject must be of type string", "welcome_email_subject");
             }
-            if (parameters.ContainsKey("welcome_custom_text") && !(parameters["welcome_custom_text"] is string))
+            if (parameters.TryGetValue("welcome_custom_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: welcome_custom_text must be of type string", "parameters[\"welcome_custom_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: welcome_custom_text is null, which cannot be sent" : "Bad parameter: welcome_custom_text must be of type string", "welcome_custom_text");
             }
-            if (parameters.ContainsKey("language") && !(parameters["language"] is string))
+            if (parameters.TryGetValue("language", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: language must be of type string", "parameters[\"language\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: language is null, which cannot be sent" : "Bad parameter: language must be of type string", "language");
             }
-            if (parameters.ContainsKey("windows_mode_ftp") && !(parameters["windows_mode_ftp"] is bool))
+            if (parameters.TryGetValue("windows_mode_ftp", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: windows_mode_ftp must be of type bool", "parameters[\"windows_mode_ftp\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: windows_mode_ftp is null, which cannot be sent" : "Bad parameter: windows_mode_ftp must be of type bool", "windows_mode_ftp");
             }
-            if (parameters.ContainsKey("default_time_zone") && !(parameters["default_time_zone"] is string))
+            if (parameters.TryGetValue("default_time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: default_time_zone must be of type string", "parameters[\"default_time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_time_zone is null, which cannot be sent" : "Bad parameter: default_time_zone must be of type string", "default_time_zone");
             }
-            if (parameters.ContainsKey("desktop_app") && !(parameters["desktop_app"] is bool))
+            if (parameters.TryGetValue("desktop_app", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: desktop_app must be of type bool", "parameters[\"desktop_app\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_app is null, which cannot be sent" : "Bad parameter: desktop_app must be of type bool", "desktop_app");
             }
-            if (parameters.ContainsKey("desktop_app_session_ip_pinning") && !(parameters["desktop_app_session_ip_pinning"] is bool))
+            if (parameters.TryGetValue("desktop_app_session_ip_pinning", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: desktop_app_session_ip_pinning must be of type bool", "parameters[\"desktop_app_session_ip_pinning\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_app_session_ip_pinning is null, which cannot be sent" : "Bad parameter: desktop_app_session_ip_pinning must be of type bool", "desktop_app_session_ip_pinning");
             }
-            if (parameters.ContainsKey("desktop_app_session_lifetime") && !(parameters["desktop_app_session_lifetime"] is Nullable<Int64>))
+            if (parameters.TryGetValue("desktop_app_session_lifetime", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: desktop_app_session_lifetime must be of type Nullable<Int64>", "parameters[\"desktop_app_session_lifetime\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_app_session_lifetime is null, which cannot be sent" : "Bad parameter: desktop_app_session_lifetime must be of type Nullable<Int64>", "desktop_app_session_lifetime");
             }
-            if (parameters.ContainsKey("mobile_app") && !(parameters["mobile_app"] is bool))
+            if (parameters.TryGetValue("mobile_app", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: mobile_app must be of type bool", "parameters[\"mobile_app\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: mobile_app is null, which cannot be sent" : "Bad parameter: mobile_app must be of type bool", "mobile_app");
             }
-            if (parameters.ContainsKey("mobile_app_session_ip_pinning") && !(parameters["mobile_app_session_ip_pinning"] is bool))
+            if (parameters.TryGetValue("mobile_app_session_ip_pinning", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: mobile_app_session_ip_pinning must be of type bool", "parameters[\"mobile_app_session_ip_pinning\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: mobile_app_session_ip_pinning is null, which cannot be sent" : "Bad parameter: mobile_app_session_ip_pinning must be of type bool", "mobile_app_session_ip_pinning");
             }
-            if (parameters.ContainsKey("mobile_app_session_lifetime") && !(parameters["mobile_app_session_lifetime"] is Nullable<Int64>))
+            if (parameters.TryGetValue("mobile_app_session_lifetime", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: mobile_app_session_lifetime must be of type Nullable<Int64>", "parameters[\"mobile_app_session_lifetime\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: mobile_app_session_lifetime is null, which cannot be sent" : "Bad parameter: mobile_app_session_lifetime must be of type Nullable<Int64>", "mobile_app_session_lifetime");
             }
-            if (parameters.ContainsKey("folder_permissions_groups_only") && !(parameters["folder_permissions_groups_only"] is bool))
+            if (parameters.TryGetValue("folder_permissions_groups_only", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: folder_permissions_groups_only must be of type bool", "parameters[\"folder_permissions_groups_only\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: folder_permissions_groups_only is null, which cannot be sent" : "Bad parameter: folder_permissions_groups_only must be of type bool", "folder_permissions_groups_only");
             }
-            if (parameters.ContainsKey("welcome_screen") && !(parameters["welcome_screen"] is string))
+            if (parameters.TryGetValue("welcome_screen", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: welcome_screen must be of type string", "parameters[\"welcome_screen\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: welcome_screen is null, which cannot be sent" : "Bad parameter: welcome_screen must be of type string", "welcome_screen");
             }
-            if (parameters.ContainsKey("office_integration_available") && !(parameters["office_integration_available"] is bool))
+            if (parameters.TryGetValue("office_integration_available", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: office_integration_available must be of type bool", "parameters[\"office_integration_available\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: office_integration_available is null, which cannot be sent" : "Bad parameter: office_integration_available must be of type bool", "office_integration_available");
             }
-            if (parameters.ContainsKey("office_integration_type") && !(parameters["office_integration_type"] is string))
+            if (parameters.TryGetValue("office_integration_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: office_integration_type must be of type string", "parameters[\"office_integration_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: office_integration_type is null, which cannot be sent" : "Bad parameter: office_integration_type must be of type string", "office_integration_type");
             }
-            if (parameters.ContainsKey("pin_all_remote_servers_to_site_region") && !(parameters["pin_all_remote_servers_to_site_region"] is bool))
+            if (parameters.TryGetValue("pin_all_remote_servers_to_site_region", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: pin_all_remote_servers_to_site_region must be of type bool", "parameters[\"pin_all_remote_servers_to_site_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: pin_all_remote_servers_to_site_region is null, which cannot be sent" : "Bad parameter: pin_all_remote_servers_to_site_region must be of type bool", "pin_all_remote_servers_to_site_region");
             }
-            if (parameters.ContainsKey("motd_text") && !(parameters["motd_text"] is string))
+            if (parameters.TryGetValue("motd_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: motd_text must be of type string", "parameters[\"motd_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: motd_text is null, which cannot be sent" : "Bad parameter: motd_text must be of type string", "motd_text");
             }
-            if (parameters.ContainsKey("motd_use_for_ftp") && !(parameters["motd_use_for_ftp"] is bool))
+            if (parameters.TryGetValue("motd_use_for_ftp", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: motd_use_for_ftp must be of type bool", "parameters[\"motd_use_for_ftp\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: motd_use_for_ftp is null, which cannot be sent" : "Bad parameter: motd_use_for_ftp must be of type bool", "motd_use_for_ftp");
             }
-            if (parameters.ContainsKey("motd_use_for_sftp") && !(parameters["motd_use_for_sftp"] is bool))
+            if (parameters.TryGetValue("motd_use_for_sftp", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: motd_use_for_sftp must be of type bool", "parameters[\"motd_use_for_sftp\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: motd_use_for_sftp is null, which cannot be sent" : "Bad parameter: motd_use_for_sftp must be of type bool", "motd_use_for_sftp");
             }
-            if (parameters.ContainsKey("left_navigation_visibility") && !(parameters["left_navigation_visibility"] is object))
+            if (parameters.TryGetValue("left_navigation_visibility", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: left_navigation_visibility must be of type object", "parameters[\"left_navigation_visibility\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: left_navigation_visibility is null, which cannot be sent" : "Bad parameter: left_navigation_visibility must be of type object", "left_navigation_visibility");
             }
-            if (parameters.ContainsKey("disable_all_ai_features") && !(parameters["disable_all_ai_features"] is bool))
+            if (parameters.TryGetValue("disable_all_ai_features", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disable_all_ai_features must be of type bool", "parameters[\"disable_all_ai_features\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disable_all_ai_features is null, which cannot be sent" : "Bad parameter: disable_all_ai_features must be of type bool", "disable_all_ai_features");
             }
-            if (parameters.ContainsKey("ai_feature_availability") && !(parameters["ai_feature_availability"] is object))
+            if (parameters.TryGetValue("ai_feature_availability", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: ai_feature_availability must be of type object", "parameters[\"ai_feature_availability\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ai_feature_availability is null, which cannot be sent" : "Bad parameter: ai_feature_availability must be of type object", "ai_feature_availability");
             }
-            if (parameters.ContainsKey("mcp_dcr_enabled") && !(parameters["mcp_dcr_enabled"] is bool))
+            if (parameters.TryGetValue("mcp_dcr_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: mcp_dcr_enabled must be of type bool", "parameters[\"mcp_dcr_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: mcp_dcr_enabled is null, which cannot be sent" : "Bad parameter: mcp_dcr_enabled must be of type bool", "mcp_dcr_enabled");
             }
-            if (parameters.ContainsKey("additional_text_file_types") && !(parameters["additional_text_file_types"] is string[]))
+            if (parameters.TryGetValue("additional_text_file_types", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: additional_text_file_types must be of type string[]", "parameters[\"additional_text_file_types\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: additional_text_file_types is null, which cannot be sent" : "Bad parameter: additional_text_file_types must be of type string[]", "additional_text_file_types");
             }
-            if (parameters.ContainsKey("bundle_require_note") && !(parameters["bundle_require_note"] is bool))
+            if (parameters.TryGetValue("bundle_require_note", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_require_note must be of type bool", "parameters[\"bundle_require_note\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_require_note is null, which cannot be sent" : "Bad parameter: bundle_require_note must be of type bool", "bundle_require_note");
             }
-            if (parameters.ContainsKey("bundle_send_shared_receipts") && !(parameters["bundle_send_shared_receipts"] is bool))
+            if (parameters.TryGetValue("bundle_send_shared_receipts", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_send_shared_receipts must be of type bool", "parameters[\"bundle_send_shared_receipts\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_send_shared_receipts is null, which cannot be sent" : "Bad parameter: bundle_send_shared_receipts must be of type bool", "bundle_send_shared_receipts");
             }
-            if (parameters.ContainsKey("bundles_default_owned_by_primary_group") && !(parameters["bundles_default_owned_by_primary_group"] is bool))
+            if (parameters.TryGetValue("bundles_default_owned_by_primary_group", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundles_default_owned_by_primary_group must be of type bool", "parameters[\"bundles_default_owned_by_primary_group\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundles_default_owned_by_primary_group is null, which cannot be sent" : "Bad parameter: bundles_default_owned_by_primary_group must be of type bool", "bundles_default_owned_by_primary_group");
             }
-            if (parameters.ContainsKey("calculate_file_checksums_crc32") && !(parameters["calculate_file_checksums_crc32"] is bool))
+            if (parameters.TryGetValue("calculate_file_checksums_crc32", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: calculate_file_checksums_crc32 must be of type bool", "parameters[\"calculate_file_checksums_crc32\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: calculate_file_checksums_crc32 is null, which cannot be sent" : "Bad parameter: calculate_file_checksums_crc32 must be of type bool", "calculate_file_checksums_crc32");
             }
-            if (parameters.ContainsKey("calculate_file_checksums_md5") && !(parameters["calculate_file_checksums_md5"] is bool))
+            if (parameters.TryGetValue("calculate_file_checksums_md5", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: calculate_file_checksums_md5 must be of type bool", "parameters[\"calculate_file_checksums_md5\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: calculate_file_checksums_md5 is null, which cannot be sent" : "Bad parameter: calculate_file_checksums_md5 must be of type bool", "calculate_file_checksums_md5");
             }
-            if (parameters.ContainsKey("calculate_file_checksums_sha1") && !(parameters["calculate_file_checksums_sha1"] is bool))
+            if (parameters.TryGetValue("calculate_file_checksums_sha1", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: calculate_file_checksums_sha1 must be of type bool", "parameters[\"calculate_file_checksums_sha1\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: calculate_file_checksums_sha1 is null, which cannot be sent" : "Bad parameter: calculate_file_checksums_sha1 must be of type bool", "calculate_file_checksums_sha1");
             }
-            if (parameters.ContainsKey("calculate_file_checksums_sha256") && !(parameters["calculate_file_checksums_sha256"] is bool))
+            if (parameters.TryGetValue("calculate_file_checksums_sha256", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: calculate_file_checksums_sha256 must be of type bool", "parameters[\"calculate_file_checksums_sha256\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: calculate_file_checksums_sha256 is null, which cannot be sent" : "Bad parameter: calculate_file_checksums_sha256 must be of type bool", "calculate_file_checksums_sha256");
             }
-            if (parameters.ContainsKey("legacy_checksums_mode") && !(parameters["legacy_checksums_mode"] is bool))
+            if (parameters.TryGetValue("legacy_checksums_mode", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: legacy_checksums_mode must be of type bool", "parameters[\"legacy_checksums_mode\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: legacy_checksums_mode is null, which cannot be sent" : "Bad parameter: legacy_checksums_mode must be of type bool", "legacy_checksums_mode");
             }
-            if (parameters.ContainsKey("migrate_remote_server_sync_to_sync") && !(parameters["migrate_remote_server_sync_to_sync"] is bool))
+            if (parameters.TryGetValue("migrate_remote_server_sync_to_sync", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: migrate_remote_server_sync_to_sync must be of type bool", "parameters[\"migrate_remote_server_sync_to_sync\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: migrate_remote_server_sync_to_sync is null, which cannot be sent" : "Bad parameter: migrate_remote_server_sync_to_sync must be of type bool", "migrate_remote_server_sync_to_sync");
             }
-            if (parameters.ContainsKey("as2_message_retention_days") && !(parameters["as2_message_retention_days"] is Nullable<Int64>))
+            if (parameters.TryGetValue("as2_message_retention_days", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: as2_message_retention_days must be of type Nullable<Int64>", "parameters[\"as2_message_retention_days\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: as2_message_retention_days is null, which cannot be sent" : "Bad parameter: as2_message_retention_days must be of type Nullable<Int64>", "as2_message_retention_days");
             }
-            if (parameters.ContainsKey("file_activity_events_enabled") && !(parameters["file_activity_events_enabled"] is bool))
+            if (parameters.TryGetValue("file_activity_events_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: file_activity_events_enabled must be of type bool", "parameters[\"file_activity_events_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_activity_events_enabled is null, which cannot be sent" : "Bad parameter: file_activity_events_enabled must be of type bool", "file_activity_events_enabled");
             }
-            if (parameters.ContainsKey("username_display") && !(parameters["username_display"] is string))
+            if (parameters.TryGetValue("username_display", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: username_display must be of type string", "parameters[\"username_display\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username_display is null, which cannot be sent" : "Bad parameter: username_display must be of type string", "username_display");
             }
-            if (parameters.ContainsKey("session_expiry_minutes") && !(parameters["session_expiry_minutes"] is Nullable<Int64>))
+            if (parameters.TryGetValue("session_expiry_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: session_expiry_minutes must be of type Nullable<Int64>", "parameters[\"session_expiry_minutes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: session_expiry_minutes is null, which cannot be sent" : "Bad parameter: session_expiry_minutes must be of type Nullable<Int64>", "session_expiry_minutes");
             }
-            if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is bool))
+            if (parameters.TryGetValue("ssl_required", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ssl_required must be of type bool", "parameters[\"ssl_required\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type bool", "ssl_required");
             }
-            if (parameters.ContainsKey("sftp_insecure_ciphers") && !(parameters["sftp_insecure_ciphers"] is bool))
+            if (parameters.TryGetValue("sftp_insecure_ciphers", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_insecure_ciphers must be of type bool", "parameters[\"sftp_insecure_ciphers\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_insecure_ciphers is null, which cannot be sent" : "Bad parameter: sftp_insecure_ciphers must be of type bool", "sftp_insecure_ciphers");
             }
-            if (parameters.ContainsKey("sftp_insecure_diffie_hellman") && !(parameters["sftp_insecure_diffie_hellman"] is bool))
+            if (parameters.TryGetValue("sftp_insecure_diffie_hellman", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_insecure_diffie_hellman must be of type bool", "parameters[\"sftp_insecure_diffie_hellman\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_insecure_diffie_hellman is null, which cannot be sent" : "Bad parameter: sftp_insecure_diffie_hellman must be of type bool", "sftp_insecure_diffie_hellman");
             }
-            if (parameters.ContainsKey("disable_files_certificate_generation") && !(parameters["disable_files_certificate_generation"] is bool))
+            if (parameters.TryGetValue("disable_files_certificate_generation", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disable_files_certificate_generation must be of type bool", "parameters[\"disable_files_certificate_generation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disable_files_certificate_generation is null, which cannot be sent" : "Bad parameter: disable_files_certificate_generation must be of type bool", "disable_files_certificate_generation");
             }
-            if (parameters.ContainsKey("fedramp") && !(parameters["fedramp"] is bool))
+            if (parameters.TryGetValue("fedramp", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: fedramp must be of type bool", "parameters[\"fedramp\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: fedramp is null, which cannot be sent" : "Bad parameter: fedramp must be of type bool", "fedramp");
             }
-            if (parameters.ContainsKey("user_lockout") && !(parameters["user_lockout"] is bool))
+            if (parameters.TryGetValue("user_lockout", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: user_lockout must be of type bool", "parameters[\"user_lockout\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_lockout is null, which cannot be sent" : "Bad parameter: user_lockout must be of type bool", "user_lockout");
             }
-            if (parameters.ContainsKey("user_lockout_tries") && !(parameters["user_lockout_tries"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_lockout_tries", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_lockout_tries must be of type Nullable<Int64>", "parameters[\"user_lockout_tries\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_lockout_tries is null, which cannot be sent" : "Bad parameter: user_lockout_tries must be of type Nullable<Int64>", "user_lockout_tries");
             }
-            if (parameters.ContainsKey("user_lockout_within") && !(parameters["user_lockout_within"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_lockout_within", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_lockout_within must be of type Nullable<Int64>", "parameters[\"user_lockout_within\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_lockout_within is null, which cannot be sent" : "Bad parameter: user_lockout_within must be of type Nullable<Int64>", "user_lockout_within");
             }
-            if (parameters.ContainsKey("user_lockout_lock_period") && !(parameters["user_lockout_lock_period"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_lockout_lock_period", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_lockout_lock_period must be of type Nullable<Int64>", "parameters[\"user_lockout_lock_period\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_lockout_lock_period is null, which cannot be sent" : "Bad parameter: user_lockout_lock_period must be of type Nullable<Int64>", "user_lockout_lock_period");
             }
-            if (parameters.ContainsKey("include_password_in_welcome_email") && !(parameters["include_password_in_welcome_email"] is bool))
+            if (parameters.TryGetValue("include_password_in_welcome_email", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: include_password_in_welcome_email must be of type bool", "parameters[\"include_password_in_welcome_email\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: include_password_in_welcome_email is null, which cannot be sent" : "Bad parameter: include_password_in_welcome_email must be of type bool", "include_password_in_welcome_email");
             }
-            if (parameters.ContainsKey("allowed_countries") && !(parameters["allowed_countries"] is string))
+            if (parameters.TryGetValue("allowed_countries", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: allowed_countries must be of type string", "parameters[\"allowed_countries\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_countries is null, which cannot be sent" : "Bad parameter: allowed_countries must be of type string", "allowed_countries");
             }
-            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            if (parameters.TryGetValue("allowed_ips", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_ips is null, which cannot be sent" : "Bad parameter: allowed_ips must be of type string", "allowed_ips");
             }
-            if (parameters.ContainsKey("allow_user_level_2fa_override") && !(parameters["allow_user_level_2fa_override"] is bool))
+            if (parameters.TryGetValue("allow_user_level_2fa_override", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_user_level_2fa_override must be of type bool", "parameters[\"allow_user_level_2fa_override\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_user_level_2fa_override is null, which cannot be sent" : "Bad parameter: allow_user_level_2fa_override must be of type bool", "allow_user_level_2fa_override");
             }
-            if (parameters.ContainsKey("allow_user_level_allowed_ip_override") && !(parameters["allow_user_level_allowed_ip_override"] is bool))
+            if (parameters.TryGetValue("allow_user_level_allowed_ip_override", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_user_level_allowed_ip_override must be of type bool", "parameters[\"allow_user_level_allowed_ip_override\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_user_level_allowed_ip_override is null, which cannot be sent" : "Bad parameter: allow_user_level_allowed_ip_override must be of type bool", "allow_user_level_allowed_ip_override");
             }
-            if (parameters.ContainsKey("allow_user_level_ssl_override") && !(parameters["allow_user_level_ssl_override"] is bool))
+            if (parameters.TryGetValue("allow_user_level_ssl_override", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_user_level_ssl_override must be of type bool", "parameters[\"allow_user_level_ssl_override\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_user_level_ssl_override is null, which cannot be sent" : "Bad parameter: allow_user_level_ssl_override must be of type bool", "allow_user_level_ssl_override");
             }
-            if (parameters.ContainsKey("disallowed_countries") && !(parameters["disallowed_countries"] is string))
+            if (parameters.TryGetValue("disallowed_countries", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: disallowed_countries must be of type string", "parameters[\"disallowed_countries\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disallowed_countries is null, which cannot be sent" : "Bad parameter: disallowed_countries must be of type string", "disallowed_countries");
             }
-            if (parameters.ContainsKey("days_to_retain_backups") && !(parameters["days_to_retain_backups"] is Nullable<Int64>))
+            if (parameters.TryGetValue("days_to_retain_backups", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: days_to_retain_backups must be of type Nullable<Int64>", "parameters[\"days_to_retain_backups\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: days_to_retain_backups is null, which cannot be sent" : "Bad parameter: days_to_retain_backups must be of type Nullable<Int64>", "days_to_retain_backups");
             }
-            if (parameters.ContainsKey("max_prior_passwords") && !(parameters["max_prior_passwords"] is Nullable<Int64>))
+            if (parameters.TryGetValue("max_prior_passwords", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: max_prior_passwords must be of type Nullable<Int64>", "parameters[\"max_prior_passwords\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: max_prior_passwords is null, which cannot be sent" : "Bad parameter: max_prior_passwords must be of type Nullable<Int64>", "max_prior_passwords");
             }
-            if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
+            if (parameters.TryGetValue("password_validity_days", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_validity_days is null, which cannot be sent" : "Bad parameter: password_validity_days must be of type Nullable<Int64>", "password_validity_days");
             }
-            if (parameters.ContainsKey("password_min_length") && !(parameters["password_min_length"] is Nullable<Int64>))
+            if (parameters.TryGetValue("password_min_length", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: password_min_length must be of type Nullable<Int64>", "parameters[\"password_min_length\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_min_length is null, which cannot be sent" : "Bad parameter: password_min_length must be of type Nullable<Int64>", "password_min_length");
             }
-            if (parameters.ContainsKey("password_require_letter") && !(parameters["password_require_letter"] is bool))
+            if (parameters.TryGetValue("password_require_letter", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: password_require_letter must be of type bool", "parameters[\"password_require_letter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_require_letter is null, which cannot be sent" : "Bad parameter: password_require_letter must be of type bool", "password_require_letter");
             }
-            if (parameters.ContainsKey("password_require_mixed") && !(parameters["password_require_mixed"] is bool))
+            if (parameters.TryGetValue("password_require_mixed", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: password_require_mixed must be of type bool", "parameters[\"password_require_mixed\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_require_mixed is null, which cannot be sent" : "Bad parameter: password_require_mixed must be of type bool", "password_require_mixed");
             }
-            if (parameters.ContainsKey("password_require_special") && !(parameters["password_require_special"] is bool))
+            if (parameters.TryGetValue("password_require_special", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: password_require_special must be of type bool", "parameters[\"password_require_special\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_require_special is null, which cannot be sent" : "Bad parameter: password_require_special must be of type bool", "password_require_special");
             }
-            if (parameters.ContainsKey("password_require_number") && !(parameters["password_require_number"] is bool))
+            if (parameters.TryGetValue("password_require_number", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: password_require_number must be of type bool", "parameters[\"password_require_number\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_require_number is null, which cannot be sent" : "Bad parameter: password_require_number must be of type bool", "password_require_number");
             }
-            if (parameters.ContainsKey("password_require_unbreached") && !(parameters["password_require_unbreached"] is bool))
+            if (parameters.TryGetValue("password_require_unbreached", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: password_require_unbreached must be of type bool", "parameters[\"password_require_unbreached\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_require_unbreached is null, which cannot be sent" : "Bad parameter: password_require_unbreached must be of type bool", "password_require_unbreached");
             }
-            if (parameters.ContainsKey("require_logout_from_bundles_and_inboxes") && !(parameters["require_logout_from_bundles_and_inboxes"] is bool))
+            if (parameters.TryGetValue("require_logout_from_bundles_and_inboxes", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: require_logout_from_bundles_and_inboxes must be of type bool", "parameters[\"require_logout_from_bundles_and_inboxes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_logout_from_bundles_and_inboxes is null, which cannot be sent" : "Bad parameter: require_logout_from_bundles_and_inboxes must be of type bool", "require_logout_from_bundles_and_inboxes");
             }
-            if (parameters.ContainsKey("dav_user_root_enabled") && !(parameters["dav_user_root_enabled"] is bool))
+            if (parameters.TryGetValue("dav_user_root_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: dav_user_root_enabled must be of type bool", "parameters[\"dav_user_root_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dav_user_root_enabled is null, which cannot be sent" : "Bad parameter: dav_user_root_enabled must be of type bool", "dav_user_root_enabled");
             }
-            if (parameters.ContainsKey("sftp_user_root_enabled") && !(parameters["sftp_user_root_enabled"] is bool))
+            if (parameters.TryGetValue("sftp_user_root_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_user_root_enabled must be of type bool", "parameters[\"sftp_user_root_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_user_root_enabled is null, which cannot be sent" : "Bad parameter: sftp_user_root_enabled must be of type bool", "sftp_user_root_enabled");
             }
-            if (parameters.ContainsKey("disable_password_reset") && !(parameters["disable_password_reset"] is bool))
+            if (parameters.TryGetValue("disable_password_reset", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disable_password_reset must be of type bool", "parameters[\"disable_password_reset\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disable_password_reset is null, which cannot be sent" : "Bad parameter: disable_password_reset must be of type bool", "disable_password_reset");
             }
-            if (parameters.ContainsKey("immutable_files") && !(parameters["immutable_files"] is bool))
+            if (parameters.TryGetValue("immutable_files", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: immutable_files must be of type bool", "parameters[\"immutable_files\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: immutable_files is null, which cannot be sent" : "Bad parameter: immutable_files must be of type bool", "immutable_files");
             }
-            if (parameters.ContainsKey("bundle_not_found_message") && !(parameters["bundle_not_found_message"] is string))
+            if (parameters.TryGetValue("bundle_not_found_message", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: bundle_not_found_message must be of type string", "parameters[\"bundle_not_found_message\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_not_found_message is null, which cannot be sent" : "Bad parameter: bundle_not_found_message must be of type string", "bundle_not_found_message");
             }
-            if (parameters.ContainsKey("bundle_password_required") && !(parameters["bundle_password_required"] is bool))
+            if (parameters.TryGetValue("bundle_password_required", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_password_required must be of type bool", "parameters[\"bundle_password_required\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_password_required is null, which cannot be sent" : "Bad parameter: bundle_password_required must be of type bool", "bundle_password_required");
             }
-            if (parameters.ContainsKey("bundle_require_registration") && !(parameters["bundle_require_registration"] is bool))
+            if (parameters.TryGetValue("bundle_require_registration", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_require_registration must be of type bool", "parameters[\"bundle_require_registration\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_require_registration is null, which cannot be sent" : "Bad parameter: bundle_require_registration must be of type bool", "bundle_require_registration");
             }
-            if (parameters.ContainsKey("bundle_require_share_recipient") && !(parameters["bundle_require_share_recipient"] is bool))
+            if (parameters.TryGetValue("bundle_require_share_recipient", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_require_share_recipient must be of type bool", "parameters[\"bundle_require_share_recipient\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_require_share_recipient is null, which cannot be sent" : "Bad parameter: bundle_require_share_recipient must be of type bool", "bundle_require_share_recipient");
             }
-            if (parameters.ContainsKey("bundle_send_one_time_password_to_recipient_at_registration") && !(parameters["bundle_send_one_time_password_to_recipient_at_registration"] is bool))
+            if (parameters.TryGetValue("bundle_send_one_time_password_to_recipient_at_registration", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_send_one_time_password_to_recipient_at_registration must be of type bool", "parameters[\"bundle_send_one_time_password_to_recipient_at_registration\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_send_one_time_password_to_recipient_at_registration is null, which cannot be sent" : "Bad parameter: bundle_send_one_time_password_to_recipient_at_registration must be of type bool", "bundle_send_one_time_password_to_recipient_at_registration");
             }
-            if (parameters.ContainsKey("bundle_registration_notifications") && !(parameters["bundle_registration_notifications"] is string))
+            if (parameters.TryGetValue("bundle_registration_notifications", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: bundle_registration_notifications must be of type string", "parameters[\"bundle_registration_notifications\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_registration_notifications is null, which cannot be sent" : "Bad parameter: bundle_registration_notifications must be of type string", "bundle_registration_notifications");
             }
-            if (parameters.ContainsKey("bundle_activity_notifications") && !(parameters["bundle_activity_notifications"] is string))
+            if (parameters.TryGetValue("bundle_activity_notifications", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: bundle_activity_notifications must be of type string", "parameters[\"bundle_activity_notifications\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_activity_notifications is null, which cannot be sent" : "Bad parameter: bundle_activity_notifications must be of type string", "bundle_activity_notifications");
             }
-            if (parameters.ContainsKey("bundle_upload_receipt_notifications") && !(parameters["bundle_upload_receipt_notifications"] is string))
+            if (parameters.TryGetValue("bundle_upload_receipt_notifications", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: bundle_upload_receipt_notifications must be of type string", "parameters[\"bundle_upload_receipt_notifications\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_upload_receipt_notifications is null, which cannot be sent" : "Bad parameter: bundle_upload_receipt_notifications must be of type string", "bundle_upload_receipt_notifications");
             }
-            if (parameters.ContainsKey("document_edits_in_bundle_allowed") && !(parameters["document_edits_in_bundle_allowed"] is bool))
+            if (parameters.TryGetValue("document_edits_in_bundle_allowed", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: document_edits_in_bundle_allowed must be of type bool", "parameters[\"document_edits_in_bundle_allowed\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: document_edits_in_bundle_allowed is null, which cannot be sent" : "Bad parameter: document_edits_in_bundle_allowed must be of type bool", "document_edits_in_bundle_allowed");
             }
-            if (parameters.ContainsKey("password_requirements_apply_to_bundles") && !(parameters["password_requirements_apply_to_bundles"] is bool))
+            if (parameters.TryGetValue("password_requirements_apply_to_bundles", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: password_requirements_apply_to_bundles must be of type bool", "parameters[\"password_requirements_apply_to_bundles\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_requirements_apply_to_bundles is null, which cannot be sent" : "Bad parameter: password_requirements_apply_to_bundles must be of type bool", "password_requirements_apply_to_bundles");
             }
-            if (parameters.ContainsKey("prevent_root_permissions_for_non_site_admins") && !(parameters["prevent_root_permissions_for_non_site_admins"] is bool))
+            if (parameters.TryGetValue("prevent_root_permissions_for_non_site_admins", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: prevent_root_permissions_for_non_site_admins must be of type bool", "parameters[\"prevent_root_permissions_for_non_site_admins\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: prevent_root_permissions_for_non_site_admins is null, which cannot be sent" : "Bad parameter: prevent_root_permissions_for_non_site_admins must be of type bool", "prevent_root_permissions_for_non_site_admins");
             }
-            if (parameters.ContainsKey("restrict_root_folder_behaviors_to_site_admins") && !(parameters["restrict_root_folder_behaviors_to_site_admins"] is bool))
+            if (parameters.TryGetValue("restrict_root_folder_behaviors_to_site_admins", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: restrict_root_folder_behaviors_to_site_admins must be of type bool", "parameters[\"restrict_root_folder_behaviors_to_site_admins\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restrict_root_folder_behaviors_to_site_admins is null, which cannot be sent" : "Bad parameter: restrict_root_folder_behaviors_to_site_admins must be of type bool", "restrict_root_folder_behaviors_to_site_admins");
             }
-            if (parameters.ContainsKey("root_folder_behaviors_apply_to_workspaces") && !(parameters["root_folder_behaviors_apply_to_workspaces"] is bool))
+            if (parameters.TryGetValue("root_folder_behaviors_apply_to_workspaces", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: root_folder_behaviors_apply_to_workspaces must be of type bool", "parameters[\"root_folder_behaviors_apply_to_workspaces\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: root_folder_behaviors_apply_to_workspaces is null, which cannot be sent" : "Bad parameter: root_folder_behaviors_apply_to_workspaces must be of type bool", "root_folder_behaviors_apply_to_workspaces");
             }
-            if (parameters.ContainsKey("opt_out_global") && !(parameters["opt_out_global"] is bool))
+            if (parameters.TryGetValue("opt_out_global", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: opt_out_global must be of type bool", "parameters[\"opt_out_global\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: opt_out_global is null, which cannot be sent" : "Bad parameter: opt_out_global must be of type bool", "opt_out_global");
             }
-            if (parameters.ContainsKey("use_provided_modified_at") && !(parameters["use_provided_modified_at"] is bool))
+            if (parameters.TryGetValue("use_provided_modified_at", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: use_provided_modified_at must be of type bool", "parameters[\"use_provided_modified_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: use_provided_modified_at is null, which cannot be sent" : "Bad parameter: use_provided_modified_at must be of type bool", "use_provided_modified_at");
             }
-            if (parameters.ContainsKey("custom_namespace") && !(parameters["custom_namespace"] is bool))
+            if (parameters.TryGetValue("custom_namespace", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: custom_namespace must be of type bool", "parameters[\"custom_namespace\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: custom_namespace is null, which cannot be sent" : "Bad parameter: custom_namespace must be of type bool", "custom_namespace");
             }
-            if (parameters.ContainsKey("non_sso_groups_allowed") && !(parameters["non_sso_groups_allowed"] is bool))
+            if (parameters.TryGetValue("non_sso_groups_allowed", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: non_sso_groups_allowed must be of type bool", "parameters[\"non_sso_groups_allowed\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: non_sso_groups_allowed is null, which cannot be sent" : "Bad parameter: non_sso_groups_allowed must be of type bool", "non_sso_groups_allowed");
             }
-            if (parameters.ContainsKey("non_sso_users_allowed") && !(parameters["non_sso_users_allowed"] is bool))
+            if (parameters.TryGetValue("non_sso_users_allowed", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: non_sso_users_allowed must be of type bool", "parameters[\"non_sso_users_allowed\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: non_sso_users_allowed is null, which cannot be sent" : "Bad parameter: non_sso_users_allowed must be of type bool", "non_sso_users_allowed");
             }
-            if (parameters.ContainsKey("sharing_enabled") && !(parameters["sharing_enabled"] is bool))
+            if (parameters.TryGetValue("sharing_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sharing_enabled must be of type bool", "parameters[\"sharing_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharing_enabled is null, which cannot be sent" : "Bad parameter: sharing_enabled must be of type bool", "sharing_enabled");
             }
-            if (parameters.ContainsKey("snapshot_sharing_enabled") && !(parameters["snapshot_sharing_enabled"] is bool))
+            if (parameters.TryGetValue("snapshot_sharing_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: snapshot_sharing_enabled must be of type bool", "parameters[\"snapshot_sharing_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: snapshot_sharing_enabled is null, which cannot be sent" : "Bad parameter: snapshot_sharing_enabled must be of type bool", "snapshot_sharing_enabled");
             }
-            if (parameters.ContainsKey("user_requests_enabled") && !(parameters["user_requests_enabled"] is bool))
+            if (parameters.TryGetValue("user_requests_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: user_requests_enabled must be of type bool", "parameters[\"user_requests_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_requests_enabled is null, which cannot be sent" : "Bad parameter: user_requests_enabled must be of type bool", "user_requests_enabled");
             }
-            if (parameters.ContainsKey("user_requests_notify_admins") && !(parameters["user_requests_notify_admins"] is bool))
+            if (parameters.TryGetValue("user_requests_notify_admins", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: user_requests_notify_admins must be of type bool", "parameters[\"user_requests_notify_admins\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_requests_notify_admins is null, which cannot be sent" : "Bad parameter: user_requests_notify_admins must be of type bool", "user_requests_notify_admins");
             }
-            if (parameters.ContainsKey("dav_enabled") && !(parameters["dav_enabled"] is bool))
+            if (parameters.TryGetValue("dav_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: dav_enabled must be of type bool", "parameters[\"dav_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dav_enabled is null, which cannot be sent" : "Bad parameter: dav_enabled must be of type bool", "dav_enabled");
             }
-            if (parameters.ContainsKey("files_com_remote_server_enabled") && !(parameters["files_com_remote_server_enabled"] is bool))
+            if (parameters.TryGetValue("files_com_remote_server_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: files_com_remote_server_enabled must be of type bool", "parameters[\"files_com_remote_server_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_com_remote_server_enabled is null, which cannot be sent" : "Bad parameter: files_com_remote_server_enabled must be of type bool", "files_com_remote_server_enabled");
             }
-            if (parameters.ContainsKey("ftp_enabled") && !(parameters["ftp_enabled"] is bool))
+            if (parameters.TryGetValue("ftp_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ftp_enabled must be of type bool", "parameters[\"ftp_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_enabled is null, which cannot be sent" : "Bad parameter: ftp_enabled must be of type bool", "ftp_enabled");
             }
-            if (parameters.ContainsKey("s3_compatible_endpoint_enabled") && !(parameters["s3_compatible_endpoint_enabled"] is bool))
+            if (parameters.TryGetValue("s3_compatible_endpoint_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_enabled must be of type bool", "parameters[\"s3_compatible_endpoint_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint_enabled is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint_enabled must be of type bool", "s3_compatible_endpoint_enabled");
             }
-            if (parameters.ContainsKey("sftp_enabled") && !(parameters["sftp_enabled"] is bool))
+            if (parameters.TryGetValue("sftp_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_enabled must be of type bool", "parameters[\"sftp_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_enabled is null, which cannot be sent" : "Bad parameter: sftp_enabled must be of type bool", "sftp_enabled");
             }
-            if (parameters.ContainsKey("sftp_finalize_partial_uploads") && !(parameters["sftp_finalize_partial_uploads"] is bool))
+            if (parameters.TryGetValue("sftp_finalize_partial_uploads", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_finalize_partial_uploads must be of type bool", "parameters[\"sftp_finalize_partial_uploads\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_finalize_partial_uploads is null, which cannot be sent" : "Bad parameter: sftp_finalize_partial_uploads must be of type bool", "sftp_finalize_partial_uploads");
             }
-            if (parameters.ContainsKey("users_can_create_api_keys") && !(parameters["users_can_create_api_keys"] is bool))
+            if (parameters.TryGetValue("users_can_create_api_keys", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: users_can_create_api_keys must be of type bool", "parameters[\"users_can_create_api_keys\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: users_can_create_api_keys is null, which cannot be sent" : "Bad parameter: users_can_create_api_keys must be of type bool", "users_can_create_api_keys");
             }
-            if (parameters.ContainsKey("users_can_create_ssh_keys") && !(parameters["users_can_create_ssh_keys"] is bool))
+            if (parameters.TryGetValue("users_can_create_ssh_keys", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: users_can_create_ssh_keys must be of type bool", "parameters[\"users_can_create_ssh_keys\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: users_can_create_ssh_keys is null, which cannot be sent" : "Bad parameter: users_can_create_ssh_keys must be of type bool", "users_can_create_ssh_keys");
             }
-            if (parameters.ContainsKey("show_user_notifications_log_in_link") && !(parameters["show_user_notifications_log_in_link"] is bool))
+            if (parameters.TryGetValue("show_user_notifications_log_in_link", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: show_user_notifications_log_in_link must be of type bool", "parameters[\"show_user_notifications_log_in_link\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: show_user_notifications_log_in_link is null, which cannot be sent" : "Bad parameter: show_user_notifications_log_in_link must be of type bool", "show_user_notifications_log_in_link");
             }
-            if (parameters.ContainsKey("sftp_host_key_type") && !(parameters["sftp_host_key_type"] is string))
+            if (parameters.TryGetValue("sftp_host_key_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sftp_host_key_type must be of type string", "parameters[\"sftp_host_key_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_host_key_type is null, which cannot be sent" : "Bad parameter: sftp_host_key_type must be of type string", "sftp_host_key_type");
             }
-            if (parameters.ContainsKey("active_sftp_host_key_id") && !(parameters["active_sftp_host_key_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("active_sftp_host_key_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: active_sftp_host_key_id must be of type Nullable<Int64>", "parameters[\"active_sftp_host_key_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: active_sftp_host_key_id is null, which cannot be sent" : "Bad parameter: active_sftp_host_key_id must be of type Nullable<Int64>", "active_sftp_host_key_id");
             }
-            if (parameters.ContainsKey("active_sftp_host_key_ids") && !(parameters["active_sftp_host_key_ids"] is Nullable<Int64>[]))
+            if (parameters.TryGetValue("active_sftp_host_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: active_sftp_host_key_ids must be of type Nullable<Int64>[]", "parameters[\"active_sftp_host_key_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: active_sftp_host_key_ids is null, which cannot be sent" : "Bad parameter: active_sftp_host_key_ids must be of type Nullable<Int64>[]", "active_sftp_host_key_ids");
             }
-            if (parameters.ContainsKey("protocol_access_groups_only") && !(parameters["protocol_access_groups_only"] is bool))
+            if (parameters.TryGetValue("protocol_access_groups_only", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: protocol_access_groups_only must be of type bool", "parameters[\"protocol_access_groups_only\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: protocol_access_groups_only is null, which cannot be sent" : "Bad parameter: protocol_access_groups_only must be of type bool", "protocol_access_groups_only");
             }
-            if (parameters.ContainsKey("revoke_bundle_access_on_disable_or_delete") && !(parameters["revoke_bundle_access_on_disable_or_delete"] is bool))
+            if (parameters.TryGetValue("revoke_bundle_access_on_disable_or_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: revoke_bundle_access_on_disable_or_delete must be of type bool", "parameters[\"revoke_bundle_access_on_disable_or_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: revoke_bundle_access_on_disable_or_delete is null, which cannot be sent" : "Bad parameter: revoke_bundle_access_on_disable_or_delete must be of type bool", "revoke_bundle_access_on_disable_or_delete");
             }
-            if (parameters.ContainsKey("group_admins_can_add_users") && !(parameters["group_admins_can_add_users"] is bool))
+            if (parameters.TryGetValue("group_admins_can_add_users", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_add_users must be of type bool", "parameters[\"group_admins_can_add_users\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_add_users is null, which cannot be sent" : "Bad parameter: group_admins_can_add_users must be of type bool", "group_admins_can_add_users");
             }
-            if (parameters.ContainsKey("group_admins_can_manage_group_memberships") && !(parameters["group_admins_can_manage_group_memberships"] is bool))
+            if (parameters.TryGetValue("group_admins_can_manage_group_memberships", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_manage_group_memberships must be of type bool", "parameters[\"group_admins_can_manage_group_memberships\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_manage_group_memberships is null, which cannot be sent" : "Bad parameter: group_admins_can_manage_group_memberships must be of type bool", "group_admins_can_manage_group_memberships");
             }
-            if (parameters.ContainsKey("group_admins_can_delete_users") && !(parameters["group_admins_can_delete_users"] is bool))
+            if (parameters.TryGetValue("group_admins_can_delete_users", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_delete_users must be of type bool", "parameters[\"group_admins_can_delete_users\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_delete_users is null, which cannot be sent" : "Bad parameter: group_admins_can_delete_users must be of type bool", "group_admins_can_delete_users");
             }
-            if (parameters.ContainsKey("group_admins_can_enable_disable_users") && !(parameters["group_admins_can_enable_disable_users"] is bool))
+            if (parameters.TryGetValue("group_admins_can_enable_disable_users", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_enable_disable_users must be of type bool", "parameters[\"group_admins_can_enable_disable_users\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_enable_disable_users is null, which cannot be sent" : "Bad parameter: group_admins_can_enable_disable_users must be of type bool", "group_admins_can_enable_disable_users");
             }
-            if (parameters.ContainsKey("group_admins_can_modify_users") && !(parameters["group_admins_can_modify_users"] is bool))
+            if (parameters.TryGetValue("group_admins_can_modify_users", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_modify_users must be of type bool", "parameters[\"group_admins_can_modify_users\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_modify_users is null, which cannot be sent" : "Bad parameter: group_admins_can_modify_users must be of type bool", "group_admins_can_modify_users");
             }
-            if (parameters.ContainsKey("group_admins_can_bypass_user_lifecycle_rules") && !(parameters["group_admins_can_bypass_user_lifecycle_rules"] is bool))
+            if (parameters.TryGetValue("group_admins_can_bypass_user_lifecycle_rules", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_bypass_user_lifecycle_rules must be of type bool", "parameters[\"group_admins_can_bypass_user_lifecycle_rules\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_bypass_user_lifecycle_rules is null, which cannot be sent" : "Bad parameter: group_admins_can_bypass_user_lifecycle_rules must be of type bool", "group_admins_can_bypass_user_lifecycle_rules");
             }
-            if (parameters.ContainsKey("group_admins_can_reset_passwords") && !(parameters["group_admins_can_reset_passwords"] is bool))
+            if (parameters.TryGetValue("group_admins_can_reset_passwords", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_reset_passwords must be of type bool", "parameters[\"group_admins_can_reset_passwords\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_reset_passwords is null, which cannot be sent" : "Bad parameter: group_admins_can_reset_passwords must be of type bool", "group_admins_can_reset_passwords");
             }
-            if (parameters.ContainsKey("group_admins_can_set_user_password") && !(parameters["group_admins_can_set_user_password"] is bool))
+            if (parameters.TryGetValue("group_admins_can_set_user_password", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: group_admins_can_set_user_password must be of type bool", "parameters[\"group_admins_can_set_user_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_admins_can_set_user_password is null, which cannot be sent" : "Bad parameter: group_admins_can_set_user_password must be of type bool", "group_admins_can_set_user_password");
             }
-            if (parameters.ContainsKey("bundle_recipient_blacklist_free_email_domains") && !(parameters["bundle_recipient_blacklist_free_email_domains"] is bool))
+            if (parameters.TryGetValue("bundle_recipient_blacklist_free_email_domains", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_recipient_blacklist_free_email_domains must be of type bool", "parameters[\"bundle_recipient_blacklist_free_email_domains\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_recipient_blacklist_free_email_domains is null, which cannot be sent" : "Bad parameter: bundle_recipient_blacklist_free_email_domains must be of type bool", "bundle_recipient_blacklist_free_email_domains");
             }
-            if (parameters.ContainsKey("bundle_recipient_blacklist_domains") && !(parameters["bundle_recipient_blacklist_domains"] is string[]))
+            if (parameters.TryGetValue("bundle_recipient_blacklist_domains", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: bundle_recipient_blacklist_domains must be of type string[]", "parameters[\"bundle_recipient_blacklist_domains\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_recipient_blacklist_domains is null, which cannot be sent" : "Bad parameter: bundle_recipient_blacklist_domains must be of type string[]", "bundle_recipient_blacklist_domains");
             }
-            if (parameters.ContainsKey("admins_bypass_locked_subfolders") && !(parameters["admins_bypass_locked_subfolders"] is bool))
+            if (parameters.TryGetValue("admins_bypass_locked_subfolders", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: admins_bypass_locked_subfolders must be of type bool", "parameters[\"admins_bypass_locked_subfolders\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: admins_bypass_locked_subfolders is null, which cannot be sent" : "Bad parameter: admins_bypass_locked_subfolders must be of type bool", "admins_bypass_locked_subfolders");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_sms") && !(parameters["allowed_2fa_method_sms"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_sms", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_sms must be of type bool", "parameters[\"allowed_2fa_method_sms\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_sms is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_sms must be of type bool", "allowed_2fa_method_sms");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_totp") && !(parameters["allowed_2fa_method_totp"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_totp", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_totp must be of type bool", "parameters[\"allowed_2fa_method_totp\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_totp is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_totp must be of type bool", "allowed_2fa_method_totp");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_webauthn") && !(parameters["allowed_2fa_method_webauthn"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_webauthn", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_webauthn must be of type bool", "parameters[\"allowed_2fa_method_webauthn\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_webauthn is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_webauthn must be of type bool", "allowed_2fa_method_webauthn");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_yubi") && !(parameters["allowed_2fa_method_yubi"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_yubi", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_yubi must be of type bool", "parameters[\"allowed_2fa_method_yubi\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_yubi is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_yubi must be of type bool", "allowed_2fa_method_yubi");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_email") && !(parameters["allowed_2fa_method_email"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_email", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_email must be of type bool", "parameters[\"allowed_2fa_method_email\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_email is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_email must be of type bool", "allowed_2fa_method_email");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_static") && !(parameters["allowed_2fa_method_static"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_static", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_static must be of type bool", "parameters[\"allowed_2fa_method_static\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_static is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_static must be of type bool", "allowed_2fa_method_static");
             }
-            if (parameters.ContainsKey("allowed_2fa_method_bypass_for_ftp_sftp_dav") && !(parameters["allowed_2fa_method_bypass_for_ftp_sftp_dav"] is bool))
+            if (parameters.TryGetValue("allowed_2fa_method_bypass_for_ftp_sftp_dav", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allowed_2fa_method_bypass_for_ftp_sftp_dav must be of type bool", "parameters[\"allowed_2fa_method_bypass_for_ftp_sftp_dav\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_2fa_method_bypass_for_ftp_sftp_dav is null, which cannot be sent" : "Bad parameter: allowed_2fa_method_bypass_for_ftp_sftp_dav must be of type bool", "allowed_2fa_method_bypass_for_ftp_sftp_dav");
             }
-            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is bool))
+            if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: require_2fa must be of type bool", "parameters[\"require_2fa\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa is null, which cannot be sent" : "Bad parameter: require_2fa must be of type bool", "require_2fa");
             }
-            if (parameters.ContainsKey("require_2fa_exempt_all_sso_users") && !(parameters["require_2fa_exempt_all_sso_users"] is bool))
+            if (parameters.TryGetValue("require_2fa_exempt_all_sso_users", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: require_2fa_exempt_all_sso_users must be of type bool", "parameters[\"require_2fa_exempt_all_sso_users\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa_exempt_all_sso_users is null, which cannot be sent" : "Bad parameter: require_2fa_exempt_all_sso_users must be of type bool", "require_2fa_exempt_all_sso_users");
             }
-            if (parameters.ContainsKey("require_2fa_user_type") && !(parameters["require_2fa_user_type"] is string))
+            if (parameters.TryGetValue("require_2fa_user_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: require_2fa_user_type must be of type string", "parameters[\"require_2fa_user_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa_user_type is null, which cannot be sent" : "Bad parameter: require_2fa_user_type must be of type string", "require_2fa_user_type");
             }
-            if (parameters.ContainsKey("color2_top") && !(parameters["color2_top"] is string))
+            if (parameters.TryGetValue("color2_top", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: color2_top must be of type string", "parameters[\"color2_top\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: color2_top is null, which cannot be sent" : "Bad parameter: color2_top must be of type string", "color2_top");
             }
-            if (parameters.ContainsKey("color2_left") && !(parameters["color2_left"] is string))
+            if (parameters.TryGetValue("color2_left", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: color2_left must be of type string", "parameters[\"color2_left\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: color2_left is null, which cannot be sent" : "Bad parameter: color2_left must be of type string", "color2_left");
             }
-            if (parameters.ContainsKey("color2_link") && !(parameters["color2_link"] is string))
+            if (parameters.TryGetValue("color2_link", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: color2_link must be of type string", "parameters[\"color2_link\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: color2_link is null, which cannot be sent" : "Bad parameter: color2_link must be of type string", "color2_link");
             }
-            if (parameters.ContainsKey("color2_text") && !(parameters["color2_text"] is string))
+            if (parameters.TryGetValue("color2_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: color2_text must be of type string", "parameters[\"color2_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: color2_text is null, which cannot be sent" : "Bad parameter: color2_text must be of type string", "color2_text");
             }
-            if (parameters.ContainsKey("color2_top_text") && !(parameters["color2_top_text"] is string))
+            if (parameters.TryGetValue("color2_top_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: color2_top_text must be of type string", "parameters[\"color2_top_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: color2_top_text is null, which cannot be sent" : "Bad parameter: color2_top_text must be of type string", "color2_top_text");
             }
-            if (parameters.ContainsKey("site_header") && !(parameters["site_header"] is string))
+            if (parameters.TryGetValue("site_header", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: site_header must be of type string", "parameters[\"site_header\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_header is null, which cannot be sent" : "Bad parameter: site_header must be of type string", "site_header");
             }
-            if (parameters.ContainsKey("site_footer") && !(parameters["site_footer"] is string))
+            if (parameters.TryGetValue("site_footer", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: site_footer must be of type string", "parameters[\"site_footer\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_footer is null, which cannot be sent" : "Bad parameter: site_footer must be of type string", "site_footer");
             }
-            if (parameters.ContainsKey("site_public_header") && !(parameters["site_public_header"] is string))
+            if (parameters.TryGetValue("site_public_header", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: site_public_header must be of type string", "parameters[\"site_public_header\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_public_header is null, which cannot be sent" : "Bad parameter: site_public_header must be of type string", "site_public_header");
             }
-            if (parameters.ContainsKey("site_public_footer") && !(parameters["site_public_footer"] is string))
+            if (parameters.TryGetValue("site_public_footer", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: site_public_footer must be of type string", "parameters[\"site_public_footer\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_public_footer is null, which cannot be sent" : "Bad parameter: site_public_footer must be of type string", "site_public_footer");
             }
-            if (parameters.ContainsKey("login_help_text") && !(parameters["login_help_text"] is string))
+            if (parameters.TryGetValue("login_help_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: login_help_text must be of type string", "parameters[\"login_help_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: login_help_text is null, which cannot be sent" : "Bad parameter: login_help_text must be of type string", "login_help_text");
             }
-            if (parameters.ContainsKey("use_dedicated_ips_for_smtp") && !(parameters["use_dedicated_ips_for_smtp"] is bool))
+            if (parameters.TryGetValue("use_dedicated_ips_for_smtp", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: use_dedicated_ips_for_smtp must be of type bool", "parameters[\"use_dedicated_ips_for_smtp\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: use_dedicated_ips_for_smtp is null, which cannot be sent" : "Bad parameter: use_dedicated_ips_for_smtp must be of type bool", "use_dedicated_ips_for_smtp");
             }
-            if (parameters.ContainsKey("email_footer_custom_text") && !(parameters["email_footer_custom_text"] is string))
+            if (parameters.TryGetValue("email_footer_custom_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: email_footer_custom_text must be of type string", "parameters[\"email_footer_custom_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email_footer_custom_text is null, which cannot be sent" : "Bad parameter: email_footer_custom_text must be of type string", "email_footer_custom_text");
             }
-            if (parameters.ContainsKey("smtp_address") && !(parameters["smtp_address"] is string))
+            if (parameters.TryGetValue("smtp_address", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: smtp_address must be of type string", "parameters[\"smtp_address\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_address is null, which cannot be sent" : "Bad parameter: smtp_address must be of type string", "smtp_address");
             }
-            if (parameters.ContainsKey("smtp_authentication") && !(parameters["smtp_authentication"] is string))
+            if (parameters.TryGetValue("smtp_authentication", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: smtp_authentication must be of type string", "parameters[\"smtp_authentication\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_authentication is null, which cannot be sent" : "Bad parameter: smtp_authentication must be of type string", "smtp_authentication");
             }
-            if (parameters.ContainsKey("smtp_from") && !(parameters["smtp_from"] is string))
+            if (parameters.TryGetValue("smtp_from", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: smtp_from must be of type string", "parameters[\"smtp_from\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_from is null, which cannot be sent" : "Bad parameter: smtp_from must be of type string", "smtp_from");
             }
-            if (parameters.ContainsKey("smtp_username") && !(parameters["smtp_username"] is string))
+            if (parameters.TryGetValue("smtp_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: smtp_username must be of type string", "parameters[\"smtp_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_username is null, which cannot be sent" : "Bad parameter: smtp_username must be of type string", "smtp_username");
             }
-            if (parameters.ContainsKey("smtp_port") && !(parameters["smtp_port"] is Nullable<Int64>))
+            if (parameters.TryGetValue("smtp_port", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: smtp_port must be of type Nullable<Int64>", "parameters[\"smtp_port\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_port is null, which cannot be sent" : "Bad parameter: smtp_port must be of type Nullable<Int64>", "smtp_port");
             }
-            if (parameters.ContainsKey("smtp_ssl") && !(parameters["smtp_ssl"] is string))
+            if (parameters.TryGetValue("smtp_ssl", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: smtp_ssl must be of type string", "parameters[\"smtp_ssl\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_ssl is null, which cannot be sent" : "Bad parameter: smtp_ssl must be of type string", "smtp_ssl");
             }
-            if (parameters.ContainsKey("ldap_enabled") && !(parameters["ldap_enabled"] is bool))
+            if (parameters.TryGetValue("ldap_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ldap_enabled must be of type bool", "parameters[\"ldap_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_enabled is null, which cannot be sent" : "Bad parameter: ldap_enabled must be of type bool", "ldap_enabled");
             }
-            if (parameters.ContainsKey("ldap_type") && !(parameters["ldap_type"] is string))
+            if (parameters.TryGetValue("ldap_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_type must be of type string", "parameters[\"ldap_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_type is null, which cannot be sent" : "Bad parameter: ldap_type must be of type string", "ldap_type");
             }
-            if (parameters.ContainsKey("ldap_host") && !(parameters["ldap_host"] is string))
+            if (parameters.TryGetValue("ldap_host", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_host must be of type string", "parameters[\"ldap_host\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_host is null, which cannot be sent" : "Bad parameter: ldap_host must be of type string", "ldap_host");
             }
-            if (parameters.ContainsKey("ldap_host_2") && !(parameters["ldap_host_2"] is string))
+            if (parameters.TryGetValue("ldap_host_2", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_host_2 must be of type string", "parameters[\"ldap_host_2\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_host_2 is null, which cannot be sent" : "Bad parameter: ldap_host_2 must be of type string", "ldap_host_2");
             }
-            if (parameters.ContainsKey("ldap_host_3") && !(parameters["ldap_host_3"] is string))
+            if (parameters.TryGetValue("ldap_host_3", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_host_3 must be of type string", "parameters[\"ldap_host_3\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_host_3 is null, which cannot be sent" : "Bad parameter: ldap_host_3 must be of type string", "ldap_host_3");
             }
-            if (parameters.ContainsKey("ldap_port") && !(parameters["ldap_port"] is Nullable<Int64>))
+            if (parameters.TryGetValue("ldap_port", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: ldap_port must be of type Nullable<Int64>", "parameters[\"ldap_port\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_port is null, which cannot be sent" : "Bad parameter: ldap_port must be of type Nullable<Int64>", "ldap_port");
             }
-            if (parameters.ContainsKey("ldap_secure") && !(parameters["ldap_secure"] is bool))
+            if (parameters.TryGetValue("ldap_secure", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ldap_secure must be of type bool", "parameters[\"ldap_secure\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_secure is null, which cannot be sent" : "Bad parameter: ldap_secure must be of type bool", "ldap_secure");
             }
-            if (parameters.ContainsKey("ldap_server_certificate") && !(parameters["ldap_server_certificate"] is string))
+            if (parameters.TryGetValue("ldap_server_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_server_certificate must be of type string", "parameters[\"ldap_server_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_server_certificate is null, which cannot be sent" : "Bad parameter: ldap_server_certificate must be of type string", "ldap_server_certificate");
             }
-            if (parameters.ContainsKey("ldap_username") && !(parameters["ldap_username"] is string))
+            if (parameters.TryGetValue("ldap_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_username must be of type string", "parameters[\"ldap_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_username is null, which cannot be sent" : "Bad parameter: ldap_username must be of type string", "ldap_username");
             }
-            if (parameters.ContainsKey("ldap_username_field") && !(parameters["ldap_username_field"] is string))
+            if (parameters.TryGetValue("ldap_username_field", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_username_field must be of type string", "parameters[\"ldap_username_field\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_username_field is null, which cannot be sent" : "Bad parameter: ldap_username_field must be of type string", "ldap_username_field");
             }
-            if (parameters.ContainsKey("ldap_domain") && !(parameters["ldap_domain"] is string))
+            if (parameters.TryGetValue("ldap_domain", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_domain must be of type string", "parameters[\"ldap_domain\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_domain is null, which cannot be sent" : "Bad parameter: ldap_domain must be of type string", "ldap_domain");
             }
-            if (parameters.ContainsKey("ldap_user_action") && !(parameters["ldap_user_action"] is string))
+            if (parameters.TryGetValue("ldap_user_action", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_user_action must be of type string", "parameters[\"ldap_user_action\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_user_action is null, which cannot be sent" : "Bad parameter: ldap_user_action must be of type string", "ldap_user_action");
             }
-            if (parameters.ContainsKey("ldap_group_action") && !(parameters["ldap_group_action"] is string))
+            if (parameters.TryGetValue("ldap_group_action", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_group_action must be of type string", "parameters[\"ldap_group_action\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_group_action is null, which cannot be sent" : "Bad parameter: ldap_group_action must be of type string", "ldap_group_action");
             }
-            if (parameters.ContainsKey("ldap_user_include_groups") && !(parameters["ldap_user_include_groups"] is string))
+            if (parameters.TryGetValue("ldap_user_include_groups", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_user_include_groups must be of type string", "parameters[\"ldap_user_include_groups\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_user_include_groups is null, which cannot be sent" : "Bad parameter: ldap_user_include_groups must be of type string", "ldap_user_include_groups");
             }
-            if (parameters.ContainsKey("ldap_group_exclusion") && !(parameters["ldap_group_exclusion"] is string))
+            if (parameters.TryGetValue("ldap_group_exclusion", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_group_exclusion must be of type string", "parameters[\"ldap_group_exclusion\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_group_exclusion is null, which cannot be sent" : "Bad parameter: ldap_group_exclusion must be of type string", "ldap_group_exclusion");
             }
-            if (parameters.ContainsKey("ldap_group_inclusion") && !(parameters["ldap_group_inclusion"] is string))
+            if (parameters.TryGetValue("ldap_group_inclusion", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_group_inclusion must be of type string", "parameters[\"ldap_group_inclusion\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_group_inclusion is null, which cannot be sent" : "Bad parameter: ldap_group_inclusion must be of type string", "ldap_group_inclusion");
             }
-            if (parameters.ContainsKey("ldap_base_dn") && !(parameters["ldap_base_dn"] is string))
+            if (parameters.TryGetValue("ldap_base_dn", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_base_dn must be of type string", "parameters[\"ldap_base_dn\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_base_dn is null, which cannot be sent" : "Bad parameter: ldap_base_dn must be of type string", "ldap_base_dn");
             }
-            if (parameters.ContainsKey("uploads_via_email_authentication") && !(parameters["uploads_via_email_authentication"] is bool))
+            if (parameters.TryGetValue("uploads_via_email_authentication", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: uploads_via_email_authentication must be of type bool", "parameters[\"uploads_via_email_authentication\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: uploads_via_email_authentication is null, which cannot be sent" : "Bad parameter: uploads_via_email_authentication must be of type bool", "uploads_via_email_authentication");
             }
-            if (parameters.ContainsKey("bundle_watermark_value") && !(parameters["bundle_watermark_value"] is object))
+            if (parameters.TryGetValue("bundle_watermark_value", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: bundle_watermark_value must be of type object", "parameters[\"bundle_watermark_value\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_watermark_value is null, which cannot be sent" : "Bad parameter: bundle_watermark_value must be of type object", "bundle_watermark_value");
             }
-            if (parameters.ContainsKey("icon16_file") && !(parameters["icon16_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("icon16_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: icon16_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon16_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon16_file is null, which cannot be sent" : "Bad parameter: icon16_file must be of type FileAttachment or IDictionary<string, object>", "icon16_file");
             }
-            if (parameters.ContainsKey("icon16_delete") && !(parameters["icon16_delete"] is bool))
+            if (parameters.TryGetValue("icon16_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: icon16_delete must be of type bool", "parameters[\"icon16_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon16_delete is null, which cannot be sent" : "Bad parameter: icon16_delete must be of type bool", "icon16_delete");
             }
-            if (parameters.ContainsKey("icon32_file") && !(parameters["icon32_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("icon32_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: icon32_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon32_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon32_file is null, which cannot be sent" : "Bad parameter: icon32_file must be of type FileAttachment or IDictionary<string, object>", "icon32_file");
             }
-            if (parameters.ContainsKey("icon32_delete") && !(parameters["icon32_delete"] is bool))
+            if (parameters.TryGetValue("icon32_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: icon32_delete must be of type bool", "parameters[\"icon32_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon32_delete is null, which cannot be sent" : "Bad parameter: icon32_delete must be of type bool", "icon32_delete");
             }
-            if (parameters.ContainsKey("icon48_file") && !(parameters["icon48_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("icon48_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: icon48_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon48_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon48_file is null, which cannot be sent" : "Bad parameter: icon48_file must be of type FileAttachment or IDictionary<string, object>", "icon48_file");
             }
-            if (parameters.ContainsKey("icon48_delete") && !(parameters["icon48_delete"] is bool))
+            if (parameters.TryGetValue("icon48_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: icon48_delete must be of type bool", "parameters[\"icon48_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon48_delete is null, which cannot be sent" : "Bad parameter: icon48_delete must be of type bool", "icon48_delete");
             }
-            if (parameters.ContainsKey("icon128_file") && !(parameters["icon128_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("icon128_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: icon128_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"icon128_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon128_file is null, which cannot be sent" : "Bad parameter: icon128_file must be of type FileAttachment or IDictionary<string, object>", "icon128_file");
             }
-            if (parameters.ContainsKey("icon128_delete") && !(parameters["icon128_delete"] is bool))
+            if (parameters.TryGetValue("icon128_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: icon128_delete must be of type bool", "parameters[\"icon128_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: icon128_delete is null, which cannot be sent" : "Bad parameter: icon128_delete must be of type bool", "icon128_delete");
             }
-            if (parameters.ContainsKey("logo_file") && !(parameters["logo_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("logo_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: logo_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"logo_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: logo_file is null, which cannot be sent" : "Bad parameter: logo_file must be of type FileAttachment or IDictionary<string, object>", "logo_file");
             }
-            if (parameters.ContainsKey("logo_delete") && !(parameters["logo_delete"] is bool))
+            if (parameters.TryGetValue("logo_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: logo_delete must be of type bool", "parameters[\"logo_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: logo_delete is null, which cannot be sent" : "Bad parameter: logo_delete must be of type bool", "logo_delete");
             }
-            if (parameters.ContainsKey("bundle_watermark_attachment_file") && !(parameters["bundle_watermark_attachment_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("bundle_watermark_attachment_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: bundle_watermark_attachment_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"bundle_watermark_attachment_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_watermark_attachment_file is null, which cannot be sent" : "Bad parameter: bundle_watermark_attachment_file must be of type FileAttachment or IDictionary<string, object>", "bundle_watermark_attachment_file");
             }
-            if (parameters.ContainsKey("bundle_watermark_attachment_delete") && !(parameters["bundle_watermark_attachment_delete"] is bool))
+            if (parameters.TryGetValue("bundle_watermark_attachment_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bundle_watermark_attachment_delete must be of type bool", "parameters[\"bundle_watermark_attachment_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_watermark_attachment_delete is null, which cannot be sent" : "Bad parameter: bundle_watermark_attachment_delete must be of type bool", "bundle_watermark_attachment_delete");
             }
-            if (parameters.ContainsKey("login_page_background_image_file") && !(parameters["login_page_background_image_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("login_page_background_image_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: login_page_background_image_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"login_page_background_image_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: login_page_background_image_file is null, which cannot be sent" : "Bad parameter: login_page_background_image_file must be of type FileAttachment or IDictionary<string, object>", "login_page_background_image_file");
             }
-            if (parameters.ContainsKey("login_page_background_image_delete") && !(parameters["login_page_background_image_delete"] is bool))
+            if (parameters.TryGetValue("login_page_background_image_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: login_page_background_image_delete must be of type bool", "parameters[\"login_page_background_image_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: login_page_background_image_delete is null, which cannot be sent" : "Bad parameter: login_page_background_image_delete must be of type bool", "login_page_background_image_delete");
             }
-            if (parameters.ContainsKey("disable_2fa_with_delay") && !(parameters["disable_2fa_with_delay"] is bool))
+            if (parameters.TryGetValue("disable_2fa_with_delay", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disable_2fa_with_delay must be of type bool", "parameters[\"disable_2fa_with_delay\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disable_2fa_with_delay is null, which cannot be sent" : "Bad parameter: disable_2fa_with_delay must be of type bool", "disable_2fa_with_delay");
             }
-            if (parameters.ContainsKey("ldap_password_change") && !(parameters["ldap_password_change"] is string))
+            if (parameters.TryGetValue("ldap_password_change", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_password_change must be of type string", "parameters[\"ldap_password_change\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_password_change is null, which cannot be sent" : "Bad parameter: ldap_password_change must be of type string", "ldap_password_change");
             }
-            if (parameters.ContainsKey("ldap_password_change_confirmation") && !(parameters["ldap_password_change_confirmation"] is string))
+            if (parameters.TryGetValue("ldap_password_change_confirmation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ldap_password_change_confirmation must be of type string", "parameters[\"ldap_password_change_confirmation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_password_change_confirmation is null, which cannot be sent" : "Bad parameter: ldap_password_change_confirmation must be of type string", "ldap_password_change_confirmation");
             }
-            if (parameters.ContainsKey("redirect_old_subdomain") && !(parameters["redirect_old_subdomain"] is bool))
+            if (parameters.TryGetValue("redirect_old_subdomain", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: redirect_old_subdomain must be of type bool", "parameters[\"redirect_old_subdomain\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: redirect_old_subdomain is null, which cannot be sent" : "Bad parameter: redirect_old_subdomain must be of type bool", "redirect_old_subdomain");
             }
-            if (parameters.ContainsKey("smtp_password") && !(parameters["smtp_password"] is string))
+            if (parameters.TryGetValue("smtp_password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: smtp_password must be of type string", "parameters[\"smtp_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_password is null, which cannot be sent" : "Bad parameter: smtp_password must be of type string", "smtp_password");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/site", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Site>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Site>(responseJson, context, options);
         }
 
     }

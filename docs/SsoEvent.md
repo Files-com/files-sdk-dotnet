@@ -44,7 +44,7 @@
 ## List SSO Events
 
 ```
-Task<FilesList<SsoEvent>> SsoEvent.List(
+FilesList<SsoEvent> SsoEvent.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

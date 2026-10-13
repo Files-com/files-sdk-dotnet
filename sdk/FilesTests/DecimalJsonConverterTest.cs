@@ -1,6 +1,6 @@
+using FilesCom.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.Json;
-using FilesCom.Util;
 
 namespace FilesTests
 {

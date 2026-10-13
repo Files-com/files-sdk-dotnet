@@ -45,7 +45,7 @@
 ## List Child Site Management Policies. On a Child Site, returns only the policy covering that site. Its value contains managed setting names with null values
 
 ```
-Task<FilesList<ChildSiteManagementPolicy>> ChildSiteManagementPolicy.List(
+FilesList<ChildSiteManagementPolicy> ChildSiteManagementPolicy.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -198,22 +198,23 @@ Task client.ChildSiteManagementPolicies.DeleteAsync(
 ## Update Child Site Management Policy
 
 ```
-var ChildSiteManagementPolicy = ChildSiteManagementPolicy.Find(1);
+var childSiteManagementPolicy = await ChildSiteManagementPolicy.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("value", {"color2_left":"#000000"});
-parameters.Add("skip_child_site_ids", [1,2]);
-parameters.Add("child_site_ids", [1,2]);
+parameters.Add("value", new Dictionary<string, object> { { "color2_left", "#000000" } });
+parameters.Add("skip_child_site_ids", new Nullable<Int64>[] { 1, 2 });
+parameters.Add("child_site_ids", new Nullable<Int64>[] { 1, 2 });
 parameters.Add("default_policy", true);
 parameters.Add("policy_type", "settings");
 parameters.Add("name", "example");
 parameters.Add("description", "example");
 
-ChildSiteManagementPolicy.Update(parameters);
+await childSiteManagementPolicy.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `ChildSiteManagementPolicy` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -232,12 +233,11 @@ ChildSiteManagementPolicy.Update(parameters);
 ## Delete Child Site Management Policy
 
 ```
-var ChildSiteManagementPolicy = ChildSiteManagementPolicy.Find(1);
+var childSiteManagementPolicy = await ChildSiteManagementPolicy.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-ChildSiteManagementPolicy.Delete
+await childSiteManagementPolicy.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -245,3 +245,14 @@ ChildSiteManagementPolicy.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Child Site Management Policy ID.
+
+
+---
+
+## Save
+
+```
+await childSiteManagementPolicy.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

@@ -9,26 +9,28 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
+    /// <summary>
+    /// ActionEntity model
+    /// </summary>
     public class History : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        /// <summary>
+        /// Makes a History with no attributes set and no options.
+        /// </summary>
         public History() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a History with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public History(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -88,26 +90,41 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => null;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
@@ -281,7 +298,10 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
-        public static FilesList<Action> ListForFile(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListForFile(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -290,7 +310,7 @@ namespace FilesCom.Models
             return ListForFileCore(FilesClient.Instance, path, parameters, options);
         }
 
-        internal static FilesList<Action> ListForFileCore(
+        internal static FilesList<HistoryAction> ListForFileCore(
             FilesClient client,
             string path,
             Dictionary<string, object> parameters,
@@ -299,6 +319,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -308,40 +329,40 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("display") && !(parameters["display"] is string))
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: display must be of type string", "parameters[\"display\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
 
-            return new FilesList<Action>(client, $"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<HistoryAction>(client, $"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -354,7 +375,10 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
         ///   path (required) - string - Path to operate on.
         /// </summary>
-        public static FilesList<Action> ListForFolder(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListForFolder(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -363,7 +387,7 @@ namespace FilesCom.Models
             return ListForFolderCore(FilesClient.Instance, path, parameters, options);
         }
 
-        internal static FilesList<Action> ListForFolderCore(
+        internal static FilesList<HistoryAction> ListForFolderCore(
             FilesClient client,
             string path,
             Dictionary<string, object> parameters,
@@ -372,6 +396,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -381,40 +406,40 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("display") && !(parameters["display"] is string))
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: display must be of type string", "parameters[\"display\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
 
-            return new FilesList<Action>(client, $"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<HistoryAction>(client, $"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -427,7 +452,10 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
         ///   user_id (required) - int64 - User ID.
         /// </summary>
-        public static FilesList<Action> ListForUser(
+        /// <param name="user_id">User ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListForUser(
             Nullable<Int64> user_id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -436,7 +464,7 @@ namespace FilesCom.Models
             return ListForUserCore(FilesClient.Instance, user_id, parameters, options);
         }
 
-        internal static FilesList<Action> ListForUserCore(
+        internal static FilesList<HistoryAction> ListForUserCore(
             FilesClient client,
             Nullable<Int64> user_id,
             Dictionary<string, object> parameters,
@@ -445,6 +473,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("user_id"))
             {
@@ -454,40 +483,40 @@ namespace FilesCom.Models
             {
                 parameters.Add("user_id", user_id);
             }
-            if (!parameters.ContainsKey("user_id") || parameters["user_id"] == null)
+            if (!parameters.TryGetValue("user_id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: user_id", "parameters[\"user_id\"]");
+                throw new MissingParameterException("Parameter missing: user_id", "user_id");
             }
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("display") && !(parameters["display"] is string))
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: display must be of type string", "parameters[\"display\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
             }
 
-            return new FilesList<Action>(client, $"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<HistoryAction>(client, $"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -499,7 +528,9 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
         /// </summary>
-        public static FilesList<Action> ListLogins(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListLogins(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -508,7 +539,7 @@ namespace FilesCom.Models
             return ListLoginsCore(FilesClient.Instance, parameters, options);
         }
 
-        internal static FilesList<Action> ListLoginsCore(
+        internal static FilesList<HistoryAction> ListLoginsCore(
             FilesClient client,
 
             Dictionary<string, object> parameters,
@@ -517,33 +548,34 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("display") && !(parameters["display"] is string))
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: display must be of type string", "parameters[\"display\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
 
-            return new FilesList<Action>(client, $"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<HistoryAction>(client, $"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -557,7 +589,9 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`. Valid field combinations are `[  ]`, `[ path ]`, `[ path ]` or `[ path ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
         /// </summary>
-        public static FilesList<Action> List(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -566,7 +600,20 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
-        public static FilesList<Action> All(
+        /// <summary>
+        /// Parameters:
+        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
+        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`. Valid field combinations are `[  ]`, `[ path ]`, `[ path ]` or `[ path ]`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
@@ -575,7 +622,7 @@ namespace FilesCom.Models
             return List(parameters, options);
         }
 
-        internal static FilesList<Action> ListCore(
+        internal static FilesList<HistoryAction> ListCore(
             FilesClient client,
 
             Dictionary<string, object> parameters,
@@ -584,41 +631,42 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("display") && !(parameters["display"] is string))
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: display must be of type string", "parameters[\"display\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            if (parameters.TryGetValue("filter", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter is null, which cannot be sent" : "Bad parameter: filter must be of type object", "filter");
             }
-            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            if (parameters.TryGetValue("filter_prefix", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_prefix is null, which cannot be sent" : "Bad parameter: filter_prefix must be of type object", "filter_prefix");
             }
 
-            return new FilesList<Action>(client, $"/history", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<HistoryAction>(client, $"/history", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
     }

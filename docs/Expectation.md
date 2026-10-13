@@ -88,7 +88,7 @@
 ## List Expectations
 
 ```
-Task<FilesList<Expectation>> Expectation.List(
+FilesList<Expectation> Expectation.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -299,12 +299,11 @@ Task client.Expectations.DeleteAsync(
 ## Manually open an Expectation window
 
 ```
-var Expectation = Expectation.Find(1);
+var expectation = await Expectation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Expectation.TriggerEvaluation
+await expectation.TriggerEvaluation(parameters);
 ```
 
 `TriggerEvaluationAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -319,7 +318,7 @@ Expectation.TriggerEvaluation
 ## Update Expectation
 
 ```
-var Expectation = Expectation.Find(1);
+var expectation = await Expectation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -331,24 +330,25 @@ parameters.Add("exclude_pattern", "*.tmp");
 parameters.Add("disabled", true);
 parameters.Add("trigger", "manual");
 parameters.Add("interval", "day");
-parameters.Add("recurring_day", 3);
-parameters.Add("recurring_days", [1,15]);
-parameters.Add("schedule_id", 1);
-parameters.Add("schedule_days_of_week", [1,3,5]);
-parameters.Add("schedule_times_of_day", ["06:00"]);
+parameters.Add("recurring_day", 3L);
+parameters.Add("recurring_days", new Nullable<Int64>[] { 1, 15 });
+parameters.Add("schedule_id", 1L);
+parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 1, 3, 5 });
+parameters.Add("schedule_times_of_day", new string[] { "06:00" });
 parameters.Add("schedule_time_zone", "UTC");
 parameters.Add("holiday_region", "us");
-parameters.Add("lookback_interval", 3600);
-parameters.Add("late_acceptance_interval", 900);
-parameters.Add("inactivity_interval", 300);
-parameters.Add("max_open_interval", 43200);
-parameters.Add("criteria", {"count":{"exact":1},"extensions":["csv"]});
-parameters.Add("workspace_id", 0);
+parameters.Add("lookback_interval", 3600L);
+parameters.Add("late_acceptance_interval", 900L);
+parameters.Add("inactivity_interval", 300L);
+parameters.Add("max_open_interval", 43200L);
+parameters.Add("criteria", new Dictionary<string, object> { { "count", new Dictionary<string, object> { { "exact", 1 } } }, { "extensions", new object[] { "csv" } } });
+parameters.Add("workspace_id", 0L);
 
-Expectation.Update(parameters);
+await expectation.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Expectation` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -381,12 +381,11 @@ Expectation.Update(parameters);
 ## Delete Expectation
 
 ```
-var Expectation = Expectation.Find(1);
+var expectation = await Expectation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Expectation.Delete
+await expectation.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -394,3 +393,14 @@ Expectation.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Expectation ID.
+
+
+---
+
+## Save
+
+```
+await expectation.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

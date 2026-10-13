@@ -30,7 +30,7 @@
 ## List Scim Logs
 
 ```
-Task<FilesList<ScimLog>> ScimLog.List(
+FilesList<ScimLog> ScimLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

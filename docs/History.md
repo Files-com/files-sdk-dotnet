@@ -43,7 +43,7 @@
 ## List history for specific file
 
 ```
-Task<FilesList<Action>> History.ListForFile(
+FilesList<HistoryAction> History.ListForFile(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -53,7 +53,7 @@ Task<FilesList<Action>> History.ListForFile(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<Action> client.Histories.ListForFile(
+FilesList<HistoryAction> client.Histories.ListForFile(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -76,7 +76,7 @@ FilesList<Action> client.Histories.ListForFile(
 ## List history for specific folder
 
 ```
-Task<FilesList<Action>> History.ListForFolder(
+FilesList<HistoryAction> History.ListForFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -86,7 +86,7 @@ Task<FilesList<Action>> History.ListForFolder(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<Action> client.Histories.ListForFolder(
+FilesList<HistoryAction> client.Histories.ListForFolder(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -109,7 +109,7 @@ FilesList<Action> client.Histories.ListForFolder(
 ## List history for specific user
 
 ```
-Task<FilesList<Action>> History.ListForUser(
+FilesList<HistoryAction> History.ListForUser(
     Nullable<Int64> user_id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -119,7 +119,7 @@ Task<FilesList<Action>> History.ListForUser(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<Action> client.Histories.ListForUser(
+FilesList<HistoryAction> client.Histories.ListForUser(
     Nullable<Int64> user_id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -142,7 +142,7 @@ FilesList<Action> client.Histories.ListForUser(
 ## List site login history
 
 ```
-Task<FilesList<Action>> History.ListLogins(
+FilesList<HistoryAction> History.ListLogins(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -152,7 +152,7 @@ Task<FilesList<Action>> History.ListLogins(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<Action> client.Histories.ListLogins(
+FilesList<HistoryAction> client.Histories.ListLogins(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -174,7 +174,7 @@ FilesList<Action> client.Histories.ListLogins(
 ## List site full action history
 
 ```
-Task<FilesList<Action>> History.List(
+FilesList<HistoryAction> History.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -184,7 +184,7 @@ Task<FilesList<Action>> History.List(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<Action> client.Histories.List(
+FilesList<HistoryAction> client.Histories.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

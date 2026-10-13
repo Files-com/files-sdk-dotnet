@@ -48,7 +48,7 @@
 ## List Event Records
 
 ```
-Task<FilesList<EventRecord>> EventRecord.List(
+FilesList<EventRecord> EventRecord.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

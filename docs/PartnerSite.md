@@ -1,3 +1,5 @@
+# FilesCom.Models.PartnerSite
+
 
 
 ---
@@ -33,12 +35,11 @@ Task client.PartnerSites.DeleteAsync(
 ## Delete Partner Site
 
 ```
-var PartnerSite = PartnerSite.ListFor(path)[0];
+var partnerSite = new PartnerSite(new Dictionary<string, object> { { "id", 1L } }, null);
 
 var parameters = new Dictionary<string, object>();
 
-
-PartnerSite.Delete
+await partnerSite.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.

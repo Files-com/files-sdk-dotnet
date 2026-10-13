@@ -48,7 +48,7 @@
 ## List Outbound Connection Logs
 
 ```
-Task<FilesList<OutboundConnectionLog>> OutboundConnectionLog.List(
+FilesList<OutboundConnectionLog> OutboundConnectionLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

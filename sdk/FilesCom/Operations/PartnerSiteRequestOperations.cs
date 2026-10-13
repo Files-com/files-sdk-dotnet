@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Operations
 {
-    // Imported inside the namespace so that model names, such as Action, take precedence over System's.
+    // Imported inside the namespace so that model names, such as Lock, take precedence over those of the namespaces
+    // above, such as System.Threading.Lock. A type of this namespace still takes precedence over a model of the same
+    // name (a model UserOperations beside the operations class of User), so code here names models in their own
+    // namespace (model_type, qualified: true).
     using FilesCom.Models;
 
     /// <summary>
@@ -14,7 +17,7 @@ namespace FilesCom.Operations
     /// <see cref="FilesClient.PartnerSiteRequests"/>. The objects and lists they return keep using that client.
     /// </summary>
     /// <remarks>
-    /// Each method matches the static <see cref="PartnerSiteRequest"/> method of the same name. Methods that send a request
+    /// Each method matches the static <see cref="global::FilesCom.Models.PartnerSiteRequest"/> method of the same name. Methods that send a request
     /// are named with Async and take a cancellation token. The dictionaries you pass are copied, never changed.
     /// </remarks>
     public sealed class PartnerSiteRequestOperations
@@ -30,10 +33,12 @@ namespace FilesCom.Operations
         /// Makes a PartnerSiteRequest that belongs to this client, without sending a request. Its methods, such as SaveAsync,
         /// then run with this client.
         /// </summary>
-        public PartnerSiteRequest New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public global::FilesCom.Models.PartnerSiteRequest New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
-            PartnerSiteRequest model = new PartnerSiteRequest(DictionaryUtil.Copy(attributes), null);
-            ((IModel)model).SetContext(client, options);
+            global::FilesCom.Models.PartnerSiteRequest model = new global::FilesCom.Models.PartnerSiteRequest(attributes, null);
+            ((IModel)model).SetContext(client, options, null);
             return model;
         }
 
@@ -44,13 +49,15 @@ namespace FilesCom.Operations
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `host_partner_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `host_partner_id`.
         /// </summary>
-        public FilesList<PartnerSiteRequest> List(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.PartnerSiteRequest> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return PartnerSiteRequest.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.PartnerSiteRequest.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>
@@ -60,19 +67,24 @@ namespace FilesCom.Operations
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `host_partner_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `host_partner_id`.
         /// </summary>
-        public FilesList<PartnerSiteRequest> All(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.PartnerSiteRequest> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return PartnerSiteRequest.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.PartnerSiteRequest.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>
         /// Parameters:
         ///   pairing_key (required) - string - Pairing key for the partner site request
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task FindByPairingKeyAsync(
 
             Dictionary<string, object> parameters = null,
@@ -80,7 +92,7 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return PartnerSiteRequest.FindByPairingKeyCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.PartnerSiteRequest.FindByPairingKeyCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -88,20 +100,26 @@ namespace FilesCom.Operations
         ///   host_partner_id (required) - int64 - Host Partner ID to link with
         ///   guest_site_url (required) - string - Guest Site URL to link to
         /// </summary>
-        public Task<PartnerSiteRequest> CreateAsync(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.PartnerSiteRequest> CreateAsync(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return PartnerSiteRequest.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.PartnerSiteRequest.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   pairing_key (required) - string - Pairing key for the partner site request
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task RejectAsync(
 
             Dictionary<string, object> parameters = null,
@@ -109,7 +127,7 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return PartnerSiteRequest.RejectCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.PartnerSiteRequest.RejectCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -117,6 +135,9 @@ namespace FilesCom.Operations
         ///   pairing_key (required) - string - Pairing key for the partner site request
         ///   partner_id - int64 - ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task ApproveAsync(
 
             Dictionary<string, object> parameters = null,
@@ -124,11 +145,16 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return PartnerSiteRequest.ApproveCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.PartnerSiteRequest.ApproveCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
+        /// Sends DELETE /partner_site_requests/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Partner Site Request ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -136,11 +162,16 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return PartnerSiteRequest.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.PartnerSiteRequest.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
+        /// Sends DELETE /partner_site_requests/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Partner Site Request ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -148,7 +179,7 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return PartnerSiteRequest.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.PartnerSiteRequest.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
     }
 }

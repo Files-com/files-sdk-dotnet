@@ -1,13 +1,14 @@
+using FilesCom;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FilesCom;
 using WireMock;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
+using WireMock.Settings;
 using WireMock.Types;
 using WireMock.Util;
 using Request = WireMock.RequestBuilders.Request;
@@ -19,7 +20,10 @@ namespace FilesTests
     // carried, so tests can check which site and principal each request of a journey used.
     public sealed class LoopbackSite : IDisposable
     {
-        private readonly WireMockServer server = WireMockServer.Start();
+        // Listens on 127.0.0.1 only, on a port the system assigns, and is reached there. Listening on every address
+        // and being reached as localhost let IPv4 requests go to any other socket bound to 127.0.0.1 on the same port,
+        // which macOS allows alongside a wildcard listener: the requests never reached this site.
+        private readonly WireMockServer server = WireMockServer.Start(new WireMockServerSettings { Urls = new[] { "http://127.0.0.1:0" } });
         private readonly List<ReceivedRequest> requests = new List<ReceivedRequest>();
 
         public LoopbackSite(string apiKey, string workspaceId)
@@ -33,6 +37,8 @@ namespace FilesTests
         public string WorkspaceId { get; }
 
         public string Url => server.Urls[0];
+
+        public int Port => new Uri(Url).Port;
 
         public IReadOnlyList<ReceivedRequest> Requests
         {
@@ -70,7 +76,7 @@ namespace FilesTests
             string fullPath = path.StartsWith("//") ? path.Substring(1) : "/api/rest/v1" + path;
             server.Given(Request.Create().WithPath(fullPath).UsingMethod(method))
                 .AtPriority(priority)
-                .RespondWith(Response.Create().WithCallback(message => respond(Record(message))));
+                .RespondWith(Response.Create().WithCallback(async message => await respond(Record(message))));
         }
 
         // Standard routes for User: find, update, create and a two-page list.
@@ -107,6 +113,25 @@ namespace FilesTests
             });
         }
 
+        // Every request this site's server received, whether a route answered it or not, with its status: what a
+        // failed check reports, to tell a request that reached no route here from one that never reached this site.
+        public string Log()
+        {
+            return Url + " received [" + string.Join(", ", server.LogEntries.Select(entry =>
+                $"{entry.RequestMessage.Method} {entry.RequestMessage.Path} {entry.ResponseMessage?.StatusCode}{(entry.MappingGuid == null ? " (no route)" : "")}")) + "]";
+        }
+
+        // An exception and each exception inside it, by type and message (a socket error names its endpoint).
+        public static string Describe(Exception exception)
+        {
+            var parts = new List<string>();
+            for (Exception e = exception; e != null; e = e.InnerException)
+            {
+                parts.Add(e.GetType().FullName + ": " + e.Message);
+            }
+            return string.Join(" <- ", parts);
+        }
+
         public void AssertReceived(params string[] expected)
         {
             Assert.AreEqual(string.Join("\n", expected), string.Join("\n", Requests), "Requests received by the site at " + Url);
@@ -130,6 +155,25 @@ namespace FilesTests
         public static ResponseMessage Status(int status)
         {
             return Json(status < 400 ? "{}" : "{\"error\":\"failed\"}", status: status);
+        }
+
+        // Amazon S3's answer, with HTTP 400, when the body of a request stops arriving for longer than it waits.
+        public const string S3RequestTimeout = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Error><Code>RequestTimeout</Code><Message>Your socket connection to the server was not read from or written to within the timeout period. Idle connections will be closed.</Message><RequestId>R45</RequestId><HostId>H45</HostId></Error>";
+
+        // A storage server's error answer: its XML, or a Files.com error object when it starts with {.
+        public static ResponseMessage StorageError(int status, string body)
+        {
+            if (body.StartsWith("{"))
+            {
+                return Json(body, status: status);
+            }
+            var response = new ResponseMessage
+            {
+                StatusCode = status,
+                BodyData = new BodyData { BodyAsString = body, DetectedBodyType = BodyType.String, Encoding = Encoding.UTF8 },
+            };
+            response.AddHeader("Content-Type", "application/xml");
+            return response;
         }
 
         public void Dispose()
@@ -161,6 +205,8 @@ namespace FilesTests
             Language = Header(message, "Accept-Language");
             Body = message.Body;
             BodyBytes = message.BodyAsBytes ?? new byte[0];
+            Headers = message.Headers?.ToDictionary(header => header.Key, header => string.Join(",", header.Value), StringComparer.OrdinalIgnoreCase)
+                ?? new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
         public LoopbackSite Site { get; }
@@ -180,6 +226,8 @@ namespace FilesTests
         public string Body { get; }
 
         public byte[] BodyBytes { get; }
+
+        public IReadOnlyDictionary<string, string> Headers { get; }
 
         // The ID in a path such as /users/5.
         public string Id => Path.Split('?')[0].Split('/').Last();

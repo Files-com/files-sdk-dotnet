@@ -36,7 +36,7 @@
 ## List Public Hosting Request Logs
 
 ```
-Task<FilesList<PublicHostingRequestLog>> PublicHostingRequestLog.List(
+FilesList<PublicHostingRequestLog> PublicHostingRequestLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

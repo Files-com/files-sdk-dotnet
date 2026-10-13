@@ -1,3 +1,6 @@
+using FilesCom;
+using FilesCom.Models;
+using FilesCom.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -6,9 +9,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using FilesCom;
-using FilesCom.Models;
-using FilesCom.Util;
 
 namespace FilesTests
 {
@@ -118,12 +118,17 @@ namespace FilesTests
             Assert.AreEqual(7, workspace.Id);
             siteA.AssertReceived("POST /workspaces key=key-a workspace=11", "PATCH /workspaces/7 key=key-a workspace=11");
             siteB.AssertReceived();
-            // Which client a model belongs to is never part of its data.
-            foreach (string json in new[] { siteA.Requests[0].Body, siteA.Requests[1].Body, JsonSerializer.Serialize(workspace, JsonUtil.Options) })
+            // Which client a model belongs to is never part of its data. Creating it sends only the name it was given.
+            foreach ((string json, string[] fields) in new[]
+            {
+                (siteA.Requests[0].Body, new[] { "name" }),
+                (siteA.Requests[1].Body, new[] { "id", "name" }),
+                (JsonSerializer.Serialize(workspace, JsonUtil.Options), new[] { "id", "name" }),
+            })
             {
                 using (JsonDocument document = JsonDocument.Parse(json))
                 {
-                    CollectionAssert.AreEquivalent(new[] { "id", "name" }, document.RootElement.EnumerateObject().Select(property => property.Name).ToArray(), json);
+                    CollectionAssert.AreEquivalent(fields, document.RootElement.EnumerateObject().Select(property => property.Name).ToArray(), json);
                 }
             }
         }
@@ -157,6 +162,14 @@ namespace FilesTests
             user.SetOption("workspace_id", "22");
             respond.SetResult(true);
             User updated = await updating;
+
+            // The original User takes the attributes Files.com returned, and keeps its options, changed meanwhile.
+            // The User returned is a separate object, with the options the update started with.
+            Assert.AreNotSame(user, updated);
+            Assert.AreEqual("changed", user.Username);
+            Assert.AreEqual("changed", updated.Username);
+            Assert.AreEqual("key-b 22", user.GetOption("api_key") + " " + user.GetOption("workspace_id"));
+            Assert.AreEqual("key-a 11", updated.GetOption("api_key") + " " + updated.GetOption("workspace_id"));
             await updated.UpdateAsync(Changes());
             await user.UpdateAsync(Changes());
 

@@ -603,7 +603,7 @@ Task<FileUploadPart[]> client.RemoteFiles.BeginUploadAsync(
 ## Download File
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
@@ -611,7 +611,7 @@ parameters.Add("with_previews", false);
 parameters.Add("with_priority_color", false);
 parameters.Add("with_direct_connection_info", false);
 
-File.Download(parameters);
+await remoteFile.Download(parameters);
 ```
 
 `DownloadAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -631,18 +631,19 @@ File.Download(parameters);
 ## Update File/Folder Metadata
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("custom_metadata", {"department":"finance"});
+parameters.Add("custom_metadata", new Dictionary<string, object> { { "department", "finance" } });
 parameters.Add("provided_mtime", "2000-01-01T01:00:00Z");
 parameters.Add("priority_color", "red");
 
-File.Update(parameters);
+await remoteFile.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `RemoteFile` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -657,13 +658,13 @@ File.Update(parameters);
 ## Delete File/Folder
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("recursive", false);
 
-File.Delete(parameters);
+await remoteFile.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -679,12 +680,11 @@ File.Delete(parameters);
 ## List the contents of a ZIP file
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
-
-File.ZipListContents
+await remoteFile.ZipListContents(parameters);
 ```
 
 `ZipListContentsAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -699,13 +699,13 @@ File.ZipListContents
 ## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("recursive", false);
 
-File.BeginDelete(parameters);
+await remoteFile.BeginDelete(parameters);
 ```
 
 `BeginDeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -721,7 +721,7 @@ File.BeginDelete(parameters);
 ## Copy File/Folder
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
@@ -730,7 +730,7 @@ parameters.Add("copy_behaviors", false);
 parameters.Add("structure", false);
 parameters.Add("overwrite", false);
 
-File.Copy(parameters);
+await remoteFile.Copy(parameters);
 ```
 
 `CopyAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -749,14 +749,14 @@ File.Copy(parameters);
 ## Move File/Folder
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
 parameters.Add("overwrite", false);
 
-File.Move(parameters);
+await remoteFile.Move(parameters);
 ```
 
 `MoveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -773,18 +773,18 @@ File.Move(parameters);
 ## Transform a file and save the output to a destination path
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
 parameters.Add("transform_type", "transform_type");
 parameters.Add("target_format", "target_format");
-parameters.Add("width", 1);
-parameters.Add("height", 1);
+parameters.Add("width", 1L);
+parameters.Add("height", 1L);
 parameters.Add("overwrite", false);
 
-File.Transform(parameters);
+await remoteFile.Transform(parameters);
 ```
 
 `TransformAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -806,17 +806,17 @@ File.Transform(parameters);
 ## Decrypt a GPG-encrypted file and save it to a destination path
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
-parameters.Add("gpg_key_partner_id", 1);
+parameters.Add("gpg_key_partner_id", 1L);
 parameters.Add("use_all_private_keys", false);
 parameters.Add("ignore_mdc_error", false);
 parameters.Add("overwrite", false);
 
-File.GpgDecrypt(parameters);
+await remoteFile.GpgDecrypt(parameters);
 ```
 
 `GpgDecryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -837,17 +837,17 @@ File.GpgDecrypt(parameters);
 ## Encrypt a file with GPG and save it to a destination path
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
-parameters.Add("gpg_key_partner_id", 1);
-parameters.Add("signing_key_id", 1);
+parameters.Add("gpg_key_partner_id", 1L);
+parameters.Add("signing_key_id", 1L);
 parameters.Add("armor", false);
 parameters.Add("overwrite", false);
 
-File.GpgEncrypt(parameters);
+await remoteFile.GpgEncrypt(parameters);
 ```
 
 `GpgEncryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -868,14 +868,14 @@ File.GpgEncrypt(parameters);
 ## Extract a ZIP file to a destination folder
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
 parameters.Add("overwrite", false);
 
-File.Unzip(parameters);
+await remoteFile.Unzip(parameters);
 ```
 
 `UnzipAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -893,21 +893,21 @@ File.Unzip(parameters);
 ## Begin File Upload
 
 ```
-var File = RemoteFile.Find(1);
+var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("mkdir_parents", false);
-parameters.Add("part", 1);
-parameters.Add("parts", 1);
+parameters.Add("part", 1L);
+parameters.Add("parts", 1L);
 parameters.Add("ref", "upload-1");
-parameters.Add("restart", 1);
-parameters.Add("size", 1);
+parameters.Add("restart", 1L);
+parameters.Add("size", 1L);
 parameters.Add("with_rename", false);
 parameters.Add("buffered_upload", false);
 parameters.Add("with_direct_connection_info", false);
 
-File.BeginUpload(parameters);
+await remoteFile.BeginUpload(parameters);
 ```
 
 `BeginUploadAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -924,3 +924,14 @@ File.BeginUpload(parameters);
 * `with_rename` (bool): Allow file rename instead of overwrite?
 * `buffered_upload` (bool): If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
 * `with_direct_connection_info` (bool): Include optional direct connection information for a direct Agent transfer attempt?
+
+
+---
+
+## Save
+
+```
+await remoteFile.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

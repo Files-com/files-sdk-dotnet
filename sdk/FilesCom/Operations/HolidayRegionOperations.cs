@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Operations
 {
-    // Imported inside the namespace so that model names, such as Action, take precedence over System's.
+    // Imported inside the namespace so that model names, such as Lock, take precedence over those of the namespaces
+    // above, such as System.Threading.Lock. A type of this namespace still takes precedence over a model of the same
+    // name (a model UserOperations beside the operations class of User), so code here names models in their own
+    // namespace (model_type, qualified: true).
     using FilesCom.Models;
 
     /// <summary>
@@ -14,7 +17,7 @@ namespace FilesCom.Operations
     /// <see cref="FilesClient.HolidayRegions"/>. The objects and lists they return keep using that client.
     /// </summary>
     /// <remarks>
-    /// Each method matches the static <see cref="HolidayRegion"/> method of the same name. Methods that send a request
+    /// Each method matches the static <see cref="global::FilesCom.Models.HolidayRegion"/> method of the same name. Methods that send a request
     /// are named with Async and take a cancellation token. The dictionaries you pass are copied, never changed.
     /// </remarks>
     public sealed class HolidayRegionOperations
@@ -31,13 +34,15 @@ namespace FilesCom.Operations
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         /// </summary>
-        public FilesList<HolidayRegion> GetSupported(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.HolidayRegion> GetSupported(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return HolidayRegion.GetSupportedCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.HolidayRegion.GetSupportedCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
     }
 }

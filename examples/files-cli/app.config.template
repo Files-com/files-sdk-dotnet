@@ -4,7 +4,7 @@
         <sectionGroup name="files.com">
             <section
                 name="filesConfiguration"
-                type="Files.FilesConfiguration, Files.com"
+                type="FilesCom.FilesConfiguration, FilesCom"
             />
         </sectionGroup>
     </configSections>

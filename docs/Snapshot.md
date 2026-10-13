@@ -29,7 +29,7 @@
 ## List Snapshots
 
 ```
-Task<FilesList<Snapshot>> Snapshot.List(
+FilesList<Snapshot> Snapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -203,12 +203,11 @@ Task client.Snapshots.DeleteAsync(
 ## Finalize Snapshot
 
 ```
-var Snapshot = Snapshot.Find(1);
+var snapshot = await Snapshot.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Snapshot.Finalize
+await snapshot.Finalize(parameters);
 ```
 
 `FinalizeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -223,17 +222,18 @@ Snapshot.Finalize
 ## Update Snapshot
 
 ```
-var Snapshot = Snapshot.Find(1);
+var snapshot = await Snapshot.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("name", "My Snapshot");
 
-Snapshot.Update(parameters);
+await snapshot.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Snapshot` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -248,12 +248,11 @@ Snapshot.Update(parameters);
 ## Delete Snapshot
 
 ```
-var Snapshot = Snapshot.Find(1);
+var snapshot = await Snapshot.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Snapshot.Delete
+await snapshot.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -261,3 +260,14 @@ Snapshot.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Snapshot ID.
+
+
+---
+
+## Save
+
+```
+await snapshot.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

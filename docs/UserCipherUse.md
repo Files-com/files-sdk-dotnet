@@ -30,7 +30,7 @@
 ## List User Cipher Uses
 
 ```
-Task<FilesList<UserCipherUse>> UserCipherUse.List(
+FilesList<UserCipherUse> UserCipherUse.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

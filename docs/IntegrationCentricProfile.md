@@ -29,7 +29,7 @@
 ## List Integration Centric Profiles
 
 ```
-Task<FilesList<IntegrationCentricProfile>> IntegrationCentricProfile.List(
+FilesList<IntegrationCentricProfile> IntegrationCentricProfile.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -178,19 +178,20 @@ Task client.IntegrationCentricProfiles.DeleteAsync(
 ## Update Integration Centric Profile
 
 ```
-var IntegrationCentricProfile = IntegrationCentricProfile.Find(1);
+var integrationCentricProfile = await IntegrationCentricProfile.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Business Systems Onboarding");
-parameters.Add("workspace_id", 1);
-parameters.Add("expected_remote_servers", [{"server_type":"dropbox","name":"Dropbox"}]);
+parameters.Add("workspace_id", 1L);
+parameters.Add("expected_remote_servers", new object[] { new Dictionary<string, object> { { "server_type", "dropbox" }, { "name", "Dropbox" } } });
 parameters.Add("use_for_all_users", false);
 
-IntegrationCentricProfile.Update(parameters);
+await integrationCentricProfile.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `IntegrationCentricProfile` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -206,12 +207,11 @@ IntegrationCentricProfile.Update(parameters);
 ## Delete Integration Centric Profile
 
 ```
-var IntegrationCentricProfile = IntegrationCentricProfile.Find(1);
+var integrationCentricProfile = await IntegrationCentricProfile.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-IntegrationCentricProfile.Delete
+await integrationCentricProfile.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -219,3 +219,14 @@ IntegrationCentricProfile.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Integration Centric Profile ID.
+
+
+---
+
+## Save
+
+```
+await integrationCentricProfile.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

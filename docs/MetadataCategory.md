@@ -33,7 +33,7 @@
 ## List Metadata Categories
 
 ```
-Task<FilesList<MetadataCategory>> MetadataCategory.List(
+FilesList<MetadataCategory> MetadataCategory.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -90,7 +90,7 @@ Task<MetadataCategory> client.MetadataCategories.FindAsync(
 ## List Metadata Categories by Path
 
 ```
-Task<FilesList<MetadataCategory>> MetadataCategory.ListFor(
+FilesList<MetadataCategory> MetadataCategory.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -206,17 +206,18 @@ Task client.MetadataCategories.DeleteAsync(
 ## Update Metadata Category
 
 ```
-var MetadataCategory = MetadataCategory.Find(1);
+var metadataCategory = await MetadataCategory.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Approval Workflow");
-parameters.Add("default_columns", ["Approval Status"]);
+parameters.Add("default_columns", new string[] { "Approval Status" });
 
-MetadataCategory.Update(parameters);
+await metadataCategory.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `MetadataCategory` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -230,12 +231,11 @@ MetadataCategory.Update(parameters);
 ## Delete Metadata Category
 
 ```
-var MetadataCategory = MetadataCategory.Find(1);
+var metadataCategory = await MetadataCategory.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-MetadataCategory.Delete
+await metadataCategory.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -243,3 +243,14 @@ MetadataCategory.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Metadata Category ID.
+
+
+---
+
+## Save
+
+```
+await metadataCategory.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

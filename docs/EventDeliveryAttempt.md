@@ -46,7 +46,7 @@
 ## List Event Delivery Attempts
 
 ```
-Task<FilesList<EventDeliveryAttempt>> EventDeliveryAttempt.List(
+FilesList<EventDeliveryAttempt> EventDeliveryAttempt.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

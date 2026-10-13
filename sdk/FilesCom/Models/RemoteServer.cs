@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class RemoteServer : IModel
+    /// <summary>
+    /// RemoteServerEntity model
+    /// </summary>
+    public class RemoteServer : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a RemoteServer with no attributes set and no options.
+        /// </summary>
         public RemoteServer() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a RemoteServer with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public RemoteServer(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -445,30 +454,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -479,7 +510,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -490,7 +521,7 @@ namespace FilesCom.Models
         public bool Disabled
         {
             get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
-            set { attributes["disabled"] = value; }
+            set { attributes["disabled"] = value; unsaved.Add("disabled"); }
         }
 
         /// <summary>
@@ -500,7 +531,7 @@ namespace FilesCom.Models
         public string AuthenticationMethod
         {
             get { return (string)attributes["authentication_method"]; }
-            set { attributes["authentication_method"] = value; }
+            set { attributes["authentication_method"] = value; unsaved.Add("authentication_method"); }
         }
 
         /// <summary>
@@ -510,7 +541,7 @@ namespace FilesCom.Models
         public string Hostname
         {
             get { return (string)attributes["hostname"]; }
-            set { attributes["hostname"] = value; }
+            set { attributes["hostname"] = value; unsaved.Add("hostname"); }
         }
 
         /// <summary>
@@ -520,7 +551,7 @@ namespace FilesCom.Models
         public string RemoteHomePath
         {
             get { return (string)attributes["remote_home_path"]; }
-            set { attributes["remote_home_path"] = value; }
+            set { attributes["remote_home_path"] = value; unsaved.Add("remote_home_path"); }
         }
 
         /// <summary>
@@ -530,7 +561,7 @@ namespace FilesCom.Models
         public string UploadStagingPath
         {
             get { return (string)attributes["upload_staging_path"]; }
-            set { attributes["upload_staging_path"] = value; }
+            set { attributes["upload_staging_path"] = value; unsaved.Add("upload_staging_path"); }
         }
 
         /// <summary>
@@ -541,7 +572,7 @@ namespace FilesCom.Models
         public bool AllowRelativePaths
         {
             get { return attributes["allow_relative_paths"] == null ? false : (bool)attributes["allow_relative_paths"]; }
-            set { attributes["allow_relative_paths"] = value; }
+            set { attributes["allow_relative_paths"] = value; unsaved.Add("allow_relative_paths"); }
         }
 
         /// <summary>
@@ -551,7 +582,7 @@ namespace FilesCom.Models
         public string Name
         {
             get { return (string)attributes["name"]; }
-            set { attributes["name"] = value; }
+            set { attributes["name"] = value; unsaved.Add("name"); }
         }
 
         /// <summary>
@@ -561,7 +592,7 @@ namespace FilesCom.Models
         public string Description
         {
             get { return (string)attributes["description"]; }
-            set { attributes["description"] = value; }
+            set { attributes["description"] = value; unsaved.Add("description"); }
         }
 
         /// <summary>
@@ -571,7 +602,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Port
         {
             get { return (Nullable<Int64>)attributes["port"]; }
-            set { attributes["port"] = value; }
+            set { attributes["port"] = value; unsaved.Add("port"); }
         }
 
         /// <summary>
@@ -581,7 +612,7 @@ namespace FilesCom.Models
         public string BufferUploads
         {
             get { return (string)attributes["buffer_uploads"]; }
-            set { attributes["buffer_uploads"] = value; }
+            set { attributes["buffer_uploads"] = value; unsaved.Add("buffer_uploads"); }
         }
 
         /// <summary>
@@ -591,7 +622,7 @@ namespace FilesCom.Models
         public Nullable<Int64> MaxConnections
         {
             get { return (Nullable<Int64>)attributes["max_connections"]; }
-            set { attributes["max_connections"] = value; }
+            set { attributes["max_connections"] = value; unsaved.Add("max_connections"); }
         }
 
         /// <summary>
@@ -602,7 +633,7 @@ namespace FilesCom.Models
         public bool PinToSiteRegion
         {
             get { return attributes["pin_to_site_region"] == null ? false : (bool)attributes["pin_to_site_region"]; }
-            set { attributes["pin_to_site_region"] = value; }
+            set { attributes["pin_to_site_region"] = value; unsaved.Add("pin_to_site_region"); }
         }
 
         /// <summary>
@@ -612,7 +643,7 @@ namespace FilesCom.Models
         public string PinnedRegion
         {
             get { return (string)attributes["pinned_region"]; }
-            set { attributes["pinned_region"] = value; }
+            set { attributes["pinned_region"] = value; unsaved.Add("pinned_region"); }
         }
 
         /// <summary>
@@ -622,7 +653,7 @@ namespace FilesCom.Models
         public Nullable<Int64> RemoteServerCredentialId
         {
             get { return (Nullable<Int64>)attributes["remote_server_credential_id"]; }
-            set { attributes["remote_server_credential_id"] = value; }
+            set { attributes["remote_server_credential_id"] = value; unsaved.Add("remote_server_credential_id"); }
         }
 
         /// <summary>
@@ -632,7 +663,7 @@ namespace FilesCom.Models
         public string S3Bucket
         {
             get { return (string)attributes["s3_bucket"]; }
-            set { attributes["s3_bucket"] = value; }
+            set { attributes["s3_bucket"] = value; unsaved.Add("s3_bucket"); }
         }
 
         /// <summary>
@@ -642,7 +673,7 @@ namespace FilesCom.Models
         public string S3Region
         {
             get { return (string)attributes["s3_region"]; }
-            set { attributes["s3_region"] = value; }
+            set { attributes["s3_region"] = value; unsaved.Add("s3_region"); }
         }
 
         /// <summary>
@@ -652,7 +683,7 @@ namespace FilesCom.Models
         public string S3KmsKeyId
         {
             get { return (string)attributes["s3_kms_key_id"]; }
-            set { attributes["s3_kms_key_id"] = value; }
+            set { attributes["s3_kms_key_id"] = value; unsaved.Add("s3_kms_key_id"); }
         }
 
         /// <summary>
@@ -662,7 +693,7 @@ namespace FilesCom.Models
         public string AwsAccessKey
         {
             get { return (string)attributes["aws_access_key"]; }
-            set { attributes["aws_access_key"] = value; }
+            set { attributes["aws_access_key"] = value; unsaved.Add("aws_access_key"); }
         }
 
         /// <summary>
@@ -672,7 +703,7 @@ namespace FilesCom.Models
         public string S3AssumeRoleArn
         {
             get { return (string)attributes["s3_assume_role_arn"]; }
-            set { attributes["s3_assume_role_arn"] = value; }
+            set { attributes["s3_assume_role_arn"] = value; unsaved.Add("s3_assume_role_arn"); }
         }
 
         /// <summary>
@@ -682,7 +713,7 @@ namespace FilesCom.Models
         public Nullable<Int64> S3AssumeRoleDurationSeconds
         {
             get { return (Nullable<Int64>)attributes["s3_assume_role_duration_seconds"]; }
-            set { attributes["s3_assume_role_duration_seconds"] = value; }
+            set { attributes["s3_assume_role_duration_seconds"] = value; unsaved.Add("s3_assume_role_duration_seconds"); }
         }
 
         /// <summary>
@@ -692,7 +723,7 @@ namespace FilesCom.Models
         public string S3AssumeRoleExternalId
         {
             get { return (string)attributes["s3_assume_role_external_id"]; }
-            set { attributes["s3_assume_role_external_id"] = value; }
+            set { attributes["s3_assume_role_external_id"] = value; unsaved.Add("s3_assume_role_external_id"); }
         }
 
         /// <summary>
@@ -702,7 +733,7 @@ namespace FilesCom.Models
         public string ServerCertificate
         {
             get { return (string)attributes["server_certificate"]; }
-            set { attributes["server_certificate"] = value; }
+            set { attributes["server_certificate"] = value; unsaved.Add("server_certificate"); }
         }
 
         /// <summary>
@@ -712,7 +743,7 @@ namespace FilesCom.Models
         public string ServerHostKey
         {
             get { return (string)attributes["server_host_key"]; }
-            set { attributes["server_host_key"] = value; }
+            set { attributes["server_host_key"] = value; unsaved.Add("server_host_key"); }
         }
 
         /// <summary>
@@ -722,7 +753,7 @@ namespace FilesCom.Models
         public string ServerType
         {
             get { return (string)attributes["server_type"]; }
-            set { attributes["server_type"] = value; }
+            set { attributes["server_type"] = value; unsaved.Add("server_type"); }
         }
 
         /// <summary>
@@ -732,7 +763,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WorkspaceId
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            set { attributes["workspace_id"] = value; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -742,7 +773,7 @@ namespace FilesCom.Models
         public string Ssl
         {
             get { return (string)attributes["ssl"]; }
-            set { attributes["ssl"] = value; }
+            set { attributes["ssl"] = value; unsaved.Add("ssl"); }
         }
 
         /// <summary>
@@ -752,7 +783,7 @@ namespace FilesCom.Models
         public string Username
         {
             get { return (string)attributes["username"]; }
-            set { attributes["username"] = value; }
+            set { attributes["username"] = value; unsaved.Add("username"); }
         }
 
         /// <summary>
@@ -762,7 +793,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageBucket
         {
             get { return (string)attributes["google_cloud_storage_bucket"]; }
-            set { attributes["google_cloud_storage_bucket"] = value; }
+            set { attributes["google_cloud_storage_bucket"] = value; unsaved.Add("google_cloud_storage_bucket"); }
         }
 
         /// <summary>
@@ -772,7 +803,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageAuthenticationMethod
         {
             get { return (string)attributes["google_cloud_storage_authentication_method"]; }
-            set { attributes["google_cloud_storage_authentication_method"] = value; }
+            set { attributes["google_cloud_storage_authentication_method"] = value; unsaved.Add("google_cloud_storage_authentication_method"); }
         }
 
         /// <summary>
@@ -782,7 +813,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageOauthScope
         {
             get { return (string)attributes["google_cloud_storage_oauth_scope"]; }
-            set { attributes["google_cloud_storage_oauth_scope"] = value; }
+            set { attributes["google_cloud_storage_oauth_scope"] = value; unsaved.Add("google_cloud_storage_oauth_scope"); }
         }
 
         /// <summary>
@@ -792,7 +823,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageProjectId
         {
             get { return (string)attributes["google_cloud_storage_project_id"]; }
-            set { attributes["google_cloud_storage_project_id"] = value; }
+            set { attributes["google_cloud_storage_project_id"] = value; unsaved.Add("google_cloud_storage_project_id"); }
         }
 
         /// <summary>
@@ -802,7 +833,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageS3CompatibleAccessKey
         {
             get { return (string)attributes["google_cloud_storage_s3_compatible_access_key"]; }
-            set { attributes["google_cloud_storage_s3_compatible_access_key"] = value; }
+            set { attributes["google_cloud_storage_s3_compatible_access_key"] = value; unsaved.Add("google_cloud_storage_s3_compatible_access_key"); }
         }
 
         /// <summary>
@@ -812,7 +843,7 @@ namespace FilesCom.Models
         public string BackblazeB2S3Endpoint
         {
             get { return (string)attributes["backblaze_b2_s3_endpoint"]; }
-            set { attributes["backblaze_b2_s3_endpoint"] = value; }
+            set { attributes["backblaze_b2_s3_endpoint"] = value; unsaved.Add("backblaze_b2_s3_endpoint"); }
         }
 
         /// <summary>
@@ -822,7 +853,7 @@ namespace FilesCom.Models
         public string BackblazeB2Bucket
         {
             get { return (string)attributes["backblaze_b2_bucket"]; }
-            set { attributes["backblaze_b2_bucket"] = value; }
+            set { attributes["backblaze_b2_bucket"] = value; unsaved.Add("backblaze_b2_bucket"); }
         }
 
         /// <summary>
@@ -832,7 +863,7 @@ namespace FilesCom.Models
         public string WasabiBucket
         {
             get { return (string)attributes["wasabi_bucket"]; }
-            set { attributes["wasabi_bucket"] = value; }
+            set { attributes["wasabi_bucket"] = value; unsaved.Add("wasabi_bucket"); }
         }
 
         /// <summary>
@@ -842,7 +873,7 @@ namespace FilesCom.Models
         public string WasabiRegion
         {
             get { return (string)attributes["wasabi_region"]; }
-            set { attributes["wasabi_region"] = value; }
+            set { attributes["wasabi_region"] = value; unsaved.Add("wasabi_region"); }
         }
 
         /// <summary>
@@ -852,7 +883,7 @@ namespace FilesCom.Models
         public string WasabiAccessKey
         {
             get { return (string)attributes["wasabi_access_key"]; }
-            set { attributes["wasabi_access_key"] = value; }
+            set { attributes["wasabi_access_key"] = value; unsaved.Add("wasabi_access_key"); }
         }
 
         /// <summary>
@@ -862,7 +893,7 @@ namespace FilesCom.Models
         public string AuthStatus
         {
             get { return (string)attributes["auth_status"]; }
-            set { attributes["auth_status"] = value; }
+            set { attributes["auth_status"] = value; unsaved.Add("auth_status"); }
         }
 
         /// <summary>
@@ -872,7 +903,7 @@ namespace FilesCom.Models
         public string AuthAccountName
         {
             get { return (string)attributes["auth_account_name"]; }
-            set { attributes["auth_account_name"] = value; }
+            set { attributes["auth_account_name"] = value; unsaved.Add("auth_account_name"); }
         }
 
         /// <summary>
@@ -882,7 +913,7 @@ namespace FilesCom.Models
         public string OneDriveAccountType
         {
             get { return (string)attributes["one_drive_account_type"]; }
-            set { attributes["one_drive_account_type"] = value; }
+            set { attributes["one_drive_account_type"] = value; unsaved.Add("one_drive_account_type"); }
         }
 
         /// <summary>
@@ -892,7 +923,7 @@ namespace FilesCom.Models
         public string SharepointTenantId
         {
             get { return (string)attributes["sharepoint_tenant_id"]; }
-            set { attributes["sharepoint_tenant_id"] = value; }
+            set { attributes["sharepoint_tenant_id"] = value; unsaved.Add("sharepoint_tenant_id"); }
         }
 
         /// <summary>
@@ -902,7 +933,7 @@ namespace FilesCom.Models
         public string SharepointClientId
         {
             get { return (string)attributes["sharepoint_client_id"]; }
-            set { attributes["sharepoint_client_id"] = value; }
+            set { attributes["sharepoint_client_id"] = value; unsaved.Add("sharepoint_client_id"); }
         }
 
         /// <summary>
@@ -913,7 +944,7 @@ namespace FilesCom.Models
         public bool SharepointAppAuthentication
         {
             get { return attributes["sharepoint_app_authentication"] == null ? false : (bool)attributes["sharepoint_app_authentication"]; }
-            set { attributes["sharepoint_app_authentication"] = value; }
+            set { attributes["sharepoint_app_authentication"] = value; unsaved.Add("sharepoint_app_authentication"); }
         }
 
         /// <summary>
@@ -923,7 +954,7 @@ namespace FilesCom.Models
         public string SharepointAppCredentialType
         {
             get { return (string)attributes["sharepoint_app_credential_type"]; }
-            set { attributes["sharepoint_app_credential_type"] = value; }
+            set { attributes["sharepoint_app_credential_type"] = value; unsaved.Add("sharepoint_app_credential_type"); }
         }
 
         /// <summary>
@@ -933,7 +964,7 @@ namespace FilesCom.Models
         public string SharepointSiteUrl
         {
             get { return (string)attributes["sharepoint_site_url"]; }
-            set { attributes["sharepoint_site_url"] = value; }
+            set { attributes["sharepoint_site_url"] = value; unsaved.Add("sharepoint_site_url"); }
         }
 
         /// <summary>
@@ -943,7 +974,7 @@ namespace FilesCom.Models
         public string AzureBlobStorageAccount
         {
             get { return (string)attributes["azure_blob_storage_account"]; }
-            set { attributes["azure_blob_storage_account"] = value; }
+            set { attributes["azure_blob_storage_account"] = value; unsaved.Add("azure_blob_storage_account"); }
         }
 
         /// <summary>
@@ -953,7 +984,7 @@ namespace FilesCom.Models
         public string AzureBlobStorageContainer
         {
             get { return (string)attributes["azure_blob_storage_container"]; }
-            set { attributes["azure_blob_storage_container"] = value; }
+            set { attributes["azure_blob_storage_container"] = value; unsaved.Add("azure_blob_storage_container"); }
         }
 
         /// <summary>
@@ -964,7 +995,7 @@ namespace FilesCom.Models
         public bool AzureBlobStorageHierarchicalNamespace
         {
             get { return attributes["azure_blob_storage_hierarchical_namespace"] == null ? false : (bool)attributes["azure_blob_storage_hierarchical_namespace"]; }
-            set { attributes["azure_blob_storage_hierarchical_namespace"] = value; }
+            set { attributes["azure_blob_storage_hierarchical_namespace"] = value; unsaved.Add("azure_blob_storage_hierarchical_namespace"); }
         }
 
         /// <summary>
@@ -974,7 +1005,7 @@ namespace FilesCom.Models
         public string AzureBlobStorageDnsSuffix
         {
             get { return (string)attributes["azure_blob_storage_dns_suffix"]; }
-            set { attributes["azure_blob_storage_dns_suffix"] = value; }
+            set { attributes["azure_blob_storage_dns_suffix"] = value; unsaved.Add("azure_blob_storage_dns_suffix"); }
         }
 
         /// <summary>
@@ -984,7 +1015,7 @@ namespace FilesCom.Models
         public string AzureFilesStorageAccount
         {
             get { return (string)attributes["azure_files_storage_account"]; }
-            set { attributes["azure_files_storage_account"] = value; }
+            set { attributes["azure_files_storage_account"] = value; unsaved.Add("azure_files_storage_account"); }
         }
 
         /// <summary>
@@ -994,7 +1025,7 @@ namespace FilesCom.Models
         public string AzureFilesStorageShareName
         {
             get { return (string)attributes["azure_files_storage_share_name"]; }
-            set { attributes["azure_files_storage_share_name"] = value; }
+            set { attributes["azure_files_storage_share_name"] = value; unsaved.Add("azure_files_storage_share_name"); }
         }
 
         /// <summary>
@@ -1004,7 +1035,7 @@ namespace FilesCom.Models
         public string AzureFilesStorageDnsSuffix
         {
             get { return (string)attributes["azure_files_storage_dns_suffix"]; }
-            set { attributes["azure_files_storage_dns_suffix"] = value; }
+            set { attributes["azure_files_storage_dns_suffix"] = value; unsaved.Add("azure_files_storage_dns_suffix"); }
         }
 
         /// <summary>
@@ -1014,7 +1045,7 @@ namespace FilesCom.Models
         public string S3CompatibleBucket
         {
             get { return (string)attributes["s3_compatible_bucket"]; }
-            set { attributes["s3_compatible_bucket"] = value; }
+            set { attributes["s3_compatible_bucket"] = value; unsaved.Add("s3_compatible_bucket"); }
         }
 
         /// <summary>
@@ -1024,7 +1055,7 @@ namespace FilesCom.Models
         public string S3CompatibleEndpoint
         {
             get { return (string)attributes["s3_compatible_endpoint"]; }
-            set { attributes["s3_compatible_endpoint"] = value; }
+            set { attributes["s3_compatible_endpoint"] = value; unsaved.Add("s3_compatible_endpoint"); }
         }
 
         /// <summary>
@@ -1034,7 +1065,7 @@ namespace FilesCom.Models
         public string S3CompatibleRegion
         {
             get { return (string)attributes["s3_compatible_region"]; }
-            set { attributes["s3_compatible_region"] = value; }
+            set { attributes["s3_compatible_region"] = value; unsaved.Add("s3_compatible_region"); }
         }
 
         /// <summary>
@@ -1045,7 +1076,7 @@ namespace FilesCom.Models
         public bool S3CompatibleVirtualHostedStyle
         {
             get { return attributes["s3_compatible_virtual_hosted_style"] == null ? false : (bool)attributes["s3_compatible_virtual_hosted_style"]; }
-            set { attributes["s3_compatible_virtual_hosted_style"] = value; }
+            set { attributes["s3_compatible_virtual_hosted_style"] = value; unsaved.Add("s3_compatible_virtual_hosted_style"); }
         }
 
         /// <summary>
@@ -1055,7 +1086,7 @@ namespace FilesCom.Models
         public string S3CompatibleAccessKey
         {
             get { return (string)attributes["s3_compatible_access_key"]; }
-            set { attributes["s3_compatible_access_key"] = value; }
+            set { attributes["s3_compatible_access_key"] = value; unsaved.Add("s3_compatible_access_key"); }
         }
 
         /// <summary>
@@ -1066,7 +1097,7 @@ namespace FilesCom.Models
         public bool EnableDedicatedIps
         {
             get { return attributes["enable_dedicated_ips"] == null ? false : (bool)attributes["enable_dedicated_ips"]; }
-            set { attributes["enable_dedicated_ips"] = value; }
+            set { attributes["enable_dedicated_ips"] = value; unsaved.Add("enable_dedicated_ips"); }
         }
 
         /// <summary>
@@ -1076,7 +1107,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CustomDomainId
         {
             get { return (Nullable<Int64>)attributes["custom_domain_id"]; }
-            set { attributes["custom_domain_id"] = value; }
+            set { attributes["custom_domain_id"] = value; unsaved.Add("custom_domain_id"); }
         }
 
         /// <summary>
@@ -1086,7 +1117,7 @@ namespace FilesCom.Models
         public string[] OutboundIpAddresses
         {
             get { return (string[])attributes["outbound_ip_addresses"]; }
-            set { attributes["outbound_ip_addresses"] = value; }
+            set { attributes["outbound_ip_addresses"] = value; unsaved.Add("outbound_ip_addresses"); }
         }
 
         /// <summary>
@@ -1096,7 +1127,7 @@ namespace FilesCom.Models
         public string FilesAgentPermissionSet
         {
             get { return (string)attributes["files_agent_permission_set"]; }
-            set { attributes["files_agent_permission_set"] = value; }
+            set { attributes["files_agent_permission_set"] = value; unsaved.Add("files_agent_permission_set"); }
         }
 
         /// <summary>
@@ -1106,7 +1137,7 @@ namespace FilesCom.Models
         public string FilesAgentRoot
         {
             get { return (string)attributes["files_agent_root"]; }
-            set { attributes["files_agent_root"] = value; }
+            set { attributes["files_agent_root"] = value; unsaved.Add("files_agent_root"); }
         }
 
         /// <summary>
@@ -1116,7 +1147,7 @@ namespace FilesCom.Models
         public string FilesAgentVersion
         {
             get { return (string)attributes["files_agent_version"]; }
-            set { attributes["files_agent_version"] = value; }
+            set { attributes["files_agent_version"] = value; unsaved.Add("files_agent_version"); }
         }
 
         /// <summary>
@@ -1127,7 +1158,7 @@ namespace FilesCom.Models
         public bool FilesAgentUpToDate
         {
             get { return attributes["files_agent_up_to_date"] == null ? false : (bool)attributes["files_agent_up_to_date"]; }
-            set { attributes["files_agent_up_to_date"] = value; }
+            set { attributes["files_agent_up_to_date"] = value; unsaved.Add("files_agent_up_to_date"); }
         }
 
         /// <summary>
@@ -1137,7 +1168,7 @@ namespace FilesCom.Models
         public string FilesAgentLatestVersion
         {
             get { return (string)attributes["files_agent_latest_version"]; }
-            set { attributes["files_agent_latest_version"] = value; }
+            set { attributes["files_agent_latest_version"] = value; unsaved.Add("files_agent_latest_version"); }
         }
 
         /// <summary>
@@ -1148,7 +1179,7 @@ namespace FilesCom.Models
         public bool FilesAgentSupportsPushUpdates
         {
             get { return attributes["files_agent_supports_push_updates"] == null ? false : (bool)attributes["files_agent_supports_push_updates"]; }
-            set { attributes["files_agent_supports_push_updates"] = value; }
+            set { attributes["files_agent_supports_push_updates"] = value; unsaved.Add("files_agent_supports_push_updates"); }
         }
 
         /// <summary>
@@ -1159,7 +1190,7 @@ namespace FilesCom.Models
         public bool DirectTransferAvailable
         {
             get { return attributes["direct_transfer_available"] == null ? false : (bool)attributes["direct_transfer_available"]; }
-            set { attributes["direct_transfer_available"] = value; }
+            set { attributes["direct_transfer_available"] = value; unsaved.Add("direct_transfer_available"); }
         }
 
         /// <summary>
@@ -1169,7 +1200,7 @@ namespace FilesCom.Models
         public Nullable<Int64> OutboundAgentId
         {
             get { return (Nullable<Int64>)attributes["outbound_agent_id"]; }
-            set { attributes["outbound_agent_id"] = value; }
+            set { attributes["outbound_agent_id"] = value; unsaved.Add("outbound_agent_id"); }
         }
 
         /// <summary>
@@ -1179,7 +1210,7 @@ namespace FilesCom.Models
         public string FilebaseBucket
         {
             get { return (string)attributes["filebase_bucket"]; }
-            set { attributes["filebase_bucket"] = value; }
+            set { attributes["filebase_bucket"] = value; unsaved.Add("filebase_bucket"); }
         }
 
         /// <summary>
@@ -1189,7 +1220,7 @@ namespace FilesCom.Models
         public string FilebaseAccessKey
         {
             get { return (string)attributes["filebase_access_key"]; }
-            set { attributes["filebase_access_key"] = value; }
+            set { attributes["filebase_access_key"] = value; unsaved.Add("filebase_access_key"); }
         }
 
         /// <summary>
@@ -1199,7 +1230,7 @@ namespace FilesCom.Models
         public string FilesApiKeyPrefix
         {
             get { return (string)attributes["files_api_key_prefix"]; }
-            set { attributes["files_api_key_prefix"] = value; }
+            set { attributes["files_api_key_prefix"] = value; unsaved.Add("files_api_key_prefix"); }
         }
 
         /// <summary>
@@ -1209,7 +1240,7 @@ namespace FilesCom.Models
         public string CloudflareBucket
         {
             get { return (string)attributes["cloudflare_bucket"]; }
-            set { attributes["cloudflare_bucket"] = value; }
+            set { attributes["cloudflare_bucket"] = value; unsaved.Add("cloudflare_bucket"); }
         }
 
         /// <summary>
@@ -1219,7 +1250,7 @@ namespace FilesCom.Models
         public string CloudflareAccessKey
         {
             get { return (string)attributes["cloudflare_access_key"]; }
-            set { attributes["cloudflare_access_key"] = value; }
+            set { attributes["cloudflare_access_key"] = value; unsaved.Add("cloudflare_access_key"); }
         }
 
         /// <summary>
@@ -1229,7 +1260,7 @@ namespace FilesCom.Models
         public string CloudflareEndpoint
         {
             get { return (string)attributes["cloudflare_endpoint"]; }
-            set { attributes["cloudflare_endpoint"] = value; }
+            set { attributes["cloudflare_endpoint"] = value; unsaved.Add("cloudflare_endpoint"); }
         }
 
         /// <summary>
@@ -1240,7 +1271,7 @@ namespace FilesCom.Models
         public bool DropboxTeams
         {
             get { return attributes["dropbox_teams"] == null ? false : (bool)attributes["dropbox_teams"]; }
-            set { attributes["dropbox_teams"] = value; }
+            set { attributes["dropbox_teams"] = value; unsaved.Add("dropbox_teams"); }
         }
 
         /// <summary>
@@ -1250,7 +1281,7 @@ namespace FilesCom.Models
         public string LinodeBucket
         {
             get { return (string)attributes["linode_bucket"]; }
-            set { attributes["linode_bucket"] = value; }
+            set { attributes["linode_bucket"] = value; unsaved.Add("linode_bucket"); }
         }
 
         /// <summary>
@@ -1260,7 +1291,7 @@ namespace FilesCom.Models
         public string LinodeAccessKey
         {
             get { return (string)attributes["linode_access_key"]; }
-            set { attributes["linode_access_key"] = value; }
+            set { attributes["linode_access_key"] = value; unsaved.Add("linode_access_key"); }
         }
 
         /// <summary>
@@ -1270,7 +1301,7 @@ namespace FilesCom.Models
         public string LinodeRegion
         {
             get { return (string)attributes["linode_region"]; }
-            set { attributes["linode_region"] = value; }
+            set { attributes["linode_region"] = value; unsaved.Add("linode_region"); }
         }
 
         /// <summary>
@@ -1281,7 +1312,7 @@ namespace FilesCom.Models
         public bool SupportsVersioning
         {
             get { return attributes["supports_versioning"] == null ? false : (bool)attributes["supports_versioning"]; }
-            set { attributes["supports_versioning"] = value; }
+            set { attributes["supports_versioning"] = value; unsaved.Add("supports_versioning"); }
         }
 
         /// <summary>
@@ -1291,7 +1322,7 @@ namespace FilesCom.Models
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
+            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
         }
 
         /// <summary>
@@ -1301,7 +1332,7 @@ namespace FilesCom.Models
         public string Password
         {
             get { return (string)attributes["password"]; }
-            set { attributes["password"] = value; }
+            set { attributes["password"] = value; unsaved.Add("password"); }
         }
 
         /// <summary>
@@ -1311,7 +1342,7 @@ namespace FilesCom.Models
         public string PrivateKey
         {
             get { return (string)attributes["private_key"]; }
-            set { attributes["private_key"] = value; }
+            set { attributes["private_key"] = value; unsaved.Add("private_key"); }
         }
 
         /// <summary>
@@ -1321,7 +1352,7 @@ namespace FilesCom.Models
         public string PrivateKeyPassphrase
         {
             get { return (string)attributes["private_key_passphrase"]; }
-            set { attributes["private_key_passphrase"] = value; }
+            set { attributes["private_key_passphrase"] = value; unsaved.Add("private_key_passphrase"); }
         }
 
         /// <summary>
@@ -1332,7 +1363,7 @@ namespace FilesCom.Models
         public bool ResetAuthentication
         {
             get { return attributes["reset_authentication"] == null ? false : (bool)attributes["reset_authentication"]; }
-            set { attributes["reset_authentication"] = value; }
+            set { attributes["reset_authentication"] = value; unsaved.Add("reset_authentication"); }
         }
 
         /// <summary>
@@ -1342,7 +1373,7 @@ namespace FilesCom.Models
         public string SharepointClientCertificate
         {
             get { return (string)attributes["sharepoint_client_certificate"]; }
-            set { attributes["sharepoint_client_certificate"] = value; }
+            set { attributes["sharepoint_client_certificate"] = value; unsaved.Add("sharepoint_client_certificate"); }
         }
 
         /// <summary>
@@ -1352,7 +1383,7 @@ namespace FilesCom.Models
         public string SharepointClientSecret
         {
             get { return (string)attributes["sharepoint_client_secret"]; }
-            set { attributes["sharepoint_client_secret"] = value; }
+            set { attributes["sharepoint_client_secret"] = value; unsaved.Add("sharepoint_client_secret"); }
         }
 
         /// <summary>
@@ -1362,7 +1393,7 @@ namespace FilesCom.Models
         public string SslCertificate
         {
             get { return (string)attributes["ssl_certificate"]; }
-            set { attributes["ssl_certificate"] = value; }
+            set { attributes["ssl_certificate"] = value; unsaved.Add("ssl_certificate"); }
         }
 
         /// <summary>
@@ -1372,7 +1403,7 @@ namespace FilesCom.Models
         public string AwsSecretKey
         {
             get { return (string)attributes["aws_secret_key"]; }
-            set { attributes["aws_secret_key"] = value; }
+            set { attributes["aws_secret_key"] = value; unsaved.Add("aws_secret_key"); }
         }
 
         /// <summary>
@@ -1382,7 +1413,7 @@ namespace FilesCom.Models
         public string AzureBlobStorageAccessKey
         {
             get { return (string)attributes["azure_blob_storage_access_key"]; }
-            set { attributes["azure_blob_storage_access_key"] = value; }
+            set { attributes["azure_blob_storage_access_key"] = value; unsaved.Add("azure_blob_storage_access_key"); }
         }
 
         /// <summary>
@@ -1392,7 +1423,7 @@ namespace FilesCom.Models
         public string AzureBlobStorageSasToken
         {
             get { return (string)attributes["azure_blob_storage_sas_token"]; }
-            set { attributes["azure_blob_storage_sas_token"] = value; }
+            set { attributes["azure_blob_storage_sas_token"] = value; unsaved.Add("azure_blob_storage_sas_token"); }
         }
 
         /// <summary>
@@ -1402,7 +1433,7 @@ namespace FilesCom.Models
         public string AzureFilesStorageAccessKey
         {
             get { return (string)attributes["azure_files_storage_access_key"]; }
-            set { attributes["azure_files_storage_access_key"] = value; }
+            set { attributes["azure_files_storage_access_key"] = value; unsaved.Add("azure_files_storage_access_key"); }
         }
 
         /// <summary>
@@ -1412,7 +1443,7 @@ namespace FilesCom.Models
         public string AzureFilesStorageSasToken
         {
             get { return (string)attributes["azure_files_storage_sas_token"]; }
-            set { attributes["azure_files_storage_sas_token"] = value; }
+            set { attributes["azure_files_storage_sas_token"] = value; unsaved.Add("azure_files_storage_sas_token"); }
         }
 
         /// <summary>
@@ -1422,7 +1453,7 @@ namespace FilesCom.Models
         public string BackblazeB2ApplicationKey
         {
             get { return (string)attributes["backblaze_b2_application_key"]; }
-            set { attributes["backblaze_b2_application_key"] = value; }
+            set { attributes["backblaze_b2_application_key"] = value; unsaved.Add("backblaze_b2_application_key"); }
         }
 
         /// <summary>
@@ -1432,7 +1463,7 @@ namespace FilesCom.Models
         public string BackblazeB2KeyId
         {
             get { return (string)attributes["backblaze_b2_key_id"]; }
-            set { attributes["backblaze_b2_key_id"] = value; }
+            set { attributes["backblaze_b2_key_id"] = value; unsaved.Add("backblaze_b2_key_id"); }
         }
 
         /// <summary>
@@ -1442,7 +1473,7 @@ namespace FilesCom.Models
         public string CloudflareSecretKey
         {
             get { return (string)attributes["cloudflare_secret_key"]; }
-            set { attributes["cloudflare_secret_key"] = value; }
+            set { attributes["cloudflare_secret_key"] = value; unsaved.Add("cloudflare_secret_key"); }
         }
 
         /// <summary>
@@ -1452,7 +1483,7 @@ namespace FilesCom.Models
         public string FilebaseSecretKey
         {
             get { return (string)attributes["filebase_secret_key"]; }
-            set { attributes["filebase_secret_key"] = value; }
+            set { attributes["filebase_secret_key"] = value; unsaved.Add("filebase_secret_key"); }
         }
 
         /// <summary>
@@ -1462,7 +1493,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageCredentialsJson
         {
             get { return (string)attributes["google_cloud_storage_credentials_json"]; }
-            set { attributes["google_cloud_storage_credentials_json"] = value; }
+            set { attributes["google_cloud_storage_credentials_json"] = value; unsaved.Add("google_cloud_storage_credentials_json"); }
         }
 
         /// <summary>
@@ -1472,7 +1503,7 @@ namespace FilesCom.Models
         public string GoogleCloudStorageS3CompatibleSecretKey
         {
             get { return (string)attributes["google_cloud_storage_s3_compatible_secret_key"]; }
-            set { attributes["google_cloud_storage_s3_compatible_secret_key"] = value; }
+            set { attributes["google_cloud_storage_s3_compatible_secret_key"] = value; unsaved.Add("google_cloud_storage_s3_compatible_secret_key"); }
         }
 
         /// <summary>
@@ -1482,7 +1513,7 @@ namespace FilesCom.Models
         public string LinodeSecretKey
         {
             get { return (string)attributes["linode_secret_key"]; }
-            set { attributes["linode_secret_key"] = value; }
+            set { attributes["linode_secret_key"] = value; unsaved.Add("linode_secret_key"); }
         }
 
         /// <summary>
@@ -1492,7 +1523,7 @@ namespace FilesCom.Models
         public string S3CompatibleSecretKey
         {
             get { return (string)attributes["s3_compatible_secret_key"]; }
-            set { attributes["s3_compatible_secret_key"] = value; }
+            set { attributes["s3_compatible_secret_key"] = value; unsaved.Add("s3_compatible_secret_key"); }
         }
 
         /// <summary>
@@ -1502,7 +1533,7 @@ namespace FilesCom.Models
         public string WasabiSecretKey
         {
             get { return (string)attributes["wasabi_secret_key"]; }
-            set { attributes["wasabi_secret_key"] = value; }
+            set { attributes["wasabi_secret_key"] = value; unsaved.Add("wasabi_secret_key"); }
         }
 
         /// <summary>
@@ -1512,12 +1543,13 @@ namespace FilesCom.Models
         public string FilesApiKey
         {
             get { return (string)attributes["files_api_key"]; }
-            set { attributes["files_api_key"] = value; }
+            set { attributes["files_api_key"] = value; unsaved.Add("files_api_key"); }
         }
 
         /// <summary>
         /// List Files.com Agent nodes
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task<AgentNode> AgentNodes(Dictionary<string, object> parameters)
         {
             return AgentNodesCore(parameters, CancellationToken.None);
@@ -1526,6 +1558,8 @@ namespace FilesCom.Models
         /// <summary>
         /// List Files.com Agent nodes
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<AgentNode> AgentNodesAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return AgentNodesCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1535,39 +1569,35 @@ namespace FilesCom.Models
         private async Task<AgentNode> AgentNodesCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The RemoteServer has no id, which AgentNodes needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/agent_nodes", System.Net.Http.HttpMethod.Get, parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<AgentNode>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            AgentNode result = JsonUtil.DeserializeModelResponse<AgentNode>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
         }
 
         /// <summary>
         /// Push update to Files Agent
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task<AgentPushUpdate> AgentPushUpdate(Dictionary<string, object> parameters)
         {
             return AgentPushUpdateCore(parameters, CancellationToken.None);
@@ -1576,6 +1606,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Push update to Files Agent
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<AgentPushUpdate> AgentPushUpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return AgentPushUpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1585,34 +1617,29 @@ namespace FilesCom.Models
         private async Task<AgentPushUpdate> AgentPushUpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The RemoteServer has no id, which AgentPushUpdate needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}/agent_push_update", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<AgentPushUpdate>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            AgentPushUpdate result = JsonUtil.DeserializeModelResponse<AgentPushUpdate>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
         }
 
         /// <summary>
@@ -1702,6 +1729,11 @@ namespace FilesCom.Models
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The RemoteServer it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<RemoteServer> Update(Dictionary<string, object> parameters)
         {
             return UpdateCore(parameters, CancellationToken.None);
@@ -1794,6 +1826,12 @@ namespace FilesCom.Models
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The RemoteServer it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<RemoteServer> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1803,386 +1841,394 @@ namespace FilesCom.Models
         private async Task<RemoteServer> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The RemoteServer has no id, which Update needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("password", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password is null, which cannot be sent" : "Bad parameter: password must be of type string", "password");
+            }
+            if (parameters.TryGetValue("private_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: private_key is null, which cannot be sent" : "Bad parameter: private_key must be of type string", "private_key");
+            }
+            if (parameters.TryGetValue("private_key_passphrase", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: private_key_passphrase is null, which cannot be sent" : "Bad parameter: private_key_passphrase must be of type string", "private_key_passphrase");
+            }
+            if (parameters.TryGetValue("reset_authentication", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: reset_authentication is null, which cannot be sent" : "Bad parameter: reset_authentication must be of type bool", "reset_authentication");
+            }
+            if (parameters.TryGetValue("sharepoint_client_certificate", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_certificate is null, which cannot be sent" : "Bad parameter: sharepoint_client_certificate must be of type string", "sharepoint_client_certificate");
+            }
+            if (parameters.TryGetValue("sharepoint_client_secret", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_secret is null, which cannot be sent" : "Bad parameter: sharepoint_client_secret must be of type string", "sharepoint_client_secret");
+            }
+            if (parameters.TryGetValue("ssl_certificate", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_certificate is null, which cannot be sent" : "Bad parameter: ssl_certificate must be of type string", "ssl_certificate");
+            }
+            if (parameters.TryGetValue("aws_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: aws_secret_key is null, which cannot be sent" : "Bad parameter: aws_secret_key must be of type string", "aws_secret_key");
+            }
+            if (parameters.TryGetValue("azure_blob_storage_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_access_key is null, which cannot be sent" : "Bad parameter: azure_blob_storage_access_key must be of type string", "azure_blob_storage_access_key");
+            }
+            if (parameters.TryGetValue("azure_blob_storage_sas_token", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_sas_token is null, which cannot be sent" : "Bad parameter: azure_blob_storage_sas_token must be of type string", "azure_blob_storage_sas_token");
+            }
+            if (parameters.TryGetValue("azure_files_storage_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_access_key is null, which cannot be sent" : "Bad parameter: azure_files_storage_access_key must be of type string", "azure_files_storage_access_key");
+            }
+            if (parameters.TryGetValue("azure_files_storage_sas_token", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_sas_token is null, which cannot be sent" : "Bad parameter: azure_files_storage_sas_token must be of type string", "azure_files_storage_sas_token");
+            }
+            if (parameters.TryGetValue("backblaze_b2_application_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_application_key is null, which cannot be sent" : "Bad parameter: backblaze_b2_application_key must be of type string", "backblaze_b2_application_key");
+            }
+            if (parameters.TryGetValue("backblaze_b2_key_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_key_id is null, which cannot be sent" : "Bad parameter: backblaze_b2_key_id must be of type string", "backblaze_b2_key_id");
+            }
+            if (parameters.TryGetValue("cloudflare_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_secret_key is null, which cannot be sent" : "Bad parameter: cloudflare_secret_key must be of type string", "cloudflare_secret_key");
+            }
+            if (parameters.TryGetValue("filebase_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_secret_key is null, which cannot be sent" : "Bad parameter: filebase_secret_key must be of type string", "filebase_secret_key");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_credentials_json", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_credentials_json is null, which cannot be sent" : "Bad parameter: google_cloud_storage_credentials_json must be of type string", "google_cloud_storage_credentials_json");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_s3_compatible_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_s3_compatible_secret_key is null, which cannot be sent" : "Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type string", "google_cloud_storage_s3_compatible_secret_key");
+            }
+            if (parameters.TryGetValue("linode_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_secret_key is null, which cannot be sent" : "Bad parameter: linode_secret_key must be of type string", "linode_secret_key");
+            }
+            if (parameters.TryGetValue("s3_compatible_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_secret_key is null, which cannot be sent" : "Bad parameter: s3_compatible_secret_key must be of type string", "s3_compatible_secret_key");
+            }
+            if (parameters.TryGetValue("wasabi_secret_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_secret_key is null, which cannot be sent" : "Bad parameter: wasabi_secret_key must be of type string", "wasabi_secret_key");
+            }
+            if (parameters.TryGetValue("allow_relative_paths", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_relative_paths is null, which cannot be sent" : "Bad parameter: allow_relative_paths must be of type bool", "allow_relative_paths");
+            }
+            if (parameters.TryGetValue("aws_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: aws_access_key is null, which cannot be sent" : "Bad parameter: aws_access_key must be of type string", "aws_access_key");
+            }
+            if (parameters.TryGetValue("azure_blob_storage_account", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_account is null, which cannot be sent" : "Bad parameter: azure_blob_storage_account must be of type string", "azure_blob_storage_account");
+            }
+            if (parameters.TryGetValue("azure_blob_storage_container", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_container is null, which cannot be sent" : "Bad parameter: azure_blob_storage_container must be of type string", "azure_blob_storage_container");
+            }
+            if (parameters.TryGetValue("azure_blob_storage_dns_suffix", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_dns_suffix is null, which cannot be sent" : "Bad parameter: azure_blob_storage_dns_suffix must be of type string", "azure_blob_storage_dns_suffix");
+            }
+            if (parameters.TryGetValue("azure_blob_storage_hierarchical_namespace", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_hierarchical_namespace is null, which cannot be sent" : "Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "azure_blob_storage_hierarchical_namespace");
+            }
+            if (parameters.TryGetValue("azure_files_storage_account", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_account is null, which cannot be sent" : "Bad parameter: azure_files_storage_account must be of type string", "azure_files_storage_account");
+            }
+            if (parameters.TryGetValue("azure_files_storage_dns_suffix", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_dns_suffix is null, which cannot be sent" : "Bad parameter: azure_files_storage_dns_suffix must be of type string", "azure_files_storage_dns_suffix");
+            }
+            if (parameters.TryGetValue("azure_files_storage_share_name", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_share_name is null, which cannot be sent" : "Bad parameter: azure_files_storage_share_name must be of type string", "azure_files_storage_share_name");
+            }
+            if (parameters.TryGetValue("backblaze_b2_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_bucket is null, which cannot be sent" : "Bad parameter: backblaze_b2_bucket must be of type string", "backblaze_b2_bucket");
+            }
+            if (parameters.TryGetValue("backblaze_b2_s3_endpoint", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_s3_endpoint is null, which cannot be sent" : "Bad parameter: backblaze_b2_s3_endpoint must be of type string", "backblaze_b2_s3_endpoint");
+            }
+            if (parameters.TryGetValue("buffer_uploads", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: buffer_uploads is null, which cannot be sent" : "Bad parameter: buffer_uploads must be of type string", "buffer_uploads");
+            }
+            if (parameters.TryGetValue("cloudflare_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_access_key is null, which cannot be sent" : "Bad parameter: cloudflare_access_key must be of type string", "cloudflare_access_key");
+            }
+            if (parameters.TryGetValue("cloudflare_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_bucket is null, which cannot be sent" : "Bad parameter: cloudflare_bucket must be of type string", "cloudflare_bucket");
+            }
+            if (parameters.TryGetValue("cloudflare_endpoint", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_endpoint is null, which cannot be sent" : "Bad parameter: cloudflare_endpoint must be of type string", "cloudflare_endpoint");
+            }
+            if (parameters.TryGetValue("description", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: description is null, which cannot be sent" : "Bad parameter: description must be of type string", "description");
+            }
+            if (parameters.TryGetValue("dropbox_teams", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dropbox_teams is null, which cannot be sent" : "Bad parameter: dropbox_teams must be of type bool", "dropbox_teams");
+            }
+            if (parameters.TryGetValue("enable_dedicated_ips", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: enable_dedicated_ips is null, which cannot be sent" : "Bad parameter: enable_dedicated_ips must be of type bool", "enable_dedicated_ips");
+            }
+            if (parameters.TryGetValue("filebase_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_access_key is null, which cannot be sent" : "Bad parameter: filebase_access_key must be of type string", "filebase_access_key");
+            }
+            if (parameters.TryGetValue("filebase_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_bucket is null, which cannot be sent" : "Bad parameter: filebase_bucket must be of type string", "filebase_bucket");
+            }
+            if (parameters.TryGetValue("files_api_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_api_key is null, which cannot be sent" : "Bad parameter: files_api_key must be of type string", "files_api_key");
+            }
+            if (parameters.TryGetValue("files_agent_permission_set", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_permission_set is null, which cannot be sent" : "Bad parameter: files_agent_permission_set must be of type string", "files_agent_permission_set");
+            }
+            if (parameters.TryGetValue("files_agent_root", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_root is null, which cannot be sent" : "Bad parameter: files_agent_root must be of type string", "files_agent_root");
+            }
+            if (parameters.TryGetValue("files_agent_version", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_version is null, which cannot be sent" : "Bad parameter: files_agent_version must be of type string", "files_agent_version");
+            }
+            if (parameters.TryGetValue("outbound_agent_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_agent_id is null, which cannot be sent" : "Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "outbound_agent_id");
+            }
+            if (parameters.TryGetValue("custom_domain_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: custom_domain_id is null, which cannot be sent" : "Bad parameter: custom_domain_id must be of type Nullable<Int64>", "custom_domain_id");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_authentication_method", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_authentication_method is null, which cannot be sent" : "Bad parameter: google_cloud_storage_authentication_method must be of type string", "google_cloud_storage_authentication_method");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_bucket is null, which cannot be sent" : "Bad parameter: google_cloud_storage_bucket must be of type string", "google_cloud_storage_bucket");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_oauth_scope", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_oauth_scope is null, which cannot be sent" : "Bad parameter: google_cloud_storage_oauth_scope must be of type string", "google_cloud_storage_oauth_scope");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_project_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_project_id is null, which cannot be sent" : "Bad parameter: google_cloud_storage_project_id must be of type string", "google_cloud_storage_project_id");
+            }
+            if (parameters.TryGetValue("google_cloud_storage_s3_compatible_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_s3_compatible_access_key is null, which cannot be sent" : "Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type string", "google_cloud_storage_s3_compatible_access_key");
+            }
+            if (parameters.TryGetValue("hostname", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: hostname is null, which cannot be sent" : "Bad parameter: hostname must be of type string", "hostname");
+            }
+            if (parameters.TryGetValue("linode_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_access_key is null, which cannot be sent" : "Bad parameter: linode_access_key must be of type string", "linode_access_key");
+            }
+            if (parameters.TryGetValue("linode_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_bucket is null, which cannot be sent" : "Bad parameter: linode_bucket must be of type string", "linode_bucket");
+            }
+            if (parameters.TryGetValue("linode_region", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_region is null, which cannot be sent" : "Bad parameter: linode_region must be of type string", "linode_region");
+            }
+            if (parameters.TryGetValue("max_connections", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: max_connections is null, which cannot be sent" : "Bad parameter: max_connections must be of type Nullable<Int64>", "max_connections");
+            }
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
+            }
+            if (parameters.TryGetValue("one_drive_account_type", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: one_drive_account_type is null, which cannot be sent" : "Bad parameter: one_drive_account_type must be of type string", "one_drive_account_type");
+            }
+            if (parameters.TryGetValue("pin_to_site_region", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: pin_to_site_region is null, which cannot be sent" : "Bad parameter: pin_to_site_region must be of type bool", "pin_to_site_region");
+            }
+            if (parameters.TryGetValue("port", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: port is null, which cannot be sent" : "Bad parameter: port must be of type Nullable<Int64>", "port");
+            }
+            if (parameters.TryGetValue("upload_staging_path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: upload_staging_path is null, which cannot be sent" : "Bad parameter: upload_staging_path must be of type string", "upload_staging_path");
+            }
+            if (parameters.TryGetValue("remote_server_credential_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: remote_server_credential_id is null, which cannot be sent" : "Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "remote_server_credential_id");
+            }
+            if (parameters.TryGetValue("s3_assume_role_arn", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_assume_role_arn is null, which cannot be sent" : "Bad parameter: s3_assume_role_arn must be of type string", "s3_assume_role_arn");
+            }
+            if (parameters.TryGetValue("s3_assume_role_duration_seconds", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_assume_role_duration_seconds is null, which cannot be sent" : "Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "s3_assume_role_duration_seconds");
+            }
+            if (parameters.TryGetValue("s3_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_bucket is null, which cannot be sent" : "Bad parameter: s3_bucket must be of type string", "s3_bucket");
+            }
+            if (parameters.TryGetValue("s3_compatible_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_access_key is null, which cannot be sent" : "Bad parameter: s3_compatible_access_key must be of type string", "s3_compatible_access_key");
+            }
+            if (parameters.TryGetValue("s3_compatible_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_bucket is null, which cannot be sent" : "Bad parameter: s3_compatible_bucket must be of type string", "s3_compatible_bucket");
+            }
+            if (parameters.TryGetValue("s3_compatible_endpoint", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint must be of type string", "s3_compatible_endpoint");
+            }
+            if (parameters.TryGetValue("s3_compatible_region", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_region is null, which cannot be sent" : "Bad parameter: s3_compatible_region must be of type string", "s3_compatible_region");
+            }
+            if (parameters.TryGetValue("s3_compatible_virtual_hosted_style", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_virtual_hosted_style is null, which cannot be sent" : "Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "s3_compatible_virtual_hosted_style");
+            }
+            if (parameters.TryGetValue("s3_kms_key_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_kms_key_id is null, which cannot be sent" : "Bad parameter: s3_kms_key_id must be of type string", "s3_kms_key_id");
+            }
+            if (parameters.TryGetValue("s3_region", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_region is null, which cannot be sent" : "Bad parameter: s3_region must be of type string", "s3_region");
+            }
+            if (parameters.TryGetValue("server_certificate", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_certificate is null, which cannot be sent" : "Bad parameter: server_certificate must be of type string", "server_certificate");
+            }
+            if (parameters.TryGetValue("server_host_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_host_key is null, which cannot be sent" : "Bad parameter: server_host_key must be of type string", "server_host_key");
+            }
+            if (parameters.TryGetValue("server_type", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_type is null, which cannot be sent" : "Bad parameter: server_type must be of type string", "server_type");
+            }
+            if (parameters.TryGetValue("sharepoint_client_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_id is null, which cannot be sent" : "Bad parameter: sharepoint_client_id must be of type string", "sharepoint_client_id");
+            }
+            if (parameters.TryGetValue("sharepoint_site_url", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_site_url is null, which cannot be sent" : "Bad parameter: sharepoint_site_url must be of type string", "sharepoint_site_url");
+            }
+            if (parameters.TryGetValue("sharepoint_tenant_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_tenant_id is null, which cannot be sent" : "Bad parameter: sharepoint_tenant_id must be of type string", "sharepoint_tenant_id");
+            }
+            if (parameters.TryGetValue("ssl", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl is null, which cannot be sent" : "Bad parameter: ssl must be of type string", "ssl");
+            }
+            if (parameters.TryGetValue("username", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username is null, which cannot be sent" : "Bad parameter: username must be of type string", "username");
+            }
+            if (parameters.TryGetValue("wasabi_access_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_access_key is null, which cannot be sent" : "Bad parameter: wasabi_access_key must be of type string", "wasabi_access_key");
+            }
+            if (parameters.TryGetValue("wasabi_bucket", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_bucket is null, which cannot be sent" : "Bad parameter: wasabi_bucket must be of type string", "wasabi_bucket");
+            }
+            if (parameters.TryGetValue("wasabi_region", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_region is null, which cannot be sent" : "Bad parameter: wasabi_region must be of type string", "wasabi_region");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
-            {
-                throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
-            }
-            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
-            }
-            if (parameters.ContainsKey("private_key_passphrase") && !(parameters["private_key_passphrase"] is string))
-            {
-                throw new ArgumentException("Bad parameter: private_key_passphrase must be of type string", "parameters[\"private_key_passphrase\"]");
-            }
-            if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
-            }
-            if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string))
-            {
-                throw new ArgumentException("Bad parameter: ssl_certificate must be of type string", "parameters[\"ssl_certificate\"]");
-            }
-            if (parameters.ContainsKey("aws_secret_key") && !(parameters["aws_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: aws_secret_key must be of type string", "parameters[\"aws_secret_key\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_access_key") && !(parameters["azure_files_storage_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_access_key must be of type string", "parameters[\"azure_files_storage_access_key\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_sas_token") && !(parameters["azure_files_storage_sas_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_sas_token must be of type string", "parameters[\"azure_files_storage_sas_token\"]");
-            }
-            if (parameters.ContainsKey("backblaze_b2_application_key") && !(parameters["backblaze_b2_application_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: backblaze_b2_application_key must be of type string", "parameters[\"backblaze_b2_application_key\"]");
-            }
-            if (parameters.ContainsKey("backblaze_b2_key_id") && !(parameters["backblaze_b2_key_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: backblaze_b2_key_id must be of type string", "parameters[\"backblaze_b2_key_id\"]");
-            }
-            if (parameters.ContainsKey("cloudflare_secret_key") && !(parameters["cloudflare_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: cloudflare_secret_key must be of type string", "parameters[\"cloudflare_secret_key\"]");
-            }
-            if (parameters.ContainsKey("filebase_secret_key") && !(parameters["filebase_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: filebase_secret_key must be of type string", "parameters[\"filebase_secret_key\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_credentials_json") && !(parameters["google_cloud_storage_credentials_json"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_credentials_json must be of type string", "parameters[\"google_cloud_storage_credentials_json\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_s3_compatible_secret_key") && !(parameters["google_cloud_storage_s3_compatible_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type string", "parameters[\"google_cloud_storage_s3_compatible_secret_key\"]");
-            }
-            if (parameters.ContainsKey("linode_secret_key") && !(parameters["linode_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: linode_secret_key must be of type string", "parameters[\"linode_secret_key\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
-            }
-            if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
-            }
-            if (parameters.ContainsKey("allow_relative_paths") && !(parameters["allow_relative_paths"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: allow_relative_paths must be of type bool", "parameters[\"allow_relative_paths\"]");
-            }
-            if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_dns_suffix") && !(parameters["azure_blob_storage_dns_suffix"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_dns_suffix must be of type string", "parameters[\"azure_blob_storage_dns_suffix\"]");
-            }
-            if (parameters.ContainsKey("azure_blob_storage_hierarchical_namespace") && !(parameters["azure_blob_storage_hierarchical_namespace"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "parameters[\"azure_blob_storage_hierarchical_namespace\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_dns_suffix") && !(parameters["azure_files_storage_dns_suffix"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_dns_suffix must be of type string", "parameters[\"azure_files_storage_dns_suffix\"]");
-            }
-            if (parameters.ContainsKey("azure_files_storage_share_name") && !(parameters["azure_files_storage_share_name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_files_storage_share_name must be of type string", "parameters[\"azure_files_storage_share_name\"]");
-            }
-            if (parameters.ContainsKey("backblaze_b2_bucket") && !(parameters["backblaze_b2_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: backblaze_b2_bucket must be of type string", "parameters[\"backblaze_b2_bucket\"]");
-            }
-            if (parameters.ContainsKey("backblaze_b2_s3_endpoint") && !(parameters["backblaze_b2_s3_endpoint"] is string))
-            {
-                throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
-            }
-            if (parameters.ContainsKey("buffer_uploads") && !(parameters["buffer_uploads"] is string))
-            {
-                throw new ArgumentException("Bad parameter: buffer_uploads must be of type string", "parameters[\"buffer_uploads\"]");
-            }
-            if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: cloudflare_access_key must be of type string", "parameters[\"cloudflare_access_key\"]");
-            }
-            if (parameters.ContainsKey("cloudflare_bucket") && !(parameters["cloudflare_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: cloudflare_bucket must be of type string", "parameters[\"cloudflare_bucket\"]");
-            }
-            if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
-            {
-                throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
-            }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
-            {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
-            }
-            if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
-            }
-            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
-            }
-            if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
-            }
-            if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
-            }
-            if (parameters.ContainsKey("files_api_key") && !(parameters["files_api_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: files_api_key must be of type string", "parameters[\"files_api_key\"]");
-            }
-            if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
-            {
-                throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
-            }
-            if (parameters.ContainsKey("files_agent_root") && !(parameters["files_agent_root"] is string))
-            {
-                throw new ArgumentException("Bad parameter: files_agent_root must be of type string", "parameters[\"files_agent_root\"]");
-            }
-            if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
-            {
-                throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
-            }
-            if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
-            }
-            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_authentication_method must be of type string", "parameters[\"google_cloud_storage_authentication_method\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_bucket must be of type string", "parameters[\"google_cloud_storage_bucket\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_oauth_scope") && !(parameters["google_cloud_storage_oauth_scope"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_oauth_scope must be of type string", "parameters[\"google_cloud_storage_oauth_scope\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_project_id must be of type string", "parameters[\"google_cloud_storage_project_id\"]");
-            }
-            if (parameters.ContainsKey("google_cloud_storage_s3_compatible_access_key") && !(parameters["google_cloud_storage_s3_compatible_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type string", "parameters[\"google_cloud_storage_s3_compatible_access_key\"]");
-            }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
-            {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
-            }
-            if (parameters.ContainsKey("linode_access_key") && !(parameters["linode_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: linode_access_key must be of type string", "parameters[\"linode_access_key\"]");
-            }
-            if (parameters.ContainsKey("linode_bucket") && !(parameters["linode_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: linode_bucket must be of type string", "parameters[\"linode_bucket\"]");
-            }
-            if (parameters.ContainsKey("linode_region") && !(parameters["linode_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
-            }
-            if (parameters.ContainsKey("max_connections") && !(parameters["max_connections"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: max_connections must be of type Nullable<Int64>", "parameters[\"max_connections\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
-            }
-            if (parameters.ContainsKey("pin_to_site_region") && !(parameters["pin_to_site_region"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: pin_to_site_region must be of type bool", "parameters[\"pin_to_site_region\"]");
-            }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
-            }
-            if (parameters.ContainsKey("upload_staging_path") && !(parameters["upload_staging_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: upload_staging_path must be of type string", "parameters[\"upload_staging_path\"]");
-            }
-            if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
-            }
-            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
-            }
-            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
-            }
-            if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_bucket must be of type string", "parameters[\"s3_bucket\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
-            }
-            if (parameters.ContainsKey("s3_kms_key_id") && !(parameters["s3_kms_key_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_kms_key_id must be of type string", "parameters[\"s3_kms_key_id\"]");
-            }
-            if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: s3_region must be of type string", "parameters[\"s3_region\"]");
-            }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
-            }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
-            }
-            if (parameters.ContainsKey("server_type") && !(parameters["server_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: server_type must be of type string", "parameters[\"server_type\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_site_url") && !(parameters["sharepoint_site_url"] is string))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_site_url must be of type string", "parameters[\"sharepoint_site_url\"]");
-            }
-            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
-            }
-            if (parameters.ContainsKey("ssl") && !(parameters["ssl"] is string))
-            {
-                throw new ArgumentException("Bad parameter: ssl must be of type string", "parameters[\"ssl\"]");
-            }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
-            {
-                throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
-            }
-            if (parameters.ContainsKey("wasabi_access_key") && !(parameters["wasabi_access_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: wasabi_access_key must be of type string", "parameters[\"wasabi_access_key\"]");
-            }
-            if (parameters.ContainsKey("wasabi_bucket") && !(parameters["wasabi_bucket"] is string))
-            {
-                throw new ArgumentException("Bad parameter: wasabi_bucket must be of type string", "parameters[\"wasabi_bucket\"]");
-            }
-            if (parameters.ContainsKey("wasabi_region") && !(parameters["wasabi_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: wasabi_region must be of type string", "parameters[\"wasabi_region\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            RemoteServer updated = JsonUtil.DeserializeModelResponse<RemoteServer>(responseJson, context, requestOptions);
+            // This object takes its own reading of the response, so that it shares no array or nested model with the
+            // one returned, and a change to either leaves the other alone.
+            Refresh(JsonUtil.DeserializeModelResponse<RemoteServer>(responseJson, context, requestOptions).attributes);
+            // Its later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return updated;
         }
 
         /// <summary>
+        /// Sends DELETE /remote_servers/{id} to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task Delete(Dictionary<string, object> parameters)
         {
             return DeleteCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
+        /// Sends DELETE /remote_servers/{id} to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>, but neither waits for the request nor reports its failure.
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        [Obsolete("Destroy neither waits for the request nor reports its failure. Use DestroyAsync instead.")]
         public async void Destroy(Dictionary<string, object> parameters)
         {
             Delete(parameters);
@@ -2191,6 +2237,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Same as <see cref="DeleteAsync"/>.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(parameters, cancellationToken);
@@ -2199,45 +2247,82 @@ namespace FilesCom.Models
         private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The RemoteServer has no id, which Delete needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/remote_servers/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
 
+        private static readonly string[] CreateParameterNames = { "user_id", "password", "private_key", "private_key_passphrase", "reset_authentication", "sharepoint_client_certificate", "sharepoint_client_secret", "ssl_certificate", "aws_secret_key", "azure_blob_storage_access_key", "azure_blob_storage_sas_token", "azure_files_storage_access_key", "azure_files_storage_sas_token", "backblaze_b2_application_key", "backblaze_b2_key_id", "cloudflare_secret_key", "filebase_secret_key", "google_cloud_storage_credentials_json", "google_cloud_storage_s3_compatible_secret_key", "linode_secret_key", "s3_compatible_secret_key", "wasabi_secret_key", "allow_relative_paths", "aws_access_key", "azure_blob_storage_account", "azure_blob_storage_container", "azure_blob_storage_dns_suffix", "azure_blob_storage_hierarchical_namespace", "azure_files_storage_account", "azure_files_storage_dns_suffix", "azure_files_storage_share_name", "backblaze_b2_bucket", "backblaze_b2_s3_endpoint", "buffer_uploads", "cloudflare_access_key", "cloudflare_bucket", "cloudflare_endpoint", "description", "dropbox_teams", "enable_dedicated_ips", "filebase_access_key", "filebase_bucket", "files_api_key", "files_agent_permission_set", "files_agent_root", "files_agent_version", "outbound_agent_id", "custom_domain_id", "google_cloud_storage_authentication_method", "google_cloud_storage_bucket", "google_cloud_storage_oauth_scope", "google_cloud_storage_project_id", "google_cloud_storage_s3_compatible_access_key", "hostname", "linode_access_key", "linode_bucket", "linode_region", "max_connections", "name", "one_drive_account_type", "pin_to_site_region", "port", "upload_staging_path", "remote_server_credential_id", "s3_assume_role_arn", "s3_assume_role_duration_seconds", "s3_bucket", "s3_compatible_access_key", "s3_compatible_bucket", "s3_compatible_endpoint", "s3_compatible_region", "s3_compatible_virtual_hosted_style", "s3_kms_key_id", "s3_region", "server_certificate", "server_host_key", "server_type", "sharepoint_client_id", "sharepoint_site_url", "sharepoint_tenant_id", "ssl", "username", "wasabi_access_key", "wasabi_bucket", "wasabi_region", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "password", "private_key", "private_key_passphrase", "reset_authentication", "sharepoint_client_certificate", "sharepoint_client_secret", "ssl_certificate", "aws_secret_key", "azure_blob_storage_access_key", "azure_blob_storage_sas_token", "azure_files_storage_access_key", "azure_files_storage_sas_token", "backblaze_b2_application_key", "backblaze_b2_key_id", "cloudflare_secret_key", "filebase_secret_key", "google_cloud_storage_credentials_json", "google_cloud_storage_s3_compatible_secret_key", "linode_secret_key", "s3_compatible_secret_key", "wasabi_secret_key", "allow_relative_paths", "aws_access_key", "azure_blob_storage_account", "azure_blob_storage_container", "azure_blob_storage_dns_suffix", "azure_blob_storage_hierarchical_namespace", "azure_files_storage_account", "azure_files_storage_dns_suffix", "azure_files_storage_share_name", "backblaze_b2_bucket", "backblaze_b2_s3_endpoint", "buffer_uploads", "cloudflare_access_key", "cloudflare_bucket", "cloudflare_endpoint", "description", "dropbox_teams", "enable_dedicated_ips", "filebase_access_key", "filebase_bucket", "files_api_key", "files_agent_permission_set", "files_agent_root", "files_agent_version", "outbound_agent_id", "custom_domain_id", "google_cloud_storage_authentication_method", "google_cloud_storage_bucket", "google_cloud_storage_oauth_scope", "google_cloud_storage_project_id", "google_cloud_storage_s3_compatible_access_key", "hostname", "linode_access_key", "linode_bucket", "linode_region", "max_connections", "name", "one_drive_account_type", "pin_to_site_region", "port", "upload_staging_path", "remote_server_credential_id", "s3_assume_role_arn", "s3_assume_role_duration_seconds", "s3_bucket", "s3_compatible_access_key", "s3_compatible_bucket", "s3_compatible_endpoint", "s3_compatible_region", "s3_compatible_virtual_hosted_style", "s3_kms_key_id", "s3_region", "server_certificate", "server_host_key", "server_type", "sharepoint_client_id", "sharepoint_site_url", "sharepoint_tenant_id", "ssl", "username", "wasabi_access_key", "wasabi_bucket", "wasabi_region" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this RemoteServer on Files.com, or updates it if it has an ID.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await UpdateCore(this.attributes, cancellationToken);
+                await UpdateCore(AttributesToSave(UpdateParameterNames), cancellationToken);
+                return;
             }
-            else
+            RemoteServer created = await RemoteServer.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await RemoteServer.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = attributes[name];
+                }
             }
+            return toSave;
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
@@ -2249,6 +2334,8 @@ namespace FilesCom.Models
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `workspace_id`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ workspace_id, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]`, `[ linode_bucket, name ]`, `[ workspace_id, server_type ]` or `[ workspace_id, server_type, name ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<RemoteServer> List(
 
             Dictionary<string, object> parameters = null,
@@ -2258,6 +2345,17 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   user_id - int64 - User ID.  Provide a value of `0` to operate the current session's user.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name`, `server_type`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `name`, `server_type`, `workspace_id`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ server_type, name ]`, `[ workspace_id, name ]`, `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]`, `[ linode_bucket, name ]`, `[ workspace_id, server_type ]` or `[ workspace_id, server_type, name ]`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `name`, `backblaze_b2_bucket`, `google_cloud_storage_bucket`, `wasabi_bucket`, `s3_bucket`, `azure_blob_storage_container`, `azure_files_storage_share_name`, `s3_compatible_bucket`, `filebase_bucket`, `cloudflare_bucket` or `linode_bucket`. Valid field combinations are `[ backblaze_b2_bucket, name ]`, `[ google_cloud_storage_bucket, name ]`, `[ wasabi_bucket, name ]`, `[ s3_bucket, name ]`, `[ azure_blob_storage_container, name ]`, `[ azure_files_storage_share_name, name ]`, `[ s3_compatible_bucket, name ]`, `[ filebase_bucket, name ]`, `[ cloudflare_bucket, name ]` or `[ linode_bucket, name ]`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<RemoteServer> All(
 
             Dictionary<string, object> parameters = null,
@@ -2276,30 +2374,31 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            if (parameters.TryGetValue("filter", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter is null, which cannot be sent" : "Bad parameter: filter must be of type object", "filter");
             }
-            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            if (parameters.TryGetValue("filter_prefix", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_prefix is null, which cannot be sent" : "Bad parameter: filter_prefix must be of type object", "filter_prefix");
             }
 
             return new FilesList<RemoteServer>(client, $"/remote_servers", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -2309,6 +2408,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   id (required) - int64 - Remote Server ID.
         /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<RemoteServer> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2318,6 +2420,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Remote Server ID.
+        /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<RemoteServer> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2337,6 +2446,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2346,30 +2456,26 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<RemoteServer>(responseJson, context, options);
         }
 
         /// <summary>
         /// List Files.com Agent nodes
         /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<AgentNode> AgentNodes(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2389,6 +2495,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2398,31 +2505,27 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/agent_nodes", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<AgentNode>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<AgentNode>(responseJson, context, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Remote Server ID.
         /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<RemoteServerConfigurationFile> FindConfigurationFile(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2442,6 +2545,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2451,25 +2555,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/configuration_file", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServerConfigurationFile>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<RemoteServerConfigurationFile>(responseJson, context, options);
         }
 
         /// <summary>
@@ -2561,6 +2658,8 @@ namespace FilesCom.Models
         ///   wasabi_region - string - Wasabi: Region
         ///   workspace_id - int64 - Workspace ID (0 for default workspace)
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<RemoteServer> Create(
 
             Dictionary<string, object> parameters = null,
@@ -2580,367 +2679,364 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
             }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
+            if (parameters.TryGetValue("password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password is null, which cannot be sent" : "Bad parameter: password must be of type string", "password");
             }
-            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
+            if (parameters.TryGetValue("private_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: private_key is null, which cannot be sent" : "Bad parameter: private_key must be of type string", "private_key");
             }
-            if (parameters.ContainsKey("private_key_passphrase") && !(parameters["private_key_passphrase"] is string))
+            if (parameters.TryGetValue("private_key_passphrase", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: private_key_passphrase must be of type string", "parameters[\"private_key_passphrase\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: private_key_passphrase is null, which cannot be sent" : "Bad parameter: private_key_passphrase must be of type string", "private_key_passphrase");
             }
-            if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool))
+            if (parameters.TryGetValue("reset_authentication", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: reset_authentication is null, which cannot be sent" : "Bad parameter: reset_authentication must be of type bool", "reset_authentication");
             }
-            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            if (parameters.TryGetValue("sharepoint_client_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_certificate is null, which cannot be sent" : "Bad parameter: sharepoint_client_certificate must be of type string", "sharepoint_client_certificate");
             }
-            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            if (parameters.TryGetValue("sharepoint_client_secret", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_secret is null, which cannot be sent" : "Bad parameter: sharepoint_client_secret must be of type string", "sharepoint_client_secret");
             }
-            if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string))
+            if (parameters.TryGetValue("ssl_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ssl_certificate must be of type string", "parameters[\"ssl_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_certificate is null, which cannot be sent" : "Bad parameter: ssl_certificate must be of type string", "ssl_certificate");
             }
-            if (parameters.ContainsKey("aws_secret_key") && !(parameters["aws_secret_key"] is string))
+            if (parameters.TryGetValue("aws_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: aws_secret_key must be of type string", "parameters[\"aws_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: aws_secret_key is null, which cannot be sent" : "Bad parameter: aws_secret_key must be of type string", "aws_secret_key");
             }
-            if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_access_key is null, which cannot be sent" : "Bad parameter: azure_blob_storage_access_key must be of type string", "azure_blob_storage_access_key");
             }
-            if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_sas_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_sas_token is null, which cannot be sent" : "Bad parameter: azure_blob_storage_sas_token must be of type string", "azure_blob_storage_sas_token");
             }
-            if (parameters.ContainsKey("azure_files_storage_access_key") && !(parameters["azure_files_storage_access_key"] is string))
+            if (parameters.TryGetValue("azure_files_storage_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_access_key must be of type string", "parameters[\"azure_files_storage_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_access_key is null, which cannot be sent" : "Bad parameter: azure_files_storage_access_key must be of type string", "azure_files_storage_access_key");
             }
-            if (parameters.ContainsKey("azure_files_storage_sas_token") && !(parameters["azure_files_storage_sas_token"] is string))
+            if (parameters.TryGetValue("azure_files_storage_sas_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_sas_token must be of type string", "parameters[\"azure_files_storage_sas_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_sas_token is null, which cannot be sent" : "Bad parameter: azure_files_storage_sas_token must be of type string", "azure_files_storage_sas_token");
             }
-            if (parameters.ContainsKey("backblaze_b2_application_key") && !(parameters["backblaze_b2_application_key"] is string))
+            if (parameters.TryGetValue("backblaze_b2_application_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_application_key must be of type string", "parameters[\"backblaze_b2_application_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_application_key is null, which cannot be sent" : "Bad parameter: backblaze_b2_application_key must be of type string", "backblaze_b2_application_key");
             }
-            if (parameters.ContainsKey("backblaze_b2_key_id") && !(parameters["backblaze_b2_key_id"] is string))
+            if (parameters.TryGetValue("backblaze_b2_key_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_key_id must be of type string", "parameters[\"backblaze_b2_key_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_key_id is null, which cannot be sent" : "Bad parameter: backblaze_b2_key_id must be of type string", "backblaze_b2_key_id");
             }
-            if (parameters.ContainsKey("cloudflare_secret_key") && !(parameters["cloudflare_secret_key"] is string))
+            if (parameters.TryGetValue("cloudflare_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_secret_key must be of type string", "parameters[\"cloudflare_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_secret_key is null, which cannot be sent" : "Bad parameter: cloudflare_secret_key must be of type string", "cloudflare_secret_key");
             }
-            if (parameters.ContainsKey("filebase_secret_key") && !(parameters["filebase_secret_key"] is string))
+            if (parameters.TryGetValue("filebase_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filebase_secret_key must be of type string", "parameters[\"filebase_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_secret_key is null, which cannot be sent" : "Bad parameter: filebase_secret_key must be of type string", "filebase_secret_key");
             }
-            if (parameters.ContainsKey("google_cloud_storage_credentials_json") && !(parameters["google_cloud_storage_credentials_json"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_credentials_json", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_credentials_json must be of type string", "parameters[\"google_cloud_storage_credentials_json\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_credentials_json is null, which cannot be sent" : "Bad parameter: google_cloud_storage_credentials_json must be of type string", "google_cloud_storage_credentials_json");
             }
-            if (parameters.ContainsKey("google_cloud_storage_s3_compatible_secret_key") && !(parameters["google_cloud_storage_s3_compatible_secret_key"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_s3_compatible_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type string", "parameters[\"google_cloud_storage_s3_compatible_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_s3_compatible_secret_key is null, which cannot be sent" : "Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type string", "google_cloud_storage_s3_compatible_secret_key");
             }
-            if (parameters.ContainsKey("linode_secret_key") && !(parameters["linode_secret_key"] is string))
+            if (parameters.TryGetValue("linode_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_secret_key must be of type string", "parameters[\"linode_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_secret_key is null, which cannot be sent" : "Bad parameter: linode_secret_key must be of type string", "linode_secret_key");
             }
-            if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string))
+            if (parameters.TryGetValue("s3_compatible_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_secret_key is null, which cannot be sent" : "Bad parameter: s3_compatible_secret_key must be of type string", "s3_compatible_secret_key");
             }
-            if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
+            if (parameters.TryGetValue("wasabi_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_secret_key is null, which cannot be sent" : "Bad parameter: wasabi_secret_key must be of type string", "wasabi_secret_key");
             }
-            if (parameters.ContainsKey("allow_relative_paths") && !(parameters["allow_relative_paths"] is bool))
+            if (parameters.TryGetValue("allow_relative_paths", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_relative_paths must be of type bool", "parameters[\"allow_relative_paths\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_relative_paths is null, which cannot be sent" : "Bad parameter: allow_relative_paths must be of type bool", "allow_relative_paths");
             }
-            if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
+            if (parameters.TryGetValue("aws_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: aws_access_key is null, which cannot be sent" : "Bad parameter: aws_access_key must be of type string", "aws_access_key");
             }
-            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_account", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_account is null, which cannot be sent" : "Bad parameter: azure_blob_storage_account must be of type string", "azure_blob_storage_account");
             }
-            if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_container", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_container is null, which cannot be sent" : "Bad parameter: azure_blob_storage_container must be of type string", "azure_blob_storage_container");
             }
-            if (parameters.ContainsKey("azure_blob_storage_dns_suffix") && !(parameters["azure_blob_storage_dns_suffix"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_dns_suffix", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_dns_suffix must be of type string", "parameters[\"azure_blob_storage_dns_suffix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_dns_suffix is null, which cannot be sent" : "Bad parameter: azure_blob_storage_dns_suffix must be of type string", "azure_blob_storage_dns_suffix");
             }
-            if (parameters.ContainsKey("azure_blob_storage_hierarchical_namespace") && !(parameters["azure_blob_storage_hierarchical_namespace"] is bool))
+            if (parameters.TryGetValue("azure_blob_storage_hierarchical_namespace", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "parameters[\"azure_blob_storage_hierarchical_namespace\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_hierarchical_namespace is null, which cannot be sent" : "Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "azure_blob_storage_hierarchical_namespace");
             }
-            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
+            if (parameters.TryGetValue("azure_files_storage_account", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_account is null, which cannot be sent" : "Bad parameter: azure_files_storage_account must be of type string", "azure_files_storage_account");
             }
-            if (parameters.ContainsKey("azure_files_storage_dns_suffix") && !(parameters["azure_files_storage_dns_suffix"] is string))
+            if (parameters.TryGetValue("azure_files_storage_dns_suffix", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_dns_suffix must be of type string", "parameters[\"azure_files_storage_dns_suffix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_dns_suffix is null, which cannot be sent" : "Bad parameter: azure_files_storage_dns_suffix must be of type string", "azure_files_storage_dns_suffix");
             }
-            if (parameters.ContainsKey("azure_files_storage_share_name") && !(parameters["azure_files_storage_share_name"] is string))
+            if (parameters.TryGetValue("azure_files_storage_share_name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_share_name must be of type string", "parameters[\"azure_files_storage_share_name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_share_name is null, which cannot be sent" : "Bad parameter: azure_files_storage_share_name must be of type string", "azure_files_storage_share_name");
             }
-            if (parameters.ContainsKey("backblaze_b2_bucket") && !(parameters["backblaze_b2_bucket"] is string))
+            if (parameters.TryGetValue("backblaze_b2_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_bucket must be of type string", "parameters[\"backblaze_b2_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_bucket is null, which cannot be sent" : "Bad parameter: backblaze_b2_bucket must be of type string", "backblaze_b2_bucket");
             }
-            if (parameters.ContainsKey("backblaze_b2_s3_endpoint") && !(parameters["backblaze_b2_s3_endpoint"] is string))
+            if (parameters.TryGetValue("backblaze_b2_s3_endpoint", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_s3_endpoint is null, which cannot be sent" : "Bad parameter: backblaze_b2_s3_endpoint must be of type string", "backblaze_b2_s3_endpoint");
             }
-            if (parameters.ContainsKey("buffer_uploads") && !(parameters["buffer_uploads"] is string))
+            if (parameters.TryGetValue("buffer_uploads", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: buffer_uploads must be of type string", "parameters[\"buffer_uploads\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: buffer_uploads is null, which cannot be sent" : "Bad parameter: buffer_uploads must be of type string", "buffer_uploads");
             }
-            if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
+            if (parameters.TryGetValue("cloudflare_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_access_key must be of type string", "parameters[\"cloudflare_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_access_key is null, which cannot be sent" : "Bad parameter: cloudflare_access_key must be of type string", "cloudflare_access_key");
             }
-            if (parameters.ContainsKey("cloudflare_bucket") && !(parameters["cloudflare_bucket"] is string))
+            if (parameters.TryGetValue("cloudflare_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_bucket must be of type string", "parameters[\"cloudflare_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_bucket is null, which cannot be sent" : "Bad parameter: cloudflare_bucket must be of type string", "cloudflare_bucket");
             }
-            if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
+            if (parameters.TryGetValue("cloudflare_endpoint", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_endpoint is null, which cannot be sent" : "Bad parameter: cloudflare_endpoint must be of type string", "cloudflare_endpoint");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            if (parameters.TryGetValue("description", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: description is null, which cannot be sent" : "Bad parameter: description must be of type string", "description");
             }
-            if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
+            if (parameters.TryGetValue("dropbox_teams", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dropbox_teams is null, which cannot be sent" : "Bad parameter: dropbox_teams must be of type bool", "dropbox_teams");
             }
-            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            if (parameters.TryGetValue("enable_dedicated_ips", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: enable_dedicated_ips is null, which cannot be sent" : "Bad parameter: enable_dedicated_ips must be of type bool", "enable_dedicated_ips");
             }
-            if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string))
+            if (parameters.TryGetValue("filebase_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_access_key is null, which cannot be sent" : "Bad parameter: filebase_access_key must be of type string", "filebase_access_key");
             }
-            if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
+            if (parameters.TryGetValue("filebase_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_bucket is null, which cannot be sent" : "Bad parameter: filebase_bucket must be of type string", "filebase_bucket");
             }
-            if (parameters.ContainsKey("files_api_key") && !(parameters["files_api_key"] is string))
+            if (parameters.TryGetValue("files_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_api_key must be of type string", "parameters[\"files_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_api_key is null, which cannot be sent" : "Bad parameter: files_api_key must be of type string", "files_api_key");
             }
-            if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
+            if (parameters.TryGetValue("files_agent_permission_set", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_permission_set is null, which cannot be sent" : "Bad parameter: files_agent_permission_set must be of type string", "files_agent_permission_set");
             }
-            if (parameters.ContainsKey("files_agent_root") && !(parameters["files_agent_root"] is string))
+            if (parameters.TryGetValue("files_agent_root", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_agent_root must be of type string", "parameters[\"files_agent_root\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_root is null, which cannot be sent" : "Bad parameter: files_agent_root must be of type string", "files_agent_root");
             }
-            if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
+            if (parameters.TryGetValue("files_agent_version", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_version is null, which cannot be sent" : "Bad parameter: files_agent_version must be of type string", "files_agent_version");
             }
-            if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("outbound_agent_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_agent_id is null, which cannot be sent" : "Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "outbound_agent_id");
             }
-            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("custom_domain_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: custom_domain_id is null, which cannot be sent" : "Bad parameter: custom_domain_id must be of type Nullable<Int64>", "custom_domain_id");
             }
-            if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_authentication_method", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_authentication_method must be of type string", "parameters[\"google_cloud_storage_authentication_method\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_authentication_method is null, which cannot be sent" : "Bad parameter: google_cloud_storage_authentication_method must be of type string", "google_cloud_storage_authentication_method");
             }
-            if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_bucket must be of type string", "parameters[\"google_cloud_storage_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_bucket is null, which cannot be sent" : "Bad parameter: google_cloud_storage_bucket must be of type string", "google_cloud_storage_bucket");
             }
-            if (parameters.ContainsKey("google_cloud_storage_oauth_scope") && !(parameters["google_cloud_storage_oauth_scope"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_oauth_scope", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_oauth_scope must be of type string", "parameters[\"google_cloud_storage_oauth_scope\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_oauth_scope is null, which cannot be sent" : "Bad parameter: google_cloud_storage_oauth_scope must be of type string", "google_cloud_storage_oauth_scope");
             }
-            if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_project_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_project_id must be of type string", "parameters[\"google_cloud_storage_project_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_project_id is null, which cannot be sent" : "Bad parameter: google_cloud_storage_project_id must be of type string", "google_cloud_storage_project_id");
             }
-            if (parameters.ContainsKey("google_cloud_storage_s3_compatible_access_key") && !(parameters["google_cloud_storage_s3_compatible_access_key"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_s3_compatible_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type string", "parameters[\"google_cloud_storage_s3_compatible_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_s3_compatible_access_key is null, which cannot be sent" : "Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type string", "google_cloud_storage_s3_compatible_access_key");
             }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
+            if (parameters.TryGetValue("hostname", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: hostname is null, which cannot be sent" : "Bad parameter: hostname must be of type string", "hostname");
             }
-            if (parameters.ContainsKey("linode_access_key") && !(parameters["linode_access_key"] is string))
+            if (parameters.TryGetValue("linode_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_access_key must be of type string", "parameters[\"linode_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_access_key is null, which cannot be sent" : "Bad parameter: linode_access_key must be of type string", "linode_access_key");
             }
-            if (parameters.ContainsKey("linode_bucket") && !(parameters["linode_bucket"] is string))
+            if (parameters.TryGetValue("linode_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_bucket must be of type string", "parameters[\"linode_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_bucket is null, which cannot be sent" : "Bad parameter: linode_bucket must be of type string", "linode_bucket");
             }
-            if (parameters.ContainsKey("linode_region") && !(parameters["linode_region"] is string))
+            if (parameters.TryGetValue("linode_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_region is null, which cannot be sent" : "Bad parameter: linode_region must be of type string", "linode_region");
             }
-            if (parameters.ContainsKey("max_connections") && !(parameters["max_connections"] is Nullable<Int64>))
+            if (parameters.TryGetValue("max_connections", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: max_connections must be of type Nullable<Int64>", "parameters[\"max_connections\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: max_connections is null, which cannot be sent" : "Bad parameter: max_connections must be of type Nullable<Int64>", "max_connections");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string))
+            if (parameters.TryGetValue("one_drive_account_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: one_drive_account_type is null, which cannot be sent" : "Bad parameter: one_drive_account_type must be of type string", "one_drive_account_type");
             }
-            if (parameters.ContainsKey("pin_to_site_region") && !(parameters["pin_to_site_region"] is bool))
+            if (parameters.TryGetValue("pin_to_site_region", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: pin_to_site_region must be of type bool", "parameters[\"pin_to_site_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: pin_to_site_region is null, which cannot be sent" : "Bad parameter: pin_to_site_region must be of type bool", "pin_to_site_region");
             }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
+            if (parameters.TryGetValue("port", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: port is null, which cannot be sent" : "Bad parameter: port must be of type Nullable<Int64>", "port");
             }
-            if (parameters.ContainsKey("upload_staging_path") && !(parameters["upload_staging_path"] is string))
+            if (parameters.TryGetValue("upload_staging_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: upload_staging_path must be of type string", "parameters[\"upload_staging_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: upload_staging_path is null, which cannot be sent" : "Bad parameter: upload_staging_path must be of type string", "upload_staging_path");
             }
-            if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("remote_server_credential_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: remote_server_credential_id is null, which cannot be sent" : "Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "remote_server_credential_id");
             }
-            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            if (parameters.TryGetValue("s3_assume_role_arn", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_assume_role_arn is null, which cannot be sent" : "Bad parameter: s3_assume_role_arn must be of type string", "s3_assume_role_arn");
             }
-            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            if (parameters.TryGetValue("s3_assume_role_duration_seconds", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_assume_role_duration_seconds is null, which cannot be sent" : "Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "s3_assume_role_duration_seconds");
             }
-            if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
+            if (parameters.TryGetValue("s3_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_bucket must be of type string", "parameters[\"s3_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_bucket is null, which cannot be sent" : "Bad parameter: s3_bucket must be of type string", "s3_bucket");
             }
-            if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string))
+            if (parameters.TryGetValue("s3_compatible_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_access_key is null, which cannot be sent" : "Bad parameter: s3_compatible_access_key must be of type string", "s3_compatible_access_key");
             }
-            if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string))
+            if (parameters.TryGetValue("s3_compatible_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_bucket is null, which cannot be sent" : "Bad parameter: s3_compatible_bucket must be of type string", "s3_compatible_bucket");
             }
-            if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string))
+            if (parameters.TryGetValue("s3_compatible_endpoint", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint must be of type string", "s3_compatible_endpoint");
             }
-            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string))
+            if (parameters.TryGetValue("s3_compatible_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_region is null, which cannot be sent" : "Bad parameter: s3_compatible_region must be of type string", "s3_compatible_region");
             }
-            if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
+            if (parameters.TryGetValue("s3_compatible_virtual_hosted_style", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_virtual_hosted_style is null, which cannot be sent" : "Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "s3_compatible_virtual_hosted_style");
             }
-            if (parameters.ContainsKey("s3_kms_key_id") && !(parameters["s3_kms_key_id"] is string))
+            if (parameters.TryGetValue("s3_kms_key_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_kms_key_id must be of type string", "parameters[\"s3_kms_key_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_kms_key_id is null, which cannot be sent" : "Bad parameter: s3_kms_key_id must be of type string", "s3_kms_key_id");
             }
-            if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
+            if (parameters.TryGetValue("s3_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_region must be of type string", "parameters[\"s3_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_region is null, which cannot be sent" : "Bad parameter: s3_region must be of type string", "s3_region");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
+            if (parameters.TryGetValue("server_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_certificate is null, which cannot be sent" : "Bad parameter: server_certificate must be of type string", "server_certificate");
             }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
+            if (parameters.TryGetValue("server_host_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_host_key is null, which cannot be sent" : "Bad parameter: server_host_key must be of type string", "server_host_key");
             }
-            if (parameters.ContainsKey("server_type") && !(parameters["server_type"] is string))
+            if (parameters.TryGetValue("server_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: server_type must be of type string", "parameters[\"server_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_type is null, which cannot be sent" : "Bad parameter: server_type must be of type string", "server_type");
             }
-            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            if (parameters.TryGetValue("sharepoint_client_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_id is null, which cannot be sent" : "Bad parameter: sharepoint_client_id must be of type string", "sharepoint_client_id");
             }
-            if (parameters.ContainsKey("sharepoint_site_url") && !(parameters["sharepoint_site_url"] is string))
+            if (parameters.TryGetValue("sharepoint_site_url", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_site_url must be of type string", "parameters[\"sharepoint_site_url\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_site_url is null, which cannot be sent" : "Bad parameter: sharepoint_site_url must be of type string", "sharepoint_site_url");
             }
-            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            if (parameters.TryGetValue("sharepoint_tenant_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_tenant_id is null, which cannot be sent" : "Bad parameter: sharepoint_tenant_id must be of type string", "sharepoint_tenant_id");
             }
-            if (parameters.ContainsKey("ssl") && !(parameters["ssl"] is string))
+            if (parameters.TryGetValue("ssl", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ssl must be of type string", "parameters[\"ssl\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl is null, which cannot be sent" : "Bad parameter: ssl must be of type string", "ssl");
             }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
+            if (parameters.TryGetValue("username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username is null, which cannot be sent" : "Bad parameter: username must be of type string", "username");
             }
-            if (parameters.ContainsKey("wasabi_access_key") && !(parameters["wasabi_access_key"] is string))
+            if (parameters.TryGetValue("wasabi_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_access_key must be of type string", "parameters[\"wasabi_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_access_key is null, which cannot be sent" : "Bad parameter: wasabi_access_key must be of type string", "wasabi_access_key");
             }
-            if (parameters.ContainsKey("wasabi_bucket") && !(parameters["wasabi_bucket"] is string))
+            if (parameters.TryGetValue("wasabi_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_bucket must be of type string", "parameters[\"wasabi_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_bucket is null, which cannot be sent" : "Bad parameter: wasabi_bucket must be of type string", "wasabi_bucket");
             }
-            if (parameters.ContainsKey("wasabi_region") && !(parameters["wasabi_region"] is string))
+            if (parameters.TryGetValue("wasabi_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_region must be of type string", "parameters[\"wasabi_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_region is null, which cannot be sent" : "Bad parameter: wasabi_region must be of type string", "wasabi_region");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<RemoteServer>(responseJson, context, options);
         }
 
         /// <summary>
         /// Push update to Files Agent
         /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<AgentPushUpdate> AgentPushUpdate(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2960,6 +3056,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2969,25 +3066,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}/agent_push_update", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<AgentPushUpdate>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<AgentPushUpdate>(responseJson, context, options);
         }
 
         /// <summary>
@@ -3077,6 +3167,9 @@ namespace FilesCom.Models
         ///   wasabi_bucket - string - Wasabi: Bucket name
         ///   wasabi_region - string - Wasabi: Region
         /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<RemoteServer> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -3096,6 +3189,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -3105,365 +3199,362 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
+            if (parameters.TryGetValue("password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password is null, which cannot be sent" : "Bad parameter: password must be of type string", "password");
             }
-            if (parameters.ContainsKey("private_key") && !(parameters["private_key"] is string))
+            if (parameters.TryGetValue("private_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: private_key must be of type string", "parameters[\"private_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: private_key is null, which cannot be sent" : "Bad parameter: private_key must be of type string", "private_key");
             }
-            if (parameters.ContainsKey("private_key_passphrase") && !(parameters["private_key_passphrase"] is string))
+            if (parameters.TryGetValue("private_key_passphrase", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: private_key_passphrase must be of type string", "parameters[\"private_key_passphrase\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: private_key_passphrase is null, which cannot be sent" : "Bad parameter: private_key_passphrase must be of type string", "private_key_passphrase");
             }
-            if (parameters.ContainsKey("reset_authentication") && !(parameters["reset_authentication"] is bool))
+            if (parameters.TryGetValue("reset_authentication", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: reset_authentication must be of type bool", "parameters[\"reset_authentication\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: reset_authentication is null, which cannot be sent" : "Bad parameter: reset_authentication must be of type bool", "reset_authentication");
             }
-            if (parameters.ContainsKey("sharepoint_client_certificate") && !(parameters["sharepoint_client_certificate"] is string))
+            if (parameters.TryGetValue("sharepoint_client_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_client_certificate must be of type string", "parameters[\"sharepoint_client_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_certificate is null, which cannot be sent" : "Bad parameter: sharepoint_client_certificate must be of type string", "sharepoint_client_certificate");
             }
-            if (parameters.ContainsKey("sharepoint_client_secret") && !(parameters["sharepoint_client_secret"] is string))
+            if (parameters.TryGetValue("sharepoint_client_secret", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_client_secret must be of type string", "parameters[\"sharepoint_client_secret\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_secret is null, which cannot be sent" : "Bad parameter: sharepoint_client_secret must be of type string", "sharepoint_client_secret");
             }
-            if (parameters.ContainsKey("ssl_certificate") && !(parameters["ssl_certificate"] is string))
+            if (parameters.TryGetValue("ssl_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ssl_certificate must be of type string", "parameters[\"ssl_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_certificate is null, which cannot be sent" : "Bad parameter: ssl_certificate must be of type string", "ssl_certificate");
             }
-            if (parameters.ContainsKey("aws_secret_key") && !(parameters["aws_secret_key"] is string))
+            if (parameters.TryGetValue("aws_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: aws_secret_key must be of type string", "parameters[\"aws_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: aws_secret_key is null, which cannot be sent" : "Bad parameter: aws_secret_key must be of type string", "aws_secret_key");
             }
-            if (parameters.ContainsKey("azure_blob_storage_access_key") && !(parameters["azure_blob_storage_access_key"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_access_key must be of type string", "parameters[\"azure_blob_storage_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_access_key is null, which cannot be sent" : "Bad parameter: azure_blob_storage_access_key must be of type string", "azure_blob_storage_access_key");
             }
-            if (parameters.ContainsKey("azure_blob_storage_sas_token") && !(parameters["azure_blob_storage_sas_token"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_sas_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_sas_token must be of type string", "parameters[\"azure_blob_storage_sas_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_sas_token is null, which cannot be sent" : "Bad parameter: azure_blob_storage_sas_token must be of type string", "azure_blob_storage_sas_token");
             }
-            if (parameters.ContainsKey("azure_files_storage_access_key") && !(parameters["azure_files_storage_access_key"] is string))
+            if (parameters.TryGetValue("azure_files_storage_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_access_key must be of type string", "parameters[\"azure_files_storage_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_access_key is null, which cannot be sent" : "Bad parameter: azure_files_storage_access_key must be of type string", "azure_files_storage_access_key");
             }
-            if (parameters.ContainsKey("azure_files_storage_sas_token") && !(parameters["azure_files_storage_sas_token"] is string))
+            if (parameters.TryGetValue("azure_files_storage_sas_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_sas_token must be of type string", "parameters[\"azure_files_storage_sas_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_sas_token is null, which cannot be sent" : "Bad parameter: azure_files_storage_sas_token must be of type string", "azure_files_storage_sas_token");
             }
-            if (parameters.ContainsKey("backblaze_b2_application_key") && !(parameters["backblaze_b2_application_key"] is string))
+            if (parameters.TryGetValue("backblaze_b2_application_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_application_key must be of type string", "parameters[\"backblaze_b2_application_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_application_key is null, which cannot be sent" : "Bad parameter: backblaze_b2_application_key must be of type string", "backblaze_b2_application_key");
             }
-            if (parameters.ContainsKey("backblaze_b2_key_id") && !(parameters["backblaze_b2_key_id"] is string))
+            if (parameters.TryGetValue("backblaze_b2_key_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_key_id must be of type string", "parameters[\"backblaze_b2_key_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_key_id is null, which cannot be sent" : "Bad parameter: backblaze_b2_key_id must be of type string", "backblaze_b2_key_id");
             }
-            if (parameters.ContainsKey("cloudflare_secret_key") && !(parameters["cloudflare_secret_key"] is string))
+            if (parameters.TryGetValue("cloudflare_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_secret_key must be of type string", "parameters[\"cloudflare_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_secret_key is null, which cannot be sent" : "Bad parameter: cloudflare_secret_key must be of type string", "cloudflare_secret_key");
             }
-            if (parameters.ContainsKey("filebase_secret_key") && !(parameters["filebase_secret_key"] is string))
+            if (parameters.TryGetValue("filebase_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filebase_secret_key must be of type string", "parameters[\"filebase_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_secret_key is null, which cannot be sent" : "Bad parameter: filebase_secret_key must be of type string", "filebase_secret_key");
             }
-            if (parameters.ContainsKey("google_cloud_storage_credentials_json") && !(parameters["google_cloud_storage_credentials_json"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_credentials_json", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_credentials_json must be of type string", "parameters[\"google_cloud_storage_credentials_json\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_credentials_json is null, which cannot be sent" : "Bad parameter: google_cloud_storage_credentials_json must be of type string", "google_cloud_storage_credentials_json");
             }
-            if (parameters.ContainsKey("google_cloud_storage_s3_compatible_secret_key") && !(parameters["google_cloud_storage_s3_compatible_secret_key"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_s3_compatible_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type string", "parameters[\"google_cloud_storage_s3_compatible_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_s3_compatible_secret_key is null, which cannot be sent" : "Bad parameter: google_cloud_storage_s3_compatible_secret_key must be of type string", "google_cloud_storage_s3_compatible_secret_key");
             }
-            if (parameters.ContainsKey("linode_secret_key") && !(parameters["linode_secret_key"] is string))
+            if (parameters.TryGetValue("linode_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_secret_key must be of type string", "parameters[\"linode_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_secret_key is null, which cannot be sent" : "Bad parameter: linode_secret_key must be of type string", "linode_secret_key");
             }
-            if (parameters.ContainsKey("s3_compatible_secret_key") && !(parameters["s3_compatible_secret_key"] is string))
+            if (parameters.TryGetValue("s3_compatible_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_secret_key must be of type string", "parameters[\"s3_compatible_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_secret_key is null, which cannot be sent" : "Bad parameter: s3_compatible_secret_key must be of type string", "s3_compatible_secret_key");
             }
-            if (parameters.ContainsKey("wasabi_secret_key") && !(parameters["wasabi_secret_key"] is string))
+            if (parameters.TryGetValue("wasabi_secret_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_secret_key must be of type string", "parameters[\"wasabi_secret_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_secret_key is null, which cannot be sent" : "Bad parameter: wasabi_secret_key must be of type string", "wasabi_secret_key");
             }
-            if (parameters.ContainsKey("allow_relative_paths") && !(parameters["allow_relative_paths"] is bool))
+            if (parameters.TryGetValue("allow_relative_paths", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_relative_paths must be of type bool", "parameters[\"allow_relative_paths\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_relative_paths is null, which cannot be sent" : "Bad parameter: allow_relative_paths must be of type bool", "allow_relative_paths");
             }
-            if (parameters.ContainsKey("aws_access_key") && !(parameters["aws_access_key"] is string))
+            if (parameters.TryGetValue("aws_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: aws_access_key must be of type string", "parameters[\"aws_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: aws_access_key is null, which cannot be sent" : "Bad parameter: aws_access_key must be of type string", "aws_access_key");
             }
-            if (parameters.ContainsKey("azure_blob_storage_account") && !(parameters["azure_blob_storage_account"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_account", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_account must be of type string", "parameters[\"azure_blob_storage_account\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_account is null, which cannot be sent" : "Bad parameter: azure_blob_storage_account must be of type string", "azure_blob_storage_account");
             }
-            if (parameters.ContainsKey("azure_blob_storage_container") && !(parameters["azure_blob_storage_container"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_container", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_container must be of type string", "parameters[\"azure_blob_storage_container\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_container is null, which cannot be sent" : "Bad parameter: azure_blob_storage_container must be of type string", "azure_blob_storage_container");
             }
-            if (parameters.ContainsKey("azure_blob_storage_dns_suffix") && !(parameters["azure_blob_storage_dns_suffix"] is string))
+            if (parameters.TryGetValue("azure_blob_storage_dns_suffix", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_dns_suffix must be of type string", "parameters[\"azure_blob_storage_dns_suffix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_dns_suffix is null, which cannot be sent" : "Bad parameter: azure_blob_storage_dns_suffix must be of type string", "azure_blob_storage_dns_suffix");
             }
-            if (parameters.ContainsKey("azure_blob_storage_hierarchical_namespace") && !(parameters["azure_blob_storage_hierarchical_namespace"] is bool))
+            if (parameters.TryGetValue("azure_blob_storage_hierarchical_namespace", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "parameters[\"azure_blob_storage_hierarchical_namespace\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_blob_storage_hierarchical_namespace is null, which cannot be sent" : "Bad parameter: azure_blob_storage_hierarchical_namespace must be of type bool", "azure_blob_storage_hierarchical_namespace");
             }
-            if (parameters.ContainsKey("azure_files_storage_account") && !(parameters["azure_files_storage_account"] is string))
+            if (parameters.TryGetValue("azure_files_storage_account", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_account must be of type string", "parameters[\"azure_files_storage_account\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_account is null, which cannot be sent" : "Bad parameter: azure_files_storage_account must be of type string", "azure_files_storage_account");
             }
-            if (parameters.ContainsKey("azure_files_storage_dns_suffix") && !(parameters["azure_files_storage_dns_suffix"] is string))
+            if (parameters.TryGetValue("azure_files_storage_dns_suffix", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_dns_suffix must be of type string", "parameters[\"azure_files_storage_dns_suffix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_dns_suffix is null, which cannot be sent" : "Bad parameter: azure_files_storage_dns_suffix must be of type string", "azure_files_storage_dns_suffix");
             }
-            if (parameters.ContainsKey("azure_files_storage_share_name") && !(parameters["azure_files_storage_share_name"] is string))
+            if (parameters.TryGetValue("azure_files_storage_share_name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_files_storage_share_name must be of type string", "parameters[\"azure_files_storage_share_name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_files_storage_share_name is null, which cannot be sent" : "Bad parameter: azure_files_storage_share_name must be of type string", "azure_files_storage_share_name");
             }
-            if (parameters.ContainsKey("backblaze_b2_bucket") && !(parameters["backblaze_b2_bucket"] is string))
+            if (parameters.TryGetValue("backblaze_b2_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_bucket must be of type string", "parameters[\"backblaze_b2_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_bucket is null, which cannot be sent" : "Bad parameter: backblaze_b2_bucket must be of type string", "backblaze_b2_bucket");
             }
-            if (parameters.ContainsKey("backblaze_b2_s3_endpoint") && !(parameters["backblaze_b2_s3_endpoint"] is string))
+            if (parameters.TryGetValue("backblaze_b2_s3_endpoint", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: backblaze_b2_s3_endpoint must be of type string", "parameters[\"backblaze_b2_s3_endpoint\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: backblaze_b2_s3_endpoint is null, which cannot be sent" : "Bad parameter: backblaze_b2_s3_endpoint must be of type string", "backblaze_b2_s3_endpoint");
             }
-            if (parameters.ContainsKey("buffer_uploads") && !(parameters["buffer_uploads"] is string))
+            if (parameters.TryGetValue("buffer_uploads", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: buffer_uploads must be of type string", "parameters[\"buffer_uploads\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: buffer_uploads is null, which cannot be sent" : "Bad parameter: buffer_uploads must be of type string", "buffer_uploads");
             }
-            if (parameters.ContainsKey("cloudflare_access_key") && !(parameters["cloudflare_access_key"] is string))
+            if (parameters.TryGetValue("cloudflare_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_access_key must be of type string", "parameters[\"cloudflare_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_access_key is null, which cannot be sent" : "Bad parameter: cloudflare_access_key must be of type string", "cloudflare_access_key");
             }
-            if (parameters.ContainsKey("cloudflare_bucket") && !(parameters["cloudflare_bucket"] is string))
+            if (parameters.TryGetValue("cloudflare_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_bucket must be of type string", "parameters[\"cloudflare_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_bucket is null, which cannot be sent" : "Bad parameter: cloudflare_bucket must be of type string", "cloudflare_bucket");
             }
-            if (parameters.ContainsKey("cloudflare_endpoint") && !(parameters["cloudflare_endpoint"] is string))
+            if (parameters.TryGetValue("cloudflare_endpoint", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cloudflare_endpoint must be of type string", "parameters[\"cloudflare_endpoint\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cloudflare_endpoint is null, which cannot be sent" : "Bad parameter: cloudflare_endpoint must be of type string", "cloudflare_endpoint");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            if (parameters.TryGetValue("description", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: description is null, which cannot be sent" : "Bad parameter: description must be of type string", "description");
             }
-            if (parameters.ContainsKey("dropbox_teams") && !(parameters["dropbox_teams"] is bool))
+            if (parameters.TryGetValue("dropbox_teams", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: dropbox_teams must be of type bool", "parameters[\"dropbox_teams\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dropbox_teams is null, which cannot be sent" : "Bad parameter: dropbox_teams must be of type bool", "dropbox_teams");
             }
-            if (parameters.ContainsKey("enable_dedicated_ips") && !(parameters["enable_dedicated_ips"] is bool))
+            if (parameters.TryGetValue("enable_dedicated_ips", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: enable_dedicated_ips must be of type bool", "parameters[\"enable_dedicated_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: enable_dedicated_ips is null, which cannot be sent" : "Bad parameter: enable_dedicated_ips must be of type bool", "enable_dedicated_ips");
             }
-            if (parameters.ContainsKey("filebase_access_key") && !(parameters["filebase_access_key"] is string))
+            if (parameters.TryGetValue("filebase_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filebase_access_key must be of type string", "parameters[\"filebase_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_access_key is null, which cannot be sent" : "Bad parameter: filebase_access_key must be of type string", "filebase_access_key");
             }
-            if (parameters.ContainsKey("filebase_bucket") && !(parameters["filebase_bucket"] is string))
+            if (parameters.TryGetValue("filebase_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filebase_bucket must be of type string", "parameters[\"filebase_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filebase_bucket is null, which cannot be sent" : "Bad parameter: filebase_bucket must be of type string", "filebase_bucket");
             }
-            if (parameters.ContainsKey("files_api_key") && !(parameters["files_api_key"] is string))
+            if (parameters.TryGetValue("files_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_api_key must be of type string", "parameters[\"files_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_api_key is null, which cannot be sent" : "Bad parameter: files_api_key must be of type string", "files_api_key");
             }
-            if (parameters.ContainsKey("files_agent_permission_set") && !(parameters["files_agent_permission_set"] is string))
+            if (parameters.TryGetValue("files_agent_permission_set", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_agent_permission_set must be of type string", "parameters[\"files_agent_permission_set\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_permission_set is null, which cannot be sent" : "Bad parameter: files_agent_permission_set must be of type string", "files_agent_permission_set");
             }
-            if (parameters.ContainsKey("files_agent_root") && !(parameters["files_agent_root"] is string))
+            if (parameters.TryGetValue("files_agent_root", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_agent_root must be of type string", "parameters[\"files_agent_root\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_root is null, which cannot be sent" : "Bad parameter: files_agent_root must be of type string", "files_agent_root");
             }
-            if (parameters.ContainsKey("files_agent_version") && !(parameters["files_agent_version"] is string))
+            if (parameters.TryGetValue("files_agent_version", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: files_agent_version must be of type string", "parameters[\"files_agent_version\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: files_agent_version is null, which cannot be sent" : "Bad parameter: files_agent_version must be of type string", "files_agent_version");
             }
-            if (parameters.ContainsKey("outbound_agent_id") && !(parameters["outbound_agent_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("outbound_agent_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "parameters[\"outbound_agent_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_agent_id is null, which cannot be sent" : "Bad parameter: outbound_agent_id must be of type Nullable<Int64>", "outbound_agent_id");
             }
-            if (parameters.ContainsKey("custom_domain_id") && !(parameters["custom_domain_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("custom_domain_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: custom_domain_id must be of type Nullable<Int64>", "parameters[\"custom_domain_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: custom_domain_id is null, which cannot be sent" : "Bad parameter: custom_domain_id must be of type Nullable<Int64>", "custom_domain_id");
             }
-            if (parameters.ContainsKey("google_cloud_storage_authentication_method") && !(parameters["google_cloud_storage_authentication_method"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_authentication_method", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_authentication_method must be of type string", "parameters[\"google_cloud_storage_authentication_method\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_authentication_method is null, which cannot be sent" : "Bad parameter: google_cloud_storage_authentication_method must be of type string", "google_cloud_storage_authentication_method");
             }
-            if (parameters.ContainsKey("google_cloud_storage_bucket") && !(parameters["google_cloud_storage_bucket"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_bucket must be of type string", "parameters[\"google_cloud_storage_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_bucket is null, which cannot be sent" : "Bad parameter: google_cloud_storage_bucket must be of type string", "google_cloud_storage_bucket");
             }
-            if (parameters.ContainsKey("google_cloud_storage_oauth_scope") && !(parameters["google_cloud_storage_oauth_scope"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_oauth_scope", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_oauth_scope must be of type string", "parameters[\"google_cloud_storage_oauth_scope\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_oauth_scope is null, which cannot be sent" : "Bad parameter: google_cloud_storage_oauth_scope must be of type string", "google_cloud_storage_oauth_scope");
             }
-            if (parameters.ContainsKey("google_cloud_storage_project_id") && !(parameters["google_cloud_storage_project_id"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_project_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_project_id must be of type string", "parameters[\"google_cloud_storage_project_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_project_id is null, which cannot be sent" : "Bad parameter: google_cloud_storage_project_id must be of type string", "google_cloud_storage_project_id");
             }
-            if (parameters.ContainsKey("google_cloud_storage_s3_compatible_access_key") && !(parameters["google_cloud_storage_s3_compatible_access_key"] is string))
+            if (parameters.TryGetValue("google_cloud_storage_s3_compatible_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type string", "parameters[\"google_cloud_storage_s3_compatible_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: google_cloud_storage_s3_compatible_access_key is null, which cannot be sent" : "Bad parameter: google_cloud_storage_s3_compatible_access_key must be of type string", "google_cloud_storage_s3_compatible_access_key");
             }
-            if (parameters.ContainsKey("hostname") && !(parameters["hostname"] is string))
+            if (parameters.TryGetValue("hostname", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: hostname must be of type string", "parameters[\"hostname\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: hostname is null, which cannot be sent" : "Bad parameter: hostname must be of type string", "hostname");
             }
-            if (parameters.ContainsKey("linode_access_key") && !(parameters["linode_access_key"] is string))
+            if (parameters.TryGetValue("linode_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_access_key must be of type string", "parameters[\"linode_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_access_key is null, which cannot be sent" : "Bad parameter: linode_access_key must be of type string", "linode_access_key");
             }
-            if (parameters.ContainsKey("linode_bucket") && !(parameters["linode_bucket"] is string))
+            if (parameters.TryGetValue("linode_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_bucket must be of type string", "parameters[\"linode_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_bucket is null, which cannot be sent" : "Bad parameter: linode_bucket must be of type string", "linode_bucket");
             }
-            if (parameters.ContainsKey("linode_region") && !(parameters["linode_region"] is string))
+            if (parameters.TryGetValue("linode_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: linode_region must be of type string", "parameters[\"linode_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: linode_region is null, which cannot be sent" : "Bad parameter: linode_region must be of type string", "linode_region");
             }
-            if (parameters.ContainsKey("max_connections") && !(parameters["max_connections"] is Nullable<Int64>))
+            if (parameters.TryGetValue("max_connections", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: max_connections must be of type Nullable<Int64>", "parameters[\"max_connections\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: max_connections is null, which cannot be sent" : "Bad parameter: max_connections must be of type Nullable<Int64>", "max_connections");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("one_drive_account_type") && !(parameters["one_drive_account_type"] is string))
+            if (parameters.TryGetValue("one_drive_account_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: one_drive_account_type must be of type string", "parameters[\"one_drive_account_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: one_drive_account_type is null, which cannot be sent" : "Bad parameter: one_drive_account_type must be of type string", "one_drive_account_type");
             }
-            if (parameters.ContainsKey("pin_to_site_region") && !(parameters["pin_to_site_region"] is bool))
+            if (parameters.TryGetValue("pin_to_site_region", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: pin_to_site_region must be of type bool", "parameters[\"pin_to_site_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: pin_to_site_region is null, which cannot be sent" : "Bad parameter: pin_to_site_region must be of type bool", "pin_to_site_region");
             }
-            if (parameters.ContainsKey("port") && !(parameters["port"] is Nullable<Int64>))
+            if (parameters.TryGetValue("port", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: port must be of type Nullable<Int64>", "parameters[\"port\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: port is null, which cannot be sent" : "Bad parameter: port must be of type Nullable<Int64>", "port");
             }
-            if (parameters.ContainsKey("upload_staging_path") && !(parameters["upload_staging_path"] is string))
+            if (parameters.TryGetValue("upload_staging_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: upload_staging_path must be of type string", "parameters[\"upload_staging_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: upload_staging_path is null, which cannot be sent" : "Bad parameter: upload_staging_path must be of type string", "upload_staging_path");
             }
-            if (parameters.ContainsKey("remote_server_credential_id") && !(parameters["remote_server_credential_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("remote_server_credential_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "parameters[\"remote_server_credential_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: remote_server_credential_id is null, which cannot be sent" : "Bad parameter: remote_server_credential_id must be of type Nullable<Int64>", "remote_server_credential_id");
             }
-            if (parameters.ContainsKey("s3_assume_role_arn") && !(parameters["s3_assume_role_arn"] is string))
+            if (parameters.TryGetValue("s3_assume_role_arn", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_assume_role_arn must be of type string", "parameters[\"s3_assume_role_arn\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_assume_role_arn is null, which cannot be sent" : "Bad parameter: s3_assume_role_arn must be of type string", "s3_assume_role_arn");
             }
-            if (parameters.ContainsKey("s3_assume_role_duration_seconds") && !(parameters["s3_assume_role_duration_seconds"] is Nullable<Int64>))
+            if (parameters.TryGetValue("s3_assume_role_duration_seconds", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "parameters[\"s3_assume_role_duration_seconds\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_assume_role_duration_seconds is null, which cannot be sent" : "Bad parameter: s3_assume_role_duration_seconds must be of type Nullable<Int64>", "s3_assume_role_duration_seconds");
             }
-            if (parameters.ContainsKey("s3_bucket") && !(parameters["s3_bucket"] is string))
+            if (parameters.TryGetValue("s3_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_bucket must be of type string", "parameters[\"s3_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_bucket is null, which cannot be sent" : "Bad parameter: s3_bucket must be of type string", "s3_bucket");
             }
-            if (parameters.ContainsKey("s3_compatible_access_key") && !(parameters["s3_compatible_access_key"] is string))
+            if (parameters.TryGetValue("s3_compatible_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_access_key must be of type string", "parameters[\"s3_compatible_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_access_key is null, which cannot be sent" : "Bad parameter: s3_compatible_access_key must be of type string", "s3_compatible_access_key");
             }
-            if (parameters.ContainsKey("s3_compatible_bucket") && !(parameters["s3_compatible_bucket"] is string))
+            if (parameters.TryGetValue("s3_compatible_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_bucket must be of type string", "parameters[\"s3_compatible_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_bucket is null, which cannot be sent" : "Bad parameter: s3_compatible_bucket must be of type string", "s3_compatible_bucket");
             }
-            if (parameters.ContainsKey("s3_compatible_endpoint") && !(parameters["s3_compatible_endpoint"] is string))
+            if (parameters.TryGetValue("s3_compatible_endpoint", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint must be of type string", "parameters[\"s3_compatible_endpoint\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint must be of type string", "s3_compatible_endpoint");
             }
-            if (parameters.ContainsKey("s3_compatible_region") && !(parameters["s3_compatible_region"] is string))
+            if (parameters.TryGetValue("s3_compatible_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_region must be of type string", "parameters[\"s3_compatible_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_region is null, which cannot be sent" : "Bad parameter: s3_compatible_region must be of type string", "s3_compatible_region");
             }
-            if (parameters.ContainsKey("s3_compatible_virtual_hosted_style") && !(parameters["s3_compatible_virtual_hosted_style"] is bool))
+            if (parameters.TryGetValue("s3_compatible_virtual_hosted_style", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "parameters[\"s3_compatible_virtual_hosted_style\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_virtual_hosted_style is null, which cannot be sent" : "Bad parameter: s3_compatible_virtual_hosted_style must be of type bool", "s3_compatible_virtual_hosted_style");
             }
-            if (parameters.ContainsKey("s3_kms_key_id") && !(parameters["s3_kms_key_id"] is string))
+            if (parameters.TryGetValue("s3_kms_key_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_kms_key_id must be of type string", "parameters[\"s3_kms_key_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_kms_key_id is null, which cannot be sent" : "Bad parameter: s3_kms_key_id must be of type string", "s3_kms_key_id");
             }
-            if (parameters.ContainsKey("s3_region") && !(parameters["s3_region"] is string))
+            if (parameters.TryGetValue("s3_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: s3_region must be of type string", "parameters[\"s3_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_region is null, which cannot be sent" : "Bad parameter: s3_region must be of type string", "s3_region");
             }
-            if (parameters.ContainsKey("server_certificate") && !(parameters["server_certificate"] is string))
+            if (parameters.TryGetValue("server_certificate", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: server_certificate must be of type string", "parameters[\"server_certificate\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_certificate is null, which cannot be sent" : "Bad parameter: server_certificate must be of type string", "server_certificate");
             }
-            if (parameters.ContainsKey("server_host_key") && !(parameters["server_host_key"] is string))
+            if (parameters.TryGetValue("server_host_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: server_host_key must be of type string", "parameters[\"server_host_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_host_key is null, which cannot be sent" : "Bad parameter: server_host_key must be of type string", "server_host_key");
             }
-            if (parameters.ContainsKey("server_type") && !(parameters["server_type"] is string))
+            if (parameters.TryGetValue("server_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: server_type must be of type string", "parameters[\"server_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_type is null, which cannot be sent" : "Bad parameter: server_type must be of type string", "server_type");
             }
-            if (parameters.ContainsKey("sharepoint_client_id") && !(parameters["sharepoint_client_id"] is string))
+            if (parameters.TryGetValue("sharepoint_client_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_client_id must be of type string", "parameters[\"sharepoint_client_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_id is null, which cannot be sent" : "Bad parameter: sharepoint_client_id must be of type string", "sharepoint_client_id");
             }
-            if (parameters.ContainsKey("sharepoint_site_url") && !(parameters["sharepoint_site_url"] is string))
+            if (parameters.TryGetValue("sharepoint_site_url", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_site_url must be of type string", "parameters[\"sharepoint_site_url\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_site_url is null, which cannot be sent" : "Bad parameter: sharepoint_site_url must be of type string", "sharepoint_site_url");
             }
-            if (parameters.ContainsKey("sharepoint_tenant_id") && !(parameters["sharepoint_tenant_id"] is string))
+            if (parameters.TryGetValue("sharepoint_tenant_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sharepoint_tenant_id must be of type string", "parameters[\"sharepoint_tenant_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_tenant_id is null, which cannot be sent" : "Bad parameter: sharepoint_tenant_id must be of type string", "sharepoint_tenant_id");
             }
-            if (parameters.ContainsKey("ssl") && !(parameters["ssl"] is string))
+            if (parameters.TryGetValue("ssl", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ssl must be of type string", "parameters[\"ssl\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl is null, which cannot be sent" : "Bad parameter: ssl must be of type string", "ssl");
             }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
+            if (parameters.TryGetValue("username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username is null, which cannot be sent" : "Bad parameter: username must be of type string", "username");
             }
-            if (parameters.ContainsKey("wasabi_access_key") && !(parameters["wasabi_access_key"] is string))
+            if (parameters.TryGetValue("wasabi_access_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_access_key must be of type string", "parameters[\"wasabi_access_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_access_key is null, which cannot be sent" : "Bad parameter: wasabi_access_key must be of type string", "wasabi_access_key");
             }
-            if (parameters.ContainsKey("wasabi_bucket") && !(parameters["wasabi_bucket"] is string))
+            if (parameters.TryGetValue("wasabi_bucket", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_bucket must be of type string", "parameters[\"wasabi_bucket\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_bucket is null, which cannot be sent" : "Bad parameter: wasabi_bucket must be of type string", "wasabi_bucket");
             }
-            if (parameters.ContainsKey("wasabi_region") && !(parameters["wasabi_region"] is string))
+            if (parameters.TryGetValue("wasabi_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: wasabi_region must be of type string", "parameters[\"wasabi_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: wasabi_region is null, which cannot be sent" : "Bad parameter: wasabi_region must be of type string", "wasabi_region");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteServer>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<RemoteServer>(responseJson, context, options);
         }
 
         /// <summary>
+        /// Sends DELETE /remote_servers/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -3473,6 +3564,12 @@ namespace FilesCom.Models
             return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Sends DELETE /remote_servers/{id} to the Files.com API.
+        /// </summary>
+        /// <param name="id">Remote Server ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Destroy(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -3492,6 +3589,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -3501,17 +3599,16 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/remote_servers/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
         }
 
     }

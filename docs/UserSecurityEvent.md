@@ -30,7 +30,7 @@
 ## List User Security Events
 
 ```
-Task<FilesList<UserSecurityEvent>> UserSecurityEvent.List(
+FilesList<UserSecurityEvent> UserSecurityEvent.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

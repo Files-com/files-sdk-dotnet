@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Operations
 {
-    // Imported inside the namespace so that model names, such as Action, take precedence over System's.
+    // Imported inside the namespace so that model names, such as Lock, take precedence over those of the namespaces
+    // above, such as System.Threading.Lock. A type of this namespace still takes precedence over a model of the same
+    // name (a model UserOperations beside the operations class of User), so code here names models in their own
+    // namespace (model_type, qualified: true).
     using FilesCom.Models;
 
     /// <summary>
@@ -14,7 +17,7 @@ namespace FilesCom.Operations
     /// <see cref="FilesClient.ActionNotificationExports"/>. The objects and lists they return keep using that client.
     /// </summary>
     /// <remarks>
-    /// Each method matches the static <see cref="ActionNotificationExport"/> method of the same name. Methods that send a request
+    /// Each method matches the static <see cref="global::FilesCom.Models.ActionNotificationExport"/> method of the same name. Methods that send a request
     /// are named with Async and take a cancellation token. The dictionaries you pass are copied, never changed.
     /// </remarks>
     public sealed class ActionNotificationExportOperations
@@ -30,10 +33,12 @@ namespace FilesCom.Operations
         /// Makes a ActionNotificationExport that belongs to this client, without sending a request. Its methods, such as SaveAsync,
         /// then run with this client.
         /// </summary>
-        public ActionNotificationExport New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public global::FilesCom.Models.ActionNotificationExport New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
-            ActionNotificationExport model = new ActionNotificationExport(DictionaryUtil.Copy(attributes), null);
-            ((IModel)model).SetContext(client, options);
+            global::FilesCom.Models.ActionNotificationExport model = new global::FilesCom.Models.ActionNotificationExport(attributes, null);
+            ((IModel)model).SetContext(client, options, null);
             return model;
         }
 
@@ -41,28 +46,36 @@ namespace FilesCom.Operations
         /// Parameters:
         ///   id (required) - int64 - Action Notification Export ID.
         /// </summary>
-        public Task<ActionNotificationExport> FindAsync(
+        /// <param name="id">Action Notification Export ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.ActionNotificationExport> FindAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return ActionNotificationExport.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.ActionNotificationExport.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Action Notification Export ID.
         /// </summary>
-        public Task<ActionNotificationExport> GetAsync(
+        /// <param name="id">Action Notification Export ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.ActionNotificationExport> GetAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return ActionNotificationExport.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.ActionNotificationExport.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -79,14 +92,17 @@ namespace FilesCom.Operations
         ///   query_path - string - Return notifications that were triggered by actions on this specific path.
         ///   query_folder - string - Return notifications that were triggered by actions in this folder.
         /// </summary>
-        public Task<ActionNotificationExport> CreateAsync(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.ActionNotificationExport> CreateAsync(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return ActionNotificationExport.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.ActionNotificationExport.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
     }
 }

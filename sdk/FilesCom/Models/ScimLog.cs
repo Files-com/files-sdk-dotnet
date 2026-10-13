@@ -9,26 +9,28 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
+    /// <summary>
+    /// ScimLogEntity model
+    /// </summary>
     public class ScimLog : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        /// <summary>
+        /// Makes a ScimLog with no attributes set and no options.
+        /// </summary>
         public ScimLog() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a ScimLog with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public ScimLog(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -64,26 +66,41 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => null;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
@@ -186,6 +203,8 @@ namespace FilesCom.Models
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<ScimLog> List(
 
             Dictionary<string, object> parameters = null,
@@ -195,6 +214,14 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<ScimLog> All(
 
             Dictionary<string, object> parameters = null,
@@ -213,18 +240,19 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
 
             return new FilesList<ScimLog>(client, $"/scim_logs", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -234,6 +262,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   id (required) - int64 - Scim Log ID.
         /// </summary>
+        /// <param name="id">Scim Log ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ScimLog> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -243,6 +274,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Scim Log ID.
+        /// </summary>
+        /// <param name="id">Scim Log ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ScimLog> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -262,6 +300,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -271,25 +310,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/scim_logs/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ScimLog>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ScimLog>(responseJson, context, options);
         }
 
     }

@@ -1,3 +1,5 @@
+using FilesCom;
+using FilesCom.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -9,8 +11,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using FilesCom;
-using FilesCom.Models;
+using WireMock;
 
 namespace FilesTests
 {
@@ -103,7 +104,10 @@ namespace FilesTests
             site.On("PUT", "//part", request =>
             {
                 failures.Release();
-                return LoopbackSite.Status(503);
+                // A storage server's wait comes from its Retry-After.
+                ResponseMessage unavailable = LoopbackSite.Status(503);
+                unavailable.AddHeader("Retry-After", "30");
+                return unavailable;
             }, priority: 1);
             site.ServeUpload(partsize: 4);
             FilesConfiguration configuration = site.Configuration(maxNetworkRetries: 2);
@@ -186,36 +190,6 @@ namespace FilesTests
 
         [TestMethod]
         [Timeout(60000)]
-        public async Task ReadTimeoutLimitsOnlyTheWaitForResponseHeaders()
-        {
-            byte[] contents = Encoding.ASCII.GetBytes("contents sent after the read timeout");
-            FilesConfiguration configuration = site.Configuration();
-            configuration.ReadTimeout = 1;
-            FilesClient client = FilesClient.Create(configuration);
-
-            using (var server = new SlowDownloadServer(contents, bytesBeforePause: 0, pause: TimeSpan.FromSeconds(2)))
-            {
-                ServeDownloadDetails(server.Url);
-                var destination = new MemoryStream();
-
-                await client.RemoteFiles.DownloadFileAsync("remote.bin", destination, cancellationToken: new CancellationTokenSource().Token);
-
-                CollectionAssert.AreEqual(contents, destination.ToArray());
-            }
-
-            using (var server = new SlowDownloadServer(contents, bytesBeforePause: 0, pause: Timeout.InfiniteTimeSpan, sendHeaders: false))
-            {
-                ServeDownloadDetails(server.Url);
-                Stopwatch elapsed = Stopwatch.StartNew();
-
-                await AssertCancelledPromptly(client.RemoteFiles.DownloadFileAsync("remote.bin", new MemoryStream()));
-
-                Assert.IsTrue(elapsed.Elapsed < Promptly, "Waiting for headers still times out after ReadTimeout.");
-            }
-        }
-
-        [TestMethod]
-        [Timeout(60000)]
         public async Task CancelWhileReadingAnErrorResponseWritesNothing()
         {
             byte[] error = Encoding.UTF8.GetBytes(@"{""type"":""not-found"",""error"":""Not Found""}");
@@ -263,7 +237,7 @@ namespace FilesTests
             FilesClient client = FilesClient.Create(site.Configuration());
             var writeError = new IOException("The destination disk is full.");
 
-            Exception error = await Assert.ThrowsExceptionAsync<IOException>(() =>
+            Exception error = await Assert.ThrowsExactlyAsync<IOException>(() =>
                 client.RemoteFiles.DownloadFileAsync("remote.bin", new WaitingStream(writeError), cancellationToken: new CancellationTokenSource().Token));
 
             Assert.AreSame(writeError, error);
@@ -285,6 +259,27 @@ namespace FilesTests
             await AssertCancelledPromptly(uploading);
             site.AssertReceived("POST /file_actions/begin_upload/remote.bin key=key-a workspace=11");
             Assert.IsTrue(source.Disposed, "The upload disposes the stream it owns.");
+        }
+
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task CancelDuringAnUploadReadThatIgnoresItStartsNoFurtherRead()
+        {
+            site.ServeUpload(partsize: 4);
+            FilesClient client = FilesClient.Create(site.Configuration());
+            // Its first read ignores the token and returns one byte of the four the part needs.
+            var source = new StalledFirstReadStream();
+            var cancellation = new CancellationTokenSource();
+
+            Task uploading = client.RemoteFiles.UploadFileAsync("remote.bin", source, 4, MTime, cancellationToken: cancellation.Token);
+            await source.FirstReadStarted;
+            cancellation.Cancel();
+            source.ReleaseFirstRead();
+
+            await AssertCancelledPromptly(uploading);
+            Assert.AreEqual(1, source.Reads, "No read starts after cancellation.");
+            site.AssertReceived("POST /file_actions/begin_upload/remote.bin key=key-a workspace=11");
+            Assert.IsFalse(source.CanRead, "The upload still disposes the stream it owns.");
         }
 
         [TestMethod]
@@ -348,8 +343,8 @@ namespace FilesTests
             site.On("GET", "/folders/missing", request => LoopbackSite.Json(@"{""type"":""not-found"",""http-code"":404,""error"":""Not Found""}", status: 404));
             FilesClient client = FilesClient.Create(site.Configuration());
 
-            Assert.ThrowsException<NotFoundException>(() => client.Folders.ListFor("missing").ListAutoPaging(CancellationToken.None));
-            AggregateException wrapped = Assert.ThrowsException<AggregateException>(() => client.Folders.ListFor("missing").ListAutoPaging());
+            Assert.ThrowsExactly<NotFoundException>(() => client.Folders.ListFor("missing").ListAutoPaging(CancellationToken.None));
+            AggregateException wrapped = Assert.ThrowsExactly<AggregateException>(() => client.Folders.ListFor("missing").ListAutoPaging());
             Assert.IsInstanceOfType(wrapped.InnerException, typeof(NotFoundException));
         }
 

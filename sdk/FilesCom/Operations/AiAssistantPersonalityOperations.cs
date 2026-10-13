@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Operations
 {
-    // Imported inside the namespace so that model names, such as Action, take precedence over System's.
+    // Imported inside the namespace so that model names, such as Lock, take precedence over those of the namespaces
+    // above, such as System.Threading.Lock. A type of this namespace still takes precedence over a model of the same
+    // name (a model UserOperations beside the operations class of User), so code here names models in their own
+    // namespace (model_type, qualified: true).
     using FilesCom.Models;
 
     /// <summary>
@@ -14,7 +17,7 @@ namespace FilesCom.Operations
     /// <see cref="FilesClient.AiAssistantPersonalities"/>. The objects and lists they return keep using that client.
     /// </summary>
     /// <remarks>
-    /// Each method matches the static <see cref="AiAssistantPersonality"/> method of the same name. Methods that send a request
+    /// Each method matches the static <see cref="global::FilesCom.Models.AiAssistantPersonality"/> method of the same name. Methods that send a request
     /// are named with Async and take a cancellation token. The dictionaries you pass are copied, never changed.
     /// </remarks>
     public sealed class AiAssistantPersonalityOperations
@@ -30,10 +33,12 @@ namespace FilesCom.Operations
         /// Makes a AiAssistantPersonality that belongs to this client, without sending a request. Its methods, such as SaveAsync,
         /// then run with this client.
         /// </summary>
-        public AiAssistantPersonality New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public global::FilesCom.Models.AiAssistantPersonality New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
-            AiAssistantPersonality model = new AiAssistantPersonality(DictionaryUtil.Copy(attributes), null);
-            ((IModel)model).SetContext(client, options);
+            global::FilesCom.Models.AiAssistantPersonality model = new global::FilesCom.Models.AiAssistantPersonality(attributes, null);
+            ((IModel)model).SetContext(client, options, null);
             return model;
         }
 
@@ -44,13 +49,15 @@ namespace FilesCom.Operations
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
-        public FilesList<AiAssistantPersonality> List(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.AiAssistantPersonality> List(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return AiAssistantPersonality.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.AiAssistantPersonality.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>
@@ -60,41 +67,51 @@ namespace FilesCom.Operations
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id` and `id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `workspace_id`.
         /// </summary>
-        public FilesList<AiAssistantPersonality> All(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.AiAssistantPersonality> All(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return AiAssistantPersonality.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.AiAssistantPersonality.ListCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Ai Assistant Personality ID.
         /// </summary>
-        public Task<AiAssistantPersonality> FindAsync(
+        /// <param name="id">Ai Assistant Personality ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.AiAssistantPersonality> FindAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return AiAssistantPersonality.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.AiAssistantPersonality.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Ai Assistant Personality ID.
         /// </summary>
-        public Task<AiAssistantPersonality> GetAsync(
+        /// <param name="id">Ai Assistant Personality ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.AiAssistantPersonality> GetAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return AiAssistantPersonality.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.AiAssistantPersonality.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -105,14 +122,17 @@ namespace FilesCom.Operations
         ///   use_by_default - boolean - Whether this personality is the default personality for the Workspace.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public Task<AiAssistantPersonality> CreateAsync(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.AiAssistantPersonality> CreateAsync(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return AiAssistantPersonality.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.AiAssistantPersonality.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -123,18 +143,27 @@ namespace FilesCom.Operations
         ///   use_by_default - boolean - Whether this personality is the default personality for the Workspace.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
         /// </summary>
-        public Task<AiAssistantPersonality> UpdateAsync(
+        /// <param name="id">Ai Assistant Personality ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.AiAssistantPersonality> UpdateAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return AiAssistantPersonality.UpdateCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.AiAssistantPersonality.UpdateCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
+        /// Sends DELETE /ai_assistant_personalities/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Ai Assistant Personality ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -142,11 +171,16 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return AiAssistantPersonality.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.AiAssistantPersonality.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
+        /// Sends DELETE /ai_assistant_personalities/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Ai Assistant Personality ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -154,7 +188,7 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return AiAssistantPersonality.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.AiAssistantPersonality.DeleteCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
     }
 }

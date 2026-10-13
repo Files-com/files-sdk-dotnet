@@ -32,7 +32,7 @@
 ## List SIEM HTTP Destination Events
 
 ```
-Task<FilesList<SiemHttpDestinationEvent>> SiemHttpDestinationEvent.List(
+FilesList<SiemHttpDestinationEvent> SiemHttpDestinationEvent.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

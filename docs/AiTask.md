@@ -73,7 +73,7 @@
 ## List Ai Tasks
 
 ```
-Task<FilesList<AiTask>> AiTask.List(
+FilesList<AiTask> AiTask.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -278,12 +278,11 @@ Task client.AiTasks.DeleteAsync(
 ## Manually Run AI Task
 
 ```
-var AiTask = AiTask.Find(1);
+var aiTask = await AiTask.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-AiTask.ManualRun
+await aiTask.ManualRun(parameters);
 ```
 
 `ManualRunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -298,7 +297,7 @@ AiTask.ManualRun
 ## Update Ai Task
 
 ```
-var AiTask = AiTask.Find(1);
+var aiTask = await AiTask.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -310,21 +309,22 @@ parameters.Add("name", "Summarize daily reports");
 parameters.Add("path", "incoming/reports");
 parameters.Add("permission_set", "files_only");
 parameters.Add("prompt", "Summarize the uploaded file and identify follow-up actions.");
-parameters.Add("recurring_day", 1);
-parameters.Add("recurring_days", [1,15]);
-parameters.Add("schedule_id", 1);
-parameters.Add("schedule_days_of_week", [1,3,5]);
+parameters.Add("recurring_day", 1L);
+parameters.Add("recurring_days", new Nullable<Int64>[] { 1, 15 });
+parameters.Add("schedule_id", 1L);
+parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 1, 3, 5 });
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
-parameters.Add("schedule_times_of_day", ["06:30"]);
+parameters.Add("schedule_times_of_day", new string[] { "06:30" });
 parameters.Add("source", "*.pdf");
 parameters.Add("trigger", "daily");
-parameters.Add("trigger_actions", ["create"]);
-parameters.Add("workspace_id", 0);
+parameters.Add("trigger_actions", new string[] { "create" });
+parameters.Add("workspace_id", 0L);
 
-AiTask.Update(parameters);
+await aiTask.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `AiTask` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -354,12 +354,11 @@ AiTask.Update(parameters);
 ## Delete Ai Task
 
 ```
-var AiTask = AiTask.Find(1);
+var aiTask = await AiTask.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-AiTask.Delete
+await aiTask.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -367,3 +366,14 @@ AiTask.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Ai Task ID.
+
+
+---
+
+## Save
+
+```
+await aiTask.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

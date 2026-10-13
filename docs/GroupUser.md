@@ -25,7 +25,7 @@
 ## List Group Users
 
 ```
-Task<FilesList<GroupUser>> GroupUser.List(
+FilesList<GroupUser> GroupUser.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -146,18 +146,19 @@ Task client.GroupUsers.DeleteAsync(
 ## Update Group User
 
 ```
-var GroupUser = GroupUser.ListFor(path)[0];
+var groupUser = (await GroupUser.List().LoadNextPageAsync()).data[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("group_id", 1);
-parameters.Add("user_id", 1);
+parameters.Add("group_id", 1L);
+parameters.Add("user_id", 1L);
 parameters.Add("admin", false);
 
-GroupUser.Update(parameters);
+await groupUser.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `GroupUser` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -172,14 +173,14 @@ GroupUser.Update(parameters);
 ## Delete Group User
 
 ```
-var GroupUser = GroupUser.ListFor(path)[0];
+var groupUser = (await GroupUser.List().LoadNextPageAsync()).data[0];
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("group_id", 1);
-parameters.Add("user_id", 1);
+parameters.Add("group_id", 1L);
+parameters.Add("user_id", 1L);
 
-GroupUser.Delete(parameters);
+await groupUser.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -189,3 +190,14 @@ GroupUser.Delete(parameters);
 * `id` (Nullable<Int64>): Required - Group User ID.
 * `group_id` (Nullable<Int64>): Required - Group ID from which to remove user.
 * `user_id` (Nullable<Int64>): Required - User ID to remove from group.
+
+
+---
+
+## Save
+
+```
+await groupUser.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

@@ -54,7 +54,7 @@
 ## List FTP Action Logs
 
 ```
-Task<FilesList<FtpActionLog>> FtpActionLog.List(
+FilesList<FtpActionLog> FtpActionLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

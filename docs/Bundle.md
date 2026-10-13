@@ -157,7 +157,7 @@
 * `form_field_set_id` / `FormFieldSetId`  (Nullable<Int64>): Id of Form Field Set to use with this bundle
 * `create_snapshot` / `CreateSnapshot`  (bool): If true, create a snapshot of this bundle's contents.
 * `finalize_snapshot` / `FinalizeSnapshot`  (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
-* `watermark_attachment_file` / `WatermarkAttachmentFile`  (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_attachment_file` / `WatermarkAttachmentFile`  (FileAttachment): Preview watermark image applied to all bundle items.
 * `watermark_attachment_delete` / `WatermarkAttachmentDelete`  (bool): If true, will delete the file stored in watermark_attachment
 
 
@@ -166,7 +166,7 @@
 ## List Share Links
 
 ```
-Task<FilesList<Bundle>> Bundle.List(
+FilesList<Bundle> Bundle.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -282,7 +282,7 @@ Task<Bundle> client.Bundles.CreateAsync(
 * `start_access_on_date` (string): Date when share will start to be accessible. If `nil` access granted right after create.
 * `snapshot_id` (Nullable<Int64>): ID of the snapshot containing this bundle's contents.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
-* `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_attachment_file` (FileAttachment): Preview watermark image applied to all bundle items.
 * `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 
 
@@ -372,7 +372,7 @@ Task<Bundle> client.Bundles.UpdateAsync(
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
-* `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_attachment_file` (FileAttachment): Preview watermark image applied to all bundle items.
 * `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
@@ -410,15 +410,15 @@ Task client.Bundles.DeleteAsync(
 ## Send email(s) with a link to bundle
 
 ```
-var Bundle = Bundle.Find(1);
+var bundle = await Bundle.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("to", ["johndoe@gmail.com"]);
+parameters.Add("to", new string[] { "johndoe@gmail.com" });
 parameters.Add("note", "Just a note.");
-parameters.Add("recipients", [{"name":"John Doe","company":"Acme Ltd","recipient":"johndoe@gmail.com"}]);
+parameters.Add("recipients", new object[] { new Dictionary<string, object> { { "name", "John Doe" }, { "company", "Acme Ltd" }, { "recipient", "johndoe@gmail.com" } } });
 
-Bundle.Share(parameters);
+await bundle.Share(parameters);
 ```
 
 `ShareAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -436,24 +436,24 @@ Bundle.Share(parameters);
 ## Update Share Link
 
 ```
-var Bundle = Bundle.Find(1);
+var bundle = await Bundle.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("paths", ["file.txt"]);
+parameters.Add("paths", new string[] { "file.txt" });
 parameters.Add("password", "Password");
 parameters.Add("bypasses_site_expiration_rules", true);
-parameters.Add("form_field_set_id", 1);
-parameters.Add("clickwrap_id", 1);
+parameters.Add("form_field_set_id", 1L);
+parameters.Add("clickwrap_id", 1L);
 parameters.Add("code", "abc123");
 parameters.Add("create_snapshot", false);
 parameters.Add("description", "The public description of the bundle.");
 parameters.Add("dont_separate_submissions_by_folder", true);
 parameters.Add("expires_at", "2000-01-01T01:00:00Z");
 parameters.Add("finalize_snapshot", false);
-parameters.Add("inbox_id", 1);
-parameters.Add("max_uses", 1);
-parameters.Add("group_id", 1);
+parameters.Add("inbox_id", 1L);
+parameters.Add("max_uses", 1L);
+parameters.Add("group_id", 1L);
 parameters.Add("internal_name", "Quarterly reports");
 parameters.Add("note", "The internal note on the bundle.");
 parameters.Add("path_template", "{{name}}_{{ip}}");
@@ -467,15 +467,16 @@ parameters.Add("skip_company", true);
 parameters.Add("start_access_on_date", "2000-01-01T01:00:00Z");
 parameters.Add("skip_email", true);
 parameters.Add("skip_name", true);
-parameters.Add("user_id", 1);
+parameters.Add("user_id", 1L);
 parameters.Add("watermark_attachment_delete", false);
-parameters.Add("watermark_value", {"gravity":"SouthWest","max_height_or_width":20,"transparency":25});
-parameters.Add("workspace_id", 1);
+parameters.Add("watermark_value", new Dictionary<string, object> { { "gravity", "SouthWest" }, { "max_height_or_width", 20 }, { "transparency", 25 } });
+parameters.Add("workspace_id", 1L);
 
-Bundle.Update(parameters);
+await bundle.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Bundle` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -509,7 +510,7 @@ Bundle.Update(parameters);
 * `skip_name` (bool): BundleRegistrations can be saved without providing name?
 * `user_id` (Nullable<Int64>): The owning user id. Only site admins can set this.
 * `watermark_attachment_delete` (bool): If true, will delete the file stored in watermark_attachment
-* `watermark_attachment_file` (System.Net.Http.ByteArrayContent): Preview watermark image applied to all bundle items.
+* `watermark_attachment_file` (FileAttachment): Preview watermark image applied to all bundle items.
 * `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
 
@@ -519,12 +520,11 @@ Bundle.Update(parameters);
 ## Delete Share Link
 
 ```
-var Bundle = Bundle.Find(1);
+var bundle = await Bundle.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Bundle.Delete
+await bundle.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -532,3 +532,14 @@ Bundle.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Bundle ID.
+
+
+---
+
+## Save
+
+```
+await bundle.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

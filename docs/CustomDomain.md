@@ -46,7 +46,7 @@
 ## List Custom Domains
 
 ```
-Task<FilesList<CustomDomain>> CustomDomain.List(
+FilesList<CustomDomain> CustomDomain.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -228,21 +228,22 @@ Task client.CustomDomains.DeleteAsync(
 ## Update Custom Domain
 
 ```
-var CustomDomain = CustomDomain.Find(1);
+var customDomain = await CustomDomain.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("available_to_all_workspaces", false);
-parameters.Add("workspace_id", 0);
+parameters.Add("workspace_id", 0L);
 parameters.Add("destination", "site_alias");
-parameters.Add("folder_behavior_id", 1);
-parameters.Add("ssl_certificate_id", 1);
+parameters.Add("folder_behavior_id", 1L);
+parameters.Add("ssl_certificate_id", 1L);
 parameters.Add("domain", "files.example.com");
 
-CustomDomain.Update(parameters);
+await customDomain.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `CustomDomain` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -260,12 +261,11 @@ CustomDomain.Update(parameters);
 ## Delete Custom Domain
 
 ```
-var CustomDomain = CustomDomain.Find(1);
+var customDomain = await CustomDomain.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-CustomDomain.Delete
+await customDomain.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -273,3 +273,14 @@ CustomDomain.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Custom Domain ID.
+
+
+---
+
+## Save
+
+```
+await customDomain.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

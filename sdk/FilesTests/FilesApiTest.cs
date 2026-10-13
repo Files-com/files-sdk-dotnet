@@ -1,4 +1,7 @@
+using FilesCom;
+using FilesCom.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,11 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FilesCom;
-using FilesCom.Models;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -297,7 +297,7 @@ namespace FilesTests
             };
             new FilesClient(config);
 
-            await Assert.ThrowsExceptionAsync<ApiException>(() =>
+            await Assert.ThrowsExactlyAsync<ApiException>(() =>
                 service.SendRequest("/files/test", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>())
             );
 
@@ -306,7 +306,7 @@ namespace FilesTests
 
         // Error bodies are decoded as HttpContent decodes text: by the declared charset, else by a byte order mark,
         // else as UTF-8. API, upload and download errors all read them the same way.
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("utf-8", "utf-8", false, DisplayName = "declared UTF-8")]
         [DataRow("utf-16", "utf-16", false, DisplayName = "declared UTF-16 without a byte order mark")]
         [DataRow("iso-8859-1", "iso-8859-1", false, DisplayName = "declared Latin-1")]
@@ -322,11 +322,11 @@ namespace FilesTests
             }
             FilesApiService service = ServiceAnswering(body, charset);
 
-            NotFoundException apiError = await Assert.ThrowsExceptionAsync<NotFoundException>(() =>
+            NotFoundException apiError = await Assert.ThrowsExactlyAsync<NotFoundException>(() =>
                 service.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
-            NotFoundException uploadError = await Assert.ThrowsExceptionAsync<NotFoundException>(() =>
+            NotFoundException uploadError = await Assert.ThrowsExactlyAsync<NotFoundException>(() =>
                 service.ChunkUpload(HttpMethod.Put, "http://example.test/part", new MemoryStream(new byte[] { 1 }), 1));
-            NotFoundException downloadError = await Assert.ThrowsExceptionAsync<NotFoundException>(() =>
+            NotFoundException downloadError = await Assert.ThrowsExactlyAsync<NotFoundException>(() =>
                 service.StreamDownload("http://example.test/file", new MemoryStream()));
 
             Assert.AreEqual("café", apiError.Message);
@@ -339,18 +339,213 @@ namespace FilesTests
         {
             FilesApiService service = ServiceAnswering(Encoding.UTF8.GetBytes(@"{""type"":""not-found"",""error"":""Not Found""}"), "no-such-charset");
 
-            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsExactlyAsync<InvalidOperationException>(() =>
                 service.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
-            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsExactlyAsync<InvalidOperationException>(() =>
                 service.ChunkUpload(HttpMethod.Put, "http://example.test/part", new MemoryStream(new byte[] { 1 }), 1));
-            await Assert.ThrowsExceptionAsync<InvalidOperationException>(() =>
+            await Assert.ThrowsExactlyAsync<InvalidOperationException>(() =>
                 service.StreamDownload("http://example.test/file", new MemoryStream()));
+        }
+
+        // A storage server's error answer, which a caller's URL or a redirect can choose, is read only to its bound
+        // (FilesApiService.StorageAnswerBytes), however long it goes on: a body that never ends is read to the bound and
+        // the one byte more that shows it goes on, and nothing after; it is still the error of its status, with its
+        // headers, which decide retrying and waiting; and whether it says its URL has expired is judged by its start.
+        // This is the failure the transfer engine's downloads take (StorageFailureAsync).
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow(403, "<Error><Code>AccessDenied</Code><Message>Request has expired</Message>", true)]
+        [DataRow(403, "<Error><Code>AccessDenied</Code><Message>Access Denied</Message>", false)]
+        [DataRow(503, "<Error><Code>SlowDown</Code><Message>Reduce your request rate</Message>", false)]
+        public async Task AStorageErrorThatNeverEndsIsReadOnlyToItsBound(int status, string start, bool expired)
+        {
+            var body = new EndlessStream(Encoding.UTF8.GetBytes(start));
+            using (HttpResponseMessage response = EndlessBodyHttpMessageHandler.Answer((HttpStatusCode)status, body))
+            using (var watch = new FilesCom.Http.NetworkWatch(FilesCom.Http.NetworkSettings.From(new FilesConfiguration()), CancellationToken.None))
+            {
+                Exception failure = await FilesApiService.StorageFailureAsync(response, watch);
+
+                InvalidResponseException error = failure as InvalidResponseException;
+                Assert.IsNotNull(error, $"An error of the answer's status: {failure}");
+                Assert.AreEqual(status, error.httpStatus);
+                Assert.AreEqual(expired ? $"Transfer request failed (HTTP {status}): the storage server says the transfer URL has expired" : $"Transfer request failed (HTTP {status})", error.Message);
+                Assert.AreEqual(expired, error.StorageSaysExpired, "Judged by the start of the body that was read.");
+                AssertAnswerHeaders(error);
+                Assert.IsTrue(body.BytesRead >= FilesApiService.StorageAnswerBytes && body.BytesRead <= FilesApiService.StorageAnswerBytes + 1, $"{body.BytesRead} bytes of the endless body were read.");
+            }
+        }
+
+        // Every error answer the service reads is bounded the same way, on each of its paths: an API request's (to
+        // FilesApiService.ApiErrorBytes, as a response too long to be a Files.com error), a legacy upload chunk's and
+        // download's, and a transfer engine's upload part's (each to StorageAnswerBytes, as a transfer failure of its
+        // status). Each fails with its status and headers once its bound is read, and its response is disposed.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task ErrorAnswersThatNeverEndAreReadOnlyToTheirBoundsOnEveryPath()
+        {
+            var handler = new EndlessBodyHttpMessageHandler(HttpStatusCode.Forbidden, "{\"type\":\"not-authorized\",\"error\":\"");
+            new FilesClient(new FilesConfiguration { ApiKey = "my-key", BaseUrl = "http://example.test", MaxNetworkRetries = 0 });
+            var service = new FilesApiService(new CapturingHttpClientFactory(handler, "http://example.test"));
+
+            InvalidResponseException api = await Assert.ThrowsExactlyAsync<InvalidResponseException>(() =>
+                service.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
+            Assert.AreEqual($"HTTP request failed with code 403, and its response is longer than the {FilesApiService.ApiErrorBytes} bytes an error response is read to", api.Message);
+            AssertBoundedAnswer(handler, api, FilesApiService.ApiErrorBytes);
+
+            InvalidResponseException chunk = await Assert.ThrowsExactlyAsync<InvalidResponseException>(() =>
+                service.ChunkUpload(HttpMethod.Put, "http://example.test/part", new MemoryStream(new byte[] { 1 }), 1));
+            Assert.AreEqual("Transfer request failed (HTTP 403)", chunk.Message);
+            AssertBoundedAnswer(handler, chunk, FilesApiService.StorageAnswerBytes);
+
+            InvalidResponseException download = await Assert.ThrowsExactlyAsync<InvalidResponseException>(() =>
+                service.StreamDownload("http://example.test/file", new MemoryStream()));
+            Assert.AreEqual("Transfer request failed (HTTP 403)", download.Message);
+            AssertBoundedAnswer(handler, download, FilesApiService.StorageAnswerBytes);
+
+            FilesCom.Http.NetworkSettings network = FilesCom.Http.NetworkSettings.From(new FilesConfiguration());
+            UploadPartAttempt part = await service.SendUploadPart(network, HttpMethod.Put, "http://example.test/part", new KeyValuePair<string, string>[0], new ByteArrayContent(new byte[] { 1 }), CancellationToken.None);
+            InvalidResponseException partError = part.Error as InvalidResponseException;
+            Assert.IsNotNull(partError, $"An error of the answer's status: {part.Error}");
+            Assert.AreEqual(403, part.StatusCode);
+            Assert.AreEqual(TimeSpan.FromSeconds(7), part.RetryAfter, "The answer's Retry-After still decides the wait.");
+            AssertBoundedAnswer(handler, partError, FilesApiService.StorageAnswerBytes);
+        }
+
+        // A body is read whole when it ends within the bound, exactly at it included, and cut at the bound when it holds
+        // even one byte more; never more than one byte past the bound is read.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow(9, false)]
+        [DataRow(10, false)]
+        [DataRow(11, true)]
+        [DataRow(100000, true)]
+        public async Task ABodyIsReadWholeWithinItsBoundAndCutJustPastIt(int length, bool truncated)
+        {
+            const int limit = 10;
+            byte[] contents = Enumerable.Range(0, length).Select(i => (byte)i).ToArray();
+            var body = new EndlessStream(contents, endsAfter: length);
+            using (HttpResponseMessage response = EndlessBodyHttpMessageHandler.Answer(HttpStatusCode.Forbidden, body))
+            using (var watch = new FilesCom.Http.NetworkWatch(FilesCom.Http.NetworkSettings.From(new FilesConfiguration()), CancellationToken.None))
+            {
+                (byte[] read, bool cut) = await FilesCom.Http.ResponseBody.ReadPrefixAsync(response, watch, limit);
+
+                CollectionAssert.AreEqual(contents.Take(limit).ToArray(), read);
+                Assert.AreEqual(truncated, cut);
+                Assert.IsTrue(body.BytesRead <= limit + 1, $"{body.BytesRead} bytes were read.");
+            }
+        }
+
+        private static void AssertAnswerHeaders(InvalidResponseException error)
+        {
+            Assert.IsTrue(error.httpHeaders.TryGetValues("x-amz-request-id", out IEnumerable<string> ids) && ids.Single() == "R45", "The answer's headers are kept.");
+            Assert.AreEqual(TimeSpan.FromSeconds(7), ((HttpResponseHeaders)error.httpHeaders).RetryAfter?.Delta, "Its Retry-After is kept.");
+        }
+
+        private static void AssertBoundedAnswer(EndlessBodyHttpMessageHandler handler, InvalidResponseException error, int bound)
+        {
+            Assert.AreEqual(403, error.httpStatus);
+            AssertAnswerHeaders(error);
+            Assert.IsTrue(handler.LastBody.BytesRead >= bound && handler.LastBody.BytesRead <= bound + 1, $"{handler.LastBody.BytesRead} bytes of the endless body were read for a bound of {bound}.");
+            Assert.IsTrue(handler.LastBody.Disposed, "The response was disposed.");
         }
 
         private static FilesApiService ServiceAnswering(byte[] errorBody, string charset)
         {
             new FilesClient(new FilesConfiguration { ApiKey = "my-key", BaseUrl = "http://example.test", MaxNetworkRetries = 0 });
             return new FilesApiService(new CapturingHttpClientFactory(new ErrorBodyHttpMessageHandler(errorBody, charset), "http://example.test"));
+        }
+    }
+
+    // Answers every request with status and a body that starts with start and then never ends, as a hostile or broken
+    // storage server can, with a request id and a Retry-After of 7 seconds; LastBody counts what was read of it.
+    public class EndlessBodyHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly HttpStatusCode status;
+        private readonly byte[] start;
+
+        public EndlessBodyHttpMessageHandler(HttpStatusCode status, string start)
+        {
+            this.status = status;
+            this.start = Encoding.UTF8.GetBytes(start);
+        }
+
+        public EndlessStream LastBody { get; private set; }
+
+        public static HttpResponseMessage Answer(HttpStatusCode status, EndlessStream body)
+        {
+            var response = new HttpResponseMessage(status) { Content = new StreamContent(body) };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/xml");
+            response.Headers.Add("x-amz-request-id", "R45");
+            response.Headers.RetryAfter = new RetryConditionHeaderValue(TimeSpan.FromSeconds(7));
+            return response;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            LastBody = new EndlessStream(start);
+            return Task.FromResult(Answer(status, LastBody));
+        }
+    }
+
+    // A forward-only body of start followed by filler, without end unless endsAfter is given, which counts the bytes
+    // read from it and whether it was disposed.
+    public sealed class EndlessStream : Stream
+    {
+        private readonly byte[] start;
+        private readonly long endsAfter;
+        private long read;
+
+        public EndlessStream(byte[] start, long endsAfter = long.MaxValue)
+        {
+            this.start = start;
+            this.endsAfter = endsAfter;
+        }
+
+        public long BytesRead => Interlocked.Read(ref read);
+
+        public bool Disposed { get; private set; }
+
+        public override bool CanRead => true;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            int n = (int)Math.Min(count, endsAfter - read);
+            for (int i = 0; i < n; i++)
+            {
+                long at = read + i;
+                buffer[offset + i] = at < start.Length ? start[at] : (byte)'x';
+            }
+            Interlocked.Add(ref read, n);
+            return n;
+        }
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(Read(buffer, offset, count));
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            Disposed = true;
+            base.Dispose(disposing);
         }
     }
 
@@ -364,14 +559,14 @@ namespace FilesTests
         [ClassInitialize]
         public static void PrepareClass(TestContext context)
         {
-            var port = new Random().Next(5000, 6000);
-            _baseUrl = "http://localhost:" + port;
-
+            // On 127.0.0.1 only, on a port the system assigns, and reached there, as LoopbackSite listens: no other socket
+            // on that port can take the requests.
             _server = WireMockServer.Start(new WireMockServerSettings
             {
-                Urls = new[] { "http://+:" + port },
+                Urls = new[] { "http://127.0.0.1:0" },
                 ReadStaticMappings = true
             });
+            _baseUrl = _server.Urls[0];
 
             // client config
             FilesConfiguration filesConfig = new FilesConfiguration();
@@ -427,14 +622,17 @@ namespace FilesTests
 
             Dictionary<string, object> parameters = new Dictionary<string, object>() { };
             var itemCount = 0;
-            try{
+            try
+            {
                 var files = Folder.ListFor("notfound", parameters, null);
                 foreach (var file in files.ListAutoPaging())
                 {
                     itemCount++;
                 }
                 Assert.Fail("no exception thrown");
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Assert.AreEqual(typeof(NotFoundException), ex.InnerException.GetType());
                 Assert.AreEqual("Not Found.  This may be related to your permissions.", ex.InnerException.Message);
             }

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Operations
 {
-    // Imported inside the namespace so that model names, such as Action, take precedence over System's.
+    // Imported inside the namespace so that model names, such as Lock, take precedence over those of the namespaces
+    // above, such as System.Threading.Lock. A type of this namespace still takes precedence over a model of the same
+    // name (a model UserOperations beside the operations class of User), so code here names models in their own
+    // namespace (model_type, qualified: true).
     using FilesCom.Models;
 
     /// <summary>
@@ -14,7 +17,7 @@ namespace FilesCom.Operations
     /// <see cref="FilesClient.Locks"/>. The objects and lists they return keep using that client.
     /// </summary>
     /// <remarks>
-    /// Each method matches the static <see cref="Lock"/> method of the same name. Methods that send a request
+    /// Each method matches the static <see cref="global::FilesCom.Models.Lock"/> method of the same name. Methods that send a request
     /// are named with Async and take a cancellation token. The dictionaries you pass are copied, never changed.
     /// </remarks>
     public sealed class LockOperations
@@ -30,10 +33,12 @@ namespace FilesCom.Operations
         /// Makes a Lock that belongs to this client, without sending a request. Its methods, such as SaveAsync,
         /// then run with this client.
         /// </summary>
-        public Lock New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public global::FilesCom.Models.Lock New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
-            Lock model = new Lock(DictionaryUtil.Copy(attributes), null);
-            ((IModel)model).SetContext(client, options);
+            global::FilesCom.Models.Lock model = new global::FilesCom.Models.Lock(attributes, null);
+            ((IModel)model).SetContext(client, options, null);
             return model;
         }
 
@@ -44,13 +49,16 @@ namespace FilesCom.Operations
         ///   path (required) - string - Path to operate on.
         ///   include_children - boolean - Include locks from children objects?
         /// </summary>
-        public FilesList<Lock> ListFor(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.Lock> ListFor(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return Lock.ListForCore(client, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.Lock.ListForCore(client, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>
@@ -64,20 +72,28 @@ namespace FilesCom.Operations
         ///   owner - string - Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
         ///   timeout - int64 - Lock timeout in seconds
         /// </summary>
-        public Task<Lock> CreateAsync(
+        /// <param name="path">Path</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.Lock> CreateAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return Lock.CreateCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.Lock.CreateCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
+        /// <param name="path">Path</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(
             string path,
             Dictionary<string, object> parameters = null,
@@ -85,13 +101,17 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return Lock.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.Lock.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
+        /// <param name="path">Path</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(
             string path,
             Dictionary<string, object> parameters = null,
@@ -99,7 +119,7 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return Lock.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.Lock.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
     }
 }

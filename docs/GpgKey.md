@@ -45,7 +45,7 @@
 ## List GPG Keys
 
 ```
-Task<FilesList<GpgKey>> GpgKey.List(
+FilesList<GpgKey> GpgKey.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -207,17 +207,18 @@ Task client.GpgKeys.DeleteAsync(
 ## Update GPG Key
 
 ```
-var GpgKey = GpgKey.Find(1);
+var gpgKey = await GpgKey.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("partner_id", 1);
+parameters.Add("partner_id", 1L);
 parameters.Add("name", "key name");
 
-GpgKey.Update(parameters);
+await gpgKey.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `GpgKey` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -234,12 +235,11 @@ GpgKey.Update(parameters);
 ## Delete GPG Key
 
 ```
-var GpgKey = GpgKey.Find(1);
+var gpgKey = await GpgKey.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-GpgKey.Delete
+await gpgKey.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -247,3 +247,14 @@ GpgKey.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Gpg Key ID.
+
+
+---
+
+## Save
+
+```
+await gpgKey.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

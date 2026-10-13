@@ -77,7 +77,7 @@
 ## List Notifications
 
 ```
-Task<FilesList<Notification>> Notification.List(
+FilesList<Notification> Notification.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -257,7 +257,7 @@ Task client.Notifications.DeleteAsync(
 ## Update Notification
 
 ```
-var Notification = Notification.Find(1);
+var notification = await Notification.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -271,16 +271,17 @@ parameters.Add("recursive", false);
 parameters.Add("send_interval", "daily");
 parameters.Add("subject", "Vendor A CSV Activity");
 parameters.Add("message", "custom notification email message");
-parameters.Add("triggering_filenames", ["*.jpg","notify_file.txt"]);
-parameters.Add("triggering_group_ids", [1]);
-parameters.Add("triggering_user_ids", [1]);
+parameters.Add("triggering_filenames", new string[] { "*.jpg", "notify_file.txt" });
+parameters.Add("triggering_group_ids", new Nullable<Int64>[] { 1 });
+parameters.Add("triggering_user_ids", new Nullable<Int64>[] { 1 });
 parameters.Add("trigger_by_share_recipients", true);
-parameters.Add("workspace_id", 1);
+parameters.Add("workspace_id", 1L);
 
-Notification.Update(parameters);
+await notification.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Notification` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -307,12 +308,11 @@ Notification.Update(parameters);
 ## Delete Notification
 
 ```
-var Notification = Notification.Find(1);
+var notification = await Notification.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Notification.Delete
+await notification.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -320,3 +320,14 @@ Notification.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Notification ID.
+
+
+---
+
+## Save
+
+```
+await notification.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

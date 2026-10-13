@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class Restore : IModel
+    /// <summary>
+    /// RestoreEntity model
+    /// </summary>
+    public class Restore : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a Restore with no attributes set and no options.
+        /// </summary>
         public Restore() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a Restore with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public Restore(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("earliest_date"))
             {
@@ -121,30 +130,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -155,7 +186,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> EarliestDate
         {
             get { return (Nullable<DateTime>)attributes["earliest_date"]; }
-            set { attributes["earliest_date"] = value; }
+            set { attributes["earliest_date"] = value; unsaved.Add("earliest_date"); }
         }
 
         /// <summary>
@@ -165,7 +196,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -175,7 +206,7 @@ namespace FilesCom.Models
         public Nullable<Int64> DirsRestored
         {
             get { return (Nullable<Int64>)attributes["dirs_restored"]; }
-            set { attributes["dirs_restored"] = value; }
+            set { attributes["dirs_restored"] = value; unsaved.Add("dirs_restored"); }
         }
 
         /// <summary>
@@ -185,7 +216,7 @@ namespace FilesCom.Models
         public Nullable<Int64> DirsErrored
         {
             get { return (Nullable<Int64>)attributes["dirs_errored"]; }
-            set { attributes["dirs_errored"] = value; }
+            set { attributes["dirs_errored"] = value; unsaved.Add("dirs_errored"); }
         }
 
         /// <summary>
@@ -195,7 +226,7 @@ namespace FilesCom.Models
         public Nullable<Int64> DirsTotal
         {
             get { return (Nullable<Int64>)attributes["dirs_total"]; }
-            set { attributes["dirs_total"] = value; }
+            set { attributes["dirs_total"] = value; unsaved.Add("dirs_total"); }
         }
 
         /// <summary>
@@ -205,7 +236,7 @@ namespace FilesCom.Models
         public Nullable<Int64> FilesRestored
         {
             get { return (Nullable<Int64>)attributes["files_restored"]; }
-            set { attributes["files_restored"] = value; }
+            set { attributes["files_restored"] = value; unsaved.Add("files_restored"); }
         }
 
         /// <summary>
@@ -215,7 +246,7 @@ namespace FilesCom.Models
         public Nullable<Int64> FilesErrored
         {
             get { return (Nullable<Int64>)attributes["files_errored"]; }
-            set { attributes["files_errored"] = value; }
+            set { attributes["files_errored"] = value; unsaved.Add("files_errored"); }
         }
 
         /// <summary>
@@ -225,7 +256,7 @@ namespace FilesCom.Models
         public Nullable<Int64> FilesTotal
         {
             get { return (Nullable<Int64>)attributes["files_total"]; }
-            set { attributes["files_total"] = value; }
+            set { attributes["files_total"] = value; unsaved.Add("files_total"); }
         }
 
         /// <summary>
@@ -235,7 +266,7 @@ namespace FilesCom.Models
         public string Prefix
         {
             get { return (string)attributes["prefix"]; }
-            set { attributes["prefix"] = value; }
+            set { attributes["prefix"] = value; unsaved.Add("prefix"); }
         }
 
         /// <summary>
@@ -245,7 +276,7 @@ namespace FilesCom.Models
         public string RestorationType
         {
             get { return (string)attributes["restoration_type"]; }
-            set { attributes["restoration_type"] = value; }
+            set { attributes["restoration_type"] = value; unsaved.Add("restoration_type"); }
         }
 
         /// <summary>
@@ -256,7 +287,7 @@ namespace FilesCom.Models
         public bool RestoreInPlace
         {
             get { return attributes["restore_in_place"] == null ? false : (bool)attributes["restore_in_place"]; }
-            set { attributes["restore_in_place"] = value; }
+            set { attributes["restore_in_place"] = value; unsaved.Add("restore_in_place"); }
         }
 
         /// <summary>
@@ -267,7 +298,7 @@ namespace FilesCom.Models
         public bool RestoreDeletedPermissions
         {
             get { return attributes["restore_deleted_permissions"] == null ? false : (bool)attributes["restore_deleted_permissions"]; }
-            set { attributes["restore_deleted_permissions"] = value; }
+            set { attributes["restore_deleted_permissions"] = value; unsaved.Add("restore_deleted_permissions"); }
         }
 
         /// <summary>
@@ -277,7 +308,7 @@ namespace FilesCom.Models
         public Nullable<Int64> UsersRestored
         {
             get { return (Nullable<Int64>)attributes["users_restored"]; }
-            set { attributes["users_restored"] = value; }
+            set { attributes["users_restored"] = value; unsaved.Add("users_restored"); }
         }
 
         /// <summary>
@@ -287,7 +318,7 @@ namespace FilesCom.Models
         public Nullable<Int64> UsersErrored
         {
             get { return (Nullable<Int64>)attributes["users_errored"]; }
-            set { attributes["users_errored"] = value; }
+            set { attributes["users_errored"] = value; unsaved.Add("users_errored"); }
         }
 
         /// <summary>
@@ -297,7 +328,7 @@ namespace FilesCom.Models
         public Nullable<Int64> UsersTotal
         {
             get { return (Nullable<Int64>)attributes["users_total"]; }
-            set { attributes["users_total"] = value; }
+            set { attributes["users_total"] = value; unsaved.Add("users_total"); }
         }
 
         /// <summary>
@@ -307,7 +338,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ApiKeysRestored
         {
             get { return (Nullable<Int64>)attributes["api_keys_restored"]; }
-            set { attributes["api_keys_restored"] = value; }
+            set { attributes["api_keys_restored"] = value; unsaved.Add("api_keys_restored"); }
         }
 
         /// <summary>
@@ -317,7 +348,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PublicKeysRestored
         {
             get { return (Nullable<Int64>)attributes["public_keys_restored"]; }
-            set { attributes["public_keys_restored"] = value; }
+            set { attributes["public_keys_restored"] = value; unsaved.Add("public_keys_restored"); }
         }
 
         /// <summary>
@@ -327,7 +358,7 @@ namespace FilesCom.Models
         public Nullable<Int64> TwoFactorAuthenticationMethodsRestored
         {
             get { return (Nullable<Int64>)attributes["two_factor_authentication_methods_restored"]; }
-            set { attributes["two_factor_authentication_methods_restored"] = value; }
+            set { attributes["two_factor_authentication_methods_restored"] = value; unsaved.Add("two_factor_authentication_methods_restored"); }
         }
 
         /// <summary>
@@ -337,7 +368,7 @@ namespace FilesCom.Models
         public string Status
         {
             get { return (string)attributes["status"]; }
-            set { attributes["status"] = value; }
+            set { attributes["status"] = value; unsaved.Add("status"); }
         }
 
         /// <summary>
@@ -348,7 +379,7 @@ namespace FilesCom.Models
         public bool UpdateTimestamps
         {
             get { return attributes["update_timestamps"] == null ? false : (bool)attributes["update_timestamps"]; }
-            set { attributes["update_timestamps"] = value; }
+            set { attributes["update_timestamps"] = value; unsaved.Add("update_timestamps"); }
         }
 
         /// <summary>
@@ -358,7 +389,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WorkspaceId
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            set { attributes["workspace_id"] = value; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -368,26 +399,72 @@ namespace FilesCom.Models
         public string[] ErrorMessages
         {
             get { return (string[])attributes["error_messages"]; }
-            set { attributes["error_messages"] = value; }
+            set { attributes["error_messages"] = value; unsaved.Add("error_messages"); }
         }
 
 
+        private static readonly string[] CreateParameterNames = { "earliest_date", "prefix", "restoration_type", "restore_deleted_permissions", "restore_in_place", "update_timestamps", "workspace_id" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this Restore on Files.com.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
                 throw new NotImplementedException("The Restore object doesn't support updates.");
             }
-            else
+            Restore created = await Restore.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await Restore.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = ToParameter(name, attributes[name]);
+                }
             }
+            return toSave;
+        }
+
+        // The value SaveAsync sends for an attribute whose property type is not the one its parameter takes.
+        private static object ToParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case "earliest_date":
+                    return ParameterValue.FromDateTime(value);
+                default:
+                    return value;
+            }
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
@@ -397,6 +474,8 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `restoration_type`.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<Restore> List(
 
             Dictionary<string, object> parameters = null,
@@ -406,6 +485,15 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `restoration_type`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<Restore> All(
 
             Dictionary<string, object> parameters = null,
@@ -424,22 +512,23 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            if (parameters.TryGetValue("filter", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter is null, which cannot be sent" : "Bad parameter: filter must be of type object", "filter");
             }
 
             return new FilesList<Restore>(client, $"/restores", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -455,6 +544,8 @@ namespace FilesCom.Models
         ///   update_timestamps - boolean - If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
         ///   workspace_id - int64 - Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Restore> Create(
 
             Dictionary<string, object> parameters = null,
@@ -474,50 +565,44 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (!parameters.ContainsKey("earliest_date") || parameters["earliest_date"] == null)
+            if (!parameters.TryGetValue("earliest_date", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: earliest_date", "parameters[\"earliest_date\"]");
+                throw new MissingParameterException("Parameter missing: earliest_date", "earliest_date");
             }
-            if (parameters.ContainsKey("earliest_date") && !(parameters["earliest_date"] is string))
+            if (parameters.TryGetValue("earliest_date", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: earliest_date must be of type string", "parameters[\"earliest_date\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: earliest_date is null, which cannot be sent" : "Bad parameter: earliest_date must be of type string", "earliest_date");
             }
-            if (parameters.ContainsKey("prefix") && !(parameters["prefix"] is string))
+            if (parameters.TryGetValue("prefix", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: prefix must be of type string", "parameters[\"prefix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: prefix is null, which cannot be sent" : "Bad parameter: prefix must be of type string", "prefix");
             }
-            if (parameters.ContainsKey("restoration_type") && !(parameters["restoration_type"] is string))
+            if (parameters.TryGetValue("restoration_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: restoration_type must be of type string", "parameters[\"restoration_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restoration_type is null, which cannot be sent" : "Bad parameter: restoration_type must be of type string", "restoration_type");
             }
-            if (parameters.ContainsKey("restore_deleted_permissions") && !(parameters["restore_deleted_permissions"] is bool))
+            if (parameters.TryGetValue("restore_deleted_permissions", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: restore_deleted_permissions must be of type bool", "parameters[\"restore_deleted_permissions\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restore_deleted_permissions is null, which cannot be sent" : "Bad parameter: restore_deleted_permissions must be of type bool", "restore_deleted_permissions");
             }
-            if (parameters.ContainsKey("restore_in_place") && !(parameters["restore_in_place"] is bool))
+            if (parameters.TryGetValue("restore_in_place", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: restore_in_place must be of type bool", "parameters[\"restore_in_place\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restore_in_place is null, which cannot be sent" : "Bad parameter: restore_in_place must be of type bool", "restore_in_place");
             }
-            if (parameters.ContainsKey("update_timestamps") && !(parameters["update_timestamps"] is bool))
+            if (parameters.TryGetValue("update_timestamps", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: update_timestamps must be of type bool", "parameters[\"update_timestamps\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: update_timestamps is null, which cannot be sent" : "Bad parameter: update_timestamps must be of type bool", "update_timestamps");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/restores", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Restore>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Restore>(responseJson, context, options);
         }
 
     }

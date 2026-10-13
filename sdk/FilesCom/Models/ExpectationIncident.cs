@@ -9,27 +9,32 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
+    /// <summary>
+    /// ExpectationIncidentEntity model
+    /// </summary>
     public class ExpectationIncident : IModel
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        /// <summary>
+        /// Makes a ExpectationIncident with no attributes set and no options.
+        /// </summary>
         public ExpectationIncident() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a ExpectationIncident with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public ExpectationIncident(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -93,27 +98,43 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
@@ -288,6 +309,7 @@ namespace FilesCom.Models
         /// <summary>
         /// Resolve an expectation incident
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task<ExpectationIncident> Resolve(Dictionary<string, object> parameters)
         {
             return ResolveCore(parameters, CancellationToken.None);
@@ -296,6 +318,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Resolve an expectation incident
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<ExpectationIncident> ResolveAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return ResolveCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -305,34 +329,29 @@ namespace FilesCom.Models
         private async Task<ExpectationIncident> ResolveCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The ExpectationIncident has no id, which Resolve needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resolve", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            ExpectationIncident result = JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
         }
 
         /// <summary>
@@ -341,6 +360,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   snoozed_until (required) - string - Time until which the incident should remain snoozed.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         public Task<ExpectationIncident> Snooze(Dictionary<string, object> parameters)
         {
             return SnoozeCore(parameters, CancellationToken.None);
@@ -352,6 +372,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   snoozed_until (required) - string - Time until which the incident should remain snoozed.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<ExpectationIncident> SnoozeAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return SnoozeCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -361,47 +383,43 @@ namespace FilesCom.Models
         private async Task<ExpectationIncident> SnoozeCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The ExpectationIncident has no id, which Snooze needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (!parameters.TryGetValue("snoozed_until", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: snoozed_until", "snoozed_until");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("snoozed_until", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: snoozed_until is null, which cannot be sent" : "Bad parameter: snoozed_until must be of type string", "snoozed_until");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (!parameters.ContainsKey("snoozed_until") || parameters["snoozed_until"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: snoozed_until", "parameters[\"snoozed_until\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("snoozed_until") && !(parameters["snoozed_until"] is string))
-            {
-                throw new ArgumentException("Bad parameter: snoozed_until must be of type string", "parameters[\"snoozed_until\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/snooze", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            ExpectationIncident result = JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
         }
 
         /// <summary>
         /// Acknowledge an expectation incident
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task<ExpectationIncident> Acknowledge(Dictionary<string, object> parameters)
         {
             return AcknowledgeCore(parameters, CancellationToken.None);
@@ -410,6 +428,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Acknowledge an expectation incident
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<ExpectationIncident> AcknowledgeAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return AcknowledgeCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -419,34 +439,29 @@ namespace FilesCom.Models
         private async Task<ExpectationIncident> AcknowledgeCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The ExpectationIncident has no id, which Acknowledge needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/acknowledge", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            ExpectationIncident result = JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
         }
 
 
@@ -458,6 +473,8 @@ namespace FilesCom.Models
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `created_at` or `expectation_id`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `expectation_id` and `workspace_id`. Valid field combinations are `[ workspace_id, expectation_id ]`.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<ExpectationIncident> List(
 
             Dictionary<string, object> parameters = null,
@@ -467,6 +484,15 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `created_at` or `expectation_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `expectation_id` and `workspace_id`. Valid field combinations are `[ workspace_id, expectation_id ]`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<ExpectationIncident> All(
 
             Dictionary<string, object> parameters = null,
@@ -485,22 +511,23 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            if (parameters.TryGetValue("filter", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter is null, which cannot be sent" : "Bad parameter: filter must be of type object", "filter");
             }
 
             return new FilesList<ExpectationIncident>(client, $"/expectation_incidents", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -510,6 +537,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   id (required) - int64 - Expectation Incident ID.
         /// </summary>
+        /// <param name="id">Expectation Incident ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ExpectationIncident> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -519,6 +549,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Expectation Incident ID.
+        /// </summary>
+        /// <param name="id">Expectation Incident ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ExpectationIncident> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -538,6 +575,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -547,30 +585,26 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, options);
         }
 
         /// <summary>
         /// Resolve an expectation incident
         /// </summary>
+        /// <param name="id">Expectation Incident ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ExpectationIncident> Resolve(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -590,6 +624,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -599,25 +634,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resolve", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, options);
         }
 
         /// <summary>
@@ -626,6 +654,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   snoozed_until (required) - string - Time until which the incident should remain snoozed.
         /// </summary>
+        /// <param name="id">Expectation Incident ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ExpectationIncident> Snooze(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -645,6 +676,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -654,38 +686,34 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (!parameters.ContainsKey("snoozed_until") || parameters["snoozed_until"] == null)
+            if (!parameters.TryGetValue("snoozed_until", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: snoozed_until", "parameters[\"snoozed_until\"]");
+                throw new MissingParameterException("Parameter missing: snoozed_until", "snoozed_until");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("snoozed_until") && !(parameters["snoozed_until"] is string))
+            if (parameters.TryGetValue("snoozed_until", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: snoozed_until must be of type string", "parameters[\"snoozed_until\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: snoozed_until is null, which cannot be sent" : "Bad parameter: snoozed_until must be of type string", "snoozed_until");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/snooze", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, options);
         }
 
         /// <summary>
         /// Acknowledge an expectation incident
         /// </summary>
+        /// <param name="id">Expectation Incident ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ExpectationIncident> Acknowledge(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -705,6 +733,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -714,25 +743,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/acknowledge", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ExpectationIncident>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, options);
         }
 
     }

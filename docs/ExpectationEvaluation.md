@@ -57,7 +57,7 @@
 ## List Expectation Evaluations
 
 ```
-Task<FilesList<ExpectationEvaluation>> ExpectationEvaluation.List(
+FilesList<ExpectationEvaluation> ExpectationEvaluation.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

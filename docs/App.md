@@ -60,7 +60,7 @@
 ## List Apps
 
 ```
-Task<FilesList<App>> App.List(
+FilesList<App> App.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

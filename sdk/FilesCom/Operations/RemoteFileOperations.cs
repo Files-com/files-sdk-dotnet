@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Operations
 {
-    // Imported inside the namespace so that model names, such as Action, take precedence over System's.
+    // Imported inside the namespace so that model names, such as Lock, take precedence over those of the namespaces
+    // above, such as System.Threading.Lock. A type of this namespace still takes precedence over a model of the same
+    // name (a model UserOperations beside the operations class of User), so code here names models in their own
+    // namespace (model_type, qualified: true).
     using FilesCom.Models;
 
     /// <summary>
@@ -14,7 +17,7 @@ namespace FilesCom.Operations
     /// <see cref="FilesClient.RemoteFiles"/>. The objects and lists they return keep using that client.
     /// </summary>
     /// <remarks>
-    /// Each method matches the static <see cref="RemoteFile"/> method of the same name. Methods that send a request
+    /// Each method matches the static <see cref="global::FilesCom.Models.RemoteFile"/> method of the same name. Methods that send a request
     /// are named with Async and take a cancellation token. The dictionaries you pass are copied, never changed.
     /// </remarks>
     public sealed class RemoteFileOperations
@@ -30,10 +33,12 @@ namespace FilesCom.Operations
         /// Makes a RemoteFile that belongs to this client, without sending a request. Its methods, such as SaveAsync,
         /// then run with this client.
         /// </summary>
-        public RemoteFile New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public global::FilesCom.Models.RemoteFile New(Dictionary<string, object> attributes = null, Dictionary<string, object> options = null)
         {
-            RemoteFile model = new RemoteFile(DictionaryUtil.Copy(attributes), null);
-            ((IModel)model).SetContext(client, options);
+            global::FilesCom.Models.RemoteFile model = new global::FilesCom.Models.RemoteFile(attributes, null);
+            ((IModel)model).SetContext(client, options, null);
             return model;
         }
 
@@ -47,14 +52,18 @@ namespace FilesCom.Operations
         ///   with_priority_color - boolean - Include file priority color information?
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public Task<RemoteFile> DownloadAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.RemoteFile> DownloadAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.DownloadCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.DownloadCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -78,14 +87,18 @@ namespace FilesCom.Operations
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public Task<RemoteFile> CreateAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.RemoteFile> CreateAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.CreateCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.CreateCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -94,20 +107,28 @@ namespace FilesCom.Operations
         ///   provided_mtime - string - Modified time of file.
         ///   priority_color - string - Priority/Bookmark color of file.
         /// </summary>
-        public Task<RemoteFile> UpdateAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.RemoteFile> UpdateAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.UpdateCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.UpdateCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(
             string path,
             Dictionary<string, object> parameters = null,
@@ -115,13 +136,17 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(
             string path,
             Dictionary<string, object> parameters = null,
@@ -129,7 +154,7 @@ namespace FilesCom.Operations
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.DeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -139,14 +164,18 @@ namespace FilesCom.Operations
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public Task<RemoteFile> FindAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.RemoteFile> FindAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.FindCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.FindCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -156,27 +185,35 @@ namespace FilesCom.Operations
         ///   with_previews - boolean - Include file preview information?
         ///   with_priority_color - boolean - Include file priority color information?
         /// </summary>
-        public Task<RemoteFile> GetAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.RemoteFile> GetAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.FindCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.FindCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
         /// List the contents of a ZIP file
         /// </summary>
-        public Task<ZipListEntry[]> ZipListContentsAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation takes no parameters besides path.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.ZipListEntry[]> ZipListContentsAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.ZipListContentsCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.ZipListContentsCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -185,14 +222,18 @@ namespace FilesCom.Operations
         /// Parameters:
         ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
-        public Task<FileAction> BeginDeleteAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> BeginDeleteAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.BeginDeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.BeginDeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -204,14 +245,18 @@ namespace FilesCom.Operations
         ///   structure - boolean - Copy structure only?
         ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
-        public Task<FileAction> CopyAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> CopyAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.CopyCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.CopyCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -221,14 +266,18 @@ namespace FilesCom.Operations
         ///   destination (required) - string - Move destination path.
         ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
-        public Task<FileAction> MoveAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> MoveAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.MoveCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.MoveCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -243,14 +292,18 @@ namespace FilesCom.Operations
         ///   height - int64 - Maximum output height for image_convert.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public Task<FileAction> TransformAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> TransformAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.TransformCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.TransformCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -264,14 +317,18 @@ namespace FilesCom.Operations
         ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public Task<FileAction> GpgDecryptAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> GpgDecryptAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.GpgDecryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.GpgDecryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -285,14 +342,18 @@ namespace FilesCom.Operations
         ///   armor - boolean - Output ASCII-armored encrypted data.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public Task<FileAction> GpgEncryptAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> GpgEncryptAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.GpgEncryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.GpgEncryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -303,14 +364,18 @@ namespace FilesCom.Operations
         ///   filename - string - Optional single entry filename to extract.
         ///   overwrite - boolean - Overwrite existing files in the destination?
         /// </summary>
-        public Task<FileAction> UnzipAsync(
+        /// <param name="path">ZIP file path to extract.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> UnzipAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.UnzipCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.UnzipCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -319,14 +384,17 @@ namespace FilesCom.Operations
         ///   destination (required) - string - Destination file path for the ZIP.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        public Task<FileAction> ZipAsync(
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> ZipAsync(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.ZipCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.ZipCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -343,14 +411,56 @@ namespace FilesCom.Operations
         ///   buffered_upload - boolean - If true, and the path refers to a destination not stored on Files.com (such as a remote server mount), the upload will be uploaded first to Files.com before being sent to the remote server mount. This can allow clients to upload using parallel parts to a remote server destination that does not offer parallel parts support natively.
         ///   with_direct_connection_info - boolean - Include optional direct connection information for a direct Agent transfer attempt?
         /// </summary>
-        public Task<FileUploadPart[]> BeginUploadAsync(
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileUploadPart[]> BeginUploadAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return RemoteFile.BeginUploadCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.BeginUploadCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Waits until Files.com has nothing at <paramref name="path"/>, checking every <paramref name="pollInterval"/>:
+        /// for example after deleting a folder with its contents, which Files.com may finish after it answers.
+        /// </summary>
+        /// <param name="path">The remote path.</param>
+        /// <param name="pollInterval">How long to wait between checks; one second if null.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">
+        /// Stops waiting. To limit the wait, use a token that cancels itself, for example from
+        /// <see cref="CancellationTokenSource(TimeSpan)"/>.
+        /// </param>
+        /// <remarks>
+        /// Each check asks for the path's details (<see cref="FindAsync"/>), and the wait ends when Files.com answers
+        /// that nothing is there (<see cref="NotFoundException"/>). Other errors end the wait with that error.
+        /// </remarks>
+        /// <exception cref="MissingParameterException"><paramref name="path"/> is null.</exception>
+        /// <exception cref="InvalidParameterException"><paramref name="pollInterval"/> is not positive, or more than <see cref="int.MaxValue"/> milliseconds.</exception>
+        /// <exception cref="ObjectDisposedException">The client has been disposed.</exception>
+        public async Task WaitUntilGoneAsync(string path, TimeSpan? pollInterval = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
+        {
+            if (path == null)
+            {
+                throw MissingParameterException.For(nameof(path));
+            }
+            TimeSpan interval = pollInterval ?? TimeSpan.FromSeconds(1);
+            if (interval <= TimeSpan.Zero || interval.TotalMilliseconds > int.MaxValue)
+            {
+                throw InvalidParameterException.OutOfRange(nameof(pollInterval), interval, "The time between checks must be positive, and at most Int32.MaxValue milliseconds");
+            }
+            // One operation: every check has the client settings and the request options it started with.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            var context = new OperationContext(client);
+            using (OperationContext.OperationScope wait = context.Begin(cancellationToken))
+            {
+                await RemoteFile.WaitUntilGoneCore(context, path, interval, requestOptions, wait.Token);
+            }
         }
 
         /// <summary>
@@ -391,6 +501,10 @@ namespace FilesCom.Operations
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
         /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
+        /// <remarks>
+        /// Sends one part at a time. To send parts in parallel, with progress and limits shared between uploads, use
+        /// <see cref="FilesClient.Transfers"/> instead.
+        /// </remarks>
         public Task<bool> UploadFileAsync(string localPath, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return RemoteFile.UploadFileCore(new OperationContext(client), localPath, destinationPath, DictionaryUtil.Copy(options), DictionaryUtil.Copy(parameters), cancellationToken);
@@ -409,6 +523,10 @@ namespace FilesCom.Operations
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
         /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
+        /// <remarks>
+        /// Sends one part at a time. <see cref="FilesClient.Transfers"/> sends parts in parallel, and leaves the stream
+        /// it reads open.
+        /// </remarks>
         public Task<bool> UploadFileAsync(string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return RemoteFile.UploadFileCore(new OperationContext(client), destinationPath, readStream, fileLength, mTime, DictionaryUtil.Copy(options), DictionaryUtil.Copy(parameters), cancellationToken);
@@ -418,6 +536,12 @@ namespace FilesCom.Operations
         /// Uploads the local file at <paramref name="localPath"/> to the Remote Server with ID <paramref name="remoteServerId"/>,
         /// as <see cref="UploadFileAsync(string, string, Dictionary{string, object}, Dictionary{string, object}, CancellationToken)"/> does.
         /// </summary>
+        /// <param name="localPath">The local file to upload. It is opened, and closed when the task ends.</param>
+        /// <param name="remoteServerId">The ID of the Remote Server.</param>
+        /// <param name="destinationPath">The path to upload to, within the Remote Server. If null, the local file's name.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
+        /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
         public Task<bool> UploadToRemoteServerAsync(string localPath, long remoteServerId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UploadFileAsync(localPath, RemoteFile.UnderscoreUploadDestinationPath("RemoteServers", remoteServerId, localPath, destinationPath), options, parameters, cancellationToken);
@@ -427,6 +551,17 @@ namespace FilesCom.Operations
         /// Uploads <paramref name="fileLength"/> bytes from <paramref name="readStream"/> to the Remote Server with ID <paramref name="remoteServerId"/>,
         /// as <see cref="UploadFileAsync(string, System.IO.Stream, long, DateTime, Dictionary{string, object}, Dictionary{string, object}, CancellationToken)"/> does.
         /// </summary>
+        /// <param name="remoteServerId">The ID of the Remote Server.</param>
+        /// <param name="destinationPath">The path to upload to, within the Remote Server.</param>
+        /// <param name="readStream">
+        /// The stream to read from its current position. The upload takes ownership of it and disposes it when the task
+        /// ends, whether the upload succeeds, fails or is cancelled.
+        /// </param>
+        /// <param name="fileLength">The number of bytes to upload. If the stream ends sooner, the upload fails with <see cref="System.IO.EndOfStreamException"/> and is not completed.</param>
+        /// <param name="mTime">The file's modification time.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
+        /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
         public Task<bool> UploadToRemoteServerAsync(long remoteServerId, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UploadFileAsync(RemoteFile.UnderscoreDestinationPath("RemoteServers", remoteServerId, destinationPath), readStream, fileLength, mTime, options, parameters, cancellationToken);
@@ -435,6 +570,12 @@ namespace FilesCom.Operations
         /// <summary>
         /// Copies the file or folder at <paramref name="path"/> to the Remote Server with ID <paramref name="remoteServerId"/>.
         /// </summary>
+        /// <param name="path">The remote path of the file or folder.</param>
+        /// <param name="remoteServerId">The ID of the Remote Server.</param>
+        /// <param name="destinationPath">The path to copy to, within the Remote Server.</param>
+        /// <param name="parameters">Copy parameters, such as overwrite. The destination is the one <paramref name="destinationPath"/> gives.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<FileAction> CopyToRemoteServerAsync(string path, long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
@@ -445,6 +586,12 @@ namespace FilesCom.Operations
         /// <summary>
         /// Moves the file or folder at <paramref name="path"/> to the Remote Server with ID <paramref name="remoteServerId"/>.
         /// </summary>
+        /// <param name="path">The remote path of the file or folder.</param>
+        /// <param name="remoteServerId">The ID of the Remote Server.</param>
+        /// <param name="destinationPath">The path to move to, within the Remote Server.</param>
+        /// <param name="parameters">Move parameters, such as overwrite. The destination is the one <paramref name="destinationPath"/> gives.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<FileAction> MoveToRemoteServerAsync(string path, long remoteServerId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
@@ -456,6 +603,12 @@ namespace FilesCom.Operations
         /// Uploads the local file at <paramref name="localPath"/> to the Snapshot with ID <paramref name="snapshotId"/>,
         /// as <see cref="UploadFileAsync(string, string, Dictionary{string, object}, Dictionary{string, object}, CancellationToken)"/> does.
         /// </summary>
+        /// <param name="localPath">The local file to upload. It is opened, and closed when the task ends.</param>
+        /// <param name="snapshotId">The ID of the Snapshot.</param>
+        /// <param name="destinationPath">The path to upload to, within the Snapshot. If null, the local file's name.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
+        /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
         public Task<bool> UploadToSnapshotAsync(string localPath, long snapshotId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UploadFileAsync(localPath, RemoteFile.UnderscoreUploadDestinationPath("Snapshots", snapshotId, localPath, destinationPath), options, parameters, cancellationToken);
@@ -465,6 +618,17 @@ namespace FilesCom.Operations
         /// Uploads <paramref name="fileLength"/> bytes from <paramref name="readStream"/> to the Snapshot with ID <paramref name="snapshotId"/>,
         /// as <see cref="UploadFileAsync(string, System.IO.Stream, long, DateTime, Dictionary{string, object}, Dictionary{string, object}, CancellationToken)"/> does.
         /// </summary>
+        /// <param name="snapshotId">The ID of the Snapshot.</param>
+        /// <param name="destinationPath">The path to upload to, within the Snapshot.</param>
+        /// <param name="readStream">
+        /// The stream to read from its current position. The upload takes ownership of it and disposes it when the task
+        /// ends, whether the upload succeeds, fails or is cancelled.
+        /// </param>
+        /// <param name="fileLength">The number of bytes to upload. If the stream ends sooner, the upload fails with <see cref="System.IO.EndOfStreamException"/> and is not completed.</param>
+        /// <param name="mTime">The file's modification time.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
+        /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
         public Task<bool> UploadToSnapshotAsync(long snapshotId, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UploadFileAsync(RemoteFile.UnderscoreDestinationPath("Snapshots", snapshotId, destinationPath), readStream, fileLength, mTime, options, parameters, cancellationToken);
@@ -473,6 +637,12 @@ namespace FilesCom.Operations
         /// <summary>
         /// Copies the file or folder at <paramref name="path"/> to the Snapshot with ID <paramref name="snapshotId"/>.
         /// </summary>
+        /// <param name="path">The remote path of the file or folder.</param>
+        /// <param name="snapshotId">The ID of the Snapshot.</param>
+        /// <param name="destinationPath">The path to copy to, within the Snapshot.</param>
+        /// <param name="parameters">Copy parameters, such as overwrite. The destination is the one <paramref name="destinationPath"/> gives.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<FileAction> CopyToSnapshotAsync(string path, long snapshotId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
@@ -483,6 +653,12 @@ namespace FilesCom.Operations
         /// <summary>
         /// Moves the file or folder at <paramref name="path"/> to the Snapshot with ID <paramref name="snapshotId"/>.
         /// </summary>
+        /// <param name="path">The remote path of the file or folder.</param>
+        /// <param name="snapshotId">The ID of the Snapshot.</param>
+        /// <param name="destinationPath">The path to move to, within the Snapshot.</param>
+        /// <param name="parameters">Move parameters, such as overwrite. The destination is the one <paramref name="destinationPath"/> gives.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<FileAction> MoveToSnapshotAsync(string path, long snapshotId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
@@ -494,6 +670,12 @@ namespace FilesCom.Operations
         /// Uploads the local file at <paramref name="localPath"/> to the Child Site with ID <paramref name="siteId"/>,
         /// as <see cref="UploadFileAsync(string, string, Dictionary{string, object}, Dictionary{string, object}, CancellationToken)"/> does.
         /// </summary>
+        /// <param name="localPath">The local file to upload. It is opened, and closed when the task ends.</param>
+        /// <param name="siteId">The ID of the Child Site.</param>
+        /// <param name="destinationPath">The path to upload to, within the Child Site. If null, the local file's name.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
+        /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
         public Task<bool> UploadToChildSiteAsync(string localPath, long siteId, string destinationPath = null, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UploadFileAsync(localPath, RemoteFile.UnderscoreUploadDestinationPath("Sites", siteId, localPath, destinationPath), options, parameters, cancellationToken);
@@ -503,6 +685,17 @@ namespace FilesCom.Operations
         /// Uploads <paramref name="fileLength"/> bytes from <paramref name="readStream"/> to the Child Site with ID <paramref name="siteId"/>,
         /// as <see cref="UploadFileAsync(string, System.IO.Stream, long, DateTime, Dictionary{string, object}, Dictionary{string, object}, CancellationToken)"/> does.
         /// </summary>
+        /// <param name="siteId">The ID of the Child Site.</param>
+        /// <param name="destinationPath">The path to upload to, within the Child Site.</param>
+        /// <param name="readStream">
+        /// The stream to read from its current position. The upload takes ownership of it and disposes it when the task
+        /// ends, whether the upload succeeds, fails or is cancelled.
+        /// </param>
+        /// <param name="fileLength">The number of bytes to upload. If the stream ends sooner, the upload fails with <see cref="System.IO.EndOfStreamException"/> and is not completed.</param>
+        /// <param name="mTime">The file's modification time.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="parameters">Upload parameters, such as mkdir_parents.</param>
+        /// <param name="cancellationToken">Stops the upload before its next request. If the final request has been sent, the upload may still complete.</param>
         public Task<bool> UploadToChildSiteAsync(long siteId, string destinationPath, System.IO.Stream readStream, Int64 fileLength, DateTime mTime, Dictionary<string, object> options = null, Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UploadFileAsync(RemoteFile.UnderscoreDestinationPath("Sites", siteId, destinationPath), readStream, fileLength, mTime, options, parameters, cancellationToken);
@@ -511,6 +704,12 @@ namespace FilesCom.Operations
         /// <summary>
         /// Copies the file or folder at <paramref name="path"/> to the Child Site with ID <paramref name="siteId"/>.
         /// </summary>
+        /// <param name="path">The remote path of the file or folder.</param>
+        /// <param name="siteId">The ID of the Child Site.</param>
+        /// <param name="destinationPath">The path to copy to, within the Child Site.</param>
+        /// <param name="parameters">Copy parameters, such as overwrite. The destination is the one <paramref name="destinationPath"/> gives.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<FileAction> CopyToChildSiteAsync(string path, long siteId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();
@@ -521,6 +720,12 @@ namespace FilesCom.Operations
         /// <summary>
         /// Moves the file or folder at <paramref name="path"/> to the Child Site with ID <paramref name="siteId"/>.
         /// </summary>
+        /// <param name="path">The remote path of the file or folder.</param>
+        /// <param name="siteId">The ID of the Child Site.</param>
+        /// <param name="destinationPath">The path to move to, within the Child Site.</param>
+        /// <param name="parameters">Move parameters, such as overwrite. The destination is the one <paramref name="destinationPath"/> gives.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<FileAction> MoveToChildSiteAsync(string path, long siteId, string destinationPath, Dictionary<string, object> parameters = null, Dictionary<string, object> options = null, CancellationToken cancellationToken = default)
         {
             parameters = parameters != null ? new Dictionary<string, object>(parameters) : new Dictionary<string, object>();

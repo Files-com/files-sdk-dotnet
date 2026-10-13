@@ -30,7 +30,7 @@
 ## List Ai Assistant Personalities
 
 ```
-Task<FilesList<AiAssistantPersonality>> AiAssistantPersonality.List(
+FilesList<AiAssistantPersonality> AiAssistantPersonality.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -181,7 +181,7 @@ Task client.AiAssistantPersonalities.DeleteAsync(
 ## Update Ai Assistant Personality
 
 ```
-var AiAssistantPersonality = AiAssistantPersonality.Find(1);
+var aiAssistantPersonality = await AiAssistantPersonality.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -189,12 +189,13 @@ parameters.Add("apply_to_all_workspaces", false);
 parameters.Add("name", "Concise Assistant");
 parameters.Add("system_prompt", "Respond as a concise operations assistant.");
 parameters.Add("use_by_default", false);
-parameters.Add("workspace_id", 0);
+parameters.Add("workspace_id", 0L);
 
-AiAssistantPersonality.Update(parameters);
+await aiAssistantPersonality.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `AiAssistantPersonality` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -211,12 +212,11 @@ AiAssistantPersonality.Update(parameters);
 ## Delete Ai Assistant Personality
 
 ```
-var AiAssistantPersonality = AiAssistantPersonality.Find(1);
+var aiAssistantPersonality = await AiAssistantPersonality.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-AiAssistantPersonality.Delete
+await aiAssistantPersonality.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -224,3 +224,14 @@ AiAssistantPersonality.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Ai Assistant Personality ID.
+
+
+---
+
+## Save
+
+```
+await aiAssistantPersonality.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

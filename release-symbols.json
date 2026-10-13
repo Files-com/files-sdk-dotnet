@@ -1,0 +1,6199 @@
+{
+  "format": "files-sdk-dotnet-symbols",
+  "version": 1,
+  "baseline": "established",
+  "models": {
+    "AccountLineItem": {
+      "type": "AccountLineItem",
+      "properties": {
+        "amount": "Amount",
+        "balance": "Balance",
+        "created_at": "CreatedAt",
+        "currency": "Currency",
+        "download_uri": "DownloadUri",
+        "id": "Id",
+        "invoice_line_items": "InvoiceLineItems",
+        "method": "Method",
+        "payment_line_items": "PaymentLineItems",
+        "payment_reversed_at": "PaymentReversedAt",
+        "payment_type": "PaymentType",
+        "site_name": "SiteName",
+        "type": "Type"
+      },
+      "operations": {
+      }
+    },
+    "Action": {
+      "type": "HistoryAction",
+      "properties": {
+        "action": "ActionType",
+        "destination": "Destination",
+        "display": "Display",
+        "failure_type": "FailureType",
+        "id": "Id",
+        "interface": "Interface",
+        "ip": "Ip",
+        "path": "Path",
+        "source": "Source",
+        "targets": "Targets",
+        "user_id": "UserId",
+        "user_is_from_parent_site": "UserIsFromParentSite",
+        "username": "Username",
+        "when": "When"
+      },
+      "operations": {
+      }
+    },
+    "ActionLog": {
+      "type": "ActionLog",
+      "operations_property": "ActionLogs",
+      "properties": {
+        "action": "Action",
+        "created_at": "CreatedAt",
+        "destination": "Destination",
+        "failure_type": "FailureType",
+        "folder": "Folder",
+        "interface": "Interface",
+        "ip": "Ip",
+        "metadata_dm_id": "MetadataDmId",
+        "parent_metadata_dm_id": "ParentMetadataDmId",
+        "path": "Path",
+        "site_id": "SiteId",
+        "src": "Src",
+        "user_id": "UserId",
+        "username": "Username"
+      },
+      "operations": {
+        "GetActionLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /action_logs"
+        }
+      }
+    },
+    "ActionNotificationExport": {
+      "type": "ActionNotificationExport",
+      "operations_property": "ActionNotificationExports",
+      "properties": {
+        "end_at": "EndAt",
+        "export_version": "ExportVersion",
+        "id": "Id",
+        "query_folder": "QueryFolder",
+        "query_message": "QueryMessage",
+        "query_path": "QueryPath",
+        "query_request_method": "QueryRequestMethod",
+        "query_request_url": "QueryRequestUrl",
+        "query_status": "QueryStatus",
+        "query_success": "QuerySuccess",
+        "results_url": "ResultsUrl",
+        "start_at": "StartAt",
+        "status": "Status",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetActionNotificationExportsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /action_notification_exports/{id}"
+        },
+        "PostActionNotificationExports": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /action_notification_exports"
+        }
+      }
+    },
+    "ActionNotificationExportResult": {
+      "type": "ActionNotificationExportResult",
+      "operations_property": "ActionNotificationExportResults",
+      "properties": {
+        "created_at": "CreatedAt",
+        "folder": "Folder",
+        "id": "Id",
+        "message": "Message",
+        "path": "Path",
+        "request_headers": "RequestHeaders",
+        "request_method": "RequestMethod",
+        "request_url": "RequestUrl",
+        "status": "Status",
+        "success": "Success"
+      },
+      "operations": {
+        "GetActionNotificationExportResults": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /action_notification_export_results"
+        }
+      }
+    },
+    "AgentNode": {
+      "type": "AgentNode",
+      "properties": {
+        "availability_role": "AvailabilityRole",
+        "direct_transfer_available": "DirectTransferAvailable",
+        "hostname": "Hostname",
+        "instances": "Instances",
+        "is_default": "IsDefault",
+        "last_seen_at": "LastSeenAt",
+        "name": "Name",
+        "node_id": "NodeId",
+        "status": "Status"
+      },
+      "operations": {
+      }
+    },
+    "AgentNodeConnection": {
+      "type": "AgentNodeConnection",
+      "properties": {
+        "last_seen_at": "LastSeenAt",
+        "mode": "Mode",
+        "status": "Status"
+      },
+      "operations": {
+      }
+    },
+    "AgentNodeInstance": {
+      "type": "AgentNodeInstance",
+      "properties": {
+        "agent_version": "AgentVersion",
+        "connections": "Connections",
+        "instance_id": "InstanceId",
+        "is_default": "IsDefault",
+        "last_seen_at": "LastSeenAt",
+        "process_state": "ProcessState",
+        "status": "Status"
+      },
+      "operations": {
+      }
+    },
+    "AgentPushUpdate": {
+      "type": "AgentPushUpdate",
+      "properties": {
+        "current_version": "CurrentVersion",
+        "error": "Error",
+        "last_error": "LastError",
+        "message": "Message",
+        "pending_version": "PendingVersion",
+        "version": "Version"
+      },
+      "operations": {
+      }
+    },
+    "AiAssistantPersonality": {
+      "type": "AiAssistantPersonality",
+      "operations_property": "AiAssistantPersonalities",
+      "properties": {
+        "apply_to_all_workspaces": "ApplyToAllWorkspaces",
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "name": "Name",
+        "system_prompt": "SystemPrompt",
+        "updated_at": "UpdatedAt",
+        "use_by_default": "UseByDefault",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteAiAssistantPersonalitiesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /ai_assistant_personalities/{id}"
+        },
+        "GetAiAssistantPersonalities": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /ai_assistant_personalities"
+        },
+        "GetAiAssistantPersonalitiesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /ai_assistant_personalities/{id}"
+        },
+        "PatchAiAssistantPersonalitiesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /ai_assistant_personalities/{id}"
+        },
+        "PostAiAssistantPersonalities": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /ai_assistant_personalities"
+        }
+      }
+    },
+    "AiTask": {
+      "type": "AiTask",
+      "operations_property": "AiTasks",
+      "properties": {
+        "created_at": "CreatedAt",
+        "description": "Description",
+        "disabled": "Disabled",
+        "holiday_region": "HolidayRegion",
+        "human_readable_schedule": "HumanReadableSchedule",
+        "id": "Id",
+        "interval": "Interval",
+        "last_run_at": "LastRunAt",
+        "master_admin_user_id": "MasterAdminUserId",
+        "name": "Name",
+        "path": "Path",
+        "permission_set": "PermissionSet",
+        "prompt": "Prompt",
+        "recurring_day": "RecurringDay",
+        "recurring_days": "RecurringDays",
+        "schedule_days_of_week": "ScheduleDaysOfWeek",
+        "schedule_id": "ScheduleId",
+        "schedule_time_zone": "ScheduleTimeZone",
+        "schedule_times_of_day": "ScheduleTimesOfDay",
+        "source": "Source",
+        "trigger": "Trigger",
+        "trigger_actions": "TriggerActions",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "AiTaskManualRun": {
+          "method": "ManualRun",
+          "aliases": [
+
+          ],
+          "route": "POST /ai_tasks/{id}/manual_run"
+        },
+        "DeleteAiTasksId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /ai_tasks/{id}"
+        },
+        "GetAiTasks": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /ai_tasks"
+        },
+        "GetAiTasksId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /ai_tasks/{id}"
+        },
+        "PatchAiTasksId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /ai_tasks/{id}"
+        },
+        "PostAiTasks": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /ai_tasks"
+        }
+      }
+    },
+    "ApiKey": {
+      "type": "ApiKey",
+      "operations_property": "ApiKeys",
+      "properties": {
+        "aws_access_key_id": "AwsAccessKeyId",
+        "aws_secret_key": "AwsSecretKey",
+        "aws_style_credentials": "AwsStyleCredentials",
+        "created_at": "CreatedAt",
+        "description": "Description",
+        "descriptive_label": "DescriptiveLabel",
+        "expires_at": "ExpiresAt",
+        "id": "Id",
+        "key": "Key",
+        "last_use_at": "LastUseAt",
+        "name": "Name",
+        "path": "Path",
+        "permission_set": "PermissionSet",
+        "platform": "Platform",
+        "site_id": "SiteId",
+        "site_name": "SiteName",
+        "url": "Url",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "ApiKeyDeleteCurrent": {
+          "method": "DeleteCurrent",
+          "aliases": [
+
+          ],
+          "route": "DELETE /api_key"
+        },
+        "ApiKeyFindCurrent": {
+          "method": "FindCurrent",
+          "aliases": [
+
+          ],
+          "route": "GET /api_key"
+        },
+        "ApiKeyUpdateCurrent": {
+          "method": "UpdateCurrent",
+          "aliases": [
+
+          ],
+          "route": "PATCH /api_key"
+        },
+        "DeleteApiKeysId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /api_keys/{id}"
+        },
+        "GetApiKeys": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /api_keys"
+        },
+        "GetApiKeysId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /api_keys/{id}"
+        },
+        "PatchApiKeysId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /api_keys/{id}"
+        },
+        "PostApiKeys": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /api_keys"
+        }
+      }
+    },
+    "ApiRequestLog": {
+      "type": "ApiRequestLog",
+      "operations_property": "ApiRequestLogs",
+      "properties": {
+        "api_key_id": "ApiKeyId",
+        "api_key_prefix": "ApiKeyPrefix",
+        "api_name": "ApiName",
+        "created_at": "CreatedAt",
+        "duration_ms": "DurationMs",
+        "error_message": "ErrorMessage",
+        "error_type": "ErrorType",
+        "impersonator_user_id": "ImpersonatorUserId",
+        "interface": "Interface",
+        "request_host": "RequestHost",
+        "request_id": "RequestId",
+        "request_ip": "RequestIp",
+        "request_method": "RequestMethod",
+        "request_path": "RequestPath",
+        "response_code": "ResponseCode",
+        "success": "Success",
+        "timestamp": "Timestamp",
+        "user_agent": "UserAgent",
+        "user_id": "UserId",
+        "user_is_from_parent_site": "UserIsFromParentSite",
+        "username": "Username"
+      },
+      "operations": {
+        "GetApiRequestLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /api_request_logs"
+        }
+      }
+    },
+    "App": {
+      "type": "App",
+      "operations_property": "Apps",
+      "properties": {
+        "app_type": "AppType",
+        "documentation_links": "DocumentationLinks",
+        "extended_description": "ExtendedDescription",
+        "extended_description_for_marketing_site": "ExtendedDescriptionForMarketingSite",
+        "external_homepage_url": "ExternalHomepageUrl",
+        "featured": "Featured",
+        "folder_behavior_type": "FolderBehaviorType",
+        "icon_url": "IconUrl",
+        "logo_thumbnail_url": "LogoThumbnailUrl",
+        "logo_url": "LogoUrl",
+        "marketing_intro": "MarketingIntro",
+        "marketing_youtube_url": "MarketingYoutubeUrl",
+        "name": "Name",
+        "package_manager_install_command": "PackageManagerInstallCommand",
+        "remote_server_type": "RemoteServerType",
+        "screenshot_list_urls": "ScreenshotListUrls",
+        "sdk_installation_instructions_link": "SdkInstallationInstructionsLink",
+        "short_description": "ShortDescription",
+        "siem_type": "SiemType",
+        "sso_strategy_type": "SsoStrategyType",
+        "tutorial_youtube_url": "TutorialYoutubeUrl"
+      },
+      "operations": {
+        "GetApps": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /apps"
+        }
+      }
+    },
+    "As2IncomingMessage": {
+      "type": "As2IncomingMessage",
+      "operations_property": "As2IncomingMessages",
+      "properties": {
+        "as2_from": "As2From",
+        "as2_partner_id": "As2PartnerId",
+        "as2_station_id": "As2StationId",
+        "as2_to": "As2To",
+        "attachment_filename": "AttachmentFilename",
+        "body_size": "BodySize",
+        "content_type": "ContentType",
+        "created_at": "CreatedAt",
+        "date": "Date",
+        "encrypted_uri": "EncryptedUri",
+        "hex_recipient_serial": "HexRecipientSerial",
+        "http_headers": "HttpHeaders",
+        "http_response_code": "HttpResponseCode",
+        "http_response_headers": "HttpResponseHeaders",
+        "id": "Id",
+        "ip": "Ip",
+        "mdn_response_uri": "MdnResponseUri",
+        "message_decrypted": "MessageDecrypted",
+        "message_id": "MessageId",
+        "message_mdn_returned": "MessageMdnReturned",
+        "message_processing_success": "MessageProcessingSuccess",
+        "message_received": "MessageReceived",
+        "message_signature_verified": "MessageSignatureVerified",
+        "mic": "Mic",
+        "mic_algo": "MicAlgo",
+        "processing_result": "ProcessingResult",
+        "processing_result_description": "ProcessingResultDescription",
+        "raw_uri": "RawUri",
+        "recipient_issuer": "RecipientIssuer",
+        "recipient_serial": "RecipientSerial",
+        "smime_signed_uri": "SmimeSignedUri",
+        "smime_uri": "SmimeUri",
+        "subject": "Subject",
+        "uuid": "Uuid",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetAs2IncomingMessages": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /as2_incoming_messages"
+        }
+      }
+    },
+    "As2OutgoingMessage": {
+      "type": "As2OutgoingMessage",
+      "operations_property": "As2OutgoingMessages",
+      "properties": {
+        "as2_from": "As2From",
+        "as2_partner_id": "As2PartnerId",
+        "as2_station_id": "As2StationId",
+        "as2_subject": "As2Subject",
+        "as2_to": "As2To",
+        "attachment_filename": "AttachmentFilename",
+        "body_size": "BodySize",
+        "created_at": "CreatedAt",
+        "date": "Date",
+        "encrypted_uri": "EncryptedUri",
+        "http_headers": "HttpHeaders",
+        "http_response_code": "HttpResponseCode",
+        "http_response_headers": "HttpResponseHeaders",
+        "http_transmission_duration": "HttpTransmissionDuration",
+        "id": "Id",
+        "mdn_message_id_matched": "MdnMessageIdMatched",
+        "mdn_mic_matched": "MdnMicMatched",
+        "mdn_processing_success": "MdnProcessingSuccess",
+        "mdn_received": "MdnReceived",
+        "mdn_response_uri": "MdnResponseUri",
+        "mdn_signature_verified": "MdnSignatureVerified",
+        "mdn_valid": "MdnValid",
+        "message_id": "MessageId",
+        "mic": "Mic",
+        "mic_sha_256": "MicSha256",
+        "processing_result": "ProcessingResult",
+        "processing_result_description": "ProcessingResultDescription",
+        "raw_uri": "RawUri",
+        "smime_signed_uri": "SmimeSignedUri",
+        "smime_uri": "SmimeUri",
+        "uuid": "Uuid",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetAs2OutgoingMessages": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /as2_outgoing_messages"
+        }
+      }
+    },
+    "As2Partner": {
+      "type": "As2Partner",
+      "operations_property": "As2Partners",
+      "properties": {
+        "additional_http_headers": "AdditionalHttpHeaders",
+        "as2_station_id": "As2StationId",
+        "default_mime_type": "DefaultMimeType",
+        "enable_dedicated_ips": "EnableDedicatedIps",
+        "hex_public_certificate_serial": "HexPublicCertificateSerial",
+        "http_auth_password": "HttpAuthPassword",
+        "http_auth_username": "HttpAuthUsername",
+        "id": "Id",
+        "mdn_validation_level": "MdnValidationLevel",
+        "name": "Name",
+        "pkcs12": "Pkcs12",
+        "pkcs12_password": "Pkcs12Password",
+        "public_certificate": "PublicCertificate",
+        "public_certificate_issuer": "PublicCertificateIssuer",
+        "public_certificate_md5": "PublicCertificateMd5",
+        "public_certificate_not_after": "PublicCertificateNotAfter",
+        "public_certificate_not_before": "PublicCertificateNotBefore",
+        "public_certificate_serial": "PublicCertificateSerial",
+        "public_certificate_subject": "PublicCertificateSubject",
+        "server_certificate": "ServerCertificate",
+        "signature_validation_level": "SignatureValidationLevel",
+        "uri": "Uri",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteAs2PartnersId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /as2_partners/{id}"
+        },
+        "GetAs2Partners": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /as2_partners"
+        },
+        "GetAs2PartnersId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /as2_partners/{id}"
+        },
+        "PatchAs2PartnersId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /as2_partners/{id}"
+        },
+        "PostAs2Partners": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /as2_partners"
+        }
+      }
+    },
+    "As2Station": {
+      "type": "As2Station",
+      "operations_property": "As2Stations",
+      "properties": {
+        "domain": "Domain",
+        "hex_public_certificate_serial": "HexPublicCertificateSerial",
+        "id": "Id",
+        "name": "Name",
+        "pkcs12": "Pkcs12",
+        "pkcs12_password": "Pkcs12Password",
+        "private_key": "PrivateKey",
+        "private_key_md5": "PrivateKeyMd5",
+        "private_key_password": "PrivateKeyPassword",
+        "private_key_password_md5": "PrivateKeyPasswordMd5",
+        "public_certificate": "PublicCertificate",
+        "public_certificate_issuer": "PublicCertificateIssuer",
+        "public_certificate_md5": "PublicCertificateMd5",
+        "public_certificate_not_after": "PublicCertificateNotAfter",
+        "public_certificate_not_before": "PublicCertificateNotBefore",
+        "public_certificate_serial": "PublicCertificateSerial",
+        "public_certificate_subject": "PublicCertificateSubject",
+        "uri": "Uri",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteAs2StationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /as2_stations/{id}"
+        },
+        "GetAs2Stations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /as2_stations"
+        },
+        "GetAs2StationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /as2_stations/{id}"
+        },
+        "PatchAs2StationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /as2_stations/{id}"
+        },
+        "PostAs2Stations": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /as2_stations"
+        }
+      }
+    },
+    "Auto": {
+      "type": "Auto",
+      "properties": {
+        "dynamic": "Dynamic"
+      },
+      "operations": {
+      }
+    },
+    "Automation": {
+      "type": "Automation",
+      "operations_property": "Automations",
+      "properties": {
+        "always_overwrite_size_matching_files": "AlwaysOverwriteSizeMatchingFiles",
+        "always_serialize_jobs": "AlwaysSerializeJobs",
+        "automation": "AutomationType",
+        "definition": "Definition",
+        "deleted": "Deleted",
+        "description": "Description",
+        "destination_replace_from": "DestinationReplaceFrom",
+        "destination_replace_to": "DestinationReplaceTo",
+        "destinations": "Destinations",
+        "disabled": "Disabled",
+        "exclude_pattern": "ExcludePattern",
+        "flatten_destination_structure": "FlattenDestinationStructure",
+        "group_ids": "GroupIds",
+        "holiday_region": "HolidayRegion",
+        "human_readable_schedule": "HumanReadableSchedule",
+        "id": "Id",
+        "ignore_locked_folders": "IgnoreLockedFolders",
+        "import_urls": "ImportUrls",
+        "inbound_email_address": "InboundEmailAddress",
+        "interval": "Interval",
+        "last_modified_at": "LastModifiedAt",
+        "legacy_folder_matching": "LegacyFolderMatching",
+        "name": "Name",
+        "overwrite_files": "OverwriteFiles",
+        "path": "Path",
+        "path_time_zone": "PathTimeZone",
+        "recurring_day": "RecurringDay",
+        "recurring_days": "RecurringDays",
+        "retry_on_failure_interval_in_minutes": "RetryOnFailureIntervalInMinutes",
+        "retry_on_failure_number_of_attempts": "RetryOnFailureNumberOfAttempts",
+        "schedule": "Schedule",
+        "schedule_days_of_week": "ScheduleDaysOfWeek",
+        "schedule_id": "ScheduleId",
+        "schedule_time_zone": "ScheduleTimeZone",
+        "schedule_times_of_day": "ScheduleTimesOfDay",
+        "source": "Source",
+        "sync_ids": "SyncIds",
+        "trigger": "Trigger",
+        "trigger_actions": "TriggerActions",
+        "user_id": "UserId",
+        "user_ids": "UserIds",
+        "value": "Value",
+        "version": "Version",
+        "webhook_url": "WebhookUrl",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "AutomationManualRun": {
+          "method": "ManualRun",
+          "aliases": [
+
+          ],
+          "route": "POST /automations/{id}/manual_run"
+        },
+        "AutomationUpgrade": {
+          "method": "Upgrade",
+          "aliases": [
+
+          ],
+          "route": "POST /automations/{id}/upgrade"
+        },
+        "DeleteAutomationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /automations/{id}"
+        },
+        "GetAutomations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /automations"
+        },
+        "GetAutomationsAuthoringSchema": {
+          "method": "GetAuthoringSchema",
+          "aliases": [
+
+          ],
+          "route": "GET /automations/authoring_schema"
+        },
+        "GetAutomationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /automations/{id}"
+        },
+        "PatchAutomationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /automations/{id}"
+        },
+        "PostAutomations": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /automations"
+        }
+      }
+    },
+    "AutomationAuthoringSchema": {
+      "type": "AutomationAuthoringSchema",
+      "properties": {
+        "definition_schema": "DefinitionSchema",
+        "error_families": "ErrorFamilies",
+        "nodes": "Nodes",
+        "schema_url": "SchemaUrl"
+      },
+      "operations": {
+      }
+    },
+    "AutomationExecutionNode": {
+      "type": "AutomationExecutionNode",
+      "properties": {
+        "completed_at": "CompletedAt",
+        "duration_ms": "DurationMs",
+        "failed_operations": "FailedOperations",
+        "input_items": "InputItems",
+        "inputs": "Inputs",
+        "node_id": "NodeId",
+        "node_type": "NodeType",
+        "output_items": "OutputItems",
+        "outputs": "Outputs",
+        "reused": "Reused",
+        "run_stage": "RunStage",
+        "started_at": "StartedAt",
+        "status": "Status",
+        "successful_operations": "SuccessfulOperations"
+      },
+      "operations": {
+      }
+    },
+    "AutomationLog": {
+      "type": "AutomationLog",
+      "operations_property": "AutomationLogs",
+      "properties": {
+        "automation_id": "AutomationId",
+        "automation_run_id": "AutomationRunId",
+        "correlation_id": "CorrelationId",
+        "created_at": "CreatedAt",
+        "dest_path": "DestPath",
+        "error_type": "ErrorType",
+        "message": "Message",
+        "node_id": "NodeId",
+        "node_type": "NodeType",
+        "operation": "Operation",
+        "output": "Output",
+        "path": "Path",
+        "source_automation_id": "SourceAutomationId",
+        "source_automation_version": "SourceAutomationVersion",
+        "status": "Status",
+        "timestamp": "Timestamp"
+      },
+      "operations": {
+        "GetAutomationLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /automation_logs"
+        }
+      }
+    },
+    "AutomationRun": {
+      "type": "AutomationRun",
+      "operations_property": "AutomationRuns",
+      "properties": {
+        "automation_id": "AutomationId",
+        "automation_version_id": "AutomationVersionId",
+        "cancel_requested_at": "CancelRequestedAt",
+        "completed_at": "CompletedAt",
+        "created_at": "CreatedAt",
+        "definition": "Definition",
+        "execution_nodes": "ExecutionNodes",
+        "failed_operations": "FailedOperations",
+        "id": "Id",
+        "journal_url": "JournalUrl",
+        "node_states": "NodeStates",
+        "rerun_from_node_id": "RerunFromNodeId",
+        "rerun_of_run_id": "RerunOfRunId",
+        "retried_at": "RetriedAt",
+        "retried_in_run_id": "RetriedInRunId",
+        "retry_at": "RetryAt",
+        "retry_of_run_id": "RetryOfRunId",
+        "runtime": "Runtime",
+        "status": "Status",
+        "status_messages_url": "StatusMessagesUrl",
+        "successful_operations": "SuccessfulOperations",
+        "version": "Version",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetAutomationRuns": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /automation_runs"
+        },
+        "GetAutomationRunsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /automation_runs/{id}"
+        },
+        "GetAutomationRunsIdNode": {
+          "method": "FindNode",
+          "aliases": [
+
+          ],
+          "route": "GET /automation_runs/{id}/node"
+        },
+        "PostAutomationRunsIdCancel": {
+          "method": "Cancel",
+          "aliases": [
+
+          ],
+          "route": "POST /automation_runs/{id}/cancel"
+        },
+        "PostAutomationRunsIdRerun": {
+          "method": "Rerun",
+          "aliases": [
+
+          ],
+          "route": "POST /automation_runs/{id}/rerun"
+        }
+      }
+    },
+    "BandwidthSnapshot": {
+      "type": "BandwidthSnapshot",
+      "operations_property": "BandwidthSnapshots",
+      "properties": {
+        "bytes_received": "BytesReceived",
+        "bytes_sent": "BytesSent",
+        "id": "Id",
+        "logged_at": "LoggedAt",
+        "requests_get": "RequestsGet",
+        "requests_other": "RequestsOther",
+        "requests_put": "RequestsPut",
+        "sync_bytes_received": "SyncBytesReceived",
+        "sync_bytes_sent": "SyncBytesSent"
+      },
+      "operations": {
+        "GetBandwidthSnapshots": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bandwidth_snapshots"
+        }
+      }
+    },
+    "Behavior": {
+      "type": "Behavior",
+      "operations_property": "Behaviors",
+      "properties": {
+        "attachment_delete": "AttachmentDelete",
+        "attachment_file": "AttachmentFile",
+        "attachment_url": "AttachmentUrl",
+        "behavior": "BehaviorType",
+        "description": "Description",
+        "disable_parent_folder_behavior": "DisableParentFolderBehavior",
+        "id": "Id",
+        "inherited": "Inherited",
+        "managed": "Managed",
+        "name": "Name",
+        "path": "Path",
+        "public_hosting_url": "PublicHostingUrl",
+        "recursive": "Recursive",
+        "root_behavior_site_admin_only": "RootBehaviorSiteAdminOnly",
+        "value": "Value"
+      },
+      "operations": {
+        "BehaviorListForPath": {
+          "method": "ListFor",
+          "aliases": [
+
+          ],
+          "route": "GET /behaviors/folders/{path}"
+        },
+        "DeleteBehaviorsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /behaviors/{id}"
+        },
+        "GetBehaviors": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /behaviors"
+        },
+        "GetBehaviorsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /behaviors/{id}"
+        },
+        "PatchBehaviorsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /behaviors/{id}"
+        },
+        "PostBehaviors": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /behaviors"
+        },
+        "PostBehaviorsWebhookTest": {
+          "method": "WebhookTest",
+          "aliases": [
+
+          ],
+          "route": "POST /behaviors/webhook/test"
+        }
+      }
+    },
+    "Bundle": {
+      "type": "Bundle",
+      "operations_property": "Bundles",
+      "properties": {
+        "bundlepaths": "Bundlepaths",
+        "bypasses_site_expiration_rules": "BypassesSiteExpirationRules",
+        "clickwrap_body": "ClickwrapBody",
+        "clickwrap_id": "ClickwrapId",
+        "code": "Code",
+        "color_left": "ColorLeft",
+        "color_link": "ColorLink",
+        "color_text": "ColorText",
+        "color_top": "ColorTop",
+        "color_top_text": "ColorTopText",
+        "create_snapshot": "CreateSnapshot",
+        "created_at": "CreatedAt",
+        "deleted": "Deleted",
+        "deleted_at": "DeletedAt",
+        "description": "Description",
+        "dont_allow_folders_in_uploads": "DontAllowFoldersInUploads",
+        "dont_separate_submissions_by_folder": "DontSeparateSubmissionsByFolder",
+        "effective_expires_at": "EffectiveExpiresAt",
+        "expires_at": "ExpiresAt",
+        "finalize_snapshot": "FinalizeSnapshot",
+        "form_field_set": "FormFieldSet",
+        "form_field_set_id": "FormFieldSetId",
+        "group_id": "GroupId",
+        "has_inbox": "HasInbox",
+        "id": "Id",
+        "inbox_id": "InboxId",
+        "internal_name": "InternalName",
+        "max_uses": "MaxUses",
+        "note": "Note",
+        "password": "Password",
+        "password_protected": "PasswordProtected",
+        "path_template": "PathTemplate",
+        "path_template_time_zone": "PathTemplateTimeZone",
+        "paths": "Paths",
+        "permissions": "Permissions",
+        "preview_only": "PreviewOnly",
+        "requested_upload_slots": "RequestedUploadSlots",
+        "require_logout": "RequireLogout",
+        "require_registration": "RequireRegistration",
+        "require_share_recipient": "RequireShareRecipient",
+        "send_email_receipt_to_uploader": "SendEmailReceiptToUploader",
+        "send_one_time_password_to_recipient_at_registration": "SendOneTimePasswordToRecipientAtRegistration",
+        "skip_company": "SkipCompany",
+        "skip_email": "SkipEmail",
+        "skip_name": "SkipName",
+        "snapshot_id": "SnapshotId",
+        "start_access_on_date": "StartAccessOnDate",
+        "url": "Url",
+        "user_id": "UserId",
+        "username": "Username",
+        "watermark_attachment": "WatermarkAttachment",
+        "watermark_attachment_delete": "WatermarkAttachmentDelete",
+        "watermark_attachment_file": "WatermarkAttachmentFile",
+        "watermark_value": "WatermarkValue",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteBundlesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /bundles/{id}"
+        },
+        "GetBundles": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bundles"
+        },
+        "GetBundlesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /bundles/{id}"
+        },
+        "PatchBundlesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /bundles/{id}"
+        },
+        "PostBundles": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /bundles"
+        },
+        "PostBundlesIdShare": {
+          "method": "Share",
+          "aliases": [
+
+          ],
+          "route": "POST /bundles/{id}/share"
+        }
+      }
+    },
+    "BundleAction": {
+      "type": "BundleAction",
+      "operations_property": "BundleActions",
+      "properties": {
+        "action": "Action",
+        "bundle_registration": "BundleRegistration",
+        "bundle_registration_email": "BundleRegistrationEmail",
+        "bundle_registration_id": "BundleRegistrationId",
+        "bundle_registration_ip": "BundleRegistrationIp",
+        "bundle_registration_name": "BundleRegistrationName",
+        "created_at": "CreatedAt",
+        "destination": "Destination",
+        "form_field_data": "FormFieldData",
+        "form_field_set_id": "FormFieldSetId",
+        "path": "Path",
+        "source": "Source",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetBundleActions": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bundle_actions"
+        }
+      }
+    },
+    "BundleDownload": {
+      "type": "BundleDownload",
+      "operations_property": "BundleDownloads",
+      "properties": {
+        "bundle_registration": "BundleRegistration",
+        "created_at": "CreatedAt",
+        "download_method": "DownloadMethod",
+        "path": "Path",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetBundleDownloads": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bundle_downloads"
+        }
+      }
+    },
+    "BundleNotification": {
+      "type": "BundleNotification",
+      "operations_property": "BundleNotifications",
+      "properties": {
+        "bundle_id": "BundleId",
+        "id": "Id",
+        "notify_current_user": "NotifyCurrentUser",
+        "notify_on_registration": "NotifyOnRegistration",
+        "notify_on_upload": "NotifyOnUpload",
+        "notify_user_id": "NotifyUserId",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteBundleNotificationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /bundle_notifications/{id}"
+        },
+        "GetBundleNotifications": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bundle_notifications"
+        },
+        "GetBundleNotificationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /bundle_notifications/{id}"
+        },
+        "PatchBundleNotificationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /bundle_notifications/{id}"
+        },
+        "PostBundleNotifications": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /bundle_notifications"
+        }
+      }
+    },
+    "BundlePath": {
+      "type": "BundlePath",
+      "properties": {
+        "path": "Path",
+        "recursive": "Recursive"
+      },
+      "operations": {
+      }
+    },
+    "BundleRecipient": {
+      "type": "BundleRecipient",
+      "operations_property": "BundleRecipients",
+      "properties": {
+        "bundle_id": "BundleId",
+        "company": "Company",
+        "name": "Name",
+        "note": "Note",
+        "recipient": "Recipient",
+        "sent_at": "SentAt",
+        "share_after_create": "ShareAfterCreate",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetBundleRecipients": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bundle_recipients"
+        },
+        "PostBundleRecipients": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /bundle_recipients"
+        }
+      }
+    },
+    "BundleRegistration": {
+      "type": "BundleRegistration",
+      "operations_property": "BundleRegistrations",
+      "properties": {
+        "bundle_code": "BundleCode",
+        "bundle_id": "BundleId",
+        "bundle_recipient_id": "BundleRecipientId",
+        "clickwrap_body": "ClickwrapBody",
+        "code": "Code",
+        "company": "Company",
+        "created_at": "CreatedAt",
+        "email": "Email",
+        "form_field_data": "FormFieldData",
+        "form_field_set_id": "FormFieldSetId",
+        "inbox_code": "InboxCode",
+        "ip": "Ip",
+        "name": "Name",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetBundleRegistrations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /bundle_registrations"
+        }
+      }
+    },
+    "ChatMessage": {
+      "type": "ChatMessage",
+      "properties": {
+        "content": "Content",
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "role": "Role"
+      },
+      "operations": {
+      }
+    },
+    "ChatSession": {
+      "type": "ChatSession",
+      "operations_property": "ChatSessions",
+      "properties": {
+        "ai_task_id": "AiTaskId",
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "last_active_at": "LastActiveAt",
+        "messages": "Messages",
+        "title": "Title",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetChatSessions": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /chat_sessions"
+        },
+        "GetChatSessionsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /chat_sessions/{id}"
+        }
+      }
+    },
+    "ChildSiteManagementPolicy": {
+      "type": "ChildSiteManagementPolicy",
+      "operations_property": "ChildSiteManagementPolicies",
+      "properties": {
+        "applied_child_site_ids": "AppliedChildSiteIds",
+        "child_site_ids": "ChildSiteIds",
+        "created_at": "CreatedAt",
+        "default_policy": "DefaultPolicy",
+        "description": "Description",
+        "id": "Id",
+        "name": "Name",
+        "policy_type": "PolicyType",
+        "skip_child_site_ids": "SkipChildSiteIds",
+        "updated_at": "UpdatedAt",
+        "value": "Value"
+      },
+      "operations": {
+        "DeleteChildSiteManagementPoliciesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /child_site_management_policies/{id}"
+        },
+        "GetChildSiteManagementPolicies": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /child_site_management_policies"
+        },
+        "GetChildSiteManagementPoliciesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /child_site_management_policies/{id}"
+        },
+        "PatchChildSiteManagementPoliciesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /child_site_management_policies/{id}"
+        },
+        "PostChildSiteManagementPolicies": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /child_site_management_policies"
+        }
+      }
+    },
+    "Clickwrap": {
+      "type": "Clickwrap",
+      "operations_property": "Clickwraps",
+      "properties": {
+        "body": "Body",
+        "id": "Id",
+        "name": "Name",
+        "use_with_bundles": "UseWithBundles",
+        "use_with_inboxes": "UseWithInboxes",
+        "use_with_users": "UseWithUsers"
+      },
+      "operations": {
+        "DeleteClickwrapsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /clickwraps/{id}"
+        },
+        "GetClickwraps": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /clickwraps"
+        },
+        "GetClickwrapsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /clickwraps/{id}"
+        },
+        "PatchClickwrapsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /clickwraps/{id}"
+        },
+        "PostClickwraps": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /clickwraps"
+        }
+      }
+    },
+    "CustomDomain": {
+      "type": "CustomDomain",
+      "operations_property": "CustomDomains",
+      "properties": {
+        "available_to_all_workspaces": "AvailableToAllWorkspaces",
+        "brick_managed": "BrickManaged",
+        "created_at": "CreatedAt",
+        "destination": "Destination",
+        "dns_status": "DnsStatus",
+        "domain": "Domain",
+        "folder_behavior_id": "FolderBehaviorId",
+        "id": "Id",
+        "ip_addresses": "IpAddresses",
+        "outbound_ip_addresses": "OutboundIpAddresses",
+        "ssl_certificate_id": "SslCertificateId",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteCustomDomainsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /custom_domains/{id}"
+        },
+        "GetCustomDomains": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /custom_domains"
+        },
+        "GetCustomDomainsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /custom_domains/{id}"
+        },
+        "PatchCustomDomainsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /custom_domains/{id}"
+        },
+        "PostCustomDomains": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /custom_domains"
+        },
+        "PostCustomDomainsIdAllocateIps": {
+          "method": "CreateAllocateIp",
+          "aliases": [
+
+          ],
+          "route": "POST /custom_domains/{id}/allocate_ips"
+        }
+      }
+    },
+    "DesktopConfigurationProfile": {
+      "type": "DesktopConfigurationProfile",
+      "operations_property": "DesktopConfigurationProfiles",
+      "properties": {
+        "disable_drive_mounting": "DisableDriveMounting",
+        "id": "Id",
+        "mount_mappings": "MountMappings",
+        "name": "Name",
+        "use_for_all_users": "UseForAllUsers",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteDesktopConfigurationProfilesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /desktop_configuration_profiles/{id}"
+        },
+        "GetDesktopConfigurationProfiles": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /desktop_configuration_profiles"
+        },
+        "GetDesktopConfigurationProfilesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /desktop_configuration_profiles/{id}"
+        },
+        "PatchDesktopConfigurationProfilesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /desktop_configuration_profiles/{id}"
+        },
+        "PostDesktopConfigurationProfiles": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /desktop_configuration_profiles"
+        }
+      }
+    },
+    "DirectConnectionInfo": {
+      "type": "DirectConnectionInfo",
+      "properties": {
+        "addresses": "Addresses",
+        "ca_pem": "CaPem",
+        "direct_uri": "DirectUri",
+        "server_name": "ServerName",
+        "version": "Version"
+      },
+      "operations": {
+      }
+    },
+    "DnsRecord": {
+      "type": "DnsRecord",
+      "operations_property": "DnsRecords",
+      "properties": {
+        "domain": "Domain",
+        "id": "Id",
+        "rrtype": "Rrtype",
+        "value": "Value"
+      },
+      "operations": {
+        "GetDnsRecords": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /dns_records"
+        }
+      }
+    },
+    "EmailIncomingMessage": {
+      "type": "EmailIncomingMessage",
+      "operations_property": "EmailIncomingMessages",
+      "properties": {
+        "body": "Body",
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "inbox_id": "InboxId",
+        "inbox_title": "InboxTitle",
+        "message": "Message",
+        "sender": "Sender",
+        "sender_name": "SenderName",
+        "status": "Status"
+      },
+      "operations": {
+        "GetEmailIncomingMessages": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /email_incoming_messages"
+        }
+      }
+    },
+    "EmailLog": {
+      "type": "EmailLog",
+      "operations_property": "EmailLogs",
+      "properties": {
+        "cc": "Cc",
+        "created_at": "CreatedAt",
+        "delivery_method": "DeliveryMethod",
+        "message": "Message",
+        "smtp_hostname": "SmtpHostname",
+        "smtp_ip": "SmtpIp",
+        "status": "Status",
+        "subject": "Subject",
+        "timestamp": "Timestamp",
+        "to": "To"
+      },
+      "operations": {
+        "GetEmailLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /email_logs"
+        }
+      }
+    },
+    "Errors": {
+      "type": "Errors",
+      "properties": {
+        "fields": "Fields",
+        "messages": "Messages"
+      },
+      "operations": {
+      }
+    },
+    "EventChannel": {
+      "type": "EventChannel",
+      "operations_property": "EventChannels",
+      "properties": {
+        "created_at": "CreatedAt",
+        "default_channel": "DefaultChannel",
+        "description": "Description",
+        "enabled": "Enabled",
+        "id": "Id",
+        "name": "Name",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteEventChannelsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /event_channels/{id}"
+        },
+        "GetEventChannels": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /event_channels"
+        },
+        "GetEventChannelsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /event_channels/{id}"
+        },
+        "PatchEventChannelsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /event_channels/{id}"
+        },
+        "PostEventChannels": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /event_channels"
+        }
+      }
+    },
+    "EventDeliveryAttempt": {
+      "type": "EventDeliveryAttempt",
+      "operations_property": "EventDeliveryAttempts",
+      "properties": {
+        "activity_notification_batch_id": "ActivityNotificationBatchId",
+        "attempt_number": "AttemptNumber",
+        "created_at": "CreatedAt",
+        "delivered_at": "DeliveredAt",
+        "error_message": "ErrorMessage",
+        "event_record_id": "EventRecordId",
+        "event_subscription_id": "EventSubscriptionId",
+        "event_target_id": "EventTargetId",
+        "id": "Id",
+        "last_attempted_at": "LastAttemptedAt",
+        "latency_ms": "LatencyMs",
+        "next_attempt_at": "NextAttemptAt",
+        "response_body": "ResponseBody",
+        "response_code": "ResponseCode",
+        "status": "Status",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetEventDeliveryAttempts": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /event_delivery_attempts"
+        },
+        "GetEventDeliveryAttemptsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /event_delivery_attempts/{id}"
+        }
+      }
+    },
+    "EventRecord": {
+      "type": "EventRecord",
+      "operations_property": "EventRecords",
+      "properties": {
+        "actor": "Actor",
+        "created_at": "CreatedAt",
+        "event_type": "EventType",
+        "event_uuid": "EventUuid",
+        "human_fields": "HumanFields",
+        "human_summary": "HumanSummary",
+        "human_title": "HumanTitle",
+        "id": "Id",
+        "occurred_at": "OccurredAt",
+        "payload": "Payload",
+        "resources": "Resources",
+        "severity": "Severity",
+        "source_id": "SourceId",
+        "source_type": "SourceType",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetEventRecords": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /event_records"
+        },
+        "GetEventRecordsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /event_records/{id}"
+        }
+      }
+    },
+    "EventSubscription": {
+      "type": "EventSubscription",
+      "operations_property": "EventSubscriptions",
+      "properties": {
+        "apply_to_all_workspaces": "ApplyToAllWorkspaces",
+        "created_at": "CreatedAt",
+        "delivery_policy": "DeliveryPolicy",
+        "enabled": "Enabled",
+        "event_channel_id": "EventChannelId",
+        "event_target_ids": "EventTargetIds",
+        "event_types": "EventTypes",
+        "filter": "Filter",
+        "id": "Id",
+        "message": "Message",
+        "message_only": "MessageOnly",
+        "name": "Name",
+        "subject": "Subject",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteEventSubscriptionsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /event_subscriptions/{id}"
+        },
+        "GetEventSubscriptions": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /event_subscriptions"
+        },
+        "GetEventSubscriptionsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /event_subscriptions/{id}"
+        },
+        "PatchEventSubscriptionsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /event_subscriptions/{id}"
+        },
+        "PostEventSubscriptions": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /event_subscriptions"
+        }
+      }
+    },
+    "EventTarget": {
+      "type": "EventTarget",
+      "operations_property": "EventTargets",
+      "properties": {
+        "apply_to_all_workspaces": "ApplyToAllWorkspaces",
+        "config": "Config",
+        "created_at": "CreatedAt",
+        "delivery_policy": "DeliveryPolicy",
+        "enabled": "Enabled",
+        "id": "Id",
+        "name": "Name",
+        "target_type": "TargetType",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteEventTargetsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /event_targets/{id}"
+        },
+        "GetEventTargets": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /event_targets"
+        },
+        "GetEventTargetsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /event_targets/{id}"
+        },
+        "PatchEventTargetsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /event_targets/{id}"
+        },
+        "PostEventTargets": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /event_targets"
+        }
+      }
+    },
+    "ExavaultApiRequestLog": {
+      "type": "ExavaultApiRequestLog",
+      "operations_property": "ExavaultApiRequestLogs",
+      "properties": {
+        "created_at": "CreatedAt",
+        "duration_ms": "DurationMs",
+        "endpoint": "Endpoint",
+        "error_message": "ErrorMessage",
+        "error_type": "ErrorType",
+        "request_ip": "RequestIp",
+        "request_method": "RequestMethod",
+        "response_code": "ResponseCode",
+        "success": "Success",
+        "timestamp": "Timestamp",
+        "user_agent": "UserAgent",
+        "version": "Version"
+      },
+      "operations": {
+        "GetExavaultApiRequestLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /exavault_api_request_logs"
+        }
+      }
+    },
+    "Expectation": {
+      "type": "Expectation",
+      "operations_property": "Expectations",
+      "properties": {
+        "created_at": "CreatedAt",
+        "criteria": "Criteria",
+        "description": "Description",
+        "disabled": "Disabled",
+        "exclude_pattern": "ExcludePattern",
+        "expectations_version": "ExpectationsVersion",
+        "holiday_region": "HolidayRegion",
+        "id": "Id",
+        "inactivity_interval": "InactivityInterval",
+        "interval": "Interval",
+        "last_evaluated_at": "LastEvaluatedAt",
+        "last_failure_at": "LastFailureAt",
+        "last_result": "LastResult",
+        "last_success_at": "LastSuccessAt",
+        "late_acceptance_interval": "LateAcceptanceInterval",
+        "lookback_interval": "LookbackInterval",
+        "max_open_interval": "MaxOpenInterval",
+        "name": "Name",
+        "path": "Path",
+        "recurring_day": "RecurringDay",
+        "recurring_days": "RecurringDays",
+        "schedule_days_of_week": "ScheduleDaysOfWeek",
+        "schedule_id": "ScheduleId",
+        "schedule_time_zone": "ScheduleTimeZone",
+        "schedule_times_of_day": "ScheduleTimesOfDay",
+        "source": "Source",
+        "trigger": "Trigger",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteExpectationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /expectations/{id}"
+        },
+        "GetExpectations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /expectations"
+        },
+        "GetExpectationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /expectations/{id}"
+        },
+        "PatchExpectationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /expectations/{id}"
+        },
+        "PostExpectations": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /expectations"
+        },
+        "PostExpectationsIdTriggerEvaluation": {
+          "method": "TriggerEvaluation",
+          "aliases": [
+
+          ],
+          "route": "POST /expectations/{id}/trigger_evaluation"
+        }
+      }
+    },
+    "ExpectationEvaluation": {
+      "type": "ExpectationEvaluation",
+      "operations_property": "ExpectationEvaluations",
+      "properties": {
+        "closed_at": "ClosedAt",
+        "created_at": "CreatedAt",
+        "criteria_errors": "CriteriaErrors",
+        "deadline_at": "DeadlineAt",
+        "expectation_id": "ExpectationId",
+        "hard_close_at": "HardCloseAt",
+        "id": "Id",
+        "late_acceptance_cutoff_at": "LateAcceptanceCutoffAt",
+        "matched_files": "MatchedFiles",
+        "missing_files": "MissingFiles",
+        "opened_at": "OpenedAt",
+        "opened_via": "OpenedVia",
+        "status": "Status",
+        "summary": "Summary",
+        "updated_at": "UpdatedAt",
+        "window_end_at": "WindowEndAt",
+        "window_start_at": "WindowStartAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetExpectationEvaluations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /expectation_evaluations"
+        },
+        "GetExpectationEvaluationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /expectation_evaluations/{id}"
+        }
+      }
+    },
+    "ExpectationIncident": {
+      "type": "ExpectationIncident",
+      "operations_property": "ExpectationIncidents",
+      "properties": {
+        "acknowledged_at": "AcknowledgedAt",
+        "created_at": "CreatedAt",
+        "expectation_id": "ExpectationId",
+        "id": "Id",
+        "last_evaluation_id": "LastEvaluationId",
+        "last_failed_at": "LastFailedAt",
+        "opened_at": "OpenedAt",
+        "opened_by_evaluation_id": "OpenedByEvaluationId",
+        "resolved_at": "ResolvedAt",
+        "resolved_by_evaluation_id": "ResolvedByEvaluationId",
+        "snoozed_until": "SnoozedUntil",
+        "status": "Status",
+        "summary": "Summary",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetExpectationIncidents": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /expectation_incidents"
+        },
+        "GetExpectationIncidentsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /expectation_incidents/{id}"
+        },
+        "PostExpectationIncidentsIdAcknowledge": {
+          "method": "Acknowledge",
+          "aliases": [
+
+          ],
+          "route": "POST /expectation_incidents/{id}/acknowledge"
+        },
+        "PostExpectationIncidentsIdResolve": {
+          "method": "Resolve",
+          "aliases": [
+
+          ],
+          "route": "POST /expectation_incidents/{id}/resolve"
+        },
+        "PostExpectationIncidentsIdSnooze": {
+          "method": "Snooze",
+          "aliases": [
+
+          ],
+          "route": "POST /expectation_incidents/{id}/snooze"
+        }
+      }
+    },
+    "ExternalEvent": {
+      "type": "ExternalEvent",
+      "operations_property": "ExternalEvents",
+      "properties": {
+        "body": "Body",
+        "body_url": "BodyUrl",
+        "created_at": "CreatedAt",
+        "event_type": "EventType",
+        "id": "Id",
+        "status": "Status"
+      },
+      "operations": {
+        "GetExternalEvents": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /external_events"
+        },
+        "GetExternalEventsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /external_events/{id}"
+        },
+        "PostExternalEvents": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /external_events"
+        }
+      }
+    },
+    "File": {
+      "type": "RemoteFile",
+      "operations_property": "RemoteFiles",
+      "properties": {
+        "action": "Action",
+        "buffered_upload": "BufferedUpload",
+        "copy_behaviors": "CopyBehaviors",
+        "crc32": "Crc32",
+        "created_at": "CreatedAt",
+        "created_by_api_key_id": "CreatedByApiKeyId",
+        "created_by_as2_incoming_message_id": "CreatedByAs2IncomingMessageId",
+        "created_by_automation_id": "CreatedByAutomationId",
+        "created_by_bundle_registration_id": "CreatedByBundleRegistrationId",
+        "created_by_id": "CreatedById",
+        "created_by_inbox_id": "CreatedByInboxId",
+        "created_by_remote_server_id": "CreatedByRemoteServerId",
+        "created_by_sync_id": "CreatedBySyncId",
+        "custom_metadata": "CustomMetadata",
+        "direct_connection_info": "DirectConnectionInfo",
+        "display_name": "DisplayName",
+        "download_uri": "DownloadUri",
+        "is_locked": "IsLocked",
+        "last_modified_by_api_key_id": "LastModifiedByApiKeyId",
+        "last_modified_by_automation_id": "LastModifiedByAutomationId",
+        "last_modified_by_bundle_registration_id": "LastModifiedByBundleRegistrationId",
+        "last_modified_by_id": "LastModifiedById",
+        "last_modified_by_remote_server_id": "LastModifiedByRemoteServerId",
+        "last_modified_by_sync_id": "LastModifiedBySyncId",
+        "length": "Length",
+        "md5": "Md5",
+        "mime_type": "MimeType",
+        "mkdir_parents": "MkdirParents",
+        "mtime": "Mtime",
+        "part": "Part",
+        "parts": "Parts",
+        "path": "Path",
+        "permissions": "Permissions",
+        "preview": "Preview",
+        "preview_id": "PreviewId",
+        "priority_color": "PriorityColor",
+        "provided_mtime": "ProvidedMtime",
+        "ref": "Ref",
+        "region": "Region",
+        "restart": "Restart",
+        "sha1": "Sha1",
+        "sha256": "Sha256",
+        "size": "Size",
+        "structure": "Structure",
+        "subfolders_locked?": "SubfoldersLocked",
+        "type": "Type",
+        "with_direct_connection_info": "WithDirectConnectionInfo",
+        "with_rename": "WithRename"
+      },
+      "operations": {
+        "DeleteFilesPath": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /files/{path}"
+        },
+        "FileActionBeginDelete": {
+          "method": "BeginDelete",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/delete/{path}"
+        },
+        "FileActionBeginUpload": {
+          "method": "BeginUpload",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/begin_upload/{path}"
+        },
+        "FileActionCopy": {
+          "method": "Copy",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/copy/{path}"
+        },
+        "FileActionFind": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /file_actions/metadata/{path}"
+        },
+        "FileActionGpgDecrypt": {
+          "method": "GpgDecrypt",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/gpg_decrypt/{path}"
+        },
+        "FileActionGpgEncrypt": {
+          "method": "GpgEncrypt",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/gpg_encrypt/{path}"
+        },
+        "FileActionMove": {
+          "method": "Move",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/move/{path}"
+        },
+        "FileActionTransform": {
+          "method": "Transform",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/transform/{path}"
+        },
+        "FileActionUnzip": {
+          "method": "Unzip",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/unzip"
+        },
+        "FileActionZip": {
+          "method": "Zip",
+          "aliases": [
+
+          ],
+          "route": "POST /file_actions/zip"
+        },
+        "FileActionZipListContents": {
+          "method": "ZipListContents",
+          "aliases": [
+
+          ],
+          "route": "GET /file_actions/zip_list/{path}"
+        },
+        "FileDownload": {
+          "method": "Download",
+          "aliases": [
+
+          ],
+          "route": "GET /files/{path}"
+        },
+        "PatchFilesPath": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /files/{path}"
+        },
+        "PostFilesPath": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /files/{path}"
+        }
+      }
+    },
+    "FileAction": {
+      "type": "FileAction",
+      "properties": {
+        "file_migration_id": "FileMigrationId",
+        "status": "Status"
+      },
+      "operations": {
+      }
+    },
+    "FileComment": {
+      "type": "FileComment",
+      "operations_property": "FileComments",
+      "properties": {
+        "body": "Body",
+        "id": "Id",
+        "path": "Path",
+        "reactions": "Reactions"
+      },
+      "operations": {
+        "DeleteFileCommentsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /file_comments/{id}"
+        },
+        "FileCommentListForPath": {
+          "method": "ListFor",
+          "aliases": [
+
+          ],
+          "route": "GET /file_comments/files/{path}"
+        },
+        "PatchFileCommentsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /file_comments/{id}"
+        },
+        "PostFileComments": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /file_comments"
+        }
+      }
+    },
+    "FileCommentReaction": {
+      "type": "FileCommentReaction",
+      "operations_property": "FileCommentReactions",
+      "properties": {
+        "emoji": "Emoji",
+        "file_comment_id": "FileCommentId",
+        "id": "Id",
+        "user_id": "UserId"
+      },
+      "operations": {
+        "DeleteFileCommentReactionsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /file_comment_reactions/{id}"
+        },
+        "PostFileCommentReactions": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /file_comment_reactions"
+        }
+      }
+    },
+    "FileMigration": {
+      "type": "FileMigration",
+      "operations_property": "FileMigrations",
+      "properties": {
+        "dest_path": "DestPath",
+        "failure_message": "FailureMessage",
+        "files_moved": "FilesMoved",
+        "files_total": "FilesTotal",
+        "id": "Id",
+        "log_url": "LogUrl",
+        "operation": "Operation",
+        "path": "Path",
+        "region": "Region",
+        "status": "Status"
+      },
+      "operations": {
+        "GetFileMigrationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /file_migrations/{id}"
+        }
+      }
+    },
+    "FileMigrationLog": {
+      "type": "FileMigrationLog",
+      "operations_property": "FileMigrationLogs",
+      "properties": {
+        "created_at": "CreatedAt",
+        "dest_path": "DestPath",
+        "error_type": "ErrorType",
+        "file_migration_id": "FileMigrationId",
+        "message": "Message",
+        "operation": "Operation",
+        "path": "Path",
+        "status": "Status",
+        "timestamp": "Timestamp"
+      },
+      "operations": {
+        "GetFileMigrationLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /file_migration_logs"
+        }
+      }
+    },
+    "FileUploadPart": {
+      "type": "FileUploadPart",
+      "properties": {
+        "action": "Action",
+        "ask_about_overwrites": "AskAboutOverwrites",
+        "available_parts": "AvailableParts",
+        "direct_connection_info": "DirectConnectionInfo",
+        "expires": "Expires",
+        "headers": "Headers",
+        "http_method": "HttpMethod",
+        "next_partsize": "NextPartsize",
+        "parallel_parts": "ParallelParts",
+        "parameters": "Parameters",
+        "part_number": "PartNumber",
+        "partsize": "Partsize",
+        "path": "Path",
+        "ref": "Ref",
+        "retry_parts": "RetryParts",
+        "send": "Send",
+        "upload_uri": "UploadUri"
+      },
+      "operations": {
+      }
+    },
+    "Folder": {
+      "type": "Folder",
+      "operations_property": "Folders",
+      "properties": {
+        "crc32": "Crc32",
+        "created_at": "CreatedAt",
+        "created_by_api_key_id": "CreatedByApiKeyId",
+        "created_by_as2_incoming_message_id": "CreatedByAs2IncomingMessageId",
+        "created_by_automation_id": "CreatedByAutomationId",
+        "created_by_bundle_registration_id": "CreatedByBundleRegistrationId",
+        "created_by_id": "CreatedById",
+        "created_by_inbox_id": "CreatedByInboxId",
+        "created_by_remote_server_id": "CreatedByRemoteServerId",
+        "created_by_sync_id": "CreatedBySyncId",
+        "custom_metadata": "CustomMetadata",
+        "direct_connection_info": "DirectConnectionInfo",
+        "display_name": "DisplayName",
+        "download_uri": "DownloadUri",
+        "is_locked": "IsLocked",
+        "last_modified_by_api_key_id": "LastModifiedByApiKeyId",
+        "last_modified_by_automation_id": "LastModifiedByAutomationId",
+        "last_modified_by_bundle_registration_id": "LastModifiedByBundleRegistrationId",
+        "last_modified_by_id": "LastModifiedById",
+        "last_modified_by_remote_server_id": "LastModifiedByRemoteServerId",
+        "last_modified_by_sync_id": "LastModifiedBySyncId",
+        "md5": "Md5",
+        "mime_type": "MimeType",
+        "mkdir_parents": "MkdirParents",
+        "mtime": "Mtime",
+        "path": "Path",
+        "permissions": "Permissions",
+        "preview": "Preview",
+        "preview_id": "PreviewId",
+        "priority_color": "PriorityColor",
+        "provided_mtime": "ProvidedMtime",
+        "region": "Region",
+        "sha1": "Sha1",
+        "sha256": "Sha256",
+        "size": "Size",
+        "subfolders_locked?": "SubfoldersLocked",
+        "type": "Type"
+      },
+      "operations": {
+        "FolderListForPath": {
+          "method": "ListFor",
+          "aliases": [
+
+          ],
+          "route": "GET /folders/{path}"
+        },
+        "PostFoldersPath": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /folders/{path}"
+        }
+      }
+    },
+    "FormField": {
+      "type": "FormField",
+      "properties": {
+        "default_option": "DefaultOption",
+        "field_type": "FieldType",
+        "form_field_set_id": "FormFieldSetId",
+        "help_text": "HelpText",
+        "id": "Id",
+        "label": "Label",
+        "options_for_select": "OptionsForSelect",
+        "required": "Required"
+      },
+      "operations": {
+      }
+    },
+    "FormFieldSet": {
+      "type": "FormFieldSet",
+      "operations_property": "FormFieldSets",
+      "properties": {
+        "form_fields": "FormFields",
+        "form_layout": "FormLayout",
+        "id": "Id",
+        "in_use": "InUse",
+        "require_complete_metadata_capture": "RequireCompleteMetadataCapture",
+        "skip_company": "SkipCompany",
+        "skip_email": "SkipEmail",
+        "skip_name": "SkipName",
+        "title": "Title",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteFormFieldSetsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /form_field_sets/{id}"
+        },
+        "GetFormFieldSets": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /form_field_sets"
+        },
+        "GetFormFieldSetsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /form_field_sets/{id}"
+        },
+        "PatchFormFieldSetsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /form_field_sets/{id}"
+        },
+        "PostFormFieldSets": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /form_field_sets"
+        }
+      }
+    },
+    "FtpActionLog": {
+      "type": "FtpActionLog",
+      "operations_property": "FtpActionLogs",
+      "properties": {
+        "action_type": "ActionType",
+        "auth_ciphers": "AuthCiphers",
+        "cmd": "Cmd",
+        "created_at": "CreatedAt",
+        "duration_ms": "DurationMs",
+        "entries_returned": "EntriesReturned",
+        "name": "Name",
+        "param": "Param",
+        "path": "Path",
+        "remote_ip": "RemoteIp",
+        "responseCode": "ResponseCode",
+        "responseMessage": "ResponseMessage",
+        "seq_id": "SeqId",
+        "server_ip": "ServerIp",
+        "session_uuid": "SessionUuid",
+        "status": "Status",
+        "success": "Success",
+        "timestamp": "Timestamp",
+        "true_path": "TruePath",
+        "username": "Username"
+      },
+      "operations": {
+        "GetFtpActionLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /ftp_action_logs"
+        }
+      }
+    },
+    "GpgKey": {
+      "type": "GpgKey",
+      "operations_property": "GpgKeys",
+      "properties": {
+        "expires_at": "ExpiresAt",
+        "generate_email": "GenerateEmail",
+        "generate_expires_at": "GenerateExpiresAt",
+        "generate_full_name": "GenerateFullName",
+        "generate_keypair": "GenerateKeypair",
+        "generated_private_key": "GeneratedPrivateKey",
+        "generated_public_key": "GeneratedPublicKey",
+        "id": "Id",
+        "name": "Name",
+        "partner_id": "PartnerId",
+        "partner_name": "PartnerName",
+        "private_key": "PrivateKey",
+        "private_key_md5": "PrivateKeyMd5",
+        "private_key_password": "PrivateKeyPassword",
+        "private_key_password_md5": "PrivateKeyPasswordMd5",
+        "public_key": "PublicKey",
+        "public_key_md5": "PublicKeyMd5",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteGpgKeysId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /gpg_keys/{id}"
+        },
+        "GetGpgKeys": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /gpg_keys"
+        },
+        "GetGpgKeysId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /gpg_keys/{id}"
+        },
+        "PatchGpgKeysId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /gpg_keys/{id}"
+        },
+        "PostGpgKeys": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /gpg_keys"
+        }
+      }
+    },
+    "Group": {
+      "type": "Group",
+      "operations_property": "Groups",
+      "properties": {
+        "admin_ids": "AdminIds",
+        "ai_assistant_personality_id": "AiAssistantPersonalityId",
+        "allowed_ips": "AllowedIps",
+        "dav_permission": "DavPermission",
+        "desktop_configuration_profile_id": "DesktopConfigurationProfileId",
+        "ftp_permission": "FtpPermission",
+        "id": "Id",
+        "integration_centric_profile_id": "IntegrationCentricProfileId",
+        "name": "Name",
+        "notes": "Notes",
+        "restapi_permission": "RestapiPermission",
+        "s3_compatible_endpoint_permission": "S3CompatibleEndpointPermission",
+        "sftp_permission": "SftpPermission",
+        "site_id": "SiteId",
+        "user_ids": "UserIds",
+        "usernames": "Usernames",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteGroupsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /groups/{id}"
+        },
+        "GetGroups": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /groups"
+        },
+        "GetGroupsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /groups/{id}"
+        },
+        "PatchGroupsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /groups/{id}"
+        },
+        "PostGroups": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /groups"
+        }
+      }
+    },
+    "GroupUser": {
+      "type": "GroupUser",
+      "operations_property": "GroupUsers",
+      "properties": {
+        "admin": "Admin",
+        "group_id": "GroupId",
+        "group_name": "GroupName",
+        "id": "Id",
+        "user_id": "UserId",
+        "username": "Username"
+      },
+      "operations": {
+        "DeleteGroupUsersId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /group_users/{id}"
+        },
+        "GetGroupUsers": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /group_users"
+        },
+        "PatchGroupUsersId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /group_users/{id}"
+        },
+        "PostGroupUsers": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /group_users"
+        }
+      }
+    },
+    "History": {
+      "type": "History",
+      "operations_property": "Histories",
+      "properties": {
+        "action": "Action",
+        "destination": "Destination",
+        "display": "Display",
+        "failure_type": "FailureType",
+        "id": "Id",
+        "interface": "Interface",
+        "ip": "Ip",
+        "path": "Path",
+        "source": "Source",
+        "targets": "Targets",
+        "user_id": "UserId",
+        "user_is_from_parent_site": "UserIsFromParentSite",
+        "username": "Username",
+        "when": "When"
+      },
+      "operations": {
+        "HistoryList": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /history"
+        },
+        "HistoryListForFile": {
+          "method": "ListForFile",
+          "aliases": [
+
+          ],
+          "route": "GET /history/files/{path}"
+        },
+        "HistoryListForFolder": {
+          "method": "ListForFolder",
+          "aliases": [
+
+          ],
+          "route": "GET /history/folders/{path}"
+        },
+        "HistoryListForUser": {
+          "method": "ListForUser",
+          "aliases": [
+
+          ],
+          "route": "GET /history/users/{user_id}"
+        },
+        "HistoryListLogins": {
+          "method": "ListLogins",
+          "aliases": [
+
+          ],
+          "route": "GET /history/login"
+        }
+      }
+    },
+    "HistoryExport": {
+      "type": "HistoryExport",
+      "operations_property": "HistoryExports",
+      "properties": {
+        "end_at": "EndAt",
+        "history_version": "HistoryVersion",
+        "id": "Id",
+        "query_action": "QueryAction",
+        "query_destination": "QueryDestination",
+        "query_failure_type": "QueryFailureType",
+        "query_file_id": "QueryFileId",
+        "query_folder": "QueryFolder",
+        "query_interface": "QueryInterface",
+        "query_ip": "QueryIp",
+        "query_parent_id": "QueryParentId",
+        "query_path": "QueryPath",
+        "query_src": "QuerySrc",
+        "query_target_id": "QueryTargetId",
+        "query_target_name": "QueryTargetName",
+        "query_target_permission": "QueryTargetPermission",
+        "query_target_permission_set": "QueryTargetPermissionSet",
+        "query_target_platform": "QueryTargetPlatform",
+        "query_target_user_id": "QueryTargetUserId",
+        "query_target_username": "QueryTargetUsername",
+        "query_user_id": "QueryUserId",
+        "query_username": "QueryUsername",
+        "results_url": "ResultsUrl",
+        "start_at": "StartAt",
+        "status": "Status",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetHistoryExportsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /history_exports/{id}"
+        },
+        "PostHistoryExports": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /history_exports"
+        }
+      }
+    },
+    "HistoryExportResult": {
+      "type": "HistoryExportResult",
+      "operations_property": "HistoryExportResults",
+      "properties": {
+        "action": "Action",
+        "created_at": "CreatedAt",
+        "created_at_iso8601": "CreatedAtIso8601",
+        "destination": "Destination",
+        "failure_type": "FailureType",
+        "file_id": "FileId",
+        "folder": "Folder",
+        "id": "Id",
+        "interface": "Interface",
+        "ip": "Ip",
+        "parent_id": "ParentId",
+        "path": "Path",
+        "src": "Src",
+        "target_expires_at": "TargetExpiresAt",
+        "target_expires_at_iso8601": "TargetExpiresAtIso8601",
+        "target_id": "TargetId",
+        "target_name": "TargetName",
+        "target_permission": "TargetPermission",
+        "target_permission_set": "TargetPermissionSet",
+        "target_platform": "TargetPlatform",
+        "target_recursive": "TargetRecursive",
+        "target_user_id": "TargetUserId",
+        "target_username": "TargetUsername",
+        "user_id": "UserId",
+        "user_is_from_parent_site": "UserIsFromParentSite",
+        "username": "Username"
+      },
+      "operations": {
+        "GetHistoryExportResults": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /history_export_results"
+        }
+      }
+    },
+    "HolidayCalendar": {
+      "type": "HolidayCalendar",
+      "operations_property": "HolidayCalendars",
+      "properties": {
+        "created_at": "CreatedAt",
+        "definition": "Definition",
+        "id": "Id",
+        "name": "Name",
+        "updated_at": "UpdatedAt"
+      },
+      "operations": {
+        "DeleteHolidayCalendarsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /holiday_calendars/{id}"
+        },
+        "GetHolidayCalendars": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /holiday_calendars"
+        },
+        "GetHolidayCalendarsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /holiday_calendars/{id}"
+        },
+        "PatchHolidayCalendarsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /holiday_calendars/{id}"
+        },
+        "PostHolidayCalendars": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /holiday_calendars"
+        }
+      }
+    },
+    "HolidayRegion": {
+      "type": "HolidayRegion",
+      "operations_property": "HolidayRegions",
+      "properties": {
+        "code": "Code",
+        "name": "Name"
+      },
+      "operations": {
+        "GetHolidayRegionsSupported": {
+          "method": "GetSupported",
+          "aliases": [
+
+          ],
+          "route": "GET /holiday_regions/supported"
+        }
+      }
+    },
+    "Image": {
+      "type": "Image",
+      "properties": {
+        "name": "Name",
+        "uri": "Uri"
+      },
+      "operations": {
+      }
+    },
+    "InboundS3Log": {
+      "type": "InboundS3Log",
+      "operations_property": "InboundS3Logs",
+      "properties": {
+        "aws_access_key": "AwsAccessKey",
+        "client_ip": "ClientIp",
+        "created_at": "CreatedAt",
+        "duration_ms": "DurationMs",
+        "error_message": "ErrorMessage",
+        "error_type": "ErrorType",
+        "operation": "Operation",
+        "path": "Path",
+        "request_id": "RequestId",
+        "status": "Status",
+        "user_agent": "UserAgent"
+      },
+      "operations": {
+        "GetInboundS3Logs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /inbound_s3_logs"
+        }
+      }
+    },
+    "InboxRecipient": {
+      "type": "InboxRecipient",
+      "operations_property": "InboxRecipients",
+      "properties": {
+        "company": "Company",
+        "inbox_id": "InboxId",
+        "name": "Name",
+        "note": "Note",
+        "recipient": "Recipient",
+        "sent_at": "SentAt",
+        "share_after_create": "ShareAfterCreate"
+      },
+      "operations": {
+        "GetInboxRecipients": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /inbox_recipients"
+        },
+        "PostInboxRecipients": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /inbox_recipients"
+        }
+      }
+    },
+    "InboxRegistration": {
+      "type": "InboxRegistration",
+      "operations_property": "InboxRegistrations",
+      "properties": {
+        "clickwrap_body": "ClickwrapBody",
+        "code": "Code",
+        "company": "Company",
+        "created_at": "CreatedAt",
+        "email": "Email",
+        "form_field_data": "FormFieldData",
+        "form_field_set_id": "FormFieldSetId",
+        "inbox_id": "InboxId",
+        "inbox_recipient_id": "InboxRecipientId",
+        "inbox_title": "InboxTitle",
+        "ip": "Ip",
+        "name": "Name"
+      },
+      "operations": {
+        "GetInboxRegistrations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /inbox_registrations"
+        }
+      }
+    },
+    "InboxUpload": {
+      "type": "InboxUpload",
+      "operations_property": "InboxUploads",
+      "properties": {
+        "created_at": "CreatedAt",
+        "inbox_registration": "InboxRegistration",
+        "path": "Path"
+      },
+      "operations": {
+        "GetInboxUploads": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /inbox_uploads"
+        }
+      }
+    },
+    "IntegrationCentricProfile": {
+      "type": "IntegrationCentricProfile",
+      "operations_property": "IntegrationCentricProfiles",
+      "properties": {
+        "expected_remote_servers": "ExpectedRemoteServers",
+        "id": "Id",
+        "name": "Name",
+        "use_for_all_users": "UseForAllUsers",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteIntegrationCentricProfilesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /integration_centric_profiles/{id}"
+        },
+        "GetIntegrationCentricProfiles": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /integration_centric_profiles"
+        },
+        "GetIntegrationCentricProfilesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /integration_centric_profiles/{id}"
+        },
+        "PatchIntegrationCentricProfilesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /integration_centric_profiles/{id}"
+        },
+        "PostIntegrationCentricProfiles": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /integration_centric_profiles"
+        }
+      }
+    },
+    "Invoice": {
+      "type": "Invoice",
+      "operations_property": "Invoices",
+      "properties": {
+        "amount": "Amount",
+        "balance": "Balance",
+        "created_at": "CreatedAt",
+        "currency": "Currency",
+        "download_uri": "DownloadUri",
+        "id": "Id",
+        "invoice_line_items": "InvoiceLineItems",
+        "method": "Method",
+        "payment_line_items": "PaymentLineItems",
+        "payment_reversed_at": "PaymentReversedAt",
+        "payment_type": "PaymentType",
+        "site_name": "SiteName",
+        "type": "Type"
+      },
+      "operations": {
+        "GetInvoices": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /invoices"
+        },
+        "GetInvoicesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /invoices/{id}"
+        }
+      }
+    },
+    "InvoiceLineItem": {
+      "type": "InvoiceLineItem",
+      "properties": {
+        "amount": "Amount",
+        "created_at": "CreatedAt",
+        "description": "Description",
+        "id": "Id",
+        "plan": "Plan",
+        "prepaid_bytes": "PrepaidBytes",
+        "prepaid_bytes_available": "PrepaidBytesAvailable",
+        "prepaid_bytes_expire_at": "PrepaidBytesExpireAt",
+        "prepaid_bytes_used": "PrepaidBytesUsed",
+        "service_end_at": "ServiceEndAt",
+        "service_start_at": "ServiceStartAt",
+        "site": "Site",
+        "type": "Type"
+      },
+      "operations": {
+      }
+    },
+    "IpAddress": {
+      "type": "IpAddress",
+      "operations_property": "IpAddresses",
+      "properties": {
+        "associated_with": "AssociatedWith",
+        "group_id": "GroupId",
+        "id": "Id",
+        "ip_addresses": "IpAddresses"
+      },
+      "operations": {
+        "GetIpAddresses": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /ip_addresses"
+        },
+        "GetIpAddressesExavaultReserved": {
+          "method": "GetExavaultReserved",
+          "aliases": [
+
+          ],
+          "route": "GET /ip_addresses/exavault-reserved"
+        },
+        "GetIpAddressesReserved": {
+          "method": "GetReserved",
+          "aliases": [
+
+          ],
+          "route": "GET /ip_addresses/reserved"
+        },
+        "GetIpAddressesSmartfileReserved": {
+          "method": "GetSmartfileReserved",
+          "aliases": [
+
+          ],
+          "route": "GET /ip_addresses/smartfile-reserved"
+        }
+      }
+    },
+    "KeyLifecycleRule": {
+      "type": "KeyLifecycleRule",
+      "operations_property": "KeyLifecycleRules",
+      "properties": {
+        "apply_to_all_workspaces": "ApplyToAllWorkspaces",
+        "expiration_days": "ExpirationDays",
+        "id": "Id",
+        "inactivity_days": "InactivityDays",
+        "key_type": "KeyType",
+        "name": "Name",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteKeyLifecycleRulesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /key_lifecycle_rules/{id}"
+        },
+        "GetKeyLifecycleRules": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /key_lifecycle_rules"
+        },
+        "GetKeyLifecycleRulesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /key_lifecycle_rules/{id}"
+        },
+        "PatchKeyLifecycleRulesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /key_lifecycle_rules/{id}"
+        },
+        "PostKeyLifecycleRules": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /key_lifecycle_rules"
+        }
+      }
+    },
+    "Lock": {
+      "type": "Lock",
+      "operations_property": "Locks",
+      "properties": {
+        "allow_access_by_any_user": "AllowAccessByAnyUser",
+        "depth": "Depth",
+        "exclusive": "Exclusive",
+        "expected_token": "ExpectedToken",
+        "owner": "Owner",
+        "path": "Path",
+        "recursive": "Recursive",
+        "scope": "Scope",
+        "timeout": "Timeout",
+        "token": "Token",
+        "type": "Type",
+        "user_id": "UserId",
+        "username": "Username"
+      },
+      "operations": {
+        "DeleteLocksPath": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /locks/{path}"
+        },
+        "LockListForPath": {
+          "method": "ListFor",
+          "aliases": [
+
+          ],
+          "route": "GET /locks/{path}"
+        },
+        "PostLocksPath": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /locks/{path}"
+        }
+      }
+    },
+    "MetadataCategory": {
+      "type": "MetadataCategory",
+      "operations_property": "MetadataCategories",
+      "properties": {
+        "default_columns": "DefaultColumns",
+        "definitions": "Definitions",
+        "id": "Id",
+        "name": "Name"
+      },
+      "operations": {
+        "DeleteMetadataCategoriesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /metadata_categories/{id}"
+        },
+        "GetMetadataCategories": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /metadata_categories"
+        },
+        "GetMetadataCategoriesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /metadata_categories/{id}"
+        },
+        "MetadataCategoryListForPath": {
+          "method": "ListFor",
+          "aliases": [
+
+          ],
+          "route": "GET /metadata_categories/list_by_path/{path}"
+        },
+        "PatchMetadataCategoriesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /metadata_categories/{id}"
+        },
+        "PostMetadataCategories": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /metadata_categories"
+        }
+      }
+    },
+    "Notification": {
+      "type": "Notification",
+      "operations_property": "Notifications",
+      "properties": {
+        "group_id": "GroupId",
+        "group_ids": "GroupIds",
+        "group_name": "GroupName",
+        "group_names": "GroupNames",
+        "id": "Id",
+        "message": "Message",
+        "notify_on_copy": "NotifyOnCopy",
+        "notify_on_delete": "NotifyOnDelete",
+        "notify_on_download": "NotifyOnDownload",
+        "notify_on_move": "NotifyOnMove",
+        "notify_on_upload": "NotifyOnUpload",
+        "notify_user_actions": "NotifyUserActions",
+        "path": "Path",
+        "recursive": "Recursive",
+        "send_interval": "SendInterval",
+        "subject": "Subject",
+        "suppressed_email": "SuppressedEmail",
+        "trigger_by_share_recipients": "TriggerByShareRecipients",
+        "triggering_filenames": "TriggeringFilenames",
+        "triggering_group_ids": "TriggeringGroupIds",
+        "triggering_user_ids": "TriggeringUserIds",
+        "unsubscribed": "Unsubscribed",
+        "unsubscribed_reason": "UnsubscribedReason",
+        "user_id": "UserId",
+        "username": "Username",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteNotificationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /notifications/{id}"
+        },
+        "GetNotifications": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /notifications"
+        },
+        "GetNotificationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /notifications/{id}"
+        },
+        "PatchNotificationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /notifications/{id}"
+        },
+        "PostNotifications": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /notifications"
+        }
+      }
+    },
+    "OutboundConnectionLog": {
+      "type": "OutboundConnectionLog",
+      "operations_property": "OutboundConnectionLogs",
+      "properties": {
+        "bytes_downloaded": "BytesDownloaded",
+        "bytes_uploaded": "BytesUploaded",
+        "client_ip": "ClientIp",
+        "created_at": "CreatedAt",
+        "dest_remote_server_id": "DestRemoteServerId",
+        "dest_remote_server_name": "DestRemoteServerName",
+        "duration_ms": "DurationMs",
+        "error_message": "ErrorMessage",
+        "error_operation": "ErrorOperation",
+        "error_type": "ErrorType",
+        "list_count": "ListCount",
+        "operation": "Operation",
+        "path": "Path",
+        "src_remote_server_id": "SrcRemoteServerId",
+        "src_remote_server_name": "SrcRemoteServerName",
+        "status": "Status",
+        "timestamp": "Timestamp"
+      },
+      "operations": {
+        "GetOutboundConnectionLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /outbound_connection_logs"
+        }
+      }
+    },
+    "Partner": {
+      "type": "Partner",
+      "operations_property": "Partners",
+      "properties": {
+        "ai_assistant_personality_id": "AiAssistantPersonalityId",
+        "allow_bypassing_2fa_policies": "AllowBypassing2faPolicies",
+        "allow_credential_changes": "AllowCredentialChanges",
+        "allow_providing_gpg_keys": "AllowProvidingGpgKeys",
+        "allow_user_creation": "AllowUserCreation",
+        "allowed_ips": "AllowedIps",
+        "cc_emails_to_responsible_party": "CcEmailsToResponsibleParty",
+        "connections": "Connections",
+        "id": "Id",
+        "name": "Name",
+        "notes": "Notes",
+        "partner_admin_ids": "PartnerAdminIds",
+        "partner_channel_template_id": "PartnerChannelTemplateId",
+        "partnership_role": "PartnershipRole",
+        "responsible_group_id": "ResponsibleGroupId",
+        "responsible_user_id": "ResponsibleUserId",
+        "root_folder": "RootFolder",
+        "show_partner_channel_home_page": "ShowPartnerChannelHomePage",
+        "tags": "Tags",
+        "user_ids": "UserIds",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeletePartnersId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /partners/{id}"
+        },
+        "GetPartners": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /partners"
+        },
+        "GetPartnersId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /partners/{id}"
+        },
+        "PatchPartnersId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /partners/{id}"
+        },
+        "PostPartners": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /partners"
+        }
+      }
+    },
+    "PartnerChannel": {
+      "type": "PartnerChannel",
+      "operations_property": "PartnerChannels",
+      "properties": {
+        "channel_path": "ChannelPath",
+        "direction": "Direction",
+        "effective_from_partner_folder_name": "EffectiveFromPartnerFolderName",
+        "effective_to_partner_folder_name": "EffectiveToPartnerFolderName",
+        "from_partner_folder_name": "FromPartnerFolderName",
+        "from_partner_folder_path": "FromPartnerFolderPath",
+        "from_partner_managed_folder_paths": "FromPartnerManagedFolderPaths",
+        "from_partner_route_path": "FromPartnerRoutePath",
+        "id": "Id",
+        "partner_channel_template_id": "PartnerChannelTemplateId",
+        "partner_id": "PartnerId",
+        "path": "Path",
+        "to_partner_folder_name": "ToPartnerFolderName",
+        "to_partner_folder_path": "ToPartnerFolderPath",
+        "to_partner_managed_folder_paths": "ToPartnerManagedFolderPaths",
+        "to_partner_route_path": "ToPartnerRoutePath",
+        "use_channel_root": "UseChannelRoot",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeletePartnerChannelsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /partner_channels/{id}"
+        },
+        "GetPartnerChannels": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /partner_channels"
+        },
+        "GetPartnerChannelsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /partner_channels/{id}"
+        },
+        "PatchPartnerChannelsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /partner_channels/{id}"
+        },
+        "PostPartnerChannels": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /partner_channels"
+        }
+      }
+    },
+    "PartnerChannelTemplate": {
+      "type": "PartnerChannelTemplate",
+      "operations_property": "PartnerChannelTemplates",
+      "properties": {
+        "direction": "Direction",
+        "effective_from_partner_folder_name": "EffectiveFromPartnerFolderName",
+        "effective_to_partner_folder_name": "EffectiveToPartnerFolderName",
+        "from_partner_folder_name": "FromPartnerFolderName",
+        "from_partner_managed_folder_paths": "FromPartnerManagedFolderPaths",
+        "from_partner_route_path_pattern": "FromPartnerRoutePathPattern",
+        "id": "Id",
+        "name": "Name",
+        "path": "Path",
+        "to_partner_folder_name": "ToPartnerFolderName",
+        "to_partner_managed_folder_paths": "ToPartnerManagedFolderPaths",
+        "to_partner_route_path_pattern": "ToPartnerRoutePathPattern",
+        "use_channel_root": "UseChannelRoot",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeletePartnerChannelTemplatesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /partner_channel_templates/{id}"
+        },
+        "GetPartnerChannelTemplates": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /partner_channel_templates"
+        },
+        "GetPartnerChannelTemplatesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /partner_channel_templates/{id}"
+        },
+        "PatchPartnerChannelTemplatesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /partner_channel_templates/{id}"
+        },
+        "PostPartnerChannelTemplates": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /partner_channel_templates"
+        }
+      }
+    },
+    "PartnerConnection": {
+      "type": "PartnerConnection",
+      "properties": {
+        "id": "Id",
+        "mount_path": "MountPath",
+        "role": "Role",
+        "site_id": "SiteId",
+        "site_name": "SiteName"
+      },
+      "operations": {
+      }
+    },
+    "PartnerSite": {
+      "type": "PartnerSite",
+      "operations_property": "PartnerSites",
+      "properties": {
+      },
+      "operations": {
+        "DeletePartnerSitesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /partner_sites/{id}"
+        }
+      }
+    },
+    "PartnerSiteRequest": {
+      "type": "PartnerSiteRequest",
+      "operations_property": "PartnerSiteRequests",
+      "properties": {
+        "created_at": "CreatedAt",
+        "guest_site_url": "GuestSiteUrl",
+        "host_partner_id": "HostPartnerId",
+        "host_site_name": "HostSiteName",
+        "id": "Id",
+        "pairing_key": "PairingKey",
+        "status": "Status",
+        "updated_at": "UpdatedAt"
+      },
+      "operations": {
+        "DeletePartnerSiteRequestsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /partner_site_requests/{id}"
+        },
+        "GetPartnerSiteRequests": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /partner_site_requests"
+        },
+        "GetPartnerSiteRequestsFindByPairingKey": {
+          "method": "FindByPairingKey",
+          "aliases": [
+
+          ],
+          "route": "GET /partner_site_requests/find_by_pairing_key"
+        },
+        "PostPartnerSiteRequests": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /partner_site_requests"
+        },
+        "PostPartnerSiteRequestsApprove": {
+          "method": "Approve",
+          "aliases": [
+
+          ],
+          "route": "POST /partner_site_requests/approve"
+        },
+        "PostPartnerSiteRequestsReject": {
+          "method": "Reject",
+          "aliases": [
+
+          ],
+          "route": "POST /partner_site_requests/reject"
+        }
+      }
+    },
+    "Payment": {
+      "type": "Payment",
+      "operations_property": "Payments",
+      "properties": {
+        "amount": "Amount",
+        "balance": "Balance",
+        "created_at": "CreatedAt",
+        "currency": "Currency",
+        "download_uri": "DownloadUri",
+        "id": "Id",
+        "invoice_line_items": "InvoiceLineItems",
+        "method": "Method",
+        "payment_line_items": "PaymentLineItems",
+        "payment_reversed_at": "PaymentReversedAt",
+        "payment_type": "PaymentType",
+        "site_name": "SiteName",
+        "type": "Type"
+      },
+      "operations": {
+        "GetPayments": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /payments"
+        },
+        "GetPaymentsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /payments/{id}"
+        }
+      }
+    },
+    "PaymentLineItem": {
+      "type": "PaymentLineItem",
+      "properties": {
+        "amount": "Amount",
+        "created_at": "CreatedAt",
+        "invoice_id": "InvoiceId",
+        "payment_id": "PaymentId"
+      },
+      "operations": {
+      }
+    },
+    "PendingWorkEvent": {
+      "type": "PendingWorkEvent",
+      "operations_property": "PendingWorkEvents",
+      "properties": {
+        "body": "Body",
+        "body_url": "BodyUrl",
+        "created_at": "CreatedAt",
+        "event_errors": "EventErrors",
+        "event_type": "EventType",
+        "folder_behavior_id": "FolderBehaviorId",
+        "id": "Id",
+        "status": "Status"
+      },
+      "operations": {
+        "GetPendingWorkEvents": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /pending_work_events"
+        },
+        "GetPendingWorkEventsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /pending_work_events/{id}"
+        }
+      }
+    },
+    "Permission": {
+      "type": "Permission",
+      "operations_property": "Permissions",
+      "properties": {
+        "group_id": "GroupId",
+        "group_ids": "GroupIds",
+        "group_name": "GroupName",
+        "group_names": "GroupNames",
+        "id": "Id",
+        "partner_id": "PartnerId",
+        "partner_name": "PartnerName",
+        "path": "Path",
+        "permission": "PermissionType",
+        "recursive": "Recursive",
+        "site_id": "SiteId",
+        "user_id": "UserId",
+        "username": "Username"
+      },
+      "operations": {
+        "DeletePermissionsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /permissions/{id}"
+        },
+        "GetPermissions": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /permissions"
+        },
+        "PostPermissions": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /permissions"
+        }
+      }
+    },
+    "Preview": {
+      "type": "Preview",
+      "properties": {
+        "download_uri": "DownloadUri",
+        "id": "Id",
+        "size": "Size",
+        "status": "Status",
+        "type": "Type"
+      },
+      "operations": {
+      }
+    },
+    "PublicHostingRequestLog": {
+      "type": "PublicHostingRequestLog",
+      "operations_property": "PublicHostingRequestLogs",
+      "properties": {
+        "bytes_transferred": "BytesTransferred",
+        "created_at": "CreatedAt",
+        "duration_ms": "DurationMs",
+        "hostname": "Hostname",
+        "http_method": "HttpMethod",
+        "path": "Path",
+        "remote_ip": "RemoteIp",
+        "responseCode": "ResponseCode",
+        "server_ip": "ServerIp",
+        "success": "Success",
+        "timestamp": "Timestamp"
+      },
+      "operations": {
+        "GetPublicHostingRequestLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /public_hosting_request_logs"
+        }
+      }
+    },
+    "PublicIpAddress": {
+      "type": "PublicIpAddress",
+      "properties": {
+        "ftp_enabled": "FtpEnabled",
+        "ip_address": "IpAddress",
+        "server_name": "ServerName",
+        "sftp_enabled": "SftpEnabled"
+      },
+      "operations": {
+      }
+    },
+    "PublicKey": {
+      "type": "PublicKey",
+      "operations_property": "PublicKeys",
+      "properties": {
+        "created_at": "CreatedAt",
+        "expired": "Expired",
+        "expires_at": "ExpiresAt",
+        "fingerprint": "Fingerprint",
+        "fingerprint_sha256": "FingerprintSha256",
+        "generate_algorithm": "GenerateAlgorithm",
+        "generate_keypair": "GenerateKeypair",
+        "generate_length": "GenerateLength",
+        "generate_private_key_password": "GeneratePrivateKeyPassword",
+        "generated_private_key": "GeneratedPrivateKey",
+        "generated_public_key": "GeneratedPublicKey",
+        "id": "Id",
+        "last_login_at": "LastLoginAt",
+        "public_key": "PublicKeyType",
+        "status": "Status",
+        "title": "Title",
+        "user_id": "UserId",
+        "username": "Username",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeletePublicKeysId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /public_keys/{id}"
+        },
+        "GetPublicKeys": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /public_keys"
+        },
+        "GetPublicKeysId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /public_keys/{id}"
+        },
+        "PatchPublicKeysId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /public_keys/{id}"
+        },
+        "PostPublicKeys": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /public_keys"
+        }
+      }
+    },
+    "RemoteBandwidthSnapshot": {
+      "type": "RemoteBandwidthSnapshot",
+      "operations_property": "RemoteBandwidthSnapshots",
+      "properties": {
+        "id": "Id",
+        "logged_at": "LoggedAt",
+        "remote_server_id": "RemoteServerId",
+        "sync_bytes_received": "SyncBytesReceived",
+        "sync_bytes_sent": "SyncBytesSent"
+      },
+      "operations": {
+        "GetRemoteBandwidthSnapshots": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /remote_bandwidth_snapshots"
+        }
+      }
+    },
+    "RemoteMountBackend": {
+      "type": "RemoteMountBackend",
+      "operations_property": "RemoteMountBackends",
+      "properties": {
+        "canary_file_path": "CanaryFilePath",
+        "enabled": "Enabled",
+        "fall": "Fall",
+        "health_check_enabled": "HealthCheckEnabled",
+        "health_check_results": "HealthCheckResults",
+        "health_check_type": "HealthCheckType",
+        "id": "Id",
+        "interval": "Interval",
+        "min_free_cpu": "MinFreeCpu",
+        "min_free_mem": "MinFreeMem",
+        "priority": "Priority",
+        "remote_path": "RemotePath",
+        "remote_server_id": "RemoteServerId",
+        "remote_server_mount_id": "RemoteServerMountId",
+        "rise": "Rise",
+        "status": "Status",
+        "undergoing_maintenance": "UndergoingMaintenance"
+      },
+      "operations": {
+        "DeleteRemoteMountBackendsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /remote_mount_backends/{id}"
+        },
+        "GetRemoteMountBackends": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /remote_mount_backends"
+        },
+        "GetRemoteMountBackendsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /remote_mount_backends/{id}"
+        },
+        "PatchRemoteMountBackendsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /remote_mount_backends/{id}"
+        },
+        "PostRemoteMountBackends": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /remote_mount_backends"
+        },
+        "PostRemoteMountBackendsIdResetStatus": {
+          "method": "ResetStatus",
+          "aliases": [
+
+          ],
+          "route": "POST /remote_mount_backends/{id}/reset_status"
+        }
+      }
+    },
+    "RemoteServer": {
+      "type": "RemoteServer",
+      "operations_property": "RemoteServers",
+      "properties": {
+        "allow_relative_paths": "AllowRelativePaths",
+        "auth_account_name": "AuthAccountName",
+        "auth_status": "AuthStatus",
+        "authentication_method": "AuthenticationMethod",
+        "aws_access_key": "AwsAccessKey",
+        "aws_secret_key": "AwsSecretKey",
+        "azure_blob_storage_access_key": "AzureBlobStorageAccessKey",
+        "azure_blob_storage_account": "AzureBlobStorageAccount",
+        "azure_blob_storage_container": "AzureBlobStorageContainer",
+        "azure_blob_storage_dns_suffix": "AzureBlobStorageDnsSuffix",
+        "azure_blob_storage_hierarchical_namespace": "AzureBlobStorageHierarchicalNamespace",
+        "azure_blob_storage_sas_token": "AzureBlobStorageSasToken",
+        "azure_files_storage_access_key": "AzureFilesStorageAccessKey",
+        "azure_files_storage_account": "AzureFilesStorageAccount",
+        "azure_files_storage_dns_suffix": "AzureFilesStorageDnsSuffix",
+        "azure_files_storage_sas_token": "AzureFilesStorageSasToken",
+        "azure_files_storage_share_name": "AzureFilesStorageShareName",
+        "backblaze_b2_application_key": "BackblazeB2ApplicationKey",
+        "backblaze_b2_bucket": "BackblazeB2Bucket",
+        "backblaze_b2_key_id": "BackblazeB2KeyId",
+        "backblaze_b2_s3_endpoint": "BackblazeB2S3Endpoint",
+        "buffer_uploads": "BufferUploads",
+        "cloudflare_access_key": "CloudflareAccessKey",
+        "cloudflare_bucket": "CloudflareBucket",
+        "cloudflare_endpoint": "CloudflareEndpoint",
+        "cloudflare_secret_key": "CloudflareSecretKey",
+        "custom_domain_id": "CustomDomainId",
+        "description": "Description",
+        "direct_transfer_available": "DirectTransferAvailable",
+        "disabled": "Disabled",
+        "dropbox_teams": "DropboxTeams",
+        "enable_dedicated_ips": "EnableDedicatedIps",
+        "filebase_access_key": "FilebaseAccessKey",
+        "filebase_bucket": "FilebaseBucket",
+        "filebase_secret_key": "FilebaseSecretKey",
+        "files_agent_latest_version": "FilesAgentLatestVersion",
+        "files_agent_permission_set": "FilesAgentPermissionSet",
+        "files_agent_root": "FilesAgentRoot",
+        "files_agent_supports_push_updates": "FilesAgentSupportsPushUpdates",
+        "files_agent_up_to_date": "FilesAgentUpToDate",
+        "files_agent_version": "FilesAgentVersion",
+        "files_api_key": "FilesApiKey",
+        "files_api_key_prefix": "FilesApiKeyPrefix",
+        "google_cloud_storage_authentication_method": "GoogleCloudStorageAuthenticationMethod",
+        "google_cloud_storage_bucket": "GoogleCloudStorageBucket",
+        "google_cloud_storage_credentials_json": "GoogleCloudStorageCredentialsJson",
+        "google_cloud_storage_oauth_scope": "GoogleCloudStorageOauthScope",
+        "google_cloud_storage_project_id": "GoogleCloudStorageProjectId",
+        "google_cloud_storage_s3_compatible_access_key": "GoogleCloudStorageS3CompatibleAccessKey",
+        "google_cloud_storage_s3_compatible_secret_key": "GoogleCloudStorageS3CompatibleSecretKey",
+        "hostname": "Hostname",
+        "id": "Id",
+        "linode_access_key": "LinodeAccessKey",
+        "linode_bucket": "LinodeBucket",
+        "linode_region": "LinodeRegion",
+        "linode_secret_key": "LinodeSecretKey",
+        "max_connections": "MaxConnections",
+        "name": "Name",
+        "one_drive_account_type": "OneDriveAccountType",
+        "outbound_agent_id": "OutboundAgentId",
+        "outbound_ip_addresses": "OutboundIpAddresses",
+        "password": "Password",
+        "pin_to_site_region": "PinToSiteRegion",
+        "pinned_region": "PinnedRegion",
+        "port": "Port",
+        "private_key": "PrivateKey",
+        "private_key_passphrase": "PrivateKeyPassphrase",
+        "remote_home_path": "RemoteHomePath",
+        "remote_server_credential_id": "RemoteServerCredentialId",
+        "reset_authentication": "ResetAuthentication",
+        "s3_assume_role_arn": "S3AssumeRoleArn",
+        "s3_assume_role_duration_seconds": "S3AssumeRoleDurationSeconds",
+        "s3_assume_role_external_id": "S3AssumeRoleExternalId",
+        "s3_bucket": "S3Bucket",
+        "s3_compatible_access_key": "S3CompatibleAccessKey",
+        "s3_compatible_bucket": "S3CompatibleBucket",
+        "s3_compatible_endpoint": "S3CompatibleEndpoint",
+        "s3_compatible_region": "S3CompatibleRegion",
+        "s3_compatible_secret_key": "S3CompatibleSecretKey",
+        "s3_compatible_virtual_hosted_style": "S3CompatibleVirtualHostedStyle",
+        "s3_kms_key_id": "S3KmsKeyId",
+        "s3_region": "S3Region",
+        "server_certificate": "ServerCertificate",
+        "server_host_key": "ServerHostKey",
+        "server_type": "ServerType",
+        "sharepoint_app_authentication": "SharepointAppAuthentication",
+        "sharepoint_app_credential_type": "SharepointAppCredentialType",
+        "sharepoint_client_certificate": "SharepointClientCertificate",
+        "sharepoint_client_id": "SharepointClientId",
+        "sharepoint_client_secret": "SharepointClientSecret",
+        "sharepoint_site_url": "SharepointSiteUrl",
+        "sharepoint_tenant_id": "SharepointTenantId",
+        "ssl": "Ssl",
+        "ssl_certificate": "SslCertificate",
+        "supports_versioning": "SupportsVersioning",
+        "upload_staging_path": "UploadStagingPath",
+        "user_id": "UserId",
+        "username": "Username",
+        "wasabi_access_key": "WasabiAccessKey",
+        "wasabi_bucket": "WasabiBucket",
+        "wasabi_region": "WasabiRegion",
+        "wasabi_secret_key": "WasabiSecretKey",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteRemoteServersId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /remote_servers/{id}"
+        },
+        "GetRemoteServers": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /remote_servers"
+        },
+        "GetRemoteServersId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /remote_servers/{id}"
+        },
+        "GetRemoteServersIdAgentNodes": {
+          "method": "AgentNodes",
+          "aliases": [
+
+          ],
+          "route": "GET /remote_servers/{id}/agent_nodes"
+        },
+        "GetRemoteServersIdConfigurationFile": {
+          "method": "FindConfigurationFile",
+          "aliases": [
+
+          ],
+          "route": "GET /remote_servers/{id}/configuration_file"
+        },
+        "PatchRemoteServersId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /remote_servers/{id}"
+        },
+        "PostRemoteServers": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /remote_servers"
+        },
+        "PostRemoteServersIdAgentPushUpdate": {
+          "method": "AgentPushUpdate",
+          "aliases": [
+
+          ],
+          "route": "POST /remote_servers/{id}/agent_push_update"
+        }
+      }
+    },
+    "RemoteServerConfigurationFile": {
+      "type": "RemoteServerConfigurationFile",
+      "properties": {
+        "auto_update_policy": "AutoUpdatePolicy",
+        "dns": "Dns",
+        "endpoint_override": "EndpointOverride",
+        "follow_links": "FollowLinks",
+        "graceful_shutdown_timeout": "GracefulShutdownTimeout",
+        "id": "Id",
+        "log_file": "LogFile",
+        "log_level": "LogLevel",
+        "log_rotate_num": "LogRotateNum",
+        "log_rotate_size": "LogRotateSize",
+        "node_name": "NodeName",
+        "override_max_concurrent_jobs": "OverrideMaxConcurrentJobs",
+        "permission_set": "PermissionSet",
+        "prefer_protocol": "PreferProtocol",
+        "private_key": "PrivateKey",
+        "proxy_all_outbound": "ProxyAllOutbound",
+        "root": "Root",
+        "subdomain": "Subdomain",
+        "transfer_rate_limit": "TransferRateLimit"
+      },
+      "operations": {
+      }
+    },
+    "RemoteServerCredential": {
+      "type": "RemoteServerCredential",
+      "operations_property": "RemoteServerCredentials",
+      "properties": {
+        "aws_access_key": "AwsAccessKey",
+        "aws_secret_key": "AwsSecretKey",
+        "azure_blob_storage_access_key": "AzureBlobStorageAccessKey",
+        "azure_blob_storage_sas_token": "AzureBlobStorageSasToken",
+        "azure_files_storage_access_key": "AzureFilesStorageAccessKey",
+        "azure_files_storage_sas_token": "AzureFilesStorageSasToken",
+        "backblaze_b2_application_key": "BackblazeB2ApplicationKey",
+        "backblaze_b2_key_id": "BackblazeB2KeyId",
+        "cloudflare_access_key": "CloudflareAccessKey",
+        "cloudflare_secret_key": "CloudflareSecretKey",
+        "copy_values_from_credential_id": "CopyValuesFromCredentialId",
+        "description": "Description",
+        "filebase_access_key": "FilebaseAccessKey",
+        "filebase_secret_key": "FilebaseSecretKey",
+        "google_cloud_storage_credentials_json": "GoogleCloudStorageCredentialsJson",
+        "google_cloud_storage_s3_compatible_access_key": "GoogleCloudStorageS3CompatibleAccessKey",
+        "google_cloud_storage_s3_compatible_secret_key": "GoogleCloudStorageS3CompatibleSecretKey",
+        "id": "Id",
+        "linode_access_key": "LinodeAccessKey",
+        "linode_secret_key": "LinodeSecretKey",
+        "name": "Name",
+        "password": "Password",
+        "private_key": "PrivateKey",
+        "private_key_passphrase": "PrivateKeyPassphrase",
+        "s3_assume_role_arn": "S3AssumeRoleArn",
+        "s3_assume_role_duration_seconds": "S3AssumeRoleDurationSeconds",
+        "s3_assume_role_external_id": "S3AssumeRoleExternalId",
+        "s3_compatible_access_key": "S3CompatibleAccessKey",
+        "s3_compatible_secret_key": "S3CompatibleSecretKey",
+        "server_type": "ServerType",
+        "sharepoint_app_credential_type": "SharepointAppCredentialType",
+        "sharepoint_client_certificate": "SharepointClientCertificate",
+        "sharepoint_client_id": "SharepointClientId",
+        "sharepoint_client_secret": "SharepointClientSecret",
+        "sharepoint_tenant_id": "SharepointTenantId",
+        "username": "Username",
+        "wasabi_access_key": "WasabiAccessKey",
+        "wasabi_secret_key": "WasabiSecretKey",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteRemoteServerCredentialsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /remote_server_credentials/{id}"
+        },
+        "GetRemoteServerCredentials": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /remote_server_credentials"
+        },
+        "GetRemoteServerCredentialsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /remote_server_credentials/{id}"
+        },
+        "PatchRemoteServerCredentialsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /remote_server_credentials/{id}"
+        },
+        "PostRemoteServerCredentials": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /remote_server_credentials"
+        }
+      }
+    },
+    "Request": {
+      "type": "Request",
+      "operations_property": "Requests",
+      "properties": {
+        "automation_id": "AutomationId",
+        "destination": "Destination",
+        "group_ids": "GroupIds",
+        "id": "Id",
+        "path": "Path",
+        "source": "Source",
+        "user_display_name": "UserDisplayName",
+        "user_ids": "UserIds"
+      },
+      "operations": {
+        "DeleteRequestsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /requests/{id}"
+        },
+        "GetRequests": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /requests"
+        },
+        "GetRequestsFoldersPath": {
+          "method": "GetFolder",
+          "aliases": [
+
+          ],
+          "route": "GET /requests/folders/{path}"
+        },
+        "PostRequests": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /requests"
+        }
+      }
+    },
+    "Restore": {
+      "type": "Restore",
+      "operations_property": "Restores",
+      "properties": {
+        "api_keys_restored": "ApiKeysRestored",
+        "dirs_errored": "DirsErrored",
+        "dirs_restored": "DirsRestored",
+        "dirs_total": "DirsTotal",
+        "earliest_date": "EarliestDate",
+        "error_messages": "ErrorMessages",
+        "files_errored": "FilesErrored",
+        "files_restored": "FilesRestored",
+        "files_total": "FilesTotal",
+        "id": "Id",
+        "prefix": "Prefix",
+        "public_keys_restored": "PublicKeysRestored",
+        "restoration_type": "RestorationType",
+        "restore_deleted_permissions": "RestoreDeletedPermissions",
+        "restore_in_place": "RestoreInPlace",
+        "status": "Status",
+        "two_factor_authentication_methods_restored": "TwoFactorAuthenticationMethodsRestored",
+        "update_timestamps": "UpdateTimestamps",
+        "users_errored": "UsersErrored",
+        "users_restored": "UsersRestored",
+        "users_total": "UsersTotal",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetRestores": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /restores"
+        },
+        "PostRestores": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /restores"
+        }
+      }
+    },
+    "Schedule": {
+      "type": "Schedule",
+      "operations_property": "Schedules",
+      "properties": {
+        "created_at": "CreatedAt",
+        "holiday_region": "HolidayRegion",
+        "human_readable_schedule": "HumanReadableSchedule",
+        "id": "Id",
+        "name": "Name",
+        "schedule_days_of_week": "ScheduleDaysOfWeek",
+        "schedule_time_zone": "ScheduleTimeZone",
+        "schedule_times_of_day": "ScheduleTimesOfDay",
+        "updated_at": "UpdatedAt"
+      },
+      "operations": {
+        "DeleteSchedulesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /schedules/{id}"
+        },
+        "GetSchedules": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /schedules"
+        },
+        "GetSchedulesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /schedules/{id}"
+        },
+        "PatchSchedulesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /schedules/{id}"
+        },
+        "PostSchedules": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /schedules"
+        }
+      }
+    },
+    "ScheduledExport": {
+      "type": "ScheduledExport",
+      "operations_property": "ScheduledExports",
+      "properties": {
+        "created_at": "CreatedAt",
+        "disabled": "Disabled",
+        "export_options": "ExportOptions",
+        "export_type": "ExportType",
+        "holiday_region": "HolidayRegion",
+        "human_readable_schedule": "HumanReadableSchedule",
+        "id": "Id",
+        "interval": "Interval",
+        "last_error": "LastError",
+        "last_export_id": "LastExportId",
+        "last_run_at": "LastRunAt",
+        "name": "Name",
+        "recurring_day": "RecurringDay",
+        "recurring_days": "RecurringDays",
+        "report_name": "ReportName",
+        "schedule_days_of_week": "ScheduleDaysOfWeek",
+        "schedule_id": "ScheduleId",
+        "schedule_time_zone": "ScheduleTimeZone",
+        "schedule_times_of_day": "ScheduleTimesOfDay",
+        "trigger": "Trigger",
+        "updated_at": "UpdatedAt",
+        "user_id": "UserId"
+      },
+      "operations": {
+        "DeleteScheduledExportsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /scheduled_exports/{id}"
+        },
+        "GetScheduledExports": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /scheduled_exports"
+        },
+        "GetScheduledExportsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /scheduled_exports/{id}"
+        },
+        "PatchScheduledExportsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /scheduled_exports/{id}"
+        },
+        "PostScheduledExports": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /scheduled_exports"
+        }
+      }
+    },
+    "ScimLog": {
+      "type": "ScimLog",
+      "operations_property": "ScimLogs",
+      "properties": {
+        "created_at": "CreatedAt",
+        "http_response_code": "HttpResponseCode",
+        "id": "Id",
+        "request_json": "RequestJson",
+        "request_method": "RequestMethod",
+        "request_path": "RequestPath",
+        "response_json": "ResponseJson",
+        "user_agent": "UserAgent"
+      },
+      "operations": {
+        "GetScimLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /scim_logs"
+        },
+        "GetScimLogsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /scim_logs/{id}"
+        }
+      }
+    },
+    "Secret": {
+      "type": "Secret",
+      "operations_property": "Secrets",
+      "properties": {
+        "created_at": "CreatedAt",
+        "description": "Description",
+        "id": "Id",
+        "metadata": "Metadata",
+        "name": "Name",
+        "secret_type": "SecretType",
+        "updated_at": "UpdatedAt",
+        "value_field_names": "ValueFieldNames",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteSecretsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /secrets/{id}"
+        },
+        "GetSecrets": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /secrets"
+        },
+        "GetSecretsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /secrets/{id}"
+        },
+        "PatchSecretsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /secrets/{id}"
+        },
+        "PostSecrets": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /secrets"
+        }
+      }
+    },
+    "Session": {
+      "type": "Session",
+      "operations_property": "Sessions",
+      "properties": {
+        "id": "Id",
+        "language": "Language",
+        "otp": "Otp",
+        "partial_session_id": "PartialSessionId",
+        "password": "Password",
+        "read_only": "ReadOnly",
+        "sftp_insecure_ciphers": "SftpInsecureCiphers",
+        "username": "Username"
+      },
+      "operations": {
+        "DeleteSessions": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /sessions"
+        },
+        "PostSessions": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /sessions"
+        }
+      }
+    },
+    "SettingsChange": {
+      "type": "SettingsChange",
+      "operations_property": "SettingsChanges",
+      "properties": {
+        "api_key_id": "ApiKeyId",
+        "changes": "Changes",
+        "created_at": "CreatedAt",
+        "user_id": "UserId",
+        "user_is_files_support": "UserIsFilesSupport",
+        "user_is_from_parent_site": "UserIsFromParentSite",
+        "username": "Username"
+      },
+      "operations": {
+        "GetSettingsChanges": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /settings_changes"
+        }
+      }
+    },
+    "SftpActionLog": {
+      "type": "SftpActionLog",
+      "operations_property": "SftpActionLogs",
+      "properties": {
+        "action_type": "ActionType",
+        "auth_ciphers": "AuthCiphers",
+        "auth_method": "AuthMethod",
+        "bytes_transferred": "BytesTransferred",
+        "created_at": "CreatedAt",
+        "data_length": "DataLength",
+        "duration_ms": "DurationMs",
+        "entries_returned": "EntriesReturned",
+        "md5": "Md5",
+        "name": "Name",
+        "path": "Path",
+        "remote_ip": "RemoteIp",
+        "seq_id": "SeqId",
+        "server_ip": "ServerIp",
+        "session_uuid": "SessionUuid",
+        "sftp_response_code": "SftpResponseCode",
+        "sftp_response_message": "SftpResponseMessage",
+        "size": "Size",
+        "ssh_client_identification": "SshClientIdentification",
+        "status": "Status",
+        "success": "Success",
+        "timestamp": "Timestamp",
+        "true_path": "TruePath",
+        "username": "Username"
+      },
+      "operations": {
+        "GetSftpActionLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /sftp_action_logs"
+        }
+      }
+    },
+    "SftpHostKey": {
+      "type": "SftpHostKey",
+      "operations_property": "SftpHostKeys",
+      "properties": {
+        "active": "Active",
+        "custom_domain_id": "CustomDomainId",
+        "fingerprint_md5": "FingerprintMd5",
+        "fingerprint_sha256": "FingerprintSha256",
+        "id": "Id",
+        "key_type": "KeyType",
+        "name": "Name",
+        "private_key": "PrivateKey"
+      },
+      "operations": {
+        "DeleteSftpHostKeysId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /sftp_host_keys/{id}"
+        },
+        "GetSftpHostKeys": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /sftp_host_keys"
+        },
+        "GetSftpHostKeysId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /sftp_host_keys/{id}"
+        },
+        "PatchSftpHostKeysId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /sftp_host_keys/{id}"
+        },
+        "PostSftpHostKeys": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /sftp_host_keys"
+        }
+      }
+    },
+    "ShareGroup": {
+      "type": "ShareGroup",
+      "operations_property": "ShareGroups",
+      "properties": {
+        "id": "Id",
+        "members": "Members",
+        "name": "Name",
+        "notes": "Notes",
+        "user_id": "UserId"
+      },
+      "operations": {
+        "DeleteShareGroupsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /share_groups/{id}"
+        },
+        "GetShareGroups": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /share_groups"
+        },
+        "GetShareGroupsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /share_groups/{id}"
+        },
+        "PatchShareGroupsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /share_groups/{id}"
+        },
+        "PostShareGroups": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /share_groups"
+        }
+      }
+    },
+    "ShareGroupMember": {
+      "type": "ShareGroupMember",
+      "properties": {
+        "company": "Company",
+        "email": "Email",
+        "name": "Name"
+      },
+      "operations": {
+      }
+    },
+    "SiemHttpDestination": {
+      "type": "SiemHttpDestination",
+      "operations_property": "SiemHttpDestinations",
+      "properties": {
+        "action_entries_sent": "ActionEntriesSent",
+        "action_send_enabled": "ActionSendEnabled",
+        "additional_headers": "AdditionalHeaders",
+        "api_request_entries_sent": "ApiRequestEntriesSent",
+        "api_request_send_enabled": "ApiRequestSendEnabled",
+        "automation_entries_sent": "AutomationEntriesSent",
+        "automation_send_enabled": "AutomationSendEnabled",
+        "azure_dcr_immutable_id": "AzureDcrImmutableId",
+        "azure_oauth_client_credentials_client_id": "AzureOauthClientCredentialsClientId",
+        "azure_oauth_client_credentials_client_secret": "AzureOauthClientCredentialsClientSecret",
+        "azure_oauth_client_credentials_client_secret_masked": "AzureOauthClientCredentialsClientSecretMasked",
+        "azure_oauth_client_credentials_tenant_id": "AzureOauthClientCredentialsTenantId",
+        "azure_stream_name": "AzureStreamName",
+        "connection_test_entry": "ConnectionTestEntry",
+        "crowdstrike_token": "CrowdstrikeToken",
+        "crowdstrike_token_masked": "CrowdstrikeTokenMasked",
+        "datadog_api_key": "DatadogApiKey",
+        "datadog_api_key_masked": "DatadogApiKeyMasked",
+        "destination_type": "DestinationType",
+        "destination_url": "DestinationUrl",
+        "email_entries_sent": "EmailEntriesSent",
+        "email_send_enabled": "EmailSendEnabled",
+        "exavault_api_request_entries_sent": "ExavaultApiRequestEntriesSent",
+        "exavault_api_request_send_enabled": "ExavaultApiRequestSendEnabled",
+        "file_destination_path": "FileDestinationPath",
+        "file_format": "FileFormat",
+        "file_interval_minutes": "FileIntervalMinutes",
+        "ftp_action_entries_sent": "FtpActionEntriesSent",
+        "ftp_action_send_enabled": "FtpActionSendEnabled",
+        "generic_payload_type": "GenericPayloadType",
+        "id": "Id",
+        "last_http_call_duration_ms": "LastHttpCallDurationMs",
+        "last_http_call_error_message": "LastHttpCallErrorMessage",
+        "last_http_call_response_body": "LastHttpCallResponseBody",
+        "last_http_call_response_code": "LastHttpCallResponseCode",
+        "last_http_call_success": "LastHttpCallSuccess",
+        "last_http_call_target_type": "LastHttpCallTargetType",
+        "last_http_call_time": "LastHttpCallTime",
+        "most_recent_http_call_success_time": "MostRecentHttpCallSuccessTime",
+        "name": "Name",
+        "new_relic_api_key": "NewRelicApiKey",
+        "new_relic_api_key_masked": "NewRelicApiKeyMasked",
+        "outbound_connection_entries_sent": "OutboundConnectionEntriesSent",
+        "outbound_connection_send_enabled": "OutboundConnectionSendEnabled",
+        "public_hosting_request_entries_sent": "PublicHostingRequestEntriesSent",
+        "public_hosting_request_send_enabled": "PublicHostingRequestSendEnabled",
+        "qradar_password": "QradarPassword",
+        "qradar_password_masked": "QradarPasswordMasked",
+        "qradar_username": "QradarUsername",
+        "sending_active": "SendingActive",
+        "settings_change_entries_sent": "SettingsChangeEntriesSent",
+        "settings_change_send_enabled": "SettingsChangeSendEnabled",
+        "sftp_action_entries_sent": "SftpActionEntriesSent",
+        "sftp_action_send_enabled": "SftpActionSendEnabled",
+        "solar_winds_token": "SolarWindsToken",
+        "solar_winds_token_masked": "SolarWindsTokenMasked",
+        "splunk_token": "SplunkToken",
+        "splunk_token_masked": "SplunkTokenMasked",
+        "sync_entries_sent": "SyncEntriesSent",
+        "sync_send_enabled": "SyncSendEnabled",
+        "web_dav_action_entries_sent": "WebDavActionEntriesSent",
+        "web_dav_action_send_enabled": "WebDavActionSendEnabled"
+      },
+      "operations": {
+        "DeleteSiemHttpDestinationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /siem_http_destinations/{id}"
+        },
+        "GetSiemHttpDestinations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /siem_http_destinations"
+        },
+        "GetSiemHttpDestinationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /siem_http_destinations/{id}"
+        },
+        "PatchSiemHttpDestinationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /siem_http_destinations/{id}"
+        },
+        "PostSiemHttpDestinations": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /siem_http_destinations"
+        },
+        "PostSiemHttpDestinationsSendTestEntry": {
+          "method": "SendTestEntry",
+          "aliases": [
+
+          ],
+          "route": "POST /siem_http_destinations/send_test_entry"
+        }
+      }
+    },
+    "SiemHttpDestinationEvent": {
+      "type": "SiemHttpDestinationEvent",
+      "operations_property": "SiemHttpDestinationEvents",
+      "properties": {
+        "body": "Body",
+        "body_url": "BodyUrl",
+        "created_at": "CreatedAt",
+        "event_errors": "EventErrors",
+        "event_type": "EventType",
+        "id": "Id",
+        "siem_http_destination_id": "SiemHttpDestinationId",
+        "status": "Status"
+      },
+      "operations": {
+        "GetSiemHttpDestinationEvents": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /siem_http_destination_events"
+        },
+        "GetSiemHttpDestinationEventsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /siem_http_destination_events/{id}"
+        }
+      }
+    },
+    "Site": {
+      "type": "Site",
+      "operations_property": "Sites",
+      "properties": {
+        "active_sftp_host_key_id": "ActiveSftpHostKeyId",
+        "active_sftp_host_key_ids": "ActiveSftpHostKeyIds",
+        "additional_text_file_types": "AdditionalTextFileTypes",
+        "admin_user_id": "AdminUserId",
+        "admins_bypass_locked_subfolders": "AdminsBypassLockedSubfolders",
+        "ai_feature_availability": "AiFeatureAvailability",
+        "allow_bundle_names": "AllowBundleNames",
+        "allow_user_level_2fa_override": "AllowUserLevel2faOverride",
+        "allow_user_level_allowed_ip_override": "AllowUserLevelAllowedIpOverride",
+        "allow_user_level_ssl_override": "AllowUserLevelSslOverride",
+        "allowed_2fa_method_bypass_for_ftp_sftp_dav": "Allowed2faMethodBypassForFtpSftpDav",
+        "allowed_2fa_method_email": "Allowed2faMethodEmail",
+        "allowed_2fa_method_sms": "Allowed2faMethodSms",
+        "allowed_2fa_method_static": "Allowed2faMethodStatic",
+        "allowed_2fa_method_totp": "Allowed2faMethodTotp",
+        "allowed_2fa_method_webauthn": "Allowed2faMethodWebauthn",
+        "allowed_2fa_method_yubi": "Allowed2faMethodYubi",
+        "allowed_countries": "AllowedCountries",
+        "allowed_ips": "AllowedIps",
+        "always_mkdir_parents": "AlwaysMkdirParents",
+        "as2_message_retention_days": "As2MessageRetentionDays",
+        "ask_about_overwrites": "AskAboutOverwrites",
+        "bundle_activity_notifications": "BundleActivityNotifications",
+        "bundle_expiration": "BundleExpiration",
+        "bundle_not_found_message": "BundleNotFoundMessage",
+        "bundle_password_required": "BundlePasswordRequired",
+        "bundle_recipient_blacklist_domains": "BundleRecipientBlacklistDomains",
+        "bundle_recipient_blacklist_free_email_domains": "BundleRecipientBlacklistFreeEmailDomains",
+        "bundle_registration_notifications": "BundleRegistrationNotifications",
+        "bundle_require_note": "BundleRequireNote",
+        "bundle_require_registration": "BundleRequireRegistration",
+        "bundle_require_share_recipient": "BundleRequireShareRecipient",
+        "bundle_send_one_time_password_to_recipient_at_registration": "BundleSendOneTimePasswordToRecipientAtRegistration",
+        "bundle_send_shared_receipts": "BundleSendSharedReceipts",
+        "bundle_upload_receipt_notifications": "BundleUploadReceiptNotifications",
+        "bundle_watermark_attachment": "BundleWatermarkAttachment",
+        "bundle_watermark_value": "BundleWatermarkValue",
+        "bundles_default_owned_by_primary_group": "BundlesDefaultOwnedByPrimaryGroup",
+        "calculate_file_checksums_crc32": "CalculateFileChecksumsCrc32",
+        "calculate_file_checksums_md5": "CalculateFileChecksumsMd5",
+        "calculate_file_checksums_sha1": "CalculateFileChecksumsSha1",
+        "calculate_file_checksums_sha256": "CalculateFileChecksumsSha256",
+        "color2_left": "Color2Left",
+        "color2_link": "Color2Link",
+        "color2_text": "Color2Text",
+        "color2_top": "Color2Top",
+        "color2_top_text": "Color2TopText",
+        "contact_name": "ContactName",
+        "created_at": "CreatedAt",
+        "currency": "Currency",
+        "custom_namespace": "CustomNamespace",
+        "dav_enabled": "DavEnabled",
+        "dav_user_root_enabled": "DavUserRootEnabled",
+        "days_to_retain_backups": "DaysToRetainBackups",
+        "default_time_zone": "DefaultTimeZone",
+        "desktop_app": "DesktopApp",
+        "desktop_app_session_ip_pinning": "DesktopAppSessionIpPinning",
+        "desktop_app_session_lifetime": "DesktopAppSessionLifetime",
+        "disable_all_ai_features": "DisableAllAiFeatures",
+        "disable_files_certificate_generation": "DisableFilesCertificateGeneration",
+        "disable_notifications": "DisableNotifications",
+        "disable_password_reset": "DisablePasswordReset",
+        "disallowed_countries": "DisallowedCountries",
+        "document_edits_in_bundle_allowed": "DocumentEditsInBundleAllowed",
+        "domain": "Domain",
+        "domain_hsts_header": "DomainHstsHeader",
+        "domain_letsencrypt_chain": "DomainLetsencryptChain",
+        "email": "Email",
+        "email_footer_custom_text": "EmailFooterCustomText",
+        "fedramp": "Fedramp",
+        "file_activity_events_enabled": "FileActivityEventsEnabled",
+        "files_com_remote_server_enabled": "FilesComRemoteServerEnabled",
+        "folder_permissions_groups_only": "FolderPermissionsGroupsOnly",
+        "ftp_enabled": "FtpEnabled",
+        "group_admins_can_add_users": "GroupAdminsCanAddUsers",
+        "group_admins_can_bypass_user_lifecycle_rules": "GroupAdminsCanBypassUserLifecycleRules",
+        "group_admins_can_delete_users": "GroupAdminsCanDeleteUsers",
+        "group_admins_can_enable_disable_users": "GroupAdminsCanEnableDisableUsers",
+        "group_admins_can_manage_group_memberships": "GroupAdminsCanManageGroupMemberships",
+        "group_admins_can_modify_users": "GroupAdminsCanModifyUsers",
+        "group_admins_can_reset_passwords": "GroupAdminsCanResetPasswords",
+        "group_admins_can_set_user_password": "GroupAdminsCanSetUserPassword",
+        "hipaa": "Hipaa",
+        "icon128": "Icon128",
+        "icon16": "Icon16",
+        "icon32": "Icon32",
+        "icon48": "Icon48",
+        "id": "Id",
+        "immutable_files_set_at": "ImmutableFilesSetAt",
+        "include_password_in_welcome_email": "IncludePasswordInWelcomeEmail",
+        "language": "Language",
+        "ldap_base_dn": "LdapBaseDn",
+        "ldap_domain": "LdapDomain",
+        "ldap_enabled": "LdapEnabled",
+        "ldap_group_action": "LdapGroupAction",
+        "ldap_group_exclusion": "LdapGroupExclusion",
+        "ldap_group_inclusion": "LdapGroupInclusion",
+        "ldap_host": "LdapHost",
+        "ldap_host_2": "LdapHost2",
+        "ldap_host_3": "LdapHost3",
+        "ldap_port": "LdapPort",
+        "ldap_secure": "LdapSecure",
+        "ldap_server_certificate": "LdapServerCertificate",
+        "ldap_type": "LdapType",
+        "ldap_user_action": "LdapUserAction",
+        "ldap_user_include_groups": "LdapUserIncludeGroups",
+        "ldap_username": "LdapUsername",
+        "ldap_username_field": "LdapUsernameField",
+        "legacy_checksums_mode": "LegacyChecksumsMode",
+        "login_help_text": "LoginHelpText",
+        "login_page_background_image": "LoginPageBackgroundImage",
+        "logo": "Logo",
+        "managed_site_settings": "ManagedSiteSettings",
+        "max_prior_passwords": "MaxPriorPasswords",
+        "mcp_dcr_enabled": "McpDcrEnabled",
+        "migrate_remote_server_sync_to_sync": "MigrateRemoteServerSyncToSync",
+        "mobile_app": "MobileApp",
+        "mobile_app_session_ip_pinning": "MobileAppSessionIpPinning",
+        "mobile_app_session_lifetime": "MobileAppSessionLifetime",
+        "motd_text": "MotdText",
+        "motd_use_for_ftp": "MotdUseForFtp",
+        "motd_use_for_sftp": "MotdUseForSftp",
+        "name": "Name",
+        "next_billing_amount": "NextBillingAmount",
+        "next_billing_date": "NextBillingDate",
+        "non_sso_groups_allowed": "NonSsoGroupsAllowed",
+        "non_sso_users_allowed": "NonSsoUsersAllowed",
+        "office_integration_available": "OfficeIntegrationAvailable",
+        "office_integration_type": "OfficeIntegrationType",
+        "oncehub_link": "OncehubLink",
+        "opt_out_global": "OptOutGlobal",
+        "overdue": "Overdue",
+        "password_min_length": "PasswordMinLength",
+        "password_require_letter": "PasswordRequireLetter",
+        "password_require_mixed": "PasswordRequireMixed",
+        "password_require_number": "PasswordRequireNumber",
+        "password_require_special": "PasswordRequireSpecial",
+        "password_require_unbreached": "PasswordRequireUnbreached",
+        "password_requirements_apply_to_bundles": "PasswordRequirementsApplyToBundles",
+        "password_validity_days": "PasswordValidityDays",
+        "phone": "Phone",
+        "pin_all_remote_servers_to_site_region": "PinAllRemoteServersToSiteRegion",
+        "prevent_root_permissions_for_non_site_admins": "PreventRootPermissionsForNonSiteAdmins",
+        "protocol_access_groups_only": "ProtocolAccessGroupsOnly",
+        "reply_to_email": "ReplyToEmail",
+        "require_2fa": "Require2fa",
+        "require_2fa_exempt_all_sso_users": "Require2faExemptAllSsoUsers",
+        "require_2fa_stop_time": "Require2faStopTime",
+        "require_2fa_user_type": "Require2faUserType",
+        "require_logout_from_bundles_and_inboxes": "RequireLogoutFromBundlesAndInboxes",
+        "restrict_root_folder_behaviors_to_site_admins": "RestrictRootFolderBehaviorsToSiteAdmins",
+        "revoke_bundle_access_on_disable_or_delete": "RevokeBundleAccessOnDisableOrDelete",
+        "root_folder_behaviors_apply_to_workspaces": "RootFolderBehaviorsApplyToWorkspaces",
+        "s3_compatible_endpoint_enabled": "S3CompatibleEndpointEnabled",
+        "session": "Session",
+        "session_expiry_minutes": "SessionExpiryMinutes",
+        "sftp_enabled": "SftpEnabled",
+        "sftp_finalize_partial_uploads": "SftpFinalizePartialUploads",
+        "sftp_host_key_type": "SftpHostKeyType",
+        "sftp_insecure_ciphers": "SftpInsecureCiphers",
+        "sftp_insecure_diffie_hellman": "SftpInsecureDiffieHellman",
+        "sftp_user_root_enabled": "SftpUserRootEnabled",
+        "sharing_enabled": "SharingEnabled",
+        "show_request_access_link": "ShowRequestAccessLink",
+        "show_user_notifications_log_in_link": "ShowUserNotificationsLogInLink",
+        "site_footer": "SiteFooter",
+        "site_header": "SiteHeader",
+        "site_public_footer": "SitePublicFooter",
+        "site_public_header": "SitePublicHeader",
+        "smtp_address": "SmtpAddress",
+        "smtp_authentication": "SmtpAuthentication",
+        "smtp_from": "SmtpFrom",
+        "smtp_port": "SmtpPort",
+        "smtp_ssl": "SmtpSsl",
+        "smtp_username": "SmtpUsername",
+        "snapshot_sharing_enabled": "SnapshotSharingEnabled",
+        "ssl_required": "SslRequired",
+        "subdomain": "Subdomain",
+        "switch_to_plan_date": "SwitchToPlanDate",
+        "trial_days_left": "TrialDaysLeft",
+        "trial_until": "TrialUntil",
+        "uploads_via_email_authentication": "UploadsViaEmailAuthentication",
+        "use_dedicated_ips_for_smtp": "UseDedicatedIpsForSmtp",
+        "use_provided_modified_at": "UseProvidedModifiedAt",
+        "user": "User",
+        "user_lockout": "UserLockout",
+        "user_lockout_lock_period": "UserLockoutLockPeriod",
+        "user_lockout_tries": "UserLockoutTries",
+        "user_lockout_within": "UserLockoutWithin",
+        "user_requests_enabled": "UserRequestsEnabled",
+        "user_requests_notify_admins": "UserRequestsNotifyAdmins",
+        "username_display": "UsernameDisplay",
+        "users_can_create_api_keys": "UsersCanCreateApiKeys",
+        "users_can_create_ssh_keys": "UsersCanCreateSshKeys",
+        "welcome_custom_text": "WelcomeCustomText",
+        "welcome_email_cc": "WelcomeEmailCc",
+        "welcome_email_enabled": "WelcomeEmailEnabled",
+        "welcome_email_subject": "WelcomeEmailSubject",
+        "welcome_screen": "WelcomeScreen",
+        "windows_mode_ftp": "WindowsModeFtp"
+      },
+      "operations": {
+        "GetSite": {
+          "method": "Get",
+          "aliases": [
+
+          ],
+          "route": "GET /site"
+        },
+        "GetSiteUsage": {
+          "method": "GetUsage",
+          "aliases": [
+
+          ],
+          "route": "GET /site/usage"
+        },
+        "PatchSite": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /site"
+        }
+      }
+    },
+    "SiteSubdomainRedirect": {
+      "type": "SiteSubdomainRedirect",
+      "operations_property": "SiteSubdomainRedirects",
+      "properties": {
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "subdomain": "Subdomain",
+        "updated_at": "UpdatedAt"
+      },
+      "operations": {
+        "DeleteSiteSubdomainRedirectsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /site_subdomain_redirects/{id}"
+        },
+        "GetSiteSubdomainRedirects": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /site_subdomain_redirects"
+        },
+        "GetSiteSubdomainRedirectsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /site_subdomain_redirects/{id}"
+        }
+      }
+    },
+    "Snapshot": {
+      "type": "Snapshot",
+      "operations_property": "Snapshots",
+      "properties": {
+        "bundle_id": "BundleId",
+        "expires_at": "ExpiresAt",
+        "finalized_at": "FinalizedAt",
+        "id": "Id",
+        "name": "Name",
+        "paths": "Paths",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteSnapshotsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /snapshots/{id}"
+        },
+        "GetSnapshots": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /snapshots"
+        },
+        "GetSnapshotsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /snapshots/{id}"
+        },
+        "PatchSnapshotsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /snapshots/{id}"
+        },
+        "PostSnapshots": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /snapshots"
+        },
+        "PostSnapshotsIdFinalize": {
+          "method": "Finalize",
+          "aliases": [
+
+          ],
+          "route": "POST /snapshots/{id}/finalize"
+        }
+      }
+    },
+    "SsoEvent": {
+      "type": "SsoEvent",
+      "operations_property": "SsoEvents",
+      "properties": {
+        "body": "Body",
+        "body_url": "BodyUrl",
+        "created_at": "CreatedAt",
+        "event_errors": "EventErrors",
+        "event_type": "EventType",
+        "id": "Id",
+        "idp_uid": "IdpUid",
+        "ip": "Ip",
+        "provider": "Provider",
+        "provider_label": "ProviderLabel",
+        "region": "Region",
+        "status": "Status",
+        "user_id": "UserId",
+        "username": "Username"
+      },
+      "operations": {
+        "GetSsoEvents": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /sso_events"
+        },
+        "GetSsoEventsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /sso_events/{id}"
+        }
+      }
+    },
+    "SsoStrategy": {
+      "type": "SsoStrategy",
+      "operations_property": "SsoStrategies",
+      "properties": {
+        "deprovision_behavior": "DeprovisionBehavior",
+        "deprovision_groups": "DeprovisionGroups",
+        "deprovision_users": "DeprovisionUsers",
+        "display_on_login_page": "DisplayOnLoginPage",
+        "enabled": "Enabled",
+        "id": "Id",
+        "label": "Label",
+        "ldap_base_dn": "LdapBaseDn",
+        "ldap_domain": "LdapDomain",
+        "ldap_host": "LdapHost",
+        "ldap_host_2": "LdapHost2",
+        "ldap_host_3": "LdapHost3",
+        "ldap_port": "LdapPort",
+        "ldap_provisioning_enabled": "LdapProvisioningEnabled",
+        "ldap_secure": "LdapSecure",
+        "ldap_server_certificate": "LdapServerCertificate",
+        "ldap_type": "LdapType",
+        "ldap_username": "LdapUsername",
+        "ldap_username_field": "LdapUsernameField",
+        "logo_url": "LogoUrl",
+        "protocol": "Protocol",
+        "provider": "Provider",
+        "provider_identifier": "ProviderIdentifier",
+        "provision_attachments_permission": "ProvisionAttachmentsPermission",
+        "provision_company": "ProvisionCompany",
+        "provision_dav_permission": "ProvisionDavPermission",
+        "provision_email_signup_groups": "ProvisionEmailSignupGroups",
+        "provision_filesystem_layout": "ProvisionFilesystemLayout",
+        "provision_ftp_permission": "ProvisionFtpPermission",
+        "provision_group_admin_groups": "ProvisionGroupAdminGroups",
+        "provision_group_default": "ProvisionGroupDefault",
+        "provision_group_exclusion": "ProvisionGroupExclusion",
+        "provision_group_inclusion": "ProvisionGroupInclusion",
+        "provision_group_required": "ProvisionGroupRequired",
+        "provision_groups": "ProvisionGroups",
+        "provision_readonly_site_admin_groups": "ProvisionReadonlySiteAdminGroups",
+        "provision_require_2fa": "ProvisionRequire2fa",
+        "provision_sftp_permission": "ProvisionSftpPermission",
+        "provision_site_admin_groups": "ProvisionSiteAdminGroups",
+        "provision_time_zone": "ProvisionTimeZone",
+        "provision_users": "ProvisionUsers",
+        "saml_provider_cert_fingerprint": "SamlProviderCertFingerprint",
+        "saml_provider_issuer_url": "SamlProviderIssuerUrl",
+        "saml_provider_metadata_content": "SamlProviderMetadataContent",
+        "saml_provider_metadata_url": "SamlProviderMetadataUrl",
+        "saml_provider_slo_target_url": "SamlProviderSloTargetUrl",
+        "saml_provider_sso_target_url": "SamlProviderSsoTargetUrl",
+        "scim_authentication_method": "ScimAuthenticationMethod",
+        "scim_oauth_access_token": "ScimOauthAccessToken",
+        "scim_oauth_access_token_expires_at": "ScimOauthAccessTokenExpiresAt",
+        "scim_username": "ScimUsername",
+        "subdomain": "Subdomain",
+        "user_count": "UserCount"
+      },
+      "operations": {
+        "GetSsoStrategies": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /sso_strategies"
+        },
+        "GetSsoStrategiesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /sso_strategies/{id}"
+        },
+        "PostSsoStrategiesIdSync": {
+          "method": "Sync",
+          "aliases": [
+
+          ],
+          "route": "POST /sso_strategies/{id}/sync"
+        }
+      }
+    },
+    "Status": {
+      "type": "Status",
+      "properties": {
+        "clickwrap_body": "ClickwrapBody",
+        "clickwrap_id": "ClickwrapId",
+        "code": "Code",
+        "data": "Data",
+        "errors": "Errors",
+        "message": "Message",
+        "status": "StatusType"
+      },
+      "operations": {
+      }
+    },
+    "Style": {
+      "type": "Style",
+      "operations_property": "Styles",
+      "properties": {
+        "file": "File",
+        "id": "Id",
+        "logo": "Logo",
+        "logo_click_href": "LogoClickHref",
+        "path": "Path",
+        "thumbnail": "Thumbnail"
+      },
+      "operations": {
+        "DeleteStylesPath": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /styles/{path}"
+        },
+        "GetStylesPath": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /styles/{path}"
+        },
+        "PatchStylesPath": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /styles/{path}"
+        }
+      }
+    },
+    "Sync": {
+      "type": "Sync",
+      "operations_property": "Syncs",
+      "properties": {
+        "always_write_trigger_file": "AlwaysWriteTriggerFile",
+        "created_at": "CreatedAt",
+        "delete_empty_folders": "DeleteEmptyFolders",
+        "description": "Description",
+        "dest_path": "DestPath",
+        "dest_remote_server_id": "DestRemoteServerId",
+        "dest_site_id": "DestSiteId",
+        "disabled": "Disabled",
+        "exclude_patterns": "ExcludePatterns",
+        "holiday_region": "HolidayRegion",
+        "id": "Id",
+        "include_patterns": "IncludePatterns",
+        "interval": "Interval",
+        "keep_after_copy": "KeepAfterCopy",
+        "latest_sync_run": "LatestSyncRun",
+        "name": "Name",
+        "recurring_day": "RecurringDay",
+        "recurring_days": "RecurringDays",
+        "schedule_days_of_week": "ScheduleDaysOfWeek",
+        "schedule_id": "ScheduleId",
+        "schedule_time_zone": "ScheduleTimeZone",
+        "schedule_times_of_day": "ScheduleTimesOfDay",
+        "site_id": "SiteId",
+        "src_path": "SrcPath",
+        "src_remote_server_id": "SrcRemoteServerId",
+        "src_site_id": "SrcSiteId",
+        "sync_interval_minutes": "SyncIntervalMinutes",
+        "trigger": "Trigger",
+        "trigger_file": "TriggerFile",
+        "two_way": "TwoWay",
+        "updated_at": "UpdatedAt",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteSyncsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /syncs/{id}"
+        },
+        "GetSyncs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /syncs"
+        },
+        "GetSyncsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /syncs/{id}"
+        },
+        "PatchSyncsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /syncs/{id}"
+        },
+        "PostSyncs": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /syncs"
+        },
+        "SyncDryRun": {
+          "method": "DryRun",
+          "aliases": [
+
+          ],
+          "route": "POST /syncs/{id}/dry_run"
+        },
+        "SyncManualRun": {
+          "method": "ManualRun",
+          "aliases": [
+
+          ],
+          "route": "POST /syncs/{id}/manual_run"
+        }
+      }
+    },
+    "SyncLog": {
+      "type": "SyncLog",
+      "operations_property": "SyncLogs",
+      "properties": {
+        "created_at": "CreatedAt",
+        "error_type": "ErrorType",
+        "external_event_id": "ExternalEventId",
+        "file_type": "FileType",
+        "message": "Message",
+        "operation": "Operation",
+        "path": "Path",
+        "size": "Size",
+        "status": "Status",
+        "sync_id": "SyncId",
+        "sync_run_id": "SyncRunId",
+        "timestamp": "Timestamp"
+      },
+      "operations": {
+        "GetSyncLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /sync_logs"
+        }
+      }
+    },
+    "SyncRun": {
+      "type": "SyncRun",
+      "operations_property": "SyncRuns",
+      "properties": {
+        "body": "Body",
+        "bytes_synced": "BytesSynced",
+        "compared_files": "ComparedFiles",
+        "compared_folders": "ComparedFolders",
+        "completed_at": "CompletedAt",
+        "created_at": "CreatedAt",
+        "dest_remote_server_type": "DestRemoteServerType",
+        "dry_run": "DryRun",
+        "errored_files": "ErroredFiles",
+        "estimated_bytes_count": "EstimatedBytesCount",
+        "event_errors": "EventErrors",
+        "id": "Id",
+        "live_transfers": "LiveTransfers",
+        "log_url": "LogUrl",
+        "runtime": "Runtime",
+        "site_id": "SiteId",
+        "src_remote_server_type": "SrcRemoteServerType",
+        "status": "Status",
+        "successful_files": "SuccessfulFiles",
+        "sync_id": "SyncId",
+        "sync_name": "SyncName",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetSyncRuns": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /sync_runs"
+        },
+        "GetSyncRunsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /sync_runs/{id}"
+        }
+      }
+    },
+    "SyncRunLiveTransfer": {
+      "type": "SyncRunLiveTransfer",
+      "properties": {
+        "bytes_copied": "BytesCopied",
+        "bytes_total": "BytesTotal",
+        "eta": "Eta",
+        "path": "Path",
+        "percentage": "Percentage",
+        "started_at": "StartedAt",
+        "status": "Status"
+      },
+      "operations": {
+      }
+    },
+    "UsageByTopLevelDir": {
+      "type": "UsageByTopLevelDir",
+      "properties": {
+        "count": "Count",
+        "dir": "Dir",
+        "size": "Size"
+      },
+      "operations": {
+      }
+    },
+    "UsageDailySnapshot": {
+      "type": "UsageDailySnapshot",
+      "operations_property": "UsageDailySnapshots",
+      "properties": {
+        "api_usage_available": "ApiUsageAvailable",
+        "current_storage": "CurrentStorage",
+        "date": "Date",
+        "deleted_files_counted_in_minimum": "DeletedFilesCountedInMinimum",
+        "deleted_files_storage": "DeletedFilesStorage",
+        "id": "Id",
+        "read_api_usage": "ReadApiUsage",
+        "root_storage": "RootStorage",
+        "transformation_credits_usage": "TransformationCreditsUsage",
+        "usage_by_top_level_dir": "UsageByTopLevelDir",
+        "user_count": "UserCount",
+        "write_api_usage": "WriteApiUsage"
+      },
+      "operations": {
+        "GetUsageDailySnapshots": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /usage_daily_snapshots"
+        }
+      }
+    },
+    "UsageSnapshot": {
+      "type": "UsageSnapshot",
+      "operations_property": "UsageSnapshots",
+      "properties": {
+        "bytes_sent": "BytesSent",
+        "current_storage": "CurrentStorage",
+        "deleted_files_counted_in_minimum": "DeletedFilesCountedInMinimum",
+        "deleted_files_storage": "DeletedFilesStorage",
+        "end_at": "EndAt",
+        "high_water_storage": "HighWaterStorage",
+        "high_water_user_count": "HighWaterUserCount",
+        "id": "Id",
+        "root_storage": "RootStorage",
+        "start_at": "StartAt",
+        "sync_bytes_received": "SyncBytesReceived",
+        "sync_bytes_sent": "SyncBytesSent",
+        "total_billable_transfer_usage": "TotalBillableTransferUsage",
+        "total_billable_usage": "TotalBillableUsage",
+        "transformation_credits_usage": "TransformationCreditsUsage",
+        "usage_by_top_level_dir": "UsageByTopLevelDir"
+      },
+      "operations": {
+        "GetUsageSnapshots": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /usage_snapshots"
+        }
+      }
+    },
+    "User": {
+      "type": "User",
+      "operations_property": "Users",
+      "properties": {
+        "active_2fa": "Active2fa",
+        "admin_group_ids": "AdminGroupIds",
+        "ai_assistant_personality_id": "AiAssistantPersonalityId",
+        "allowed_ips": "AllowedIps",
+        "announcements_read": "AnnouncementsRead",
+        "api_keys_count": "ApiKeysCount",
+        "attachments_permission": "AttachmentsPermission",
+        "authenticate_until": "AuthenticateUntil",
+        "authentication_method": "AuthenticationMethod",
+        "avatar_delete": "AvatarDelete",
+        "avatar_file": "AvatarFile",
+        "avatar_url": "AvatarUrl",
+        "billable": "Billable",
+        "billing_permission": "BillingPermission",
+        "bypass_site_allowed_ips": "BypassSiteAllowedIps",
+        "bypass_user_lifecycle_rules": "BypassUserLifecycleRules",
+        "change_password": "ChangePassword",
+        "change_password_confirmation": "ChangePasswordConfirmation",
+        "clear_2fa": "Clear2fa",
+        "company": "Company",
+        "convert_to_partner_user": "ConvertToPartnerUser",
+        "created_at": "CreatedAt",
+        "dav_permission": "DavPermission",
+        "days_remaining_until_password_expire": "DaysRemainingUntilPasswordExpire",
+        "default_workspace_id": "DefaultWorkspaceId",
+        "desktop_configuration_profile_id": "DesktopConfigurationProfileId",
+        "disabled": "Disabled",
+        "disabled_expired_or_inactive": "DisabledExpiredOrInactive",
+        "email": "Email",
+        "externally_managed": "ExternallyManaged",
+        "filesystem_layout": "FilesystemLayout",
+        "first_login_at": "FirstLoginAt",
+        "ftp_permission": "FtpPermission",
+        "grant_permission": "GrantPermission",
+        "group_id": "GroupId",
+        "group_ids": "GroupIds",
+        "header_text": "HeaderText",
+        "id": "Id",
+        "imported_password_hash": "ImportedPasswordHash",
+        "integration_centric_profile_id": "IntegrationCentricProfileId",
+        "language": "Language",
+        "last_active_at": "LastActiveAt",
+        "last_api_use_at": "LastApiUseAt",
+        "last_dav_login_at": "LastDavLoginAt",
+        "last_desktop_login_at": "LastDesktopLoginAt",
+        "last_ftp_login_at": "LastFtpLoginAt",
+        "last_login_at": "LastLoginAt",
+        "last_protocol_cipher": "LastProtocolCipher",
+        "last_restapi_login_at": "LastRestapiLoginAt",
+        "last_sftp_login_at": "LastSftpLoginAt",
+        "last_web_login_at": "LastWebLoginAt",
+        "lockout_expires": "LockoutExpires",
+        "name": "Name",
+        "notes": "Notes",
+        "notification_daily_send_time": "NotificationDailySendTime",
+        "notify_on_all_automation_failures": "NotifyOnAllAutomationFailures",
+        "notify_on_all_expectation_failures": "NotifyOnAllExpectationFailures",
+        "notify_on_all_pending_work_failures": "NotifyOnAllPendingWorkFailures",
+        "notify_on_all_siem_http_destination_failures": "NotifyOnAllSiemHttpDestinationFailures",
+        "notify_on_all_site_warnings": "NotifyOnAllSiteWarnings",
+        "notify_on_all_sso_failures": "NotifyOnAllSsoFailures",
+        "notify_on_all_sync_failures": "NotifyOnAllSyncFailures",
+        "notify_on_all_user_security_events": "NotifyOnAllUserSecurityEvents",
+        "office_integration_enabled": "OfficeIntegrationEnabled",
+        "partner_admin": "PartnerAdmin",
+        "partner_id": "PartnerId",
+        "partner_name": "PartnerName",
+        "password": "Password",
+        "password_confirmation": "PasswordConfirmation",
+        "password_expire_at": "PasswordExpireAt",
+        "password_expired": "PasswordExpired",
+        "password_set_at": "PasswordSetAt",
+        "password_validity_days": "PasswordValidityDays",
+        "primary_group_id": "PrimaryGroupId",
+        "public_keys_count": "PublicKeysCount",
+        "readonly_site_admin": "ReadonlySiteAdmin",
+        "receive_admin_alerts": "ReceiveAdminAlerts",
+        "require_2fa": "Require2fa",
+        "require_login_by": "RequireLoginBy",
+        "require_password_change": "RequirePasswordChange",
+        "responsible_group_id": "ResponsibleGroupId",
+        "responsible_user_id": "ResponsibleUserId",
+        "restapi_permission": "RestapiPermission",
+        "s3_compatible_endpoint_permission": "S3CompatibleEndpointPermission",
+        "self_managed": "SelfManaged",
+        "sftp_permission": "SftpPermission",
+        "site_admin": "SiteAdmin",
+        "site_id": "SiteId",
+        "skip_welcome_screen": "SkipWelcomeScreen",
+        "ssl_required": "SslRequired",
+        "sso_strategy_id": "SsoStrategyId",
+        "subscribe_to_newsletter": "SubscribeToNewsletter",
+        "tags": "Tags",
+        "time_zone": "TimeZone",
+        "type_of_2fa": "TypeOf2fa",
+        "type_of_2fa_for_display": "TypeOf2faForDisplay",
+        "user_home": "UserHome",
+        "user_root": "UserRoot",
+        "username": "Username",
+        "workspace_admin": "WorkspaceAdmin",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteUsersId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /users/{id}"
+        },
+        "GetUsers": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /users"
+        },
+        "GetUsersId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /users/{id}"
+        },
+        "PatchUsersId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /users/{id}"
+        },
+        "PostUsers": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /users"
+        },
+        "PostUsersId2faReset": {
+          "method": "User2faReset",
+          "aliases": [
+
+          ],
+          "route": "POST /users/{id}/2fa/reset"
+        },
+        "PostUsersIdResendWelcomeEmail": {
+          "method": "ResendWelcomeEmail",
+          "aliases": [
+
+          ],
+          "route": "POST /users/{id}/resend_welcome_email"
+        },
+        "PostUsersIdUnlock": {
+          "method": "Unlock",
+          "aliases": [
+
+          ],
+          "route": "POST /users/{id}/unlock"
+        }
+      }
+    },
+    "UserAdditionalEmailRecipient": {
+      "type": "UserAdditionalEmailRecipient",
+      "operations_property": "UserAdditionalEmailRecipients",
+      "properties": {
+        "created_at": "CreatedAt",
+        "email": "Email",
+        "id": "Id",
+        "user_id": "UserId",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteUserAdditionalEmailRecipientsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /user_additional_email_recipients/{id}"
+        },
+        "GetUserAdditionalEmailRecipients": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /user_additional_email_recipients"
+        },
+        "GetUserAdditionalEmailRecipientsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /user_additional_email_recipients/{id}"
+        },
+        "PatchUserAdditionalEmailRecipientsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /user_additional_email_recipients/{id}"
+        },
+        "PostUserAdditionalEmailRecipients": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /user_additional_email_recipients"
+        }
+      }
+    },
+    "UserCipherUse": {
+      "type": "UserCipherUse",
+      "operations_property": "UserCipherUses",
+      "properties": {
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "insecure": "Insecure",
+        "interface": "Interface",
+        "protocol_cipher": "ProtocolCipher",
+        "updated_at": "UpdatedAt",
+        "user_id": "UserId",
+        "username": "Username"
+      },
+      "operations": {
+        "GetUserCipherUses": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /user_cipher_uses"
+        }
+      }
+    },
+    "UserLifecycleRule": {
+      "type": "UserLifecycleRule",
+      "operations_property": "UserLifecycleRules",
+      "properties": {
+        "action": "Action",
+        "apply_to_all_workspaces": "ApplyToAllWorkspaces",
+        "authentication_method": "AuthenticationMethod",
+        "group_ids": "GroupIds",
+        "id": "Id",
+        "inactivity_days": "InactivityDays",
+        "include_folder_admins": "IncludeFolderAdmins",
+        "include_site_admins": "IncludeSiteAdmins",
+        "name": "Name",
+        "notify_users": "NotifyUsers",
+        "partner_tag": "PartnerTag",
+        "site_id": "SiteId",
+        "user_state": "UserState",
+        "user_tag": "UserTag",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteUserLifecycleRulesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /user_lifecycle_rules/{id}"
+        },
+        "GetUserLifecycleRules": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /user_lifecycle_rules"
+        },
+        "GetUserLifecycleRulesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /user_lifecycle_rules/{id}"
+        },
+        "PatchUserLifecycleRulesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /user_lifecycle_rules/{id}"
+        },
+        "PostUserLifecycleRules": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /user_lifecycle_rules"
+        }
+      }
+    },
+    "UserRequest": {
+      "type": "UserRequest",
+      "operations_property": "UserRequests",
+      "properties": {
+        "company": "Company",
+        "details": "Details",
+        "email": "Email",
+        "id": "Id",
+        "name": "Name"
+      },
+      "operations": {
+        "DeleteUserRequestsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /user_requests/{id}"
+        },
+        "GetUserRequests": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /user_requests"
+        },
+        "GetUserRequestsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /user_requests/{id}"
+        },
+        "PostUserRequests": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /user_requests"
+        }
+      }
+    },
+    "UserSecurityEvent": {
+      "type": "UserSecurityEvent",
+      "operations_property": "UserSecurityEvents",
+      "properties": {
+        "body": "Body",
+        "body_url": "BodyUrl",
+        "created_at": "CreatedAt",
+        "event_errors": "EventErrors",
+        "event_type": "EventType",
+        "id": "Id",
+        "user_id": "UserId"
+      },
+      "operations": {
+        "GetUserSecurityEvents": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /user_security_events"
+        },
+        "GetUserSecurityEventsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /user_security_events/{id}"
+        }
+      }
+    },
+    "UserSftpClientUse": {
+      "type": "UserSftpClientUse",
+      "operations_property": "UserSftpClientUses",
+      "properties": {
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "sftp_client": "SftpClient",
+        "updated_at": "UpdatedAt",
+        "user_id": "UserId"
+      },
+      "operations": {
+        "GetUserSftpClientUses": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /user_sftp_client_uses"
+        }
+      }
+    },
+    "WebDavActionLog": {
+      "type": "WebDavActionLog",
+      "operations_property": "WebDavActionLogs",
+      "properties": {
+        "action_type": "ActionType",
+        "auth_ciphers": "AuthCiphers",
+        "created_at": "CreatedAt",
+        "duration_ms": "DurationMs",
+        "entries_returned": "EntriesReturned",
+        "http_method": "HttpMethod",
+        "http_path": "HttpPath",
+        "http_response_code": "HttpResponseCode",
+        "name": "Name",
+        "path": "Path",
+        "remote_ip": "RemoteIp",
+        "server_ip": "ServerIp",
+        "size": "Size",
+        "status": "Status",
+        "success": "Success",
+        "timestamp": "Timestamp",
+        "true_path": "TruePath",
+        "username": "Username"
+      },
+      "operations": {
+        "GetWebDavActionLogs": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /web_dav_action_logs"
+        }
+      }
+    },
+    "WebhookTest": {
+      "type": "WebhookTest",
+      "operations_property": "WebhookTests",
+      "properties": {
+        "action": "Action",
+        "body": "Body",
+        "code": "Code",
+        "data": "Data",
+        "encoding": "Encoding",
+        "file_as_body": "FileAsBody",
+        "file_form_field": "FileFormField",
+        "headers": "Headers",
+        "message": "Message",
+        "method": "Method",
+        "raw_body": "RawBody",
+        "status": "Status",
+        "success": "Success",
+        "url": "Url",
+        "use_dedicated_ips": "UseDedicatedIps"
+      },
+      "operations": {
+        "PostWebhookTests": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /webhook_tests"
+        }
+      }
+    },
+    "Workspace": {
+      "type": "Workspace",
+      "operations_property": "Workspaces",
+      "properties": {
+        "id": "Id",
+        "name": "Name"
+      },
+      "operations": {
+        "DeleteWorkspacesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /workspaces/{id}"
+        },
+        "GetWorkspaces": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /workspaces"
+        },
+        "GetWorkspacesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /workspaces/{id}"
+        },
+        "PatchWorkspacesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /workspaces/{id}"
+        },
+        "PostWorkspaces": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /workspaces"
+        }
+      }
+    },
+    "ZipListEntry": {
+      "type": "ZipListEntry",
+      "properties": {
+        "path": "Path",
+        "size": "Size"
+      },
+      "operations": {
+      }
+    }
+  }
+}

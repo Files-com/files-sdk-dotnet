@@ -1,32 +1,40 @@
-﻿using FilesCom.Models;
+using FilesCom;
 using System;
+using System.Collections.Generic;
+using System.CommandLine;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace files_cli.Commands
+namespace FilesCli.Commands
 {
-    public class UploadFileCommand : BaseCommand
+    internal sealed class UploadFileCommand : FilesCommand
     {
-        string Path { get; set; }
-        string LocalPath { get; set; }
-
-        public UploadFileCommand()
+        private readonly Option<FileInfo> localPath = new Option<FileInfo>("--local-path", "--localPath")
         {
-            IsCommand("UploadFile", "Uploads a file");
+            Description = "The file to upload.",
+            Required = true,
+        }.AcceptExistingOnly();
 
-            HasLongDescription("Uploads a file to a given path.");
+        private readonly Option<string> path = new Option<string>("--path")
+        {
+            Description = "Where to put it in Files.com, such as reports/report.pdf.",
+            Required = true,
+        };
 
-            HasRequiredOption("path=", "The path of the file to be uploaded.", path => Path = path);
-            HasOption("localPath=", "The path of the file to be uploaded.", localPath => LocalPath = localPath);
-
-            LocalPath = System.IO.Directory.GetCurrentDirectory();
+        public UploadFileCommand() : base("upload-file", "UploadFile", "Uploads a file.")
+        {
+            Options.Add(localPath);
+            Options.Add(path);
         }
 
-        public override async Task<int> RunAsync(string[] remainingArguments)
+        protected override async Task ExecuteAsync(ParseResult parseResult, FilesClient client, Dictionary<string, object> credentials, CancellationToken cancellationToken)
         {
-            var result = await RemoteFile.UploadFile(LocalPath, Path, await GetOptions());
-            Console.WriteLine(result);
+            FileInfo file = parseResult.GetValue(localPath);
+            string destination = parseResult.GetValue(path);
 
-            return 0;
+            await client.RemoteFiles.UploadFileAsync(file.FullName, destination, credentials, cancellationToken: cancellationToken);
+            Console.WriteLine($"Uploaded {file.FullName} to {destination}");
         }
     }
 }

@@ -38,7 +38,7 @@
 ## List Exavault API Request Logs
 
 ```
-Task<FilesList<ExavaultApiRequestLog>> ExavaultApiRequestLog.List(
+FilesList<ExavaultApiRequestLog> ExavaultApiRequestLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

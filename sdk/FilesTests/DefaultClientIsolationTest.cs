@@ -1,3 +1,5 @@
+using FilesCom;
+using FilesCom.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -6,8 +8,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using FilesCom;
-using FilesCom.Models;
 
 namespace FilesTests
 {
@@ -71,7 +71,12 @@ namespace FilesTests
             new FilesClient(siteA.Configuration());
 
             Task<User> finding = User.Find(5);
-            await arrived.Task;
+            // A find that ends before its request reaches siteA ends the wait too, and the test reports how it ended.
+            if (await Task.WhenAny(arrived.Task, finding) != arrived.Task)
+            {
+                Assert.Fail($"User.Find(5) ended before its request reached the site at {siteA.Url} (server logs: {siteA.Log()}; {siteB.Log()}): " +
+                    (finding.IsFaulted ? LoopbackSite.Describe(finding.Exception.InnerException) : "it completed without its request arriving"));
+            }
             new FilesClient(siteB.Configuration());
             respond.SetResult(true);
             User user = await finding;
@@ -152,7 +157,7 @@ namespace FilesTests
             new FilesClient(siteA.Configuration());
             var user = new User(new Dictionary<string, object> { { "id", 3L } }, null);
 
-            await Assert.ThrowsExceptionAsync<ApiException>(() => user.Update(Changes()));
+            await Assert.ThrowsExactlyAsync<ApiException>(() => user.Update(Changes()));
             new FilesClient(siteB.Configuration());
             await user.Update(Changes());
 

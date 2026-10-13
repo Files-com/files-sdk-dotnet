@@ -62,7 +62,7 @@
 ## List SFTP Action Logs
 
 ```
-Task<FilesList<SftpActionLog>> SftpActionLog.List(
+FilesList<SftpActionLog> SftpActionLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

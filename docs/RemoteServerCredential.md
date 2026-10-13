@@ -72,7 +72,7 @@
 ## List Remote Server Credentials
 
 ```
-Task<FilesList<RemoteServerCredential>> RemoteServerCredential.List(
+FilesList<RemoteServerCredential> RemoteServerCredential.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -284,7 +284,7 @@ Task client.RemoteServerCredentials.DeleteAsync(
 ## Update Remote Server Credential
 
 ```
-var RemoteServerCredential = RemoteServerCredential.Find(1);
+var remoteServerCredential = await RemoteServerCredential.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -293,7 +293,7 @@ parameters.Add("description", "More information or notes about this credential."
 parameters.Add("server_type", "s3");
 parameters.Add("aws_access_key", "example");
 parameters.Add("s3_assume_role_arn", "example");
-parameters.Add("s3_assume_role_duration_seconds", 1);
+parameters.Add("s3_assume_role_duration_seconds", 1L);
 parameters.Add("cloudflare_access_key", "example");
 parameters.Add("filebase_access_key", "example");
 parameters.Add("google_cloud_storage_s3_compatible_access_key", "example");
@@ -304,10 +304,11 @@ parameters.Add("sharepoint_tenant_id", "00000000-0000-0000-0000-000000000000");
 parameters.Add("username", "user");
 parameters.Add("wasabi_access_key", "example");
 
-RemoteServerCredential.Update(parameters);
+await remoteServerCredential.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `RemoteServerCredential` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -353,12 +354,11 @@ RemoteServerCredential.Update(parameters);
 ## Delete Remote Server Credential
 
 ```
-var RemoteServerCredential = RemoteServerCredential.Find(1);
+var remoteServerCredential = await RemoteServerCredential.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-RemoteServerCredential.Delete
+await remoteServerCredential.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -366,3 +366,14 @@ RemoteServerCredential.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server Credential ID.
+
+
+---
+
+## Save
+
+```
+await remoteServerCredential.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

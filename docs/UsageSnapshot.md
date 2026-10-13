@@ -52,7 +52,7 @@
 ## List Usage Snapshots
 
 ```
-Task<FilesList<UsageSnapshot>> UsageSnapshot.List(
+FilesList<UsageSnapshot> UsageSnapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

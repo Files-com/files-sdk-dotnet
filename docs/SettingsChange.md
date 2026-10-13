@@ -30,7 +30,7 @@
 ## List Settings Changes
 
 ```
-Task<FilesList<SettingsChange>> SettingsChange.List(
+FilesList<SettingsChange> SettingsChange.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

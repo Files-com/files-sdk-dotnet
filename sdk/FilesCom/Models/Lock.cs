@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class Lock : IModel
+    /// <summary>
+    /// LockEntity model
+    /// </summary>
+    public class Lock : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a Lock with no attributes set and no options.
+        /// </summary>
         public Lock() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a Lock with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public Lock(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("path"))
             {
@@ -85,30 +94,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -119,7 +150,7 @@ namespace FilesCom.Models
         public string Path
         {
             get { return (string)attributes["path"]; }
-            set { attributes["path"] = value; }
+            set { attributes["path"] = value; unsaved.Add("path"); }
         }
 
         /// <summary>
@@ -129,16 +160,17 @@ namespace FilesCom.Models
         public Nullable<Int64> Timeout
         {
             get { return (Nullable<Int64>)attributes["timeout"]; }
-            set { attributes["timeout"] = value; }
+            set { attributes["timeout"] = value; unsaved.Add("timeout"); }
         }
 
         /// <summary>
+        /// The depth field of a Lock object in the Files.com API.
         /// </summary>
         [JsonPropertyName("depth")]
         public string Depth
         {
             get { return (string)attributes["depth"]; }
-            set { attributes["depth"] = value; }
+            set { attributes["depth"] = value; unsaved.Add("depth"); }
         }
 
         /// <summary>
@@ -149,7 +181,7 @@ namespace FilesCom.Models
         public bool Recursive
         {
             get { return attributes["recursive"] == null ? false : (bool)attributes["recursive"]; }
-            set { attributes["recursive"] = value; }
+            set { attributes["recursive"] = value; unsaved.Add("recursive"); }
         }
 
         /// <summary>
@@ -159,16 +191,17 @@ namespace FilesCom.Models
         public string Owner
         {
             get { return (string)attributes["owner"]; }
-            set { attributes["owner"] = value; }
+            set { attributes["owner"] = value; unsaved.Add("owner"); }
         }
 
         /// <summary>
+        /// The scope field of a Lock object in the Files.com API.
         /// </summary>
         [JsonPropertyName("scope")]
         public string Scope
         {
             get { return (string)attributes["scope"]; }
-            set { attributes["scope"] = value; }
+            set { attributes["scope"] = value; unsaved.Add("scope"); }
         }
 
         /// <summary>
@@ -179,7 +212,7 @@ namespace FilesCom.Models
         public bool Exclusive
         {
             get { return attributes["exclusive"] == null ? false : (bool)attributes["exclusive"]; }
-            set { attributes["exclusive"] = value; }
+            set { attributes["exclusive"] = value; unsaved.Add("exclusive"); }
         }
 
         /// <summary>
@@ -189,16 +222,17 @@ namespace FilesCom.Models
         public string Token
         {
             get { return (string)attributes["token"]; }
-            set { attributes["token"] = value; }
+            set { attributes["token"] = value; unsaved.Add("token"); }
         }
 
         /// <summary>
+        /// The type field of a Lock object in the Files.com API.
         /// </summary>
         [JsonPropertyName("type")]
         public string Type
         {
             get { return (string)attributes["type"]; }
-            set { attributes["type"] = value; }
+            set { attributes["type"] = value; unsaved.Add("type"); }
         }
 
         /// <summary>
@@ -209,7 +243,7 @@ namespace FilesCom.Models
         public bool AllowAccessByAnyUser
         {
             get { return attributes["allow_access_by_any_user"] == null ? false : (bool)attributes["allow_access_by_any_user"]; }
-            set { attributes["allow_access_by_any_user"] = value; }
+            set { attributes["allow_access_by_any_user"] = value; unsaved.Add("allow_access_by_any_user"); }
         }
 
         /// <summary>
@@ -219,7 +253,7 @@ namespace FilesCom.Models
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
+            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
         }
 
         /// <summary>
@@ -229,7 +263,7 @@ namespace FilesCom.Models
         public string Username
         {
             get { return (string)attributes["username"]; }
-            set { attributes["username"] = value; }
+            set { attributes["username"] = value; unsaved.Add("username"); }
         }
 
         /// <summary>
@@ -239,13 +273,14 @@ namespace FilesCom.Models
         public string ExpectedToken
         {
             get { return (string)attributes["expected_token"]; }
-            set { attributes["expected_token"] = value; }
+            set { attributes["expected_token"] = value; unsaved.Add("expected_token"); }
         }
 
         /// <summary>
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         public Task Delete(Dictionary<string, object> parameters)
         {
             return DeleteCore(parameters, CancellationToken.None);
@@ -255,11 +290,18 @@ namespace FilesCom.Models
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>, but neither waits for the request nor reports its failure.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        [Obsolete("Destroy neither waits for the request nor reports its failure. Use DestroyAsync instead.")]
         public async void Destroy(Dictionary<string, object> parameters)
         {
             Delete(parameters);
@@ -268,6 +310,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Same as <see cref="DeleteAsync"/>.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(parameters, cancellationToken);
@@ -276,46 +320,84 @@ namespace FilesCom.Models
         private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["path"] = attributes["path"];
+            object parameterValue;
+            if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Lock has no path, which Delete needs", "path");
+            }
+            parameters["path"] = parameterValue;
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (!parameters.TryGetValue("token", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: token", "token");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("token", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: token is null, which cannot be sent" : "Bad parameter: token must be of type string", "token");
+            }
 
-            if (!attributes.ContainsKey("path"))
-            {
-                throw new ArgumentException("Current object doesn't have a path");
-            }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
-            }
-            if (!parameters.ContainsKey("token") || parameters["token"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/locks/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/locks/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
 
+        private static readonly string[] CreateParameterNames = { "path", "token", "expected_token", "allow_access_by_any_user", "exclusive", "recursive", "owner", "timeout" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this Lock on Files.com.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            var newObj = await Lock.CreateCore(new OperationContext(FilesClient.Bind(ref client)), Path, this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-            this.attributes = newObj.getAttributes();
+            Lock created = await Lock.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), Path, AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
+            {
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = attributes[name];
+                }
+            }
+            return toSave;
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
@@ -325,6 +407,9 @@ namespace FilesCom.Models
         ///   path (required) - string - Path to operate on.
         ///   include_children - boolean - Include locks from children objects?
         /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<Lock> ListFor(
             string path,
             Dictionary<string, object> parameters = null,
@@ -343,6 +428,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -352,25 +438,25 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("include_children") && !(parameters["include_children"] is bool))
+            if (parameters.TryGetValue("include_children", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: include_children must be of type bool", "parameters[\"include_children\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: include_children is null, which cannot be sent" : "Bad parameter: include_children must be of type bool", "include_children");
             }
 
             return new FilesList<Lock>(client, $"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -387,6 +473,9 @@ namespace FilesCom.Models
         ///   owner - string - Arbitrary descriptive label for the lock. Does not change the lock creator or permissions.
         ///   timeout - int64 - Lock timeout in seconds
         /// </summary>
+        /// <param name="path">Path</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Lock> Create(
             string path,
             Dictionary<string, object> parameters = null,
@@ -406,6 +495,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -415,59 +505,55 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
+            if (parameters.TryGetValue("token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: token is null, which cannot be sent" : "Bad parameter: token must be of type string", "token");
             }
-            if (parameters.ContainsKey("expected_token") && !(parameters["expected_token"] is string))
+            if (parameters.TryGetValue("expected_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: expected_token must be of type string", "parameters[\"expected_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: expected_token is null, which cannot be sent" : "Bad parameter: expected_token must be of type string", "expected_token");
             }
-            if (parameters.ContainsKey("allow_access_by_any_user") && !(parameters["allow_access_by_any_user"] is bool))
+            if (parameters.TryGetValue("allow_access_by_any_user", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: allow_access_by_any_user must be of type bool", "parameters[\"allow_access_by_any_user\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_access_by_any_user is null, which cannot be sent" : "Bad parameter: allow_access_by_any_user must be of type bool", "allow_access_by_any_user");
             }
-            if (parameters.ContainsKey("exclusive") && !(parameters["exclusive"] is bool))
+            if (parameters.TryGetValue("exclusive", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: exclusive must be of type bool", "parameters[\"exclusive\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exclusive is null, which cannot be sent" : "Bad parameter: exclusive must be of type bool", "exclusive");
             }
-            if (parameters.ContainsKey("recursive") && !(parameters["recursive"] is bool))
+            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: recursive must be of type bool", "parameters[\"recursive\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
             }
-            if (parameters.ContainsKey("owner") && !(parameters["owner"] is string))
+            if (parameters.TryGetValue("owner", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: owner must be of type string", "parameters[\"owner\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: owner is null, which cannot be sent" : "Bad parameter: owner must be of type string", "owner");
             }
-            if (parameters.ContainsKey("timeout") && !(parameters["timeout"] is Nullable<Int64>))
+            if (parameters.TryGetValue("timeout", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: timeout must be of type Nullable<Int64>", "parameters[\"timeout\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: timeout is null, which cannot be sent" : "Bad parameter: timeout must be of type Nullable<Int64>", "timeout");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Lock>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Lock>(responseJson, context, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   token (required) - string - Lock token
         /// </summary>
+        /// <param name="path">Path</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Delete(
             string path,
             Dictionary<string, object> parameters = null,
@@ -477,6 +563,13 @@ namespace FilesCom.Models
             return DeleteCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   token (required) - string - Lock token
+        /// </summary>
+        /// <param name="path">Path</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Destroy(
             string path,
             Dictionary<string, object> parameters = null,
@@ -496,6 +589,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -505,25 +599,24 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (!parameters.ContainsKey("token") || parameters["token"] == null)
+            if (!parameters.TryGetValue("token", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: token", "parameters[\"token\"]");
+                throw new MissingParameterException("Parameter missing: token", "token");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("token") && !(parameters["token"] is string))
+            if (parameters.TryGetValue("token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: token must be of type string", "parameters[\"token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: token is null, which cannot be sent" : "Bad parameter: token must be of type string", "token");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/locks/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
         }
 
     }

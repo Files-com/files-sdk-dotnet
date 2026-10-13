@@ -200,7 +200,7 @@
 ## List Remote Servers
 
 ```
-Task<FilesList<RemoteServer>> RemoteServer.List(
+FilesList<RemoteServer> RemoteServer.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -597,12 +597,11 @@ Task client.RemoteServers.DeleteAsync(
 ## List Files.com Agent nodes
 
 ```
-var RemoteServer = RemoteServer.Find(1);
+var remoteServer = await RemoteServer.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-RemoteServer.AgentNodes
+await remoteServer.AgentNodes(parameters);
 ```
 
 `AgentNodesAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -617,12 +616,11 @@ RemoteServer.AgentNodes
 ## Push update to Files Agent
 
 ```
-var RemoteServer = RemoteServer.Find(1);
+var remoteServer = await RemoteServer.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-RemoteServer.AgentPushUpdate
+await remoteServer.AgentPushUpdate(parameters);
 ```
 
 `AgentPushUpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -637,7 +635,7 @@ RemoteServer.AgentPushUpdate
 ## Update Remote Server
 
 ```
-var RemoteServer = RemoteServer.Find(1);
+var remoteServer = await RemoteServer.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -665,8 +663,8 @@ parameters.Add("filebase_bucket", "my-bucket");
 parameters.Add("files_agent_permission_set", "read_write");
 parameters.Add("files_agent_root", "example");
 parameters.Add("files_agent_version", "example");
-parameters.Add("outbound_agent_id", 1);
-parameters.Add("custom_domain_id", 1);
+parameters.Add("outbound_agent_id", 1L);
+parameters.Add("custom_domain_id", 1L);
 parameters.Add("google_cloud_storage_authentication_method", "json");
 parameters.Add("google_cloud_storage_bucket", "my-bucket");
 parameters.Add("google_cloud_storage_oauth_scope", "https://www.googleapis.com/auth/devstorage.read_only");
@@ -676,15 +674,15 @@ parameters.Add("hostname", "remote-server.com");
 parameters.Add("linode_access_key", "example");
 parameters.Add("linode_bucket", "my-bucket");
 parameters.Add("linode_region", "us-east-1");
-parameters.Add("max_connections", 1);
+parameters.Add("max_connections", 1L);
 parameters.Add("name", "My Remote server");
 parameters.Add("one_drive_account_type", "personal");
 parameters.Add("pin_to_site_region", true);
-parameters.Add("port", 1);
+parameters.Add("port", 1L);
 parameters.Add("upload_staging_path", "/tmp/uploads");
-parameters.Add("remote_server_credential_id", 1);
+parameters.Add("remote_server_credential_id", 1L);
 parameters.Add("s3_assume_role_arn", "example");
-parameters.Add("s3_assume_role_duration_seconds", 1);
+parameters.Add("s3_assume_role_duration_seconds", 1L);
 parameters.Add("s3_bucket", "my-bucket");
 parameters.Add("s3_compatible_access_key", "example");
 parameters.Add("s3_compatible_bucket", "my-bucket");
@@ -705,10 +703,11 @@ parameters.Add("wasabi_access_key", "example");
 parameters.Add("wasabi_bucket", "my-bucket");
 parameters.Add("wasabi_region", "us-west-1");
 
-RemoteServer.Update(parameters);
+await remoteServer.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `RemoteServer` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -804,12 +803,11 @@ RemoteServer.Update(parameters);
 ## Delete Remote Server
 
 ```
-var RemoteServer = RemoteServer.Find(1);
+var remoteServer = await RemoteServer.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-RemoteServer.Delete
+await remoteServer.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -817,3 +815,14 @@ RemoteServer.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Server ID.
+
+
+---
+
+## Save
+
+```
+await remoteServer.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

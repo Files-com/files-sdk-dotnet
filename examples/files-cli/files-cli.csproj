@@ -2,17 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>files_cli</RootNamespace>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>FilesCli</RootNamespace>
+    <!-- The FilesCom version this example is written for; releases set it. Set FilesComVersion to build against another, such as a local package. -->
+    <FilesComVersion Condition="'$(FilesComVersion)' == ''">2.0.0</FilesComVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FilesCom" Version="1.4.706" />
-    <PackageReference Include="log4net" Version="2.0.10" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0-preview.1.20120.5" />
-    <PackageReference Include="ManyConsole" Version="2.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\" />
+    <PackageReference Include="FilesCom" Version="$(FilesComVersion)" />
+    <PackageReference Include="System.CommandLine" Version="2.0.12" />
   </ItemGroup>
 </Project>

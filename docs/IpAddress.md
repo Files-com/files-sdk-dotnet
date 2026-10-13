@@ -24,7 +24,7 @@
 ## List IP Addresses associated with the current site
 
 ```
-Task<FilesList<IpAddress>> IpAddress.List(
+FilesList<IpAddress> IpAddress.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -52,7 +52,7 @@ FilesList<IpAddress> client.IpAddresses.List(
 ## List all possible public SmartFile IP addresses
 
 ```
-Task<FilesList<PublicIpAddress>> IpAddress.GetSmartfileReserved(
+FilesList<PublicIpAddress> IpAddress.GetSmartfileReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -80,7 +80,7 @@ FilesList<PublicIpAddress> client.IpAddresses.GetSmartfileReserved(
 ## List all possible public ExaVault IP addresses
 
 ```
-Task<FilesList<PublicIpAddress>> IpAddress.GetExavaultReserved(
+FilesList<PublicIpAddress> IpAddress.GetExavaultReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -108,7 +108,7 @@ FilesList<PublicIpAddress> client.IpAddresses.GetExavaultReserved(
 ## List all possible public IP addresses
 
 ```
-Task<FilesList<PublicIpAddress>> IpAddress.GetReserved(
+FilesList<PublicIpAddress> IpAddress.GetReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

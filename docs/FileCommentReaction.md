@@ -78,12 +78,11 @@ Task client.FileCommentReactions.DeleteAsync(
 ## Delete File Comment Reaction
 
 ```
-var FileCommentReaction = FileCommentReaction.ListFor(path)[0];
+var fileCommentReaction = new FileCommentReaction(new Dictionary<string, object> { { "id", 1L } }, null);
 
 var parameters = new Dictionary<string, object>();
 
-
-FileCommentReaction.Delete
+await fileCommentReaction.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -91,3 +90,14 @@ FileCommentReaction.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - File Comment Reaction ID.
+
+
+---
+
+## Save
+
+```
+await fileCommentReaction.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

@@ -44,8 +44,8 @@
 ```
 
 * `id` / `Id`  (Nullable<Int64>): Line item Id
-* `amount` / `Amount`  (decimal): Line item amount
-* `balance` / `Balance`  (decimal): Line item balance
+* `amount` / `Amount`  (Nullable<decimal>): Line item amount
+* `balance` / `Balance`  (Nullable<decimal>): Line item balance
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Line item created at
 * `currency` / `Currency`  (string): Line item currency
 * `download_uri` / `DownloadUri`  (string): Line item download uri
@@ -63,7 +63,7 @@
 ## List Payments
 
 ```
-Task<FilesList<AccountLineItem>> Payment.List(
+FilesList<AccountLineItem> Payment.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

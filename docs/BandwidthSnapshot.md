@@ -32,7 +32,7 @@
 ## List Bandwidth Snapshots
 
 ```
-Task<FilesList<BandwidthSnapshot>> BandwidthSnapshot.List(
+FilesList<BandwidthSnapshot> BandwidthSnapshot.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

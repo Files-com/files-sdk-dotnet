@@ -1,13 +1,13 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System;
-using System.IO;
-using System.Globalization;
-using System.Text.Json;
 using FilesCom;
 using FilesCom.Models;
 using FilesCom.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Text.Json;
 
 namespace FilesTests.PathUtilTest
 {
@@ -31,7 +31,7 @@ namespace FilesTests.PathUtilTest
         }
 
 
-        [TestMethod, DynamicData(nameof(GetComparisons), DynamicDataSourceType.Method)]
+        [TestMethod, DynamicData(nameof(GetComparisons))]
         public void TestSame(string a, string b)
         {
             Assert.AreEqual(b, PathUtil.normalize_for_comparison(a));

@@ -72,7 +72,7 @@
 ## List Sync Runs
 
 ```
-Task<FilesList<SyncRun>> SyncRun.List(
+FilesList<SyncRun> SyncRun.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

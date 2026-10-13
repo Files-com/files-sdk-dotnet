@@ -24,7 +24,7 @@
 ## List User SFTP Client Uses
 
 ```
-Task<FilesList<UserSftpClientUse>> UserSftpClientUse.List(
+FilesList<UserSftpClientUse> UserSftpClientUse.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

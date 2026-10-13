@@ -26,7 +26,7 @@
 ## List Clickwraps
 
 ```
-Task<FilesList<Clickwrap>> Clickwrap.List(
+FilesList<Clickwrap> Clickwrap.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -176,7 +176,7 @@ Task client.Clickwraps.DeleteAsync(
 ## Update Clickwrap
 
 ```
-var Clickwrap = Clickwrap.Find(1);
+var clickwrap = await Clickwrap.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
@@ -186,10 +186,11 @@ parameters.Add("use_with_bundles", "example");
 parameters.Add("use_with_inboxes", "example");
 parameters.Add("use_with_users", "example");
 
-Clickwrap.Update(parameters);
+await clickwrap.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Clickwrap` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -206,12 +207,11 @@ Clickwrap.Update(parameters);
 ## Delete Clickwrap
 
 ```
-var Clickwrap = Clickwrap.Find(1);
+var clickwrap = await Clickwrap.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Clickwrap.Delete
+await clickwrap.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -219,3 +219,14 @@ Clickwrap.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Clickwrap ID.
+
+
+---
+
+## Save
+
+```
+await clickwrap.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

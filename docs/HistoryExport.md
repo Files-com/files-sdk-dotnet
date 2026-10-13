@@ -137,3 +137,14 @@ Task<HistoryExport> client.HistoryExports.CreateAsync(
 * `query_target_username` (string): If searching for Histories about API keys, this parameter restricts results to API keys created by/for this username.
 * `query_target_platform` (string): If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
 * `query_target_permission_set` (string): If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
+
+
+---
+
+## Save
+
+```
+await historyExport.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

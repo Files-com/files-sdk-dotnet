@@ -32,7 +32,7 @@
 ## List Pending Work Events
 
 ```
-Task<FilesList<PendingWorkEvent>> PendingWorkEvent.List(
+FilesList<PendingWorkEvent> PendingWorkEvent.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

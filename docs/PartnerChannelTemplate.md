@@ -46,7 +46,7 @@
 ## List Partner Channel Templates
 
 ```
-Task<FilesList<PartnerChannelTemplate>> PartnerChannelTemplate.List(
+FilesList<PartnerChannelTemplate> PartnerChannelTemplate.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -208,25 +208,26 @@ Task client.PartnerChannelTemplates.DeleteAsync(
 ## Update Partner Channel Template
 
 ```
-var PartnerChannelTemplate = PartnerChannelTemplate.Find(1);
+var partnerChannelTemplate = await PartnerChannelTemplate.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("direction", "two_way");
 parameters.Add("use_channel_root", false);
 parameters.Add("from_partner_folder_name", "incoming");
-parameters.Add("from_partner_managed_folder_paths", ["claims/received"]);
+parameters.Add("from_partner_managed_folder_paths", new string[] { "claims/received" });
 parameters.Add("from_partner_route_path_pattern", "processing/{{partner_name}}/from-partner");
 parameters.Add("to_partner_folder_name", "outgoing");
-parameters.Add("to_partner_managed_folder_paths", ["reports/monthly"]);
+parameters.Add("to_partner_managed_folder_paths", new string[] { "reports/monthly" });
 parameters.Add("to_partner_route_path_pattern", "delivery/{{partner_name}}/to-partner");
 parameters.Add("name", "Claims Template");
 parameters.Add("path", "claims/medical");
 
-PartnerChannelTemplate.Update(parameters);
+await partnerChannelTemplate.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `PartnerChannelTemplate` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -248,12 +249,11 @@ PartnerChannelTemplate.Update(parameters);
 ## Delete Partner Channel Template
 
 ```
-var PartnerChannelTemplate = PartnerChannelTemplate.Find(1);
+var partnerChannelTemplate = await PartnerChannelTemplate.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-PartnerChannelTemplate.Delete
+await partnerChannelTemplate.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -261,3 +261,14 @@ PartnerChannelTemplate.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel Template ID.
+
+
+---
+
+## Save
+
+```
+await partnerChannelTemplate.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

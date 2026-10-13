@@ -48,7 +48,7 @@
 ## List Groups
 
 ```
-Task<FilesList<Group>> Group.List(
+FilesList<Group> Group.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -219,28 +219,29 @@ Task client.Groups.DeleteAsync(
 ## Update Group
 
 ```
-var Group = Group.Find(1);
+var group = await Group.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("notes", "example");
 parameters.Add("user_ids", "1");
 parameters.Add("admin_ids", "1");
-parameters.Add("ai_assistant_personality_id", 1);
+parameters.Add("ai_assistant_personality_id", 1L);
 parameters.Add("ftp_permission", true);
 parameters.Add("sftp_permission", true);
 parameters.Add("dav_permission", true);
 parameters.Add("restapi_permission", true);
 parameters.Add("s3_compatible_endpoint_permission", true);
-parameters.Add("desktop_configuration_profile_id", 1);
-parameters.Add("integration_centric_profile_id", 1);
+parameters.Add("desktop_configuration_profile_id", 1L);
+parameters.Add("integration_centric_profile_id", 1L);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("name", "owners");
 
-Group.Update(parameters);
+await group.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Group` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -265,12 +266,11 @@ Group.Update(parameters);
 ## Delete Group
 
 ```
-var Group = Group.Find(1);
+var group = await Group.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Group.Delete
+await group.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -278,3 +278,14 @@ Group.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Group ID.
+
+
+---
+
+## Save
+
+```
+await group.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

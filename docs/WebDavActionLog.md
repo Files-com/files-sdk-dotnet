@@ -50,7 +50,7 @@
 ## List WebDAV Action Logs
 
 ```
-Task<FilesList<WebDavActionLog>> WebDavActionLog.List(
+FilesList<WebDavActionLog> WebDavActionLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

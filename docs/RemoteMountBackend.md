@@ -43,8 +43,8 @@
 * `health_check_type` / `HealthCheckType`  (string): Type of health check to perform.
 * `id` / `Id`  (Nullable<Int64>): Unique identifier for this backend.
 * `interval` / `Interval`  (Nullable<Int64>): Interval in seconds between health checks.
-* `min_free_cpu` / `MinFreeCpu`  (decimal): Minimum free CPU percentage required for this backend to be considered healthy.
-* `min_free_mem` / `MinFreeMem`  (decimal): Minimum free memory percentage required for this backend to be considered healthy.
+* `min_free_cpu` / `MinFreeCpu`  (Nullable<decimal>): Minimum free CPU percentage required for this backend to be considered healthy.
+* `min_free_mem` / `MinFreeMem`  (Nullable<decimal>): Minimum free memory percentage required for this backend to be considered healthy.
 * `priority` / `Priority`  (Nullable<Int64>): Priority of this backend.
 * `remote_path` / `RemotePath`  (string): Path on the remote server to treat as the root of this mount.
 * `remote_server_id` / `RemoteServerId`  (Nullable<Int64>): The remote server that this backend is associated with.
@@ -59,7 +59,7 @@
 ## List Remote Mount Backends
 
 ```
-Task<FilesList<RemoteMountBackend>> RemoteMountBackend.List(
+FilesList<RemoteMountBackend> RemoteMountBackend.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -252,12 +252,11 @@ Task client.RemoteMountBackends.DeleteAsync(
 ## Reset backend status to healthy
 
 ```
-var RemoteMountBackend = RemoteMountBackend.Find(1);
+var remoteMountBackend = await RemoteMountBackend.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-RemoteMountBackend.ResetStatus
+await remoteMountBackend.ResetStatus(parameters);
 ```
 
 `ResetStatusAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -272,27 +271,28 @@ RemoteMountBackend.ResetStatus
 ## Update Remote Mount Backend
 
 ```
-var RemoteMountBackend = RemoteMountBackend.Find(1);
+var remoteMountBackend = await RemoteMountBackend.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("enabled", true);
-parameters.Add("fall", 1);
+parameters.Add("fall", 1L);
 parameters.Add("health_check_enabled", true);
 parameters.Add("health_check_type", "active");
-parameters.Add("interval", 60);
-parameters.Add("min_free_cpu", "1.0");
-parameters.Add("min_free_mem", "1.0");
-parameters.Add("priority", 1);
+parameters.Add("interval", 60L);
+parameters.Add("min_free_cpu", 1.0);
+parameters.Add("min_free_mem", 1.0);
+parameters.Add("priority", 1L);
 parameters.Add("remote_path", "/path/on/remote");
-parameters.Add("rise", 1);
+parameters.Add("rise", 1L);
 parameters.Add("canary_file_path", "backend1.txt");
-parameters.Add("remote_server_id", 1);
+parameters.Add("remote_server_id", 1L);
 
-RemoteMountBackend.Update(parameters);
+await remoteMountBackend.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `RemoteMountBackend` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -316,12 +316,11 @@ RemoteMountBackend.Update(parameters);
 ## Delete Remote Mount Backend
 
 ```
-var RemoteMountBackend = RemoteMountBackend.Find(1);
+var remoteMountBackend = await RemoteMountBackend.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-RemoteMountBackend.Delete
+await remoteMountBackend.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -329,3 +328,14 @@ RemoteMountBackend.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Remote Mount Backend ID.
+
+
+---
+
+## Save
+
+```
+await remoteMountBackend.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

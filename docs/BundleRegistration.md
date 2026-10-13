@@ -44,7 +44,7 @@
 ## List Share Link Registrations
 
 ```
-Task<FilesList<BundleRegistration>> BundleRegistration.List(
+FilesList<BundleRegistration> BundleRegistration.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

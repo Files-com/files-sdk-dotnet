@@ -1,32 +1,40 @@
-﻿using FilesCom.Models;
+using FilesCom;
 using System;
+using System.Collections.Generic;
+using System.CommandLine;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace files_cli.Commands
+namespace FilesCli.Commands
 {
-    public class DownloadFileCommand : BaseCommand
+    internal sealed class DownloadFileCommand : FilesCommand
     {
-        string Path { get; set; }
-        string LocalPath { get; set; }
-
-        public DownloadFileCommand()
+        private readonly Option<string> path = new Option<string>("--path")
         {
-            IsCommand("DownloadFile", "Downloads a file");
+            Description = "The Files.com path of the file to download.",
+            Required = true,
+        };
 
-            HasLongDescription("Downloads a file by a given path.");
+        private readonly Option<string> localPath = new Option<string>("--local-path", "--localPath")
+        {
+            Description = "Where to save it. Defaults to the file's name in the current directory.",
+        };
 
-            HasRequiredOption("path=", "The path of the file to download.", path => Path = path);
-            HasOption("localPath=", "The local path and file name to save the file.", localPath => LocalPath = localPath);
-
-            LocalPath = System.IO.Directory.GetCurrentDirectory();
+        public DownloadFileCommand() : base("download-file", "DownloadFile", "Downloads a file.")
+        {
+            Options.Add(path);
+            Options.Add(localPath);
         }
 
-        public override async Task<int> RunAsync(string[] remainingArguments)
+        protected override async Task ExecuteAsync(ParseResult parseResult, FilesClient client, Dictionary<string, object> credentials, CancellationToken cancellationToken)
         {
-            var result = await RemoteFile.DownloadFile(Path, LocalPath, await GetOptions());
-            Console.WriteLine(result);
+            string source = parseResult.GetValue(path);
+            string destination = parseResult.GetValue(localPath);
 
-            return 0;
+            // A cancelled or failed download leaves what it had written in the local file.
+            await client.RemoteFiles.DownloadFileAsync(source, destination, credentials, cancellationToken);
+            Console.WriteLine($"Downloaded {source} to {destination ?? Path.GetFileName(source)}");
         }
     }
 }

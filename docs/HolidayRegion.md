@@ -18,7 +18,7 @@
 ## List all possible holiday regions
 
 ```
-Task<FilesList<HolidayRegion>> HolidayRegion.GetSupported(
+FilesList<HolidayRegion> HolidayRegion.GetSupported(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

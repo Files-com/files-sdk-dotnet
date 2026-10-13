@@ -44,7 +44,7 @@
 ## List Permissions
 
 ```
-Task<FilesList<Permission>> Permission.List(
+FilesList<Permission> Permission.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -145,12 +145,11 @@ Task client.Permissions.DeleteAsync(
 ## Delete Permission
 
 ```
-var Permission = Permission.ListFor(path)[0];
+var permission = (await Permission.List().LoadNextPageAsync()).data[0];
 
 var parameters = new Dictionary<string, object>();
 
-
-Permission.Delete
+await permission.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -158,3 +157,14 @@ Permission.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Permission ID.
+
+
+---
+
+## Save
+
+```
+await permission.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

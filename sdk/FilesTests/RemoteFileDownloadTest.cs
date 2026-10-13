@@ -1,3 +1,5 @@
+using FilesCom;
+using FilesCom.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -7,8 +9,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using FilesCom;
-using FilesCom.Models;
 
 namespace FilesTests
 {
@@ -57,7 +57,8 @@ namespace FilesTests
                 error = await CaptureException(() => DownloadableFile(server.Url).DownloadFile(destination));
             }
 
-            Assert.IsInstanceOfType(error, typeof(IOException));
+            // The connection failed while the file was arriving: a failure of the SDK's request, not of the file.
+            Assert.IsInstanceOfType(error, typeof(ApiConnectionException));
             AssertFileReleased(destination);
         }
 
@@ -129,6 +130,24 @@ namespace FilesTests
             }
         }
 
+        // What is not the whole file is refused before anything is written: part of it, answered to a request for all of
+        // it, or a page of the Files.com web app.
+        [TestMethod]
+        [DataRow("HTTP/1.1 206 Partial Content", "Content-Range: bytes 0-4095/32768\r\n", "HTTP 206")]
+        [DataRow("HTTP/1.1 200 OK", "X-Files-Frontend-App: true\r\n", "web app")]
+        public async Task DownloadRefusesWhatIsNotTheWholeFile(string statusLine, string headers, string reason)
+        {
+            using (var destination = new MemoryStream())
+            using (var server = new OneResponseServer(Payload, Payload.Length, statusLine, headers))
+            {
+                Exception error = await CaptureException(() => DownloadableFile(server.Url).DownloadFile(destination));
+
+                Assert.IsInstanceOfType<InvalidResponseException>(error);
+                StringAssert.Contains(error.Message, reason);
+                Assert.AreEqual(0, destination.Length);
+            }
+        }
+
         [TestMethod]
         public async Task DownloadWithoutLocalPathRefusesDriveStreamAndDeviceNames()
         {
@@ -138,7 +157,8 @@ namespace FilesTests
             {
                 Exception error = await CaptureException(() => RemoteFile.DownloadFile(remotePath));
 
-                Assert.IsInstanceOfType(error, typeof(ArgumentException), remotePath);
+                Assert.IsInstanceOfType(error, typeof(InvalidParameterException), remotePath);
+                Assert.AreEqual("localPath", ((InvalidParameterException)error).ParamName, remotePath);
             }
         }
 
@@ -190,8 +210,13 @@ namespace FilesTests
         {
             private readonly TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
 
-            public OneResponseServer(byte[] body, int bytesToSend)
+            private readonly string statusLine;
+            private readonly string headers;
+
+            public OneResponseServer(byte[] body, int bytesToSend, string statusLine = "HTTP/1.1 200 OK", string headers = "")
             {
+                this.statusLine = statusLine;
+                this.headers = headers;
                 listener.Start();
                 Url = $"http://127.0.0.1:{((IPEndPoint)listener.LocalEndpoint).Port}/download";
                 _ = Serve(body, bytesToSend);
@@ -208,8 +233,8 @@ namespace FilesTests
                     while (!string.IsNullOrEmpty(await request.ReadLineAsync()))
                     {
                     }
-                    byte[] headers = Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Length: {body.Length}\r\nConnection: close\r\n\r\n");
-                    await stream.WriteAsync(headers, 0, headers.Length);
+                    byte[] head = Encoding.ASCII.GetBytes($"{statusLine}\r\nContent-Length: {body.Length}\r\n{headers}Connection: close\r\n\r\n");
+                    await stream.WriteAsync(head, 0, head.Length);
                     await stream.WriteAsync(body, 0, bytesToSend);
                 }
             }

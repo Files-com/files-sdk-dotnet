@@ -26,7 +26,7 @@
 ## List File Comments by Path
 
 ```
-Task<FilesList<FileComment>> FileComment.ListFor(
+FilesList<FileComment> FileComment.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -141,16 +141,17 @@ Task client.FileComments.DeleteAsync(
 ## Update File Comment
 
 ```
-var FileComment = FileComment.ListFor(path)[0];
+var fileComment = (await FileComment.ListFor("path").LoadNextPageAsync()).data[0];
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("body", "What a great file!");
 
-FileComment.Update(parameters);
+await fileComment.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `FileComment` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -163,12 +164,11 @@ FileComment.Update(parameters);
 ## Delete File Comment
 
 ```
-var FileComment = FileComment.ListFor(path)[0];
+var fileComment = (await FileComment.ListFor("path").LoadNextPageAsync()).data[0];
 
 var parameters = new Dictionary<string, object>();
 
-
-FileComment.Delete
+await fileComment.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -176,3 +176,14 @@ FileComment.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - File Comment ID.
+
+
+---
+
+## Save
+
+```
+await fileComment.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

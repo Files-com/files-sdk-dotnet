@@ -22,7 +22,7 @@
 ## Show Site DNS Configuration
 
 ```
-Task<FilesList<DnsRecord>> DnsRecord.List(
+FilesList<DnsRecord> DnsRecord.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

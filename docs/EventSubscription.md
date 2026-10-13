@@ -55,7 +55,7 @@
 ## List Event Subscriptions
 
 ```
-Task<FilesList<EventSubscription>> EventSubscription.List(
+FilesList<EventSubscription> EventSubscription.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -220,27 +220,28 @@ Task client.EventSubscriptions.DeleteAsync(
 ## Update Event Subscription
 
 ```
-var EventSubscription = EventSubscription.Find(1);
+var eventSubscription = await EventSubscription.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("event_channel_id", 1);
-parameters.Add("workspace_id", 1);
+parameters.Add("event_channel_id", 1L);
+parameters.Add("workspace_id", 1L);
 parameters.Add("apply_to_all_workspaces", true);
 parameters.Add("name", "example");
 parameters.Add("subject", "example");
 parameters.Add("message", "example");
 parameters.Add("message_only", true);
 parameters.Add("enabled", true);
-parameters.Add("event_types", ["sync_run.failure.v1"]);
-parameters.Add("filter", {"payload.sync_name":{"prefix":"Nightly"},"payload.event_errors":{"exists":true}});
+parameters.Add("event_types", new string[] { "sync_run.failure.v1" });
+parameters.Add("filter", new Dictionary<string, object> { { "payload.sync_name", new Dictionary<string, object> { { "prefix", "Nightly" } } }, { "payload.event_errors", new Dictionary<string, object> { { "exists", true } } } });
 parameters.Add("delivery_policy", "example");
-parameters.Add("event_target_ids", [1]);
+parameters.Add("event_target_ids", new Nullable<Int64>[] { 1 });
 
-EventSubscription.Update(parameters);
+await eventSubscription.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `EventSubscription` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -264,12 +265,11 @@ EventSubscription.Update(parameters);
 ## Delete Event Subscription
 
 ```
-var EventSubscription = EventSubscription.Find(1);
+var eventSubscription = await EventSubscription.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-EventSubscription.Delete
+await eventSubscription.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -277,3 +277,14 @@ EventSubscription.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Event Subscription ID.
+
+
+---
+
+## Save
+
+```
+await eventSubscription.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

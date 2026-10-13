@@ -45,7 +45,7 @@
 ## List Expectation Incidents
 
 ```
-Task<FilesList<ExpectationIncident>> ExpectationIncident.List(
+FilesList<ExpectationIncident> ExpectationIncident.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -188,12 +188,11 @@ Task<ExpectationIncident> client.ExpectationIncidents.AcknowledgeAsync(
 ## Resolve an expectation incident
 
 ```
-var ExpectationIncident = ExpectationIncident.Find(1);
+var expectationIncident = await ExpectationIncident.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-ExpectationIncident.Resolve
+await expectationIncident.Resolve(parameters);
 ```
 
 `ResolveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -208,13 +207,13 @@ ExpectationIncident.Resolve
 ## Snooze an expectation incident until a specified time
 
 ```
-var ExpectationIncident = ExpectationIncident.Find(1);
+var expectationIncident = await ExpectationIncident.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("snoozed_until", "snoozed_until");
 
-ExpectationIncident.Snooze(parameters);
+await expectationIncident.Snooze(parameters);
 ```
 
 `SnoozeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -230,12 +229,11 @@ ExpectationIncident.Snooze(parameters);
 ## Acknowledge an expectation incident
 
 ```
-var ExpectationIncident = ExpectationIncident.Find(1);
+var expectationIncident = await ExpectationIncident.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-ExpectationIncident.Acknowledge
+await expectationIncident.Acknowledge(parameters);
 ```
 
 `AcknowledgeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Runs on each supported modern runtime; each needs that runtime installed. -->
+    <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.4.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.4.1" />
+  </ItemGroup>
+
+  <!-- The SDK under test: this SDK's FilesCom project, or, when FilesComPackageVersion is set, that version of the
+       FilesCom package, installed as an application installs it (contract-test.sh restores it from the archive it is
+       given). -->
+  <ItemGroup Condition="'$(FilesComPackageVersion)' == ''">
+    <ProjectReference Include="../FilesCom/FilesCom.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(FilesComPackageVersion)' != ''">
+    <PackageReference Include="FilesCom" Version="[$(FilesComPackageVersion)]" />
+  </ItemGroup>
+</Project>

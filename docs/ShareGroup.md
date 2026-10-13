@@ -30,7 +30,7 @@
 ## List Share Groups
 
 ```
-Task<FilesList<ShareGroup>> ShareGroup.List(
+FilesList<ShareGroup> ShareGroup.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -177,18 +177,19 @@ Task client.ShareGroups.DeleteAsync(
 ## Update Share Group
 
 ```
-var ShareGroup = ShareGroup.Find(1);
+var shareGroup = await ShareGroup.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("notes", "This group is defined for testing purposes");
 parameters.Add("name", "Test group 1");
-parameters.Add("members", [{"name":"John Doe","company":"Acme Ltd","email":"johndoe@gmail.com"}]);
+parameters.Add("members", new object[] { new Dictionary<string, object> { { "name", "John Doe" }, { "company", "Acme Ltd" }, { "email", "johndoe@gmail.com" } } });
 
-ShareGroup.Update(parameters);
+await shareGroup.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `ShareGroup` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -203,12 +204,11 @@ ShareGroup.Update(parameters);
 ## Delete Share Group
 
 ```
-var ShareGroup = ShareGroup.Find(1);
+var shareGroup = await ShareGroup.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-ShareGroup.Delete
+await shareGroup.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -216,3 +216,14 @@ ShareGroup.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Share Group ID.
+
+
+---
+
+## Save
+
+```
+await shareGroup.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

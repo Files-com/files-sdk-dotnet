@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class HistoryExport : IModel
+    /// <summary>
+    /// HistoryExportEntity model
+    /// </summary>
+    public class HistoryExport : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a HistoryExport with no attributes set and no options.
+        /// </summary>
         public HistoryExport() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a HistoryExport with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public HistoryExport(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("workspace_id"))
             {
@@ -141,30 +150,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -175,7 +206,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WorkspaceId
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            set { attributes["workspace_id"] = value; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -185,7 +216,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -195,7 +226,7 @@ namespace FilesCom.Models
         public string HistoryVersion
         {
             get { return (string)attributes["history_version"]; }
-            set { attributes["history_version"] = value; }
+            set { attributes["history_version"] = value; unsaved.Add("history_version"); }
         }
 
         /// <summary>
@@ -205,7 +236,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> StartAt
         {
             get { return (Nullable<DateTime>)attributes["start_at"]; }
-            set { attributes["start_at"] = value; }
+            set { attributes["start_at"] = value; unsaved.Add("start_at"); }
         }
 
         /// <summary>
@@ -215,7 +246,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> EndAt
         {
             get { return (Nullable<DateTime>)attributes["end_at"]; }
-            set { attributes["end_at"] = value; }
+            set { attributes["end_at"] = value; unsaved.Add("end_at"); }
         }
 
         /// <summary>
@@ -225,7 +256,7 @@ namespace FilesCom.Models
         public string Status
         {
             get { return (string)attributes["status"]; }
-            set { attributes["status"] = value; }
+            set { attributes["status"] = value; unsaved.Add("status"); }
         }
 
         /// <summary>
@@ -235,7 +266,7 @@ namespace FilesCom.Models
         public string QueryAction
         {
             get { return (string)attributes["query_action"]; }
-            set { attributes["query_action"] = value; }
+            set { attributes["query_action"] = value; unsaved.Add("query_action"); }
         }
 
         /// <summary>
@@ -245,7 +276,7 @@ namespace FilesCom.Models
         public string QueryInterface
         {
             get { return (string)attributes["query_interface"]; }
-            set { attributes["query_interface"] = value; }
+            set { attributes["query_interface"] = value; unsaved.Add("query_interface"); }
         }
 
         /// <summary>
@@ -255,7 +286,7 @@ namespace FilesCom.Models
         public string QueryUserId
         {
             get { return (string)attributes["query_user_id"]; }
-            set { attributes["query_user_id"] = value; }
+            set { attributes["query_user_id"] = value; unsaved.Add("query_user_id"); }
         }
 
         /// <summary>
@@ -265,7 +296,7 @@ namespace FilesCom.Models
         public string QueryFileId
         {
             get { return (string)attributes["query_file_id"]; }
-            set { attributes["query_file_id"] = value; }
+            set { attributes["query_file_id"] = value; unsaved.Add("query_file_id"); }
         }
 
         /// <summary>
@@ -275,7 +306,7 @@ namespace FilesCom.Models
         public string QueryParentId
         {
             get { return (string)attributes["query_parent_id"]; }
-            set { attributes["query_parent_id"] = value; }
+            set { attributes["query_parent_id"] = value; unsaved.Add("query_parent_id"); }
         }
 
         /// <summary>
@@ -285,7 +316,7 @@ namespace FilesCom.Models
         public string QueryPath
         {
             get { return (string)attributes["query_path"]; }
-            set { attributes["query_path"] = value; }
+            set { attributes["query_path"] = value; unsaved.Add("query_path"); }
         }
 
         /// <summary>
@@ -295,7 +326,7 @@ namespace FilesCom.Models
         public string QueryFolder
         {
             get { return (string)attributes["query_folder"]; }
-            set { attributes["query_folder"] = value; }
+            set { attributes["query_folder"] = value; unsaved.Add("query_folder"); }
         }
 
         /// <summary>
@@ -305,7 +336,7 @@ namespace FilesCom.Models
         public string QuerySrc
         {
             get { return (string)attributes["query_src"]; }
-            set { attributes["query_src"] = value; }
+            set { attributes["query_src"] = value; unsaved.Add("query_src"); }
         }
 
         /// <summary>
@@ -315,7 +346,7 @@ namespace FilesCom.Models
         public string QueryDestination
         {
             get { return (string)attributes["query_destination"]; }
-            set { attributes["query_destination"] = value; }
+            set { attributes["query_destination"] = value; unsaved.Add("query_destination"); }
         }
 
         /// <summary>
@@ -325,7 +356,7 @@ namespace FilesCom.Models
         public string QueryIp
         {
             get { return (string)attributes["query_ip"]; }
-            set { attributes["query_ip"] = value; }
+            set { attributes["query_ip"] = value; unsaved.Add("query_ip"); }
         }
 
         /// <summary>
@@ -335,7 +366,7 @@ namespace FilesCom.Models
         public string QueryUsername
         {
             get { return (string)attributes["query_username"]; }
-            set { attributes["query_username"] = value; }
+            set { attributes["query_username"] = value; unsaved.Add("query_username"); }
         }
 
         /// <summary>
@@ -345,7 +376,7 @@ namespace FilesCom.Models
         public string QueryFailureType
         {
             get { return (string)attributes["query_failure_type"]; }
-            set { attributes["query_failure_type"] = value; }
+            set { attributes["query_failure_type"] = value; unsaved.Add("query_failure_type"); }
         }
 
         /// <summary>
@@ -355,7 +386,7 @@ namespace FilesCom.Models
         public string QueryTargetId
         {
             get { return (string)attributes["query_target_id"]; }
-            set { attributes["query_target_id"] = value; }
+            set { attributes["query_target_id"] = value; unsaved.Add("query_target_id"); }
         }
 
         /// <summary>
@@ -365,7 +396,7 @@ namespace FilesCom.Models
         public string QueryTargetName
         {
             get { return (string)attributes["query_target_name"]; }
-            set { attributes["query_target_name"] = value; }
+            set { attributes["query_target_name"] = value; unsaved.Add("query_target_name"); }
         }
 
         /// <summary>
@@ -375,7 +406,7 @@ namespace FilesCom.Models
         public string QueryTargetPermission
         {
             get { return (string)attributes["query_target_permission"]; }
-            set { attributes["query_target_permission"] = value; }
+            set { attributes["query_target_permission"] = value; unsaved.Add("query_target_permission"); }
         }
 
         /// <summary>
@@ -385,7 +416,7 @@ namespace FilesCom.Models
         public string QueryTargetUserId
         {
             get { return (string)attributes["query_target_user_id"]; }
-            set { attributes["query_target_user_id"] = value; }
+            set { attributes["query_target_user_id"] = value; unsaved.Add("query_target_user_id"); }
         }
 
         /// <summary>
@@ -395,7 +426,7 @@ namespace FilesCom.Models
         public string QueryTargetUsername
         {
             get { return (string)attributes["query_target_username"]; }
-            set { attributes["query_target_username"] = value; }
+            set { attributes["query_target_username"] = value; unsaved.Add("query_target_username"); }
         }
 
         /// <summary>
@@ -405,7 +436,7 @@ namespace FilesCom.Models
         public string QueryTargetPlatform
         {
             get { return (string)attributes["query_target_platform"]; }
-            set { attributes["query_target_platform"] = value; }
+            set { attributes["query_target_platform"] = value; unsaved.Add("query_target_platform"); }
         }
 
         /// <summary>
@@ -415,7 +446,7 @@ namespace FilesCom.Models
         public string QueryTargetPermissionSet
         {
             get { return (string)attributes["query_target_permission_set"]; }
-            set { attributes["query_target_permission_set"] = value; }
+            set { attributes["query_target_permission_set"] = value; unsaved.Add("query_target_permission_set"); }
         }
 
         /// <summary>
@@ -425,7 +456,7 @@ namespace FilesCom.Models
         public string ResultsUrl
         {
             get { return (string)attributes["results_url"]; }
-            set { attributes["results_url"] = value; }
+            set { attributes["results_url"] = value; unsaved.Add("results_url"); }
         }
 
         /// <summary>
@@ -435,32 +466,82 @@ namespace FilesCom.Models
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
+            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
         }
 
 
+        private static readonly string[] CreateParameterNames = { "user_id", "start_at", "end_at", "query_action", "query_interface", "query_user_id", "query_file_id", "query_parent_id", "query_path", "query_folder", "query_src", "query_destination", "query_ip", "query_username", "query_failure_type", "query_target_id", "query_target_name", "query_target_permission", "query_target_user_id", "query_target_username", "query_target_platform", "query_target_permission_set" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this HistoryExport on Files.com.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
                 throw new NotImplementedException("The HistoryExport object doesn't support updates.");
             }
-            else
+            HistoryExport created = await HistoryExport.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await HistoryExport.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = ToParameter(name, attributes[name]);
+                }
             }
+            return toSave;
+        }
+
+        // The value SaveAsync sends for an attribute whose property type is not the one its parameter takes.
+        private static object ToParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case "start_at":
+                case "end_at":
+                    return ParameterValue.FromDateTime(value);
+                default:
+                    return value;
+            }
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - History Export ID.
         /// </summary>
+        /// <param name="id">History Export ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<HistoryExport> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -470,6 +551,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - History Export ID.
+        /// </summary>
+        /// <param name="id">History Export ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<HistoryExport> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -489,6 +577,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -498,25 +587,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/history_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<HistoryExport>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<HistoryExport>(responseJson, context, options);
         }
 
         /// <summary>
@@ -544,6 +626,8 @@ namespace FilesCom.Models
         ///   query_target_platform - string - If searching for Histories about API keys, this parameter restricts results to API keys associated with this platform.
         ///   query_target_permission_set - string - If searching for Histories about API keys, this parameter restricts results to API keys with this permission set.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<HistoryExport> Create(
 
             Dictionary<string, object> parameters = null,
@@ -563,106 +647,100 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
             }
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("query_action") && !(parameters["query_action"] is string))
+            if (parameters.TryGetValue("query_action", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_action must be of type string", "parameters[\"query_action\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_action is null, which cannot be sent" : "Bad parameter: query_action must be of type string", "query_action");
             }
-            if (parameters.ContainsKey("query_interface") && !(parameters["query_interface"] is string))
+            if (parameters.TryGetValue("query_interface", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_interface must be of type string", "parameters[\"query_interface\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_interface is null, which cannot be sent" : "Bad parameter: query_interface must be of type string", "query_interface");
             }
-            if (parameters.ContainsKey("query_user_id") && !(parameters["query_user_id"] is string))
+            if (parameters.TryGetValue("query_user_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_user_id must be of type string", "parameters[\"query_user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_user_id is null, which cannot be sent" : "Bad parameter: query_user_id must be of type string", "query_user_id");
             }
-            if (parameters.ContainsKey("query_file_id") && !(parameters["query_file_id"] is string))
+            if (parameters.TryGetValue("query_file_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_file_id must be of type string", "parameters[\"query_file_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_file_id is null, which cannot be sent" : "Bad parameter: query_file_id must be of type string", "query_file_id");
             }
-            if (parameters.ContainsKey("query_parent_id") && !(parameters["query_parent_id"] is string))
+            if (parameters.TryGetValue("query_parent_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_parent_id must be of type string", "parameters[\"query_parent_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_parent_id is null, which cannot be sent" : "Bad parameter: query_parent_id must be of type string", "query_parent_id");
             }
-            if (parameters.ContainsKey("query_path") && !(parameters["query_path"] is string))
+            if (parameters.TryGetValue("query_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_path must be of type string", "parameters[\"query_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_path is null, which cannot be sent" : "Bad parameter: query_path must be of type string", "query_path");
             }
-            if (parameters.ContainsKey("query_folder") && !(parameters["query_folder"] is string))
+            if (parameters.TryGetValue("query_folder", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_folder must be of type string", "parameters[\"query_folder\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_folder is null, which cannot be sent" : "Bad parameter: query_folder must be of type string", "query_folder");
             }
-            if (parameters.ContainsKey("query_src") && !(parameters["query_src"] is string))
+            if (parameters.TryGetValue("query_src", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_src must be of type string", "parameters[\"query_src\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_src is null, which cannot be sent" : "Bad parameter: query_src must be of type string", "query_src");
             }
-            if (parameters.ContainsKey("query_destination") && !(parameters["query_destination"] is string))
+            if (parameters.TryGetValue("query_destination", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_destination must be of type string", "parameters[\"query_destination\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_destination is null, which cannot be sent" : "Bad parameter: query_destination must be of type string", "query_destination");
             }
-            if (parameters.ContainsKey("query_ip") && !(parameters["query_ip"] is string))
+            if (parameters.TryGetValue("query_ip", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_ip must be of type string", "parameters[\"query_ip\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_ip is null, which cannot be sent" : "Bad parameter: query_ip must be of type string", "query_ip");
             }
-            if (parameters.ContainsKey("query_username") && !(parameters["query_username"] is string))
+            if (parameters.TryGetValue("query_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_username must be of type string", "parameters[\"query_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_username is null, which cannot be sent" : "Bad parameter: query_username must be of type string", "query_username");
             }
-            if (parameters.ContainsKey("query_failure_type") && !(parameters["query_failure_type"] is string))
+            if (parameters.TryGetValue("query_failure_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_failure_type must be of type string", "parameters[\"query_failure_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_failure_type is null, which cannot be sent" : "Bad parameter: query_failure_type must be of type string", "query_failure_type");
             }
-            if (parameters.ContainsKey("query_target_id") && !(parameters["query_target_id"] is string))
+            if (parameters.TryGetValue("query_target_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_id must be of type string", "parameters[\"query_target_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_id is null, which cannot be sent" : "Bad parameter: query_target_id must be of type string", "query_target_id");
             }
-            if (parameters.ContainsKey("query_target_name") && !(parameters["query_target_name"] is string))
+            if (parameters.TryGetValue("query_target_name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_name must be of type string", "parameters[\"query_target_name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_name is null, which cannot be sent" : "Bad parameter: query_target_name must be of type string", "query_target_name");
             }
-            if (parameters.ContainsKey("query_target_permission") && !(parameters["query_target_permission"] is string))
+            if (parameters.TryGetValue("query_target_permission", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_permission must be of type string", "parameters[\"query_target_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_permission is null, which cannot be sent" : "Bad parameter: query_target_permission must be of type string", "query_target_permission");
             }
-            if (parameters.ContainsKey("query_target_user_id") && !(parameters["query_target_user_id"] is string))
+            if (parameters.TryGetValue("query_target_user_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_user_id must be of type string", "parameters[\"query_target_user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_user_id is null, which cannot be sent" : "Bad parameter: query_target_user_id must be of type string", "query_target_user_id");
             }
-            if (parameters.ContainsKey("query_target_username") && !(parameters["query_target_username"] is string))
+            if (parameters.TryGetValue("query_target_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_username must be of type string", "parameters[\"query_target_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_username is null, which cannot be sent" : "Bad parameter: query_target_username must be of type string", "query_target_username");
             }
-            if (parameters.ContainsKey("query_target_platform") && !(parameters["query_target_platform"] is string))
+            if (parameters.TryGetValue("query_target_platform", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_platform must be of type string", "parameters[\"query_target_platform\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_platform is null, which cannot be sent" : "Bad parameter: query_target_platform must be of type string", "query_target_platform");
             }
-            if (parameters.ContainsKey("query_target_permission_set") && !(parameters["query_target_permission_set"] is string))
+            if (parameters.TryGetValue("query_target_permission_set", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_target_permission_set must be of type string", "parameters[\"query_target_permission_set\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_target_permission_set is null, which cannot be sent" : "Bad parameter: query_target_permission_set must be of type string", "query_target_permission_set");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/history_exports", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<HistoryExport>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<HistoryExport>(responseJson, context, options);
         }
 
     }

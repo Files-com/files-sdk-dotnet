@@ -41,7 +41,7 @@
 ## List Share Link Downloads
 
 ```
-Task<FilesList<BundleDownload>> BundleDownload.List(
+FilesList<BundleDownload> BundleDownload.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

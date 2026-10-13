@@ -72,7 +72,7 @@
 ## List Partners
 
 ```
-Task<FilesList<Partner>> Partner.List(
+FilesList<Partner> Partner.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -245,11 +245,11 @@ Task client.Partners.DeleteAsync(
 ## Update Partner
 
 ```
-var Partner = Partner.Find(1);
+var partner = await Partner.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("ai_assistant_personality_id", 1);
+parameters.Add("ai_assistant_personality_id", 1L);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("allow_bypassing_2fa_policies", false);
 parameters.Add("allow_credential_changes", false);
@@ -257,19 +257,20 @@ parameters.Add("allow_providing_gpg_keys", false);
 parameters.Add("allow_user_creation", false);
 parameters.Add("cc_emails_to_responsible_party", false);
 parameters.Add("notes", "This is a note about the partner.");
-parameters.Add("partner_channel_template_id", 1);
-parameters.Add("responsible_group_id", 1);
-parameters.Add("responsible_user_id", 1);
+parameters.Add("partner_channel_template_id", 1L);
+parameters.Add("responsible_group_id", 1L);
+parameters.Add("responsible_user_id", 1L);
 parameters.Add("show_partner_channel_home_page", false);
 parameters.Add("tags", "example");
 parameters.Add("name", "Acme Corp");
 parameters.Add("partnership_role", "host");
 parameters.Add("root_folder", "/AcmeCorp");
 
-Partner.Update(parameters);
+await partner.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Partner` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -297,12 +298,11 @@ Partner.Update(parameters);
 ## Delete Partner
 
 ```
-var Partner = Partner.Find(1);
+var partner = await Partner.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Partner.Delete
+await partner.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -310,3 +310,14 @@ Partner.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner ID.
+
+
+---
+
+## Save
+
+```
+await partner.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

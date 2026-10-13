@@ -36,7 +36,7 @@
 ## List Inbound S3 Logs
 
 ```
-Task<FilesList<InboundS3Log>> InboundS3Log.List(
+FilesList<InboundS3Log> InboundS3Log.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

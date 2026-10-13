@@ -60,7 +60,7 @@
 ## List Restores
 
 ```
-Task<FilesList<Restore>> Restore.List(
+FilesList<Restore> Restore.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -117,3 +117,14 @@ Task<Restore> client.Restores.CreateAsync(
 * `restore_in_place` (bool): If true, we will restore the files in place (into their original paths). If false, we will create a new restoration folder in the root and restore files there.
 * `update_timestamps` (bool): If true, we will update the last modified timestamp of restored files to today's date. If false, we might trigger File Expiration to delete the file again.
 * `workspace_id` (Nullable<Int64>): Workspace ID for a workspace-scoped restore. `0` means the default site-wide scope.
+
+
+---
+
+## Save
+
+```
+await restore.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

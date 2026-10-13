@@ -9,27 +9,40 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class Automation : IModel
+    /// <summary>
+    /// AutomationEntity model
+    /// </summary>
+    public class Automation : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        // The JSON, when handed out since then, of the arrays among them that callers can change in place, directly or
+        // through a model in them. SaveAsync compares each with the array's JSON now, and sends the ones that differ.
+        private readonly Dictionary<string, string> handedOut = new Dictionary<string, string>();
+        private static readonly string[] ArrayAttributeNames = { "destinations", "import_urls", "group_ids", "recurring_days", "schedule_days_of_week", "schedule_times_of_day", "sync_ids", "trigger_actions", "user_ids" };
+        /// <summary>
+        /// Makes a Automation with no attributes set and no options.
+        /// </summary>
         public Automation() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a Automation with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public Automation(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -213,30 +226,58 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
+            // The copy holds this object's own arrays, which the caller can change in place as through its properties.
+            foreach (string name in ArrayAttributeNames)
+            {
+                HandedOut(name);
+            }
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
+            handedOut.Clear();
         }
 
 
@@ -247,7 +288,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -257,7 +298,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WorkspaceId
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            set { attributes["workspace_id"] = value; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -268,7 +309,7 @@ namespace FilesCom.Models
         public bool AlwaysSerializeJobs
         {
             get { return attributes["always_serialize_jobs"] == null ? false : (bool)attributes["always_serialize_jobs"]; }
-            set { attributes["always_serialize_jobs"] = value; }
+            set { attributes["always_serialize_jobs"] = value; unsaved.Add("always_serialize_jobs"); }
         }
 
         /// <summary>
@@ -279,7 +320,7 @@ namespace FilesCom.Models
         public bool AlwaysOverwriteSizeMatchingFiles
         {
             get { return attributes["always_overwrite_size_matching_files"] == null ? false : (bool)attributes["always_overwrite_size_matching_files"]; }
-            set { attributes["always_overwrite_size_matching_files"] = value; }
+            set { attributes["always_overwrite_size_matching_files"] = value; unsaved.Add("always_overwrite_size_matching_files"); }
         }
 
         /// <summary>
@@ -289,7 +330,7 @@ namespace FilesCom.Models
         public string AutomationType
         {
             get { return (string)attributes["automation"]; }
-            set { attributes["automation"] = value; }
+            set { attributes["automation"] = value; unsaved.Add("automation"); }
         }
 
         /// <summary>
@@ -300,7 +341,7 @@ namespace FilesCom.Models
         public bool Deleted
         {
             get { return attributes["deleted"] == null ? false : (bool)attributes["deleted"]; }
-            set { attributes["deleted"] = value; }
+            set { attributes["deleted"] = value; unsaved.Add("deleted"); }
         }
 
         /// <summary>
@@ -310,7 +351,7 @@ namespace FilesCom.Models
         public string Description
         {
             get { return (string)attributes["description"]; }
-            set { attributes["description"] = value; }
+            set { attributes["description"] = value; unsaved.Add("description"); }
         }
 
         /// <summary>
@@ -320,7 +361,7 @@ namespace FilesCom.Models
         public object Definition
         {
             get { return (object)attributes["definition"]; }
-            set { attributes["definition"] = value; }
+            set { attributes["definition"] = value; unsaved.Add("definition"); }
         }
 
         /// <summary>
@@ -330,7 +371,7 @@ namespace FilesCom.Models
         public string DestinationReplaceFrom
         {
             get { return (string)attributes["destination_replace_from"]; }
-            set { attributes["destination_replace_from"] = value; }
+            set { attributes["destination_replace_from"] = value; unsaved.Add("destination_replace_from"); }
         }
 
         /// <summary>
@@ -340,7 +381,7 @@ namespace FilesCom.Models
         public string DestinationReplaceTo
         {
             get { return (string)attributes["destination_replace_to"]; }
-            set { attributes["destination_replace_to"] = value; }
+            set { attributes["destination_replace_to"] = value; unsaved.Add("destination_replace_to"); }
         }
 
         /// <summary>
@@ -349,8 +390,8 @@ namespace FilesCom.Models
         [JsonPropertyName("destinations")]
         public string[] Destinations
         {
-            get { return (string[])attributes["destinations"]; }
-            set { attributes["destinations"] = value; }
+            get { return (string[])HandedOut("destinations"); }
+            set { attributes["destinations"] = value; unsaved.Add("destinations"); }
         }
 
         /// <summary>
@@ -361,7 +402,7 @@ namespace FilesCom.Models
         public bool Disabled
         {
             get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
-            set { attributes["disabled"] = value; }
+            set { attributes["disabled"] = value; unsaved.Add("disabled"); }
         }
 
         /// <summary>
@@ -371,7 +412,7 @@ namespace FilesCom.Models
         public string ExcludePattern
         {
             get { return (string)attributes["exclude_pattern"]; }
-            set { attributes["exclude_pattern"] = value; }
+            set { attributes["exclude_pattern"] = value; unsaved.Add("exclude_pattern"); }
         }
 
         /// <summary>
@@ -380,8 +421,8 @@ namespace FilesCom.Models
         [JsonPropertyName("import_urls")]
         public object[] ImportUrls
         {
-            get { return (object[])attributes["import_urls"]; }
-            set { attributes["import_urls"] = value; }
+            get { return (object[])HandedOut("import_urls"); }
+            set { attributes["import_urls"] = value; unsaved.Add("import_urls"); }
         }
 
         /// <summary>
@@ -391,7 +432,7 @@ namespace FilesCom.Models
         public string InboundEmailAddress
         {
             get { return (string)attributes["inbound_email_address"]; }
-            set { attributes["inbound_email_address"] = value; }
+            set { attributes["inbound_email_address"] = value; unsaved.Add("inbound_email_address"); }
         }
 
         /// <summary>
@@ -402,7 +443,7 @@ namespace FilesCom.Models
         public bool FlattenDestinationStructure
         {
             get { return attributes["flatten_destination_structure"] == null ? false : (bool)attributes["flatten_destination_structure"]; }
-            set { attributes["flatten_destination_structure"] = value; }
+            set { attributes["flatten_destination_structure"] = value; unsaved.Add("flatten_destination_structure"); }
         }
 
         /// <summary>
@@ -411,8 +452,8 @@ namespace FilesCom.Models
         [JsonPropertyName("group_ids")]
         public Nullable<Int64>[] GroupIds
         {
-            get { return (Nullable<Int64>[])attributes["group_ids"]; }
-            set { attributes["group_ids"] = value; }
+            get { return (Nullable<Int64>[])HandedOut("group_ids"); }
+            set { attributes["group_ids"] = value; unsaved.Add("group_ids"); }
         }
 
         /// <summary>
@@ -423,7 +464,7 @@ namespace FilesCom.Models
         public bool IgnoreLockedFolders
         {
             get { return attributes["ignore_locked_folders"] == null ? false : (bool)attributes["ignore_locked_folders"]; }
-            set { attributes["ignore_locked_folders"] = value; }
+            set { attributes["ignore_locked_folders"] = value; unsaved.Add("ignore_locked_folders"); }
         }
 
         /// <summary>
@@ -433,7 +474,7 @@ namespace FilesCom.Models
         public string Interval
         {
             get { return (string)attributes["interval"]; }
-            set { attributes["interval"] = value; }
+            set { attributes["interval"] = value; unsaved.Add("interval"); }
         }
 
         /// <summary>
@@ -443,7 +484,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastModifiedAt
         {
             get { return (Nullable<DateTime>)attributes["last_modified_at"]; }
-            set { attributes["last_modified_at"] = value; }
+            set { attributes["last_modified_at"] = value; unsaved.Add("last_modified_at"); }
         }
 
         /// <summary>
@@ -454,7 +495,7 @@ namespace FilesCom.Models
         public bool LegacyFolderMatching
         {
             get { return attributes["legacy_folder_matching"] == null ? false : (bool)attributes["legacy_folder_matching"]; }
-            set { attributes["legacy_folder_matching"] = value; }
+            set { attributes["legacy_folder_matching"] = value; unsaved.Add("legacy_folder_matching"); }
         }
 
         /// <summary>
@@ -464,7 +505,7 @@ namespace FilesCom.Models
         public string Name
         {
             get { return (string)attributes["name"]; }
-            set { attributes["name"] = value; }
+            set { attributes["name"] = value; unsaved.Add("name"); }
         }
 
         /// <summary>
@@ -475,7 +516,7 @@ namespace FilesCom.Models
         public bool OverwriteFiles
         {
             get { return attributes["overwrite_files"] == null ? false : (bool)attributes["overwrite_files"]; }
-            set { attributes["overwrite_files"] = value; }
+            set { attributes["overwrite_files"] = value; unsaved.Add("overwrite_files"); }
         }
 
         /// <summary>
@@ -485,7 +526,7 @@ namespace FilesCom.Models
         public string Path
         {
             get { return (string)attributes["path"]; }
-            set { attributes["path"] = value; }
+            set { attributes["path"] = value; unsaved.Add("path"); }
         }
 
         /// <summary>
@@ -495,7 +536,7 @@ namespace FilesCom.Models
         public string PathTimeZone
         {
             get { return (string)attributes["path_time_zone"]; }
-            set { attributes["path_time_zone"] = value; }
+            set { attributes["path_time_zone"] = value; unsaved.Add("path_time_zone"); }
         }
 
         /// <summary>
@@ -505,7 +546,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Version
         {
             get { return (Nullable<Int64>)attributes["version"]; }
-            set { attributes["version"] = value; }
+            set { attributes["version"] = value; unsaved.Add("version"); }
         }
 
         /// <summary>
@@ -515,7 +556,7 @@ namespace FilesCom.Models
         public Nullable<Int64> RecurringDay
         {
             get { return (Nullable<Int64>)attributes["recurring_day"]; }
-            set { attributes["recurring_day"] = value; }
+            set { attributes["recurring_day"] = value; unsaved.Add("recurring_day"); }
         }
 
         /// <summary>
@@ -524,8 +565,8 @@ namespace FilesCom.Models
         [JsonPropertyName("recurring_days")]
         public Nullable<Int64>[] RecurringDays
         {
-            get { return (Nullable<Int64>[])attributes["recurring_days"]; }
-            set { attributes["recurring_days"] = value; }
+            get { return (Nullable<Int64>[])HandedOut("recurring_days"); }
+            set { attributes["recurring_days"] = value; unsaved.Add("recurring_days"); }
         }
 
         /// <summary>
@@ -535,7 +576,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ScheduleId
         {
             get { return (Nullable<Int64>)attributes["schedule_id"]; }
-            set { attributes["schedule_id"] = value; }
+            set { attributes["schedule_id"] = value; unsaved.Add("schedule_id"); }
         }
 
         /// <summary>
@@ -545,7 +586,7 @@ namespace FilesCom.Models
         public Nullable<Int64> RetryOnFailureIntervalInMinutes
         {
             get { return (Nullable<Int64>)attributes["retry_on_failure_interval_in_minutes"]; }
-            set { attributes["retry_on_failure_interval_in_minutes"] = value; }
+            set { attributes["retry_on_failure_interval_in_minutes"] = value; unsaved.Add("retry_on_failure_interval_in_minutes"); }
         }
 
         /// <summary>
@@ -555,7 +596,7 @@ namespace FilesCom.Models
         public Nullable<Int64> RetryOnFailureNumberOfAttempts
         {
             get { return (Nullable<Int64>)attributes["retry_on_failure_number_of_attempts"]; }
-            set { attributes["retry_on_failure_number_of_attempts"] = value; }
+            set { attributes["retry_on_failure_number_of_attempts"] = value; unsaved.Add("retry_on_failure_number_of_attempts"); }
         }
 
         /// <summary>
@@ -565,7 +606,7 @@ namespace FilesCom.Models
         public object Schedule
         {
             get { return (object)attributes["schedule"]; }
-            set { attributes["schedule"] = value; }
+            set { attributes["schedule"] = value; unsaved.Add("schedule"); }
         }
 
         /// <summary>
@@ -575,7 +616,7 @@ namespace FilesCom.Models
         public string HumanReadableSchedule
         {
             get { return (string)attributes["human_readable_schedule"]; }
-            set { attributes["human_readable_schedule"] = value; }
+            set { attributes["human_readable_schedule"] = value; unsaved.Add("human_readable_schedule"); }
         }
 
         /// <summary>
@@ -584,8 +625,8 @@ namespace FilesCom.Models
         [JsonPropertyName("schedule_days_of_week")]
         public Nullable<Int64>[] ScheduleDaysOfWeek
         {
-            get { return (Nullable<Int64>[])attributes["schedule_days_of_week"]; }
-            set { attributes["schedule_days_of_week"] = value; }
+            get { return (Nullable<Int64>[])HandedOut("schedule_days_of_week"); }
+            set { attributes["schedule_days_of_week"] = value; unsaved.Add("schedule_days_of_week"); }
         }
 
         /// <summary>
@@ -594,8 +635,8 @@ namespace FilesCom.Models
         [JsonPropertyName("schedule_times_of_day")]
         public string[] ScheduleTimesOfDay
         {
-            get { return (string[])attributes["schedule_times_of_day"]; }
-            set { attributes["schedule_times_of_day"] = value; }
+            get { return (string[])HandedOut("schedule_times_of_day"); }
+            set { attributes["schedule_times_of_day"] = value; unsaved.Add("schedule_times_of_day"); }
         }
 
         /// <summary>
@@ -605,7 +646,7 @@ namespace FilesCom.Models
         public string ScheduleTimeZone
         {
             get { return (string)attributes["schedule_time_zone"]; }
-            set { attributes["schedule_time_zone"] = value; }
+            set { attributes["schedule_time_zone"] = value; unsaved.Add("schedule_time_zone"); }
         }
 
         /// <summary>
@@ -615,7 +656,7 @@ namespace FilesCom.Models
         public string Source
         {
             get { return (string)attributes["source"]; }
-            set { attributes["source"] = value; }
+            set { attributes["source"] = value; unsaved.Add("source"); }
         }
 
         /// <summary>
@@ -624,8 +665,8 @@ namespace FilesCom.Models
         [JsonPropertyName("sync_ids")]
         public Nullable<Int64>[] SyncIds
         {
-            get { return (Nullable<Int64>[])attributes["sync_ids"]; }
-            set { attributes["sync_ids"] = value; }
+            get { return (Nullable<Int64>[])HandedOut("sync_ids"); }
+            set { attributes["sync_ids"] = value; unsaved.Add("sync_ids"); }
         }
 
         /// <summary>
@@ -634,8 +675,8 @@ namespace FilesCom.Models
         [JsonPropertyName("trigger_actions")]
         public string[] TriggerActions
         {
-            get { return (string[])attributes["trigger_actions"]; }
-            set { attributes["trigger_actions"] = value; }
+            get { return (string[])HandedOut("trigger_actions"); }
+            set { attributes["trigger_actions"] = value; unsaved.Add("trigger_actions"); }
         }
 
         /// <summary>
@@ -645,7 +686,7 @@ namespace FilesCom.Models
         public string Trigger
         {
             get { return (string)attributes["trigger"]; }
-            set { attributes["trigger"] = value; }
+            set { attributes["trigger"] = value; unsaved.Add("trigger"); }
         }
 
         /// <summary>
@@ -655,7 +696,7 @@ namespace FilesCom.Models
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
+            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
         }
 
         /// <summary>
@@ -664,8 +705,8 @@ namespace FilesCom.Models
         [JsonPropertyName("user_ids")]
         public Nullable<Int64>[] UserIds
         {
-            get { return (Nullable<Int64>[])attributes["user_ids"]; }
-            set { attributes["user_ids"] = value; }
+            get { return (Nullable<Int64>[])HandedOut("user_ids"); }
+            set { attributes["user_ids"] = value; unsaved.Add("user_ids"); }
         }
 
         /// <summary>
@@ -675,7 +716,7 @@ namespace FilesCom.Models
         public object Value
         {
             get { return (object)attributes["value"]; }
-            set { attributes["value"] = value; }
+            set { attributes["value"] = value; unsaved.Add("value"); }
         }
 
         /// <summary>
@@ -685,7 +726,7 @@ namespace FilesCom.Models
         public string WebhookUrl
         {
             get { return (string)attributes["webhook_url"]; }
-            set { attributes["webhook_url"] = value; }
+            set { attributes["webhook_url"] = value; unsaved.Add("webhook_url"); }
         }
 
         /// <summary>
@@ -695,12 +736,13 @@ namespace FilesCom.Models
         public string HolidayRegion
         {
             get { return (string)attributes["holiday_region"]; }
-            set { attributes["holiday_region"] = value; }
+            set { attributes["holiday_region"] = value; unsaved.Add("holiday_region"); }
         }
 
         /// <summary>
         /// Upgrade a legacy Automation to Automation v2
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task<Automation> Upgrade(Dictionary<string, object> parameters)
         {
             return UpgradeCore(parameters, CancellationToken.None);
@@ -709,6 +751,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Upgrade a legacy Automation to Automation v2
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task<Automation> UpgradeAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UpgradeCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -718,34 +762,29 @@ namespace FilesCom.Models
         private async Task<Automation> UpgradeCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Automation has no id, which Upgrade needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}/upgrade", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Automation>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            Automation result = JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
         }
 
         /// <summary>
@@ -754,6 +793,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         public Task ManualRun(Dictionary<string, object> parameters)
         {
             return ManualRunCore(parameters, CancellationToken.None);
@@ -765,6 +805,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task ManualRunAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return ManualRunCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -774,30 +816,31 @@ namespace FilesCom.Models
         private async Task ManualRunCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Automation has no id, which ManualRun needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("items", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: items is null, which cannot be sent" : "Bad parameter: items must be of type object[]", "items");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("items") && !(parameters["items"] is object[]))
-            {
-                throw new ArgumentException("Bad parameter: items must be of type object[]", "parameters[\"items\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
         /// <summary>
@@ -838,6 +881,11 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   automation - string - Automation type
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The Automation it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<Automation> Update(Dictionary<string, object> parameters)
         {
             return UpdateCore(parameters, CancellationToken.None);
@@ -881,6 +929,12 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   automation - string - Automation type
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The Automation it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<Automation> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -890,190 +944,198 @@ namespace FilesCom.Models
         private async Task<Automation> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Automation has no id, which Update needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("source", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: source is null, which cannot be sent" : "Bad parameter: source must be of type string", "source");
+            }
+            if (parameters.TryGetValue("destinations", out parameterValue) && !(parameterValue is string[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destinations is null, which cannot be sent" : "Bad parameter: destinations must be of type string[]", "destinations");
+            }
+            if (parameters.TryGetValue("destination_replace_from", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_replace_from is null, which cannot be sent" : "Bad parameter: destination_replace_from must be of type string", "destination_replace_from");
+            }
+            if (parameters.TryGetValue("destination_replace_to", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_replace_to is null, which cannot be sent" : "Bad parameter: destination_replace_to must be of type string", "destination_replace_to");
+            }
+            if (parameters.TryGetValue("interval", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: interval is null, which cannot be sent" : "Bad parameter: interval must be of type string", "interval");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("sync_ids", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_ids is null, which cannot be sent" : "Bad parameter: sync_ids must be of type string", "sync_ids");
+            }
+            if (parameters.TryGetValue("user_ids", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_ids is null, which cannot be sent" : "Bad parameter: user_ids must be of type string", "user_ids");
+            }
+            if (parameters.TryGetValue("group_ids", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_ids is null, which cannot be sent" : "Bad parameter: group_ids must be of type string", "group_ids");
+            }
+            if (parameters.TryGetValue("schedule_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_id is null, which cannot be sent" : "Bad parameter: schedule_id must be of type Nullable<Int64>", "schedule_id");
+            }
+            if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_times_of_day is null, which cannot be sent" : "Bad parameter: schedule_times_of_day must be of type string[]", "schedule_times_of_day");
+            }
+            if (parameters.TryGetValue("schedule_time_zone", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_time_zone is null, which cannot be sent" : "Bad parameter: schedule_time_zone must be of type string", "schedule_time_zone");
+            }
+            if (parameters.TryGetValue("holiday_region", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: holiday_region is null, which cannot be sent" : "Bad parameter: holiday_region must be of type string", "holiday_region");
+            }
+            if (parameters.TryGetValue("always_overwrite_size_matching_files", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_overwrite_size_matching_files is null, which cannot be sent" : "Bad parameter: always_overwrite_size_matching_files must be of type bool", "always_overwrite_size_matching_files");
+            }
+            if (parameters.TryGetValue("always_serialize_jobs", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_serialize_jobs is null, which cannot be sent" : "Bad parameter: always_serialize_jobs must be of type bool", "always_serialize_jobs");
+            }
+            if (parameters.TryGetValue("description", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: description is null, which cannot be sent" : "Bad parameter: description must be of type string", "description");
+            }
+            if (parameters.TryGetValue("definition", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: definition is null, which cannot be sent" : "Bad parameter: definition must be of type object", "definition");
+            }
+            if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disabled is null, which cannot be sent" : "Bad parameter: disabled must be of type bool", "disabled");
+            }
+            if (parameters.TryGetValue("exclude_pattern", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exclude_pattern is null, which cannot be sent" : "Bad parameter: exclude_pattern must be of type string", "exclude_pattern");
+            }
+            if (parameters.TryGetValue("import_urls", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: import_urls is null, which cannot be sent" : "Bad parameter: import_urls must be of type object[]", "import_urls");
+            }
+            if (parameters.TryGetValue("flatten_destination_structure", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: flatten_destination_structure is null, which cannot be sent" : "Bad parameter: flatten_destination_structure must be of type bool", "flatten_destination_structure");
+            }
+            if (parameters.TryGetValue("ignore_locked_folders", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_locked_folders is null, which cannot be sent" : "Bad parameter: ignore_locked_folders must be of type bool", "ignore_locked_folders");
+            }
+            if (parameters.TryGetValue("legacy_folder_matching", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: legacy_folder_matching is null, which cannot be sent" : "Bad parameter: legacy_folder_matching must be of type bool", "legacy_folder_matching");
+            }
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
+            }
+            if (parameters.TryGetValue("overwrite_files", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite_files is null, which cannot be sent" : "Bad parameter: overwrite_files must be of type bool", "overwrite_files");
+            }
+            if (parameters.TryGetValue("path_time_zone", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path_time_zone is null, which cannot be sent" : "Bad parameter: path_time_zone must be of type string", "path_time_zone");
+            }
+            if (parameters.TryGetValue("retry_on_failure_interval_in_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: retry_on_failure_interval_in_minutes is null, which cannot be sent" : "Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "retry_on_failure_interval_in_minutes");
+            }
+            if (parameters.TryGetValue("retry_on_failure_number_of_attempts", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: retry_on_failure_number_of_attempts is null, which cannot be sent" : "Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "retry_on_failure_number_of_attempts");
+            }
+            if (parameters.TryGetValue("trigger", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: trigger is null, which cannot be sent" : "Bad parameter: trigger must be of type string", "trigger");
+            }
+            if (parameters.TryGetValue("trigger_actions", out parameterValue) && !(parameterValue is string[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: trigger_actions is null, which cannot be sent" : "Bad parameter: trigger_actions must be of type string[]", "trigger_actions");
+            }
+            if (parameters.TryGetValue("value", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: value is null, which cannot be sent" : "Bad parameter: value must be of type object", "value");
+            }
+            if (parameters.TryGetValue("recurring_day", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recurring_day is null, which cannot be sent" : "Bad parameter: recurring_day must be of type Nullable<Int64>", "recurring_day");
+            }
+            if (parameters.TryGetValue("recurring_days", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recurring_days is null, which cannot be sent" : "Bad parameter: recurring_days must be of type Nullable<Int64>[]", "recurring_days");
+            }
+            if (parameters.TryGetValue("automation", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation is null, which cannot be sent" : "Bad parameter: automation must be of type string", "automation");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("source") && !(parameters["source"] is string))
-            {
-                throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
-            }
-            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[]))
-            {
-                throw new ArgumentException("Bad parameter: destinations must be of type string[]", "parameters[\"destinations\"]");
-            }
-            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string))
-            {
-                throw new ArgumentException("Bad parameter: destination_replace_from must be of type string", "parameters[\"destination_replace_from\"]");
-            }
-            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string))
-            {
-                throw new ArgumentException("Bad parameter: destination_replace_to must be of type string", "parameters[\"destination_replace_to\"]");
-            }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
-            {
-                throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
-            }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
-            }
-            if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
-            {
-                throw new ArgumentException("Bad parameter: sync_ids must be of type string", "parameters[\"sync_ids\"]");
-            }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
-            {
-                throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
-            }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
-            {
-                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
-            }
-            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
-            }
-            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
-            }
-            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
-            {
-                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
-            }
-            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
-            {
-                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
-            }
-            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
-            {
-                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
-            }
-            if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
-            }
-            if (parameters.ContainsKey("always_serialize_jobs") && !(parameters["always_serialize_jobs"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: always_serialize_jobs must be of type bool", "parameters[\"always_serialize_jobs\"]");
-            }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
-            {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
-            }
-            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
-            {
-                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
-            }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
-            }
-            if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
-            {
-                throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
-            }
-            if (parameters.ContainsKey("import_urls") && !(parameters["import_urls"] is object[]))
-            {
-                throw new ArgumentException("Bad parameter: import_urls must be of type object[]", "parameters[\"import_urls\"]");
-            }
-            if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: flatten_destination_structure must be of type bool", "parameters[\"flatten_destination_structure\"]");
-            }
-            if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
-            }
-            if (parameters.ContainsKey("legacy_folder_matching") && !(parameters["legacy_folder_matching"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: legacy_folder_matching must be of type bool", "parameters[\"legacy_folder_matching\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
-            }
-            if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
-            {
-                throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
-            }
-            if (parameters.ContainsKey("retry_on_failure_interval_in_minutes") && !(parameters["retry_on_failure_interval_in_minutes"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "parameters[\"retry_on_failure_interval_in_minutes\"]");
-            }
-            if (parameters.ContainsKey("retry_on_failure_number_of_attempts") && !(parameters["retry_on_failure_number_of_attempts"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "parameters[\"retry_on_failure_number_of_attempts\"]");
-            }
-            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
-            {
-                throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
-            }
-            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[]))
-            {
-                throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
-            }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
-            {
-                throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
-            }
-            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
-            }
-            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
-            {
-                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
-            }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
-            {
-                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Automation>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            Automation updated = JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, requestOptions);
+            // This object takes its own reading of the response, so that it shares no array or nested model with the
+            // one returned, and a change to either leaves the other alone.
+            Refresh(JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, requestOptions).attributes);
+            // Its later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return updated;
         }
 
         /// <summary>
+        /// Sends DELETE /automations/{id} to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task Delete(Dictionary<string, object> parameters)
         {
             return DeleteCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
+        /// Sends DELETE /automations/{id} to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>, but neither waits for the request nor reports its failure.
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        [Obsolete("Destroy neither waits for the request nor reports its failure. Use DestroyAsync instead.")]
         public async void Destroy(Dictionary<string, object> parameters)
         {
             Delete(parameters);
@@ -1082,6 +1144,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Same as <see cref="DeleteAsync"/>.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(parameters, cancellationToken);
@@ -1090,45 +1154,115 @@ namespace FilesCom.Models
         private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Automation has no id, which Delete needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/automations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
 
+        private static readonly string[] CreateParameterNames = { "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this Automation on Files.com, or updates it if it has an ID.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await UpdateCore(this.attributes, cancellationToken);
+                await UpdateCore(AttributesToSave(UpdateParameterNames), cancellationToken);
+                return;
             }
-            else
+            Automation created = await Automation.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await Automation.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name) || ChangedInPlace(name))
+                {
+                    toSave[name] = ToParameter(name, attributes[name]);
+                }
             }
+            return toSave;
+        }
+
+        // An array attribute, for a property or getAttributes to hand out. Its JSON is kept the first time, as the caller
+        // can change the array, or an array in a model in it, without setting anything.
+        private object HandedOut(string name)
+        {
+            object value = attributes[name];
+            if (value != null && !handedOut.ContainsKey(name))
+            {
+                handedOut[name] = JsonSerializer.Serialize(value, JsonUtil.Options);
+            }
+            return value;
+        }
+
+        // Whether an array handed out has been changed in place since, at any depth.
+        private bool ChangedInPlace(string name)
+        {
+            return handedOut.TryGetValue(name, out string handedOutJson) && JsonSerializer.Serialize(attributes[name], JsonUtil.Options) != handedOutJson;
+        }
+
+        // The value SaveAsync sends for an attribute whose property type is not the one its parameter takes.
+        private static object ToParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case "sync_ids":
+                case "user_ids":
+                case "group_ids":
+                    return ParameterValue.FromIds(value);
+                default:
+                    return value;
+            }
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
+            handedOut.Clear();
         }
 
         /// <summary>
@@ -1142,6 +1276,8 @@ namespace FilesCom.Models
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `last_modified_at`.
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `last_modified_at`.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<Automation> List(
 
             Dictionary<string, object> parameters = null,
@@ -1151,6 +1287,19 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `name`, `automation`, `last_modified_at` or `disabled`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `disabled`, `last_modified_at`, `workspace_id` or `automation`. Valid field combinations are `[ disabled, last_modified_at ]`, `[ workspace_id, disabled ]`, `[ disabled, automation ]`, `[ workspace_id, last_modified_at ]`, `[ automation, last_modified_at ]`, `[ workspace_id, automation ]`, `[ workspace_id, disabled, last_modified_at ]`, `[ disabled, automation, last_modified_at ]`, `[ workspace_id, disabled, automation ]`, `[ workspace_id, automation, last_modified_at ]` or `[ workspace_id, disabled, automation, last_modified_at ]`.
+        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `last_modified_at`.
+        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `last_modified_at`.
+        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `last_modified_at`.
+        ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `last_modified_at`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<Automation> All(
 
             Dictionary<string, object> parameters = null,
@@ -1169,38 +1318,39 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            if (parameters.TryGetValue("filter", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter is null, which cannot be sent" : "Bad parameter: filter must be of type object", "filter");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
+            if (parameters.TryGetValue("filter_gt", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_gt is null, which cannot be sent" : "Bad parameter: filter_gt must be of type object", "filter_gt");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
+            if (parameters.TryGetValue("filter_gteq", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_gteq is null, which cannot be sent" : "Bad parameter: filter_gteq must be of type object", "filter_gteq");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
+            if (parameters.TryGetValue("filter_lt", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_lt is null, which cannot be sent" : "Bad parameter: filter_lt must be of type object", "filter_lt");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
+            if (parameters.TryGetValue("filter_lteq", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_lteq is null, which cannot be sent" : "Bad parameter: filter_lteq must be of type object", "filter_lteq");
             }
 
             return new FilesList<Automation>(client, $"/automations", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -1210,6 +1360,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   id (required) - int64 - Automation ID.
         /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Automation> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1219,6 +1372,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Automation ID.
+        /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Automation> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1238,6 +1398,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1247,29 +1408,25 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Automation>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, options);
         }
 
         /// <summary>
+        /// Sends GET /automations/authoring_schema to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<AutomationAuthoringSchema> GetAuthoringSchema(
 
             Dictionary<string, object> parameters = null,
@@ -1293,14 +1450,7 @@ namespace FilesCom.Models
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations/authoring_schema", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<AutomationAuthoringSchema>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<AutomationAuthoringSchema>(responseJson, context, options);
         }
 
         /// <summary>
@@ -1342,6 +1492,8 @@ namespace FilesCom.Models
         ///   automation (required) - string - Automation type
         ///   workspace_id - int64 - Workspace ID
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Automation> Create(
 
             Dictionary<string, object> parameters = null,
@@ -1361,171 +1513,168 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (!parameters.ContainsKey("automation") || parameters["automation"] == null)
+            if (!parameters.TryGetValue("automation", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: automation", "parameters[\"automation\"]");
+                throw new MissingParameterException("Parameter missing: automation", "automation");
             }
-            if (parameters.ContainsKey("source") && !(parameters["source"] is string))
+            if (parameters.TryGetValue("source", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: source is null, which cannot be sent" : "Bad parameter: source must be of type string", "source");
             }
-            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[]))
+            if (parameters.TryGetValue("destinations", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: destinations must be of type string[]", "parameters[\"destinations\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destinations is null, which cannot be sent" : "Bad parameter: destinations must be of type string[]", "destinations");
             }
-            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string))
+            if (parameters.TryGetValue("destination_replace_from", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_replace_from must be of type string", "parameters[\"destination_replace_from\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_replace_from is null, which cannot be sent" : "Bad parameter: destination_replace_from must be of type string", "destination_replace_from");
             }
-            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string))
+            if (parameters.TryGetValue("destination_replace_to", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_replace_to must be of type string", "parameters[\"destination_replace_to\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_replace_to is null, which cannot be sent" : "Bad parameter: destination_replace_to must be of type string", "destination_replace_to");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
+            if (parameters.TryGetValue("interval", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: interval is null, which cannot be sent" : "Bad parameter: interval must be of type string", "interval");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
+            if (parameters.TryGetValue("sync_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sync_ids must be of type string", "parameters[\"sync_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_ids is null, which cannot be sent" : "Bad parameter: sync_ids must be of type string", "sync_ids");
             }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
+            if (parameters.TryGetValue("user_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_ids is null, which cannot be sent" : "Bad parameter: user_ids must be of type string", "user_ids");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
+            if (parameters.TryGetValue("group_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_ids is null, which cannot be sent" : "Bad parameter: group_ids must be of type string", "group_ids");
             }
-            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("schedule_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_id is null, which cannot be sent" : "Bad parameter: schedule_id must be of type Nullable<Int64>", "schedule_id");
             }
-            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
+            if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
             }
-            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_times_of_day is null, which cannot be sent" : "Bad parameter: schedule_times_of_day must be of type string[]", "schedule_times_of_day");
             }
-            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            if (parameters.TryGetValue("schedule_time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_time_zone is null, which cannot be sent" : "Bad parameter: schedule_time_zone must be of type string", "schedule_time_zone");
             }
-            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            if (parameters.TryGetValue("holiday_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: holiday_region is null, which cannot be sent" : "Bad parameter: holiday_region must be of type string", "holiday_region");
             }
-            if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
+            if (parameters.TryGetValue("always_overwrite_size_matching_files", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_overwrite_size_matching_files is null, which cannot be sent" : "Bad parameter: always_overwrite_size_matching_files must be of type bool", "always_overwrite_size_matching_files");
             }
-            if (parameters.ContainsKey("always_serialize_jobs") && !(parameters["always_serialize_jobs"] is bool))
+            if (parameters.TryGetValue("always_serialize_jobs", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: always_serialize_jobs must be of type bool", "parameters[\"always_serialize_jobs\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_serialize_jobs is null, which cannot be sent" : "Bad parameter: always_serialize_jobs must be of type bool", "always_serialize_jobs");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            if (parameters.TryGetValue("description", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: description is null, which cannot be sent" : "Bad parameter: description must be of type string", "description");
             }
-            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            if (parameters.TryGetValue("definition", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: definition is null, which cannot be sent" : "Bad parameter: definition must be of type object", "definition");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
+            if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disabled is null, which cannot be sent" : "Bad parameter: disabled must be of type bool", "disabled");
             }
-            if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
+            if (parameters.TryGetValue("exclude_pattern", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exclude_pattern is null, which cannot be sent" : "Bad parameter: exclude_pattern must be of type string", "exclude_pattern");
             }
-            if (parameters.ContainsKey("import_urls") && !(parameters["import_urls"] is object[]))
+            if (parameters.TryGetValue("import_urls", out parameterValue) && !(parameterValue is object[]))
             {
-                throw new ArgumentException("Bad parameter: import_urls must be of type object[]", "parameters[\"import_urls\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: import_urls is null, which cannot be sent" : "Bad parameter: import_urls must be of type object[]", "import_urls");
             }
-            if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
+            if (parameters.TryGetValue("flatten_destination_structure", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: flatten_destination_structure must be of type bool", "parameters[\"flatten_destination_structure\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: flatten_destination_structure is null, which cannot be sent" : "Bad parameter: flatten_destination_structure must be of type bool", "flatten_destination_structure");
             }
-            if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
+            if (parameters.TryGetValue("ignore_locked_folders", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_locked_folders is null, which cannot be sent" : "Bad parameter: ignore_locked_folders must be of type bool", "ignore_locked_folders");
             }
-            if (parameters.ContainsKey("legacy_folder_matching") && !(parameters["legacy_folder_matching"] is bool))
+            if (parameters.TryGetValue("legacy_folder_matching", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: legacy_folder_matching must be of type bool", "parameters[\"legacy_folder_matching\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: legacy_folder_matching is null, which cannot be sent" : "Bad parameter: legacy_folder_matching must be of type bool", "legacy_folder_matching");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
+            if (parameters.TryGetValue("overwrite_files", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite_files is null, which cannot be sent" : "Bad parameter: overwrite_files must be of type bool", "overwrite_files");
             }
-            if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
+            if (parameters.TryGetValue("path_time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path_time_zone is null, which cannot be sent" : "Bad parameter: path_time_zone must be of type string", "path_time_zone");
             }
-            if (parameters.ContainsKey("retry_on_failure_interval_in_minutes") && !(parameters["retry_on_failure_interval_in_minutes"] is Nullable<Int64>))
+            if (parameters.TryGetValue("retry_on_failure_interval_in_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "parameters[\"retry_on_failure_interval_in_minutes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: retry_on_failure_interval_in_minutes is null, which cannot be sent" : "Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "retry_on_failure_interval_in_minutes");
             }
-            if (parameters.ContainsKey("retry_on_failure_number_of_attempts") && !(parameters["retry_on_failure_number_of_attempts"] is Nullable<Int64>))
+            if (parameters.TryGetValue("retry_on_failure_number_of_attempts", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "parameters[\"retry_on_failure_number_of_attempts\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: retry_on_failure_number_of_attempts is null, which cannot be sent" : "Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "retry_on_failure_number_of_attempts");
             }
-            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
+            if (parameters.TryGetValue("trigger", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: trigger is null, which cannot be sent" : "Bad parameter: trigger must be of type string", "trigger");
             }
-            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[]))
+            if (parameters.TryGetValue("trigger_actions", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: trigger_actions is null, which cannot be sent" : "Bad parameter: trigger_actions must be of type string[]", "trigger_actions");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
+            if (parameters.TryGetValue("value", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: value is null, which cannot be sent" : "Bad parameter: value must be of type object", "value");
             }
-            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            if (parameters.TryGetValue("recurring_day", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recurring_day is null, which cannot be sent" : "Bad parameter: recurring_day must be of type Nullable<Int64>", "recurring_day");
             }
-            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            if (parameters.TryGetValue("recurring_days", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recurring_days is null, which cannot be sent" : "Bad parameter: recurring_days must be of type Nullable<Int64>[]", "recurring_days");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
+            if (parameters.TryGetValue("automation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation is null, which cannot be sent" : "Bad parameter: automation must be of type string", "automation");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Automation>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, options);
         }
 
         /// <summary>
         /// Upgrade a legacy Automation to Automation v2
         /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Automation> Upgrade(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1545,6 +1694,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1554,25 +1704,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}/upgrade", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Automation>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, options);
         }
 
         /// <summary>
@@ -1581,6 +1724,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   items - array(object) - Initial items for a v2 manual trigger. Each item contains exactly one `file` path or `data` object.
         /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task ManualRun(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1600,6 +1746,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1609,21 +1756,20 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("items") && !(parameters["items"] is object[]))
+            if (parameters.TryGetValue("items", out parameterValue) && !(parameterValue is object[]))
             {
-                throw new ArgumentException("Bad parameter: items must be of type object[]", "parameters[\"items\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: items is null, which cannot be sent" : "Bad parameter: items must be of type object[]", "items");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>
@@ -1664,6 +1810,9 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   automation - string - Automation type
         /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<Automation> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1683,6 +1832,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1692,169 +1842,166 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("source") && !(parameters["source"] is string))
+            if (parameters.TryGetValue("source", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: source must be of type string", "parameters[\"source\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: source is null, which cannot be sent" : "Bad parameter: source must be of type string", "source");
             }
-            if (parameters.ContainsKey("destinations") && !(parameters["destinations"] is string[]))
+            if (parameters.TryGetValue("destinations", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: destinations must be of type string[]", "parameters[\"destinations\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destinations is null, which cannot be sent" : "Bad parameter: destinations must be of type string[]", "destinations");
             }
-            if (parameters.ContainsKey("destination_replace_from") && !(parameters["destination_replace_from"] is string))
+            if (parameters.TryGetValue("destination_replace_from", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_replace_from must be of type string", "parameters[\"destination_replace_from\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_replace_from is null, which cannot be sent" : "Bad parameter: destination_replace_from must be of type string", "destination_replace_from");
             }
-            if (parameters.ContainsKey("destination_replace_to") && !(parameters["destination_replace_to"] is string))
+            if (parameters.TryGetValue("destination_replace_to", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_replace_to must be of type string", "parameters[\"destination_replace_to\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_replace_to is null, which cannot be sent" : "Bad parameter: destination_replace_to must be of type string", "destination_replace_to");
             }
-            if (parameters.ContainsKey("interval") && !(parameters["interval"] is string))
+            if (parameters.TryGetValue("interval", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: interval must be of type string", "parameters[\"interval\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: interval is null, which cannot be sent" : "Bad parameter: interval must be of type string", "interval");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("sync_ids") && !(parameters["sync_ids"] is string))
+            if (parameters.TryGetValue("sync_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: sync_ids must be of type string", "parameters[\"sync_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_ids is null, which cannot be sent" : "Bad parameter: sync_ids must be of type string", "sync_ids");
             }
-            if (parameters.ContainsKey("user_ids") && !(parameters["user_ids"] is string))
+            if (parameters.TryGetValue("user_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: user_ids must be of type string", "parameters[\"user_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_ids is null, which cannot be sent" : "Bad parameter: user_ids must be of type string", "user_ids");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
+            if (parameters.TryGetValue("group_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_ids is null, which cannot be sent" : "Bad parameter: group_ids must be of type string", "group_ids");
             }
-            if (parameters.ContainsKey("schedule_id") && !(parameters["schedule_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("schedule_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: schedule_id must be of type Nullable<Int64>", "parameters[\"schedule_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_id is null, which cannot be sent" : "Bad parameter: schedule_id must be of type Nullable<Int64>", "schedule_id");
             }
-            if (parameters.ContainsKey("schedule_days_of_week") && !(parameters["schedule_days_of_week"] is Nullable<Int64>[]))
+            if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "parameters[\"schedule_days_of_week\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
             }
-            if (parameters.ContainsKey("schedule_times_of_day") && !(parameters["schedule_times_of_day"] is string[]))
+            if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: schedule_times_of_day must be of type string[]", "parameters[\"schedule_times_of_day\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_times_of_day is null, which cannot be sent" : "Bad parameter: schedule_times_of_day must be of type string[]", "schedule_times_of_day");
             }
-            if (parameters.ContainsKey("schedule_time_zone") && !(parameters["schedule_time_zone"] is string))
+            if (parameters.TryGetValue("schedule_time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: schedule_time_zone must be of type string", "parameters[\"schedule_time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_time_zone is null, which cannot be sent" : "Bad parameter: schedule_time_zone must be of type string", "schedule_time_zone");
             }
-            if (parameters.ContainsKey("holiday_region") && !(parameters["holiday_region"] is string))
+            if (parameters.TryGetValue("holiday_region", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: holiday_region must be of type string", "parameters[\"holiday_region\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: holiday_region is null, which cannot be sent" : "Bad parameter: holiday_region must be of type string", "holiday_region");
             }
-            if (parameters.ContainsKey("always_overwrite_size_matching_files") && !(parameters["always_overwrite_size_matching_files"] is bool))
+            if (parameters.TryGetValue("always_overwrite_size_matching_files", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: always_overwrite_size_matching_files must be of type bool", "parameters[\"always_overwrite_size_matching_files\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_overwrite_size_matching_files is null, which cannot be sent" : "Bad parameter: always_overwrite_size_matching_files must be of type bool", "always_overwrite_size_matching_files");
             }
-            if (parameters.ContainsKey("always_serialize_jobs") && !(parameters["always_serialize_jobs"] is bool))
+            if (parameters.TryGetValue("always_serialize_jobs", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: always_serialize_jobs must be of type bool", "parameters[\"always_serialize_jobs\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: always_serialize_jobs is null, which cannot be sent" : "Bad parameter: always_serialize_jobs must be of type bool", "always_serialize_jobs");
             }
-            if (parameters.ContainsKey("description") && !(parameters["description"] is string))
+            if (parameters.TryGetValue("description", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: description must be of type string", "parameters[\"description\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: description is null, which cannot be sent" : "Bad parameter: description must be of type string", "description");
             }
-            if (parameters.ContainsKey("definition") && !(parameters["definition"] is object))
+            if (parameters.TryGetValue("definition", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: definition must be of type object", "parameters[\"definition\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: definition is null, which cannot be sent" : "Bad parameter: definition must be of type object", "definition");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
+            if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disabled is null, which cannot be sent" : "Bad parameter: disabled must be of type bool", "disabled");
             }
-            if (parameters.ContainsKey("exclude_pattern") && !(parameters["exclude_pattern"] is string))
+            if (parameters.TryGetValue("exclude_pattern", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: exclude_pattern must be of type string", "parameters[\"exclude_pattern\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exclude_pattern is null, which cannot be sent" : "Bad parameter: exclude_pattern must be of type string", "exclude_pattern");
             }
-            if (parameters.ContainsKey("import_urls") && !(parameters["import_urls"] is object[]))
+            if (parameters.TryGetValue("import_urls", out parameterValue) && !(parameterValue is object[]))
             {
-                throw new ArgumentException("Bad parameter: import_urls must be of type object[]", "parameters[\"import_urls\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: import_urls is null, which cannot be sent" : "Bad parameter: import_urls must be of type object[]", "import_urls");
             }
-            if (parameters.ContainsKey("flatten_destination_structure") && !(parameters["flatten_destination_structure"] is bool))
+            if (parameters.TryGetValue("flatten_destination_structure", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: flatten_destination_structure must be of type bool", "parameters[\"flatten_destination_structure\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: flatten_destination_structure is null, which cannot be sent" : "Bad parameter: flatten_destination_structure must be of type bool", "flatten_destination_structure");
             }
-            if (parameters.ContainsKey("ignore_locked_folders") && !(parameters["ignore_locked_folders"] is bool))
+            if (parameters.TryGetValue("ignore_locked_folders", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ignore_locked_folders must be of type bool", "parameters[\"ignore_locked_folders\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_locked_folders is null, which cannot be sent" : "Bad parameter: ignore_locked_folders must be of type bool", "ignore_locked_folders");
             }
-            if (parameters.ContainsKey("legacy_folder_matching") && !(parameters["legacy_folder_matching"] is bool))
+            if (parameters.TryGetValue("legacy_folder_matching", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: legacy_folder_matching must be of type bool", "parameters[\"legacy_folder_matching\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: legacy_folder_matching is null, which cannot be sent" : "Bad parameter: legacy_folder_matching must be of type bool", "legacy_folder_matching");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("overwrite_files") && !(parameters["overwrite_files"] is bool))
+            if (parameters.TryGetValue("overwrite_files", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: overwrite_files must be of type bool", "parameters[\"overwrite_files\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite_files is null, which cannot be sent" : "Bad parameter: overwrite_files must be of type bool", "overwrite_files");
             }
-            if (parameters.ContainsKey("path_time_zone") && !(parameters["path_time_zone"] is string))
+            if (parameters.TryGetValue("path_time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path_time_zone must be of type string", "parameters[\"path_time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path_time_zone is null, which cannot be sent" : "Bad parameter: path_time_zone must be of type string", "path_time_zone");
             }
-            if (parameters.ContainsKey("retry_on_failure_interval_in_minutes") && !(parameters["retry_on_failure_interval_in_minutes"] is Nullable<Int64>))
+            if (parameters.TryGetValue("retry_on_failure_interval_in_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "parameters[\"retry_on_failure_interval_in_minutes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: retry_on_failure_interval_in_minutes is null, which cannot be sent" : "Bad parameter: retry_on_failure_interval_in_minutes must be of type Nullable<Int64>", "retry_on_failure_interval_in_minutes");
             }
-            if (parameters.ContainsKey("retry_on_failure_number_of_attempts") && !(parameters["retry_on_failure_number_of_attempts"] is Nullable<Int64>))
+            if (parameters.TryGetValue("retry_on_failure_number_of_attempts", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "parameters[\"retry_on_failure_number_of_attempts\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: retry_on_failure_number_of_attempts is null, which cannot be sent" : "Bad parameter: retry_on_failure_number_of_attempts must be of type Nullable<Int64>", "retry_on_failure_number_of_attempts");
             }
-            if (parameters.ContainsKey("trigger") && !(parameters["trigger"] is string))
+            if (parameters.TryGetValue("trigger", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: trigger must be of type string", "parameters[\"trigger\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: trigger is null, which cannot be sent" : "Bad parameter: trigger must be of type string", "trigger");
             }
-            if (parameters.ContainsKey("trigger_actions") && !(parameters["trigger_actions"] is string[]))
+            if (parameters.TryGetValue("trigger_actions", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new ArgumentException("Bad parameter: trigger_actions must be of type string[]", "parameters[\"trigger_actions\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: trigger_actions is null, which cannot be sent" : "Bad parameter: trigger_actions must be of type string[]", "trigger_actions");
             }
-            if (parameters.ContainsKey("value") && !(parameters["value"] is object))
+            if (parameters.TryGetValue("value", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: value must be of type object", "parameters[\"value\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: value is null, which cannot be sent" : "Bad parameter: value must be of type object", "value");
             }
-            if (parameters.ContainsKey("recurring_day") && !(parameters["recurring_day"] is Nullable<Int64>))
+            if (parameters.TryGetValue("recurring_day", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: recurring_day must be of type Nullable<Int64>", "parameters[\"recurring_day\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recurring_day is null, which cannot be sent" : "Bad parameter: recurring_day must be of type Nullable<Int64>", "recurring_day");
             }
-            if (parameters.ContainsKey("recurring_days") && !(parameters["recurring_days"] is Nullable<Int64>[]))
+            if (parameters.TryGetValue("recurring_days", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
-                throw new ArgumentException("Bad parameter: recurring_days must be of type Nullable<Int64>[]", "parameters[\"recurring_days\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recurring_days is null, which cannot be sent" : "Bad parameter: recurring_days must be of type Nullable<Int64>[]", "recurring_days");
             }
-            if (parameters.ContainsKey("automation") && !(parameters["automation"] is string))
+            if (parameters.TryGetValue("automation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: automation must be of type string", "parameters[\"automation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation is null, which cannot be sent" : "Bad parameter: automation must be of type string", "automation");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<Automation>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<Automation>(responseJson, context, options);
         }
 
         /// <summary>
+        /// Sends DELETE /automations/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1864,6 +2011,12 @@ namespace FilesCom.Models
             return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Sends DELETE /automations/{id} to the Files.com API.
+        /// </summary>
+        /// <param name="id">Automation ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Destroy(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1883,6 +2036,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1892,17 +2046,16 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/automations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
         }
 
     }

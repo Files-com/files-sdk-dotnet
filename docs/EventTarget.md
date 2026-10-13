@@ -34,7 +34,7 @@
 ## List Event Targets
 
 ```
-Task<FilesList<EventTarget>> EventTarget.List(
+FilesList<EventTarget> EventTarget.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -188,21 +188,22 @@ Task client.EventTargets.DeleteAsync(
 ## Update Event Target
 
 ```
-var EventTarget = EventTarget.Find(1);
+var eventTarget = await EventTarget.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "example");
-parameters.Add("workspace_id", 1);
+parameters.Add("workspace_id", 1L);
 parameters.Add("apply_to_all_workspaces", true);
 parameters.Add("enabled", true);
 parameters.Add("config", "example");
 parameters.Add("delivery_policy", "example");
 
-EventTarget.Update(parameters);
+await eventTarget.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `EventTarget` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -220,12 +221,11 @@ EventTarget.Update(parameters);
 ## Delete Event Target
 
 ```
-var EventTarget = EventTarget.Find(1);
+var eventTarget = await EventTarget.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-EventTarget.Delete
+await eventTarget.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -233,3 +233,14 @@ EventTarget.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Event Target ID.
+
+
+---
+
+## Save
+
+```
+await eventTarget.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

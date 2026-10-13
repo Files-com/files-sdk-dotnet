@@ -37,7 +37,7 @@
 ## List Chat Sessions
 
 ```
-Task<FilesList<ChatSession>> ChatSession.List(
+FilesList<ChatSession> ChatSession.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

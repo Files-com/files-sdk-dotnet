@@ -48,7 +48,7 @@
 ## List AS2 Stations
 
 ```
-Task<FilesList<As2Station>> As2Station.List(
+FilesList<As2Station> As2Station.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -202,17 +202,18 @@ Task client.As2Stations.DeleteAsync(
 ## Update AS2 Station
 
 ```
-var As2Station = As2Station.Find(1);
+var as2Station = await As2Station.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "AS2 Station Name");
 parameters.Add("public_certificate", "example");
 
-As2Station.Update(parameters);
+await as2Station.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `As2Station` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -230,12 +231,11 @@ As2Station.Update(parameters);
 ## Delete AS2 Station
 
 ```
-var As2Station = As2Station.Find(1);
+var as2Station = await As2Station.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-As2Station.Delete
+await as2Station.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -243,3 +243,14 @@ As2Station.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - As2 Station ID.
+
+
+---
+
+## Save
+
+```
+await as2Station.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

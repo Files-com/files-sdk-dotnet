@@ -54,7 +54,7 @@
 ## List Partner Channels
 
 ```
-Task<FilesList<PartnerChannel>> PartnerChannel.List(
+FilesList<PartnerChannel> PartnerChannel.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -215,24 +215,25 @@ Task client.PartnerChannels.DeleteAsync(
 ## Update Partner Channel
 
 ```
-var PartnerChannel = PartnerChannel.Find(1);
+var partnerChannel = await PartnerChannel.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("direction", "two_way");
 parameters.Add("use_channel_root", false);
 parameters.Add("from_partner_folder_name", "incoming");
-parameters.Add("from_partner_managed_folder_paths", ["claims/received"]);
+parameters.Add("from_partner_managed_folder_paths", new string[] { "claims/received" });
 parameters.Add("from_partner_route_path", "processing/from-partner");
 parameters.Add("to_partner_folder_name", "outgoing");
-parameters.Add("to_partner_managed_folder_paths", ["reports/monthly"]);
+parameters.Add("to_partner_managed_folder_paths", new string[] { "reports/monthly" });
 parameters.Add("to_partner_route_path", "delivery/to-partner");
 parameters.Add("path", "claims/medical");
 
-PartnerChannel.Update(parameters);
+await partnerChannel.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `PartnerChannel` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -253,12 +254,11 @@ PartnerChannel.Update(parameters);
 ## Delete Partner Channel
 
 ```
-var PartnerChannel = PartnerChannel.Find(1);
+var partnerChannel = await PartnerChannel.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-PartnerChannel.Delete
+await partnerChannel.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -266,3 +266,14 @@ PartnerChannel.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Partner Channel ID.
+
+
+---
+
+## Save
+
+```
+await partnerChannel.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

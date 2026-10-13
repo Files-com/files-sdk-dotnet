@@ -74,3 +74,14 @@ Task client.Sessions.DeleteAsync(
     CancellationToken cancellationToken = default
 )
 ```
+
+
+---
+
+## Save
+
+```
+await session.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

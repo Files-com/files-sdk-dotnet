@@ -64,7 +64,7 @@
 ## List Holiday Calendars
 
 ```
-Task<FilesList<HolidayCalendar>> HolidayCalendar.List(
+FilesList<HolidayCalendar> HolidayCalendar.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -208,17 +208,18 @@ Task client.HolidayCalendars.DeleteAsync(
 ## Update Holiday Calendar
 
 ```
-var HolidayCalendar = HolidayCalendar.Find(1);
+var holidayCalendar = await HolidayCalendar.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("definition", {"months":{"0":[{"name":"Good Friday","function":"easter(year)","function_modifier":-2}],"1":[{"name":"New Year's Day","mday":1,"observed":"to_weekday_if_weekend(date)"},{"name":"Third Monday","week":3,"wday":1}],"11":[{"name":"Thanksgiving","week":4,"wday":4}],"12":[{"name":"Christmas Eve Early Close","mday":24,"start_time":"13:00","end_time":"17:00","year_ranges":{"from":2026}}]}});
+parameters.Add("definition", new Dictionary<string, object> { { "months", new Dictionary<string, object> { { "0", new object[] { new Dictionary<string, object> { { "name", "Good Friday" }, { "function", "easter(year)" }, { "function_modifier", -2 } } } }, { "1", new object[] { new Dictionary<string, object> { { "name", "New Year's Day" }, { "mday", 1 }, { "observed", "to_weekday_if_weekend(date)" } }, new Dictionary<string, object> { { "name", "Third Monday" }, { "week", 3 }, { "wday", 1 } } } }, { "11", new object[] { new Dictionary<string, object> { { "name", "Thanksgiving" }, { "week", 4 }, { "wday", 4 } } } }, { "12", new object[] { new Dictionary<string, object> { { "name", "Christmas Eve Early Close" }, { "mday", 24 }, { "start_time", "13:00" }, { "end_time", "17:00" }, { "year_ranges", new Dictionary<string, object> { { "from", 2026 } } } } } } } } });
 parameters.Add("name", "Company Holidays");
 
-HolidayCalendar.Update(parameters);
+await holidayCalendar.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `HolidayCalendar` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -232,12 +233,11 @@ HolidayCalendar.Update(parameters);
 ## Delete Holiday Calendar
 
 ```
-var HolidayCalendar = HolidayCalendar.Find(1);
+var holidayCalendar = await HolidayCalendar.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-HolidayCalendar.Delete
+await holidayCalendar.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -245,3 +245,14 @@ HolidayCalendar.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Holiday Calendar ID.
+
+
+---
+
+## Save
+
+```
+await holidayCalendar.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

@@ -502,7 +502,7 @@
 * `motd_text` / `MotdText`  (string): A message to show users when they connect via FTP or SFTP.
 * `motd_use_for_ftp` / `MotdUseForFtp`  (bool): Show message to users connecting via FTP
 * `motd_use_for_sftp` / `MotdUseForSftp`  (bool): Show message to users connecting via SFTP
-* `next_billing_amount` / `NextBillingAmount`  (decimal): Next billing amount
+* `next_billing_amount` / `NextBillingAmount`  (Nullable<decimal>): Next billing amount
 * `next_billing_date` / `NextBillingDate`  (string): Next billing date
 * `office_integration_available` / `OfficeIntegrationAvailable`  (bool): If true, allows users to use a document editing integration.
 * `office_integration_type` / `OfficeIntegrationType`  (string): Which document editing integration to support. Files.com Editor or Microsoft Office for the Web.
@@ -828,19 +828,19 @@ Task<Site> client.Sites.UpdateAsync(
 * `ldap_base_dn` (string): Base DN for looking up users in LDAP server
 * `uploads_via_email_authentication` (bool): Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?
 * `bundle_watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
-* `icon16_file` (System.Net.Http.ByteArrayContent): 
+* `icon16_file` (FileAttachment): 
 * `icon16_delete` (bool): If true, will delete the file stored in icon16
-* `icon32_file` (System.Net.Http.ByteArrayContent): 
+* `icon32_file` (FileAttachment): 
 * `icon32_delete` (bool): If true, will delete the file stored in icon32
-* `icon48_file` (System.Net.Http.ByteArrayContent): 
+* `icon48_file` (FileAttachment): 
 * `icon48_delete` (bool): If true, will delete the file stored in icon48
-* `icon128_file` (System.Net.Http.ByteArrayContent): 
+* `icon128_file` (FileAttachment): 
 * `icon128_delete` (bool): If true, will delete the file stored in icon128
-* `logo_file` (System.Net.Http.ByteArrayContent): 
+* `logo_file` (FileAttachment): 
 * `logo_delete` (bool): If true, will delete the file stored in logo
-* `bundle_watermark_attachment_file` (System.Net.Http.ByteArrayContent): 
+* `bundle_watermark_attachment_file` (FileAttachment): 
 * `bundle_watermark_attachment_delete` (bool): If true, will delete the file stored in bundle_watermark_attachment
-* `login_page_background_image_file` (System.Net.Http.ByteArrayContent): 
+* `login_page_background_image_file` (FileAttachment): 
 * `login_page_background_image_delete` (bool): If true, will delete the file stored in login_page_background_image
 * `disable_2fa_with_delay` (bool): If set to true, we will begin the process of disabling 2FA on this site.
 * `ldap_password_change` (string): New LDAP password.

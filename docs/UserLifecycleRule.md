@@ -48,7 +48,7 @@
 ## List User Lifecycle Rules
 
 ```
-Task<FilesList<UserLifecycleRule>> UserLifecycleRule.List(
+FilesList<UserLifecycleRule> UserLifecycleRule.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -215,14 +215,14 @@ Task client.UserLifecycleRules.DeleteAsync(
 ## Update User Lifecycle Rule
 
 ```
-var UserLifecycleRule = UserLifecycleRule.Find(1);
+var userLifecycleRule = await UserLifecycleRule.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("apply_to_all_workspaces", true);
 parameters.Add("authentication_method", "all_non_sso");
-parameters.Add("group_ids", [1,2,3]);
-parameters.Add("inactivity_days", 12);
+parameters.Add("group_ids", new Nullable<Int64>[] { 1, 2, 3 });
+parameters.Add("inactivity_days", 12L);
 parameters.Add("include_site_admins", true);
 parameters.Add("include_folder_admins", true);
 parameters.Add("name", "password specific rules");
@@ -230,12 +230,13 @@ parameters.Add("notify_users", true);
 parameters.Add("partner_tag", "guest");
 parameters.Add("user_state", "inactive");
 parameters.Add("user_tag", "guest");
-parameters.Add("workspace_id", 0);
+parameters.Add("workspace_id", 0L);
 
-UserLifecycleRule.Update(parameters);
+await userLifecycleRule.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `UserLifecycleRule` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -260,12 +261,11 @@ UserLifecycleRule.Update(parameters);
 ## Delete User Lifecycle Rule
 
 ```
-var UserLifecycleRule = UserLifecycleRule.Find(1);
+var userLifecycleRule = await UserLifecycleRule.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-UserLifecycleRule.Delete
+await userLifecycleRule.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -273,3 +273,14 @@ UserLifecycleRule.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Lifecycle Rule ID.
+
+
+---
+
+## Save
+
+```
+await userLifecycleRule.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

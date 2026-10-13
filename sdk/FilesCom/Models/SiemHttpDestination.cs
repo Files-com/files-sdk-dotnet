@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class SiemHttpDestination : IModel
+    /// <summary>
+    /// SiemHttpDestinationEntity model
+    /// </summary>
+    public class SiemHttpDestination : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a SiemHttpDestination with no attributes set and no options.
+        /// </summary>
         public SiemHttpDestination() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a SiemHttpDestination with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public SiemHttpDestination(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -281,30 +290,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -315,7 +346,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -325,7 +356,7 @@ namespace FilesCom.Models
         public string Name
         {
             get { return (string)attributes["name"]; }
-            set { attributes["name"] = value; }
+            set { attributes["name"] = value; unsaved.Add("name"); }
         }
 
         /// <summary>
@@ -335,7 +366,7 @@ namespace FilesCom.Models
         public string DestinationType
         {
             get { return (string)attributes["destination_type"]; }
-            set { attributes["destination_type"] = value; }
+            set { attributes["destination_type"] = value; unsaved.Add("destination_type"); }
         }
 
         /// <summary>
@@ -345,7 +376,7 @@ namespace FilesCom.Models
         public string DestinationUrl
         {
             get { return (string)attributes["destination_url"]; }
-            set { attributes["destination_url"] = value; }
+            set { attributes["destination_url"] = value; unsaved.Add("destination_url"); }
         }
 
         /// <summary>
@@ -355,7 +386,7 @@ namespace FilesCom.Models
         public string FileDestinationPath
         {
             get { return (string)attributes["file_destination_path"]; }
-            set { attributes["file_destination_path"] = value; }
+            set { attributes["file_destination_path"] = value; unsaved.Add("file_destination_path"); }
         }
 
         /// <summary>
@@ -365,7 +396,7 @@ namespace FilesCom.Models
         public string FileFormat
         {
             get { return (string)attributes["file_format"]; }
-            set { attributes["file_format"] = value; }
+            set { attributes["file_format"] = value; unsaved.Add("file_format"); }
         }
 
         /// <summary>
@@ -375,7 +406,7 @@ namespace FilesCom.Models
         public Nullable<Int64> FileIntervalMinutes
         {
             get { return (Nullable<Int64>)attributes["file_interval_minutes"]; }
-            set { attributes["file_interval_minutes"] = value; }
+            set { attributes["file_interval_minutes"] = value; unsaved.Add("file_interval_minutes"); }
         }
 
         /// <summary>
@@ -385,7 +416,7 @@ namespace FilesCom.Models
         public object AdditionalHeaders
         {
             get { return (object)attributes["additional_headers"]; }
-            set { attributes["additional_headers"] = value; }
+            set { attributes["additional_headers"] = value; unsaved.Add("additional_headers"); }
         }
 
         /// <summary>
@@ -396,7 +427,7 @@ namespace FilesCom.Models
         public bool SendingActive
         {
             get { return attributes["sending_active"] == null ? false : (bool)attributes["sending_active"]; }
-            set { attributes["sending_active"] = value; }
+            set { attributes["sending_active"] = value; unsaved.Add("sending_active"); }
         }
 
         /// <summary>
@@ -406,7 +437,7 @@ namespace FilesCom.Models
         public string GenericPayloadType
         {
             get { return (string)attributes["generic_payload_type"]; }
-            set { attributes["generic_payload_type"] = value; }
+            set { attributes["generic_payload_type"] = value; unsaved.Add("generic_payload_type"); }
         }
 
         /// <summary>
@@ -416,7 +447,7 @@ namespace FilesCom.Models
         public string SplunkTokenMasked
         {
             get { return (string)attributes["splunk_token_masked"]; }
-            set { attributes["splunk_token_masked"] = value; }
+            set { attributes["splunk_token_masked"] = value; unsaved.Add("splunk_token_masked"); }
         }
 
         /// <summary>
@@ -426,7 +457,7 @@ namespace FilesCom.Models
         public string CrowdstrikeTokenMasked
         {
             get { return (string)attributes["crowdstrike_token_masked"]; }
-            set { attributes["crowdstrike_token_masked"] = value; }
+            set { attributes["crowdstrike_token_masked"] = value; unsaved.Add("crowdstrike_token_masked"); }
         }
 
         /// <summary>
@@ -436,7 +467,7 @@ namespace FilesCom.Models
         public string AzureDcrImmutableId
         {
             get { return (string)attributes["azure_dcr_immutable_id"]; }
-            set { attributes["azure_dcr_immutable_id"] = value; }
+            set { attributes["azure_dcr_immutable_id"] = value; unsaved.Add("azure_dcr_immutable_id"); }
         }
 
         /// <summary>
@@ -446,7 +477,7 @@ namespace FilesCom.Models
         public string AzureStreamName
         {
             get { return (string)attributes["azure_stream_name"]; }
-            set { attributes["azure_stream_name"] = value; }
+            set { attributes["azure_stream_name"] = value; unsaved.Add("azure_stream_name"); }
         }
 
         /// <summary>
@@ -456,7 +487,7 @@ namespace FilesCom.Models
         public string AzureOauthClientCredentialsTenantId
         {
             get { return (string)attributes["azure_oauth_client_credentials_tenant_id"]; }
-            set { attributes["azure_oauth_client_credentials_tenant_id"] = value; }
+            set { attributes["azure_oauth_client_credentials_tenant_id"] = value; unsaved.Add("azure_oauth_client_credentials_tenant_id"); }
         }
 
         /// <summary>
@@ -466,7 +497,7 @@ namespace FilesCom.Models
         public string AzureOauthClientCredentialsClientId
         {
             get { return (string)attributes["azure_oauth_client_credentials_client_id"]; }
-            set { attributes["azure_oauth_client_credentials_client_id"] = value; }
+            set { attributes["azure_oauth_client_credentials_client_id"] = value; unsaved.Add("azure_oauth_client_credentials_client_id"); }
         }
 
         /// <summary>
@@ -476,7 +507,7 @@ namespace FilesCom.Models
         public string AzureOauthClientCredentialsClientSecretMasked
         {
             get { return (string)attributes["azure_oauth_client_credentials_client_secret_masked"]; }
-            set { attributes["azure_oauth_client_credentials_client_secret_masked"] = value; }
+            set { attributes["azure_oauth_client_credentials_client_secret_masked"] = value; unsaved.Add("azure_oauth_client_credentials_client_secret_masked"); }
         }
 
         /// <summary>
@@ -486,7 +517,7 @@ namespace FilesCom.Models
         public string QradarUsername
         {
             get { return (string)attributes["qradar_username"]; }
-            set { attributes["qradar_username"] = value; }
+            set { attributes["qradar_username"] = value; unsaved.Add("qradar_username"); }
         }
 
         /// <summary>
@@ -496,7 +527,7 @@ namespace FilesCom.Models
         public string QradarPasswordMasked
         {
             get { return (string)attributes["qradar_password_masked"]; }
-            set { attributes["qradar_password_masked"] = value; }
+            set { attributes["qradar_password_masked"] = value; unsaved.Add("qradar_password_masked"); }
         }
 
         /// <summary>
@@ -506,7 +537,7 @@ namespace FilesCom.Models
         public string SolarWindsTokenMasked
         {
             get { return (string)attributes["solar_winds_token_masked"]; }
-            set { attributes["solar_winds_token_masked"] = value; }
+            set { attributes["solar_winds_token_masked"] = value; unsaved.Add("solar_winds_token_masked"); }
         }
 
         /// <summary>
@@ -516,7 +547,7 @@ namespace FilesCom.Models
         public string NewRelicApiKeyMasked
         {
             get { return (string)attributes["new_relic_api_key_masked"]; }
-            set { attributes["new_relic_api_key_masked"] = value; }
+            set { attributes["new_relic_api_key_masked"] = value; unsaved.Add("new_relic_api_key_masked"); }
         }
 
         /// <summary>
@@ -526,7 +557,7 @@ namespace FilesCom.Models
         public string DatadogApiKeyMasked
         {
             get { return (string)attributes["datadog_api_key_masked"]; }
-            set { attributes["datadog_api_key_masked"] = value; }
+            set { attributes["datadog_api_key_masked"] = value; unsaved.Add("datadog_api_key_masked"); }
         }
 
         /// <summary>
@@ -537,7 +568,7 @@ namespace FilesCom.Models
         public bool ActionSendEnabled
         {
             get { return attributes["action_send_enabled"] == null ? false : (bool)attributes["action_send_enabled"]; }
-            set { attributes["action_send_enabled"] = value; }
+            set { attributes["action_send_enabled"] = value; unsaved.Add("action_send_enabled"); }
         }
 
         /// <summary>
@@ -547,7 +578,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ActionEntriesSent
         {
             get { return (Nullable<Int64>)attributes["action_entries_sent"]; }
-            set { attributes["action_entries_sent"] = value; }
+            set { attributes["action_entries_sent"] = value; unsaved.Add("action_entries_sent"); }
         }
 
         /// <summary>
@@ -558,7 +589,7 @@ namespace FilesCom.Models
         public bool SftpActionSendEnabled
         {
             get { return attributes["sftp_action_send_enabled"] == null ? false : (bool)attributes["sftp_action_send_enabled"]; }
-            set { attributes["sftp_action_send_enabled"] = value; }
+            set { attributes["sftp_action_send_enabled"] = value; unsaved.Add("sftp_action_send_enabled"); }
         }
 
         /// <summary>
@@ -568,7 +599,7 @@ namespace FilesCom.Models
         public Nullable<Int64> SftpActionEntriesSent
         {
             get { return (Nullable<Int64>)attributes["sftp_action_entries_sent"]; }
-            set { attributes["sftp_action_entries_sent"] = value; }
+            set { attributes["sftp_action_entries_sent"] = value; unsaved.Add("sftp_action_entries_sent"); }
         }
 
         /// <summary>
@@ -579,7 +610,7 @@ namespace FilesCom.Models
         public bool FtpActionSendEnabled
         {
             get { return attributes["ftp_action_send_enabled"] == null ? false : (bool)attributes["ftp_action_send_enabled"]; }
-            set { attributes["ftp_action_send_enabled"] = value; }
+            set { attributes["ftp_action_send_enabled"] = value; unsaved.Add("ftp_action_send_enabled"); }
         }
 
         /// <summary>
@@ -589,7 +620,7 @@ namespace FilesCom.Models
         public Nullable<Int64> FtpActionEntriesSent
         {
             get { return (Nullable<Int64>)attributes["ftp_action_entries_sent"]; }
-            set { attributes["ftp_action_entries_sent"] = value; }
+            set { attributes["ftp_action_entries_sent"] = value; unsaved.Add("ftp_action_entries_sent"); }
         }
 
         /// <summary>
@@ -600,7 +631,7 @@ namespace FilesCom.Models
         public bool WebDavActionSendEnabled
         {
             get { return attributes["web_dav_action_send_enabled"] == null ? false : (bool)attributes["web_dav_action_send_enabled"]; }
-            set { attributes["web_dav_action_send_enabled"] = value; }
+            set { attributes["web_dav_action_send_enabled"] = value; unsaved.Add("web_dav_action_send_enabled"); }
         }
 
         /// <summary>
@@ -610,7 +641,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WebDavActionEntriesSent
         {
             get { return (Nullable<Int64>)attributes["web_dav_action_entries_sent"]; }
-            set { attributes["web_dav_action_entries_sent"] = value; }
+            set { attributes["web_dav_action_entries_sent"] = value; unsaved.Add("web_dav_action_entries_sent"); }
         }
 
         /// <summary>
@@ -621,7 +652,7 @@ namespace FilesCom.Models
         public bool SyncSendEnabled
         {
             get { return attributes["sync_send_enabled"] == null ? false : (bool)attributes["sync_send_enabled"]; }
-            set { attributes["sync_send_enabled"] = value; }
+            set { attributes["sync_send_enabled"] = value; unsaved.Add("sync_send_enabled"); }
         }
 
         /// <summary>
@@ -631,7 +662,7 @@ namespace FilesCom.Models
         public Nullable<Int64> SyncEntriesSent
         {
             get { return (Nullable<Int64>)attributes["sync_entries_sent"]; }
-            set { attributes["sync_entries_sent"] = value; }
+            set { attributes["sync_entries_sent"] = value; unsaved.Add("sync_entries_sent"); }
         }
 
         /// <summary>
@@ -642,7 +673,7 @@ namespace FilesCom.Models
         public bool OutboundConnectionSendEnabled
         {
             get { return attributes["outbound_connection_send_enabled"] == null ? false : (bool)attributes["outbound_connection_send_enabled"]; }
-            set { attributes["outbound_connection_send_enabled"] = value; }
+            set { attributes["outbound_connection_send_enabled"] = value; unsaved.Add("outbound_connection_send_enabled"); }
         }
 
         /// <summary>
@@ -652,7 +683,7 @@ namespace FilesCom.Models
         public Nullable<Int64> OutboundConnectionEntriesSent
         {
             get { return (Nullable<Int64>)attributes["outbound_connection_entries_sent"]; }
-            set { attributes["outbound_connection_entries_sent"] = value; }
+            set { attributes["outbound_connection_entries_sent"] = value; unsaved.Add("outbound_connection_entries_sent"); }
         }
 
         /// <summary>
@@ -663,7 +694,7 @@ namespace FilesCom.Models
         public bool AutomationSendEnabled
         {
             get { return attributes["automation_send_enabled"] == null ? false : (bool)attributes["automation_send_enabled"]; }
-            set { attributes["automation_send_enabled"] = value; }
+            set { attributes["automation_send_enabled"] = value; unsaved.Add("automation_send_enabled"); }
         }
 
         /// <summary>
@@ -673,7 +704,7 @@ namespace FilesCom.Models
         public Nullable<Int64> AutomationEntriesSent
         {
             get { return (Nullable<Int64>)attributes["automation_entries_sent"]; }
-            set { attributes["automation_entries_sent"] = value; }
+            set { attributes["automation_entries_sent"] = value; unsaved.Add("automation_entries_sent"); }
         }
 
         /// <summary>
@@ -684,7 +715,7 @@ namespace FilesCom.Models
         public bool ApiRequestSendEnabled
         {
             get { return attributes["api_request_send_enabled"] == null ? false : (bool)attributes["api_request_send_enabled"]; }
-            set { attributes["api_request_send_enabled"] = value; }
+            set { attributes["api_request_send_enabled"] = value; unsaved.Add("api_request_send_enabled"); }
         }
 
         /// <summary>
@@ -694,7 +725,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ApiRequestEntriesSent
         {
             get { return (Nullable<Int64>)attributes["api_request_entries_sent"]; }
-            set { attributes["api_request_entries_sent"] = value; }
+            set { attributes["api_request_entries_sent"] = value; unsaved.Add("api_request_entries_sent"); }
         }
 
         /// <summary>
@@ -705,7 +736,7 @@ namespace FilesCom.Models
         public bool PublicHostingRequestSendEnabled
         {
             get { return attributes["public_hosting_request_send_enabled"] == null ? false : (bool)attributes["public_hosting_request_send_enabled"]; }
-            set { attributes["public_hosting_request_send_enabled"] = value; }
+            set { attributes["public_hosting_request_send_enabled"] = value; unsaved.Add("public_hosting_request_send_enabled"); }
         }
 
         /// <summary>
@@ -715,7 +746,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PublicHostingRequestEntriesSent
         {
             get { return (Nullable<Int64>)attributes["public_hosting_request_entries_sent"]; }
-            set { attributes["public_hosting_request_entries_sent"] = value; }
+            set { attributes["public_hosting_request_entries_sent"] = value; unsaved.Add("public_hosting_request_entries_sent"); }
         }
 
         /// <summary>
@@ -726,7 +757,7 @@ namespace FilesCom.Models
         public bool EmailSendEnabled
         {
             get { return attributes["email_send_enabled"] == null ? false : (bool)attributes["email_send_enabled"]; }
-            set { attributes["email_send_enabled"] = value; }
+            set { attributes["email_send_enabled"] = value; unsaved.Add("email_send_enabled"); }
         }
 
         /// <summary>
@@ -736,7 +767,7 @@ namespace FilesCom.Models
         public Nullable<Int64> EmailEntriesSent
         {
             get { return (Nullable<Int64>)attributes["email_entries_sent"]; }
-            set { attributes["email_entries_sent"] = value; }
+            set { attributes["email_entries_sent"] = value; unsaved.Add("email_entries_sent"); }
         }
 
         /// <summary>
@@ -747,7 +778,7 @@ namespace FilesCom.Models
         public bool ExavaultApiRequestSendEnabled
         {
             get { return attributes["exavault_api_request_send_enabled"] == null ? false : (bool)attributes["exavault_api_request_send_enabled"]; }
-            set { attributes["exavault_api_request_send_enabled"] = value; }
+            set { attributes["exavault_api_request_send_enabled"] = value; unsaved.Add("exavault_api_request_send_enabled"); }
         }
 
         /// <summary>
@@ -757,7 +788,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ExavaultApiRequestEntriesSent
         {
             get { return (Nullable<Int64>)attributes["exavault_api_request_entries_sent"]; }
-            set { attributes["exavault_api_request_entries_sent"] = value; }
+            set { attributes["exavault_api_request_entries_sent"] = value; unsaved.Add("exavault_api_request_entries_sent"); }
         }
 
         /// <summary>
@@ -768,7 +799,7 @@ namespace FilesCom.Models
         public bool SettingsChangeSendEnabled
         {
             get { return attributes["settings_change_send_enabled"] == null ? false : (bool)attributes["settings_change_send_enabled"]; }
-            set { attributes["settings_change_send_enabled"] = value; }
+            set { attributes["settings_change_send_enabled"] = value; unsaved.Add("settings_change_send_enabled"); }
         }
 
         /// <summary>
@@ -778,7 +809,7 @@ namespace FilesCom.Models
         public Nullable<Int64> SettingsChangeEntriesSent
         {
             get { return (Nullable<Int64>)attributes["settings_change_entries_sent"]; }
-            set { attributes["settings_change_entries_sent"] = value; }
+            set { attributes["settings_change_entries_sent"] = value; unsaved.Add("settings_change_entries_sent"); }
         }
 
         /// <summary>
@@ -788,7 +819,7 @@ namespace FilesCom.Models
         public string LastHttpCallTargetType
         {
             get { return (string)attributes["last_http_call_target_type"]; }
-            set { attributes["last_http_call_target_type"] = value; }
+            set { attributes["last_http_call_target_type"] = value; unsaved.Add("last_http_call_target_type"); }
         }
 
         /// <summary>
@@ -799,7 +830,7 @@ namespace FilesCom.Models
         public bool LastHttpCallSuccess
         {
             get { return attributes["last_http_call_success"] == null ? false : (bool)attributes["last_http_call_success"]; }
-            set { attributes["last_http_call_success"] = value; }
+            set { attributes["last_http_call_success"] = value; unsaved.Add("last_http_call_success"); }
         }
 
         /// <summary>
@@ -809,7 +840,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastHttpCallResponseCode
         {
             get { return (Nullable<Int64>)attributes["last_http_call_response_code"]; }
-            set { attributes["last_http_call_response_code"] = value; }
+            set { attributes["last_http_call_response_code"] = value; unsaved.Add("last_http_call_response_code"); }
         }
 
         /// <summary>
@@ -819,7 +850,7 @@ namespace FilesCom.Models
         public string LastHttpCallResponseBody
         {
             get { return (string)attributes["last_http_call_response_body"]; }
-            set { attributes["last_http_call_response_body"] = value; }
+            set { attributes["last_http_call_response_body"] = value; unsaved.Add("last_http_call_response_body"); }
         }
 
         /// <summary>
@@ -829,7 +860,7 @@ namespace FilesCom.Models
         public string LastHttpCallErrorMessage
         {
             get { return (string)attributes["last_http_call_error_message"]; }
-            set { attributes["last_http_call_error_message"] = value; }
+            set { attributes["last_http_call_error_message"] = value; unsaved.Add("last_http_call_error_message"); }
         }
 
         /// <summary>
@@ -839,7 +870,7 @@ namespace FilesCom.Models
         public string LastHttpCallTime
         {
             get { return (string)attributes["last_http_call_time"]; }
-            set { attributes["last_http_call_time"] = value; }
+            set { attributes["last_http_call_time"] = value; unsaved.Add("last_http_call_time"); }
         }
 
         /// <summary>
@@ -849,7 +880,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastHttpCallDurationMs
         {
             get { return (Nullable<Int64>)attributes["last_http_call_duration_ms"]; }
-            set { attributes["last_http_call_duration_ms"] = value; }
+            set { attributes["last_http_call_duration_ms"] = value; unsaved.Add("last_http_call_duration_ms"); }
         }
 
         /// <summary>
@@ -859,7 +890,7 @@ namespace FilesCom.Models
         public string MostRecentHttpCallSuccessTime
         {
             get { return (string)attributes["most_recent_http_call_success_time"]; }
-            set { attributes["most_recent_http_call_success_time"] = value; }
+            set { attributes["most_recent_http_call_success_time"] = value; unsaved.Add("most_recent_http_call_success_time"); }
         }
 
         /// <summary>
@@ -869,7 +900,7 @@ namespace FilesCom.Models
         public string ConnectionTestEntry
         {
             get { return (string)attributes["connection_test_entry"]; }
-            set { attributes["connection_test_entry"] = value; }
+            set { attributes["connection_test_entry"] = value; unsaved.Add("connection_test_entry"); }
         }
 
         /// <summary>
@@ -879,7 +910,7 @@ namespace FilesCom.Models
         public string SplunkToken
         {
             get { return (string)attributes["splunk_token"]; }
-            set { attributes["splunk_token"] = value; }
+            set { attributes["splunk_token"] = value; unsaved.Add("splunk_token"); }
         }
 
         /// <summary>
@@ -889,7 +920,7 @@ namespace FilesCom.Models
         public string CrowdstrikeToken
         {
             get { return (string)attributes["crowdstrike_token"]; }
-            set { attributes["crowdstrike_token"] = value; }
+            set { attributes["crowdstrike_token"] = value; unsaved.Add("crowdstrike_token"); }
         }
 
         /// <summary>
@@ -899,7 +930,7 @@ namespace FilesCom.Models
         public string AzureOauthClientCredentialsClientSecret
         {
             get { return (string)attributes["azure_oauth_client_credentials_client_secret"]; }
-            set { attributes["azure_oauth_client_credentials_client_secret"] = value; }
+            set { attributes["azure_oauth_client_credentials_client_secret"] = value; unsaved.Add("azure_oauth_client_credentials_client_secret"); }
         }
 
         /// <summary>
@@ -909,7 +940,7 @@ namespace FilesCom.Models
         public string QradarPassword
         {
             get { return (string)attributes["qradar_password"]; }
-            set { attributes["qradar_password"] = value; }
+            set { attributes["qradar_password"] = value; unsaved.Add("qradar_password"); }
         }
 
         /// <summary>
@@ -919,7 +950,7 @@ namespace FilesCom.Models
         public string SolarWindsToken
         {
             get { return (string)attributes["solar_winds_token"]; }
-            set { attributes["solar_winds_token"] = value; }
+            set { attributes["solar_winds_token"] = value; unsaved.Add("solar_winds_token"); }
         }
 
         /// <summary>
@@ -929,7 +960,7 @@ namespace FilesCom.Models
         public string NewRelicApiKey
         {
             get { return (string)attributes["new_relic_api_key"]; }
-            set { attributes["new_relic_api_key"] = value; }
+            set { attributes["new_relic_api_key"] = value; unsaved.Add("new_relic_api_key"); }
         }
 
         /// <summary>
@@ -939,7 +970,7 @@ namespace FilesCom.Models
         public string DatadogApiKey
         {
             get { return (string)attributes["datadog_api_key"]; }
-            set { attributes["datadog_api_key"] = value; }
+            set { attributes["datadog_api_key"] = value; unsaved.Add("datadog_api_key"); }
         }
 
         /// <summary>
@@ -978,6 +1009,11 @@ namespace FilesCom.Models
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The SiemHttpDestination it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<SiemHttpDestination> Update(Dictionary<string, object> parameters)
         {
             return UpdateCore(parameters, CancellationToken.None);
@@ -1019,6 +1055,12 @@ namespace FilesCom.Models
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The SiemHttpDestination it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<SiemHttpDestination> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1028,182 +1070,190 @@ namespace FilesCom.Models
         private async Task<SiemHttpDestination> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The SiemHttpDestination has no id, which Update needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
+            }
+            if (parameters.TryGetValue("additional_headers", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: additional_headers is null, which cannot be sent" : "Bad parameter: additional_headers must be of type object", "additional_headers");
+            }
+            if (parameters.TryGetValue("sending_active", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sending_active is null, which cannot be sent" : "Bad parameter: sending_active must be of type bool", "sending_active");
+            }
+            if (parameters.TryGetValue("generic_payload_type", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: generic_payload_type is null, which cannot be sent" : "Bad parameter: generic_payload_type must be of type string", "generic_payload_type");
+            }
+            if (parameters.TryGetValue("file_destination_path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_destination_path is null, which cannot be sent" : "Bad parameter: file_destination_path must be of type string", "file_destination_path");
+            }
+            if (parameters.TryGetValue("file_format", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_format is null, which cannot be sent" : "Bad parameter: file_format must be of type string", "file_format");
+            }
+            if (parameters.TryGetValue("file_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_interval_minutes is null, which cannot be sent" : "Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "file_interval_minutes");
+            }
+            if (parameters.TryGetValue("splunk_token", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: splunk_token is null, which cannot be sent" : "Bad parameter: splunk_token must be of type string", "splunk_token");
+            }
+            if (parameters.TryGetValue("crowdstrike_token", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: crowdstrike_token is null, which cannot be sent" : "Bad parameter: crowdstrike_token must be of type string", "crowdstrike_token");
+            }
+            if (parameters.TryGetValue("azure_dcr_immutable_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_dcr_immutable_id is null, which cannot be sent" : "Bad parameter: azure_dcr_immutable_id must be of type string", "azure_dcr_immutable_id");
+            }
+            if (parameters.TryGetValue("azure_stream_name", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_stream_name is null, which cannot be sent" : "Bad parameter: azure_stream_name must be of type string", "azure_stream_name");
+            }
+            if (parameters.TryGetValue("azure_oauth_client_credentials_tenant_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_tenant_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "azure_oauth_client_credentials_tenant_id");
+            }
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_id", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "azure_oauth_client_credentials_client_id");
+            }
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_secret", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_secret is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "azure_oauth_client_credentials_client_secret");
+            }
+            if (parameters.TryGetValue("qradar_username", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_username is null, which cannot be sent" : "Bad parameter: qradar_username must be of type string", "qradar_username");
+            }
+            if (parameters.TryGetValue("qradar_password", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_password is null, which cannot be sent" : "Bad parameter: qradar_password must be of type string", "qradar_password");
+            }
+            if (parameters.TryGetValue("solar_winds_token", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: solar_winds_token is null, which cannot be sent" : "Bad parameter: solar_winds_token must be of type string", "solar_winds_token");
+            }
+            if (parameters.TryGetValue("new_relic_api_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: new_relic_api_key is null, which cannot be sent" : "Bad parameter: new_relic_api_key must be of type string", "new_relic_api_key");
+            }
+            if (parameters.TryGetValue("datadog_api_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: datadog_api_key is null, which cannot be sent" : "Bad parameter: datadog_api_key must be of type string", "datadog_api_key");
+            }
+            if (parameters.TryGetValue("action_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: action_send_enabled is null, which cannot be sent" : "Bad parameter: action_send_enabled must be of type bool", "action_send_enabled");
+            }
+            if (parameters.TryGetValue("sftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: sftp_action_send_enabled must be of type bool", "sftp_action_send_enabled");
+            }
+            if (parameters.TryGetValue("ftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: ftp_action_send_enabled must be of type bool", "ftp_action_send_enabled");
+            }
+            if (parameters.TryGetValue("web_dav_action_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: web_dav_action_send_enabled is null, which cannot be sent" : "Bad parameter: web_dav_action_send_enabled must be of type bool", "web_dav_action_send_enabled");
+            }
+            if (parameters.TryGetValue("sync_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_send_enabled is null, which cannot be sent" : "Bad parameter: sync_send_enabled must be of type bool", "sync_send_enabled");
+            }
+            if (parameters.TryGetValue("outbound_connection_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_connection_send_enabled is null, which cannot be sent" : "Bad parameter: outbound_connection_send_enabled must be of type bool", "outbound_connection_send_enabled");
+            }
+            if (parameters.TryGetValue("automation_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation_send_enabled is null, which cannot be sent" : "Bad parameter: automation_send_enabled must be of type bool", "automation_send_enabled");
+            }
+            if (parameters.TryGetValue("api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: api_request_send_enabled is null, which cannot be sent" : "Bad parameter: api_request_send_enabled must be of type bool", "api_request_send_enabled");
+            }
+            if (parameters.TryGetValue("public_hosting_request_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: public_hosting_request_send_enabled is null, which cannot be sent" : "Bad parameter: public_hosting_request_send_enabled must be of type bool", "public_hosting_request_send_enabled");
+            }
+            if (parameters.TryGetValue("email_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email_send_enabled is null, which cannot be sent" : "Bad parameter: email_send_enabled must be of type bool", "email_send_enabled");
+            }
+            if (parameters.TryGetValue("exavault_api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exavault_api_request_send_enabled is null, which cannot be sent" : "Bad parameter: exavault_api_request_send_enabled must be of type bool", "exavault_api_request_send_enabled");
+            }
+            if (parameters.TryGetValue("settings_change_send_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: settings_change_send_enabled is null, which cannot be sent" : "Bad parameter: settings_change_send_enabled must be of type bool", "settings_change_send_enabled");
+            }
+            if (parameters.TryGetValue("destination_type", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_type is null, which cannot be sent" : "Bad parameter: destination_type must be of type string", "destination_type");
+            }
+            if (parameters.TryGetValue("destination_url", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_url is null, which cannot be sent" : "Bad parameter: destination_url must be of type string", "destination_url");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("additional_headers") && !(parameters["additional_headers"] is object))
-            {
-                throw new ArgumentException("Bad parameter: additional_headers must be of type object", "parameters[\"additional_headers\"]");
-            }
-            if (parameters.ContainsKey("sending_active") && !(parameters["sending_active"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: sending_active must be of type bool", "parameters[\"sending_active\"]");
-            }
-            if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
-            }
-            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
-            {
-                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
-            }
-            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
-            {
-                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
-            }
-            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
-            }
-            if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
-            }
-            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
-            }
-            if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_dcr_immutable_id must be of type string", "parameters[\"azure_dcr_immutable_id\"]");
-            }
-            if (parameters.ContainsKey("azure_stream_name") && !(parameters["azure_stream_name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_stream_name must be of type string", "parameters[\"azure_stream_name\"]");
-            }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_tenant_id") && !(parameters["azure_oauth_client_credentials_tenant_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "parameters[\"azure_oauth_client_credentials_tenant_id\"]");
-            }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_id") && !(parameters["azure_oauth_client_credentials_client_id"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "parameters[\"azure_oauth_client_credentials_client_id\"]");
-            }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_secret") && !(parameters["azure_oauth_client_credentials_client_secret"] is string))
-            {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "parameters[\"azure_oauth_client_credentials_client_secret\"]");
-            }
-            if (parameters.ContainsKey("qradar_username") && !(parameters["qradar_username"] is string))
-            {
-                throw new ArgumentException("Bad parameter: qradar_username must be of type string", "parameters[\"qradar_username\"]");
-            }
-            if (parameters.ContainsKey("qradar_password") && !(parameters["qradar_password"] is string))
-            {
-                throw new ArgumentException("Bad parameter: qradar_password must be of type string", "parameters[\"qradar_password\"]");
-            }
-            if (parameters.ContainsKey("solar_winds_token") && !(parameters["solar_winds_token"] is string))
-            {
-                throw new ArgumentException("Bad parameter: solar_winds_token must be of type string", "parameters[\"solar_winds_token\"]");
-            }
-            if (parameters.ContainsKey("new_relic_api_key") && !(parameters["new_relic_api_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: new_relic_api_key must be of type string", "parameters[\"new_relic_api_key\"]");
-            }
-            if (parameters.ContainsKey("datadog_api_key") && !(parameters["datadog_api_key"] is string))
-            {
-                throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
-            }
-            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: sftp_action_send_enabled must be of type bool", "parameters[\"sftp_action_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("ftp_action_send_enabled") && !(parameters["ftp_action_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: ftp_action_send_enabled must be of type bool", "parameters[\"ftp_action_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("web_dav_action_send_enabled") && !(parameters["web_dav_action_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: web_dav_action_send_enabled must be of type bool", "parameters[\"web_dav_action_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("sync_send_enabled") && !(parameters["sync_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: sync_send_enabled must be of type bool", "parameters[\"sync_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("outbound_connection_send_enabled") && !(parameters["outbound_connection_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: outbound_connection_send_enabled must be of type bool", "parameters[\"outbound_connection_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("automation_send_enabled") && !(parameters["automation_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: automation_send_enabled must be of type bool", "parameters[\"automation_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("api_request_send_enabled") && !(parameters["api_request_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: api_request_send_enabled must be of type bool", "parameters[\"api_request_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("public_hosting_request_send_enabled") && !(parameters["public_hosting_request_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: public_hosting_request_send_enabled must be of type bool", "parameters[\"public_hosting_request_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("email_send_enabled") && !(parameters["email_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: email_send_enabled must be of type bool", "parameters[\"email_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("exavault_api_request_send_enabled") && !(parameters["exavault_api_request_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
-            }
-            if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
-            {
-                throw new ArgumentException("Bad parameter: destination_type must be of type string", "parameters[\"destination_type\"]");
-            }
-            if (parameters.ContainsKey("destination_url") && !(parameters["destination_url"] is string))
-            {
-                throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            SiemHttpDestination updated = JsonUtil.DeserializeModelResponse<SiemHttpDestination>(responseJson, context, requestOptions);
+            // This object takes its own reading of the response, so that it shares no array or nested model with the
+            // one returned, and a change to either leaves the other alone.
+            Refresh(JsonUtil.DeserializeModelResponse<SiemHttpDestination>(responseJson, context, requestOptions).attributes);
+            // Its later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return updated;
         }
 
         /// <summary>
+        /// Sends DELETE /siem_http_destinations/{id} to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task Delete(Dictionary<string, object> parameters)
         {
             return DeleteCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
+        /// Sends DELETE /siem_http_destinations/{id} to the Files.com API.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>, but neither waits for the request nor reports its failure.
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        [Obsolete("Destroy neither waits for the request nor reports its failure. Use DestroyAsync instead.")]
         public async void Destroy(Dictionary<string, object> parameters)
         {
             Delete(parameters);
@@ -1212,6 +1262,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Same as <see cref="DeleteAsync"/>.
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(parameters, cancellationToken);
@@ -1220,45 +1272,82 @@ namespace FilesCom.Models
         private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The SiemHttpDestination has no id, which Delete needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
 
+        private static readonly string[] CreateParameterNames = { "name", "additional_headers", "sending_active", "generic_payload_type", "file_destination_path", "file_format", "file_interval_minutes", "splunk_token", "crowdstrike_token", "azure_dcr_immutable_id", "azure_stream_name", "azure_oauth_client_credentials_tenant_id", "azure_oauth_client_credentials_client_id", "azure_oauth_client_credentials_client_secret", "qradar_username", "qradar_password", "solar_winds_token", "new_relic_api_key", "datadog_api_key", "action_send_enabled", "sftp_action_send_enabled", "ftp_action_send_enabled", "web_dav_action_send_enabled", "sync_send_enabled", "outbound_connection_send_enabled", "automation_send_enabled", "api_request_send_enabled", "public_hosting_request_send_enabled", "email_send_enabled", "exavault_api_request_send_enabled", "settings_change_send_enabled", "destination_type", "destination_url" };
+        private static readonly string[] UpdateParameterNames = { "id", "name", "additional_headers", "sending_active", "generic_payload_type", "file_destination_path", "file_format", "file_interval_minutes", "splunk_token", "crowdstrike_token", "azure_dcr_immutable_id", "azure_stream_name", "azure_oauth_client_credentials_tenant_id", "azure_oauth_client_credentials_client_id", "azure_oauth_client_credentials_client_secret", "qradar_username", "qradar_password", "solar_winds_token", "new_relic_api_key", "datadog_api_key", "action_send_enabled", "sftp_action_send_enabled", "ftp_action_send_enabled", "web_dav_action_send_enabled", "sync_send_enabled", "outbound_connection_send_enabled", "automation_send_enabled", "api_request_send_enabled", "public_hosting_request_send_enabled", "email_send_enabled", "exavault_api_request_send_enabled", "settings_change_send_enabled", "destination_type", "destination_url" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this SiemHttpDestination on Files.com, or updates it if it has an ID.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await UpdateCore(this.attributes, cancellationToken);
+                await UpdateCore(AttributesToSave(UpdateParameterNames), cancellationToken);
+                return;
             }
-            else
+            SiemHttpDestination created = await SiemHttpDestination.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await SiemHttpDestination.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = attributes[name];
+                }
             }
+            return toSave;
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
@@ -1266,6 +1355,8 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<SiemHttpDestination> List(
 
             Dictionary<string, object> parameters = null,
@@ -1275,6 +1366,13 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<SiemHttpDestination> All(
 
             Dictionary<string, object> parameters = null,
@@ -1293,14 +1391,15 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
 
             return new FilesList<SiemHttpDestination>(client, $"/siem_http_destinations", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -1310,6 +1409,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   id (required) - int64 - Siem Http Destination ID.
         /// </summary>
+        /// <param name="id">Siem Http Destination ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<SiemHttpDestination> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1319,6 +1421,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Siem Http Destination ID.
+        /// </summary>
+        /// <param name="id">Siem Http Destination ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<SiemHttpDestination> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1338,6 +1447,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1347,25 +1457,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<SiemHttpDestination>(responseJson, context, options);
         }
 
         /// <summary>
@@ -1404,6 +1507,8 @@ namespace FilesCom.Models
         ///   destination_type (required) - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<SiemHttpDestination> Create(
 
             Dictionary<string, object> parameters = null,
@@ -1423,154 +1528,148 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (!parameters.ContainsKey("destination_type") || parameters["destination_type"] == null)
+            if (!parameters.TryGetValue("destination_type", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: destination_type", "parameters[\"destination_type\"]");
+                throw new MissingParameterException("Parameter missing: destination_type", "destination_type");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("additional_headers") && !(parameters["additional_headers"] is object))
+            if (parameters.TryGetValue("additional_headers", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: additional_headers must be of type object", "parameters[\"additional_headers\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: additional_headers is null, which cannot be sent" : "Bad parameter: additional_headers must be of type object", "additional_headers");
             }
-            if (parameters.ContainsKey("sending_active") && !(parameters["sending_active"] is bool))
+            if (parameters.TryGetValue("sending_active", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sending_active must be of type bool", "parameters[\"sending_active\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sending_active is null, which cannot be sent" : "Bad parameter: sending_active must be of type bool", "sending_active");
             }
-            if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
+            if (parameters.TryGetValue("generic_payload_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: generic_payload_type is null, which cannot be sent" : "Bad parameter: generic_payload_type must be of type string", "generic_payload_type");
             }
-            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            if (parameters.TryGetValue("file_destination_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_destination_path is null, which cannot be sent" : "Bad parameter: file_destination_path must be of type string", "file_destination_path");
             }
-            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            if (parameters.TryGetValue("file_format", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_format is null, which cannot be sent" : "Bad parameter: file_format must be of type string", "file_format");
             }
-            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            if (parameters.TryGetValue("file_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_interval_minutes is null, which cannot be sent" : "Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "file_interval_minutes");
             }
-            if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
+            if (parameters.TryGetValue("splunk_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: splunk_token is null, which cannot be sent" : "Bad parameter: splunk_token must be of type string", "splunk_token");
             }
-            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            if (parameters.TryGetValue("crowdstrike_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: crowdstrike_token is null, which cannot be sent" : "Bad parameter: crowdstrike_token must be of type string", "crowdstrike_token");
             }
-            if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
+            if (parameters.TryGetValue("azure_dcr_immutable_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_dcr_immutable_id must be of type string", "parameters[\"azure_dcr_immutable_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_dcr_immutable_id is null, which cannot be sent" : "Bad parameter: azure_dcr_immutable_id must be of type string", "azure_dcr_immutable_id");
             }
-            if (parameters.ContainsKey("azure_stream_name") && !(parameters["azure_stream_name"] is string))
+            if (parameters.TryGetValue("azure_stream_name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_stream_name must be of type string", "parameters[\"azure_stream_name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_stream_name is null, which cannot be sent" : "Bad parameter: azure_stream_name must be of type string", "azure_stream_name");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_tenant_id") && !(parameters["azure_oauth_client_credentials_tenant_id"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_tenant_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "parameters[\"azure_oauth_client_credentials_tenant_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_tenant_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "azure_oauth_client_credentials_tenant_id");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_id") && !(parameters["azure_oauth_client_credentials_client_id"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "parameters[\"azure_oauth_client_credentials_client_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "azure_oauth_client_credentials_client_id");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_secret") && !(parameters["azure_oauth_client_credentials_client_secret"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_secret", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "parameters[\"azure_oauth_client_credentials_client_secret\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_secret is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "azure_oauth_client_credentials_client_secret");
             }
-            if (parameters.ContainsKey("qradar_username") && !(parameters["qradar_username"] is string))
+            if (parameters.TryGetValue("qradar_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: qradar_username must be of type string", "parameters[\"qradar_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_username is null, which cannot be sent" : "Bad parameter: qradar_username must be of type string", "qradar_username");
             }
-            if (parameters.ContainsKey("qradar_password") && !(parameters["qradar_password"] is string))
+            if (parameters.TryGetValue("qradar_password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: qradar_password must be of type string", "parameters[\"qradar_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_password is null, which cannot be sent" : "Bad parameter: qradar_password must be of type string", "qradar_password");
             }
-            if (parameters.ContainsKey("solar_winds_token") && !(parameters["solar_winds_token"] is string))
+            if (parameters.TryGetValue("solar_winds_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: solar_winds_token must be of type string", "parameters[\"solar_winds_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: solar_winds_token is null, which cannot be sent" : "Bad parameter: solar_winds_token must be of type string", "solar_winds_token");
             }
-            if (parameters.ContainsKey("new_relic_api_key") && !(parameters["new_relic_api_key"] is string))
+            if (parameters.TryGetValue("new_relic_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: new_relic_api_key must be of type string", "parameters[\"new_relic_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: new_relic_api_key is null, which cannot be sent" : "Bad parameter: new_relic_api_key must be of type string", "new_relic_api_key");
             }
-            if (parameters.ContainsKey("datadog_api_key") && !(parameters["datadog_api_key"] is string))
+            if (parameters.TryGetValue("datadog_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: datadog_api_key is null, which cannot be sent" : "Bad parameter: datadog_api_key must be of type string", "datadog_api_key");
             }
-            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            if (parameters.TryGetValue("action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: action_send_enabled is null, which cannot be sent" : "Bad parameter: action_send_enabled must be of type bool", "action_send_enabled");
             }
-            if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("sftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_action_send_enabled must be of type bool", "parameters[\"sftp_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: sftp_action_send_enabled must be of type bool", "sftp_action_send_enabled");
             }
-            if (parameters.ContainsKey("ftp_action_send_enabled") && !(parameters["ftp_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("ftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ftp_action_send_enabled must be of type bool", "parameters[\"ftp_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: ftp_action_send_enabled must be of type bool", "ftp_action_send_enabled");
             }
-            if (parameters.ContainsKey("web_dav_action_send_enabled") && !(parameters["web_dav_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("web_dav_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: web_dav_action_send_enabled must be of type bool", "parameters[\"web_dav_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: web_dav_action_send_enabled is null, which cannot be sent" : "Bad parameter: web_dav_action_send_enabled must be of type bool", "web_dav_action_send_enabled");
             }
-            if (parameters.ContainsKey("sync_send_enabled") && !(parameters["sync_send_enabled"] is bool))
+            if (parameters.TryGetValue("sync_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sync_send_enabled must be of type bool", "parameters[\"sync_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_send_enabled is null, which cannot be sent" : "Bad parameter: sync_send_enabled must be of type bool", "sync_send_enabled");
             }
-            if (parameters.ContainsKey("outbound_connection_send_enabled") && !(parameters["outbound_connection_send_enabled"] is bool))
+            if (parameters.TryGetValue("outbound_connection_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: outbound_connection_send_enabled must be of type bool", "parameters[\"outbound_connection_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_connection_send_enabled is null, which cannot be sent" : "Bad parameter: outbound_connection_send_enabled must be of type bool", "outbound_connection_send_enabled");
             }
-            if (parameters.ContainsKey("automation_send_enabled") && !(parameters["automation_send_enabled"] is bool))
+            if (parameters.TryGetValue("automation_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: automation_send_enabled must be of type bool", "parameters[\"automation_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation_send_enabled is null, which cannot be sent" : "Bad parameter: automation_send_enabled must be of type bool", "automation_send_enabled");
             }
-            if (parameters.ContainsKey("api_request_send_enabled") && !(parameters["api_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: api_request_send_enabled must be of type bool", "parameters[\"api_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: api_request_send_enabled is null, which cannot be sent" : "Bad parameter: api_request_send_enabled must be of type bool", "api_request_send_enabled");
             }
-            if (parameters.ContainsKey("public_hosting_request_send_enabled") && !(parameters["public_hosting_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("public_hosting_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: public_hosting_request_send_enabled must be of type bool", "parameters[\"public_hosting_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: public_hosting_request_send_enabled is null, which cannot be sent" : "Bad parameter: public_hosting_request_send_enabled must be of type bool", "public_hosting_request_send_enabled");
             }
-            if (parameters.ContainsKey("email_send_enabled") && !(parameters["email_send_enabled"] is bool))
+            if (parameters.TryGetValue("email_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: email_send_enabled must be of type bool", "parameters[\"email_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email_send_enabled is null, which cannot be sent" : "Bad parameter: email_send_enabled must be of type bool", "email_send_enabled");
             }
-            if (parameters.ContainsKey("exavault_api_request_send_enabled") && !(parameters["exavault_api_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("exavault_api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exavault_api_request_send_enabled is null, which cannot be sent" : "Bad parameter: exavault_api_request_send_enabled must be of type bool", "exavault_api_request_send_enabled");
             }
-            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            if (parameters.TryGetValue("settings_change_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: settings_change_send_enabled is null, which cannot be sent" : "Bad parameter: settings_change_send_enabled must be of type bool", "settings_change_send_enabled");
             }
-            if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
+            if (parameters.TryGetValue("destination_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_type must be of type string", "parameters[\"destination_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_type is null, which cannot be sent" : "Bad parameter: destination_type must be of type string", "destination_type");
             }
-            if (parameters.ContainsKey("destination_url") && !(parameters["destination_url"] is string))
+            if (parameters.TryGetValue("destination_url", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_url is null, which cannot be sent" : "Bad parameter: destination_url must be of type string", "destination_url");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<SiemHttpDestination>(responseJson, context, options);
         }
 
         /// <summary>
@@ -1610,6 +1709,8 @@ namespace FilesCom.Models
         ///   exavault_api_request_send_enabled - boolean - Whether or not sending is enabled for exavault_api_request logs.
         ///   settings_change_send_enabled - boolean - Whether or not sending is enabled for settings_change logs.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task SendTestEntry(
 
             Dictionary<string, object> parameters = null,
@@ -1629,146 +1730,146 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("siem_http_destination_id") && !(parameters["siem_http_destination_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("siem_http_destination_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: siem_http_destination_id must be of type Nullable<Int64>", "parameters[\"siem_http_destination_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: siem_http_destination_id is null, which cannot be sent" : "Bad parameter: siem_http_destination_id must be of type Nullable<Int64>", "siem_http_destination_id");
             }
-            if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
+            if (parameters.TryGetValue("destination_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_type must be of type string", "parameters[\"destination_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_type is null, which cannot be sent" : "Bad parameter: destination_type must be of type string", "destination_type");
             }
-            if (parameters.ContainsKey("destination_url") && !(parameters["destination_url"] is string))
+            if (parameters.TryGetValue("destination_url", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_url is null, which cannot be sent" : "Bad parameter: destination_url must be of type string", "destination_url");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("additional_headers") && !(parameters["additional_headers"] is object))
+            if (parameters.TryGetValue("additional_headers", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: additional_headers must be of type object", "parameters[\"additional_headers\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: additional_headers is null, which cannot be sent" : "Bad parameter: additional_headers must be of type object", "additional_headers");
             }
-            if (parameters.ContainsKey("sending_active") && !(parameters["sending_active"] is bool))
+            if (parameters.TryGetValue("sending_active", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sending_active must be of type bool", "parameters[\"sending_active\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sending_active is null, which cannot be sent" : "Bad parameter: sending_active must be of type bool", "sending_active");
             }
-            if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
+            if (parameters.TryGetValue("generic_payload_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: generic_payload_type is null, which cannot be sent" : "Bad parameter: generic_payload_type must be of type string", "generic_payload_type");
             }
-            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            if (parameters.TryGetValue("file_destination_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_destination_path is null, which cannot be sent" : "Bad parameter: file_destination_path must be of type string", "file_destination_path");
             }
-            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            if (parameters.TryGetValue("file_format", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_format is null, which cannot be sent" : "Bad parameter: file_format must be of type string", "file_format");
             }
-            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            if (parameters.TryGetValue("file_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_interval_minutes is null, which cannot be sent" : "Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "file_interval_minutes");
             }
-            if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
+            if (parameters.TryGetValue("splunk_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: splunk_token is null, which cannot be sent" : "Bad parameter: splunk_token must be of type string", "splunk_token");
             }
-            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            if (parameters.TryGetValue("crowdstrike_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: crowdstrike_token is null, which cannot be sent" : "Bad parameter: crowdstrike_token must be of type string", "crowdstrike_token");
             }
-            if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
+            if (parameters.TryGetValue("azure_dcr_immutable_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_dcr_immutable_id must be of type string", "parameters[\"azure_dcr_immutable_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_dcr_immutable_id is null, which cannot be sent" : "Bad parameter: azure_dcr_immutable_id must be of type string", "azure_dcr_immutable_id");
             }
-            if (parameters.ContainsKey("azure_stream_name") && !(parameters["azure_stream_name"] is string))
+            if (parameters.TryGetValue("azure_stream_name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_stream_name must be of type string", "parameters[\"azure_stream_name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_stream_name is null, which cannot be sent" : "Bad parameter: azure_stream_name must be of type string", "azure_stream_name");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_tenant_id") && !(parameters["azure_oauth_client_credentials_tenant_id"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_tenant_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "parameters[\"azure_oauth_client_credentials_tenant_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_tenant_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "azure_oauth_client_credentials_tenant_id");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_id") && !(parameters["azure_oauth_client_credentials_client_id"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "parameters[\"azure_oauth_client_credentials_client_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "azure_oauth_client_credentials_client_id");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_secret") && !(parameters["azure_oauth_client_credentials_client_secret"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_secret", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "parameters[\"azure_oauth_client_credentials_client_secret\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_secret is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "azure_oauth_client_credentials_client_secret");
             }
-            if (parameters.ContainsKey("qradar_username") && !(parameters["qradar_username"] is string))
+            if (parameters.TryGetValue("qradar_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: qradar_username must be of type string", "parameters[\"qradar_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_username is null, which cannot be sent" : "Bad parameter: qradar_username must be of type string", "qradar_username");
             }
-            if (parameters.ContainsKey("qradar_password") && !(parameters["qradar_password"] is string))
+            if (parameters.TryGetValue("qradar_password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: qradar_password must be of type string", "parameters[\"qradar_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_password is null, which cannot be sent" : "Bad parameter: qradar_password must be of type string", "qradar_password");
             }
-            if (parameters.ContainsKey("solar_winds_token") && !(parameters["solar_winds_token"] is string))
+            if (parameters.TryGetValue("solar_winds_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: solar_winds_token must be of type string", "parameters[\"solar_winds_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: solar_winds_token is null, which cannot be sent" : "Bad parameter: solar_winds_token must be of type string", "solar_winds_token");
             }
-            if (parameters.ContainsKey("new_relic_api_key") && !(parameters["new_relic_api_key"] is string))
+            if (parameters.TryGetValue("new_relic_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: new_relic_api_key must be of type string", "parameters[\"new_relic_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: new_relic_api_key is null, which cannot be sent" : "Bad parameter: new_relic_api_key must be of type string", "new_relic_api_key");
             }
-            if (parameters.ContainsKey("datadog_api_key") && !(parameters["datadog_api_key"] is string))
+            if (parameters.TryGetValue("datadog_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: datadog_api_key is null, which cannot be sent" : "Bad parameter: datadog_api_key must be of type string", "datadog_api_key");
             }
-            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            if (parameters.TryGetValue("action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: action_send_enabled is null, which cannot be sent" : "Bad parameter: action_send_enabled must be of type bool", "action_send_enabled");
             }
-            if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("sftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_action_send_enabled must be of type bool", "parameters[\"sftp_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: sftp_action_send_enabled must be of type bool", "sftp_action_send_enabled");
             }
-            if (parameters.ContainsKey("ftp_action_send_enabled") && !(parameters["ftp_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("ftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ftp_action_send_enabled must be of type bool", "parameters[\"ftp_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: ftp_action_send_enabled must be of type bool", "ftp_action_send_enabled");
             }
-            if (parameters.ContainsKey("web_dav_action_send_enabled") && !(parameters["web_dav_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("web_dav_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: web_dav_action_send_enabled must be of type bool", "parameters[\"web_dav_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: web_dav_action_send_enabled is null, which cannot be sent" : "Bad parameter: web_dav_action_send_enabled must be of type bool", "web_dav_action_send_enabled");
             }
-            if (parameters.ContainsKey("sync_send_enabled") && !(parameters["sync_send_enabled"] is bool))
+            if (parameters.TryGetValue("sync_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sync_send_enabled must be of type bool", "parameters[\"sync_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_send_enabled is null, which cannot be sent" : "Bad parameter: sync_send_enabled must be of type bool", "sync_send_enabled");
             }
-            if (parameters.ContainsKey("outbound_connection_send_enabled") && !(parameters["outbound_connection_send_enabled"] is bool))
+            if (parameters.TryGetValue("outbound_connection_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: outbound_connection_send_enabled must be of type bool", "parameters[\"outbound_connection_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_connection_send_enabled is null, which cannot be sent" : "Bad parameter: outbound_connection_send_enabled must be of type bool", "outbound_connection_send_enabled");
             }
-            if (parameters.ContainsKey("automation_send_enabled") && !(parameters["automation_send_enabled"] is bool))
+            if (parameters.TryGetValue("automation_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: automation_send_enabled must be of type bool", "parameters[\"automation_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation_send_enabled is null, which cannot be sent" : "Bad parameter: automation_send_enabled must be of type bool", "automation_send_enabled");
             }
-            if (parameters.ContainsKey("api_request_send_enabled") && !(parameters["api_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: api_request_send_enabled must be of type bool", "parameters[\"api_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: api_request_send_enabled is null, which cannot be sent" : "Bad parameter: api_request_send_enabled must be of type bool", "api_request_send_enabled");
             }
-            if (parameters.ContainsKey("public_hosting_request_send_enabled") && !(parameters["public_hosting_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("public_hosting_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: public_hosting_request_send_enabled must be of type bool", "parameters[\"public_hosting_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: public_hosting_request_send_enabled is null, which cannot be sent" : "Bad parameter: public_hosting_request_send_enabled must be of type bool", "public_hosting_request_send_enabled");
             }
-            if (parameters.ContainsKey("email_send_enabled") && !(parameters["email_send_enabled"] is bool))
+            if (parameters.TryGetValue("email_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: email_send_enabled must be of type bool", "parameters[\"email_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email_send_enabled is null, which cannot be sent" : "Bad parameter: email_send_enabled must be of type bool", "email_send_enabled");
             }
-            if (parameters.ContainsKey("exavault_api_request_send_enabled") && !(parameters["exavault_api_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("exavault_api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exavault_api_request_send_enabled is null, which cannot be sent" : "Bad parameter: exavault_api_request_send_enabled must be of type bool", "exavault_api_request_send_enabled");
             }
-            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            if (parameters.TryGetValue("settings_change_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: settings_change_send_enabled is null, which cannot be sent" : "Bad parameter: settings_change_send_enabled must be of type bool", "settings_change_send_enabled");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/siem_http_destinations/send_test_entry", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/siem_http_destinations/send_test_entry", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>
@@ -1807,6 +1908,9 @@ namespace FilesCom.Models
         ///   destination_type - string - Destination Type
         ///   destination_url - string - Destination Url
         /// </summary>
+        /// <param name="id">Siem Http Destination ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<SiemHttpDestination> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1826,6 +1930,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -1835,161 +1940,158 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("additional_headers") && !(parameters["additional_headers"] is object))
+            if (parameters.TryGetValue("additional_headers", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: additional_headers must be of type object", "parameters[\"additional_headers\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: additional_headers is null, which cannot be sent" : "Bad parameter: additional_headers must be of type object", "additional_headers");
             }
-            if (parameters.ContainsKey("sending_active") && !(parameters["sending_active"] is bool))
+            if (parameters.TryGetValue("sending_active", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sending_active must be of type bool", "parameters[\"sending_active\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sending_active is null, which cannot be sent" : "Bad parameter: sending_active must be of type bool", "sending_active");
             }
-            if (parameters.ContainsKey("generic_payload_type") && !(parameters["generic_payload_type"] is string))
+            if (parameters.TryGetValue("generic_payload_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: generic_payload_type must be of type string", "parameters[\"generic_payload_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: generic_payload_type is null, which cannot be sent" : "Bad parameter: generic_payload_type must be of type string", "generic_payload_type");
             }
-            if (parameters.ContainsKey("file_destination_path") && !(parameters["file_destination_path"] is string))
+            if (parameters.TryGetValue("file_destination_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: file_destination_path must be of type string", "parameters[\"file_destination_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_destination_path is null, which cannot be sent" : "Bad parameter: file_destination_path must be of type string", "file_destination_path");
             }
-            if (parameters.ContainsKey("file_format") && !(parameters["file_format"] is string))
+            if (parameters.TryGetValue("file_format", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: file_format must be of type string", "parameters[\"file_format\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_format is null, which cannot be sent" : "Bad parameter: file_format must be of type string", "file_format");
             }
-            if (parameters.ContainsKey("file_interval_minutes") && !(parameters["file_interval_minutes"] is Nullable<Int64>))
+            if (parameters.TryGetValue("file_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "parameters[\"file_interval_minutes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: file_interval_minutes is null, which cannot be sent" : "Bad parameter: file_interval_minutes must be of type Nullable<Int64>", "file_interval_minutes");
             }
-            if (parameters.ContainsKey("splunk_token") && !(parameters["splunk_token"] is string))
+            if (parameters.TryGetValue("splunk_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: splunk_token must be of type string", "parameters[\"splunk_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: splunk_token is null, which cannot be sent" : "Bad parameter: splunk_token must be of type string", "splunk_token");
             }
-            if (parameters.ContainsKey("crowdstrike_token") && !(parameters["crowdstrike_token"] is string))
+            if (parameters.TryGetValue("crowdstrike_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: crowdstrike_token must be of type string", "parameters[\"crowdstrike_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: crowdstrike_token is null, which cannot be sent" : "Bad parameter: crowdstrike_token must be of type string", "crowdstrike_token");
             }
-            if (parameters.ContainsKey("azure_dcr_immutable_id") && !(parameters["azure_dcr_immutable_id"] is string))
+            if (parameters.TryGetValue("azure_dcr_immutable_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_dcr_immutable_id must be of type string", "parameters[\"azure_dcr_immutable_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_dcr_immutable_id is null, which cannot be sent" : "Bad parameter: azure_dcr_immutable_id must be of type string", "azure_dcr_immutable_id");
             }
-            if (parameters.ContainsKey("azure_stream_name") && !(parameters["azure_stream_name"] is string))
+            if (parameters.TryGetValue("azure_stream_name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_stream_name must be of type string", "parameters[\"azure_stream_name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_stream_name is null, which cannot be sent" : "Bad parameter: azure_stream_name must be of type string", "azure_stream_name");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_tenant_id") && !(parameters["azure_oauth_client_credentials_tenant_id"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_tenant_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "parameters[\"azure_oauth_client_credentials_tenant_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_tenant_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_tenant_id must be of type string", "azure_oauth_client_credentials_tenant_id");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_id") && !(parameters["azure_oauth_client_credentials_client_id"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_id", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "parameters[\"azure_oauth_client_credentials_client_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_id is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_id must be of type string", "azure_oauth_client_credentials_client_id");
             }
-            if (parameters.ContainsKey("azure_oauth_client_credentials_client_secret") && !(parameters["azure_oauth_client_credentials_client_secret"] is string))
+            if (parameters.TryGetValue("azure_oauth_client_credentials_client_secret", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "parameters[\"azure_oauth_client_credentials_client_secret\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: azure_oauth_client_credentials_client_secret is null, which cannot be sent" : "Bad parameter: azure_oauth_client_credentials_client_secret must be of type string", "azure_oauth_client_credentials_client_secret");
             }
-            if (parameters.ContainsKey("qradar_username") && !(parameters["qradar_username"] is string))
+            if (parameters.TryGetValue("qradar_username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: qradar_username must be of type string", "parameters[\"qradar_username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_username is null, which cannot be sent" : "Bad parameter: qradar_username must be of type string", "qradar_username");
             }
-            if (parameters.ContainsKey("qradar_password") && !(parameters["qradar_password"] is string))
+            if (parameters.TryGetValue("qradar_password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: qradar_password must be of type string", "parameters[\"qradar_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: qradar_password is null, which cannot be sent" : "Bad parameter: qradar_password must be of type string", "qradar_password");
             }
-            if (parameters.ContainsKey("solar_winds_token") && !(parameters["solar_winds_token"] is string))
+            if (parameters.TryGetValue("solar_winds_token", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: solar_winds_token must be of type string", "parameters[\"solar_winds_token\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: solar_winds_token is null, which cannot be sent" : "Bad parameter: solar_winds_token must be of type string", "solar_winds_token");
             }
-            if (parameters.ContainsKey("new_relic_api_key") && !(parameters["new_relic_api_key"] is string))
+            if (parameters.TryGetValue("new_relic_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: new_relic_api_key must be of type string", "parameters[\"new_relic_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: new_relic_api_key is null, which cannot be sent" : "Bad parameter: new_relic_api_key must be of type string", "new_relic_api_key");
             }
-            if (parameters.ContainsKey("datadog_api_key") && !(parameters["datadog_api_key"] is string))
+            if (parameters.TryGetValue("datadog_api_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: datadog_api_key must be of type string", "parameters[\"datadog_api_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: datadog_api_key is null, which cannot be sent" : "Bad parameter: datadog_api_key must be of type string", "datadog_api_key");
             }
-            if (parameters.ContainsKey("action_send_enabled") && !(parameters["action_send_enabled"] is bool))
+            if (parameters.TryGetValue("action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: action_send_enabled must be of type bool", "parameters[\"action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: action_send_enabled is null, which cannot be sent" : "Bad parameter: action_send_enabled must be of type bool", "action_send_enabled");
             }
-            if (parameters.ContainsKey("sftp_action_send_enabled") && !(parameters["sftp_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("sftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_action_send_enabled must be of type bool", "parameters[\"sftp_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: sftp_action_send_enabled must be of type bool", "sftp_action_send_enabled");
             }
-            if (parameters.ContainsKey("ftp_action_send_enabled") && !(parameters["ftp_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("ftp_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ftp_action_send_enabled must be of type bool", "parameters[\"ftp_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_action_send_enabled is null, which cannot be sent" : "Bad parameter: ftp_action_send_enabled must be of type bool", "ftp_action_send_enabled");
             }
-            if (parameters.ContainsKey("web_dav_action_send_enabled") && !(parameters["web_dav_action_send_enabled"] is bool))
+            if (parameters.TryGetValue("web_dav_action_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: web_dav_action_send_enabled must be of type bool", "parameters[\"web_dav_action_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: web_dav_action_send_enabled is null, which cannot be sent" : "Bad parameter: web_dav_action_send_enabled must be of type bool", "web_dav_action_send_enabled");
             }
-            if (parameters.ContainsKey("sync_send_enabled") && !(parameters["sync_send_enabled"] is bool))
+            if (parameters.TryGetValue("sync_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sync_send_enabled must be of type bool", "parameters[\"sync_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sync_send_enabled is null, which cannot be sent" : "Bad parameter: sync_send_enabled must be of type bool", "sync_send_enabled");
             }
-            if (parameters.ContainsKey("outbound_connection_send_enabled") && !(parameters["outbound_connection_send_enabled"] is bool))
+            if (parameters.TryGetValue("outbound_connection_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: outbound_connection_send_enabled must be of type bool", "parameters[\"outbound_connection_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: outbound_connection_send_enabled is null, which cannot be sent" : "Bad parameter: outbound_connection_send_enabled must be of type bool", "outbound_connection_send_enabled");
             }
-            if (parameters.ContainsKey("automation_send_enabled") && !(parameters["automation_send_enabled"] is bool))
+            if (parameters.TryGetValue("automation_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: automation_send_enabled must be of type bool", "parameters[\"automation_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: automation_send_enabled is null, which cannot be sent" : "Bad parameter: automation_send_enabled must be of type bool", "automation_send_enabled");
             }
-            if (parameters.ContainsKey("api_request_send_enabled") && !(parameters["api_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: api_request_send_enabled must be of type bool", "parameters[\"api_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: api_request_send_enabled is null, which cannot be sent" : "Bad parameter: api_request_send_enabled must be of type bool", "api_request_send_enabled");
             }
-            if (parameters.ContainsKey("public_hosting_request_send_enabled") && !(parameters["public_hosting_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("public_hosting_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: public_hosting_request_send_enabled must be of type bool", "parameters[\"public_hosting_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: public_hosting_request_send_enabled is null, which cannot be sent" : "Bad parameter: public_hosting_request_send_enabled must be of type bool", "public_hosting_request_send_enabled");
             }
-            if (parameters.ContainsKey("email_send_enabled") && !(parameters["email_send_enabled"] is bool))
+            if (parameters.TryGetValue("email_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: email_send_enabled must be of type bool", "parameters[\"email_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email_send_enabled is null, which cannot be sent" : "Bad parameter: email_send_enabled must be of type bool", "email_send_enabled");
             }
-            if (parameters.ContainsKey("exavault_api_request_send_enabled") && !(parameters["exavault_api_request_send_enabled"] is bool))
+            if (parameters.TryGetValue("exavault_api_request_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: exavault_api_request_send_enabled must be of type bool", "parameters[\"exavault_api_request_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: exavault_api_request_send_enabled is null, which cannot be sent" : "Bad parameter: exavault_api_request_send_enabled must be of type bool", "exavault_api_request_send_enabled");
             }
-            if (parameters.ContainsKey("settings_change_send_enabled") && !(parameters["settings_change_send_enabled"] is bool))
+            if (parameters.TryGetValue("settings_change_send_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: settings_change_send_enabled must be of type bool", "parameters[\"settings_change_send_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: settings_change_send_enabled is null, which cannot be sent" : "Bad parameter: settings_change_send_enabled must be of type bool", "settings_change_send_enabled");
             }
-            if (parameters.ContainsKey("destination_type") && !(parameters["destination_type"] is string))
+            if (parameters.TryGetValue("destination_type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_type must be of type string", "parameters[\"destination_type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_type is null, which cannot be sent" : "Bad parameter: destination_type must be of type string", "destination_type");
             }
-            if (parameters.ContainsKey("destination_url") && !(parameters["destination_url"] is string))
+            if (parameters.TryGetValue("destination_url", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: destination_url must be of type string", "parameters[\"destination_url\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination_url is null, which cannot be sent" : "Bad parameter: destination_url must be of type string", "destination_url");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<SiemHttpDestination>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<SiemHttpDestination>(responseJson, context, options);
         }
 
         /// <summary>
+        /// Sends DELETE /siem_http_destinations/{id} to the Files.com API.
         /// </summary>
+        /// <param name="id">Siem Http Destination ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -1999,6 +2101,12 @@ namespace FilesCom.Models
             return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Sends DELETE /siem_http_destinations/{id} to the Files.com API.
+        /// </summary>
+        /// <param name="id">Siem Http Destination ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Destroy(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2018,6 +2126,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2027,17 +2136,16 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/siem_http_destinations/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
         }
 
     }

@@ -39,7 +39,7 @@
 * `inherited` / `Inherited`  (bool): If true, this behavior is inherited from a higher scope rather than owned by the requested workspace.
 * `managed` / `Managed`  (bool): If true, this behavior is controlled by a parent-site policy and cannot be modified locally.
 * `root_behavior_site_admin_only` / `RootBehaviorSiteAdminOnly`  (bool): If true, this behavior may only be modified by a site admin because it is at the site root or disables a root behavior.
-* `attachment_file` / `AttachmentFile`  (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+* `attachment_file` / `AttachmentFile`  (FileAttachment): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
 * `attachment_delete` / `AttachmentDelete`  (bool): If `true`, delete the file stored in `attachment`.
 
 
@@ -48,7 +48,7 @@
 ## List Behaviors
 
 ```
-Task<FilesList<Behavior>> Behavior.List(
+FilesList<Behavior> Behavior.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -106,7 +106,7 @@ Task<Behavior> client.Behaviors.FindAsync(
 ## List Behaviors by Path
 
 ```
-Task<FilesList<Behavior>> Behavior.ListFor(
+FilesList<Behavior> Behavior.ListFor(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -159,7 +159,7 @@ Task<Behavior> client.Behaviors.CreateAsync(
 ### Parameters
 
 * `value` (object): This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.
-* `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+* `attachment_file` (FileAttachment): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
 * `disable_parent_folder_behavior` (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` (bool): Whether the behavior should apply to child folders. This is only configurable for behavior types whose recursion mode is `sometimes`; `always` behaviors stay recursive and `never` behaviors stay non-recursive.
 * `name` (string): Name for this behavior.
@@ -228,7 +228,7 @@ Task<Behavior> client.Behaviors.UpdateAsync(
 
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (object): This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.
-* `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+* `attachment_file` (FileAttachment): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
 * `disable_parent_folder_behavior` (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` (bool): Whether the behavior should apply to child folders. This is only configurable for behavior types whose recursion mode is `sometimes`; `always` behaviors stay recursive and `never` behaviors stay non-recursive.
 * `name` (string): Name for this behavior.
@@ -269,27 +269,28 @@ Task client.Behaviors.DeleteAsync(
 ## Update Behavior
 
 ```
-var Behavior = Behavior.Find(1);
+var behavior = await Behavior.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("value", {"urls":["https://example.com/webhook"],"method":"POST","encoding":"JSON"});
+parameters.Add("value", new Dictionary<string, object> { { "urls", new object[] { "https://example.com/webhook" } }, { "method", "POST" }, { "encoding", "JSON" } });
 parameters.Add("disable_parent_folder_behavior", true);
 parameters.Add("recursive", false);
 parameters.Add("name", "example");
 parameters.Add("description", "example");
 parameters.Add("attachment_delete", false);
 
-Behavior.Update(parameters);
+await behavior.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Behavior` it returns is a separate object with those attributes.
 
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Behavior ID.
 * `value` (object): This field stores data specific to the type of behavior. See The Behavior Types section for the accepted value for each type of behavior.
-* `attachment_file` (System.Net.Http.ByteArrayContent): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
+* `attachment_file` (FileAttachment): Certain behaviors may require a file, for instance, the `watermark` behavior requires a watermark image. Attach that file here.
 * `disable_parent_folder_behavior` (bool): If true, disables the inherited behavior for this folder and its children. Valid only for behavior types that child folders may override, and requires recursive to be true. Rejected for all other behavior types.
 * `recursive` (bool): Whether the behavior should apply to child folders. This is only configurable for behavior types whose recursion mode is `sometimes`; `always` behaviors stay recursive and `never` behaviors stay non-recursive.
 * `name` (string): Name for this behavior.
@@ -302,12 +303,11 @@ Behavior.Update(parameters);
 ## Delete Behavior
 
 ```
-var Behavior = Behavior.Find(1);
+var behavior = await Behavior.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Behavior.Delete
+await behavior.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -315,3 +315,14 @@ Behavior.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Behavior ID.
+
+
+---
+
+## Save
+
+```
+await behavior.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

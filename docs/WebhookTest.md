@@ -64,3 +64,14 @@ Task<WebhookTest> client.WebhookTests.CreateAsync(
 * `file_form_field` (string): Send the file data as a named parameter in the request POST body
 * `action` (string): action for test body
 * `use_dedicated_ips` (bool): Use dedicated IPs for sending the webhook?
+
+
+---
+
+## Save
+
+```
+await webhookTest.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

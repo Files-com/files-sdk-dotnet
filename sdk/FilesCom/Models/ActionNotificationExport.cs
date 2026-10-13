@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class ActionNotificationExport : IModel
+    /// <summary>
+    /// ActionNotificationExportEntity model
+    /// </summary>
+    public class ActionNotificationExport : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a ActionNotificationExport with no attributes set and no options.
+        /// </summary>
         public ActionNotificationExport() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a ActionNotificationExport with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public ActionNotificationExport(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -93,30 +102,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -127,7 +158,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -137,7 +168,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WorkspaceId
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            set { attributes["workspace_id"] = value; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -147,7 +178,7 @@ namespace FilesCom.Models
         public string ExportVersion
         {
             get { return (string)attributes["export_version"]; }
-            set { attributes["export_version"] = value; }
+            set { attributes["export_version"] = value; unsaved.Add("export_version"); }
         }
 
         /// <summary>
@@ -157,7 +188,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> StartAt
         {
             get { return (Nullable<DateTime>)attributes["start_at"]; }
-            set { attributes["start_at"] = value; }
+            set { attributes["start_at"] = value; unsaved.Add("start_at"); }
         }
 
         /// <summary>
@@ -167,7 +198,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> EndAt
         {
             get { return (Nullable<DateTime>)attributes["end_at"]; }
-            set { attributes["end_at"] = value; }
+            set { attributes["end_at"] = value; unsaved.Add("end_at"); }
         }
 
         /// <summary>
@@ -177,7 +208,7 @@ namespace FilesCom.Models
         public string Status
         {
             get { return (string)attributes["status"]; }
-            set { attributes["status"] = value; }
+            set { attributes["status"] = value; unsaved.Add("status"); }
         }
 
         /// <summary>
@@ -187,7 +218,7 @@ namespace FilesCom.Models
         public string QueryPath
         {
             get { return (string)attributes["query_path"]; }
-            set { attributes["query_path"] = value; }
+            set { attributes["query_path"] = value; unsaved.Add("query_path"); }
         }
 
         /// <summary>
@@ -197,7 +228,7 @@ namespace FilesCom.Models
         public string QueryFolder
         {
             get { return (string)attributes["query_folder"]; }
-            set { attributes["query_folder"] = value; }
+            set { attributes["query_folder"] = value; unsaved.Add("query_folder"); }
         }
 
         /// <summary>
@@ -207,7 +238,7 @@ namespace FilesCom.Models
         public string QueryMessage
         {
             get { return (string)attributes["query_message"]; }
-            set { attributes["query_message"] = value; }
+            set { attributes["query_message"] = value; unsaved.Add("query_message"); }
         }
 
         /// <summary>
@@ -217,7 +248,7 @@ namespace FilesCom.Models
         public string QueryRequestMethod
         {
             get { return (string)attributes["query_request_method"]; }
-            set { attributes["query_request_method"] = value; }
+            set { attributes["query_request_method"] = value; unsaved.Add("query_request_method"); }
         }
 
         /// <summary>
@@ -227,7 +258,7 @@ namespace FilesCom.Models
         public string QueryRequestUrl
         {
             get { return (string)attributes["query_request_url"]; }
-            set { attributes["query_request_url"] = value; }
+            set { attributes["query_request_url"] = value; unsaved.Add("query_request_url"); }
         }
 
         /// <summary>
@@ -237,7 +268,7 @@ namespace FilesCom.Models
         public string QueryStatus
         {
             get { return (string)attributes["query_status"]; }
-            set { attributes["query_status"] = value; }
+            set { attributes["query_status"] = value; unsaved.Add("query_status"); }
         }
 
         /// <summary>
@@ -248,7 +279,7 @@ namespace FilesCom.Models
         public bool QuerySuccess
         {
             get { return attributes["query_success"] == null ? false : (bool)attributes["query_success"]; }
-            set { attributes["query_success"] = value; }
+            set { attributes["query_success"] = value; unsaved.Add("query_success"); }
         }
 
         /// <summary>
@@ -258,7 +289,7 @@ namespace FilesCom.Models
         public string ResultsUrl
         {
             get { return (string)attributes["results_url"]; }
-            set { attributes["results_url"] = value; }
+            set { attributes["results_url"] = value; unsaved.Add("results_url"); }
         }
 
         /// <summary>
@@ -268,32 +299,82 @@ namespace FilesCom.Models
         public Nullable<Int64> UserId
         {
             get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; }
+            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
         }
 
 
+        private static readonly string[] CreateParameterNames = { "user_id", "workspace_id", "start_at", "end_at", "query_message", "query_request_method", "query_request_url", "query_status", "query_success", "query_path", "query_folder" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this ActionNotificationExport on Files.com.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
                 throw new NotImplementedException("The ActionNotificationExport object doesn't support updates.");
             }
-            else
+            ActionNotificationExport created = await ActionNotificationExport.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await ActionNotificationExport.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = ToParameter(name, attributes[name]);
+                }
             }
+            return toSave;
+        }
+
+        // The value SaveAsync sends for an attribute whose property type is not the one its parameter takes.
+        private static object ToParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case "start_at":
+                case "end_at":
+                    return ParameterValue.FromDateTime(value);
+                default:
+                    return value;
+            }
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
         /// Parameters:
         ///   id (required) - int64 - Action Notification Export ID.
         /// </summary>
+        /// <param name="id">Action Notification Export ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ActionNotificationExport> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -303,6 +384,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Action Notification Export ID.
+        /// </summary>
+        /// <param name="id">Action Notification Export ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ActionNotificationExport> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -322,6 +410,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -331,25 +420,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/action_notification_exports/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ActionNotificationExport>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ActionNotificationExport>(responseJson, context, options);
         }
 
         /// <summary>
@@ -366,6 +448,8 @@ namespace FilesCom.Models
         ///   query_path - string - Return notifications that were triggered by actions on this specific path.
         ///   query_folder - string - Return notifications that were triggered by actions in this folder.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<ActionNotificationExport> Create(
 
             Dictionary<string, object> parameters = null,
@@ -385,62 +469,56 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("user_id") && !(parameters["user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: user_id must be of type Nullable<Int64>", "parameters[\"user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
             }
-            if (parameters.ContainsKey("start_at") && !(parameters["start_at"] is string))
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: start_at must be of type string", "parameters[\"start_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
             }
-            if (parameters.ContainsKey("end_at") && !(parameters["end_at"] is string))
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: end_at must be of type string", "parameters[\"end_at\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
             }
-            if (parameters.ContainsKey("query_message") && !(parameters["query_message"] is string))
+            if (parameters.TryGetValue("query_message", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_message must be of type string", "parameters[\"query_message\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_message is null, which cannot be sent" : "Bad parameter: query_message must be of type string", "query_message");
             }
-            if (parameters.ContainsKey("query_request_method") && !(parameters["query_request_method"] is string))
+            if (parameters.TryGetValue("query_request_method", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_request_method must be of type string", "parameters[\"query_request_method\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_request_method is null, which cannot be sent" : "Bad parameter: query_request_method must be of type string", "query_request_method");
             }
-            if (parameters.ContainsKey("query_request_url") && !(parameters["query_request_url"] is string))
+            if (parameters.TryGetValue("query_request_url", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_request_url must be of type string", "parameters[\"query_request_url\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_request_url is null, which cannot be sent" : "Bad parameter: query_request_url must be of type string", "query_request_url");
             }
-            if (parameters.ContainsKey("query_status") && !(parameters["query_status"] is string))
+            if (parameters.TryGetValue("query_status", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_status must be of type string", "parameters[\"query_status\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_status is null, which cannot be sent" : "Bad parameter: query_status must be of type string", "query_status");
             }
-            if (parameters.ContainsKey("query_success") && !(parameters["query_success"] is bool))
+            if (parameters.TryGetValue("query_success", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: query_success must be of type bool", "parameters[\"query_success\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_success is null, which cannot be sent" : "Bad parameter: query_success must be of type bool", "query_success");
             }
-            if (parameters.ContainsKey("query_path") && !(parameters["query_path"] is string))
+            if (parameters.TryGetValue("query_path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_path must be of type string", "parameters[\"query_path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_path is null, which cannot be sent" : "Bad parameter: query_path must be of type string", "query_path");
             }
-            if (parameters.ContainsKey("query_folder") && !(parameters["query_folder"] is string))
+            if (parameters.TryGetValue("query_folder", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: query_folder must be of type string", "parameters[\"query_folder\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: query_folder is null, which cannot be sent" : "Bad parameter: query_folder must be of type string", "query_folder");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/action_notification_exports", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<ActionNotificationExport>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<ActionNotificationExport>(responseJson, context, options);
         }
 
     }

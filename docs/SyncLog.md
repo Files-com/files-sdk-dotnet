@@ -38,7 +38,7 @@
 ## List Sync Logs
 
 ```
-Task<FilesList<SyncLog>> SyncLog.List(
+FilesList<SyncLog> SyncLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

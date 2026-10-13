@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class Folder : IModel
+    /// <summary>
+    /// FileEntity model
+    /// </summary>
+    public class Folder : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a Folder with no attributes set and no options.
+        /// </summary>
         public Folder() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a Folder with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public Folder(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("path"))
             {
@@ -181,30 +190,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[] { DirectConnectionInfo, Preview }; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -215,7 +246,7 @@ namespace FilesCom.Models
         public string Path
         {
             get { return (string)attributes["path"]; }
-            set { attributes["path"] = value; }
+            set { attributes["path"] = value; unsaved.Add("path"); }
         }
 
         /// <summary>
@@ -225,7 +256,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedById
         {
             get { return (Nullable<Int64>)attributes["created_by_id"]; }
-            set { attributes["created_by_id"] = value; }
+            set { attributes["created_by_id"] = value; unsaved.Add("created_by_id"); }
         }
 
         /// <summary>
@@ -235,7 +266,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedByApiKeyId
         {
             get { return (Nullable<Int64>)attributes["created_by_api_key_id"]; }
-            set { attributes["created_by_api_key_id"] = value; }
+            set { attributes["created_by_api_key_id"] = value; unsaved.Add("created_by_api_key_id"); }
         }
 
         /// <summary>
@@ -245,7 +276,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedByAs2IncomingMessageId
         {
             get { return (Nullable<Int64>)attributes["created_by_as2_incoming_message_id"]; }
-            set { attributes["created_by_as2_incoming_message_id"] = value; }
+            set { attributes["created_by_as2_incoming_message_id"] = value; unsaved.Add("created_by_as2_incoming_message_id"); }
         }
 
         /// <summary>
@@ -255,7 +286,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedByAutomationId
         {
             get { return (Nullable<Int64>)attributes["created_by_automation_id"]; }
-            set { attributes["created_by_automation_id"] = value; }
+            set { attributes["created_by_automation_id"] = value; unsaved.Add("created_by_automation_id"); }
         }
 
         /// <summary>
@@ -265,7 +296,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedByBundleRegistrationId
         {
             get { return (Nullable<Int64>)attributes["created_by_bundle_registration_id"]; }
-            set { attributes["created_by_bundle_registration_id"] = value; }
+            set { attributes["created_by_bundle_registration_id"] = value; unsaved.Add("created_by_bundle_registration_id"); }
         }
 
         /// <summary>
@@ -275,7 +306,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedByInboxId
         {
             get { return (Nullable<Int64>)attributes["created_by_inbox_id"]; }
-            set { attributes["created_by_inbox_id"] = value; }
+            set { attributes["created_by_inbox_id"] = value; unsaved.Add("created_by_inbox_id"); }
         }
 
         /// <summary>
@@ -285,7 +316,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedByRemoteServerId
         {
             get { return (Nullable<Int64>)attributes["created_by_remote_server_id"]; }
-            set { attributes["created_by_remote_server_id"] = value; }
+            set { attributes["created_by_remote_server_id"] = value; unsaved.Add("created_by_remote_server_id"); }
         }
 
         /// <summary>
@@ -295,7 +326,7 @@ namespace FilesCom.Models
         public Nullable<Int64> CreatedBySyncId
         {
             get { return (Nullable<Int64>)attributes["created_by_sync_id"]; }
-            set { attributes["created_by_sync_id"] = value; }
+            set { attributes["created_by_sync_id"] = value; unsaved.Add("created_by_sync_id"); }
         }
 
         /// <summary>
@@ -305,7 +336,7 @@ namespace FilesCom.Models
         public object CustomMetadata
         {
             get { return (object)attributes["custom_metadata"]; }
-            set { attributes["custom_metadata"] = value; }
+            set { attributes["custom_metadata"] = value; unsaved.Add("custom_metadata"); }
         }
 
         /// <summary>
@@ -315,7 +346,7 @@ namespace FilesCom.Models
         public string DisplayName
         {
             get { return (string)attributes["display_name"]; }
-            set { attributes["display_name"] = value; }
+            set { attributes["display_name"] = value; unsaved.Add("display_name"); }
         }
 
         /// <summary>
@@ -325,7 +356,7 @@ namespace FilesCom.Models
         public string Type
         {
             get { return (string)attributes["type"]; }
-            set { attributes["type"] = value; }
+            set { attributes["type"] = value; unsaved.Add("type"); }
         }
 
         /// <summary>
@@ -335,7 +366,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Size
         {
             get { return (Nullable<Int64>)attributes["size"]; }
-            set { attributes["size"] = value; }
+            set { attributes["size"] = value; unsaved.Add("size"); }
         }
 
         /// <summary>
@@ -356,7 +387,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastModifiedById
         {
             get { return (Nullable<Int64>)attributes["last_modified_by_id"]; }
-            set { attributes["last_modified_by_id"] = value; }
+            set { attributes["last_modified_by_id"] = value; unsaved.Add("last_modified_by_id"); }
         }
 
         /// <summary>
@@ -366,7 +397,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastModifiedByApiKeyId
         {
             get { return (Nullable<Int64>)attributes["last_modified_by_api_key_id"]; }
-            set { attributes["last_modified_by_api_key_id"] = value; }
+            set { attributes["last_modified_by_api_key_id"] = value; unsaved.Add("last_modified_by_api_key_id"); }
         }
 
         /// <summary>
@@ -376,7 +407,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastModifiedByAutomationId
         {
             get { return (Nullable<Int64>)attributes["last_modified_by_automation_id"]; }
-            set { attributes["last_modified_by_automation_id"] = value; }
+            set { attributes["last_modified_by_automation_id"] = value; unsaved.Add("last_modified_by_automation_id"); }
         }
 
         /// <summary>
@@ -386,7 +417,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastModifiedByBundleRegistrationId
         {
             get { return (Nullable<Int64>)attributes["last_modified_by_bundle_registration_id"]; }
-            set { attributes["last_modified_by_bundle_registration_id"] = value; }
+            set { attributes["last_modified_by_bundle_registration_id"] = value; unsaved.Add("last_modified_by_bundle_registration_id"); }
         }
 
         /// <summary>
@@ -396,7 +427,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastModifiedByRemoteServerId
         {
             get { return (Nullable<Int64>)attributes["last_modified_by_remote_server_id"]; }
-            set { attributes["last_modified_by_remote_server_id"] = value; }
+            set { attributes["last_modified_by_remote_server_id"] = value; unsaved.Add("last_modified_by_remote_server_id"); }
         }
 
         /// <summary>
@@ -406,7 +437,7 @@ namespace FilesCom.Models
         public Nullable<Int64> LastModifiedBySyncId
         {
             get { return (Nullable<Int64>)attributes["last_modified_by_sync_id"]; }
-            set { attributes["last_modified_by_sync_id"] = value; }
+            set { attributes["last_modified_by_sync_id"] = value; unsaved.Add("last_modified_by_sync_id"); }
         }
 
         /// <summary>
@@ -416,17 +447,17 @@ namespace FilesCom.Models
         public Nullable<DateTime> Mtime
         {
             get { return (Nullable<DateTime>)attributes["mtime"]; }
-            set { attributes["mtime"] = value; }
+            set { attributes["mtime"] = value; unsaved.Add("mtime"); }
         }
 
         /// <summary>
-        /// File last modified date/time, according to the client who set it.  Files.com allows desktop, FTP, SFTP, and WebDAV clients to set modified at times.  This allows Desktop<->Cloud syncing to preserve modified at times.
+        /// File last modified date/time, according to the client who set it.  Files.com allows desktop, FTP, SFTP, and WebDAV clients to set modified at times.  This allows Desktop&lt;-&gt;Cloud syncing to preserve modified at times.
         /// </summary>
         [JsonPropertyName("provided_mtime")]
         public Nullable<DateTime> ProvidedMtime
         {
             get { return (Nullable<DateTime>)attributes["provided_mtime"]; }
-            set { attributes["provided_mtime"] = value; }
+            set { attributes["provided_mtime"] = value; unsaved.Add("provided_mtime"); }
         }
 
         /// <summary>
@@ -436,7 +467,7 @@ namespace FilesCom.Models
         public string Crc32
         {
             get { return (string)attributes["crc32"]; }
-            set { attributes["crc32"] = value; }
+            set { attributes["crc32"] = value; unsaved.Add("crc32"); }
         }
 
         /// <summary>
@@ -446,7 +477,7 @@ namespace FilesCom.Models
         public string Md5
         {
             get { return (string)attributes["md5"]; }
-            set { attributes["md5"] = value; }
+            set { attributes["md5"] = value; unsaved.Add("md5"); }
         }
 
         /// <summary>
@@ -456,7 +487,7 @@ namespace FilesCom.Models
         public string Sha1
         {
             get { return (string)attributes["sha1"]; }
-            set { attributes["sha1"] = value; }
+            set { attributes["sha1"] = value; unsaved.Add("sha1"); }
         }
 
         /// <summary>
@@ -466,7 +497,7 @@ namespace FilesCom.Models
         public string Sha256
         {
             get { return (string)attributes["sha256"]; }
-            set { attributes["sha256"] = value; }
+            set { attributes["sha256"] = value; unsaved.Add("sha256"); }
         }
 
         /// <summary>
@@ -476,7 +507,7 @@ namespace FilesCom.Models
         public string MimeType
         {
             get { return (string)attributes["mime_type"]; }
-            set { attributes["mime_type"] = value; }
+            set { attributes["mime_type"] = value; unsaved.Add("mime_type"); }
         }
 
         /// <summary>
@@ -486,7 +517,7 @@ namespace FilesCom.Models
         public string Region
         {
             get { return (string)attributes["region"]; }
-            set { attributes["region"] = value; }
+            set { attributes["region"] = value; unsaved.Add("region"); }
         }
 
         /// <summary>
@@ -496,7 +527,7 @@ namespace FilesCom.Models
         public string Permissions
         {
             get { return (string)attributes["permissions"]; }
-            set { attributes["permissions"] = value; }
+            set { attributes["permissions"] = value; unsaved.Add("permissions"); }
         }
 
         /// <summary>
@@ -507,7 +538,7 @@ namespace FilesCom.Models
         public bool SubfoldersLocked
         {
             get { return attributes["subfolders_locked?"] == null ? false : (bool)attributes["subfolders_locked?"]; }
-            set { attributes["subfolders_locked?"] = value; }
+            set { attributes["subfolders_locked?"] = value; unsaved.Add("subfolders_locked?"); }
         }
 
         /// <summary>
@@ -518,7 +549,7 @@ namespace FilesCom.Models
         public bool IsLocked
         {
             get { return attributes["is_locked"] == null ? false : (bool)attributes["is_locked"]; }
-            set { attributes["is_locked"] = value; }
+            set { attributes["is_locked"] = value; unsaved.Add("is_locked"); }
         }
 
         /// <summary>
@@ -528,7 +559,7 @@ namespace FilesCom.Models
         public string DownloadUri
         {
             get { return (string)attributes["download_uri"]; }
-            set { attributes["download_uri"] = value; }
+            set { attributes["download_uri"] = value; unsaved.Add("download_uri"); }
         }
 
         /// <summary>
@@ -538,7 +569,7 @@ namespace FilesCom.Models
         public DirectConnectionInfo DirectConnectionInfo
         {
             get { return (DirectConnectionInfo)attributes["direct_connection_info"]; }
-            set { attributes["direct_connection_info"] = value; }
+            set { attributes["direct_connection_info"] = value; unsaved.Add("direct_connection_info"); }
         }
 
         /// <summary>
@@ -548,7 +579,7 @@ namespace FilesCom.Models
         public string PriorityColor
         {
             get { return (string)attributes["priority_color"]; }
-            set { attributes["priority_color"] = value; }
+            set { attributes["priority_color"] = value; unsaved.Add("priority_color"); }
         }
 
         /// <summary>
@@ -558,7 +589,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PreviewId
         {
             get { return (Nullable<Int64>)attributes["preview_id"]; }
-            set { attributes["preview_id"] = value; }
+            set { attributes["preview_id"] = value; unsaved.Add("preview_id"); }
         }
 
         /// <summary>
@@ -568,7 +599,7 @@ namespace FilesCom.Models
         public Preview Preview
         {
             get { return (Preview)attributes["preview"]; }
-            set { attributes["preview"] = value; }
+            set { attributes["preview"] = value; unsaved.Add("preview"); }
         }
 
         /// <summary>
@@ -579,19 +610,68 @@ namespace FilesCom.Models
         public bool MkdirParents
         {
             get { return attributes["mkdir_parents"] == null ? false : (bool)attributes["mkdir_parents"]; }
-            set { attributes["mkdir_parents"] = value; }
+            set { attributes["mkdir_parents"] = value; unsaved.Add("mkdir_parents"); }
         }
 
 
+        private static readonly string[] CreateParameterNames = { "path", "mkdir_parents", "provided_mtime" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this Folder on Files.com.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            var newObj = await Folder.CreateCore(new OperationContext(FilesClient.Bind(ref client)), Path, this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-            this.attributes = newObj.getAttributes();
+            RemoteFile created = await Folder.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), Path, AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
+            {
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = ToParameter(name, attributes[name]);
+                }
+            }
+            return toSave;
+        }
+
+        // The value SaveAsync sends for an attribute whose property type is not the one its parameter takes.
+        private static object ToParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case "provided_mtime":
+                    return ParameterValue.FromDateTime(value);
+                default:
+                    return value;
+            }
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
@@ -609,6 +689,9 @@ namespace FilesCom.Models
         ///   type - string - Type of objects to return.  Can be `folder` or `file`.
         ///   modified_at_datetime - string - If provided, will only return files/folders modified after this time. Can be used only in combination with `type` filter.
         /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<RemoteFile> ListFor(
             string path,
             Dictionary<string, object> parameters = null,
@@ -627,6 +710,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -636,57 +720,57 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("preview_size") && !(parameters["preview_size"] is string))
+            if (parameters.TryGetValue("preview_size", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: preview_size must be of type string", "parameters[\"preview_size\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: preview_size is null, which cannot be sent" : "Bad parameter: preview_size must be of type string", "preview_size");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("search") && !(parameters["search"] is string))
+            if (parameters.TryGetValue("search", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: search must be of type string", "parameters[\"search\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: search is null, which cannot be sent" : "Bad parameter: search must be of type string", "search");
             }
-            if (parameters.ContainsKey("search_custom_metadata_key") && !(parameters["search_custom_metadata_key"] is string))
+            if (parameters.TryGetValue("search_custom_metadata_key", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: search_custom_metadata_key must be of type string", "parameters[\"search_custom_metadata_key\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: search_custom_metadata_key is null, which cannot be sent" : "Bad parameter: search_custom_metadata_key must be of type string", "search_custom_metadata_key");
             }
-            if (parameters.ContainsKey("search_all") && !(parameters["search_all"] is bool))
+            if (parameters.TryGetValue("search_all", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: search_all must be of type bool", "parameters[\"search_all\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: search_all is null, which cannot be sent" : "Bad parameter: search_all must be of type bool", "search_all");
             }
-            if (parameters.ContainsKey("with_previews") && !(parameters["with_previews"] is bool))
+            if (parameters.TryGetValue("with_previews", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: with_previews must be of type bool", "parameters[\"with_previews\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: with_previews is null, which cannot be sent" : "Bad parameter: with_previews must be of type bool", "with_previews");
             }
-            if (parameters.ContainsKey("with_priority_color") && !(parameters["with_priority_color"] is bool))
+            if (parameters.TryGetValue("with_priority_color", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: with_priority_color must be of type bool", "parameters[\"with_priority_color\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: with_priority_color is null, which cannot be sent" : "Bad parameter: with_priority_color must be of type bool", "with_priority_color");
             }
-            if (parameters.ContainsKey("type") && !(parameters["type"] is string))
+            if (parameters.TryGetValue("type", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: type must be of type string", "parameters[\"type\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: type is null, which cannot be sent" : "Bad parameter: type must be of type string", "type");
             }
-            if (parameters.ContainsKey("modified_at_datetime") && !(parameters["modified_at_datetime"] is string))
+            if (parameters.TryGetValue("modified_at_datetime", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: modified_at_datetime must be of type string", "parameters[\"modified_at_datetime\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: modified_at_datetime is null, which cannot be sent" : "Bad parameter: modified_at_datetime must be of type string", "modified_at_datetime");
             }
 
             return new FilesList<RemoteFile>(client, $"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -698,6 +782,9 @@ namespace FilesCom.Models
         ///   mkdir_parents - boolean - Create parent directories if they do not exist?
         ///   provided_mtime - string - User provided modification time.
         /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<RemoteFile> Create(
             string path,
             Dictionary<string, object> parameters = null,
@@ -717,6 +804,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("path"))
             {
@@ -726,33 +814,26 @@ namespace FilesCom.Models
             {
                 parameters.Add("path", path);
             }
-            if (!parameters.ContainsKey("path") || parameters["path"] == null)
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: path", "parameters[\"path\"]");
+                throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (parameters.ContainsKey("path") && !(parameters["path"] is string))
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: path must be of type string", "parameters[\"path\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.ContainsKey("mkdir_parents") && !(parameters["mkdir_parents"] is bool))
+            if (parameters.TryGetValue("mkdir_parents", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: mkdir_parents must be of type bool", "parameters[\"mkdir_parents\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: mkdir_parents is null, which cannot be sent" : "Bad parameter: mkdir_parents must be of type bool", "mkdir_parents");
             }
-            if (parameters.ContainsKey("provided_mtime") && !(parameters["provided_mtime"] is string))
+            if (parameters.TryGetValue("provided_mtime", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: provided_mtime must be of type string", "parameters[\"provided_mtime\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: provided_mtime is null, which cannot be sent" : "Bad parameter: provided_mtime must be of type string", "provided_mtime");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<RemoteFile>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<RemoteFile>(responseJson, context, options);
         }
 
     }

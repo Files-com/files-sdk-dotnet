@@ -79,7 +79,7 @@
 ## List Automation Runs
 
 ```
-Task<FilesList<AutomationRun>> AutomationRun.List(
+FilesList<AutomationRun> AutomationRun.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -225,12 +225,11 @@ Task<AutomationRun> client.AutomationRuns.RerunAsync(
 ## Cancel Automation Run
 
 ```
-var AutomationRun = AutomationRun.Find(1);
+var automationRun = await AutomationRun.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-AutomationRun.Cancel
+await automationRun.Cancel(parameters);
 ```
 
 `CancelAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -245,13 +244,13 @@ AutomationRun.Cancel
 ## Re-run Automation from Node
 
 ```
-var AutomationRun = AutomationRun.Find(1);
+var automationRun = await AutomationRun.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("node_id", "node_id");
 
-AutomationRun.Rerun(parameters);
+await automationRun.Rerun(parameters);
 ```
 
 `RerunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.

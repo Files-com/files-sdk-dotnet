@@ -34,7 +34,7 @@
 ## List Email Logs
 
 ```
-Task<FilesList<EmailLog>> EmailLog.List(
+FilesList<EmailLog> EmailLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

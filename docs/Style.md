@@ -20,7 +20,7 @@
 * `logo` / `Logo`  (Image): Logo
 * `logo_click_href` / `LogoClickHref`  (string): URL to open when a public visitor clicks the logo
 * `thumbnail` / `Thumbnail`  (Image): Logo thumbnail
-* `file` / `File`  (System.Net.Http.ByteArrayContent): Logo for custom branding. Required when creating a new style.
+* `file` / `File`  (FileAttachment): Logo for custom branding. Required when creating a new style.
 
 
 ---
@@ -77,7 +77,7 @@ Task<Style> client.Styles.UpdateAsync(
 ### Parameters
 
 * `path` (string): Required - Style path.
-* `file` (System.Net.Http.ByteArrayContent): Logo for custom branding. Required when creating a new style.
+* `file` (FileAttachment): Logo for custom branding. Required when creating a new style.
 * `logo_click_href` (string): URL to open when a public visitor clicks the logo.
 
 
@@ -114,21 +114,22 @@ Task client.Styles.DeleteAsync(
 ## Update Style
 
 ```
-var Style = Style.Find(1);
+var style = await Style.Find("example");
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("logo_click_href", "https://www.example.com");
 
-Style.Update(parameters);
+await style.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Style` it returns is a separate object with those attributes.
 
 ### Parameters
 
 * `path` (string): Required - Style path.
-* `file` (System.Net.Http.ByteArrayContent): Logo for custom branding. Required when creating a new style.
+* `file` (FileAttachment): Logo for custom branding. Required when creating a new style.
 * `logo_click_href` (string): URL to open when a public visitor clicks the logo.
 
 
@@ -137,12 +138,11 @@ Style.Update(parameters);
 ## Delete Style
 
 ```
-var Style = Style.Find(1);
+var style = await Style.Find("example");
 
 var parameters = new Dictionary<string, object>();
 
-
-Style.Delete
+await style.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -150,3 +150,14 @@ Style.Delete
 ### Parameters
 
 * `path` (string): Required - Style path.
+
+
+---
+
+## Save
+
+```
+await style.SaveAsync(cancellationToken);
+```
+
+Updates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

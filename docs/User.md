@@ -187,7 +187,7 @@
 * `user_home` / `UserHome`  (string): Home folder for FTP/SFTP. For users with the partner_root filesystem layout, this path is relative to the Partner root folder. In all other cases, it is an absolute path. Only applies to FTP and SFTP, and not any other interface.
 * `days_remaining_until_password_expire` / `DaysRemainingUntilPasswordExpire`  (Nullable<Int64>): Number of days remaining until password expires
 * `password_expire_at` / `PasswordExpireAt`  (Nullable<DateTime>): Password expiration datetime
-* `avatar_file` / `AvatarFile`  (System.Net.Http.ByteArrayContent): An image file for your user avatar.
+* `avatar_file` / `AvatarFile`  (FileAttachment): An image file for your user avatar.
 * `avatar_delete` / `AvatarDelete`  (bool): If true, the avatar will be deleted.
 * `change_password` / `ChangePassword`  (string): Used for changing a password on an existing user.
 * `change_password_confirmation` / `ChangePasswordConfirmation`  (string): Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
@@ -206,7 +206,7 @@
 ## List Users
 
 ```
-Task<FilesList<User>> User.List(
+FilesList<User> User.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -292,7 +292,7 @@ Task<User> client.Users.CreateAsync(
 
 ### Parameters
 
-* `avatar_file` (System.Net.Http.ByteArrayContent): An image file for your user avatar.
+* `avatar_file` (FileAttachment): An image file for your user avatar.
 * `avatar_delete` (bool): If true, the avatar will be deleted.
 * `change_password` (string): Used for changing a password on an existing user.
 * `change_password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
@@ -473,7 +473,7 @@ Task<User> client.Users.UpdateAsync(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User ID.
-* `avatar_file` (System.Net.Http.ByteArrayContent): An image file for your user avatar.
+* `avatar_file` (FileAttachment): An image file for your user avatar.
 * `avatar_delete` (bool): If true, the avatar will be deleted.
 * `change_password` (string): Used for changing a password on an existing user.
 * `change_password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
@@ -580,12 +580,11 @@ Task client.Users.DeleteAsync(
 ## Unlock user who has been locked out due to failed logins
 
 ```
-var User = User.Find(1);
+var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-User.Unlock
+await user.Unlock(parameters);
 ```
 
 `UnlockAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -600,12 +599,11 @@ User.Unlock
 ## Resend user welcome email
 
 ```
-var User = User.Find(1);
+var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-User.ResendWelcomeEmail
+await user.ResendWelcomeEmail(parameters);
 ```
 
 `ResendWelcomeEmailAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -620,12 +618,11 @@ User.ResendWelcomeEmail
 ## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
-var User = User.Find(1);
+var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-User.User2faReset
+await user.User2faReset(parameters);
 ```
 
 `User2faResetAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -640,16 +637,16 @@ User.User2faReset
 ## Update User
 
 ```
-var User = User.Find(1);
+var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("avatar_delete", false);
 parameters.Add("email", "john.doe@files.com");
-parameters.Add("group_id", 1);
+parameters.Add("group_id", 1L);
 parameters.Add("group_ids", "example");
 parameters.Add("announcements_read", false);
-parameters.Add("ai_assistant_personality_id", 1);
+parameters.Add("ai_assistant_personality_id", 1L);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("attachments_permission", true);
 parameters.Add("authenticate_until", "2000-01-01T01:00:00Z");
@@ -658,23 +655,23 @@ parameters.Add("billing_permission", false);
 parameters.Add("bypass_user_lifecycle_rules", false);
 parameters.Add("bypass_site_allowed_ips", false);
 parameters.Add("dav_permission", true);
-parameters.Add("desktop_configuration_profile_id", 1);
-parameters.Add("default_workspace_id", 1);
+parameters.Add("desktop_configuration_profile_id", 1L);
+parameters.Add("default_workspace_id", 1L);
 parameters.Add("disabled", true);
 parameters.Add("filesystem_layout", "site_root");
 parameters.Add("ftp_permission", true);
 parameters.Add("header_text", "User-specific message.");
-parameters.Add("integration_centric_profile_id", 1);
+parameters.Add("integration_centric_profile_id", 1L);
 parameters.Add("language", "en");
-parameters.Add("notification_daily_send_time", 18);
+parameters.Add("notification_daily_send_time", 18L);
 parameters.Add("name", "John Doe");
 parameters.Add("company", "ACME Corp.");
 parameters.Add("notes", "Internal notes on this user.");
 parameters.Add("office_integration_enabled", true);
 parameters.Add("partner_admin", true);
-parameters.Add("partner_id", 1);
-parameters.Add("password_validity_days", 1);
-parameters.Add("primary_group_id", 1);
+parameters.Add("partner_id", 1L);
+parameters.Add("password_validity_days", 1L);
+parameters.Add("primary_group_id", 1L);
 parameters.Add("readonly_site_admin", true);
 parameters.Add("receive_admin_alerts", true);
 parameters.Add("notify_on_all_site_warnings", true);
@@ -687,8 +684,8 @@ parameters.Add("notify_on_all_automation_failures", true);
 parameters.Add("notify_on_all_expectation_failures", true);
 parameters.Add("require_login_by", "2000-01-01T01:00:00Z");
 parameters.Add("require_password_change", true);
-parameters.Add("responsible_group_id", 1);
-parameters.Add("responsible_user_id", 1);
+parameters.Add("responsible_group_id", 1L);
+parameters.Add("responsible_user_id", 1L);
 parameters.Add("restapi_permission", true);
 parameters.Add("s3_compatible_endpoint_permission", true);
 parameters.Add("self_managed", true);
@@ -696,7 +693,7 @@ parameters.Add("sftp_permission", true);
 parameters.Add("site_admin", true);
 parameters.Add("skip_welcome_screen", true);
 parameters.Add("ssl_required", "always_require");
-parameters.Add("sso_strategy_id", 1);
+parameters.Add("sso_strategy_id", 1L);
 parameters.Add("subscribe_to_newsletter", true);
 parameters.Add("require_2fa", "always_require");
 parameters.Add("tags", "example");
@@ -705,19 +702,20 @@ parameters.Add("user_root", "example");
 parameters.Add("user_home", "example");
 parameters.Add("workspace_admin", true);
 parameters.Add("username", "user");
-parameters.Add("workspace_id", 1);
+parameters.Add("workspace_id", 1L);
 parameters.Add("clear_2fa", false);
 parameters.Add("convert_to_partner_user", false);
 
-User.Update(parameters);
+await user.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `User` it returns is a separate object with those attributes.
 
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User ID.
-* `avatar_file` (System.Net.Http.ByteArrayContent): An image file for your user avatar.
+* `avatar_file` (FileAttachment): An image file for your user avatar.
 * `avatar_delete` (bool): If true, the avatar will be deleted.
 * `change_password` (string): Used for changing a password on an existing user.
 * `change_password_confirmation` (string): Optional, but if provided, we will ensure that it matches the value sent in `change_password`.
@@ -795,13 +793,13 @@ User.Update(parameters);
 ## Delete User
 
 ```
-var User = User.Find(1);
+var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("new_owner_id", 1);
+parameters.Add("new_owner_id", 1L);
 
-User.Delete(parameters);
+await user.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -810,3 +808,14 @@ User.Delete(parameters);
 
 * `id` (Nullable<Int64>): Required - User ID.
 * `new_owner_id` (Nullable<Int64>): Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
+
+
+---
+
+## Save
+
+```
+await user.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

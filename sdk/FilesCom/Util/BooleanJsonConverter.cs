@@ -6,20 +6,27 @@ namespace FilesCom.Util
 {
     public class BooleanJsonConverter : JsonConverter<bool>
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(BooleanJsonConverter));
+        private static readonly SdkLog log = SdkLog.For(typeof(BooleanJsonConverter));
+        /// <inheritdoc/>
         public override bool Read(ref Utf8JsonReader reader,
             Type typeToConvert,
             JsonSerializerOptions options)
         {
 
+            // A value that is not a boolean is a JsonException, so that it is reported as an invalid response like any
+            // other. Its message leaves the value out, as it could be anything, even a secret.
             if (reader.TokenType == JsonTokenType.String)
             {
-                return Convert.ToBoolean(reader.GetString() ?? String.Empty);
+                // "true" or "false", in any case and with surrounding white space, as Convert.ToBoolean has always read.
+                if (bool.TryParse(reader.GetString(), out bool value))
+                {
+                    return value;
+                }
+                throw new JsonException("The string is not a boolean.");
             }
             else if (reader.TokenType == JsonTokenType.Number)
             {
-                var stringValue = reader.GetDouble();
-                return Convert.ToBoolean(stringValue.ToString());
+                throw new JsonException("A number is not a boolean.");
             }
             else if (reader.TokenType == JsonTokenType.False ||
                 reader.TokenType == JsonTokenType.True)
@@ -47,6 +54,7 @@ namespace FilesCom.Util
             }
         }
 
+        /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options)
         {
             writer.WriteBooleanValue(value);

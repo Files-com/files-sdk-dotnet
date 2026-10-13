@@ -24,7 +24,7 @@
 ## List User Requests
 
 ```
-Task<FilesList<UserRequest>> UserRequest.List(
+FilesList<UserRequest> UserRequest.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -139,12 +139,11 @@ Task client.UserRequests.DeleteAsync(
 ## Delete User Request
 
 ```
-var UserRequest = UserRequest.Find(1);
+var userRequest = await UserRequest.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-UserRequest.Delete
+await userRequest.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -152,3 +151,14 @@ UserRequest.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - User Request ID.
+
+
+---
+
+## Save
+
+```
+await userRequest.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

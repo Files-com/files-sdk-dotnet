@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <!-- Runs on a newer .NET runtime, such as the one the repository's pinned SDK installs, when no .NET 8 runtime is present. -->
+    <RollForward>Major</RollForward>
+    <RootNamespace>TransferUploads</RootNamespace>
+    <!-- The newest FilesCom release. Set FilesComVersion to build against another, such as a local package. -->
+    <FilesComVersion Condition="'$(FilesComVersion)' == ''">*</FilesComVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FilesCom" Version="$(FilesComVersion)" />
+  </ItemGroup>
+</Project>

@@ -120,7 +120,7 @@
 ## List SSO Strategies
 
 ```
-Task<FilesList<SsoStrategy>> SsoStrategy.List(
+FilesList<SsoStrategy> SsoStrategy.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -205,12 +205,11 @@ Task client.SsoStrategies.SyncAsync(
 ## Synchronize provisioning data with the SSO remote server
 
 ```
-var SsoStrategy = SsoStrategy.Find(1);
+var ssoStrategy = await SsoStrategy.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-SsoStrategy.Sync
+await ssoStrategy.Sync(parameters);
 ```
 
 `SyncAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.

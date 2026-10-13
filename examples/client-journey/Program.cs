@@ -21,9 +21,23 @@ namespace ClientJourney
     {
         private static async Task<int> Main(string[] args)
         {
-            if (args.Length < 1)
+            if (args.Length < 1 || args.Length > 2)
             {
                 Console.Error.WriteLine("Usage: client-journey <base-url> [time-limit-seconds]");
+                return 2;
+            }
+            if (!Uri.TryCreate(args[0], UriKind.Absolute, out Uri baseUrl) ||
+                (baseUrl.Scheme != Uri.UriSchemeHttps && baseUrl.Scheme != Uri.UriSchemeHttp))
+            {
+                Console.Error.WriteLine("The base URL must be an absolute HTTP or HTTPS URL.");
+                return 2;
+            }
+            double seconds = 300;
+            // CancellationTokenSource uses a timer whose largest finite delay is UInt32.MaxValue - 1 milliseconds.
+            if (args.Length > 1 && (!double.TryParse(args[1], NumberStyles.Float, CultureInfo.InvariantCulture, out seconds) ||
+                !double.IsFinite(seconds) || seconds < 0 || seconds > (uint.MaxValue - 1) / 1000d))
+            {
+                Console.Error.WriteLine("The time limit must be a finite, nonnegative number of seconds within the timer's range (about 49 days).");
                 return 2;
             }
             string apiKey = Environment.GetEnvironmentVariable("FILES_API_KEY");
@@ -34,7 +48,7 @@ namespace ClientJourney
                 Console.Error.WriteLine("Set FILES_API_KEY, or both FILES_USERNAME and FILES_PASSWORD, to sign in.");
                 return 2;
             }
-            TimeSpan timeLimit = TimeSpan.FromSeconds(args.Length > 1 ? double.Parse(args[1], CultureInfo.InvariantCulture) : 300);
+            TimeSpan timeLimit = TimeSpan.FromSeconds(seconds);
 
             using (var cancellation = new CancellationTokenSource(timeLimit))
             {
@@ -45,7 +59,8 @@ namespace ClientJourney
                 };
                 try
                 {
-                    FilesClient client = await SignInAsync(args[0], apiKey, username, password, cancellation.Token);
+                    // Disposing the client when the journey ends closes its connections.
+                    await using FilesClient client = await SignInAsync(args[0], apiKey, username, password, cancellation.Token);
                     await RunAsync(client, cancellation.Token);
                     return 0;
                 }
@@ -74,14 +89,16 @@ namespace ClientJourney
             await client.RemoteFiles.UploadFileAsync(path, new MemoryStream(contents), contents.Length, DateTime.UtcNow, cancellationToken: cancellationToken);
             Console.WriteLine($"Uploaded {path}");
 
-            // Update it. An object from a client sends its own requests with that client.
+            // Update it. An object from a client sends its own requests with that client, and takes the attributes
+            // Files.com returns.
             RemoteFile file = await client.RemoteFiles.FindAsync(path, cancellationToken: cancellationToken);
             await file.UpdateAsync(new Dictionary<string, object> { { "priority_color", "blue" } }, cancellationToken);
-            Console.WriteLine($"Updated {file.Path}");
+            Console.WriteLine($"Updated {file.Path}: priority color {file.PriorityColor}");
 
-            // Page through the folder, one item per page to show paging. Each page comes from the same client.
+            // Page through the folder, one item per page to show paging. Each page is loaded from the same client
+            // when the loop reaches it.
             var onePerPage = new Dictionary<string, object> { { "per_page", 1L } };
-            foreach (RemoteFile entry in client.Folders.ListFor(folder, onePerPage).ListAutoPaging(cancellationToken))
+            await foreach (RemoteFile entry in client.Folders.ListFor(folder, onePerPage).ListAutoPagingAsync(cancellationToken))
             {
                 Console.WriteLine($"Listed {entry.Path}");
             }
@@ -111,8 +128,8 @@ namespace ClientJourney
                 return FilesClient.Create(new FilesConfiguration { BaseUrl = baseUrl, ApiKey = apiKey });
             }
 
-            // Signing in needs no credentials, so this client has none of its own.
-            FilesClient site = FilesClient.Create(new FilesConfiguration { BaseUrl = baseUrl });
+            // Signing in needs no credentials, so this client has none of its own. It is only needed to sign in.
+            await using FilesClient site = FilesClient.Create(new FilesConfiguration { BaseUrl = baseUrl });
             var login = new Dictionary<string, object>
             {
                 { "username", username },

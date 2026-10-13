@@ -69,7 +69,7 @@
 ## List Scheduled Exports
 
 ```
-Task<FilesList<ScheduledExport>> ScheduledExport.List(
+FilesList<ScheduledExport> ScheduledExport.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -239,29 +239,30 @@ Task client.ScheduledExports.DeleteAsync(
 ## Update Scheduled Export
 
 ```
-var ScheduledExport = ScheduledExport.Find(1);
+var scheduledExport = await ScheduledExport.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Monthly access review");
 parameters.Add("export_type", "permission_audit");
-parameters.Add("export_options", {"group_by":"user"});
-parameters.Add("user_id", 1);
+parameters.Add("export_options", new Dictionary<string, object> { { "group_by", "user" } });
+parameters.Add("user_id", 1L);
 parameters.Add("disabled", true);
 parameters.Add("trigger", "daily");
 parameters.Add("interval", "month");
-parameters.Add("recurring_day", 1);
-parameters.Add("recurring_days", [1,15]);
-parameters.Add("schedule_id", 1);
-parameters.Add("schedule_days_of_week", [1,3,5]);
-parameters.Add("schedule_times_of_day", ["06:30"]);
+parameters.Add("recurring_day", 1L);
+parameters.Add("recurring_days", new Nullable<Int64>[] { 1, 15 });
+parameters.Add("schedule_id", 1L);
+parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 1, 3, 5 });
+parameters.Add("schedule_times_of_day", new string[] { "06:30" });
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("holiday_region", "us");
 
-ScheduledExport.Update(parameters);
+await scheduledExport.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `ScheduledExport` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -287,12 +288,11 @@ ScheduledExport.Update(parameters);
 ## Delete Scheduled Export
 
 ```
-var ScheduledExport = ScheduledExport.Find(1);
+var scheduledExport = await ScheduledExport.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-ScheduledExport.Delete
+await scheduledExport.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -300,3 +300,14 @@ ScheduledExport.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Scheduled Export ID.
+
+
+---
+
+## Save
+
+```
+await scheduledExport.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

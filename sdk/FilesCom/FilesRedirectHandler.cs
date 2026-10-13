@@ -1,3 +1,4 @@
+using FilesCom.Http;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -48,6 +49,9 @@ namespace FilesCom
                     {
                         redirectRequest.Headers.Remove(header);
                     }
+                    // Whatever answers from here on, even back at the first origin, did not receive the request from
+                    // the SDK alone, and cannot send an operation to another region.
+                    RequestMarks.Set(redirectRequest, RequestMarks.CrossedOrigins);
                 }
 
                 int statusCode = (int)response.StatusCode;
@@ -69,7 +73,7 @@ namespace FilesCom
             return response;
         }
 
-        private static HttpRequestMessage CloneRequest(HttpRequestMessage request)
+        internal static HttpRequestMessage CloneRequest(HttpRequestMessage request)
         {
             var clone = new HttpRequestMessage(request.Method, request.RequestUri)
             {
@@ -103,14 +107,14 @@ namespace FilesCom
             return code == 300 || code == 301 || code == 302 || code == 303 || code == 307 || code == 308;
         }
 
-        private static bool IsSameOrigin(Uri first, Uri second)
+        internal static bool IsSameOrigin(Uri first, Uri second)
         {
             return string.Equals(first.Scheme, second.Scheme, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(first.IdnHost, second.IdnHost, StringComparison.OrdinalIgnoreCase)
                 && first.Port == second.Port;
         }
 
-        private static Uri ResolveRedirectUri(Uri requestUri, Uri location)
+        internal static Uri ResolveRedirectUri(Uri requestUri, Uri location)
         {
             Uri redirectUri = location.IsAbsoluteUri ? location : new Uri(requestUri, location);
             if (string.IsNullOrEmpty(redirectUri.Fragment) && !string.IsNullOrEmpty(requestUri.Fragment))

@@ -175,7 +175,7 @@
 ## List Automations
 
 ```
-Task<FilesList<Automation>> Automation.List(
+FilesList<Automation> Automation.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -472,12 +472,11 @@ Task client.Automations.DeleteAsync(
 ## Upgrade a legacy Automation to Automation v2
 
 ```
-var Automation = Automation.Find(1);
+var automation = await Automation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Automation.Upgrade
+await automation.Upgrade(parameters);
 ```
 
 `UpgradeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -492,13 +491,13 @@ Automation.Upgrade
 ## Manually Run Automation
 
 ```
-var Automation = Automation.Find(1);
+var automation = await Automation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("items", [{"file":"incoming/report.csv"},{"data":{"customer":"Acme"}}]);
+parameters.Add("items", new object[] { new Dictionary<string, object> { { "file", "incoming/report.csv" } }, new Dictionary<string, object> { { "data", new Dictionary<string, object> { { "customer", "Acme" } } } } });
 
-Automation.ManualRun(parameters);
+await automation.ManualRun(parameters);
 ```
 
 `ManualRunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -514,50 +513,51 @@ Automation.ManualRun(parameters);
 ## Update Automation
 
 ```
-var Automation = Automation.Find(1);
+var automation = await Automation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("source", "example");
-parameters.Add("destinations", ["folder_a/file_a.txt","folder_b/","./relative-folder/"]);
+parameters.Add("destinations", new string[] { "folder_a/file_a.txt", "folder_b/", "./relative-folder/" });
 parameters.Add("destination_replace_from", "example");
 parameters.Add("destination_replace_to", "example");
 parameters.Add("interval", "year");
 parameters.Add("path", "example");
-parameters.Add("sync_ids", [1,2]);
-parameters.Add("user_ids", [1,2]);
-parameters.Add("group_ids", [1,2]);
-parameters.Add("schedule_id", 1);
-parameters.Add("schedule_days_of_week", [0,1,3]);
-parameters.Add("schedule_times_of_day", ["7:30","11:30"]);
+parameters.Add("sync_ids", new object[] { 1, 2 });
+parameters.Add("user_ids", new object[] { 1, 2 });
+parameters.Add("group_ids", new object[] { 1, 2 });
+parameters.Add("schedule_id", 1L);
+parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 0, 1, 3 });
+parameters.Add("schedule_times_of_day", new string[] { "7:30", "11:30" });
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("holiday_region", "us_dc");
 parameters.Add("always_overwrite_size_matching_files", true);
 parameters.Add("always_serialize_jobs", true);
 parameters.Add("description", "example");
-parameters.Add("definition", {"schema_version":1,"nodes":[{"id":"trigger","type":"trigger_manual"},{"id":"create_reports","type":"create_folder","config":{"destinations":["reports/"]}}],"edges":[{"from":"trigger","to":"create_reports"}]});
+parameters.Add("definition", new Dictionary<string, object> { { "schema_version", 1 }, { "nodes", new object[] { new Dictionary<string, object> { { "id", "trigger" }, { "type", "trigger_manual" } }, new Dictionary<string, object> { { "id", "create_reports" }, { "type", "create_folder" }, { "config", new Dictionary<string, object> { { "destinations", new object[] { "reports/" } } } } } } }, { "edges", new object[] { new Dictionary<string, object> { { "from", "trigger" }, { "to", "create_reports" } } } } });
 parameters.Add("disabled", true);
 parameters.Add("exclude_pattern", "path/to/exclude/*");
-parameters.Add("import_urls", [{"name":"users.json","url":"http://example.com/users","method":"POST","headers":{"Content-Type":"application/json"},"content":{"group":"support"}}]);
+parameters.Add("import_urls", new object[] { new Dictionary<string, object> { { "name", "users.json" }, { "url", "http://example.com/users" }, { "method", "POST" }, { "headers", new Dictionary<string, object> { { "Content-Type", "application/json" } } }, { "content", new Dictionary<string, object> { { "group", "support" } } } } });
 parameters.Add("flatten_destination_structure", true);
 parameters.Add("ignore_locked_folders", true);
 parameters.Add("legacy_folder_matching", false);
 parameters.Add("name", "example");
 parameters.Add("overwrite_files", true);
 parameters.Add("path_time_zone", "Eastern Time (US & Canada)");
-parameters.Add("retry_on_failure_interval_in_minutes", 60);
-parameters.Add("retry_on_failure_number_of_attempts", 10);
+parameters.Add("retry_on_failure_interval_in_minutes", 60L);
+parameters.Add("retry_on_failure_number_of_attempts", 10L);
 parameters.Add("trigger", "daily");
-parameters.Add("trigger_actions", ["create"]);
-parameters.Add("value", {"limit":"1"});
-parameters.Add("recurring_day", 25);
-parameters.Add("recurring_days", [1,15]);
+parameters.Add("trigger_actions", new string[] { "create" });
+parameters.Add("value", new Dictionary<string, object> { { "limit", "1" } });
+parameters.Add("recurring_day", 25L);
+parameters.Add("recurring_days", new Nullable<Int64>[] { 1, 15 });
 parameters.Add("automation", "create_folder");
 
-Automation.Update(parameters);
+await automation.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Automation` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -604,12 +604,11 @@ Automation.Update(parameters);
 ## Delete Automation
 
 ```
-var Automation = Automation.Find(1);
+var automation = await Automation.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Automation.Delete
+await automation.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -617,3 +616,14 @@ Automation.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Automation ID.
+
+
+---
+
+## Save
+
+```
+await automation.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

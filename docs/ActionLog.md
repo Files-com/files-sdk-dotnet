@@ -42,7 +42,7 @@
 ## List Action Logs
 
 ```
-Task<FilesList<ActionLog>> ActionLog.List(
+FilesList<ActionLog> ActionLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

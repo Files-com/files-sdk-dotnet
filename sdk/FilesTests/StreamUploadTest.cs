@@ -1,3 +1,5 @@
+using FilesCom;
+using FilesCom.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -6,11 +8,10 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using FilesCom;
-using FilesCom.Models;
 using WireMock;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
+using WireMock.Settings;
 using Request = WireMock.RequestBuilders.Request;
 
 namespace FilesTests
@@ -26,7 +27,8 @@ namespace FilesTests
         [TestInitialize]
         public void StartServer()
         {
-            server = WireMockServer.Start();
+            // On 127.0.0.1 only, as LoopbackSite listens, so no other socket on that port can take the requests.
+            server = WireMockServer.Start(new WireMockServerSettings { Urls = new[] { "http://127.0.0.1:0" } });
             server.Given(Request.Create().WithPath("/part").UsingPut())
                 .RespondWith(Response.Create().WithStatusCode(200));
             UseClient(maxNetworkRetries: 0);
@@ -72,7 +74,7 @@ namespace FilesTests
         {
             var stream = new ShortReadStream(Bytes(1, 5));
 
-            await Assert.ThrowsExceptionAsync<EndOfStreamException>(() =>
+            await Assert.ThrowsExactlyAsync<EndOfStreamException>(() =>
                 FilesClient.ChunkUpload(HttpMethod.Put, PartUrl, stream, 8));
 
             AssertRequests();
@@ -85,7 +87,7 @@ namespace FilesTests
             var readError = new IOException("The source disconnected.");
             var stream = new ShortReadStream(Bytes(1, 3), readError);
 
-            Exception error = await Assert.ThrowsExceptionAsync<IOException>(() =>
+            Exception error = await Assert.ThrowsExactlyAsync<IOException>(() =>
                 FilesClient.ChunkUpload(HttpMethod.Put, PartUrl, stream, 8));
 
             Assert.AreSame(readError, error);
@@ -99,7 +101,7 @@ namespace FilesTests
             {
                 var stream = new ShortReadStream(Bytes(1, 4));
 
-                await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() =>
+                await Assert.ThrowsExactlyAsync<InvalidParameterException>(() =>
                     FilesClient.ChunkUpload(HttpMethod.Put, PartUrl, stream, length));
 
                 Assert.AreEqual(Hex(Bytes(1, 4)), Hex(ReadToEnd(stream)), "Nothing is read from the stream.");
@@ -133,7 +135,7 @@ namespace FilesTests
             ServeUpload(partsize: 4);
             var stream = new ShortReadStream(Bytes(1, 6));
 
-            await Assert.ThrowsExceptionAsync<EndOfStreamException>(() =>
+            await Assert.ThrowsExactlyAsync<EndOfStreamException>(() =>
                 RemoteFile.UploadFile("remote.bin", stream, 10, MTime));
 
             AssertRequests("begin", "PUT " + Hex(Bytes(1, 4)), "begin");
@@ -149,6 +151,33 @@ namespace FilesTests
             AssertRequests("begin", "PUT " + Hex(new byte[0]), "end");
         }
 
+        [TestMethod]
+        public async Task UploadFileOfALocalPathWithoutARemotePathUploadsUnderTheLocalFileName()
+        {
+            ServeUpload(partsize: 8, remotePath: "*");
+
+            // The local path is joined with \ on Windows and / elsewhere; only the file's name is the remote path.
+            Assert.IsTrue(await UploadLocalFile("report.txt", Bytes(1, 6)));
+
+            AssertRequests("begin", "PUT " + Hex(Bytes(1, 6)), "end");
+            AssertRemotePaths("report.txt", "report.txt");
+        }
+
+        [TestMethod]
+        public async Task UploadFileOfALocalPathWithoutARemotePathKeepsABackslashInAUnixFileName()
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                Assert.Inconclusive("A backslash separates folders on Windows, so no file name there contains one.");
+                return;
+            }
+            ServeUpload(partsize: 8, remotePath: "*");
+
+            Assert.IsTrue(await UploadLocalFile(@"report\2026.txt", Bytes(1, 6)));
+
+            AssertRemotePaths(@"report\2026.txt", @"report\2026.txt");
+        }
+
         private void UseClient(int maxNetworkRetries)
         {
             new FilesClient(new FilesConfiguration
@@ -160,15 +189,51 @@ namespace FilesTests
             });
         }
 
-        private void ServeUpload(int partsize)
+        // Accepts an upload to remotePath, which may be a "*" wildcard, in parts of partsize bytes.
+        private void ServeUpload(int partsize, string remotePath = "remote.bin")
         {
-            server.Given(Request.Create().WithPath("/api/rest/v1/file_actions/begin_upload/remote.bin").UsingPost())
+            server.Given(Request.Create().WithPath("/api/rest/v1/file_actions/begin_upload/" + remotePath).UsingPost())
                 .RespondWith(Response.Create().WithStatusCode(200).WithBodyAsJson(new[]
                 {
                     new { upload_uri = PartUrl, http_method = "PUT", partsize, @ref = "upload-ref" },
                 }));
-            server.Given(Request.Create().WithPath("/api/rest/v1/files/remote.bin").UsingPost())
+            server.Given(Request.Create().WithPath("/api/rest/v1/files/" + remotePath).UsingPost())
                 .RespondWith(Response.Create().WithStatusCode(200).WithBodyAsJson(new { path = "remote.bin" }));
+        }
+
+        // Writes contents to a local file called name in a new temporary directory, and uploads it with the local-path
+        // UploadFile, giving no remote path.
+        private static async Task<bool> UploadLocalFile(string name, byte[] contents)
+        {
+            string directory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(directory);
+            try
+            {
+                string localPath = Path.Combine(directory, name);
+                File.WriteAllBytes(localPath, contents);
+                return await RemoteFile.UploadFile(localPath);
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        // The remote path each request that begins or finishes an upload names in its body, in order.
+        private void AssertRemotePaths(params string[] expected)
+        {
+            string[] received = server.LogEntries.Where(entry => entry.RequestMessage.Method == "POST")
+                .Select(entry => RemotePath(entry.RequestMessage)).ToArray();
+
+            Assert.AreEqual(string.Join(", ", expected), string.Join(", ", received));
+        }
+
+        private static string RemotePath(IRequestMessage request)
+        {
+            using (JsonDocument body = JsonDocument.Parse(request.Body))
+            {
+                return body.RootElement.GetProperty("path").GetString();
+            }
         }
 
         private void AssertRequests(params string[] expected)

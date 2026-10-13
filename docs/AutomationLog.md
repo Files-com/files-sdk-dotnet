@@ -46,7 +46,7 @@
 ## List Automation Logs
 
 ```
-Task<FilesList<AutomationLog>> AutomationLog.List(
+FilesList<AutomationLog> AutomationLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

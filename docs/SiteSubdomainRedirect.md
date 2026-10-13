@@ -22,7 +22,7 @@
 ## List Site Subdomain Redirects
 
 ```
-Task<FilesList<SiteSubdomainRedirect>> SiteSubdomainRedirect.List(
+FilesList<SiteSubdomainRedirect> SiteSubdomainRedirect.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -107,12 +107,11 @@ Task client.SiteSubdomainRedirects.DeleteAsync(
 ## Delete Site Subdomain Redirect
 
 ```
-var SiteSubdomainRedirect = SiteSubdomainRedirect.Find(1);
+var siteSubdomainRedirect = await SiteSubdomainRedirect.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-SiteSubdomainRedirect.Delete
+await siteSubdomainRedirect.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.

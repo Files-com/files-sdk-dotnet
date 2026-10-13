@@ -33,6 +33,12 @@ namespace FilesCom.Util
         private static string TWO_OR_MORE_SLASHES = @"(/){2,}";
 
 
+        /// <summary>
+        /// The Files.com path made of <paramref name="args"/>, in the form Files.com compares paths in: joined with /,
+        /// without empty, . or .. segments, with letters in lower case and other characters mapped as Files.com maps them.
+        /// </summary>
+        /// <param name="args">The paths or path segments to join, with / or \ between their segments.</param>
+        /// <returns>The path to compare.</returns>
         public static string normalize_for_comparison(params string[] args)
         {
             string path = normalize(args);
@@ -58,11 +64,24 @@ namespace FilesCom.Util
             return result.ToString();
         }
 
+        /// <summary>
+        /// Whether two Files.com paths name the same file or folder, as Files.com compares paths
+        /// (<see cref="normalize_for_comparison"/>).
+        /// </summary>
+        /// <param name="a">A path.</param>
+        /// <param name="b">The path to compare it with.</param>
+        /// <returns>True when Files.com takes them for the same path.</returns>
         public static bool same(string a, string b)
         {
             return normalize_for_comparison(a).Equals(normalize_for_comparison(b));
         }
 
+        /// <summary>
+        /// A path segment as Files.com takes it: without NUL characters, with \ as /, without leading, trailing or
+        /// repeated slashes, and empty when it is . or ..
+        /// </summary>
+        /// <param name="str">The segment to clean.</param>
+        /// <returns>The cleaned segment.</returns>
         public static string cleanpath(string str)
         {
             string newStr = str;

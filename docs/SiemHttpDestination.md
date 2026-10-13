@@ -133,7 +133,7 @@
 ## List SIEM HTTP Destinations
 
 ```
-Task<FilesList<SiemHttpDestination>> SiemHttpDestination.List(
+FilesList<SiemHttpDestination> SiemHttpDestination.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -399,17 +399,17 @@ Task client.SiemHttpDestinations.DeleteAsync(
 ## Update SIEM HTTP Destination
 
 ```
-var SiemHttpDestination = SiemHttpDestination.Find(1);
+var siemHttpDestination = await SiemHttpDestination.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "example");
-parameters.Add("additional_headers", {"Authorization":"Bearer YOUR_TOKEN"});
+parameters.Add("additional_headers", new Dictionary<string, object> { { "Authorization", "Bearer YOUR_TOKEN" } });
 parameters.Add("sending_active", true);
 parameters.Add("generic_payload_type", "example");
 parameters.Add("file_destination_path", "example");
 parameters.Add("file_format", "example");
-parameters.Add("file_interval_minutes", 1);
+parameters.Add("file_interval_minutes", 1L);
 parameters.Add("azure_dcr_immutable_id", "example");
 parameters.Add("azure_stream_name", "example");
 parameters.Add("azure_oauth_client_credentials_tenant_id", "example");
@@ -430,10 +430,11 @@ parameters.Add("settings_change_send_enabled", true);
 parameters.Add("destination_type", "example");
 parameters.Add("destination_url", "example");
 
-SiemHttpDestination.Update(parameters);
+await siemHttpDestination.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `SiemHttpDestination` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -478,12 +479,11 @@ SiemHttpDestination.Update(parameters);
 ## Delete SIEM HTTP Destination
 
 ```
-var SiemHttpDestination = SiemHttpDestination.Find(1);
+var siemHttpDestination = await SiemHttpDestination.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-SiemHttpDestination.Delete
+await siemHttpDestination.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -491,3 +491,14 @@ SiemHttpDestination.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Siem Http Destination ID.
+
+
+---
+
+## Save
+
+```
+await siemHttpDestination.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

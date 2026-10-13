@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net6.0;net5.0;netcoreapp3.1;netcoreapp3.0;netcoreapp2.2;netcoreapp2.1;netstandard2.1;netstandard2.0</TargetFrameworks>
-    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <!-- netstandard2.0 is the asset .NET Framework 4.8 and 4.8.1 applications use. -->
+    <TargetFrameworks>net10.0;net8.0;netstandard2.0</TargetFrameworks>
     <PackageId>FilesCom</PackageId>
-    <Version>1.4.706</Version>
+    <Version>2.0.0</Version>
     <Authors>Files.com - support@files.com - https://www.files.com/</Authors>
     <Title>Files.com Client</Title>
     <Description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</Description>
@@ -16,17 +16,42 @@
       Files.com releases contain API improvements, bugfixes, and more.
     </PackageReleaseNotes>
     <PackageTags>Files Files.com FTP SFTP SCP WebDAV</PackageTags>
+    <!-- Ships FilesCom.xml beside each assembly, so editors show the documentation of installed packages. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Some public types and members, such as the generated model classes, have no documentation comment yet. Malformed comments still warn. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <!--
+    The package is built with -c Production (build.sh, and the release job's pack), a configuration only this project
+    names: optimized, as Release is, with its own PRODUCTION constant.
+  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Production'">
+    <Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.10" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.3" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
-    <PackageReference Include="Polly" Version="7.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.5" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="log4net" Version="3.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.12" />
+    <!-- The retry strategy the SDK configures itself for every request it retries (Http/RetryPolicy.cs). -->
+    <PackageReference Include="Polly.Core" Version="8.8.0" />
+    <!-- Each client's own IHttpClientFactory and the service provider it lives in (Http/ClientTransport.cs). -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+  </ItemGroup>
+  <!-- .NET 10 includes this System.Text.Json version in its shared framework. -->
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="System.Text.Json" Version="10.0.12" />
+  </ItemGroup>
+  <!--
+    FilesList.ListAutoPagingAsync returns IAsyncEnumerable, and FilesClient implements IAsyncDisposable, which .NET
+    Standard 2.0 lacks. This package supplies them, and the async iterator support C# 8 needs, to that build and to
+    the .NET Framework applications that use it. .NET 8 and 10 include them.
+  -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.12" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Util/path_comparison.json" LogicalName="FilesCom.Util.path_comparison.json" />

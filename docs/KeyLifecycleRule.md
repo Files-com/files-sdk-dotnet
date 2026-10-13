@@ -28,7 +28,7 @@
 ## List Key Lifecycle Rules
 
 ```
-Task<FilesList<KeyLifecycleRule>> KeyLifecycleRule.List(
+FilesList<KeyLifecycleRule> KeyLifecycleRule.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -181,21 +181,22 @@ Task client.KeyLifecycleRules.DeleteAsync(
 ## Update Key Lifecycle Rule
 
 ```
-var KeyLifecycleRule = KeyLifecycleRule.Find(1);
+var keyLifecycleRule = await KeyLifecycleRule.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("apply_to_all_workspaces", true);
-parameters.Add("expiration_days", 365);
+parameters.Add("expiration_days", 365L);
 parameters.Add("key_type", "gpg");
-parameters.Add("inactivity_days", 12);
+parameters.Add("inactivity_days", 12L);
 parameters.Add("name", "inactive gpg keys");
-parameters.Add("workspace_id", 12);
+parameters.Add("workspace_id", 12L);
 
-KeyLifecycleRule.Update(parameters);
+await keyLifecycleRule.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `KeyLifecycleRule` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -213,12 +214,11 @@ KeyLifecycleRule.Update(parameters);
 ## Delete Key Lifecycle Rule
 
 ```
-var KeyLifecycleRule = KeyLifecycleRule.Find(1);
+var keyLifecycleRule = await KeyLifecycleRule.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-KeyLifecycleRule.Delete
+await keyLifecycleRule.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -226,3 +226,14 @@ KeyLifecycleRule.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Key Lifecycle Rule ID.
+
+
+---
+
+## Save
+
+```
+await keyLifecycleRule.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

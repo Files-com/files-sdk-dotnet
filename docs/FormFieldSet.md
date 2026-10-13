@@ -54,7 +54,7 @@
 ## List Form Field Sets
 
 ```
-Task<FilesList<FormFieldSet>> FormFieldSet.List(
+FilesList<FormFieldSet> FormFieldSet.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -209,22 +209,23 @@ Task client.FormFieldSets.DeleteAsync(
 ## Update Form Field Set
 
 ```
-var FormFieldSet = FormFieldSet.Find(1);
+var formFieldSet = await FormFieldSet.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("title", "Sample Form Title");
 parameters.Add("require_complete_metadata_capture", false);
-parameters.Add("workspace_id", 1);
+parameters.Add("workspace_id", 1L);
 parameters.Add("skip_email", false);
 parameters.Add("skip_name", false);
 parameters.Add("skip_company", false);
-parameters.Add("form_fields", [{"id":1,"label":"Sample Label","required":true,"help_text":"Help Text","field_type":"text","options_for_select":["red","green","blue"],"default_option":"red","form_field_set_id":1}]);
+parameters.Add("form_fields", new object[] { new Dictionary<string, object> { { "id", 1 }, { "label", "Sample Label" }, { "required", true }, { "help_text", "Help Text" }, { "field_type", "text" }, { "options_for_select", new object[] { "red", "green", "blue" } }, { "default_option", "red" }, { "form_field_set_id", 1 } } });
 
-FormFieldSet.Update(parameters);
+await formFieldSet.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `FormFieldSet` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -243,12 +244,11 @@ FormFieldSet.Update(parameters);
 ## Delete Form Field Set
 
 ```
-var FormFieldSet = FormFieldSet.Find(1);
+var formFieldSet = await FormFieldSet.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-FormFieldSet.Delete
+await formFieldSet.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -256,3 +256,14 @@ FormFieldSet.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Form Field Set ID.
+
+
+---
+
+## Save
+
+```
+await formFieldSet.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

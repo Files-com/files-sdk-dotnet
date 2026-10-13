@@ -36,7 +36,7 @@
 ## List Secrets
 
 ```
-Task<FilesList<Secret>> Secret.List(
+FilesList<Secret> Secret.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -187,19 +187,20 @@ Task client.Secrets.DeleteAsync(
 ## Update Secret
 
 ```
-var Secret = Secret.Find(1);
+var secret = await Secret.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Production API token");
 parameters.Add("description", "Used by production API integrations.");
 parameters.Add("secret_type", "token");
-parameters.Add("metadata", {"header_name":"Authorization"});
+parameters.Add("metadata", new Dictionary<string, object> { { "header_name", "Authorization" } });
 
-Secret.Update(parameters);
+await secret.Update(parameters);
 ```
 
 `UpdateAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+When it succeeds, the object takes the attributes Files.com returns. The `Secret` it returns is a separate object with those attributes.
 
 ### Parameters
 
@@ -215,12 +216,11 @@ Secret.Update(parameters);
 ## Delete Secret
 
 ```
-var Secret = Secret.Find(1);
+var secret = await Secret.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-
-Secret.Delete
+await secret.Delete(parameters);
 ```
 
 `DeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
@@ -228,3 +228,14 @@ Secret.Delete
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Secret ID.
+
+
+---
+
+## Save
+
+```
+await secret.SaveAsync(cancellationToken);
+```
+
+Creates the object on Files.com, or updates it if it has an ID. It sends the attributes set on the object, in its constructor or with its properties, or changed in place, such as an element of an array, since it was made or last came from Files.com, and only those the operation takes, each in the form its parameter takes. When it succeeds, the object takes the attributes Files.com returns. `Save()` does the same without a cancellation token.

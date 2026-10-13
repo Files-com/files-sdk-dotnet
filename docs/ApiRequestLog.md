@@ -56,7 +56,7 @@
 ## List API Request Logs
 
 ```
-Task<FilesList<ApiRequestLog>> ApiRequestLog.List(
+FilesList<ApiRequestLog> ApiRequestLog.List(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

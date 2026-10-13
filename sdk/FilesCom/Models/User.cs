@@ -9,27 +9,36 @@ using System.Threading.Tasks;
 
 namespace FilesCom.Models
 {
-    public class User : IModel
+    /// <summary>
+    /// UserEntity model
+    /// </summary>
+    public class User : IModel, IJsonOnDeserialized
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
         private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
+        // The names of the attributes set on this object, by its constructor or its properties, since it was made
+        // or last came from Files.com. SaveAsync sends these, never the defaults of attributes nobody set.
+        private readonly HashSet<string> unsaved = new HashSet<string>();
+        /// <summary>
+        /// Makes a User with no attributes set and no options.
+        /// </summary>
         public User() : this(null, null) { }
 
+        /// <summary>
+        /// Makes a User with copies of <paramref name="attributes"/>, keyed by their API names, and of
+        /// <paramref name="options"/>. Later changes to the dictionaries do not change the object.
+        /// </summary>
+        /// <param name="attributes">The object's attributes, keyed by their API names. Null for none.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public User(Dictionary<string, object> attributes, Dictionary<string, object> options)
         {
-            this.attributes = attributes;
-            this.options = options;
-
-            if (this.attributes == null)
-            {
-                this.attributes = new Dictionary<string, object>();
-            }
-
-            if (this.options == null)
-            {
-                this.options = new Dictionary<string, object>();
-            }
+            this.attributes = attributes != null ? new Dictionary<string, object>(attributes) : new Dictionary<string, object>();
+            this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
+            unsaved.UnionWith(this.attributes.Keys);
 
             if (!this.attributes.ContainsKey("id"))
             {
@@ -437,30 +446,52 @@ namespace FilesCom.Models
             }
         }
 
+        /// <summary>
+        /// A copy of this object's attributes, keyed by their API names. Their values, such as arrays, are this
+        /// object's own, not copies.
+        /// </summary>
         public Dictionary<string, object> getAttributes()
         {
             return new Dictionary<string, object>(this.attributes);
         }
 
+        /// <summary>
+        /// The value of one of this object's request options, or null if it has no option of that name.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
         public object GetOption(string name)
         {
-            return (this.options.ContainsKey(name) ? this.options[name] : null);
+            return this.options.TryGetValue(name, out object value) ? value : null;
         }
 
-        void IModel.SetContext(FilesClient client, Dictionary<string, object> options)
+        void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
             this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
+
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
             get { return new object[0]; }
         }
 
+        /// <summary>
+        /// Sets one of this object's request options.
+        /// </summary>
+        /// <param name="name">The option's name, such as api_key.</param>
+        /// <param name="value">The option's value.</param>
         public void SetOption(string name, object value)
         {
             this.options[name] = value;
+        }
+
+        // What is read from JSON, such as a response from Files.com, is not waiting to be saved.
+        void IJsonOnDeserialized.OnDeserialized()
+        {
+            unsaved.Clear();
         }
 
 
@@ -471,7 +502,7 @@ namespace FilesCom.Models
         public Nullable<Int64> Id
         {
             get { return (Nullable<Int64>)attributes["id"]; }
-            set { attributes["id"] = value; }
+            set { attributes["id"] = value; unsaved.Add("id"); }
         }
 
         /// <summary>
@@ -481,7 +512,7 @@ namespace FilesCom.Models
         public string Username
         {
             get { return (string)attributes["username"]; }
-            set { attributes["username"] = value; }
+            set { attributes["username"] = value; unsaved.Add("username"); }
         }
 
         /// <summary>
@@ -491,7 +522,7 @@ namespace FilesCom.Models
         public Nullable<Int64>[] AdminGroupIds
         {
             get { return (Nullable<Int64>[])attributes["admin_group_ids"]; }
-            set { attributes["admin_group_ids"] = value; }
+            set { attributes["admin_group_ids"] = value; unsaved.Add("admin_group_ids"); }
         }
 
         /// <summary>
@@ -501,7 +532,7 @@ namespace FilesCom.Models
         public string AllowedIps
         {
             get { return (string)attributes["allowed_ips"]; }
-            set { attributes["allowed_ips"] = value; }
+            set { attributes["allowed_ips"] = value; unsaved.Add("allowed_ips"); }
         }
 
         /// <summary>
@@ -512,7 +543,7 @@ namespace FilesCom.Models
         public bool AttachmentsPermission
         {
             get { return attributes["attachments_permission"] == null ? false : (bool)attributes["attachments_permission"]; }
-            set { attributes["attachments_permission"] = value; }
+            set { attributes["attachments_permission"] = value; unsaved.Add("attachments_permission"); }
         }
 
         /// <summary>
@@ -522,7 +553,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ApiKeysCount
         {
             get { return (Nullable<Int64>)attributes["api_keys_count"]; }
-            set { attributes["api_keys_count"] = value; }
+            set { attributes["api_keys_count"] = value; unsaved.Add("api_keys_count"); }
         }
 
         /// <summary>
@@ -532,7 +563,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> AuthenticateUntil
         {
             get { return (Nullable<DateTime>)attributes["authenticate_until"]; }
-            set { attributes["authenticate_until"] = value; }
+            set { attributes["authenticate_until"] = value; unsaved.Add("authenticate_until"); }
         }
 
         /// <summary>
@@ -542,7 +573,7 @@ namespace FilesCom.Models
         public string AuthenticationMethod
         {
             get { return (string)attributes["authentication_method"]; }
-            set { attributes["authentication_method"] = value; }
+            set { attributes["authentication_method"] = value; unsaved.Add("authentication_method"); }
         }
 
         /// <summary>
@@ -552,7 +583,7 @@ namespace FilesCom.Models
         public string AvatarUrl
         {
             get { return (string)attributes["avatar_url"]; }
-            set { attributes["avatar_url"] = value; }
+            set { attributes["avatar_url"] = value; unsaved.Add("avatar_url"); }
         }
 
         /// <summary>
@@ -563,7 +594,7 @@ namespace FilesCom.Models
         public bool Billable
         {
             get { return attributes["billable"] == null ? false : (bool)attributes["billable"]; }
-            set { attributes["billable"] = value; }
+            set { attributes["billable"] = value; unsaved.Add("billable"); }
         }
 
         /// <summary>
@@ -574,7 +605,7 @@ namespace FilesCom.Models
         public bool BillingPermission
         {
             get { return attributes["billing_permission"] == null ? false : (bool)attributes["billing_permission"]; }
-            set { attributes["billing_permission"] = value; }
+            set { attributes["billing_permission"] = value; unsaved.Add("billing_permission"); }
         }
 
         /// <summary>
@@ -585,7 +616,7 @@ namespace FilesCom.Models
         public bool BypassSiteAllowedIps
         {
             get { return attributes["bypass_site_allowed_ips"] == null ? false : (bool)attributes["bypass_site_allowed_ips"]; }
-            set { attributes["bypass_site_allowed_ips"] = value; }
+            set { attributes["bypass_site_allowed_ips"] = value; unsaved.Add("bypass_site_allowed_ips"); }
         }
 
         /// <summary>
@@ -596,7 +627,7 @@ namespace FilesCom.Models
         public bool BypassUserLifecycleRules
         {
             get { return attributes["bypass_user_lifecycle_rules"] == null ? false : (bool)attributes["bypass_user_lifecycle_rules"]; }
-            set { attributes["bypass_user_lifecycle_rules"] = value; }
+            set { attributes["bypass_user_lifecycle_rules"] = value; unsaved.Add("bypass_user_lifecycle_rules"); }
         }
 
         /// <summary>
@@ -618,7 +649,7 @@ namespace FilesCom.Models
         public bool DavPermission
         {
             get { return attributes["dav_permission"] == null ? false : (bool)attributes["dav_permission"]; }
-            set { attributes["dav_permission"] = value; }
+            set { attributes["dav_permission"] = value; unsaved.Add("dav_permission"); }
         }
 
         /// <summary>
@@ -629,7 +660,7 @@ namespace FilesCom.Models
         public bool Disabled
         {
             get { return attributes["disabled"] == null ? false : (bool)attributes["disabled"]; }
-            set { attributes["disabled"] = value; }
+            set { attributes["disabled"] = value; unsaved.Add("disabled"); }
         }
 
         /// <summary>
@@ -640,7 +671,7 @@ namespace FilesCom.Models
         public bool DisabledExpiredOrInactive
         {
             get { return attributes["disabled_expired_or_inactive"] == null ? false : (bool)attributes["disabled_expired_or_inactive"]; }
-            set { attributes["disabled_expired_or_inactive"] = value; }
+            set { attributes["disabled_expired_or_inactive"] = value; unsaved.Add("disabled_expired_or_inactive"); }
         }
 
         /// <summary>
@@ -650,7 +681,7 @@ namespace FilesCom.Models
         public Nullable<Int64> AiAssistantPersonalityId
         {
             get { return (Nullable<Int64>)attributes["ai_assistant_personality_id"]; }
-            set { attributes["ai_assistant_personality_id"] = value; }
+            set { attributes["ai_assistant_personality_id"] = value; unsaved.Add("ai_assistant_personality_id"); }
         }
 
         /// <summary>
@@ -660,7 +691,7 @@ namespace FilesCom.Models
         public Nullable<Int64> DesktopConfigurationProfileId
         {
             get { return (Nullable<Int64>)attributes["desktop_configuration_profile_id"]; }
-            set { attributes["desktop_configuration_profile_id"] = value; }
+            set { attributes["desktop_configuration_profile_id"] = value; unsaved.Add("desktop_configuration_profile_id"); }
         }
 
         /// <summary>
@@ -670,7 +701,7 @@ namespace FilesCom.Models
         public Nullable<Int64> IntegrationCentricProfileId
         {
             get { return (Nullable<Int64>)attributes["integration_centric_profile_id"]; }
-            set { attributes["integration_centric_profile_id"] = value; }
+            set { attributes["integration_centric_profile_id"] = value; unsaved.Add("integration_centric_profile_id"); }
         }
 
         /// <summary>
@@ -680,7 +711,7 @@ namespace FilesCom.Models
         public string Email
         {
             get { return (string)attributes["email"]; }
-            set { attributes["email"] = value; }
+            set { attributes["email"] = value; unsaved.Add("email"); }
         }
 
         /// <summary>
@@ -690,7 +721,7 @@ namespace FilesCom.Models
         public string FilesystemLayout
         {
             get { return (string)attributes["filesystem_layout"]; }
-            set { attributes["filesystem_layout"] = value; }
+            set { attributes["filesystem_layout"] = value; unsaved.Add("filesystem_layout"); }
         }
 
         /// <summary>
@@ -700,7 +731,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> FirstLoginAt
         {
             get { return (Nullable<DateTime>)attributes["first_login_at"]; }
-            set { attributes["first_login_at"] = value; }
+            set { attributes["first_login_at"] = value; unsaved.Add("first_login_at"); }
         }
 
         /// <summary>
@@ -711,7 +742,7 @@ namespace FilesCom.Models
         public bool FtpPermission
         {
             get { return attributes["ftp_permission"] == null ? false : (bool)attributes["ftp_permission"]; }
-            set { attributes["ftp_permission"] = value; }
+            set { attributes["ftp_permission"] = value; unsaved.Add("ftp_permission"); }
         }
 
         /// <summary>
@@ -721,7 +752,7 @@ namespace FilesCom.Models
         public string GroupIds
         {
             get { return (string)attributes["group_ids"]; }
-            set { attributes["group_ids"] = value; }
+            set { attributes["group_ids"] = value; unsaved.Add("group_ids"); }
         }
 
         /// <summary>
@@ -731,7 +762,7 @@ namespace FilesCom.Models
         public string HeaderText
         {
             get { return (string)attributes["header_text"]; }
-            set { attributes["header_text"] = value; }
+            set { attributes["header_text"] = value; unsaved.Add("header_text"); }
         }
 
         /// <summary>
@@ -741,7 +772,7 @@ namespace FilesCom.Models
         public string Language
         {
             get { return (string)attributes["language"]; }
-            set { attributes["language"] = value; }
+            set { attributes["language"] = value; unsaved.Add("language"); }
         }
 
         /// <summary>
@@ -751,7 +782,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_login_at"]; }
-            set { attributes["last_login_at"] = value; }
+            set { attributes["last_login_at"] = value; unsaved.Add("last_login_at"); }
         }
 
         /// <summary>
@@ -761,7 +792,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastWebLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_web_login_at"]; }
-            set { attributes["last_web_login_at"] = value; }
+            set { attributes["last_web_login_at"] = value; unsaved.Add("last_web_login_at"); }
         }
 
         /// <summary>
@@ -771,7 +802,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastFtpLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_ftp_login_at"]; }
-            set { attributes["last_ftp_login_at"] = value; }
+            set { attributes["last_ftp_login_at"] = value; unsaved.Add("last_ftp_login_at"); }
         }
 
         /// <summary>
@@ -781,7 +812,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastSftpLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_sftp_login_at"]; }
-            set { attributes["last_sftp_login_at"] = value; }
+            set { attributes["last_sftp_login_at"] = value; unsaved.Add("last_sftp_login_at"); }
         }
 
         /// <summary>
@@ -791,7 +822,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastDavLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_dav_login_at"]; }
-            set { attributes["last_dav_login_at"] = value; }
+            set { attributes["last_dav_login_at"] = value; unsaved.Add("last_dav_login_at"); }
         }
 
         /// <summary>
@@ -801,7 +832,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastDesktopLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_desktop_login_at"]; }
-            set { attributes["last_desktop_login_at"] = value; }
+            set { attributes["last_desktop_login_at"] = value; unsaved.Add("last_desktop_login_at"); }
         }
 
         /// <summary>
@@ -811,7 +842,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastRestapiLoginAt
         {
             get { return (Nullable<DateTime>)attributes["last_restapi_login_at"]; }
-            set { attributes["last_restapi_login_at"] = value; }
+            set { attributes["last_restapi_login_at"] = value; unsaved.Add("last_restapi_login_at"); }
         }
 
         /// <summary>
@@ -821,7 +852,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastApiUseAt
         {
             get { return (Nullable<DateTime>)attributes["last_api_use_at"]; }
-            set { attributes["last_api_use_at"] = value; }
+            set { attributes["last_api_use_at"] = value; unsaved.Add("last_api_use_at"); }
         }
 
         /// <summary>
@@ -831,7 +862,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LastActiveAt
         {
             get { return (Nullable<DateTime>)attributes["last_active_at"]; }
-            set { attributes["last_active_at"] = value; }
+            set { attributes["last_active_at"] = value; unsaved.Add("last_active_at"); }
         }
 
         /// <summary>
@@ -841,7 +872,7 @@ namespace FilesCom.Models
         public string LastProtocolCipher
         {
             get { return (string)attributes["last_protocol_cipher"]; }
-            set { attributes["last_protocol_cipher"] = value; }
+            set { attributes["last_protocol_cipher"] = value; unsaved.Add("last_protocol_cipher"); }
         }
 
         /// <summary>
@@ -851,7 +882,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> LockoutExpires
         {
             get { return (Nullable<DateTime>)attributes["lockout_expires"]; }
-            set { attributes["lockout_expires"] = value; }
+            set { attributes["lockout_expires"] = value; unsaved.Add("lockout_expires"); }
         }
 
         /// <summary>
@@ -861,7 +892,7 @@ namespace FilesCom.Models
         public string Name
         {
             get { return (string)attributes["name"]; }
-            set { attributes["name"] = value; }
+            set { attributes["name"] = value; unsaved.Add("name"); }
         }
 
         /// <summary>
@@ -871,7 +902,7 @@ namespace FilesCom.Models
         public string Company
         {
             get { return (string)attributes["company"]; }
-            set { attributes["company"] = value; }
+            set { attributes["company"] = value; unsaved.Add("company"); }
         }
 
         /// <summary>
@@ -881,7 +912,7 @@ namespace FilesCom.Models
         public string Notes
         {
             get { return (string)attributes["notes"]; }
-            set { attributes["notes"] = value; }
+            set { attributes["notes"] = value; unsaved.Add("notes"); }
         }
 
         /// <summary>
@@ -891,7 +922,7 @@ namespace FilesCom.Models
         public Nullable<Int64> NotificationDailySendTime
         {
             get { return (Nullable<Int64>)attributes["notification_daily_send_time"]; }
-            set { attributes["notification_daily_send_time"] = value; }
+            set { attributes["notification_daily_send_time"] = value; unsaved.Add("notification_daily_send_time"); }
         }
 
         /// <summary>
@@ -902,7 +933,7 @@ namespace FilesCom.Models
         public bool OfficeIntegrationEnabled
         {
             get { return attributes["office_integration_enabled"] == null ? false : (bool)attributes["office_integration_enabled"]; }
-            set { attributes["office_integration_enabled"] = value; }
+            set { attributes["office_integration_enabled"] = value; unsaved.Add("office_integration_enabled"); }
         }
 
         /// <summary>
@@ -913,7 +944,7 @@ namespace FilesCom.Models
         public bool PartnerAdmin
         {
             get { return attributes["partner_admin"] == null ? false : (bool)attributes["partner_admin"]; }
-            set { attributes["partner_admin"] = value; }
+            set { attributes["partner_admin"] = value; unsaved.Add("partner_admin"); }
         }
 
         /// <summary>
@@ -923,7 +954,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PartnerId
         {
             get { return (Nullable<Int64>)attributes["partner_id"]; }
-            set { attributes["partner_id"] = value; }
+            set { attributes["partner_id"] = value; unsaved.Add("partner_id"); }
         }
 
         /// <summary>
@@ -933,7 +964,7 @@ namespace FilesCom.Models
         public string PartnerName
         {
             get { return (string)attributes["partner_name"]; }
-            set { attributes["partner_name"] = value; }
+            set { attributes["partner_name"] = value; unsaved.Add("partner_name"); }
         }
 
         /// <summary>
@@ -943,7 +974,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> PasswordSetAt
         {
             get { return (Nullable<DateTime>)attributes["password_set_at"]; }
-            set { attributes["password_set_at"] = value; }
+            set { attributes["password_set_at"] = value; unsaved.Add("password_set_at"); }
         }
 
         /// <summary>
@@ -953,7 +984,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PasswordValidityDays
         {
             get { return (Nullable<Int64>)attributes["password_validity_days"]; }
-            set { attributes["password_validity_days"] = value; }
+            set { attributes["password_validity_days"] = value; unsaved.Add("password_validity_days"); }
         }
 
         /// <summary>
@@ -963,7 +994,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PrimaryGroupId
         {
             get { return (Nullable<Int64>)attributes["primary_group_id"]; }
-            set { attributes["primary_group_id"] = value; }
+            set { attributes["primary_group_id"] = value; unsaved.Add("primary_group_id"); }
         }
 
         /// <summary>
@@ -973,7 +1004,7 @@ namespace FilesCom.Models
         public Nullable<Int64> PublicKeysCount
         {
             get { return (Nullable<Int64>)attributes["public_keys_count"]; }
-            set { attributes["public_keys_count"] = value; }
+            set { attributes["public_keys_count"] = value; unsaved.Add("public_keys_count"); }
         }
 
         /// <summary>
@@ -984,7 +1015,7 @@ namespace FilesCom.Models
         public bool ReceiveAdminAlerts
         {
             get { return attributes["receive_admin_alerts"] == null ? false : (bool)attributes["receive_admin_alerts"]; }
-            set { attributes["receive_admin_alerts"] = value; }
+            set { attributes["receive_admin_alerts"] = value; unsaved.Add("receive_admin_alerts"); }
         }
 
         /// <summary>
@@ -995,7 +1026,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllSiteWarnings
         {
             get { return attributes["notify_on_all_site_warnings"] == null ? false : (bool)attributes["notify_on_all_site_warnings"]; }
-            set { attributes["notify_on_all_site_warnings"] = value; }
+            set { attributes["notify_on_all_site_warnings"] = value; unsaved.Add("notify_on_all_site_warnings"); }
         }
 
         /// <summary>
@@ -1006,7 +1037,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllSsoFailures
         {
             get { return attributes["notify_on_all_sso_failures"] == null ? false : (bool)attributes["notify_on_all_sso_failures"]; }
-            set { attributes["notify_on_all_sso_failures"] = value; }
+            set { attributes["notify_on_all_sso_failures"] = value; unsaved.Add("notify_on_all_sso_failures"); }
         }
 
         /// <summary>
@@ -1017,7 +1048,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllUserSecurityEvents
         {
             get { return attributes["notify_on_all_user_security_events"] == null ? false : (bool)attributes["notify_on_all_user_security_events"]; }
-            set { attributes["notify_on_all_user_security_events"] = value; }
+            set { attributes["notify_on_all_user_security_events"] = value; unsaved.Add("notify_on_all_user_security_events"); }
         }
 
         /// <summary>
@@ -1028,7 +1059,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllPendingWorkFailures
         {
             get { return attributes["notify_on_all_pending_work_failures"] == null ? false : (bool)attributes["notify_on_all_pending_work_failures"]; }
-            set { attributes["notify_on_all_pending_work_failures"] = value; }
+            set { attributes["notify_on_all_pending_work_failures"] = value; unsaved.Add("notify_on_all_pending_work_failures"); }
         }
 
         /// <summary>
@@ -1039,7 +1070,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllSiemHttpDestinationFailures
         {
             get { return attributes["notify_on_all_siem_http_destination_failures"] == null ? false : (bool)attributes["notify_on_all_siem_http_destination_failures"]; }
-            set { attributes["notify_on_all_siem_http_destination_failures"] = value; }
+            set { attributes["notify_on_all_siem_http_destination_failures"] = value; unsaved.Add("notify_on_all_siem_http_destination_failures"); }
         }
 
         /// <summary>
@@ -1050,7 +1081,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllSyncFailures
         {
             get { return attributes["notify_on_all_sync_failures"] == null ? false : (bool)attributes["notify_on_all_sync_failures"]; }
-            set { attributes["notify_on_all_sync_failures"] = value; }
+            set { attributes["notify_on_all_sync_failures"] = value; unsaved.Add("notify_on_all_sync_failures"); }
         }
 
         /// <summary>
@@ -1061,7 +1092,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllAutomationFailures
         {
             get { return attributes["notify_on_all_automation_failures"] == null ? false : (bool)attributes["notify_on_all_automation_failures"]; }
-            set { attributes["notify_on_all_automation_failures"] = value; }
+            set { attributes["notify_on_all_automation_failures"] = value; unsaved.Add("notify_on_all_automation_failures"); }
         }
 
         /// <summary>
@@ -1072,7 +1103,7 @@ namespace FilesCom.Models
         public bool NotifyOnAllExpectationFailures
         {
             get { return attributes["notify_on_all_expectation_failures"] == null ? false : (bool)attributes["notify_on_all_expectation_failures"]; }
-            set { attributes["notify_on_all_expectation_failures"] = value; }
+            set { attributes["notify_on_all_expectation_failures"] = value; unsaved.Add("notify_on_all_expectation_failures"); }
         }
 
         /// <summary>
@@ -1082,7 +1113,7 @@ namespace FilesCom.Models
         public string Require2fa
         {
             get { return (string)attributes["require_2fa"]; }
-            set { attributes["require_2fa"] = value; }
+            set { attributes["require_2fa"] = value; unsaved.Add("require_2fa"); }
         }
 
         /// <summary>
@@ -1092,7 +1123,7 @@ namespace FilesCom.Models
         public Nullable<DateTime> RequireLoginBy
         {
             get { return (Nullable<DateTime>)attributes["require_login_by"]; }
-            set { attributes["require_login_by"] = value; }
+            set { attributes["require_login_by"] = value; unsaved.Add("require_login_by"); }
         }
 
         /// <summary>
@@ -1103,7 +1134,7 @@ namespace FilesCom.Models
         public bool Active2fa
         {
             get { return attributes["active_2fa"] == null ? false : (bool)attributes["active_2fa"]; }
-            set { attributes["active_2fa"] = value; }
+            set { attributes["active_2fa"] = value; unsaved.Add("active_2fa"); }
         }
 
         /// <summary>
@@ -1114,7 +1145,7 @@ namespace FilesCom.Models
         public bool RequirePasswordChange
         {
             get { return attributes["require_password_change"] == null ? false : (bool)attributes["require_password_change"]; }
-            set { attributes["require_password_change"] = value; }
+            set { attributes["require_password_change"] = value; unsaved.Add("require_password_change"); }
         }
 
         /// <summary>
@@ -1125,7 +1156,7 @@ namespace FilesCom.Models
         public bool PasswordExpired
         {
             get { return attributes["password_expired"] == null ? false : (bool)attributes["password_expired"]; }
-            set { attributes["password_expired"] = value; }
+            set { attributes["password_expired"] = value; unsaved.Add("password_expired"); }
         }
 
         /// <summary>
@@ -1135,7 +1166,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ResponsibleGroupId
         {
             get { return (Nullable<Int64>)attributes["responsible_group_id"]; }
-            set { attributes["responsible_group_id"] = value; }
+            set { attributes["responsible_group_id"] = value; unsaved.Add("responsible_group_id"); }
         }
 
         /// <summary>
@@ -1145,7 +1176,7 @@ namespace FilesCom.Models
         public Nullable<Int64> ResponsibleUserId
         {
             get { return (Nullable<Int64>)attributes["responsible_user_id"]; }
-            set { attributes["responsible_user_id"] = value; }
+            set { attributes["responsible_user_id"] = value; unsaved.Add("responsible_user_id"); }
         }
 
         /// <summary>
@@ -1156,7 +1187,7 @@ namespace FilesCom.Models
         public bool ReadonlySiteAdmin
         {
             get { return attributes["readonly_site_admin"] == null ? false : (bool)attributes["readonly_site_admin"]; }
-            set { attributes["readonly_site_admin"] = value; }
+            set { attributes["readonly_site_admin"] = value; unsaved.Add("readonly_site_admin"); }
         }
 
         /// <summary>
@@ -1167,7 +1198,7 @@ namespace FilesCom.Models
         public bool RestapiPermission
         {
             get { return attributes["restapi_permission"] == null ? false : (bool)attributes["restapi_permission"]; }
-            set { attributes["restapi_permission"] = value; }
+            set { attributes["restapi_permission"] = value; unsaved.Add("restapi_permission"); }
         }
 
         /// <summary>
@@ -1178,7 +1209,7 @@ namespace FilesCom.Models
         public bool S3CompatibleEndpointPermission
         {
             get { return attributes["s3_compatible_endpoint_permission"] == null ? false : (bool)attributes["s3_compatible_endpoint_permission"]; }
-            set { attributes["s3_compatible_endpoint_permission"] = value; }
+            set { attributes["s3_compatible_endpoint_permission"] = value; unsaved.Add("s3_compatible_endpoint_permission"); }
         }
 
         /// <summary>
@@ -1189,7 +1220,7 @@ namespace FilesCom.Models
         public bool SelfManaged
         {
             get { return attributes["self_managed"] == null ? false : (bool)attributes["self_managed"]; }
-            set { attributes["self_managed"] = value; }
+            set { attributes["self_managed"] = value; unsaved.Add("self_managed"); }
         }
 
         /// <summary>
@@ -1200,7 +1231,7 @@ namespace FilesCom.Models
         public bool SftpPermission
         {
             get { return attributes["sftp_permission"] == null ? false : (bool)attributes["sftp_permission"]; }
-            set { attributes["sftp_permission"] = value; }
+            set { attributes["sftp_permission"] = value; unsaved.Add("sftp_permission"); }
         }
 
         /// <summary>
@@ -1211,7 +1242,7 @@ namespace FilesCom.Models
         public bool SiteAdmin
         {
             get { return attributes["site_admin"] == null ? false : (bool)attributes["site_admin"]; }
-            set { attributes["site_admin"] = value; }
+            set { attributes["site_admin"] = value; unsaved.Add("site_admin"); }
         }
 
         /// <summary>
@@ -1222,7 +1253,7 @@ namespace FilesCom.Models
         public bool WorkspaceAdmin
         {
             get { return attributes["workspace_admin"] == null ? false : (bool)attributes["workspace_admin"]; }
-            set { attributes["workspace_admin"] = value; }
+            set { attributes["workspace_admin"] = value; unsaved.Add("workspace_admin"); }
         }
 
         /// <summary>
@@ -1232,7 +1263,7 @@ namespace FilesCom.Models
         public Nullable<Int64> SiteId
         {
             get { return (Nullable<Int64>)attributes["site_id"]; }
-            set { attributes["site_id"] = value; }
+            set { attributes["site_id"] = value; unsaved.Add("site_id"); }
         }
 
         /// <summary>
@@ -1242,7 +1273,7 @@ namespace FilesCom.Models
         public Nullable<Int64> WorkspaceId
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
-            set { attributes["workspace_id"] = value; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -1252,7 +1283,7 @@ namespace FilesCom.Models
         public Nullable<Int64> DefaultWorkspaceId
         {
             get { return (Nullable<Int64>)attributes["default_workspace_id"]; }
-            set { attributes["default_workspace_id"] = value; }
+            set { attributes["default_workspace_id"] = value; unsaved.Add("default_workspace_id"); }
         }
 
         /// <summary>
@@ -1263,7 +1294,7 @@ namespace FilesCom.Models
         public bool SkipWelcomeScreen
         {
             get { return attributes["skip_welcome_screen"] == null ? false : (bool)attributes["skip_welcome_screen"]; }
-            set { attributes["skip_welcome_screen"] = value; }
+            set { attributes["skip_welcome_screen"] = value; unsaved.Add("skip_welcome_screen"); }
         }
 
         /// <summary>
@@ -1273,7 +1304,7 @@ namespace FilesCom.Models
         public string SslRequired
         {
             get { return (string)attributes["ssl_required"]; }
-            set { attributes["ssl_required"] = value; }
+            set { attributes["ssl_required"] = value; unsaved.Add("ssl_required"); }
         }
 
         /// <summary>
@@ -1283,7 +1314,7 @@ namespace FilesCom.Models
         public Nullable<Int64> SsoStrategyId
         {
             get { return (Nullable<Int64>)attributes["sso_strategy_id"]; }
-            set { attributes["sso_strategy_id"] = value; }
+            set { attributes["sso_strategy_id"] = value; unsaved.Add("sso_strategy_id"); }
         }
 
         /// <summary>
@@ -1294,7 +1325,7 @@ namespace FilesCom.Models
         public bool SubscribeToNewsletter
         {
             get { return attributes["subscribe_to_newsletter"] == null ? false : (bool)attributes["subscribe_to_newsletter"]; }
-            set { attributes["subscribe_to_newsletter"] = value; }
+            set { attributes["subscribe_to_newsletter"] = value; unsaved.Add("subscribe_to_newsletter"); }
         }
 
         /// <summary>
@@ -1305,7 +1336,7 @@ namespace FilesCom.Models
         public bool ExternallyManaged
         {
             get { return attributes["externally_managed"] == null ? false : (bool)attributes["externally_managed"]; }
-            set { attributes["externally_managed"] = value; }
+            set { attributes["externally_managed"] = value; unsaved.Add("externally_managed"); }
         }
 
         /// <summary>
@@ -1315,7 +1346,7 @@ namespace FilesCom.Models
         public string Tags
         {
             get { return (string)attributes["tags"]; }
-            set { attributes["tags"] = value; }
+            set { attributes["tags"] = value; unsaved.Add("tags"); }
         }
 
         /// <summary>
@@ -1325,7 +1356,7 @@ namespace FilesCom.Models
         public string TimeZone
         {
             get { return (string)attributes["time_zone"]; }
-            set { attributes["time_zone"] = value; }
+            set { attributes["time_zone"] = value; unsaved.Add("time_zone"); }
         }
 
         /// <summary>
@@ -1335,7 +1366,7 @@ namespace FilesCom.Models
         public string TypeOf2fa
         {
             get { return (string)attributes["type_of_2fa"]; }
-            set { attributes["type_of_2fa"] = value; }
+            set { attributes["type_of_2fa"] = value; unsaved.Add("type_of_2fa"); }
         }
 
         /// <summary>
@@ -1345,7 +1376,7 @@ namespace FilesCom.Models
         public string TypeOf2faForDisplay
         {
             get { return (string)attributes["type_of_2fa_for_display"]; }
-            set { attributes["type_of_2fa_for_display"] = value; }
+            set { attributes["type_of_2fa_for_display"] = value; unsaved.Add("type_of_2fa_for_display"); }
         }
 
         /// <summary>
@@ -1355,7 +1386,7 @@ namespace FilesCom.Models
         public string UserRoot
         {
             get { return (string)attributes["user_root"]; }
-            set { attributes["user_root"] = value; }
+            set { attributes["user_root"] = value; unsaved.Add("user_root"); }
         }
 
         /// <summary>
@@ -1365,7 +1396,7 @@ namespace FilesCom.Models
         public string UserHome
         {
             get { return (string)attributes["user_home"]; }
-            set { attributes["user_home"] = value; }
+            set { attributes["user_home"] = value; unsaved.Add("user_home"); }
         }
 
         /// <summary>
@@ -1375,7 +1406,7 @@ namespace FilesCom.Models
         public Nullable<Int64> DaysRemainingUntilPasswordExpire
         {
             get { return (Nullable<Int64>)attributes["days_remaining_until_password_expire"]; }
-            set { attributes["days_remaining_until_password_expire"] = value; }
+            set { attributes["days_remaining_until_password_expire"] = value; unsaved.Add("days_remaining_until_password_expire"); }
         }
 
         /// <summary>
@@ -1385,17 +1416,17 @@ namespace FilesCom.Models
         public Nullable<DateTime> PasswordExpireAt
         {
             get { return (Nullable<DateTime>)attributes["password_expire_at"]; }
-            set { attributes["password_expire_at"] = value; }
+            set { attributes["password_expire_at"] = value; unsaved.Add("password_expire_at"); }
         }
 
         /// <summary>
         /// An image file for your user avatar.
         /// </summary>
         [JsonPropertyName("avatar_file")]
-        public System.Net.Http.ByteArrayContent AvatarFile
+        public FileAttachment AvatarFile
         {
-            get { return (System.Net.Http.ByteArrayContent)attributes["avatar_file"]; }
-            set { attributes["avatar_file"] = value; }
+            get { return (FileAttachment)attributes["avatar_file"]; }
+            set { attributes["avatar_file"] = value; unsaved.Add("avatar_file"); }
         }
 
         /// <summary>
@@ -1406,7 +1437,7 @@ namespace FilesCom.Models
         public bool AvatarDelete
         {
             get { return attributes["avatar_delete"] == null ? false : (bool)attributes["avatar_delete"]; }
-            set { attributes["avatar_delete"] = value; }
+            set { attributes["avatar_delete"] = value; unsaved.Add("avatar_delete"); }
         }
 
         /// <summary>
@@ -1416,7 +1447,7 @@ namespace FilesCom.Models
         public string ChangePassword
         {
             get { return (string)attributes["change_password"]; }
-            set { attributes["change_password"] = value; }
+            set { attributes["change_password"] = value; unsaved.Add("change_password"); }
         }
 
         /// <summary>
@@ -1426,7 +1457,7 @@ namespace FilesCom.Models
         public string ChangePasswordConfirmation
         {
             get { return (string)attributes["change_password_confirmation"]; }
-            set { attributes["change_password_confirmation"] = value; }
+            set { attributes["change_password_confirmation"] = value; unsaved.Add("change_password_confirmation"); }
         }
 
         /// <summary>
@@ -1436,7 +1467,7 @@ namespace FilesCom.Models
         public string GrantPermission
         {
             get { return (string)attributes["grant_permission"]; }
-            set { attributes["grant_permission"] = value; }
+            set { attributes["grant_permission"] = value; unsaved.Add("grant_permission"); }
         }
 
         /// <summary>
@@ -1446,7 +1477,7 @@ namespace FilesCom.Models
         public Nullable<Int64> GroupId
         {
             get { return (Nullable<Int64>)attributes["group_id"]; }
-            set { attributes["group_id"] = value; }
+            set { attributes["group_id"] = value; unsaved.Add("group_id"); }
         }
 
         /// <summary>
@@ -1456,7 +1487,7 @@ namespace FilesCom.Models
         public string ImportedPasswordHash
         {
             get { return (string)attributes["imported_password_hash"]; }
-            set { attributes["imported_password_hash"] = value; }
+            set { attributes["imported_password_hash"] = value; unsaved.Add("imported_password_hash"); }
         }
 
         /// <summary>
@@ -1466,7 +1497,7 @@ namespace FilesCom.Models
         public string Password
         {
             get { return (string)attributes["password"]; }
-            set { attributes["password"] = value; }
+            set { attributes["password"] = value; unsaved.Add("password"); }
         }
 
         /// <summary>
@@ -1476,7 +1507,7 @@ namespace FilesCom.Models
         public string PasswordConfirmation
         {
             get { return (string)attributes["password_confirmation"]; }
-            set { attributes["password_confirmation"] = value; }
+            set { attributes["password_confirmation"] = value; unsaved.Add("password_confirmation"); }
         }
 
         /// <summary>
@@ -1487,7 +1518,7 @@ namespace FilesCom.Models
         public bool AnnouncementsRead
         {
             get { return attributes["announcements_read"] == null ? false : (bool)attributes["announcements_read"]; }
-            set { attributes["announcements_read"] = value; }
+            set { attributes["announcements_read"] = value; unsaved.Add("announcements_read"); }
         }
 
         /// <summary>
@@ -1498,7 +1529,7 @@ namespace FilesCom.Models
         public bool Clear2fa
         {
             get { return attributes["clear_2fa"] == null ? false : (bool)attributes["clear_2fa"]; }
-            set { attributes["clear_2fa"] = value; }
+            set { attributes["clear_2fa"] = value; unsaved.Add("clear_2fa"); }
         }
 
         /// <summary>
@@ -1509,12 +1540,13 @@ namespace FilesCom.Models
         public bool ConvertToPartnerUser
         {
             get { return attributes["convert_to_partner_user"] == null ? false : (bool)attributes["convert_to_partner_user"]; }
-            set { attributes["convert_to_partner_user"] = value; }
+            set { attributes["convert_to_partner_user"] = value; unsaved.Add("convert_to_partner_user"); }
         }
 
         /// <summary>
         /// Unlock user who has been locked out due to failed logins
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task Unlock(Dictionary<string, object> parameters)
         {
             return UnlockCore(parameters, CancellationToken.None);
@@ -1523,6 +1555,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Unlock user who has been locked out due to failed logins
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task UnlockAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UnlockCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1532,31 +1566,33 @@ namespace FilesCom.Models
         private async Task UnlockCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The User has no id, which Unlock needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
         /// <summary>
         /// Resend user welcome email
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task ResendWelcomeEmail(Dictionary<string, object> parameters)
         {
             return ResendWelcomeEmailCore(parameters, CancellationToken.None);
@@ -1565,6 +1601,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Resend user welcome email
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task ResendWelcomeEmailAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return ResendWelcomeEmailCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1574,31 +1612,33 @@ namespace FilesCom.Models
         private async Task ResendWelcomeEmailCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The User has no id, which ResendWelcomeEmail needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
         /// <summary>
         /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         public Task User2faReset(Dictionary<string, object> parameters)
         {
             return User2faResetCore(parameters, CancellationToken.None);
@@ -1607,6 +1647,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task User2faResetAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return User2faResetCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1616,26 +1658,27 @@ namespace FilesCom.Models
         private async Task User2faResetCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The User has no id, which User2faReset needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
         /// <summary>
@@ -1712,6 +1755,11 @@ namespace FilesCom.Models
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The User it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<User> Update(Dictionary<string, object> parameters)
         {
             return UpdateCore(parameters, CancellationToken.None);
@@ -1791,6 +1839,12 @@ namespace FilesCom.Models
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        /// <remarks>
+        /// When it succeeds, this object takes the attributes Files.com returns. The User it returns is a
+        /// separate object with those attributes, which keeps the options this request was sent with.
+        /// </remarks>
         public Task<User> UpdateAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return UpdateCore(DictionaryUtil.Copy(parameters), cancellationToken);
@@ -1800,324 +1854,323 @@ namespace FilesCom.Models
         private async Task<User> UpdateCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The User has no id, which Update needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("avatar_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: avatar_file is null, which cannot be sent" : "Bad parameter: avatar_file must be of type FileAttachment or IDictionary<string, object>", "avatar_file");
+            }
+            if (parameters.TryGetValue("avatar_delete", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: avatar_delete is null, which cannot be sent" : "Bad parameter: avatar_delete must be of type bool", "avatar_delete");
+            }
+            if (parameters.TryGetValue("change_password", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: change_password is null, which cannot be sent" : "Bad parameter: change_password must be of type string", "change_password");
+            }
+            if (parameters.TryGetValue("change_password_confirmation", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: change_password_confirmation is null, which cannot be sent" : "Bad parameter: change_password_confirmation must be of type string", "change_password_confirmation");
+            }
+            if (parameters.TryGetValue("email", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email is null, which cannot be sent" : "Bad parameter: email must be of type string", "email");
+            }
+            if (parameters.TryGetValue("grant_permission", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: grant_permission is null, which cannot be sent" : "Bad parameter: grant_permission must be of type string", "grant_permission");
+            }
+            if (parameters.TryGetValue("group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_id is null, which cannot be sent" : "Bad parameter: group_id must be of type Nullable<Int64>", "group_id");
+            }
+            if (parameters.TryGetValue("group_ids", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_ids is null, which cannot be sent" : "Bad parameter: group_ids must be of type string", "group_ids");
+            }
+            if (parameters.TryGetValue("imported_password_hash", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: imported_password_hash is null, which cannot be sent" : "Bad parameter: imported_password_hash must be of type string", "imported_password_hash");
+            }
+            if (parameters.TryGetValue("password", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password is null, which cannot be sent" : "Bad parameter: password must be of type string", "password");
+            }
+            if (parameters.TryGetValue("password_confirmation", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_confirmation is null, which cannot be sent" : "Bad parameter: password_confirmation must be of type string", "password_confirmation");
+            }
+            if (parameters.TryGetValue("announcements_read", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: announcements_read is null, which cannot be sent" : "Bad parameter: announcements_read must be of type bool", "announcements_read");
+            }
+            if (parameters.TryGetValue("ai_assistant_personality_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ai_assistant_personality_id is null, which cannot be sent" : "Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "ai_assistant_personality_id");
+            }
+            if (parameters.TryGetValue("allowed_ips", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_ips is null, which cannot be sent" : "Bad parameter: allowed_ips must be of type string", "allowed_ips");
+            }
+            if (parameters.TryGetValue("attachments_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: attachments_permission is null, which cannot be sent" : "Bad parameter: attachments_permission must be of type bool", "attachments_permission");
+            }
+            if (parameters.TryGetValue("authenticate_until", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: authenticate_until is null, which cannot be sent" : "Bad parameter: authenticate_until must be of type string", "authenticate_until");
+            }
+            if (parameters.TryGetValue("authentication_method", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: authentication_method is null, which cannot be sent" : "Bad parameter: authentication_method must be of type string", "authentication_method");
+            }
+            if (parameters.TryGetValue("billing_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: billing_permission is null, which cannot be sent" : "Bad parameter: billing_permission must be of type bool", "billing_permission");
+            }
+            if (parameters.TryGetValue("bypass_user_lifecycle_rules", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bypass_user_lifecycle_rules is null, which cannot be sent" : "Bad parameter: bypass_user_lifecycle_rules must be of type bool", "bypass_user_lifecycle_rules");
+            }
+            if (parameters.TryGetValue("bypass_site_allowed_ips", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bypass_site_allowed_ips is null, which cannot be sent" : "Bad parameter: bypass_site_allowed_ips must be of type bool", "bypass_site_allowed_ips");
+            }
+            if (parameters.TryGetValue("dav_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dav_permission is null, which cannot be sent" : "Bad parameter: dav_permission must be of type bool", "dav_permission");
+            }
+            if (parameters.TryGetValue("desktop_configuration_profile_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_configuration_profile_id is null, which cannot be sent" : "Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "desktop_configuration_profile_id");
+            }
+            if (parameters.TryGetValue("default_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_workspace_id is null, which cannot be sent" : "Bad parameter: default_workspace_id must be of type Nullable<Int64>", "default_workspace_id");
+            }
+            if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disabled is null, which cannot be sent" : "Bad parameter: disabled must be of type bool", "disabled");
+            }
+            if (parameters.TryGetValue("filesystem_layout", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filesystem_layout is null, which cannot be sent" : "Bad parameter: filesystem_layout must be of type string", "filesystem_layout");
+            }
+            if (parameters.TryGetValue("ftp_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_permission is null, which cannot be sent" : "Bad parameter: ftp_permission must be of type bool", "ftp_permission");
+            }
+            if (parameters.TryGetValue("header_text", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: header_text is null, which cannot be sent" : "Bad parameter: header_text must be of type string", "header_text");
+            }
+            if (parameters.TryGetValue("integration_centric_profile_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: integration_centric_profile_id is null, which cannot be sent" : "Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "integration_centric_profile_id");
+            }
+            if (parameters.TryGetValue("language", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: language is null, which cannot be sent" : "Bad parameter: language must be of type string", "language");
+            }
+            if (parameters.TryGetValue("notification_daily_send_time", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notification_daily_send_time is null, which cannot be sent" : "Bad parameter: notification_daily_send_time must be of type Nullable<Int64>", "notification_daily_send_time");
+            }
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
+            }
+            if (parameters.TryGetValue("company", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: company is null, which cannot be sent" : "Bad parameter: company must be of type string", "company");
+            }
+            if (parameters.TryGetValue("notes", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notes is null, which cannot be sent" : "Bad parameter: notes must be of type string", "notes");
+            }
+            if (parameters.TryGetValue("office_integration_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: office_integration_enabled is null, which cannot be sent" : "Bad parameter: office_integration_enabled must be of type bool", "office_integration_enabled");
+            }
+            if (parameters.TryGetValue("partner_admin", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: partner_admin is null, which cannot be sent" : "Bad parameter: partner_admin must be of type bool", "partner_admin");
+            }
+            if (parameters.TryGetValue("partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: partner_id is null, which cannot be sent" : "Bad parameter: partner_id must be of type Nullable<Int64>", "partner_id");
+            }
+            if (parameters.TryGetValue("password_validity_days", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_validity_days is null, which cannot be sent" : "Bad parameter: password_validity_days must be of type Nullable<Int64>", "password_validity_days");
+            }
+            if (parameters.TryGetValue("primary_group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: primary_group_id is null, which cannot be sent" : "Bad parameter: primary_group_id must be of type Nullable<Int64>", "primary_group_id");
+            }
+            if (parameters.TryGetValue("readonly_site_admin", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: readonly_site_admin is null, which cannot be sent" : "Bad parameter: readonly_site_admin must be of type bool", "readonly_site_admin");
+            }
+            if (parameters.TryGetValue("receive_admin_alerts", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: receive_admin_alerts is null, which cannot be sent" : "Bad parameter: receive_admin_alerts must be of type bool", "receive_admin_alerts");
+            }
+            if (parameters.TryGetValue("notify_on_all_site_warnings", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_site_warnings is null, which cannot be sent" : "Bad parameter: notify_on_all_site_warnings must be of type bool", "notify_on_all_site_warnings");
+            }
+            if (parameters.TryGetValue("notify_on_all_sso_failures", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_sso_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_sso_failures must be of type bool", "notify_on_all_sso_failures");
+            }
+            if (parameters.TryGetValue("notify_on_all_user_security_events", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_user_security_events is null, which cannot be sent" : "Bad parameter: notify_on_all_user_security_events must be of type bool", "notify_on_all_user_security_events");
+            }
+            if (parameters.TryGetValue("notify_on_all_pending_work_failures", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_pending_work_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_pending_work_failures must be of type bool", "notify_on_all_pending_work_failures");
+            }
+            if (parameters.TryGetValue("notify_on_all_siem_http_destination_failures", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_siem_http_destination_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "notify_on_all_siem_http_destination_failures");
+            }
+            if (parameters.TryGetValue("notify_on_all_sync_failures", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_sync_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_sync_failures must be of type bool", "notify_on_all_sync_failures");
+            }
+            if (parameters.TryGetValue("notify_on_all_automation_failures", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_automation_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_automation_failures must be of type bool", "notify_on_all_automation_failures");
+            }
+            if (parameters.TryGetValue("notify_on_all_expectation_failures", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_expectation_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_expectation_failures must be of type bool", "notify_on_all_expectation_failures");
+            }
+            if (parameters.TryGetValue("require_login_by", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_login_by is null, which cannot be sent" : "Bad parameter: require_login_by must be of type string", "require_login_by");
+            }
+            if (parameters.TryGetValue("require_password_change", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_password_change is null, which cannot be sent" : "Bad parameter: require_password_change must be of type bool", "require_password_change");
+            }
+            if (parameters.TryGetValue("responsible_group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: responsible_group_id is null, which cannot be sent" : "Bad parameter: responsible_group_id must be of type Nullable<Int64>", "responsible_group_id");
+            }
+            if (parameters.TryGetValue("responsible_user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: responsible_user_id is null, which cannot be sent" : "Bad parameter: responsible_user_id must be of type Nullable<Int64>", "responsible_user_id");
+            }
+            if (parameters.TryGetValue("restapi_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restapi_permission is null, which cannot be sent" : "Bad parameter: restapi_permission must be of type bool", "restapi_permission");
+            }
+            if (parameters.TryGetValue("s3_compatible_endpoint_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint_permission is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint_permission must be of type bool", "s3_compatible_endpoint_permission");
+            }
+            if (parameters.TryGetValue("self_managed", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: self_managed is null, which cannot be sent" : "Bad parameter: self_managed must be of type bool", "self_managed");
+            }
+            if (parameters.TryGetValue("sftp_permission", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_permission is null, which cannot be sent" : "Bad parameter: sftp_permission must be of type bool", "sftp_permission");
+            }
+            if (parameters.TryGetValue("site_admin", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_admin is null, which cannot be sent" : "Bad parameter: site_admin must be of type bool", "site_admin");
+            }
+            if (parameters.TryGetValue("skip_welcome_screen", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: skip_welcome_screen is null, which cannot be sent" : "Bad parameter: skip_welcome_screen must be of type bool", "skip_welcome_screen");
+            }
+            if (parameters.TryGetValue("ssl_required", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type string", "ssl_required");
+            }
+            if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
+            }
+            if (parameters.TryGetValue("subscribe_to_newsletter", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subscribe_to_newsletter is null, which cannot be sent" : "Bad parameter: subscribe_to_newsletter must be of type bool", "subscribe_to_newsletter");
+            }
+            if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa is null, which cannot be sent" : "Bad parameter: require_2fa must be of type string", "require_2fa");
+            }
+            if (parameters.TryGetValue("tags", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: tags is null, which cannot be sent" : "Bad parameter: tags must be of type string", "tags");
+            }
+            if (parameters.TryGetValue("time_zone", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: time_zone is null, which cannot be sent" : "Bad parameter: time_zone must be of type string", "time_zone");
+            }
+            if (parameters.TryGetValue("user_root", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_root is null, which cannot be sent" : "Bad parameter: user_root must be of type string", "user_root");
+            }
+            if (parameters.TryGetValue("user_home", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_home is null, which cannot be sent" : "Bad parameter: user_home must be of type string", "user_home");
+            }
+            if (parameters.TryGetValue("workspace_admin", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_admin is null, which cannot be sent" : "Bad parameter: workspace_admin must be of type bool", "workspace_admin");
+            }
+            if (parameters.TryGetValue("username", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username is null, which cannot be sent" : "Bad parameter: username must be of type string", "username");
+            }
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
+            }
+            if (parameters.TryGetValue("clear_2fa", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: clear_2fa is null, which cannot be sent" : "Bad parameter: clear_2fa must be of type bool", "clear_2fa");
+            }
+            if (parameters.TryGetValue("convert_to_partner_user", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: convert_to_partner_user is null, which cannot be sent" : "Bad parameter: convert_to_partner_user must be of type bool", "convert_to_partner_user");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("avatar_file") && !(parameters["avatar_file"] is System.Net.Http.ByteArrayContent))
-            {
-                throw new ArgumentException("Bad parameter: avatar_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"avatar_file\"]");
-            }
-            if (parameters.ContainsKey("avatar_delete") && !(parameters["avatar_delete"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: avatar_delete must be of type bool", "parameters[\"avatar_delete\"]");
-            }
-            if (parameters.ContainsKey("change_password") && !(parameters["change_password"] is string))
-            {
-                throw new ArgumentException("Bad parameter: change_password must be of type string", "parameters[\"change_password\"]");
-            }
-            if (parameters.ContainsKey("change_password_confirmation") && !(parameters["change_password_confirmation"] is string))
-            {
-                throw new ArgumentException("Bad parameter: change_password_confirmation must be of type string", "parameters[\"change_password_confirmation\"]");
-            }
-            if (parameters.ContainsKey("email") && !(parameters["email"] is string))
-            {
-                throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
-            }
-            if (parameters.ContainsKey("grant_permission") && !(parameters["grant_permission"] is string))
-            {
-                throw new ArgumentException("Bad parameter: grant_permission must be of type string", "parameters[\"grant_permission\"]");
-            }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
-            }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
-            {
-                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
-            }
-            if (parameters.ContainsKey("imported_password_hash") && !(parameters["imported_password_hash"] is string))
-            {
-                throw new ArgumentException("Bad parameter: imported_password_hash must be of type string", "parameters[\"imported_password_hash\"]");
-            }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
-            {
-                throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
-            }
-            if (parameters.ContainsKey("password_confirmation") && !(parameters["password_confirmation"] is string))
-            {
-                throw new ArgumentException("Bad parameter: password_confirmation must be of type string", "parameters[\"password_confirmation\"]");
-            }
-            if (parameters.ContainsKey("announcements_read") && !(parameters["announcements_read"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: announcements_read must be of type bool", "parameters[\"announcements_read\"]");
-            }
-            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
-            }
-            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
-            {
-                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
-            }
-            if (parameters.ContainsKey("attachments_permission") && !(parameters["attachments_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: attachments_permission must be of type bool", "parameters[\"attachments_permission\"]");
-            }
-            if (parameters.ContainsKey("authenticate_until") && !(parameters["authenticate_until"] is string))
-            {
-                throw new ArgumentException("Bad parameter: authenticate_until must be of type string", "parameters[\"authenticate_until\"]");
-            }
-            if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
-            {
-                throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
-            }
-            if (parameters.ContainsKey("billing_permission") && !(parameters["billing_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: billing_permission must be of type bool", "parameters[\"billing_permission\"]");
-            }
-            if (parameters.ContainsKey("bypass_user_lifecycle_rules") && !(parameters["bypass_user_lifecycle_rules"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: bypass_user_lifecycle_rules must be of type bool", "parameters[\"bypass_user_lifecycle_rules\"]");
-            }
-            if (parameters.ContainsKey("bypass_site_allowed_ips") && !(parameters["bypass_site_allowed_ips"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: bypass_site_allowed_ips must be of type bool", "parameters[\"bypass_site_allowed_ips\"]");
-            }
-            if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
-            }
-            if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
-            }
-            if (parameters.ContainsKey("default_workspace_id") && !(parameters["default_workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: default_workspace_id must be of type Nullable<Int64>", "parameters[\"default_workspace_id\"]");
-            }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
-            }
-            if (parameters.ContainsKey("filesystem_layout") && !(parameters["filesystem_layout"] is string))
-            {
-                throw new ArgumentException("Bad parameter: filesystem_layout must be of type string", "parameters[\"filesystem_layout\"]");
-            }
-            if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
-            }
-            if (parameters.ContainsKey("header_text") && !(parameters["header_text"] is string))
-            {
-                throw new ArgumentException("Bad parameter: header_text must be of type string", "parameters[\"header_text\"]");
-            }
-            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
-            }
-            if (parameters.ContainsKey("language") && !(parameters["language"] is string))
-            {
-                throw new ArgumentException("Bad parameter: language must be of type string", "parameters[\"language\"]");
-            }
-            if (parameters.ContainsKey("notification_daily_send_time") && !(parameters["notification_daily_send_time"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: notification_daily_send_time must be of type Nullable<Int64>", "parameters[\"notification_daily_send_time\"]");
-            }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
-            {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
-            }
-            if (parameters.ContainsKey("company") && !(parameters["company"] is string))
-            {
-                throw new ArgumentException("Bad parameter: company must be of type string", "parameters[\"company\"]");
-            }
-            if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
-            {
-                throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
-            }
-            if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
-            }
-            if (parameters.ContainsKey("partner_admin") && !(parameters["partner_admin"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: partner_admin must be of type bool", "parameters[\"partner_admin\"]");
-            }
-            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
-            }
-            if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
-            }
-            if (parameters.ContainsKey("primary_group_id") && !(parameters["primary_group_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: primary_group_id must be of type Nullable<Int64>", "parameters[\"primary_group_id\"]");
-            }
-            if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: readonly_site_admin must be of type bool", "parameters[\"readonly_site_admin\"]");
-            }
-            if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_site_warnings") && !(parameters["notify_on_all_site_warnings"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_site_warnings must be of type bool", "parameters[\"notify_on_all_site_warnings\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_sso_failures") && !(parameters["notify_on_all_sso_failures"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_sso_failures must be of type bool", "parameters[\"notify_on_all_sso_failures\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_user_security_events") && !(parameters["notify_on_all_user_security_events"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_user_security_events must be of type bool", "parameters[\"notify_on_all_user_security_events\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_pending_work_failures") && !(parameters["notify_on_all_pending_work_failures"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_pending_work_failures must be of type bool", "parameters[\"notify_on_all_pending_work_failures\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_siem_http_destination_failures") && !(parameters["notify_on_all_siem_http_destination_failures"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "parameters[\"notify_on_all_siem_http_destination_failures\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_sync_failures") && !(parameters["notify_on_all_sync_failures"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_sync_failures must be of type bool", "parameters[\"notify_on_all_sync_failures\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_automation_failures") && !(parameters["notify_on_all_automation_failures"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_automation_failures must be of type bool", "parameters[\"notify_on_all_automation_failures\"]");
-            }
-            if (parameters.ContainsKey("notify_on_all_expectation_failures") && !(parameters["notify_on_all_expectation_failures"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: notify_on_all_expectation_failures must be of type bool", "parameters[\"notify_on_all_expectation_failures\"]");
-            }
-            if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
-            {
-                throw new ArgumentException("Bad parameter: require_login_by must be of type string", "parameters[\"require_login_by\"]");
-            }
-            if (parameters.ContainsKey("require_password_change") && !(parameters["require_password_change"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: require_password_change must be of type bool", "parameters[\"require_password_change\"]");
-            }
-            if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
-            }
-            if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
-            }
-            if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
-            }
-            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
-            }
-            if (parameters.ContainsKey("self_managed") && !(parameters["self_managed"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: self_managed must be of type bool", "parameters[\"self_managed\"]");
-            }
-            if (parameters.ContainsKey("sftp_permission") && !(parameters["sftp_permission"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: sftp_permission must be of type bool", "parameters[\"sftp_permission\"]");
-            }
-            if (parameters.ContainsKey("site_admin") && !(parameters["site_admin"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: site_admin must be of type bool", "parameters[\"site_admin\"]");
-            }
-            if (parameters.ContainsKey("skip_welcome_screen") && !(parameters["skip_welcome_screen"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: skip_welcome_screen must be of type bool", "parameters[\"skip_welcome_screen\"]");
-            }
-            if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is string))
-            {
-                throw new ArgumentException("Bad parameter: ssl_required must be of type string", "parameters[\"ssl_required\"]");
-            }
-            if (parameters.ContainsKey("sso_strategy_id") && !(parameters["sso_strategy_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "parameters[\"sso_strategy_id\"]");
-            }
-            if (parameters.ContainsKey("subscribe_to_newsletter") && !(parameters["subscribe_to_newsletter"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: subscribe_to_newsletter must be of type bool", "parameters[\"subscribe_to_newsletter\"]");
-            }
-            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is string))
-            {
-                throw new ArgumentException("Bad parameter: require_2fa must be of type string", "parameters[\"require_2fa\"]");
-            }
-            if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
-            {
-                throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
-            }
-            if (parameters.ContainsKey("time_zone") && !(parameters["time_zone"] is string))
-            {
-                throw new ArgumentException("Bad parameter: time_zone must be of type string", "parameters[\"time_zone\"]");
-            }
-            if (parameters.ContainsKey("user_root") && !(parameters["user_root"] is string))
-            {
-                throw new ArgumentException("Bad parameter: user_root must be of type string", "parameters[\"user_root\"]");
-            }
-            if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
-            {
-                throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
-            }
-            if (parameters.ContainsKey("workspace_admin") && !(parameters["workspace_admin"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: workspace_admin must be of type bool", "parameters[\"workspace_admin\"]");
-            }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
-            {
-                throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
-            }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
-            }
-            if (parameters.ContainsKey("clear_2fa") && !(parameters["clear_2fa"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: clear_2fa must be of type bool", "parameters[\"clear_2fa\"]");
-            }
-            if (parameters.ContainsKey("convert_to_partner_user") && !(parameters["convert_to_partner_user"] is bool))
-            {
-                throw new ArgumentException("Bad parameter: convert_to_partner_user must be of type bool", "parameters[\"convert_to_partner_user\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             string responseJson = await FilesClient.SendStringRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
-
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, requestOptions);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            User updated = JsonUtil.DeserializeModelResponse<User>(responseJson, context, requestOptions);
+            // This object takes its own reading of the response, so that it shares no array or nested model with the
+            // one returned, and a change to either leaves the other alone.
+            Refresh(JsonUtil.DeserializeModelResponse<User>(responseJson, context, requestOptions).attributes);
+            // Its later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return updated;
         }
 
         /// <summary>
         /// Parameters:
         ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         public Task Delete(Dictionary<string, object> parameters)
         {
             return DeleteCore(parameters, CancellationToken.None);
@@ -2127,11 +2180,18 @@ namespace FilesCom.Models
         /// Parameters:
         ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
+        /// <summary>
+        /// Same as <see cref="DeleteAsync"/>, but neither waits for the request nor reports its failure.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        [Obsolete("Destroy neither waits for the request nor reports its failure. Use DestroyAsync instead.")]
         public async void Destroy(Dictionary<string, object> parameters)
         {
             Delete(parameters);
@@ -2140,6 +2200,8 @@ namespace FilesCom.Models
         /// <summary>
         /// Same as <see cref="DeleteAsync"/>.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
         public Task DestroyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
             return DeleteAsync(parameters, cancellationToken);
@@ -2148,49 +2210,99 @@ namespace FilesCom.Models
         private async Task DeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            parameters["id"] = attributes["id"];
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The User has no id, which Delete needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("new_owner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: new_owner_id is null, which cannot be sent" : "Bad parameter: new_owner_id must be of type Nullable<Int64>", "new_owner_id");
+            }
 
-            if (!attributes.ContainsKey("id"))
-            {
-                throw new ArgumentException("Current object doesn't have a id");
-            }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
-            {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
-            }
-            if (parameters.ContainsKey("new_owner_id") && !(parameters["new_owner_id"] is Nullable<Int64>))
-            {
-                throw new ArgumentException("Bad parameter: new_owner_id must be of type Nullable<Int64>", "parameters[\"new_owner_id\"]");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client));
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
         }
 
 
+        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "subscribe_to_newsletter", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "subscribe_to_newsletter", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
+
+        /// <summary>
+        /// Same as <see cref="SaveAsync"/>, without a cancellation token.
+        /// </summary>
         public Task Save()
         {
             return SaveAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// Creates this User on Files.com, or updates it if it has an ID.
+        /// It sends the attributes set on this object, in its constructor or with its properties, or changed in place,
+        /// such as an element of an array, since it was made or last came from Files.com, of those that operation
+        /// takes; it sends no other attributes, and no defaults. Each goes in the form its parameter takes, such as a
+        /// DateTime as ISO 8601 text. When it succeeds, this object takes the attributes Files.com returns.
+        /// </summary>
+        /// <param name="cancellationToken">Stops the request.</param>
         public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
             if (this.attributes["id"] != null)
             {
-                await UpdateCore(this.attributes, cancellationToken);
+                await UpdateCore(AttributesToSave(UpdateParameterNames), cancellationToken);
+                return;
             }
-            else
+            User created = await User.CreateCore(new OperationContext(FilesClient.Bind(ref client), origin), AttributesToSave(CreateParameterNames), DictionaryUtil.Copy(this.options), cancellationToken);
+            Refresh(created.getAttributes());
+            origin = ((IModel)created).Origin;
+        }
+
+        // The attributes set or changed on this object since it was made or last came from Files.com, of those named
+        // in parameterNames: the parameters of the operation that saves it.
+        private Dictionary<string, object> AttributesToSave(string[] parameterNames)
+        {
+            Dictionary<string, object> toSave = new Dictionary<string, object>();
+            foreach (string name in parameterNames)
             {
-                var newObj = await User.CreateCore(new OperationContext(FilesClient.Bind(ref client)), this.attributes, DictionaryUtil.Copy(this.options), cancellationToken);
-                this.attributes = newObj.getAttributes();
+                if (unsaved.Contains(name))
+                {
+                    toSave[name] = ToParameter(name, attributes[name]);
+                }
             }
+            return toSave;
+        }
+
+        // The value SaveAsync sends for an attribute whose property type is not the one its parameter takes.
+        private static object ToParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case "authenticate_until":
+                case "require_login_by":
+                    return ParameterValue.FromDateTime(value);
+                default:
+                    return value;
+            }
+        }
+
+        // Takes the attributes Files.com returned for this object after saving or updating it, which the response's
+        // reading has already checked is an object. Its client and options stay as they are.
+        private void Refresh(Dictionary<string, object> saved)
+        {
+            attributes = saved;
+            unsaved.Clear();
         }
 
         /// <summary>
@@ -2208,6 +2320,8 @@ namespace FilesCom.Models
         ///   include_parent_site_users - boolean - Include users from the parent site.
         ///   search - string - Searches for partial matches of name, username, or email.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<User> List(
 
             Dictionary<string, object> parameters = null,
@@ -2217,6 +2331,23 @@ namespace FilesCom.Models
             return ListCore(FilesClient.Instance, parameters, options);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `site_id`, `workspace_id`, `company`, `name`, `disabled`, `authenticate_until`, `username`, `email`, `site_admin`, `last_desktop_login_at`, `last_login_at`, `password_validity_days` or `ssl_required`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `username`, `name`, `email`, `company`, `site_admin`, `password_validity_days`, `ssl_required`, `last_login_at`, `authenticate_until`, `not_site_admin`, `disabled`, `partner_id`, `primary_group_id` or `workspace_id`. Valid field combinations are `[ site_admin, username ]`, `[ not_site_admin, username ]`, `[ workspace_id, username ]`, `[ company, name ]`, `[ workspace_id, name ]`, `[ workspace_id, email ]`, `[ workspace_id, company ]`, `[ workspace_id, site_admin ]`, `[ workspace_id, not_site_admin ]`, `[ workspace_id, disabled ]`, `[ workspace_id, partner_id ]`, `[ workspace_id, site_admin, username ]`, `[ workspace_id, not_site_admin, username ]`, `[ workspace_id, disabled, username ]`, `[ workspace_id, partner_id, username ]` or `[ workspace_id, company, name ]`.
+        ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
+        ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
+        ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `username`, `name`, `email` or `company`. Valid field combinations are `[ company, name ]`.
+        ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
+        ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
+        ///   ids - string - comma-separated list of User IDs
+        ///   include_parent_site_users - boolean - Include users from the parent site.
+        ///   search - string - Searches for partial matches of name, username, or email.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static FilesList<User> All(
 
             Dictionary<string, object> parameters = null,
@@ -2235,54 +2366,55 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (parameters.ContainsKey("cursor") && !(parameters["cursor"] is string))
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: cursor must be of type string", "parameters[\"cursor\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
             }
-            if (parameters.ContainsKey("per_page") && !(parameters["per_page"] is Nullable<Int64>))
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: per_page must be of type Nullable<Int64>", "parameters[\"per_page\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
-            if (parameters.ContainsKey("sort_by") && !(parameters["sort_by"] is object))
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: sort_by must be of type object", "parameters[\"sort_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
             }
-            if (parameters.ContainsKey("filter") && !(parameters["filter"] is object))
+            if (parameters.TryGetValue("filter", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter must be of type object", "parameters[\"filter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter is null, which cannot be sent" : "Bad parameter: filter must be of type object", "filter");
             }
-            if (parameters.ContainsKey("filter_gt") && !(parameters["filter_gt"] is object))
+            if (parameters.TryGetValue("filter_gt", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_gt must be of type object", "parameters[\"filter_gt\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_gt is null, which cannot be sent" : "Bad parameter: filter_gt must be of type object", "filter_gt");
             }
-            if (parameters.ContainsKey("filter_gteq") && !(parameters["filter_gteq"] is object))
+            if (parameters.TryGetValue("filter_gteq", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_gteq must be of type object", "parameters[\"filter_gteq\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_gteq is null, which cannot be sent" : "Bad parameter: filter_gteq must be of type object", "filter_gteq");
             }
-            if (parameters.ContainsKey("filter_prefix") && !(parameters["filter_prefix"] is object))
+            if (parameters.TryGetValue("filter_prefix", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_prefix must be of type object", "parameters[\"filter_prefix\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_prefix is null, which cannot be sent" : "Bad parameter: filter_prefix must be of type object", "filter_prefix");
             }
-            if (parameters.ContainsKey("filter_lt") && !(parameters["filter_lt"] is object))
+            if (parameters.TryGetValue("filter_lt", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_lt must be of type object", "parameters[\"filter_lt\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_lt is null, which cannot be sent" : "Bad parameter: filter_lt must be of type object", "filter_lt");
             }
-            if (parameters.ContainsKey("filter_lteq") && !(parameters["filter_lteq"] is object))
+            if (parameters.TryGetValue("filter_lteq", out parameterValue) && !(parameterValue is object))
             {
-                throw new ArgumentException("Bad parameter: filter_lteq must be of type object", "parameters[\"filter_lteq\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filter_lteq is null, which cannot be sent" : "Bad parameter: filter_lteq must be of type object", "filter_lteq");
             }
-            if (parameters.ContainsKey("ids") && !(parameters["ids"] is string))
+            if (parameters.TryGetValue("ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ids must be of type string", "parameters[\"ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ids is null, which cannot be sent" : "Bad parameter: ids must be of type string", "ids");
             }
-            if (parameters.ContainsKey("include_parent_site_users") && !(parameters["include_parent_site_users"] is bool))
+            if (parameters.TryGetValue("include_parent_site_users", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: include_parent_site_users must be of type bool", "parameters[\"include_parent_site_users\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: include_parent_site_users is null, which cannot be sent" : "Bad parameter: include_parent_site_users must be of type bool", "include_parent_site_users");
             }
-            if (parameters.ContainsKey("search") && !(parameters["search"] is string))
+            if (parameters.TryGetValue("search", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: search must be of type string", "parameters[\"search\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: search is null, which cannot be sent" : "Bad parameter: search must be of type string", "search");
             }
 
             return new FilesList<User>(client, $"/users", System.Net.Http.HttpMethod.Get, parameters, options);
@@ -2292,6 +2424,9 @@ namespace FilesCom.Models
         /// Parameters:
         ///   id (required) - int64 - User ID.
         /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<User> Find(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2301,6 +2436,13 @@ namespace FilesCom.Models
             return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - User ID.
+        /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<User> Get(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2320,6 +2462,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2329,25 +2472,18 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<User>(responseJson, context, options);
         }
 
         /// <summary>
@@ -2422,6 +2558,8 @@ namespace FilesCom.Models
         ///   username (required) - string - User's username
         ///   workspace_id - int64 - ID of the Workspace the user belongs to. 0 is the Default Workspace.
         /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<User> Create(
 
             Dictionary<string, object> parameters = null,
@@ -2441,303 +2579,300 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
-            if (!parameters.ContainsKey("username") || parameters["username"] == null)
+            if (!parameters.TryGetValue("username", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: username", "parameters[\"username\"]");
+                throw new MissingParameterException("Parameter missing: username", "username");
             }
-            if (parameters.ContainsKey("avatar_file") && !(parameters["avatar_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("avatar_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: avatar_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"avatar_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: avatar_file is null, which cannot be sent" : "Bad parameter: avatar_file must be of type FileAttachment or IDictionary<string, object>", "avatar_file");
             }
-            if (parameters.ContainsKey("avatar_delete") && !(parameters["avatar_delete"] is bool))
+            if (parameters.TryGetValue("avatar_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: avatar_delete must be of type bool", "parameters[\"avatar_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: avatar_delete is null, which cannot be sent" : "Bad parameter: avatar_delete must be of type bool", "avatar_delete");
             }
-            if (parameters.ContainsKey("change_password") && !(parameters["change_password"] is string))
+            if (parameters.TryGetValue("change_password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: change_password must be of type string", "parameters[\"change_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: change_password is null, which cannot be sent" : "Bad parameter: change_password must be of type string", "change_password");
             }
-            if (parameters.ContainsKey("change_password_confirmation") && !(parameters["change_password_confirmation"] is string))
+            if (parameters.TryGetValue("change_password_confirmation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: change_password_confirmation must be of type string", "parameters[\"change_password_confirmation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: change_password_confirmation is null, which cannot be sent" : "Bad parameter: change_password_confirmation must be of type string", "change_password_confirmation");
             }
-            if (parameters.ContainsKey("email") && !(parameters["email"] is string))
+            if (parameters.TryGetValue("email", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email is null, which cannot be sent" : "Bad parameter: email must be of type string", "email");
             }
-            if (parameters.ContainsKey("grant_permission") && !(parameters["grant_permission"] is string))
+            if (parameters.TryGetValue("grant_permission", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: grant_permission must be of type string", "parameters[\"grant_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: grant_permission is null, which cannot be sent" : "Bad parameter: grant_permission must be of type string", "grant_permission");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_id is null, which cannot be sent" : "Bad parameter: group_id must be of type Nullable<Int64>", "group_id");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
+            if (parameters.TryGetValue("group_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_ids is null, which cannot be sent" : "Bad parameter: group_ids must be of type string", "group_ids");
             }
-            if (parameters.ContainsKey("imported_password_hash") && !(parameters["imported_password_hash"] is string))
+            if (parameters.TryGetValue("imported_password_hash", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: imported_password_hash must be of type string", "parameters[\"imported_password_hash\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: imported_password_hash is null, which cannot be sent" : "Bad parameter: imported_password_hash must be of type string", "imported_password_hash");
             }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
+            if (parameters.TryGetValue("password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password is null, which cannot be sent" : "Bad parameter: password must be of type string", "password");
             }
-            if (parameters.ContainsKey("password_confirmation") && !(parameters["password_confirmation"] is string))
+            if (parameters.TryGetValue("password_confirmation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: password_confirmation must be of type string", "parameters[\"password_confirmation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_confirmation is null, which cannot be sent" : "Bad parameter: password_confirmation must be of type string", "password_confirmation");
             }
-            if (parameters.ContainsKey("announcements_read") && !(parameters["announcements_read"] is bool))
+            if (parameters.TryGetValue("announcements_read", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: announcements_read must be of type bool", "parameters[\"announcements_read\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: announcements_read is null, which cannot be sent" : "Bad parameter: announcements_read must be of type bool", "announcements_read");
             }
-            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("ai_assistant_personality_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ai_assistant_personality_id is null, which cannot be sent" : "Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "ai_assistant_personality_id");
             }
-            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            if (parameters.TryGetValue("allowed_ips", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_ips is null, which cannot be sent" : "Bad parameter: allowed_ips must be of type string", "allowed_ips");
             }
-            if (parameters.ContainsKey("attachments_permission") && !(parameters["attachments_permission"] is bool))
+            if (parameters.TryGetValue("attachments_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: attachments_permission must be of type bool", "parameters[\"attachments_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: attachments_permission is null, which cannot be sent" : "Bad parameter: attachments_permission must be of type bool", "attachments_permission");
             }
-            if (parameters.ContainsKey("authenticate_until") && !(parameters["authenticate_until"] is string))
+            if (parameters.TryGetValue("authenticate_until", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: authenticate_until must be of type string", "parameters[\"authenticate_until\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: authenticate_until is null, which cannot be sent" : "Bad parameter: authenticate_until must be of type string", "authenticate_until");
             }
-            if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
+            if (parameters.TryGetValue("authentication_method", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: authentication_method is null, which cannot be sent" : "Bad parameter: authentication_method must be of type string", "authentication_method");
             }
-            if (parameters.ContainsKey("billing_permission") && !(parameters["billing_permission"] is bool))
+            if (parameters.TryGetValue("billing_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: billing_permission must be of type bool", "parameters[\"billing_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: billing_permission is null, which cannot be sent" : "Bad parameter: billing_permission must be of type bool", "billing_permission");
             }
-            if (parameters.ContainsKey("bypass_user_lifecycle_rules") && !(parameters["bypass_user_lifecycle_rules"] is bool))
+            if (parameters.TryGetValue("bypass_user_lifecycle_rules", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_user_lifecycle_rules must be of type bool", "parameters[\"bypass_user_lifecycle_rules\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bypass_user_lifecycle_rules is null, which cannot be sent" : "Bad parameter: bypass_user_lifecycle_rules must be of type bool", "bypass_user_lifecycle_rules");
             }
-            if (parameters.ContainsKey("bypass_site_allowed_ips") && !(parameters["bypass_site_allowed_ips"] is bool))
+            if (parameters.TryGetValue("bypass_site_allowed_ips", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_site_allowed_ips must be of type bool", "parameters[\"bypass_site_allowed_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bypass_site_allowed_ips is null, which cannot be sent" : "Bad parameter: bypass_site_allowed_ips must be of type bool", "bypass_site_allowed_ips");
             }
-            if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
+            if (parameters.TryGetValue("dav_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dav_permission is null, which cannot be sent" : "Bad parameter: dav_permission must be of type bool", "dav_permission");
             }
-            if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("desktop_configuration_profile_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_configuration_profile_id is null, which cannot be sent" : "Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "desktop_configuration_profile_id");
             }
-            if (parameters.ContainsKey("default_workspace_id") && !(parameters["default_workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("default_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: default_workspace_id must be of type Nullable<Int64>", "parameters[\"default_workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_workspace_id is null, which cannot be sent" : "Bad parameter: default_workspace_id must be of type Nullable<Int64>", "default_workspace_id");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
+            if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disabled is null, which cannot be sent" : "Bad parameter: disabled must be of type bool", "disabled");
             }
-            if (parameters.ContainsKey("filesystem_layout") && !(parameters["filesystem_layout"] is string))
+            if (parameters.TryGetValue("filesystem_layout", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filesystem_layout must be of type string", "parameters[\"filesystem_layout\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filesystem_layout is null, which cannot be sent" : "Bad parameter: filesystem_layout must be of type string", "filesystem_layout");
             }
-            if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
+            if (parameters.TryGetValue("ftp_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_permission is null, which cannot be sent" : "Bad parameter: ftp_permission must be of type bool", "ftp_permission");
             }
-            if (parameters.ContainsKey("header_text") && !(parameters["header_text"] is string))
+            if (parameters.TryGetValue("header_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: header_text must be of type string", "parameters[\"header_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: header_text is null, which cannot be sent" : "Bad parameter: header_text must be of type string", "header_text");
             }
-            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("integration_centric_profile_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: integration_centric_profile_id is null, which cannot be sent" : "Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "integration_centric_profile_id");
             }
-            if (parameters.ContainsKey("language") && !(parameters["language"] is string))
+            if (parameters.TryGetValue("language", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: language must be of type string", "parameters[\"language\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: language is null, which cannot be sent" : "Bad parameter: language must be of type string", "language");
             }
-            if (parameters.ContainsKey("notification_daily_send_time") && !(parameters["notification_daily_send_time"] is Nullable<Int64>))
+            if (parameters.TryGetValue("notification_daily_send_time", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: notification_daily_send_time must be of type Nullable<Int64>", "parameters[\"notification_daily_send_time\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notification_daily_send_time is null, which cannot be sent" : "Bad parameter: notification_daily_send_time must be of type Nullable<Int64>", "notification_daily_send_time");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("company") && !(parameters["company"] is string))
+            if (parameters.TryGetValue("company", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: company must be of type string", "parameters[\"company\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: company is null, which cannot be sent" : "Bad parameter: company must be of type string", "company");
             }
-            if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
+            if (parameters.TryGetValue("notes", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notes is null, which cannot be sent" : "Bad parameter: notes must be of type string", "notes");
             }
-            if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
+            if (parameters.TryGetValue("office_integration_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: office_integration_enabled is null, which cannot be sent" : "Bad parameter: office_integration_enabled must be of type bool", "office_integration_enabled");
             }
-            if (parameters.ContainsKey("partner_admin") && !(parameters["partner_admin"] is bool))
+            if (parameters.TryGetValue("partner_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: partner_admin must be of type bool", "parameters[\"partner_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: partner_admin is null, which cannot be sent" : "Bad parameter: partner_admin must be of type bool", "partner_admin");
             }
-            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: partner_id is null, which cannot be sent" : "Bad parameter: partner_id must be of type Nullable<Int64>", "partner_id");
             }
-            if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
+            if (parameters.TryGetValue("password_validity_days", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_validity_days is null, which cannot be sent" : "Bad parameter: password_validity_days must be of type Nullable<Int64>", "password_validity_days");
             }
-            if (parameters.ContainsKey("primary_group_id") && !(parameters["primary_group_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("primary_group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: primary_group_id must be of type Nullable<Int64>", "parameters[\"primary_group_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: primary_group_id is null, which cannot be sent" : "Bad parameter: primary_group_id must be of type Nullable<Int64>", "primary_group_id");
             }
-            if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
+            if (parameters.TryGetValue("readonly_site_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: readonly_site_admin must be of type bool", "parameters[\"readonly_site_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: readonly_site_admin is null, which cannot be sent" : "Bad parameter: readonly_site_admin must be of type bool", "readonly_site_admin");
             }
-            if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
+            if (parameters.TryGetValue("receive_admin_alerts", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: receive_admin_alerts is null, which cannot be sent" : "Bad parameter: receive_admin_alerts must be of type bool", "receive_admin_alerts");
             }
-            if (parameters.ContainsKey("notify_on_all_site_warnings") && !(parameters["notify_on_all_site_warnings"] is bool))
+            if (parameters.TryGetValue("notify_on_all_site_warnings", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_site_warnings must be of type bool", "parameters[\"notify_on_all_site_warnings\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_site_warnings is null, which cannot be sent" : "Bad parameter: notify_on_all_site_warnings must be of type bool", "notify_on_all_site_warnings");
             }
-            if (parameters.ContainsKey("notify_on_all_sso_failures") && !(parameters["notify_on_all_sso_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_sso_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_sso_failures must be of type bool", "parameters[\"notify_on_all_sso_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_sso_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_sso_failures must be of type bool", "notify_on_all_sso_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_user_security_events") && !(parameters["notify_on_all_user_security_events"] is bool))
+            if (parameters.TryGetValue("notify_on_all_user_security_events", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_user_security_events must be of type bool", "parameters[\"notify_on_all_user_security_events\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_user_security_events is null, which cannot be sent" : "Bad parameter: notify_on_all_user_security_events must be of type bool", "notify_on_all_user_security_events");
             }
-            if (parameters.ContainsKey("notify_on_all_pending_work_failures") && !(parameters["notify_on_all_pending_work_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_pending_work_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_pending_work_failures must be of type bool", "parameters[\"notify_on_all_pending_work_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_pending_work_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_pending_work_failures must be of type bool", "notify_on_all_pending_work_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_siem_http_destination_failures") && !(parameters["notify_on_all_siem_http_destination_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_siem_http_destination_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "parameters[\"notify_on_all_siem_http_destination_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_siem_http_destination_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "notify_on_all_siem_http_destination_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_sync_failures") && !(parameters["notify_on_all_sync_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_sync_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_sync_failures must be of type bool", "parameters[\"notify_on_all_sync_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_sync_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_sync_failures must be of type bool", "notify_on_all_sync_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_automation_failures") && !(parameters["notify_on_all_automation_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_automation_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_automation_failures must be of type bool", "parameters[\"notify_on_all_automation_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_automation_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_automation_failures must be of type bool", "notify_on_all_automation_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_expectation_failures") && !(parameters["notify_on_all_expectation_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_expectation_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_expectation_failures must be of type bool", "parameters[\"notify_on_all_expectation_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_expectation_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_expectation_failures must be of type bool", "notify_on_all_expectation_failures");
             }
-            if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
+            if (parameters.TryGetValue("require_login_by", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: require_login_by must be of type string", "parameters[\"require_login_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_login_by is null, which cannot be sent" : "Bad parameter: require_login_by must be of type string", "require_login_by");
             }
-            if (parameters.ContainsKey("require_password_change") && !(parameters["require_password_change"] is bool))
+            if (parameters.TryGetValue("require_password_change", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: require_password_change must be of type bool", "parameters[\"require_password_change\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_password_change is null, which cannot be sent" : "Bad parameter: require_password_change must be of type bool", "require_password_change");
             }
-            if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("responsible_group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: responsible_group_id is null, which cannot be sent" : "Bad parameter: responsible_group_id must be of type Nullable<Int64>", "responsible_group_id");
             }
-            if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("responsible_user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: responsible_user_id is null, which cannot be sent" : "Bad parameter: responsible_user_id must be of type Nullable<Int64>", "responsible_user_id");
             }
-            if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
+            if (parameters.TryGetValue("restapi_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restapi_permission is null, which cannot be sent" : "Bad parameter: restapi_permission must be of type bool", "restapi_permission");
             }
-            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            if (parameters.TryGetValue("s3_compatible_endpoint_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint_permission is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint_permission must be of type bool", "s3_compatible_endpoint_permission");
             }
-            if (parameters.ContainsKey("self_managed") && !(parameters["self_managed"] is bool))
+            if (parameters.TryGetValue("self_managed", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: self_managed must be of type bool", "parameters[\"self_managed\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: self_managed is null, which cannot be sent" : "Bad parameter: self_managed must be of type bool", "self_managed");
             }
-            if (parameters.ContainsKey("sftp_permission") && !(parameters["sftp_permission"] is bool))
+            if (parameters.TryGetValue("sftp_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_permission must be of type bool", "parameters[\"sftp_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_permission is null, which cannot be sent" : "Bad parameter: sftp_permission must be of type bool", "sftp_permission");
             }
-            if (parameters.ContainsKey("site_admin") && !(parameters["site_admin"] is bool))
+            if (parameters.TryGetValue("site_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: site_admin must be of type bool", "parameters[\"site_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_admin is null, which cannot be sent" : "Bad parameter: site_admin must be of type bool", "site_admin");
             }
-            if (parameters.ContainsKey("skip_welcome_screen") && !(parameters["skip_welcome_screen"] is bool))
+            if (parameters.TryGetValue("skip_welcome_screen", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: skip_welcome_screen must be of type bool", "parameters[\"skip_welcome_screen\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: skip_welcome_screen is null, which cannot be sent" : "Bad parameter: skip_welcome_screen must be of type bool", "skip_welcome_screen");
             }
-            if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is string))
+            if (parameters.TryGetValue("ssl_required", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ssl_required must be of type string", "parameters[\"ssl_required\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type string", "ssl_required");
             }
-            if (parameters.ContainsKey("sso_strategy_id") && !(parameters["sso_strategy_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "parameters[\"sso_strategy_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
             }
-            if (parameters.ContainsKey("subscribe_to_newsletter") && !(parameters["subscribe_to_newsletter"] is bool))
+            if (parameters.TryGetValue("subscribe_to_newsletter", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: subscribe_to_newsletter must be of type bool", "parameters[\"subscribe_to_newsletter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subscribe_to_newsletter is null, which cannot be sent" : "Bad parameter: subscribe_to_newsletter must be of type bool", "subscribe_to_newsletter");
             }
-            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is string))
+            if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: require_2fa must be of type string", "parameters[\"require_2fa\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa is null, which cannot be sent" : "Bad parameter: require_2fa must be of type string", "require_2fa");
             }
-            if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
+            if (parameters.TryGetValue("tags", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: tags is null, which cannot be sent" : "Bad parameter: tags must be of type string", "tags");
             }
-            if (parameters.ContainsKey("time_zone") && !(parameters["time_zone"] is string))
+            if (parameters.TryGetValue("time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: time_zone must be of type string", "parameters[\"time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: time_zone is null, which cannot be sent" : "Bad parameter: time_zone must be of type string", "time_zone");
             }
-            if (parameters.ContainsKey("user_root") && !(parameters["user_root"] is string))
+            if (parameters.TryGetValue("user_root", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: user_root must be of type string", "parameters[\"user_root\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_root is null, which cannot be sent" : "Bad parameter: user_root must be of type string", "user_root");
             }
-            if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
+            if (parameters.TryGetValue("user_home", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_home is null, which cannot be sent" : "Bad parameter: user_home must be of type string", "user_home");
             }
-            if (parameters.ContainsKey("workspace_admin") && !(parameters["workspace_admin"] is bool))
+            if (parameters.TryGetValue("workspace_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: workspace_admin must be of type bool", "parameters[\"workspace_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_admin is null, which cannot be sent" : "Bad parameter: workspace_admin must be of type bool", "workspace_admin");
             }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
+            if (parameters.TryGetValue("username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username is null, which cannot be sent" : "Bad parameter: username must be of type string", "username");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/users", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<User>(responseJson, context, options);
         }
 
         /// <summary>
         /// Unlock user who has been locked out due to failed logins
         /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Unlock(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2757,6 +2892,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2766,22 +2902,24 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>
         /// Resend user welcome email
         /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task ResendWelcomeEmail(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2801,6 +2939,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2810,22 +2949,24 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resend_welcome_email", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>
         /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task User2faReset(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2845,6 +2986,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2854,17 +2996,16 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>
@@ -2941,6 +3082,9 @@ namespace FilesCom.Models
         ///   clear_2fa - boolean - If true when changing authentication_method from `password` to `sso`, remove all two-factor methods. Ignored in all other cases.
         ///   convert_to_partner_user - boolean - Required when assigning a Partner to an existing non-Partner user. If true, convert the user by assigning the partner_id provided.
         /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task<User> Update(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -2960,6 +3104,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -2969,315 +3114,311 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("avatar_file") && !(parameters["avatar_file"] is System.Net.Http.ByteArrayContent))
+            if (parameters.TryGetValue("avatar_file", out parameterValue) && !(parameterValue is FileAttachment || parameterValue is IDictionary<string, object>))
             {
-                throw new ArgumentException("Bad parameter: avatar_file must be of type System.Net.Http.ByteArrayContent", "parameters[\"avatar_file\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: avatar_file is null, which cannot be sent" : "Bad parameter: avatar_file must be of type FileAttachment or IDictionary<string, object>", "avatar_file");
             }
-            if (parameters.ContainsKey("avatar_delete") && !(parameters["avatar_delete"] is bool))
+            if (parameters.TryGetValue("avatar_delete", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: avatar_delete must be of type bool", "parameters[\"avatar_delete\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: avatar_delete is null, which cannot be sent" : "Bad parameter: avatar_delete must be of type bool", "avatar_delete");
             }
-            if (parameters.ContainsKey("change_password") && !(parameters["change_password"] is string))
+            if (parameters.TryGetValue("change_password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: change_password must be of type string", "parameters[\"change_password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: change_password is null, which cannot be sent" : "Bad parameter: change_password must be of type string", "change_password");
             }
-            if (parameters.ContainsKey("change_password_confirmation") && !(parameters["change_password_confirmation"] is string))
+            if (parameters.TryGetValue("change_password_confirmation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: change_password_confirmation must be of type string", "parameters[\"change_password_confirmation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: change_password_confirmation is null, which cannot be sent" : "Bad parameter: change_password_confirmation must be of type string", "change_password_confirmation");
             }
-            if (parameters.ContainsKey("email") && !(parameters["email"] is string))
+            if (parameters.TryGetValue("email", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: email must be of type string", "parameters[\"email\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: email is null, which cannot be sent" : "Bad parameter: email must be of type string", "email");
             }
-            if (parameters.ContainsKey("grant_permission") && !(parameters["grant_permission"] is string))
+            if (parameters.TryGetValue("grant_permission", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: grant_permission must be of type string", "parameters[\"grant_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: grant_permission is null, which cannot be sent" : "Bad parameter: grant_permission must be of type string", "grant_permission");
             }
-            if (parameters.ContainsKey("group_id") && !(parameters["group_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: group_id must be of type Nullable<Int64>", "parameters[\"group_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_id is null, which cannot be sent" : "Bad parameter: group_id must be of type Nullable<Int64>", "group_id");
             }
-            if (parameters.ContainsKey("group_ids") && !(parameters["group_ids"] is string))
+            if (parameters.TryGetValue("group_ids", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: group_ids must be of type string", "parameters[\"group_ids\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: group_ids is null, which cannot be sent" : "Bad parameter: group_ids must be of type string", "group_ids");
             }
-            if (parameters.ContainsKey("imported_password_hash") && !(parameters["imported_password_hash"] is string))
+            if (parameters.TryGetValue("imported_password_hash", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: imported_password_hash must be of type string", "parameters[\"imported_password_hash\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: imported_password_hash is null, which cannot be sent" : "Bad parameter: imported_password_hash must be of type string", "imported_password_hash");
             }
-            if (parameters.ContainsKey("password") && !(parameters["password"] is string))
+            if (parameters.TryGetValue("password", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: password must be of type string", "parameters[\"password\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password is null, which cannot be sent" : "Bad parameter: password must be of type string", "password");
             }
-            if (parameters.ContainsKey("password_confirmation") && !(parameters["password_confirmation"] is string))
+            if (parameters.TryGetValue("password_confirmation", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: password_confirmation must be of type string", "parameters[\"password_confirmation\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_confirmation is null, which cannot be sent" : "Bad parameter: password_confirmation must be of type string", "password_confirmation");
             }
-            if (parameters.ContainsKey("announcements_read") && !(parameters["announcements_read"] is bool))
+            if (parameters.TryGetValue("announcements_read", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: announcements_read must be of type bool", "parameters[\"announcements_read\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: announcements_read is null, which cannot be sent" : "Bad parameter: announcements_read must be of type bool", "announcements_read");
             }
-            if (parameters.ContainsKey("ai_assistant_personality_id") && !(parameters["ai_assistant_personality_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("ai_assistant_personality_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "parameters[\"ai_assistant_personality_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ai_assistant_personality_id is null, which cannot be sent" : "Bad parameter: ai_assistant_personality_id must be of type Nullable<Int64>", "ai_assistant_personality_id");
             }
-            if (parameters.ContainsKey("allowed_ips") && !(parameters["allowed_ips"] is string))
+            if (parameters.TryGetValue("allowed_ips", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: allowed_ips must be of type string", "parameters[\"allowed_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allowed_ips is null, which cannot be sent" : "Bad parameter: allowed_ips must be of type string", "allowed_ips");
             }
-            if (parameters.ContainsKey("attachments_permission") && !(parameters["attachments_permission"] is bool))
+            if (parameters.TryGetValue("attachments_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: attachments_permission must be of type bool", "parameters[\"attachments_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: attachments_permission is null, which cannot be sent" : "Bad parameter: attachments_permission must be of type bool", "attachments_permission");
             }
-            if (parameters.ContainsKey("authenticate_until") && !(parameters["authenticate_until"] is string))
+            if (parameters.TryGetValue("authenticate_until", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: authenticate_until must be of type string", "parameters[\"authenticate_until\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: authenticate_until is null, which cannot be sent" : "Bad parameter: authenticate_until must be of type string", "authenticate_until");
             }
-            if (parameters.ContainsKey("authentication_method") && !(parameters["authentication_method"] is string))
+            if (parameters.TryGetValue("authentication_method", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: authentication_method must be of type string", "parameters[\"authentication_method\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: authentication_method is null, which cannot be sent" : "Bad parameter: authentication_method must be of type string", "authentication_method");
             }
-            if (parameters.ContainsKey("billing_permission") && !(parameters["billing_permission"] is bool))
+            if (parameters.TryGetValue("billing_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: billing_permission must be of type bool", "parameters[\"billing_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: billing_permission is null, which cannot be sent" : "Bad parameter: billing_permission must be of type bool", "billing_permission");
             }
-            if (parameters.ContainsKey("bypass_user_lifecycle_rules") && !(parameters["bypass_user_lifecycle_rules"] is bool))
+            if (parameters.TryGetValue("bypass_user_lifecycle_rules", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_user_lifecycle_rules must be of type bool", "parameters[\"bypass_user_lifecycle_rules\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bypass_user_lifecycle_rules is null, which cannot be sent" : "Bad parameter: bypass_user_lifecycle_rules must be of type bool", "bypass_user_lifecycle_rules");
             }
-            if (parameters.ContainsKey("bypass_site_allowed_ips") && !(parameters["bypass_site_allowed_ips"] is bool))
+            if (parameters.TryGetValue("bypass_site_allowed_ips", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: bypass_site_allowed_ips must be of type bool", "parameters[\"bypass_site_allowed_ips\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bypass_site_allowed_ips is null, which cannot be sent" : "Bad parameter: bypass_site_allowed_ips must be of type bool", "bypass_site_allowed_ips");
             }
-            if (parameters.ContainsKey("dav_permission") && !(parameters["dav_permission"] is bool))
+            if (parameters.TryGetValue("dav_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: dav_permission must be of type bool", "parameters[\"dav_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dav_permission is null, which cannot be sent" : "Bad parameter: dav_permission must be of type bool", "dav_permission");
             }
-            if (parameters.ContainsKey("desktop_configuration_profile_id") && !(parameters["desktop_configuration_profile_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("desktop_configuration_profile_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "parameters[\"desktop_configuration_profile_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_configuration_profile_id is null, which cannot be sent" : "Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "desktop_configuration_profile_id");
             }
-            if (parameters.ContainsKey("default_workspace_id") && !(parameters["default_workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("default_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: default_workspace_id must be of type Nullable<Int64>", "parameters[\"default_workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_workspace_id is null, which cannot be sent" : "Bad parameter: default_workspace_id must be of type Nullable<Int64>", "default_workspace_id");
             }
-            if (parameters.ContainsKey("disabled") && !(parameters["disabled"] is bool))
+            if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: disabled must be of type bool", "parameters[\"disabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disabled is null, which cannot be sent" : "Bad parameter: disabled must be of type bool", "disabled");
             }
-            if (parameters.ContainsKey("filesystem_layout") && !(parameters["filesystem_layout"] is string))
+            if (parameters.TryGetValue("filesystem_layout", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: filesystem_layout must be of type string", "parameters[\"filesystem_layout\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filesystem_layout is null, which cannot be sent" : "Bad parameter: filesystem_layout must be of type string", "filesystem_layout");
             }
-            if (parameters.ContainsKey("ftp_permission") && !(parameters["ftp_permission"] is bool))
+            if (parameters.TryGetValue("ftp_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: ftp_permission must be of type bool", "parameters[\"ftp_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_permission is null, which cannot be sent" : "Bad parameter: ftp_permission must be of type bool", "ftp_permission");
             }
-            if (parameters.ContainsKey("header_text") && !(parameters["header_text"] is string))
+            if (parameters.TryGetValue("header_text", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: header_text must be of type string", "parameters[\"header_text\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: header_text is null, which cannot be sent" : "Bad parameter: header_text must be of type string", "header_text");
             }
-            if (parameters.ContainsKey("integration_centric_profile_id") && !(parameters["integration_centric_profile_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("integration_centric_profile_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "parameters[\"integration_centric_profile_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: integration_centric_profile_id is null, which cannot be sent" : "Bad parameter: integration_centric_profile_id must be of type Nullable<Int64>", "integration_centric_profile_id");
             }
-            if (parameters.ContainsKey("language") && !(parameters["language"] is string))
+            if (parameters.TryGetValue("language", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: language must be of type string", "parameters[\"language\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: language is null, which cannot be sent" : "Bad parameter: language must be of type string", "language");
             }
-            if (parameters.ContainsKey("notification_daily_send_time") && !(parameters["notification_daily_send_time"] is Nullable<Int64>))
+            if (parameters.TryGetValue("notification_daily_send_time", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: notification_daily_send_time must be of type Nullable<Int64>", "parameters[\"notification_daily_send_time\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notification_daily_send_time is null, which cannot be sent" : "Bad parameter: notification_daily_send_time must be of type Nullable<Int64>", "notification_daily_send_time");
             }
-            if (parameters.ContainsKey("name") && !(parameters["name"] is string))
+            if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: name must be of type string", "parameters[\"name\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
-            if (parameters.ContainsKey("company") && !(parameters["company"] is string))
+            if (parameters.TryGetValue("company", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: company must be of type string", "parameters[\"company\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: company is null, which cannot be sent" : "Bad parameter: company must be of type string", "company");
             }
-            if (parameters.ContainsKey("notes") && !(parameters["notes"] is string))
+            if (parameters.TryGetValue("notes", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: notes must be of type string", "parameters[\"notes\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notes is null, which cannot be sent" : "Bad parameter: notes must be of type string", "notes");
             }
-            if (parameters.ContainsKey("office_integration_enabled") && !(parameters["office_integration_enabled"] is bool))
+            if (parameters.TryGetValue("office_integration_enabled", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: office_integration_enabled must be of type bool", "parameters[\"office_integration_enabled\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: office_integration_enabled is null, which cannot be sent" : "Bad parameter: office_integration_enabled must be of type bool", "office_integration_enabled");
             }
-            if (parameters.ContainsKey("partner_admin") && !(parameters["partner_admin"] is bool))
+            if (parameters.TryGetValue("partner_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: partner_admin must be of type bool", "parameters[\"partner_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: partner_admin is null, which cannot be sent" : "Bad parameter: partner_admin must be of type bool", "partner_admin");
             }
-            if (parameters.ContainsKey("partner_id") && !(parameters["partner_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: partner_id must be of type Nullable<Int64>", "parameters[\"partner_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: partner_id is null, which cannot be sent" : "Bad parameter: partner_id must be of type Nullable<Int64>", "partner_id");
             }
-            if (parameters.ContainsKey("password_validity_days") && !(parameters["password_validity_days"] is Nullable<Int64>))
+            if (parameters.TryGetValue("password_validity_days", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: password_validity_days must be of type Nullable<Int64>", "parameters[\"password_validity_days\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: password_validity_days is null, which cannot be sent" : "Bad parameter: password_validity_days must be of type Nullable<Int64>", "password_validity_days");
             }
-            if (parameters.ContainsKey("primary_group_id") && !(parameters["primary_group_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("primary_group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: primary_group_id must be of type Nullable<Int64>", "parameters[\"primary_group_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: primary_group_id is null, which cannot be sent" : "Bad parameter: primary_group_id must be of type Nullable<Int64>", "primary_group_id");
             }
-            if (parameters.ContainsKey("readonly_site_admin") && !(parameters["readonly_site_admin"] is bool))
+            if (parameters.TryGetValue("readonly_site_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: readonly_site_admin must be of type bool", "parameters[\"readonly_site_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: readonly_site_admin is null, which cannot be sent" : "Bad parameter: readonly_site_admin must be of type bool", "readonly_site_admin");
             }
-            if (parameters.ContainsKey("receive_admin_alerts") && !(parameters["receive_admin_alerts"] is bool))
+            if (parameters.TryGetValue("receive_admin_alerts", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: receive_admin_alerts must be of type bool", "parameters[\"receive_admin_alerts\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: receive_admin_alerts is null, which cannot be sent" : "Bad parameter: receive_admin_alerts must be of type bool", "receive_admin_alerts");
             }
-            if (parameters.ContainsKey("notify_on_all_site_warnings") && !(parameters["notify_on_all_site_warnings"] is bool))
+            if (parameters.TryGetValue("notify_on_all_site_warnings", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_site_warnings must be of type bool", "parameters[\"notify_on_all_site_warnings\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_site_warnings is null, which cannot be sent" : "Bad parameter: notify_on_all_site_warnings must be of type bool", "notify_on_all_site_warnings");
             }
-            if (parameters.ContainsKey("notify_on_all_sso_failures") && !(parameters["notify_on_all_sso_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_sso_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_sso_failures must be of type bool", "parameters[\"notify_on_all_sso_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_sso_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_sso_failures must be of type bool", "notify_on_all_sso_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_user_security_events") && !(parameters["notify_on_all_user_security_events"] is bool))
+            if (parameters.TryGetValue("notify_on_all_user_security_events", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_user_security_events must be of type bool", "parameters[\"notify_on_all_user_security_events\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_user_security_events is null, which cannot be sent" : "Bad parameter: notify_on_all_user_security_events must be of type bool", "notify_on_all_user_security_events");
             }
-            if (parameters.ContainsKey("notify_on_all_pending_work_failures") && !(parameters["notify_on_all_pending_work_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_pending_work_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_pending_work_failures must be of type bool", "parameters[\"notify_on_all_pending_work_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_pending_work_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_pending_work_failures must be of type bool", "notify_on_all_pending_work_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_siem_http_destination_failures") && !(parameters["notify_on_all_siem_http_destination_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_siem_http_destination_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "parameters[\"notify_on_all_siem_http_destination_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_siem_http_destination_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_siem_http_destination_failures must be of type bool", "notify_on_all_siem_http_destination_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_sync_failures") && !(parameters["notify_on_all_sync_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_sync_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_sync_failures must be of type bool", "parameters[\"notify_on_all_sync_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_sync_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_sync_failures must be of type bool", "notify_on_all_sync_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_automation_failures") && !(parameters["notify_on_all_automation_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_automation_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_automation_failures must be of type bool", "parameters[\"notify_on_all_automation_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_automation_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_automation_failures must be of type bool", "notify_on_all_automation_failures");
             }
-            if (parameters.ContainsKey("notify_on_all_expectation_failures") && !(parameters["notify_on_all_expectation_failures"] is bool))
+            if (parameters.TryGetValue("notify_on_all_expectation_failures", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: notify_on_all_expectation_failures must be of type bool", "parameters[\"notify_on_all_expectation_failures\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: notify_on_all_expectation_failures is null, which cannot be sent" : "Bad parameter: notify_on_all_expectation_failures must be of type bool", "notify_on_all_expectation_failures");
             }
-            if (parameters.ContainsKey("require_login_by") && !(parameters["require_login_by"] is string))
+            if (parameters.TryGetValue("require_login_by", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: require_login_by must be of type string", "parameters[\"require_login_by\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_login_by is null, which cannot be sent" : "Bad parameter: require_login_by must be of type string", "require_login_by");
             }
-            if (parameters.ContainsKey("require_password_change") && !(parameters["require_password_change"] is bool))
+            if (parameters.TryGetValue("require_password_change", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: require_password_change must be of type bool", "parameters[\"require_password_change\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_password_change is null, which cannot be sent" : "Bad parameter: require_password_change must be of type bool", "require_password_change");
             }
-            if (parameters.ContainsKey("responsible_group_id") && !(parameters["responsible_group_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("responsible_group_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: responsible_group_id must be of type Nullable<Int64>", "parameters[\"responsible_group_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: responsible_group_id is null, which cannot be sent" : "Bad parameter: responsible_group_id must be of type Nullable<Int64>", "responsible_group_id");
             }
-            if (parameters.ContainsKey("responsible_user_id") && !(parameters["responsible_user_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("responsible_user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: responsible_user_id must be of type Nullable<Int64>", "parameters[\"responsible_user_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: responsible_user_id is null, which cannot be sent" : "Bad parameter: responsible_user_id must be of type Nullable<Int64>", "responsible_user_id");
             }
-            if (parameters.ContainsKey("restapi_permission") && !(parameters["restapi_permission"] is bool))
+            if (parameters.TryGetValue("restapi_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: restapi_permission must be of type bool", "parameters[\"restapi_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: restapi_permission is null, which cannot be sent" : "Bad parameter: restapi_permission must be of type bool", "restapi_permission");
             }
-            if (parameters.ContainsKey("s3_compatible_endpoint_permission") && !(parameters["s3_compatible_endpoint_permission"] is bool))
+            if (parameters.TryGetValue("s3_compatible_endpoint_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: s3_compatible_endpoint_permission must be of type bool", "parameters[\"s3_compatible_endpoint_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: s3_compatible_endpoint_permission is null, which cannot be sent" : "Bad parameter: s3_compatible_endpoint_permission must be of type bool", "s3_compatible_endpoint_permission");
             }
-            if (parameters.ContainsKey("self_managed") && !(parameters["self_managed"] is bool))
+            if (parameters.TryGetValue("self_managed", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: self_managed must be of type bool", "parameters[\"self_managed\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: self_managed is null, which cannot be sent" : "Bad parameter: self_managed must be of type bool", "self_managed");
             }
-            if (parameters.ContainsKey("sftp_permission") && !(parameters["sftp_permission"] is bool))
+            if (parameters.TryGetValue("sftp_permission", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: sftp_permission must be of type bool", "parameters[\"sftp_permission\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_permission is null, which cannot be sent" : "Bad parameter: sftp_permission must be of type bool", "sftp_permission");
             }
-            if (parameters.ContainsKey("site_admin") && !(parameters["site_admin"] is bool))
+            if (parameters.TryGetValue("site_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: site_admin must be of type bool", "parameters[\"site_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_admin is null, which cannot be sent" : "Bad parameter: site_admin must be of type bool", "site_admin");
             }
-            if (parameters.ContainsKey("skip_welcome_screen") && !(parameters["skip_welcome_screen"] is bool))
+            if (parameters.TryGetValue("skip_welcome_screen", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: skip_welcome_screen must be of type bool", "parameters[\"skip_welcome_screen\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: skip_welcome_screen is null, which cannot be sent" : "Bad parameter: skip_welcome_screen must be of type bool", "skip_welcome_screen");
             }
-            if (parameters.ContainsKey("ssl_required") && !(parameters["ssl_required"] is string))
+            if (parameters.TryGetValue("ssl_required", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: ssl_required must be of type string", "parameters[\"ssl_required\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type string", "ssl_required");
             }
-            if (parameters.ContainsKey("sso_strategy_id") && !(parameters["sso_strategy_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "parameters[\"sso_strategy_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
             }
-            if (parameters.ContainsKey("subscribe_to_newsletter") && !(parameters["subscribe_to_newsletter"] is bool))
+            if (parameters.TryGetValue("subscribe_to_newsletter", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: subscribe_to_newsletter must be of type bool", "parameters[\"subscribe_to_newsletter\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subscribe_to_newsletter is null, which cannot be sent" : "Bad parameter: subscribe_to_newsletter must be of type bool", "subscribe_to_newsletter");
             }
-            if (parameters.ContainsKey("require_2fa") && !(parameters["require_2fa"] is string))
+            if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: require_2fa must be of type string", "parameters[\"require_2fa\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa is null, which cannot be sent" : "Bad parameter: require_2fa must be of type string", "require_2fa");
             }
-            if (parameters.ContainsKey("tags") && !(parameters["tags"] is string))
+            if (parameters.TryGetValue("tags", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: tags must be of type string", "parameters[\"tags\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: tags is null, which cannot be sent" : "Bad parameter: tags must be of type string", "tags");
             }
-            if (parameters.ContainsKey("time_zone") && !(parameters["time_zone"] is string))
+            if (parameters.TryGetValue("time_zone", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: time_zone must be of type string", "parameters[\"time_zone\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: time_zone is null, which cannot be sent" : "Bad parameter: time_zone must be of type string", "time_zone");
             }
-            if (parameters.ContainsKey("user_root") && !(parameters["user_root"] is string))
+            if (parameters.TryGetValue("user_root", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: user_root must be of type string", "parameters[\"user_root\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_root is null, which cannot be sent" : "Bad parameter: user_root must be of type string", "user_root");
             }
-            if (parameters.ContainsKey("user_home") && !(parameters["user_home"] is string))
+            if (parameters.TryGetValue("user_home", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: user_home must be of type string", "parameters[\"user_home\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_home is null, which cannot be sent" : "Bad parameter: user_home must be of type string", "user_home");
             }
-            if (parameters.ContainsKey("workspace_admin") && !(parameters["workspace_admin"] is bool))
+            if (parameters.TryGetValue("workspace_admin", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: workspace_admin must be of type bool", "parameters[\"workspace_admin\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_admin is null, which cannot be sent" : "Bad parameter: workspace_admin must be of type bool", "workspace_admin");
             }
-            if (parameters.ContainsKey("username") && !(parameters["username"] is string))
+            if (parameters.TryGetValue("username", out parameterValue) && !(parameterValue is string))
             {
-                throw new ArgumentException("Bad parameter: username must be of type string", "parameters[\"username\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username is null, which cannot be sent" : "Bad parameter: username must be of type string", "username");
             }
-            if (parameters.ContainsKey("workspace_id") && !(parameters["workspace_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: workspace_id must be of type Nullable<Int64>", "parameters[\"workspace_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
             }
-            if (parameters.ContainsKey("clear_2fa") && !(parameters["clear_2fa"] is bool))
+            if (parameters.TryGetValue("clear_2fa", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: clear_2fa must be of type bool", "parameters[\"clear_2fa\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: clear_2fa is null, which cannot be sent" : "Bad parameter: clear_2fa must be of type bool", "clear_2fa");
             }
-            if (parameters.ContainsKey("convert_to_partner_user") && !(parameters["convert_to_partner_user"] is bool))
+            if (parameters.TryGetValue("convert_to_partner_user", out parameterValue) && !(parameterValue is bool))
             {
-                throw new ArgumentException("Bad parameter: convert_to_partner_user must be of type bool", "parameters[\"convert_to_partner_user\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: convert_to_partner_user is null, which cannot be sent" : "Bad parameter: convert_to_partner_user must be of type bool", "convert_to_partner_user");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
-            try
-            {
-                return JsonUtil.DeserializeWithOptions<User>(responseJson, context.Client, options);
-            }
-            catch (JsonException)
-            {
-                throw new InvalidResponseException("Unexpected data received from server: " + responseJson);
-            }
+            return JsonUtil.DeserializeModelResponse<User>(responseJson, context, options);
         }
 
         /// <summary>
         /// Parameters:
         ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
         /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Delete(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -3287,6 +3428,13 @@ namespace FilesCom.Models
             return DeleteCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
+        /// <summary>
+        /// Parameters:
+        ///   new_owner_id - int64 - Provide a User ID here to transfer ownership of certain resources such as Automations and Share Links (Bundles) to that new user.
+        /// </summary>
+        /// <param name="id">User ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         public static Task Destroy(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
@@ -3306,6 +3454,7 @@ namespace FilesCom.Models
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
 
             if (parameters.ContainsKey("id"))
             {
@@ -3315,21 +3464,20 @@ namespace FilesCom.Models
             {
                 parameters.Add("id", id);
             }
-            if (!parameters.ContainsKey("id") || parameters["id"] == null)
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new ArgumentNullException("Parameter missing: id", "parameters[\"id\"]");
+                throw new MissingParameterException("Parameter missing: id", "id");
             }
-            if (parameters.ContainsKey("id") && !(parameters["id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: id must be of type Nullable<Int64>", "parameters[\"id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
-            if (parameters.ContainsKey("new_owner_id") && !(parameters["new_owner_id"] is Nullable<Int64>))
+            if (parameters.TryGetValue("new_owner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new ArgumentException("Bad parameter: new_owner_id must be of type Nullable<Int64>", "parameters[\"new_owner_id\"]");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: new_owner_id is null, which cannot be sent" : "Bad parameter: new_owner_id must be of type Nullable<Int64>", "new_owner_id");
             }
 
-            HttpResponseMessage response = await FilesClient.SendRequest(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
-            response.Dispose();
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Delete, parameters, options, cancellationToken);
         }
 
     }

@@ -1,0 +1,15 @@
+<Project>
+  <!--
+    Every restore in this repository checks the packages it resolves, direct and transitive, against the advisories
+    of the audit sources NuGet.Config names. A known vulnerability of any severity fails the restore, and so does an
+    audit source that cannot be reached or provides no vulnerability data, instead of the restore passing unaudited.
+    An accepted advisory is listed with NuGetAuditSuppress. A build that must run without network names
+    -p:NuGetAudit=false, and is not audited.
+  -->
+  <PropertyGroup>
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1900;NU1901;NU1902;NU1903;NU1904;NU1905</WarningsAsErrors>
+  </PropertyGroup>
+</Project>

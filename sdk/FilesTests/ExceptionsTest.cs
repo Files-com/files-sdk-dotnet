@@ -1,11 +1,11 @@
+using FilesCom;
+using FilesCom.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using FilesCom;
-using FilesCom.Models;
 
 namespace FilesTests
 {
@@ -18,10 +18,10 @@ namespace FilesTests
             const string testMessage = "This is only a test";
 
             ApiConnectionException exception = new ApiConnectionException(message: testMessage);
-            Assert.AreEqual(exception.ToString(), testMessage);
+            Assert.AreEqual(testMessage, exception.ToString());
 
             InvalidFileTypeException iftException = new InvalidFileTypeException(message: testMessage);
-            Assert.AreEqual(exception.ToString(), testMessage);
+            Assert.AreEqual(testMessage, exception.ToString());
         }
 
         [TestMethod]
@@ -55,20 +55,20 @@ namespace FilesTests
 
             ModelSaveErrorException exception = new ModelSaveErrorException("Model Save Error", 400, error, headers);
 
-            Assert.AreEqual(exception.detail, "Error saving model.");
-            Assert.AreEqual(exception.error, "Error saving.");
-            Assert.AreEqual(exception.errors[0], "Username must not contain multiple spaces together");
-            Assert.AreEqual(exception.errors[1], "Username must not begin or end with a space");
-            Assert.AreEqual(exception.httpCode, 422);
-            Assert.AreEqual(exception.instance, "14846924-ee4f-45ae-836e-406cad383adb");
-            Assert.AreEqual(exception.modelErrors["username"][0], "Username must not contain multiple spaces together");
-            Assert.AreEqual(exception.modelErrors["username"][1], "Username must not begin or end with a space");
-            Assert.AreEqual(exception.title, "Model save error");
-            Assert.AreEqual(exception.type, "model-save-error");
-            Assert.AreEqual(exception.httpStatus, 400);
-            Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("TestHeader1"))[0], "TestValue1");
-            Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("TestHeader2"))[0], "TestValue2");
-            Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("TestHeader2"))[1], "TestValue3");
+            Assert.AreEqual("Error saving model.", exception.detail);
+            Assert.AreEqual("Error saving.", exception.error);
+            Assert.AreEqual("Username must not contain multiple spaces together", exception.errors[0]);
+            Assert.AreEqual("Username must not begin or end with a space", exception.errors[1]);
+            Assert.AreEqual(422, exception.httpCode);
+            Assert.AreEqual("14846924-ee4f-45ae-836e-406cad383adb", exception.instance);
+            Assert.AreEqual("Username must not contain multiple spaces together", exception.modelErrors["username"][0]);
+            Assert.AreEqual("Username must not begin or end with a space", exception.modelErrors["username"][1]);
+            Assert.AreEqual("Model save error", exception.title);
+            Assert.AreEqual("model-save-error", exception.type);
+            Assert.AreEqual(400, exception.httpStatus);
+            Assert.AreEqual("TestValue1", new List<string>(exception.httpHeaders.GetValues("TestHeader1"))[0]);
+            Assert.AreEqual("TestValue2", new List<string>(exception.httpHeaders.GetValues("TestHeader2"))[0]);
+            Assert.AreEqual("TestValue3", new List<string>(exception.httpHeaders.GetValues("TestHeader2"))[1]);
         }
 
         [TestMethod]
@@ -91,13 +91,13 @@ namespace FilesTests
 
             LockoutRegionMismatchException exception = new LockoutRegionMismatchException("Lockout Region Mismatch Error", 403, error, headers);
 
-            Assert.AreEqual(exception.error, "You have connected to a URL that has different security settings than those required for your site.");
-            Assert.AreEqual(exception.httpCode, 403);
-            Assert.AreEqual(exception.title, "Lockout Region Mismatch");
-            Assert.AreEqual(exception.type, "not-authenticated/lockout-region-mismatch");
-            Assert.AreEqual(exception.httpStatus, 403);
-            Assert.AreEqual(exception.data["host"].ToString(), "test.host");
-            Assert.AreEqual(new List<string>(exception.httpHeaders.GetValues("x-files-host"))[0], "test.host");
+            Assert.AreEqual("You have connected to a URL that has different security settings than those required for your site.", exception.error);
+            Assert.AreEqual(403, exception.httpCode);
+            Assert.AreEqual("Lockout Region Mismatch", exception.title);
+            Assert.AreEqual("not-authenticated/lockout-region-mismatch", exception.type);
+            Assert.AreEqual(403, exception.httpStatus);
+            Assert.AreEqual("test.host", exception.data["host"].ToString());
+            Assert.AreEqual("test.host", new List<string>(exception.httpHeaders.GetValues("x-files-host"))[0]);
         }
     }
 }

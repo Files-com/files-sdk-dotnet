@@ -1,29 +1,33 @@
-﻿using FilesCom.Models;
+using FilesCom;
+using FilesCom.Models;
 using System;
+using System.Collections.Generic;
+using System.CommandLine;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace files_cli.Commands
+namespace FilesCli.Commands
 {
-    public class ShowUserCommand : BaseCommand
+    internal sealed class ShowUserCommand : FilesCommand
     {
-        public int UserId { get; set; }
-
-        public ShowUserCommand()
+        private readonly Option<long> id = new Option<long>("--id")
         {
-            IsCommand("ShowUser", "Prints user info");
+            Description = "The ID of the user to show.",
+            Required = true,
+        };
 
-            HasLongDescription("Shows a specific user's information.");
-
-            HasRequiredOption("id=", "The id of the user to show.", id => UserId = int.Parse(id));
+        public ShowUserCommand() : base("show-user", "ShowUser", "Shows a user's details.")
+        {
+            Options.Add(id);
         }
 
-        public override async Task<int> RunAsync(string[] remainingArguments)
+        protected override async Task ExecuteAsync(ParseResult parseResult, FilesClient client, Dictionary<string, object> credentials, CancellationToken cancellationToken)
         {
-            User user = await User.Get(UserId, null, await GetOptions());
+            User user = await client.Users.FindAsync(parseResult.GetValue(id), null, credentials, cancellationToken);
 
             Console.WriteLine($"Id: {user.Id}");
             Console.WriteLine($"Username: {user.Username}");
-            Console.WriteLine($"AdminGroupIds: {user.AdminGroupIds}");
+            Console.WriteLine($"AdminGroupIds: {string.Join(", ", user.AdminGroupIds ?? Array.Empty<long?>())}");
             Console.WriteLine($"AllowedIps: {user.AllowedIps}");
             Console.WriteLine($"AttachmentsPermission: {user.AttachmentsPermission}");
             Console.WriteLine($"ApiKeysCount: {user.ApiKeysCount}");
@@ -59,7 +63,6 @@ namespace files_cli.Commands
             Console.WriteLine($"TimeZone: {user.TimeZone}");
             Console.WriteLine($"TypeOf2fa: {user.TypeOf2fa}");
             Console.WriteLine($"UserRoot: {user.UserRoot}");
-            return Success;
         }
     }
 }

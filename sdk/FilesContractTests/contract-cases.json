@@ -1,0 +1,1644 @@
+{
+  "schema": {
+    "name": "swagger_doc-production.json",
+    "sha256": "c636f3ad40d8c14fc80f5b4dca1963a59976c23791a643b6ba7edaac504a2cbe"
+  },
+  "cases": [
+    {
+      "test": "FilesContractTests.Records.ActionLogRecordContractTest.List",
+      "model": "ActionLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ActionNotificationExportRecordContractTest.Find",
+      "model": "ActionNotificationExport",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ActionNotificationExportRecordContractTest.Create",
+      "model": "ActionNotificationExport",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ActionNotificationExportResultRecordContractTest.List",
+      "model": "ActionNotificationExportResult",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AiAssistantPersonalityRecordContractTest.List",
+      "model": "AiAssistantPersonality",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AiAssistantPersonalityRecordContractTest.Find",
+      "model": "AiAssistantPersonality",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.AiAssistantPersonalityRecordContractTest.Create",
+      "model": "AiAssistantPersonality",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.AiAssistantPersonalityRecordContractTest.Update",
+      "model": "AiAssistantPersonality",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.AiAssistantPersonalityRecordContractTest.Delete",
+      "model": "AiAssistantPersonality",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.AiTaskRecordContractTest.List",
+      "model": "AiTask",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AiTaskRecordContractTest.Find",
+      "model": "AiTask",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.AiTaskRecordContractTest.Create",
+      "model": "AiTask",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.AiTaskRecordContractTest.Update",
+      "model": "AiTask",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.AiTaskRecordContractTest.Delete",
+      "model": "AiTask",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ApiKeyRecordContractTest.List",
+      "model": "ApiKey",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ApiKeyRecordContractTest.Find",
+      "model": "ApiKey",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ApiKeyRecordContractTest.Create",
+      "model": "ApiKey",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ApiKeyRecordContractTest.Update",
+      "model": "ApiKey",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ApiKeyRecordContractTest.Delete",
+      "model": "ApiKey",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ApiRequestLogRecordContractTest.List",
+      "model": "ApiRequestLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AppRecordContractTest.List",
+      "model": "App",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.As2IncomingMessageRecordContractTest.List",
+      "model": "As2IncomingMessage",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.As2OutgoingMessageRecordContractTest.List",
+      "model": "As2OutgoingMessage",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.As2PartnerRecordContractTest.List",
+      "model": "As2Partner",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.As2PartnerRecordContractTest.Find",
+      "model": "As2Partner",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.As2PartnerRecordContractTest.Create",
+      "model": "As2Partner",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.As2PartnerRecordContractTest.Update",
+      "model": "As2Partner",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.As2PartnerRecordContractTest.Delete",
+      "model": "As2Partner",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.As2StationRecordContractTest.List",
+      "model": "As2Station",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.As2StationRecordContractTest.Find",
+      "model": "As2Station",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.As2StationRecordContractTest.Create",
+      "model": "As2Station",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.As2StationRecordContractTest.Update",
+      "model": "As2Station",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.As2StationRecordContractTest.Delete",
+      "model": "As2Station",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRecordContractTest.List",
+      "model": "Automation",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRecordContractTest.Find",
+      "model": "Automation",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRecordContractTest.Create",
+      "model": "Automation",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRecordContractTest.Update",
+      "model": "Automation",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRecordContractTest.Delete",
+      "model": "Automation",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationLogRecordContractTest.List",
+      "model": "AutomationLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRunRecordContractTest.List",
+      "model": "AutomationRun",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationRunRecordContractTest.Find",
+      "model": "AutomationRun",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.BandwidthSnapshotRecordContractTest.List",
+      "model": "BandwidthSnapshot",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BehaviorRecordContractTest.List",
+      "model": "Behavior",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BehaviorRecordContractTest.Find",
+      "model": "Behavior",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.BehaviorRecordContractTest.Create",
+      "model": "Behavior",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.BehaviorRecordContractTest.Update",
+      "model": "Behavior",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.BehaviorRecordContractTest.Delete",
+      "model": "Behavior",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecordContractTest.List",
+      "model": "Bundle",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecordContractTest.Find",
+      "model": "Bundle",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecordContractTest.Create",
+      "model": "Bundle",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecordContractTest.Update",
+      "model": "Bundle",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecordContractTest.Delete",
+      "model": "Bundle",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleActionRecordContractTest.List",
+      "model": "BundleAction",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleDownloadRecordContractTest.List",
+      "model": "BundleDownload",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleNotificationRecordContractTest.List",
+      "model": "BundleNotification",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleNotificationRecordContractTest.Find",
+      "model": "BundleNotification",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleNotificationRecordContractTest.Create",
+      "model": "BundleNotification",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleNotificationRecordContractTest.Update",
+      "model": "BundleNotification",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleNotificationRecordContractTest.Delete",
+      "model": "BundleNotification",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecipientRecordContractTest.List",
+      "model": "BundleRecipient",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRecipientRecordContractTest.Create",
+      "model": "BundleRecipient",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.BundleRegistrationRecordContractTest.List",
+      "model": "BundleRegistration",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ChatSessionRecordContractTest.List",
+      "model": "ChatSession",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ChatSessionRecordContractTest.Find",
+      "model": "ChatSession",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ChildSiteManagementPolicyRecordContractTest.List",
+      "model": "ChildSiteManagementPolicy",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ChildSiteManagementPolicyRecordContractTest.Find",
+      "model": "ChildSiteManagementPolicy",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ChildSiteManagementPolicyRecordContractTest.Create",
+      "model": "ChildSiteManagementPolicy",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ChildSiteManagementPolicyRecordContractTest.Update",
+      "model": "ChildSiteManagementPolicy",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ChildSiteManagementPolicyRecordContractTest.Delete",
+      "model": "ChildSiteManagementPolicy",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ClickwrapRecordContractTest.List",
+      "model": "Clickwrap",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ClickwrapRecordContractTest.Find",
+      "model": "Clickwrap",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ClickwrapRecordContractTest.Create",
+      "model": "Clickwrap",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ClickwrapRecordContractTest.Update",
+      "model": "Clickwrap",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ClickwrapRecordContractTest.Delete",
+      "model": "Clickwrap",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.CustomDomainRecordContractTest.List",
+      "model": "CustomDomain",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.CustomDomainRecordContractTest.Find",
+      "model": "CustomDomain",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.CustomDomainRecordContractTest.Create",
+      "model": "CustomDomain",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.CustomDomainRecordContractTest.Update",
+      "model": "CustomDomain",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.CustomDomainRecordContractTest.Delete",
+      "model": "CustomDomain",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.DesktopConfigurationProfileRecordContractTest.List",
+      "model": "DesktopConfigurationProfile",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.DesktopConfigurationProfileRecordContractTest.Find",
+      "model": "DesktopConfigurationProfile",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.DesktopConfigurationProfileRecordContractTest.Create",
+      "model": "DesktopConfigurationProfile",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.DesktopConfigurationProfileRecordContractTest.Update",
+      "model": "DesktopConfigurationProfile",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.DesktopConfigurationProfileRecordContractTest.Delete",
+      "model": "DesktopConfigurationProfile",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.DnsRecordRecordContractTest.List",
+      "model": "DnsRecord",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EmailIncomingMessageRecordContractTest.List",
+      "model": "EmailIncomingMessage",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EmailLogRecordContractTest.List",
+      "model": "EmailLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EventChannelRecordContractTest.List",
+      "model": "EventChannel",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EventChannelRecordContractTest.Find",
+      "model": "EventChannel",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.EventChannelRecordContractTest.Create",
+      "model": "EventChannel",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.EventChannelRecordContractTest.Update",
+      "model": "EventChannel",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.EventChannelRecordContractTest.Delete",
+      "model": "EventChannel",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.EventDeliveryAttemptRecordContractTest.List",
+      "model": "EventDeliveryAttempt",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EventDeliveryAttemptRecordContractTest.Find",
+      "model": "EventDeliveryAttempt",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.EventRecordRecordContractTest.List",
+      "model": "EventRecord",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EventRecordRecordContractTest.Find",
+      "model": "EventRecord",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.EventSubscriptionRecordContractTest.List",
+      "model": "EventSubscription",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EventSubscriptionRecordContractTest.Find",
+      "model": "EventSubscription",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.EventSubscriptionRecordContractTest.Create",
+      "model": "EventSubscription",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.EventSubscriptionRecordContractTest.Update",
+      "model": "EventSubscription",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.EventSubscriptionRecordContractTest.Delete",
+      "model": "EventSubscription",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.EventTargetRecordContractTest.List",
+      "model": "EventTarget",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.EventTargetRecordContractTest.Find",
+      "model": "EventTarget",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.EventTargetRecordContractTest.Create",
+      "model": "EventTarget",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.EventTargetRecordContractTest.Update",
+      "model": "EventTarget",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.EventTargetRecordContractTest.Delete",
+      "model": "EventTarget",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ExavaultApiRequestLogRecordContractTest.List",
+      "model": "ExavaultApiRequestLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationRecordContractTest.List",
+      "model": "Expectation",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationRecordContractTest.Find",
+      "model": "Expectation",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationRecordContractTest.Create",
+      "model": "Expectation",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationRecordContractTest.Update",
+      "model": "Expectation",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationRecordContractTest.Delete",
+      "model": "Expectation",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationEvaluationRecordContractTest.List",
+      "model": "ExpectationEvaluation",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationEvaluationRecordContractTest.Find",
+      "model": "ExpectationEvaluation",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationIncidentRecordContractTest.List",
+      "model": "ExpectationIncident",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ExpectationIncidentRecordContractTest.Find",
+      "model": "ExpectationIncident",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ExternalEventRecordContractTest.List",
+      "model": "ExternalEvent",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ExternalEventRecordContractTest.Find",
+      "model": "ExternalEvent",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ExternalEventRecordContractTest.Create",
+      "model": "ExternalEvent",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.FileCommentRecordContractTest.Create",
+      "model": "FileComment",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.FileCommentRecordContractTest.Update",
+      "model": "FileComment",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.FileCommentRecordContractTest.Delete",
+      "model": "FileComment",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.FileCommentReactionRecordContractTest.Create",
+      "model": "FileCommentReaction",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.FileCommentReactionRecordContractTest.Delete",
+      "model": "FileCommentReaction",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.FileMigrationRecordContractTest.Find",
+      "model": "FileMigration",
+      "method": "find",
+      "specialized": "file_migrations.find"
+    },
+    {
+      "test": "FilesContractTests.Records.FileMigrationLogRecordContractTest.List",
+      "model": "FileMigrationLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.FormFieldSetRecordContractTest.List",
+      "model": "FormFieldSet",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.FormFieldSetRecordContractTest.Find",
+      "model": "FormFieldSet",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.FormFieldSetRecordContractTest.Create",
+      "model": "FormFieldSet",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.FormFieldSetRecordContractTest.Update",
+      "model": "FormFieldSet",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.FormFieldSetRecordContractTest.Delete",
+      "model": "FormFieldSet",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.FtpActionLogRecordContractTest.List",
+      "model": "FtpActionLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.GpgKeyRecordContractTest.List",
+      "model": "GpgKey",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.GpgKeyRecordContractTest.Find",
+      "model": "GpgKey",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.GpgKeyRecordContractTest.Create",
+      "model": "GpgKey",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.GpgKeyRecordContractTest.Update",
+      "model": "GpgKey",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.GpgKeyRecordContractTest.Delete",
+      "model": "GpgKey",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupRecordContractTest.List",
+      "model": "Group",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupRecordContractTest.Find",
+      "model": "Group",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupRecordContractTest.Create",
+      "model": "Group",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupRecordContractTest.Update",
+      "model": "Group",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupRecordContractTest.Delete",
+      "model": "Group",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupUserRecordContractTest.List",
+      "model": "GroupUser",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupUserRecordContractTest.Create",
+      "model": "GroupUser",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupUserRecordContractTest.Update",
+      "model": "GroupUser",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.GroupUserRecordContractTest.Delete",
+      "model": "GroupUser",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.HistoryRecordContractTest.List",
+      "model": "History",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.HistoryExportRecordContractTest.Find",
+      "model": "HistoryExport",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.HistoryExportRecordContractTest.Create",
+      "model": "HistoryExport",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.HistoryExportResultRecordContractTest.List",
+      "model": "HistoryExportResult",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.HolidayCalendarRecordContractTest.List",
+      "model": "HolidayCalendar",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.HolidayCalendarRecordContractTest.Find",
+      "model": "HolidayCalendar",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.HolidayCalendarRecordContractTest.Create",
+      "model": "HolidayCalendar",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.HolidayCalendarRecordContractTest.Update",
+      "model": "HolidayCalendar",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.HolidayCalendarRecordContractTest.Delete",
+      "model": "HolidayCalendar",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.InboundS3LogRecordContractTest.List",
+      "model": "InboundS3Log",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.InboxRecipientRecordContractTest.List",
+      "model": "InboxRecipient",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.InboxRecipientRecordContractTest.Create",
+      "model": "InboxRecipient",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.InboxRegistrationRecordContractTest.List",
+      "model": "InboxRegistration",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.InboxUploadRecordContractTest.List",
+      "model": "InboxUpload",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.IntegrationCentricProfileRecordContractTest.List",
+      "model": "IntegrationCentricProfile",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.IntegrationCentricProfileRecordContractTest.Find",
+      "model": "IntegrationCentricProfile",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.IntegrationCentricProfileRecordContractTest.Create",
+      "model": "IntegrationCentricProfile",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.IntegrationCentricProfileRecordContractTest.Update",
+      "model": "IntegrationCentricProfile",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.IntegrationCentricProfileRecordContractTest.Delete",
+      "model": "IntegrationCentricProfile",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.InvoiceRecordContractTest.List",
+      "model": "Invoice",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.InvoiceRecordContractTest.Find",
+      "model": "Invoice",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.IpAddressRecordContractTest.List",
+      "model": "IpAddress",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.KeyLifecycleRuleRecordContractTest.List",
+      "model": "KeyLifecycleRule",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.KeyLifecycleRuleRecordContractTest.Find",
+      "model": "KeyLifecycleRule",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.KeyLifecycleRuleRecordContractTest.Create",
+      "model": "KeyLifecycleRule",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.KeyLifecycleRuleRecordContractTest.Update",
+      "model": "KeyLifecycleRule",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.KeyLifecycleRuleRecordContractTest.Delete",
+      "model": "KeyLifecycleRule",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.MetadataCategoryRecordContractTest.List",
+      "model": "MetadataCategory",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.MetadataCategoryRecordContractTest.Find",
+      "model": "MetadataCategory",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.MetadataCategoryRecordContractTest.Create",
+      "model": "MetadataCategory",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.MetadataCategoryRecordContractTest.Update",
+      "model": "MetadataCategory",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.MetadataCategoryRecordContractTest.Delete",
+      "model": "MetadataCategory",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.NotificationRecordContractTest.List",
+      "model": "Notification",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.NotificationRecordContractTest.Find",
+      "model": "Notification",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.NotificationRecordContractTest.Create",
+      "model": "Notification",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.NotificationRecordContractTest.Update",
+      "model": "Notification",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.NotificationRecordContractTest.Delete",
+      "model": "Notification",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.OutboundConnectionLogRecordContractTest.List",
+      "model": "OutboundConnectionLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerRecordContractTest.List",
+      "model": "Partner",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerRecordContractTest.Find",
+      "model": "Partner",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerRecordContractTest.Create",
+      "model": "Partner",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerRecordContractTest.Update",
+      "model": "Partner",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerRecordContractTest.Delete",
+      "model": "Partner",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelRecordContractTest.List",
+      "model": "PartnerChannel",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelRecordContractTest.Find",
+      "model": "PartnerChannel",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelRecordContractTest.Create",
+      "model": "PartnerChannel",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelRecordContractTest.Update",
+      "model": "PartnerChannel",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelRecordContractTest.Delete",
+      "model": "PartnerChannel",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelTemplateRecordContractTest.List",
+      "model": "PartnerChannelTemplate",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelTemplateRecordContractTest.Find",
+      "model": "PartnerChannelTemplate",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelTemplateRecordContractTest.Create",
+      "model": "PartnerChannelTemplate",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelTemplateRecordContractTest.Update",
+      "model": "PartnerChannelTemplate",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerChannelTemplateRecordContractTest.Delete",
+      "model": "PartnerChannelTemplate",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerSiteRecordContractTest.Delete",
+      "model": "PartnerSite",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerSiteRequestRecordContractTest.List",
+      "model": "PartnerSiteRequest",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerSiteRequestRecordContractTest.Create",
+      "model": "PartnerSiteRequest",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.PartnerSiteRequestRecordContractTest.Delete",
+      "model": "PartnerSiteRequest",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.PaymentRecordContractTest.List",
+      "model": "Payment",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PaymentRecordContractTest.Find",
+      "model": "Payment",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.PendingWorkEventRecordContractTest.List",
+      "model": "PendingWorkEvent",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PendingWorkEventRecordContractTest.Find",
+      "model": "PendingWorkEvent",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.PermissionRecordContractTest.List",
+      "model": "Permission",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PermissionRecordContractTest.Create",
+      "model": "Permission",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.PermissionRecordContractTest.Delete",
+      "model": "Permission",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.PublicHostingRequestLogRecordContractTest.List",
+      "model": "PublicHostingRequestLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PublicKeyRecordContractTest.List",
+      "model": "PublicKey",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.PublicKeyRecordContractTest.Find",
+      "model": "PublicKey",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.PublicKeyRecordContractTest.Create",
+      "model": "PublicKey",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.PublicKeyRecordContractTest.Update",
+      "model": "PublicKey",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.PublicKeyRecordContractTest.Delete",
+      "model": "PublicKey",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteBandwidthSnapshotRecordContractTest.List",
+      "model": "RemoteBandwidthSnapshot",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteMountBackendRecordContractTest.List",
+      "model": "RemoteMountBackend",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteMountBackendRecordContractTest.Find",
+      "model": "RemoteMountBackend",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteMountBackendRecordContractTest.Create",
+      "model": "RemoteMountBackend",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteMountBackendRecordContractTest.Update",
+      "model": "RemoteMountBackend",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteMountBackendRecordContractTest.Delete",
+      "model": "RemoteMountBackend",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerRecordContractTest.List",
+      "model": "RemoteServer",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerRecordContractTest.Find",
+      "model": "RemoteServer",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerRecordContractTest.Create",
+      "model": "RemoteServer",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerRecordContractTest.Update",
+      "model": "RemoteServer",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerRecordContractTest.Delete",
+      "model": "RemoteServer",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerCredentialRecordContractTest.List",
+      "model": "RemoteServerCredential",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerCredentialRecordContractTest.Find",
+      "model": "RemoteServerCredential",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerCredentialRecordContractTest.Create",
+      "model": "RemoteServerCredential",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerCredentialRecordContractTest.Update",
+      "model": "RemoteServerCredential",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.RemoteServerCredentialRecordContractTest.Delete",
+      "model": "RemoteServerCredential",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.RequestRecordContractTest.List",
+      "model": "Request",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.RequestRecordContractTest.Create",
+      "model": "Request",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.RequestRecordContractTest.Delete",
+      "model": "Request",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.RestoreRecordContractTest.List",
+      "model": "Restore",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.RestoreRecordContractTest.Create",
+      "model": "Restore",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduleRecordContractTest.List",
+      "model": "Schedule",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduleRecordContractTest.Find",
+      "model": "Schedule",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduleRecordContractTest.Create",
+      "model": "Schedule",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduleRecordContractTest.Update",
+      "model": "Schedule",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduleRecordContractTest.Delete",
+      "model": "Schedule",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduledExportRecordContractTest.List",
+      "model": "ScheduledExport",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduledExportRecordContractTest.Find",
+      "model": "ScheduledExport",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduledExportRecordContractTest.Create",
+      "model": "ScheduledExport",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduledExportRecordContractTest.Update",
+      "model": "ScheduledExport",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ScheduledExportRecordContractTest.Delete",
+      "model": "ScheduledExport",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ScimLogRecordContractTest.List",
+      "model": "ScimLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ScimLogRecordContractTest.Find",
+      "model": "ScimLog",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SecretRecordContractTest.List",
+      "model": "Secret",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SecretRecordContractTest.Find",
+      "model": "Secret",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SecretRecordContractTest.Create",
+      "model": "Secret",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.SecretRecordContractTest.Update",
+      "model": "Secret",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.SecretRecordContractTest.Delete",
+      "model": "Secret",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SessionRecordContractTest.Create",
+      "model": "Session",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.SettingsChangeRecordContractTest.List",
+      "model": "SettingsChange",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SftpActionLogRecordContractTest.List",
+      "model": "SftpActionLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SftpHostKeyRecordContractTest.List",
+      "model": "SftpHostKey",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SftpHostKeyRecordContractTest.Find",
+      "model": "SftpHostKey",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SftpHostKeyRecordContractTest.Create",
+      "model": "SftpHostKey",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.SftpHostKeyRecordContractTest.Update",
+      "model": "SftpHostKey",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.SftpHostKeyRecordContractTest.Delete",
+      "model": "SftpHostKey",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.ShareGroupRecordContractTest.List",
+      "model": "ShareGroup",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.ShareGroupRecordContractTest.Find",
+      "model": "ShareGroup",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.ShareGroupRecordContractTest.Create",
+      "model": "ShareGroup",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.ShareGroupRecordContractTest.Update",
+      "model": "ShareGroup",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.ShareGroupRecordContractTest.Delete",
+      "model": "ShareGroup",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationRecordContractTest.List",
+      "model": "SiemHttpDestination",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationRecordContractTest.Find",
+      "model": "SiemHttpDestination",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationRecordContractTest.Create",
+      "model": "SiemHttpDestination",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationRecordContractTest.Update",
+      "model": "SiemHttpDestination",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationRecordContractTest.Delete",
+      "model": "SiemHttpDestination",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationEventRecordContractTest.List",
+      "model": "SiemHttpDestinationEvent",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SiemHttpDestinationEventRecordContractTest.Find",
+      "model": "SiemHttpDestinationEvent",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SiteSubdomainRedirectRecordContractTest.List",
+      "model": "SiteSubdomainRedirect",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SiteSubdomainRedirectRecordContractTest.Find",
+      "model": "SiteSubdomainRedirect",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SiteSubdomainRedirectRecordContractTest.Delete",
+      "model": "SiteSubdomainRedirect",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SnapshotRecordContractTest.List",
+      "model": "Snapshot",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SnapshotRecordContractTest.Find",
+      "model": "Snapshot",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SnapshotRecordContractTest.Create",
+      "model": "Snapshot",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.SnapshotRecordContractTest.Update",
+      "model": "Snapshot",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.SnapshotRecordContractTest.Delete",
+      "model": "Snapshot",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SsoEventRecordContractTest.List",
+      "model": "SsoEvent",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SsoEventRecordContractTest.Find",
+      "model": "SsoEvent",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SsoStrategyRecordContractTest.List",
+      "model": "SsoStrategy",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SsoStrategyRecordContractTest.Find",
+      "model": "SsoStrategy",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRecordContractTest.List",
+      "model": "Sync",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRecordContractTest.Find",
+      "model": "Sync",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRecordContractTest.Create",
+      "model": "Sync",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRecordContractTest.Update",
+      "model": "Sync",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRecordContractTest.Delete",
+      "model": "Sync",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncLogRecordContractTest.List",
+      "model": "SyncLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRunRecordContractTest.List",
+      "model": "SyncRun",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SyncRunRecordContractTest.Find",
+      "model": "SyncRun",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.UsageDailySnapshotRecordContractTest.List",
+      "model": "UsageDailySnapshot",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UsageSnapshotRecordContractTest.List",
+      "model": "UsageSnapshot",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRecordContractTest.List",
+      "model": "User",
+      "method": "list",
+      "specialized": "users.list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRecordContractTest.Find",
+      "model": "User",
+      "method": "find",
+      "specialized": "users.find"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRecordContractTest.Create",
+      "model": "User",
+      "method": "create",
+      "specialized": "users.create"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRecordContractTest.Update",
+      "model": "User",
+      "method": "update",
+      "specialized": "users.update"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRecordContractTest.Delete",
+      "model": "User",
+      "method": "delete",
+      "specialized": "users.delete"
+    },
+    {
+      "test": "FilesContractTests.Records.UserAdditionalEmailRecipientRecordContractTest.List",
+      "model": "UserAdditionalEmailRecipient",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserAdditionalEmailRecipientRecordContractTest.Find",
+      "model": "UserAdditionalEmailRecipient",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.UserAdditionalEmailRecipientRecordContractTest.Create",
+      "model": "UserAdditionalEmailRecipient",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.UserAdditionalEmailRecipientRecordContractTest.Update",
+      "model": "UserAdditionalEmailRecipient",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.UserAdditionalEmailRecipientRecordContractTest.Delete",
+      "model": "UserAdditionalEmailRecipient",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.UserCipherUseRecordContractTest.List",
+      "model": "UserCipherUse",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserLifecycleRuleRecordContractTest.List",
+      "model": "UserLifecycleRule",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserLifecycleRuleRecordContractTest.Find",
+      "model": "UserLifecycleRule",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.UserLifecycleRuleRecordContractTest.Create",
+      "model": "UserLifecycleRule",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.UserLifecycleRuleRecordContractTest.Update",
+      "model": "UserLifecycleRule",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.UserLifecycleRuleRecordContractTest.Delete",
+      "model": "UserLifecycleRule",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRequestRecordContractTest.List",
+      "model": "UserRequest",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRequestRecordContractTest.Find",
+      "model": "UserRequest",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRequestRecordContractTest.Create",
+      "model": "UserRequest",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.UserRequestRecordContractTest.Delete",
+      "model": "UserRequest",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.UserSecurityEventRecordContractTest.List",
+      "model": "UserSecurityEvent",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.UserSecurityEventRecordContractTest.Find",
+      "model": "UserSecurityEvent",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.UserSftpClientUseRecordContractTest.List",
+      "model": "UserSftpClientUse",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.WebDavActionLogRecordContractTest.List",
+      "model": "WebDavActionLog",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.WebhookTestRecordContractTest.Create",
+      "model": "WebhookTest",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.WorkspaceRecordContractTest.List",
+      "model": "Workspace",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.WorkspaceRecordContractTest.Find",
+      "model": "Workspace",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.WorkspaceRecordContractTest.Create",
+      "model": "Workspace",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.WorkspaceRecordContractTest.Update",
+      "model": "Workspace",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.WorkspaceRecordContractTest.Delete",
+      "model": "Workspace",
+      "method": "delete"
+    }
+  ]
+}

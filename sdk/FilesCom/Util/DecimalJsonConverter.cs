@@ -7,8 +7,12 @@ namespace FilesCom.Util
 {
     public class DecimalJsonConverter : JsonConverter<decimal>
     {
+        /// <inheritdoc/>
         public override decimal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            // Text that is not a decimal, or is too large for one, is a JsonException, so that it is reported as an
+            // invalid response like any other. Its message leaves the value out, as it could be anything, even a secret.
+            // (A number too large is already one: the serializer rethrows GetDecimal's FormatException as a JsonException.)
             if (reader.TokenType == JsonTokenType.String)
             {
                 var s = reader.GetString();
@@ -16,7 +20,11 @@ namespace FilesCom.Util
                 {
                     return 0m;
                 }
-                return decimal.Parse(s, NumberStyles.Number, CultureInfo.InvariantCulture);
+                if (decimal.TryParse(s, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal parsed))
+                {
+                    return parsed;
+                }
+                throw new JsonException("The string is not a decimal number, or is too large for one.");
             }
 
             if (reader.TokenType == JsonTokenType.Number)
@@ -32,6 +40,7 @@ namespace FilesCom.Util
             throw new JsonException($"Unsupported token type for decimal: {reader.TokenType}");
         }
 
+        /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options)
         {
             writer.WriteStringValue(value.ToString(CultureInfo.InvariantCulture));
