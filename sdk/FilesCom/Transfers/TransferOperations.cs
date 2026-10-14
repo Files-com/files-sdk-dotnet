@@ -324,13 +324,12 @@ namespace FilesCom.Transfers
         /// replaced, and the download fails before anything is replaced; a new file gets a new file's permissions; and
         /// the file and then its directory are flushed to storage as it is put in place. On Windows the stage has an
         /// access control list of its own that allows only this user, SYSTEM and Administrators until it is put in place,
-        /// when it takes the replaced file's list, for <see cref="DownloadPublicationPolicy.ReplaceRegularFile"/>, or the
-        /// one a new file in the directory gets; its staging directory is removed only while it is the one the download
-        /// made; and only the file is flushed. By default the directory is used by path and a replaced file is replaced as
-        /// Windows does it, while <see cref="DownloadPublicationPolicy.CreateNew"/> and
-        /// <see cref="DownloadPublicationPolicy.ReplaceRegularFile"/> hold the directory, and every directory above it,
-        /// from the moment the download starts, so that none of them can be renamed or replaced meanwhile, and rename the
-        /// stage through its own handle. On Linux where the runtime cannot call the C
+        /// when it takes the replaced file's list, for <see cref="DownloadPublicationPolicy.ReplaceRegularFile"/> and the
+        /// default, or the one a new file in the directory gets; its staging directory is removed only while it is the
+        /// one the download made; and only the file is flushed. Whatever the policy, the directory, and every directory
+        /// above it, is held from the moment the download starts, so that none of them can be renamed or replaced
+        /// meanwhile, and the stage is renamed through its own handle; a directory that cannot be held from the root of
+        /// its volume or share is refused (<see cref="DownloadPublicationProblem.NotSupported"/>). On Linux where the runtime cannot call the C
         /// library (such as .NET Core 2.x, with the netstandard2.0 build), or on a processor other than x64, x86, Arm64 and
         /// 32-bit Arm (such as ppc64le or s390x), it is used by path too, an existing file is not replaced, and the other
         /// policies fail (<see cref="DownloadPublicationProblem.NotSupported"/>). A destination a policy refuses fails
@@ -531,10 +530,9 @@ namespace FilesCom.Transfers
         /// Local folders are entered, and created, one name at a time without following symbolic links: a symbolic link
         /// where a folder belongs fails the download of the files below it. On macOS and Linux this goes through the
         /// directories already entered, so a program renaming entries meanwhile cannot make the download write outside
-        /// the directory. On Windows, with <see cref="DownloadPublicationPolicy.CreateNew"/> or
-        /// <see cref="DownloadPublicationPolicy.ReplaceRegularFile"/>, the local directory, every directory above it and
-        /// every folder entered are held from before the remote folder is listed until the download ends, so that none of
-        /// them can be renamed or replaced meanwhile; by default they are used by path.
+        /// the directory. On Windows, whatever the policy, the local directory, every directory above it and every folder
+        /// entered are held from before the remote folder is listed until the download ends, so that none of them can be
+        /// renamed or replaced meanwhile.
         /// </para>
         /// <para>
         /// The first failure stops the files in progress, and no other file starts; the download then ends with that

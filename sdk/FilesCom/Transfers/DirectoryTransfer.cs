@@ -113,7 +113,7 @@ namespace FilesCom.Transfers
         internal static async Task<DirectoryTransferResult> UploadAsync(OperationContext context, string localDirectory, string remoteDirectory, DirectorySettings settings, CancellationToken cancellationToken)
         {
             using (var transfer = new DirectoryTransfer(context, localDirectory, RemoteFolder(remoteDirectory), settings, cancellationToken))
-            using (LocalDirectory root = LocalDirectory.Open(Path.GetFullPath(localDirectory)))
+            using (LocalDirectory root = LocalDirectory.OpenSource(Path.GetFullPath(localDirectory)))
             {
                 transfer.CheckCheckpointDirectory(root);
                 var files = new List<PlannedFile>();
@@ -137,7 +137,7 @@ namespace FilesCom.Transfers
             using (var transfer = new DirectoryTransfer(context, localDirectory, RemoteFolder(remoteDirectory), settings, cancellationToken))
             {
                 Directory.CreateDirectory(localDirectory);
-                // Opened, and on Windows held when the policy needs it to be, before anything is listed.
+                // Opened, and on Windows held for every policy, before anything is listed.
                 using (LocalDirectory root = LocalDirectory.Open(Path.GetFullPath(localDirectory), settings.DownloadFile.PublicationPolicy))
                 {
                     transfer.CheckCheckpointDirectory(root);

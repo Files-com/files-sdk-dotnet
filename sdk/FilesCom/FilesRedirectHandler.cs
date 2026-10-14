@@ -2,7 +2,6 @@ using FilesCom.Http;
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -137,11 +136,12 @@ namespace FilesCom
                 return false;
             }
 
+            // A redirect from HTTPS to HTTP is not followed on any runtime: the request, its body included, would go in
+            // the clear. .NET Framework's own handler follows such a redirect, and this handler used to as well there.
             bool isHttpsDowngrade = string.Equals(requestUri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase)
                 && isHttp;
 
-            return !isHttpsDowngrade
-                || RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework", StringComparison.OrdinalIgnoreCase);
+            return !isHttpsDowngrade;
         }
     }
 }

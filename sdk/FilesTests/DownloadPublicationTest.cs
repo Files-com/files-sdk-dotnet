@@ -776,7 +776,7 @@ namespace FilesTests
         {
             if (OperatingSystem.IsWindows())
             {
-                Assert.Inconclusive("On Windows the folders are held for CreateNew and ReplaceRegularFile, and the default puts the file in place by its path.");
+                Assert.Inconclusive("On Windows the folders are held for every policy, so they cannot be renamed.");
                 return;
             }
             string into = Path.Combine(folder, "into");
@@ -847,7 +847,7 @@ namespace FilesTests
         {
             if (OperatingSystem.IsWindows())
             {
-                Assert.Inconclusive("On Windows the folders are held for CreateNew and ReplaceRegularFile.");
+                Assert.Inconclusive("On Windows the folders are held for every policy, so they cannot be renamed.");
                 return;
             }
             string into = Path.Combine(folder, "into");
@@ -895,7 +895,7 @@ namespace FilesTests
         {
             if (OperatingSystem.IsWindows())
             {
-                Assert.Inconclusive("On Windows the folders are held for CreateNew and ReplaceRegularFile.");
+                Assert.Inconclusive("On Windows the folders are held for every policy, so they cannot be renamed.");
                 return;
             }
             string into = Path.Combine(folder, "into");
@@ -1011,16 +1011,19 @@ namespace FilesTests
             }
         }
 
-        // On Windows a file replaced by ReplaceRegularFile leaves its access control list to the file replacing it exactly,
-        // control included: a protected one stays protected, and later changes to its directory's inheritable entries do
-        // not reach it; an inheriting one keeps its own and its inherited entries, and goes on inheriting.
+        // On Windows a file replaced by ReplaceRegularFile, or by the default, leaves its access control list to the file
+        // replacing it exactly, control included: a protected one stays protected, and later changes to its directory's
+        // inheritable entries do not reach it; an inheriting one keeps its own and its inherited entries, and goes on
+        // inheriting.
         [TestMethod]
         [Timeout(60000)]
         [OSCondition(OperatingSystems.Windows)]
-        [DataRow(true, DisplayName = "Protected")]
-        [DataRow(false, DisplayName = "Inheriting")]
+        [DataRow(true, DownloadPublicationPolicy.ReplaceRegularFile, DisplayName = "Protected, ReplaceRegularFile")]
+        [DataRow(false, DownloadPublicationPolicy.ReplaceRegularFile, DisplayName = "Inheriting, ReplaceRegularFile")]
+        [DataRow(true, DownloadPublicationPolicy.ReplaceExisting, DisplayName = "Protected, by default")]
+        [DataRow(false, DownloadPublicationPolicy.ReplaceExisting, DisplayName = "Inheriting, by default")]
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-        public async Task OnWindowsAReplacedFilesListIsKeptWithItsProtectionOrInheritance(bool isProtected)
+        public async Task OnWindowsAReplacedFilesListIsKeptWithItsProtectionOrInheritance(bool isProtected, DownloadPublicationPolicy policy)
         {
             if (!OperatingSystem.IsWindows())
             {
@@ -1042,7 +1045,7 @@ namespace FilesTests
             string before = new FileInfo(placed).GetAccessControl().GetSecurityDescriptorSddlForm(AccessControlSections.Access);
             using (var server = new DownloadServer(Contents))
             {
-                await Client(server).Transfers.DownloadFileAsync("remote.bin", placed, Options(DownloadPublicationPolicy.ReplaceRegularFile));
+                await Client(server).Transfers.DownloadFileAsync("remote.bin", placed, Options(policy));
 
                 FileSecurity access = new FileInfo(placed).GetAccessControl();
                 Assert.AreEqual(before, access.GetSecurityDescriptorSddlForm(AccessControlSections.Access), "The replaced file's list, control included.");
@@ -1055,6 +1058,54 @@ namespace FilesTests
                 directory.SetAccessControl(security);
                 bool reached = new FileInfo(placed).GetAccessControl().GetAccessRules(false, true, typeof(SecurityIdentifier)).Cast<FileSystemAccessRule>().Any(rule => rule.IdentityReference.Equals(later));
                 Assert.AreEqual(!isProtected, reached, "A later entry of the directory reaches only an inheriting list.");
+            }
+        }
+
+        // On Windows the destination directory is held, without sharing the right to rename or remove it, from the moment a
+        // download starts, by default as for the other policies: another program cannot rename it away and put a link in
+        // its place while the download runs, so the file is put in place in the very directory the download opened.
+        [TestMethod]
+        [Timeout(60000)]
+        [OSCondition(OperatingSystems.Windows)]
+        [DataRow(DownloadPublicationPolicy.ReplaceExisting)]
+        [DataRow(DownloadPublicationPolicy.CreateNew)]
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+        public async Task OnWindowsTheDestinationDirectoryIsHeldWhateverThePolicy(DownloadPublicationPolicy policy)
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                return;
+            }
+            string chosen = Path.Combine(folder, "chosen");
+            string moved = Path.Combine(folder, "moved");
+            Directory.CreateDirectory(chosen);
+            using (var server = new DownloadServer(Contents))
+            {
+                Exception refused = null;
+                int attempts = 0;
+                server.Intercept = (request, connection) =>
+                {
+                    if (Interlocked.Increment(ref attempts) == 1)
+                    {
+                        try
+                        {
+                            Directory.Move(chosen, moved);
+                        }
+                        catch (IOException e)
+                        {
+                            refused = e;
+                        }
+                    }
+                    return Task.FromResult(false);
+                };
+                string placed = Path.Combine(chosen, "file.bin");
+
+                await Client(server).Transfers.DownloadFileAsync("remote.bin", placed, Options(policy));
+
+                Assert.IsNotNull(refused, "Renaming the held directory during the download is refused.");
+                Assert.IsFalse(Directory.Exists(moved), "The directory stayed where it was.");
+                CollectionAssert.AreEqual(Contents, File.ReadAllBytes(placed));
+                CollectionAssert.AreEqual(new string[0], Directory.GetDirectories(chosen, ".files-download-*"), "The staging directory was removed.");
             }
         }
 

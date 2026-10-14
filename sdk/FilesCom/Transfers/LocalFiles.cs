@@ -15,9 +15,9 @@ namespace FilesCom.Transfers
     //
     // Where the platform allows it (macOS, and Linux wherever the runtime can call the C library, Native), everything
     // below the selected directory goes through directory descriptors, as UnixDirectory describes, which another program
-    // writing into the directory cannot redirect. On Windows (WindowsDirectory), directories are held open from the
-    // moment they are selected for a download that puts files in place with CreateNew or ReplaceRegularFile, and used by
-    // path otherwise. Elsewhere (Linux on a runtime that cannot call the C library, such as .NET Core 2.x, or on a
+    // writing into the directory cannot redirect. On Windows download destinations (WindowsDirectory) are held open
+    // from the moment they are selected, whatever the publication policy; upload sources are read by path. Elsewhere
+    // (Linux on a runtime that cannot call the C library, such as .NET Core 2.x, or on a
     // processor other than x64, x86, Arm64 and 32-bit Arm, whose flag and structure layouts PlatformFlags does not
     // have; and other systems) directories and stages are used by path (PathDirectory), which a program renaming entries
     // in the directory at the same moment can redirect.
@@ -32,20 +32,26 @@ namespace FilesCom.Transfers
 #endif
         internal static bool ByDescriptor => !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && UnixDirectory.Supported;
 
-        // Opens an existing directory, following symbolic links in path, which is the caller's choice, for downloads
-        // that put their files in place as policy says (and for anything else with the default): on Windows it is held
-        // from now on when the policy needs it to be (WindowsDirectory).
+        // Opens an existing download destination, following symbolic links in path, which is the caller's choice:
+        // on Windows it is held from now on, whatever the policy (WindowsDirectory).
         internal static LocalDirectory Open(string path, DownloadPublicationPolicy policy = DownloadPublicationPolicy.ReplaceExisting)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return WindowsDirectory.OpenPath(path, hold: policy != DownloadPublicationPolicy.ReplaceExisting);
+                return WindowsDirectory.OpenPath(path);
             }
             if (ByDescriptor)
             {
                 return UnixDirectory.OpenPath(path);
             }
             return PathDirectory.OpenPath(path);
+        }
+
+        // Opens an upload source. Windows reads it by path, as before: publication's root and ancestor holds are not
+        // needed to read files, and would exclude readable sources on mounted volumes and restricted shares.
+        internal static LocalDirectory OpenSource(string path)
+        {
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? PathDirectory.OpenPath(path) : Open(path);
         }
 
         // The directory called name inside this one, created if create and missing. name is one path component: never
@@ -430,8 +436,9 @@ namespace FilesCom.Transfers
         protected abstract void Close(bool delete, bool published);
     }
 
-    // The fallback, on systems other than Windows where directories cannot be held by descriptor: directories and stages
-    // by path. A stage is a file in a staging directory of its own inside the destination directory, held open without
+    // Windows upload sources, and the fallback on other systems where directories cannot be held by descriptor:
+    // directories by path. Only the fallback publishes stages. A stage is a file in a staging directory of its own
+    // inside the destination directory, held open without
     // sharing until it is published. Neither has an identity this fallback can give, nor can it make them private: they
     // get the permissions new files and directories get, and a stage kept for a later run is kept as it is.
     internal sealed class PathDirectory : LocalDirectory
@@ -458,6 +465,10 @@ namespace FilesCom.Transfers
         {
             CheckName(name);
             string child = System.IO.Path.Combine(path, name);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && WindowsPublication.IsAnotherEntrysShortName(child, name))
+            {
+                throw new IOException($"{child} is the short name of a local folder with another name, which the transfer does not use.");
+            }
             var info = new DirectoryInfo(child);
             if (!info.Exists)
             {
@@ -553,11 +564,11 @@ namespace FilesCom.Transfers
             return new LocalEntry(regular, null, regular ? new FileInfo(child).Length : 0);
         }
 
-        // A file is renamed into place by path, which cannot be made to refuse or keep what it replaces, so only the
-        // default, which does not replace a file there at all.
+        // Windows uses this only to read upload sources, never to publish. The fallback on other systems supports only
+        // the default, which does not replace a file there at all.
         internal override bool Supports(DownloadPublicationPolicy policy)
         {
-            return policy == DownloadPublicationPolicy.ReplaceExisting;
+            return !RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && policy == DownloadPublicationPolicy.ReplaceExisting;
         }
 
         internal override void FinishPlaced(StageLocation location, string identity, string stagingIdentity)

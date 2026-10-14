@@ -11,16 +11,16 @@ namespace FilesCom.Transfers
     // the links in it, which are the caller's choice; a directory below it is entered one name at a time, and one that
     // is a reparse point is refused.
     //
-    // With CreateNew or ReplaceRegularFile (held), the directory is held from the moment it is selected, before anything
-    // is listed or fetched, until the transfer is done with it: its path is resolved once, following those links, and
-    // every directory on the resolved path, from its volume's or share's root, is opened without following a reparse
-    // point that names another path (a symbolic link, junction or mount point), which is refused, and held open without
+    // Whatever the publication policy, the directory is held from the moment it is selected, before anything is listed
+    // or fetched, until the transfer is done with it: its path is resolved once, following those links, and every
+    // directory on the resolved path, from its volume's or share's root, is opened without following a reparse point
+    // that names another path (a symbolic link, junction or mount point), which is refused, and held open without
     // sharing the right to delete it, as CheckpointStorageWindows holds a checkpoint's directories; so is every directory
     // entered below it. While they are held no one can rename, move or remove any of them, so every path the transfer
     // uses, which it builds on the resolved path, names the directories it selected and checked. A path that cannot be
-    // walked from a root that way, such as one on a volume with no drive letter, is refused for those policies
-    // (DownloadPublicationProblem.NotSupported). With the default policy, as before, directories are used by the path the
-    // caller gave, which a program renaming entries at the same moment can redirect.
+    // walked from a root that way, such as one on a volume with no drive letter, is refused
+    // (DownloadPublicationProblem.NotSupported). Before 2.0 the default policy used directories by the path the caller
+    // gave, which a program renaming entries at the same moment could redirect.
     //
     // A stage is a file in a staging directory of its own, .files-download-<random>, created in the destination directory
     // and inheriting from it. The staging directory is created and opened in one call, so the handle held (without delete
@@ -37,8 +37,8 @@ namespace FilesCom.Transfers
     // starts over, and the stage, when it is shown to be this download's, is removed. Every right the stage is opened with
     // is granted by its own list, so a destination's list never refuses it.
     //
-    // Only as it is put in place does the stage take its final access: the access control list of the regular file it
-    // replaces, for ReplaceRegularFile, exactly as that file has it (WindowsPublication); otherwise the one a file created
+    // Only as it is put in place does the stage take its final access: the access control list of the file it replaces,
+    // for ReplaceRegularFile and ReplaceExisting, exactly as that file has it (WindowsPublication); otherwise the one a file created
     // directly in the destination directory gets. That directory is the one the staging directory was created through,
     // opened as the caller's path leads (following its links, as putting the file there does), so the list is that of the
     // very directory the file lands in. The file system shows the list itself: an empty file of the SDK's own is created
@@ -61,7 +61,7 @@ namespace FilesCom.Transfers
 
         // The directory as the caller named it, for messages and for the local paths a checkpoint records.
         private readonly string path;
-        // The path every operation uses: the resolved one when held, else the caller's.
+        // The path every operation uses: the resolved one, on which the held directories were opened.
         private readonly string where;
         // The directories held, this one's last, shared by every handle to it and to the directories below it.
         private readonly Held held;
@@ -76,18 +76,10 @@ namespace FilesCom.Transfers
 
         internal override string Path => path;
 
-        // Opens the directory at path; held, for CreateNew and ReplaceRegularFile.
-        internal static WindowsDirectory OpenPath(string path, bool hold)
+        // Opens the directory at path and holds it, with every directory above it, whatever the publication policy.
+        internal static WindowsDirectory OpenPath(string path)
         {
             string full = System.IO.Path.GetFullPath(path);
-            if (!hold)
-            {
-                if (!Directory.Exists(full))
-                {
-                    throw new DirectoryNotFoundException($"The directory {path} does not exist.");
-                }
-                return new WindowsDirectory(full, full, null);
-            }
             string resolved = WindowsNative.FinalPathOf(full);
             string root;
             List<string> names;
@@ -130,24 +122,6 @@ namespace FilesCom.Transfers
             if (WindowsPublication.IsAnotherEntrysShortName(child, name))
             {
                 throw ShortNameOfAnother(shown, "folder");
-            }
-            if (held == null)
-            {
-                var info = new DirectoryInfo(child);
-                if (!info.Exists)
-                {
-                    if (File.Exists(child) || !create)
-                    {
-                        throw new IOException($"{shown} is not a directory.");
-                    }
-                    info.Create();
-                    info.Refresh();
-                }
-                if ((info.Attributes & FileAttributes.ReparsePoint) != 0)
-                {
-                    throw new IOException($"{shown} is a symbolic link or other reparse point, which transfers do not follow.");
-                }
-                return new WindowsDirectory(shown, child, null);
             }
             if (create)
             {
@@ -246,10 +220,10 @@ namespace FilesCom.Transfers
             return WindowsPublication.Examine(Join(where, name));
         }
 
-        // Held, every policy (WindowsPublication); by path, only the default, which does not need the directory held.
+        // Every policy: the directory is held, and WindowsPublication puts a stage in place as each policy says.
         internal override bool Supports(DownloadPublicationPolicy policy)
         {
-            return held != null || policy == DownloadPublicationPolicy.ReplaceExisting;
+            return true;
         }
 
         // A stage is renamed into place, so it has no second name to remove: only its staging directory is, while it is
@@ -541,9 +515,9 @@ namespace FilesCom.Transfers
                 file.Flush(true);
             }
 
-            // Puts the stage in place, flushed, with its final access. The default replaces a file of that name as Windows
-            // does it, by path; CreateNew and ReplaceRegularFile rename the stage through its own handle into the held
-            // directory (WindowsPublication).
+            // Puts the stage in place, flushed, with its final access: every policy renames the stage through its own
+            // handle into the held directory, as the policy says (WindowsPublication). Before 2.0 the default replaced a
+            // file of that name as Windows does it, by path.
             protected override void PublishCore(DownloadPublicationPolicy policy)
             {
                 file.Flush(true);
@@ -553,31 +527,7 @@ namespace FilesCom.Transfers
                 {
                     throw ShortNameOfAnother(System.IO.Path.Combine(directory.path, finalName), "file");
                 }
-                if (policy != DownloadPublicationPolicy.ReplaceExisting)
-                {
-                    WindowsPublication.Publish(handle, directory.where, directory.path, finalName, policy, needsFinalAccess ? GiveNewFileAccess : (Action)null, ref accessTaken);
-                    MarkPlaced();
-                    return;
-                }
-                if (needsFinalAccess)
-                {
-                    accessTaken = true;
-                    GiveNewFileAccess();
-                }
-                file.Dispose();
-                string target = Join(directory.where, finalName);
-#if NETCOREAPP3_0_OR_GREATER
-                File.Move(StagePath, target, overwrite: true);
-#else
-                if (File.Exists(target))
-                {
-                    File.Replace(StagePath, target, null);
-                }
-                else
-                {
-                    File.Move(StagePath, target);
-                }
-#endif
+                WindowsPublication.Publish(handle, staging.Destination, directory.where, directory.path, finalName, policy, needsFinalAccess ? GiveNewFileAccess : (Action)null, ref accessTaken);
                 MarkPlaced();
             }
 

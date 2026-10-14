@@ -13,10 +13,11 @@ namespace FilesCom.Transfers
         /// The default: the file is created, or replaces a file of that name. On macOS and Linux a replaced file keeps
         /// exactly who may use it: its owner, group, permissions and access control list go to the new file, and a file
         /// whose owner or group this user cannot give the new file (another user's, or one of a group this user is not in)
-        /// is not replaced. On Windows the file is replaced as Windows replaces a file by name: with the net8.0 and
-        /// net10.0 builds the new file has the access a new file in the directory gets; with the netstandard2.0 build,
-        /// Windows' ReplaceFile gives it the replaced file's access control list and attributes. The directory is used by
-        /// path, as it always has been.
+        /// is not replaced. On Windows the replaced file's access control list, and its hidden attribute, go to the new
+        /// file, whose owner is the one this user's account gives new files, as for <see cref="ReplaceRegularFile"/>; a
+        /// link at the name is replaced as an entry, never followed; a folder is not replaced
+        /// (<see cref="DownloadPublicationProblem.DestinationNotRegularFile"/>); and the destination directory, and every
+        /// directory above it, is held from the moment the download starts, as for <see cref="CreateNew"/>.
         /// </summary>
         ReplaceExisting = 0,
 

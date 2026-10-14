@@ -285,10 +285,12 @@ namespace FilesTests
             Assert.AreEqual("123", new List<string>(handler.Requests[50].Headers.GetValues("X-Files-Workspace-Id"))[0]);
         }
 
+        // A redirect from HTTPS to HTTP is not followed on any runtime, .NET Framework included, whose own handler
+        // follows it: a 307 would send the request again, its body included, in the clear.
         [TestMethod]
-        public async Task TestDoesNotFollowHttpsToHttpRedirectOnModernDotNet()
+        public async Task TestDoesNotFollowHttpsToHttpRedirect()
         {
-            var handler = new RedirectingHttpMessageHandler("http://storage.example.test/download");
+            var handler = new RedirectingHttpMessageHandler(HttpStatusCode.TemporaryRedirect, "http://storage.example.test/sessions");
             var service = new FilesApiService(new CapturingHttpClientFactory(handler, "https://api.example.test"));
             var config = new FilesConfiguration
             {
@@ -298,10 +300,11 @@ namespace FilesTests
             new FilesClient(config);
 
             await Assert.ThrowsExactlyAsync<ApiException>(() =>
-                service.SendRequest("/files/test", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>())
+                service.SendRequest("/sessions", HttpMethod.Post, new Dictionary<string, object> { { "username", "bob" }, { "password", "secret" } }, new Dictionary<string, object>())
             );
 
-            Assert.AreEqual(1, handler.Requests.Count);
+            Assert.AreEqual(1, handler.Requests.Count, "The request was sent once, to the HTTPS address only.");
+            Assert.AreEqual("https", handler.Requests[0].RequestUri.Scheme);
         }
 
         // Error bodies are decoded as HttpContent decodes text: by the declared charset, else by a byte order mark,

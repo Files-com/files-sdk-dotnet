@@ -121,6 +121,9 @@ Retries and timeouts:
   wait what the server's `Retry-After` asks, however long, or not at all without one, and 0.1 seconds after other
   failures. A `Retry-After` longer than the platform can wait is not retried: the 429 or 503 error is thrown. Use a
   `CancellationToken` to bound how long an operation may wait.
+- A redirect from HTTPS to HTTP is not followed on any runtime, .NET Framework included, where the SDK used to
+  follow it as .NET Framework's own handler does: the request fails with the redirect's status, and nothing is sent
+  in the clear.
 - HTTP 429 is retried, and 501, TLS certificate failures and redirects the SDK does not follow are not. A request
   that only asks for something, such as a `GET`, is retried after a connection failure or a timeout as before. A
   request that can change something, such as `CreateAsync`, `UpdateAsync` or `DeleteAsync`, is now retried only when
@@ -148,6 +151,12 @@ Retries and timeouts:
   (`X-Files-Frontend-App`), and a partial (`206`) answer to their request for the whole file, with
   `InvalidResponseException` before writing anything. Both used to write such an answer as the file.
 - A signed storage address that is about to expire is renewed with Files.com before a request is sent to it.
+- On Windows a download to a local file (`client.Transfers`) holds its directory, and every directory above it,
+  from the moment it starts, whatever its `DownloadPublicationPolicy`, so that none of them can be renamed or
+  replaced meanwhile, and the default policy gives a replaced file's access control list and hidden attribute to the
+  new file, as `ReplaceRegularFile` does; a directory whose path cannot be held from the root of its volume or share
+  is refused before downloading begins. Before, the default used the directory by path and gave the
+  new file the access a new file in the directory gets.
 - A client keeps the `ConnectTimeout` it was made with. It applies on .NET 8 and later to the client's own
   handlers and to a factory's `SocketsHttpHandler` without one of its own; other handlers you give through
   `HttpTransport` keep their own connection settings. On .NET Framework there is

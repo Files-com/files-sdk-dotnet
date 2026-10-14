@@ -107,6 +107,49 @@ namespace FilesTests
             }
         }
 
+        // An Agent/FIW upload may continue beyond S3's part-number limit. Seed the state of an earlier run from an
+        // actual checkpoint so only the one new part is sent, rather than making 10,000 requests in this test.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task AgentUploadContinuesBeyondTenThousandAcceptedParts()
+        {
+            using (var server = new UploadServer { ParallelParts = "false", PartSize = number => 1, ExtraPartFields = DirectConnection })
+            {
+                byte[] contents = Pattern(10001);
+                string localPath = WriteFile("local.bin", contents);
+                string checkpoint = Path.Combine(directory, "upload.checkpoint");
+                var options = new UploadOptions { CheckpointPath = checkpoint };
+                await CancelAtPart(server, localPath, options, 2);
+
+                JsonNode recorded = JsonNode.Parse(File.ReadAllText(checkpoint));
+                var planned = new JsonArray();
+                var accepted = new JsonArray();
+                string[] hashes = Enumerable.Range(0, 256).Select(value => UploadCoordinator.Hex(System.Security.Cryptography.SHA256.HashData(new[] { (byte)value }))).ToArray();
+                for (int i = 0; i < 10000; i++)
+                {
+                    planned.Add(new JsonArray(i + 1, i, 1, 0));
+                    accepted.Add(new JsonObject { ["part"] = i + 1, ["etag"] = $"\"earlier-part-{i + 1}\"", ["sha256"] = hashes[contents[i]] });
+                }
+                recorded["planned"] = planned;
+                recorded["accepted"] = accepted;
+                File.WriteAllText(checkpoint, recorded.ToJsonString());
+                int sentBefore = server.Parts.Count;
+
+                UploadResult result = await Within(server.Client(run: "again").Transfers.UploadFileAsync(localPath, "remote.bin", options));
+
+                PartRequest sent = server.Parts.Skip(sentBefore).Single();
+                Assert.AreEqual(10001L, sent.Number);
+                CollectionAssert.AreEqual(new[] { contents[10000] }, sent.Bytes);
+                Assert.AreEqual(10000, result.ResumedParts);
+                Assert.AreEqual(10000L, result.ResumedBytes);
+                Assert.AreEqual(UploadPerformanceProfile.Agent, result.FinalProgress.Concurrency.Profile);
+                Assert.AreEqual(PartSizeSource.ServerPlanned, result.FinalProgress.PartSizing.Source);
+                Assert.AreEqual(1, server.NegotiationsOf("again").Count, "Only the new part was negotiated.");
+                Assert.AreEqual(10001, server.Finishes.Single().GetProperty("etags").GetArrayLength());
+                Assert.IsFalse(File.Exists(checkpoint), "The upload completed and its checkpoint was removed.");
+            }
+        }
+
         [TestMethod]
         [Timeout(60000)]
         public async Task InterruptedUploadContinuesFromWhatItsCheckpointLastRecorded()

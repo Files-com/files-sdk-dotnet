@@ -38,6 +38,32 @@ namespace FilesTests
 
         private string Checkpoints => Path.Combine(folder, "checkpoints");
 
+        // An upload reads its source by path on Windows, without reserving its ancestors against deletion for download
+        // publication. Another program's open handle with delete access is compatible with those reads.
+        [TestMethod]
+        [Timeout(60000)]
+        [OSCondition(OperatingSystems.Windows)]
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+        public async Task OnWindowsDirectoryUploadDoesNotReserveItsAncestorsForPublication()
+        {
+            if (!OperatingSystem.IsWindows())
+            {
+                return;
+            }
+            byte[] contents = Pattern(20, 1);
+            WriteLocal("sub/file.bin", contents);
+            using (var ancestor = OpenDirectoryForDelete(folder, 0x00010000, 7, IntPtr.Zero, 3, 0x02000000, IntPtr.Zero))
+            using (var server = new UploadServer())
+            {
+                Assert.IsFalse(ancestor.IsInvalid, $"The source ancestor is open with delete access: error {Marshal.GetLastWin32Error()}.");
+
+                DirectoryTransferResult result = await Client(server).Transfers.UploadDirectoryAsync(Local, "backup");
+
+                CollectionAssert.AreEqual(contents, server.AcceptedBytes("backup/sub/file.bin"));
+                Assert.AreEqual(1, result.Files.Count);
+            }
+        }
+
         [TestMethod]
         [Timeout(60000)]
         public async Task DirectoryUploadSendsEveryFileToItsPathAndCreatesEmptyFolders()
@@ -1697,6 +1723,9 @@ namespace FilesTests
                 report(value);
             }
         }
+
+        [DllImport("kernel32.dll", EntryPoint = "CreateFileW", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern Microsoft.Win32.SafeHandles.SafeFileHandle OpenDirectoryForDelete(string path, uint access, uint share, IntPtr security, uint creation, uint flags, IntPtr template);
 
         private sealed class FailingProgress : IProgress<TransferProgress>
         {

@@ -9,14 +9,15 @@ namespace FilesCom.Transfers
 {
     // The Windows calls WindowsDirectory makes to hold directories and stages and put stages in place. A stage is
     // opened, never shared, with the right to delete it, so it is renamed and deleted through its own handle, and no one
-    // else can open, rename, replace or delete it while it is open. CreateNew and ReplaceRegularFile look at the
-    // destination's entry without following a reparse point, and rename the stage into the held destination directory
-    // through the stage's handle (FILE_RENAME_INFORMATION with the directory as its RootDirectory, given to
-    // NtSetInformationFile: SetFileInformationByHandle refuses a name relative to a RootDirectory with
-    // ERROR_INVALID_PARAMETER): without replacing anything for CreateNew, which the system refuses with
-    // STATUS_OBJECT_NAME_COLLISION (ERROR_ALREADY_EXISTS), or replacing a regular file for
-    // ReplaceRegularFile, which first gives the stage the replaced file's access control list through the stage's
-    // handle, as PowerShell does. A folder or reparse point at the name is never replaced.
+    // else can open, rename, replace or delete it while it is open. Every policy looks at the destination's entry
+    // without following a reparse point, and renames the stage into the held destination directory through the
+    // stage's handle (FILE_RENAME_INFORMATION with the directory as its RootDirectory, given to NtSetInformationFile:
+    // SetFileInformationByHandle refuses a name relative to a RootDirectory with ERROR_INVALID_PARAMETER): without
+    // replacing anything for CreateNew, which the system refuses with STATUS_OBJECT_NAME_COLLISION
+    // (ERROR_ALREADY_EXISTS); replacing a regular file for ReplaceRegularFile; or replacing a regular file or a reparse
+    // point, as an entry, never followed, for ReplaceExisting. A replaced entry first gives the stage its access control
+    // list through the stage's handle, as PowerShell does. A folder at the name is never replaced, nor is a reparse
+    // point for ReplaceRegularFile.
 #if NET5_0_OR_GREATER
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
@@ -28,7 +29,6 @@ namespace FilesCom.Transfers
         private const uint ReadControl = 0x00020000;
         private const uint WriteDac = 0x00040000;
         private const uint Synchronize = 0x00100000;
-        private const uint AddFile = 0x00000002;
         private const uint ReadAttributes = 0x00000080;
         private const uint ShareRead = 1;
         private const uint ShareWrite = 2;
@@ -399,68 +399,67 @@ namespace FilesCom.Transfers
         }
 
         // Puts the stage held by stage in place as finalName in the held directory at where (shown as directory), as
-        // policy says (CreateNew or ReplaceRegularFile). The stage first takes its final access: a replaced regular
-        // file's access control list, or, with nothing there, newFileAccess, which gives it a new file's; accessTaken is
-        // set once it has either, which a stage kept for a later run must not keep. Throws DownloadPublicationException
-        // when the policy refuses the destination, and leaves the stage where it is.
-        internal static void Publish(SafeFileHandle stage, string where, string directory, string finalName, DownloadPublicationPolicy policy, Action newFileAccess, ref bool accessTaken)
+        // policy says. destinationDirectory is the handle the staging directory was created or reopened through; it
+        // already grants FILE_ADD_FILE and stays open until the stage closes. The stage first takes its final access: a replaced entry's access control list, or, with nothing
+        // there, newFileAccess, which gives it a new file's; accessTaken is set once it has either, which a stage kept for
+        // a later run must not keep. Throws DownloadPublicationException when the policy refuses the destination, and
+        // leaves the stage where it is.
+        internal static void Publish(SafeFileHandle stage, SafeFileHandle destinationDirectory, string where, string directory, string finalName, DownloadPublicationPolicy policy, Action newFileAccess, ref bool accessTaken)
         {
             string destination = Path.Combine(directory, finalName);
             string target = where.TrimEnd('\\') + "\\" + finalName;
-            using (SafeFileHandle held = CreateFileW(where, AddFile | Synchronize, ShareRead | ShareWrite, IntPtr.Zero, OpenExisting, BackupSemantics | OpenReparsePoint, IntPtr.Zero))
+            bool hidden = false;
+            using (SafeFileHandle existing = CreateFileW(target, ReadControl | ReadAttributes, ShareRead | ShareWrite | ShareDelete, IntPtr.Zero, OpenExisting, BackupSemantics | OpenReparsePoint, IntPtr.Zero))
             {
-                if (held.IsInvalid)
+                if (!existing.IsInvalid)
                 {
-                    throw Failure(Marshal.GetLastWin32Error(), $"The directory {directory} cannot be opened to put {finalName} in it");
-                }
-                bool hidden = false;
-                using (SafeFileHandle existing = CreateFileW(target, ReadControl | ReadAttributes, ShareRead | ShareWrite | ShareDelete, IntPtr.Zero, OpenExisting, BackupSemantics | OpenReparsePoint, IntPtr.Zero))
-                {
-                    if (!existing.IsInvalid)
-                    {
-                        uint attributes = WindowsNative.InformationOf(existing, destination).Attributes;
-                        if (policy == DownloadPublicationPolicy.CreateNew)
-                        {
-                            throw Exists(destination);
-                        }
-                        if ((attributes & (ReparsePointAttribute | DirectoryAttribute)) != 0)
-                        {
-                            throw new DownloadPublicationException(DownloadPublicationProblem.DestinationNotRegularFile, destination, $"{destination} is a directory or reparse point, which is not replaced, so nothing was replaced.");
-                        }
-                        hidden = (attributes & HiddenAttribute) != 0;
-                        accessTaken = true;
-                        TakeOverAccessRules(existing, stage, destination);
-                    }
-                    else
-                    {
-                        int error = Marshal.GetLastWin32Error();
-                        if (error != NotFound && error != PathNotFound)
-                        {
-                            throw Failure(error, $"{destination} cannot be examined");
-                        }
-                        if (newFileAccess != null)
-                        {
-                            accessTaken = true;
-                            newFileAccess();
-                        }
-                    }
-                }
-                if (hidden)
-                {
-                    // A file that replaces a hidden one stays hidden, as PowerShell's replacement does.
-                    SetAttributes(stage, HiddenAttribute, destination);
-                }
-                byte[] rename = RenameInformation(held, finalName, replace: policy == DownloadPublicationPolicy.ReplaceRegularFile);
-                int status = NtSetInformationFile(stage, out IoStatusBlock _, rename, (uint)rename.Length, FileRenameInformation);
-                if (status < 0)
-                {
-                    int error = RtlNtStatusToDosError(status);
-                    if (error == FileExists || error == AlreadyExists)
+                    uint attributes = WindowsNative.InformationOf(existing, destination).Attributes;
+                    if (policy == DownloadPublicationPolicy.CreateNew)
                     {
                         throw Exists(destination);
                     }
-                    throw Failure(error, $"The file downloaded to {destination} cannot be put in place");
+                    if ((attributes & DirectoryAttribute) != 0)
+                    {
+                        throw new DownloadPublicationException(DownloadPublicationProblem.DestinationNotRegularFile, destination, $"{destination} is a directory, which is not replaced, so nothing was replaced.");
+                    }
+                    if ((attributes & ReparsePointAttribute) != 0 && policy == DownloadPublicationPolicy.ReplaceRegularFile)
+                    {
+                        throw new DownloadPublicationException(DownloadPublicationProblem.DestinationNotRegularFile, destination, $"{destination} is a reparse point, which is not replaced, so nothing was replaced.");
+                    }
+                    hidden = (attributes & HiddenAttribute) != 0;
+                    accessTaken = true;
+                    TakeOverAccessRules(existing, stage, destination);
                 }
+                else
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    if (error != NotFound && error != PathNotFound)
+                    {
+                        throw Failure(error, $"{destination} cannot be examined");
+                    }
+                    if (newFileAccess != null)
+                    {
+                        accessTaken = true;
+                        newFileAccess();
+                    }
+                }
+            }
+            if (hidden)
+            {
+                // A file that replaces a hidden one stays hidden, as PowerShell's replacement does.
+                SetAttributes(stage, HiddenAttribute, destination);
+            }
+            byte[] rename = RenameInformation(destinationDirectory, finalName, replace: policy != DownloadPublicationPolicy.CreateNew);
+            int status = NtSetInformationFile(stage, out IoStatusBlock _, rename, (uint)rename.Length, FileRenameInformation);
+            GC.KeepAlive(destinationDirectory);
+            if (status < 0)
+            {
+                int error = RtlNtStatusToDosError(status);
+                if (error == FileExists || error == AlreadyExists)
+                {
+                    throw Exists(destination);
+                }
+                throw Failure(error, $"The file downloaded to {destination} cannot be put in place");
             }
         }
 

@@ -1044,6 +1044,27 @@ namespace FilesTests
             }
         }
 
+        // Files.com starts small and grows its server-planned parts. The first size alone would project five parts,
+        // but this plan needs only the four slots available, including when the caller selects server sizing for S3.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task GrowingServerPartsFitWithinTheAvailableSlots()
+        {
+            using (var server = new UploadServer { Aws = true, ExtraPartFields = ",\"available_parts\":4" })
+            {
+                server.PartSize = number => number == 1 ? 5 : number <= 3 ? 6 : 8;
+                byte[] contents = Pattern(25);
+                string localPath = WriteFile("local.bin", contents);
+
+                UploadResult result = await Within(Client(server).Transfers.UploadFileAsync(localPath, "remote.bin", new UploadOptions { PartSizingMode = UploadPartSizingMode.ServerPlanned }));
+
+                CollectionAssert.AreEqual(new long[] { 5, 6, 6, 8 }, result.Parts.Select(part => part.Length).ToArray());
+                CollectionAssert.AreEqual(contents, server.AcceptedBytes("remote.bin"));
+                Assert.AreEqual(PartSizeSource.ServerPlanned, result.FinalProgress.PartSizing.Source);
+                Assert.AreEqual(1, server.Finishes.Count, "The valid plan completed.");
+            }
+        }
+
         private static FilesClient Client(UploadServer server, int retries = 0)
         {
             return server.Client(retries);
