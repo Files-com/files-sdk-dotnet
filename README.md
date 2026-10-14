@@ -1233,6 +1233,61 @@ Exception
 |`TrialLockedException`|  `SiteConfigurationException` |
 |`UserRequestsEnabledRequiredException`|  `SiteConfigurationException` |
 
+## Cancellation
+
+Every method that sends a request has an `Async` form that takes a `CancellationToken`: client operations such
+as `client.Users.FindAsync`, object methods such as `user.UpdateAsync` and `SaveAsync`, the list methods
+`LoadNextPageAsync`, `AllAsync`, `ListAutoPagingAsync` and `ListAutoPaging(cancellationToken)`, and the file
+transfers `client.RemoteFiles.UploadFileAsync` and `DownloadFileAsync`, and the uploads of `client.Transfers`,
+described in File Transfers.
+
+Cancelling the token stops the operation wherever it is: waiting for a response, waiting to retry, reading or
+writing file contents, or between pages and upload parts. The operation then ends with an
+`OperationCanceledException` (or a `TaskCanceledException`, which derives from it), and it starts no further
+request, retry, page or part.
+
+Methods without a token, including `User.Find` and `LoadNextPage`, do not support token-based cancellation.
+
+[Disposing the client](/net/overview/configuration/#closing-a-client) also cancels its running operations.
+
+```csharp title="Example Request"
+using FilesCom;
+using FilesCom.Models;
+
+using (var cancellation = new CancellationTokenSource(TimeSpan.FromMinutes(10)))
+{
+    try
+    {
+        await client.RemoteFiles.UploadFileAsync(localPath, destinationPath, cancellationToken: cancellation.Token);
+    }
+    catch (OperationCanceledException)
+    {
+        Console.WriteLine("The upload was cancelled.");
+    }
+}
+```
+
+### What Cancellation Leaves Behind
+
+Cancellation stops the SDK operation. It does not undo requests Files.com has already received. If the last request of
+an upload was sent before you cancelled, the file may still be completed.
+
+The SDK passes the token to the streams you give it. A stream that ignores its token finishes its current read
+or write before the operation stops.
+
+- `UploadFileAsync(destinationPath, stream, ...)` disposes the stream when it ends, including when it is cancelled.
+- `DownloadFileAsync(path, stream)` leaves your stream open.
+- `DownloadFileAsync(path, localPath)` closes the local file when it ends. After a failure or cancellation, the
+  file may be partly written.
+
+### Timeouts
+
+The `ReadTimeout` and `WriteTimeout` settings end a request whose connection stalls: one that waits too long for its
+response or for more of it, or an upload part that cannot send. It then fails with `NetworkTimeoutException`, not
+`OperationCanceledException`, after the retries a connection failure gets. An error response whose body stops
+arriving fails with its HTTP status instead, as an `InvalidResponseException`. They do not limit a transfer that keeps
+moving, however long it takes. To limit a whole operation, use a token that cancels itself, as in the example.
+
 ## Pagination
 
 Certain API operations return lists of objects. When the number of objects in the list is large,
@@ -2134,61 +2189,6 @@ Existing `RemoteFile` methods and `client.RemoteFiles` transfer methods remain a
 | `RemoteFile.DownloadFile`, `client.RemoteFiles.DownloadFileAsync` | Fetches the whole file directly into the local file or stream, without staging. Rejects web-app and partial responses before writing. An address refused as expired can be renewed at most twice before any bytes are written. Downloads are not retried after writing bytes. |
 
 Use `client.Transfers` for automatic tuning, progress, staged local downloads, shared limits and file checkpoints.
-
-## Cancellation
-
-Every method that sends a request has an `Async` form that takes a `CancellationToken`: client operations such
-as `client.Users.FindAsync`, object methods such as `user.UpdateAsync` and `SaveAsync`, the list methods
-`LoadNextPageAsync`, `AllAsync`, `ListAutoPagingAsync` and `ListAutoPaging(cancellationToken)`, and the file
-transfers `client.RemoteFiles.UploadFileAsync` and `DownloadFileAsync`, and the uploads of `client.Transfers`,
-described in File Transfers.
-
-Cancelling the token stops the operation wherever it is: waiting for a response, waiting to retry, reading or
-writing file contents, or between pages and upload parts. The operation then ends with an
-`OperationCanceledException` (or a `TaskCanceledException`, which derives from it), and it starts no further
-request, retry, page or part.
-
-Methods without a token, including `User.Find` and `LoadNextPage`, do not support token-based cancellation.
-
-[Disposing the client](/net/overview/configuration/#closing-a-client) also cancels its running operations.
-
-```csharp title="Example Request"
-using FilesCom;
-using FilesCom.Models;
-
-using (var cancellation = new CancellationTokenSource(TimeSpan.FromMinutes(10)))
-{
-    try
-    {
-        await client.RemoteFiles.UploadFileAsync(localPath, destinationPath, cancellationToken: cancellation.Token);
-    }
-    catch (OperationCanceledException)
-    {
-        Console.WriteLine("The upload was cancelled.");
-    }
-}
-```
-
-### What Cancellation Leaves Behind
-
-Cancellation stops the SDK operation. It does not undo requests Files.com has already received. If the last request of
-an upload was sent before you cancelled, the file may still be completed.
-
-The SDK passes the token to the streams you give it. A stream that ignores its token finishes its current read
-or write before the operation stops.
-
-- `UploadFileAsync(destinationPath, stream, ...)` disposes the stream when it ends, including when it is cancelled.
-- `DownloadFileAsync(path, stream)` leaves your stream open.
-- `DownloadFileAsync(path, localPath)` closes the local file when it ends. After a failure or cancellation, the
-  file may be partly written.
-
-### Timeouts
-
-The `ReadTimeout` and `WriteTimeout` settings end a request whose connection stalls: one that waits too long for its
-response or for more of it, or an upload part that cannot send. It then fails with `NetworkTimeoutException`, not
-`OperationCanceledException`, after the retries a connection failure gets. An error response whose body stops
-arriving fails with its HTTP status instead, as an `InvalidResponseException`. They do not limit a transfer that keeps
-moving, however long it takes. To limit a whole operation, use a token that cancels itself, as in the example.
 
 ## Logs
 
