@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>ClientJourney</RootNamespace>
     <!-- The FilesCom version this example is written for; releases set it. Set FilesComVersion to build against another, such as a local package. -->
-    <FilesComVersion Condition="'$(FilesComVersion)' == ''">2.0.5</FilesComVersion>
+    <FilesComVersion Condition="'$(FilesComVersion)' == ''">2.0.6</FilesComVersion>
   </PropertyGroup>
 
   <ItemGroup>

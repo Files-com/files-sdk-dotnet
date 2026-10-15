@@ -189,6 +189,7 @@ namespace FilesCom.Operations
         ///   group_admins_can_reset_passwords - boolean - Allow group admins to reset passwords for users in their groups
         ///   group_admins_can_set_user_password - boolean - Allow group admins to set password authentication method
         ///   child_site_folder_admins_can_see_parent_site_directory - boolean - If true, administrators on this site's Child Sites, including Folder Admins, can list this site's Default Workspace users and groups and grant them folder permissions and notifications on Child Site paths.
+        ///   workspace_folder_admins_can_see_default_workspace_directory - boolean - If true, Workspace Administrators and Folder Admins in a Custom Workspace can list the Default Workspace users and groups that have permissions in that Workspace and choose them as Email Notification recipients.
         ///   bundle_recipient_blacklist_free_email_domains - boolean - Disallow free email domains for Bundle/Inbox recipients?
         ///   bundle_recipient_blacklist_domains - array(string) - List of email domains to disallow when entering a Bundle/Inbox recipients
         ///   admins_bypass_locked_subfolders - boolean - Allow admins to bypass the locked subfolders setting.

@@ -5167,7 +5167,8 @@
         "welcome_email_enabled": "WelcomeEmailEnabled",
         "welcome_email_subject": "WelcomeEmailSubject",
         "welcome_screen": "WelcomeScreen",
-        "windows_mode_ftp": "WindowsModeFtp"
+        "windows_mode_ftp": "WindowsModeFtp",
+        "workspace_folder_admins_can_see_default_workspace_directory": "WorkspaceFolderAdminsCanSeeDefaultWorkspaceDirectory"
       },
       "operations": {
         "GetSite": {

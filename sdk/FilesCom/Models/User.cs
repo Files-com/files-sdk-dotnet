@@ -2318,6 +2318,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
         ///   ids - string - comma-separated list of User IDs
         ///   include_parent_site_users - boolean - Include users from the parent site.
+        ///   include_default_workspace_users - boolean - When scoped to a Custom Workspace, include Default Workspace users who have permissions in that Workspace. Available to Site Administrators, and to Workspace Administrators and Folder Admins in that Workspace when the site shares its Default Workspace directory with Workspaces.
         ///   search - string - Searches for partial matches of name, username, or email.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -2344,6 +2345,7 @@ namespace FilesCom.Models
         ///   filter_lteq - object - If set, return records where the specified field is less than or equal the supplied value. Valid fields are `password_validity_days`, `last_login_at` or `authenticate_until`.
         ///   ids - string - comma-separated list of User IDs
         ///   include_parent_site_users - boolean - Include users from the parent site.
+        ///   include_default_workspace_users - boolean - When scoped to a Custom Workspace, include Default Workspace users who have permissions in that Workspace. Available to Site Administrators, and to Workspace Administrators and Folder Admins in that Workspace when the site shares its Default Workspace directory with Workspaces.
         ///   search - string - Searches for partial matches of name, username, or email.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -2411,6 +2413,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("include_parent_site_users", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: include_parent_site_users is null, which cannot be sent" : "Bad parameter: include_parent_site_users must be of type bool", "include_parent_site_users");
+            }
+            if (parameters.TryGetValue("include_default_workspace_users", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: include_default_workspace_users is null, which cannot be sent" : "Bad parameter: include_default_workspace_users must be of type bool", "include_default_workspace_users");
             }
             if (parameters.TryGetValue("search", out parameterValue) && !(parameterValue is string))
             {
