@@ -1479,12 +1479,15 @@ namespace FilesTests
             }
         }
 
-        // Files of one part each, uploaded by default straight to S3, spend most of their time beginning (begin_upload) or
+        // Files of one part each, uploaded straight to S3, spend most of their time beginning (begin_upload) or
         // finishing (the final request) wherever Files.com takes longer to answer those than storage takes to accept a
         // part. Here every one of those answers is held, so the files the target's own limit allows can never have a part
         // ready to send. The upload still begins more files, past that limit, to feed the target, but one at a time, a
         // file each time it looks again, never all at once, and never more than MaxConcurrentFiles; the caller's limiter
         // still holds the parts to its slots, and is left with nothing in use. Every byte arrives once the answers come.
+        // The files' shared target is held at 4, by tuning of their own, which has no warm start, so that only this pacing
+        // begins files past its limit: a warm start's raises may begin several at once instead, as
+        // TheLastRaiseOfASharedWarmStartBeginsFilesBeforeAnyFinishes shows.
         [TestMethod]
         [Timeout(60000)]
         [DataRow("begin", DisplayName = "Beginning held: more files begin, one at a time")]
@@ -1494,7 +1497,8 @@ namespace FilesTests
             const int most = 24;
             using (var server = new UploadServer { Aws = true })
             {
-                UploadGrant.AwsLimitsForTests.Value = new PartSizeLimits(1, 8, 100, 4096);
+                // Parts no smaller than the files: each is sent as one part.
+                UploadGrant.AwsLimitsForTests.Value = new PartSizeLimits(8, 8, 100, 4096);
                 server.UploadUri = (file, number, negotiation) => UploadServer.AwsPartUrl(file.Replace('/', '~'), number, negotiation);
                 for (int i = 0; i < 60; i++)
                 {
@@ -1520,10 +1524,13 @@ namespace FilesTests
                 }
                 var progress = new DirectoryProgressLog();
                 var limiter = new TransferLimiter(maxConcurrentRequests: 2, maxBufferedBytes: 1024 * 1024);
-                var options = new DirectoryUploadOptions { MaxConcurrentFiles = most, Limiter = limiter, Progress = progress };
+                AutomaticConcurrencyOptions fixedTarget = SharedTuning(start: 4, max: 4, step: 1);
+                fixedTarget.MinTarget = 4;
+                var options = new DirectoryUploadOptions { MaxConcurrentFiles = most, Limiter = limiter, Progress = progress, FileOptions = new UploadOptions { AutomaticConcurrency = fixedTarget } };
 
                 Task<DirectoryTransferResult> upload = server.Client().Transfers.UploadDirectoryAsync(Local, "up", options);
                 List<TimeSpan> seen;
+                IReadOnlyList<DirectoryTransferProgress> whileHeld;
                 try
                 {
                     await server.WaitUntil(_ => Count(arrivals) >= most || upload.IsCompleted, $"{most} files' requests are held", () => $"{Count(arrivals)} held");
@@ -1532,6 +1539,7 @@ namespace FilesTests
                     {
                         seen = arrivals.ToList();
                     }
+                    whileHeld = progress.Reports;
                 }
                 finally
                 {
@@ -1540,9 +1548,14 @@ namespace FilesTests
                 DirectoryTransferResult result = await upload;
 
                 Assert.AreEqual(most, seen.Count, "Files begun to feed the target, up to MaxConcurrentFiles and no more.");
-                // Past the files the target's limit allows before any file has begun (6), files begin one at a time: the
-                // upload looks again every 100 ms while no file ends, as none does while their answers are held.
-                List<TimeSpan> later = seen.Skip(6).ToList();
+                // Each file reports that it began before its transfer starts, and no file ends while the answers are held, so
+                // the first report of each number of files in progress is when that file began, not when its request reached
+                // Files.com. Past the files the target's limit allows (6, with the target held at 4), files begin one at a
+                // time: the upload looks again every 100 ms while no file ends.
+                Assert.IsTrue(whileHeld.All(r => r.FilesDone == 0), "No file ended while the answers were held.");
+                List<TimeSpan?> began = Enumerable.Range(7, most - 6).Select(files => whileHeld.FirstOrDefault(r => r.FilesActive == files)?.Elapsed).ToList();
+                Assert.IsTrue(began.All(at => at.HasValue), $"A report as each of files 7 to {most} began, among {string.Join(", ", whileHeld.Select(r => r.FilesActive).Distinct())} in progress.");
+                List<TimeSpan> later = began.Select(at => at.Value).ToList();
                 double gap = (later.Last() - later.First()).TotalMilliseconds / (later.Count - 1);
                 Assert.IsTrue(gap >= 50, $"Files past the target's limit began one at a time, {gap:0} ms apart on average, not all at once.");
                 Assert.IsTrue(progress.Reports.All(r => r.FilesActive <= most && r.FileLimit <= most), "Never more than MaxConcurrentFiles in progress.");

@@ -9,6 +9,14 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
+  <!-- When CI tests the frameworks at the same time (test.sh, TestTfmsInParallel), it names in FilesTestsFrameworkTemp
+       a directory holding a temporary directory for each framework, and each framework's test host gets its own as
+       TMPDIR (VSTest's RunConfiguration.EnvironmentVariables): tests that look at what is in the temporary directory
+       then see only their own host's files, as when the frameworks run one after another. Unset, nothing changes. -->
+  <PropertyGroup Condition="'$(FilesTestsFrameworkTemp)' != ''">
+    <VSTestCLIRunSettings>$(VSTestCLIRunSettings);RunConfiguration.EnvironmentVariables.TMPDIR=$(FilesTestsFrameworkTemp)/$(TargetFramework)</VSTestCLIRunSettings>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.4.1" />

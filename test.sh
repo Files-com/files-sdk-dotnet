@@ -23,12 +23,56 @@ results="$(mktemp -d)" || exit 1
 trap 'status=$?; if [[ ${status} -eq 0 ]]; then rm -rf "${results}"; else echo "test.sh failed (exit ${status}); its results are kept in ${results}" >&2; fi' EXIT
 
 frameworks="$(dotnet msbuild FilesTests/FilesTests.csproj -getProperty:TargetFrameworks)" || exit 1
+
+# The frameworks are tested one after another. A CI job (CI=true) can opt in (FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL=1)
+# to testing them at the same time when it has the CPUs and memory for it, which parallel-test-resources.sh decides
+# before any test runs; otherwise, and outside CI, they run one after another as without the opt-in. Either way a
+# failure fails the run: nothing is retried the other way.
+parallel=""
+case "${FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL:-}" in
+  "") ;;
+  1)
+    if [[ "${CI:-}" == true ]]; then
+      "${DIR}/parallel-test-resources.sh" && parallel=1
+    else
+      echo "sequential: FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL applies in CI (CI=true) only"
+    fi
+    ;;
+  *)
+    echo "FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL must be 1 or unset, not ${FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL}" >&2
+    exit 1
+    ;;
+esac
+if [[ -n "${parallel}" ]]; then
+  # One run tests every framework, each in its own test host on its own runtime, at the same time (the SDK's
+  # TestTfmsInParallel). LogFilePrefix gives each framework its own TRX file, FilesTests_<framework>_<timestamp>.trx.
+  # Each host also gets a temporary directory of its own, results/tmp/<framework>, made like the system's (mode 1777),
+  # as TMPDIR (FilesTests.csproj, FilesTestsFrameworkTemp): the hosts would otherwise share one, and a test that looks
+  # at what is in it would also see the other host's files. Like the rest of the results, they are removed when the run
+  # passes and kept when it fails.
+  mkdir -m 1777 "${results}/tmp" || exit 1
+  for framework in ${frameworks//;/ }; do
+    mkdir -m 1777 "${results}/tmp/${framework}" || exit 1
+  done
+  dotnet test FilesTests/FilesTests.csproj -p:TestTfmsInParallel=true -p:FilesTestsFrameworkTemp="${results}/tmp" \
+    --logger "trx;LogFilePrefix=FilesTests" --results-directory "${results}" || exit 1
+fi
 for framework in ${frameworks//;/ }; do
-  dotnet test FilesTests/FilesTests.csproj --framework "${framework}" \
-    --logger "trx;LogFileName=${framework}.trx" --results-directory "${results}" || exit 1
+  if [[ -n "${parallel}" ]]; then
+    reports=("${results}"/FilesTests_"${framework}"_*.trx)
+    if [[ "${#reports[@]}" -ne 1 || ! -f "${reports[0]}" ]]; then
+      echo "Expected one TRX file for ${framework} in ${results}" >&2
+      exit 1
+    fi
+    report="${reports[0]}"
+  else
+    dotnet test FilesTests/FilesTests.csproj --framework "${framework}" \
+      --logger "trx;LogFileName=${framework}.trx" --results-directory "${results}" || exit 1
+    report="${results}/${framework}.trx"
+  fi
 
   # A run that finds no tests passes; fail it here instead.
-  counters="$(grep -o '<Counters [^>]*>' "${results}/${framework}.trx")"
+  counters="$(grep -o '<Counters [^>]*>' "${report}")"
   total="$(sed -E 's/.* total="([0-9]+)".*/\1/' <<< "${counters}")"
   executed="$(sed -E 's/.* executed="([0-9]+)".*/\1/' <<< "${counters}")"
   echo "${framework}: ${total} tests found, ${executed} executed, $((total - executed)) skipped"

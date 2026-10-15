@@ -37,14 +37,19 @@ step() {
   [[ ${status} -eq 0 ]] || exit 1
 }
 
+# Formats the projects PROJECTS in place, then checks that formatting them again would change nothing. dotnet format
+# loads one workspace per run, so the projects go in one solution NAME, made in the work directory: each pass loads
+# them once rather than once each, and formats the same files that formatting each project in turn would.
 format() {
-  step dotnet format "$1"
-  step dotnet format --verify-no-changes "$1"
+  local name="$1"
+  shift
+  step dotnet new sln --format sln --name "${name}" --output "${work}"
+  step dotnet sln "${work}/${name}.sln" add "$@"
+  step dotnet format "${work}/${name}.sln"
+  step dotnet format --verify-no-changes "${work}/${name}.sln"
 }
 
-format sdk/FilesCom/FilesCom.csproj
-format sdk/FilesTests/FilesTests.csproj
-format sdk/FilesContractTests/FilesContractTests.csproj
+format sdk sdk/FilesCom/FilesCom.csproj sdk/FilesTests/FilesTests.csproj sdk/FilesContractTests/FilesContractTests.csproj
 step dotnet build sdk/FilesCom/FilesCom.csproj --configuration Production
 
 # The examples build against a package of this library, as applications install it. Restores take FilesCom only
@@ -76,8 +81,8 @@ FilesComVersion="$(dotnet msbuild sdk/FilesCom/FilesCom.csproj -getProperty:Vers
 export FilesComVersion
 export RestoreConfigFile="${work}/NuGet.Config"
 export NUGET_PACKAGES="${work}/restored"
+format examples examples/*/*.csproj
 for example in examples/*/*.csproj; do
-  format "${example}"
   step dotnet build "${example}" --configuration Release
 done
 
