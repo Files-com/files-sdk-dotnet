@@ -37,6 +37,8 @@ More:
 
 ## Introduction
 
+For integration choices and credential scope, start with [SDKs & APIs](https://www.files.com/docs/clients-and-protocols/sdks-and-apis). [Scripts, APIs & Application Workflows](https://www.files.com/docs/automated-workflows/scripts-apis-and-application-workflows) explains how to coordinate Files.com operations with the work your application owns.
+
 The Files.com .NET client library calls the Files.com API from .NET applications.
 
 Files.com customers use our .NET client library for directly working with files and folders as well as performing management tasks such as adding/removing users, onboarding counterparties, retrieving information about automations and more.
@@ -96,7 +98,7 @@ Explore the [files-sdk-dotnet](https://github.com/Files-com/files-sdk-dotnet) co
 
 The Files.com Support team provides official support for all of our official Files.com integration tools.
 
-To initiate a support conversation, you can send an [Authenticated Support Request](https://www.files.com/docs/overview/requesting-support) or simply send an E-Mail to support@files.com.
+To initiate a support conversation, you can send an [Authenticated Support Request](https://www.files.com/docs/support-and-services/requesting-support) or simply send an E-Mail to support@files.com.
 
 ## Authentication
 
@@ -108,10 +110,10 @@ Authenticating with an API key is the recommended authentication method for most
 the method used in the examples on this site.
 
 To use an API Key, first generate an API key from the [web
-interface](https://www.files.com/docs/sdk-and-apis/api-keys) or [via the API or an
+interface](https://www.files.com/docs/security/authentication-and-credentials/api-keys) or [via the API or an
 SDK](https://developers.files.com/net/resources/developers/api-keys).
 
-A user-specific API key uses the user's permissions. [Workspaces](https://developers.files.com/net/overview/workspaces) describes account scope and administrative access.
+A user key follows its account's permissions, narrowed by the key's permission scope, Workspace, and any path restriction on file operations. It can perform administrative operations only when both the account and key permit them. [API Keys](https://www.files.com/docs/security/authentication-and-credentials/api-keys) explains credential scope and lifecycle; [Workspaces](https://developers.files.com/net/overview/workspaces) explains request context and delegated administration.
 
 ```csharp title="Example Request"
 using FilesCom;
@@ -169,7 +171,7 @@ Don't forget to replace the placeholder, `YOUR_API_KEY`, with your actual API ke
 
 ### Authenticate with a Session
 
-Create a session with the username and password of an active user. The session uses that user's permissions. [Workspaces](https://developers.files.com/net/overview/workspaces) describes account scope and administrative access.
+Create a session with the username and password of an active user. The session uses that user's permissions, including any delegated administrative access. [Workspaces](https://developers.files.com/net/overview/workspaces) describes account scope and administrative access.
 
 Sessions use the exact same session timeout settings as web interface sessions. When a
 session times out, simply create a new session and resume where you left off. This process is not
@@ -787,7 +789,7 @@ This behavior applies across:
 - Folder and file lookup operations
 - Automations and workflows
 
-See also: [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/case-sensitivity/)
+See also: [Case Sensitivity Documentation](https://www.files.com/docs/files-and-folders/file-system-semantics/case-sensitivity)
 
 The `PathUtil.same` function in the Files.com SDK is designed to help you determine if two paths on
 your native file system would be considered the same on Files.com. This is particularly important
