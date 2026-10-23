@@ -546,13 +546,23 @@ namespace FilesTests
         // files' MaxConcurrency of 2: its one raise, to 2, is its last, which ends it, and is never withdrawn. Files.com
         // holds the files' beginnings until twenty have begun, the files the upload grows to, a file each 100 ms, while
         // none of their parts can be ready, past the six the target alone allows (TargetFileLimit), and holds every file's
-        // finish throughout, so that no file ends. Storage takes 10 ms to answer each part: from when the upload has had
-        // time to look at the warm start's first target, so that the raise comes after it has, or at once, so that the
-        // raise usually comes before the upload first sees a target. The raise needs more parts than the files in progress
-        // have left, and the files that bring them begin with it, before any file finishes: at least eight within 300 ms,
-        // where the ordinary pacing, a file each 100 ms while too few parts are ready, begins four at most. Never more parts
-        // at once than MaxConcurrency, nor more files than MaxConcurrentFiles (the most the transfer allows); cancelled,
-        // the upload stops, its limiter left with nothing in use.
+        // finish throughout, so that no file ends. It then answers the beginnings it holds one at a time, in the order the
+        // files began: the first, and another each time storage answers a part, so that the next part comes as the part
+        // before it is answered rather than waiting behind it. While no part waits, the upload goes on beginning a file
+        // each 100 ms, the files it has grown to staying a file ahead of the files in progress; parts waiting through the
+        // warm start's sampling would instead take them down a file each 100 ms (WaitForFileLimitAsync), leaving its raise
+        // fewer files to double than are already in progress. Storage answers the parts from when the upload has had time
+        // to look at the warm start's first target, so that the raise comes after it has, or at once, whether or not it
+        // has; it answers each once the part has been in flight long enough that the windows the warm start judges are
+        // measured, however slowly the machine runs (BusyStorage), and once Files.com holds a beginning to answer for the
+        // next part. The raise doubles the files the upload may have in progress, and the files it adds begin at once,
+        // before any file finishes: at least eight within 300 ms, where the ordinary pacing, a file each 100 ms while too
+        // few parts are ready, begins four at most. Never more parts at once than MaxConcurrency, nor more files than
+        // MaxConcurrentFiles (the most the transfer allows); cancelled, the upload stops, its limiter left with nothing in
+        // use. However the test ends, it cancels the upload, gives the beginnings, answers and finishes it holds, and waits
+        // for the upload to end (SettleAsync). A failure shows, for each decision, why its window was below target, its
+        // throughput and for how much of it answers were awaited, and for the raise the files then in progress and
+        // allowed; then the beginnings answered one at a time and how long storage had a part in flight and went without.
         [TestMethod]
         [Timeout(60000)]
         [DataRow(true, DisplayName = "Answered once the warm start's first target could be seen")]
@@ -573,34 +583,69 @@ namespace FilesTests
                 }
                 const int grown = 20;
                 var begun = new List<TimeSpan>();
+                // The beginnings Files.com holds, in the order the files began, to answer one at a time, and as many counts.
+                var held = new Queue<TaskCompletionSource<bool>>();
+                var holding = new SemaphoreSlim(0);
+                // Answers every beginning, held or still to come.
                 var beginning = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
                 var answering = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
                 var finishing = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                var cancellation = new CancellationTokenSource();
+                var storage = new BusyStorage(cancellation.Token);
                 if (!answerLater)
                 {
                     answering.SetResult(true);
                 }
+                // Answers the earliest beginning Files.com holds, once a count of holding has been taken for it.
+                void AnswerHeldBeginning()
+                {
+                    TaskCompletionSource<bool> next;
+                    lock (begun)
+                    {
+                        next = held.Dequeue();
+                    }
+                    next.TrySetResult(true);
+                }
+                // Answers the earliest beginning Files.com holds, once it holds one: while no part waits, the upload begins
+                // another file within 100 ms. Answers none once the upload is cancelled.
+                async Task AnswerNextBeginningAsync()
+                {
+                    try
+                    {
+                        await holding.WaitAsync(cancellation.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        return;
+                    }
+                    AnswerHeldBeginning();
+                }
                 server.HoldNegotiation = file =>
                 {
+                    var answer = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                    int count;
                     lock (begun)
                     {
                         begun.Add(UploadServer.Clock);
-                        if (!answerLater && begun.Count == grown)
-                        {
-                            beginning.TrySetResult(true);
-                        }
+                        held.Enqueue(answer);
+                        count = begun.Count;
                     }
-                    return beginning.Task;
+                    holding.Release();
+                    if (!answerLater && count == grown && holding.Wait(0))
+                    {
+                        AnswerHeldBeginning();
+                    }
+                    return Task.WhenAny(answer.Task, beginning.Task);
                 };
                 server.HoldFinish = file => finishing.Task;
-                server.RespondToPart = async request =>
+                server.RespondToPart = request => storage.AnswerAsync(answering.Task, async () =>
                 {
-                    await answering.Task;
-                    await Task.Delay(10);
+                    await AnswerNextBeginningAsync();
                     return UploadServer.Accept(request);
-                };
-                var reports = new List<(int Files, int Limit)>();
+                });
+                var reports = new List<(TimeSpan At, int Files, int Limit)>();
                 var decisions = new List<(TimeSpan At, UploadDecisionTrace Decision)>();
+                var attempts = new List<(TimeSpan At, UploadAttemptTrace Attempt)>();
                 var limiter = new TransferLimiter(maxConcurrentRequests: 128, maxBufferedBytes: 1024 * 1024);
                 var options = new DirectoryUploadOptions
                 {
@@ -610,7 +655,7 @@ namespace FilesTests
                     {
                         lock (reports)
                         {
-                            reports.Add((report.FilesActive, report.FileLimit));
+                            reports.Add((UploadServer.Clock, report.FilesActive, report.FileLimit));
                         }
                     }),
                     FileOptions = new UploadOptions
@@ -618,11 +663,15 @@ namespace FilesTests
                         MaxConcurrency = most,
                         Trace = new Synchronous<UploadTraceEvent>(record =>
                         {
-                            if (record is UploadDecisionTrace decision)
+                            lock (reports)
                             {
-                                lock (reports)
+                                if (record is UploadDecisionTrace decision)
                                 {
                                     decisions.Add((UploadServer.Clock, decision));
+                                }
+                                else if (record is UploadAttemptTrace attempt)
+                                {
+                                    attempts.Add((UploadServer.Clock, attempt));
                                 }
                             }
                         }),
@@ -643,44 +692,74 @@ namespace FilesTests
                         return decisions.Where(d => d.Decision.Decision == ConcurrencyDecision.WarmStartRaised).ToList();
                     }
                 }
+                // Each decision, with why its window was below target, its throughput, and the answers since the decision
+                // before it (or since the first part was sent) with how long they were awaited, which while the target is
+                // one part is how long the upload had it in flight; for the raise, the files begun by then, the files in
+                // progress and allowed as the upload last reported them before it, and the files begun within 300 ms; then
+                // the beginnings answered one at a time, the answers in all and what storage saw.
                 string Seen()
                 {
                     List<TimeSpan> starts;
+                    int given;
                     lock (begun)
                     {
                         starts = begun.ToList();
+                        given = begun.Count - held.Count;
                     }
                     TimeSpan origin = starts.Count > 0 ? starts[0] : UploadServer.Clock;
                     lock (reports)
                     {
-                        return string.Join("; ", decisions.Select(d => $"{d.Decision.Decision} {d.Decision.PreviousTarget}->{d.Decision.Target} at {(d.At - origin).TotalMilliseconds:0} ms"
-                            + (d.Decision.Decision == ConcurrencyDecision.WarmStartRaised ? $", {starts.Count(at => at <= d.At)} files begun, {Begun(d.At)} more within 300 ms" : "")));
+                        var seen = new List<string>();
+                        TimeSpan since = attempts.Count > 0 ? attempts[0].At - attempts[0].Attempt.Duration : origin;
+                        foreach ((TimeSpan at, UploadDecisionTrace decision) in decisions)
+                        {
+                            List<UploadAttemptTrace> answered = attempts.Where(a => a.At > since && a.At <= at).Select(a => a.Attempt).ToList();
+                            (TimeSpan At, int Files, int Limit) allowed = reports.LastOrDefault(r => r.At <= at);
+                            seen.Add($"{decision.Decision} {decision.PreviousTarget}->{decision.Target} at {(at - origin).TotalMilliseconds:0} ms (below target: {decision.BelowTargetReason}; {decision.ThroughputBytesPerSecond:0} B/s; "
+                                + $"{answered.Count} answers awaited {answered.Sum(a => a.Duration.TotalMilliseconds):0} of the {(at - since).TotalMilliseconds:0} ms before it)"
+                                + (decision.Decision == ConcurrencyDecision.WarmStartRaised ? $", {starts.Count(start => start <= at)} files begun, {allowed.Files} in progress of {allowed.Limit} allowed, {Begun(at)} more within 300 ms" : ""));
+                            since = at;
+                        }
+                        return (seen.Count > 0 ? string.Join("; ", seen) : "no decisions") + $"; {starts.Count} files begun, {given} beginnings answered one at a time; {attempts.Count} answers in all; {storage}";
                     }
                 }
-                var cancellation = new CancellationTokenSource();
 
-                Task<DirectoryTransferResult> upload = server.Client().Transfers.UploadDirectoryAsync(local, "up", options, cancellation.Token);
-                await server.WaitUntil(s => Begun() >= grown || upload.IsCompleted, $"{grown} files began");
-                if (answerLater)
+                Task<DirectoryTransferResult> upload = null;
+                bool passed = false;
+                try
                 {
+                    upload = server.Client().Transfers.UploadDirectoryAsync(local, "up", options, cancellation.Token);
+                    await server.WaitUntil(s => Begun() >= grown || upload.IsCompleted, $"{grown} files began");
+                    if (answerLater)
+                    {
+                        if (holding.Wait(0))
+                        {
+                            AnswerHeldBeginning();
+                        }
+                        await server.WaitUntil(s => s.Parts.Count > 0 || upload.IsCompleted, "a part was sent");
+                        // The upload looks at the target at least each 100 ms while it waits to begin more files.
+                        await Task.Delay(TimeSpan.FromMilliseconds(250));
+                        answering.TrySetResult(true);
+                    }
+                    await server.WaitUntil(s => Raises().Any(r => UploadServer.Clock > r.At + window) || upload.IsCompleted, "300 ms after the warm start's raise", Seen);
+                    cancellation.Cancel();
                     beginning.TrySetResult(true);
-                    await server.WaitUntil(s => s.Parts.Count > 0 || upload.IsCompleted, "a part was sent");
-                    // The upload looks at the target at least each 100 ms while it waits to begin more files.
-                    await Task.Delay(TimeSpan.FromMilliseconds(250));
-                    answering.TrySetResult(true);
-                }
-                await server.WaitUntil(s => Raises().Any(r => UploadServer.Clock > r.At + window) || upload.IsCompleted, "300 ms after the warm start's raise", Seen);
-                cancellation.Cancel();
-                finishing.TrySetResult(true);
-                await Assert.ThrowsAsync<OperationCanceledException>(() => Within(upload));
+                    finishing.TrySetResult(true);
+                    await Assert.ThrowsAsync<OperationCanceledException>(() => Within(upload));
 
-                Assert.IsTrue(Raises().Count == 1 && Raises()[0].Decision.Target == most && Begun(Raises()[0].At) >= 8, "At least eight files began within 300 ms of the warm start's raise to 2: " + Seen());
-                Assert.IsTrue(server.MaxPartsInFlight <= most, $"Never more parts at once than MaxConcurrency: {server.MaxPartsInFlight}.");
-                lock (reports)
-                {
-                    Assert.IsTrue(reports.All(r => r.Files <= DirectoryTransferOptions.MaxAllowedConcurrentFiles && r.Limit <= DirectoryTransferOptions.MaxAllowedConcurrentFiles), "Never more than MaxConcurrentFiles.");
+                    Assert.IsTrue(Raises().Count == 1 && Raises()[0].Decision.Target == most && Begun(Raises()[0].At) >= 8, "At least eight files began within 300 ms of the warm start's raise to 2: " + Seen());
+                    Assert.IsTrue(server.MaxPartsInFlight <= most, $"Never more parts at once than MaxConcurrency: {server.MaxPartsInFlight}.");
+                    lock (reports)
+                    {
+                        Assert.IsTrue(reports.All(r => r.Files <= DirectoryTransferOptions.MaxAllowedConcurrentFiles && r.Limit <= DirectoryTransferOptions.MaxAllowedConcurrentFiles), "Never more than MaxConcurrentFiles.");
+                    }
+                    Assert.AreEqual(0, limiter.ActiveRequests + limiter.BufferedBytes + limiter.QueuedRequests + limiter.QueuedBufferReservations);
+                    passed = true;
                 }
-                Assert.AreEqual(0, limiter.ActiveRequests + limiter.BufferedBytes + limiter.QueuedRequests + limiter.QueuedBufferReservations);
+                finally
+                {
+                    await SettleAsync(passed, upload, cancellation, server, limiter, Seen, beginning, answering, finishing);
+                }
             }
         }
 
@@ -710,6 +789,90 @@ namespace FilesTests
             }
 
             public void Report(T value) => report(value);
+        }
+
+        // Storage that answers each part once it has been in flight InFlightPerIdle times as long as the longest time
+        // storage has gone without a part: from an answer, with no other part in flight, until the next part arrived. That
+        // time holds all the upload did between the two, the answer's way back, ending its attempt, admitting the next and
+        // sending it, and the upload counts an attempt in flight from just before it sends it until after its answer is
+        // back. So an upload whose target is one part had it in flight for at least four fifths of every window from one
+        // answer to another, more than the three quarters it needs to measure the window, however slowly the machine runs,
+        // and its answers, held alike, take alike, so that few of them judge a window. The first part, with no such time
+        // before it, is answered as soon as it may be. Once released, storage answers at once.
+        private sealed class BusyStorage
+        {
+            private const int InFlightPerIdle = 4;
+            private readonly object gate = new object();
+            private readonly CancellationToken released;
+            private int inFlight;
+            private int answered;
+            // Since when storage has had a part in flight, while it has; since when it has had none, once it answered one.
+            private TimeSpan busySince;
+            private TimeSpan? idleSince;
+            private TimeSpan busy;
+            private TimeSpan idle;
+            private TimeSpan longestIdle;
+
+            internal BusyStorage(CancellationToken released)
+            {
+                this.released = released;
+            }
+
+            // Answers with what answer gives once answering has completed and the part has been held as long as storage
+            // holds parts now; answer may wait in turn, the part still in flight.
+            internal async Task<T> AnswerAsync<T>(Task answering, Func<Task<T>> answer)
+            {
+                TimeSpan arrived;
+                TimeSpan hold;
+                lock (gate)
+                {
+                    arrived = UploadServer.Clock;
+                    if (inFlight++ == 0)
+                    {
+                        busySince = arrived;
+                        if (idleSince.HasValue)
+                        {
+                            idle += arrived - idleSince.Value;
+                            longestIdle = Max(longestIdle, arrived - idleSince.Value);
+                        }
+                    }
+                    hold = TimeSpan.FromTicks(longestIdle.Ticks * InFlightPerIdle);
+                }
+                try
+                {
+                    await answering;
+                    TimeSpan left = arrived + hold - UploadServer.Clock;
+                    if (left > TimeSpan.Zero)
+                    {
+                        // Ends early, without throwing, once released.
+                        await Task.WhenAny(Task.Delay(left, released));
+                    }
+                    return await answer();
+                }
+                finally
+                {
+                    lock (gate)
+                    {
+                        answered++;
+                        if (--inFlight == 0)
+                        {
+                            TimeSpan now = UploadServer.Clock;
+                            busy += now - busySince;
+                            idleSince = now;
+                        }
+                    }
+                }
+            }
+
+            public override string ToString()
+            {
+                lock (gate)
+                {
+                    TimeSpan held = busy + (inFlight > 0 ? UploadServer.Clock - busySince : TimeSpan.Zero);
+                    return $"storage answered {answered} parts, with a part in flight for {held.TotalMilliseconds:0} ms and none for {idle.TotalMilliseconds:0} ms between them, "
+                        + $"at most {longestIdle.TotalMilliseconds:0} ms at a time, so holding each part {longestIdle.TotalMilliseconds * InFlightPerIdle:0} ms";
+                }
+            }
         }
     }
 }
