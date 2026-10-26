@@ -58,7 +58,6 @@ namespace FilesCli.Commands
             Console.WriteLine($"SkipWelcomeScreen: {user.SkipWelcomeScreen}");
             Console.WriteLine($"SslRequired: {user.SslRequired}");
             Console.WriteLine($"SsoStrategyId: {user.SsoStrategyId}");
-            Console.WriteLine($"SubscribeToNewsletter: {user.SubscribeToNewsletter}");
             Console.WriteLine($"ExternallyManaged: {user.ExternallyManaged}");
             Console.WriteLine($"TimeZone: {user.TimeZone}");
             Console.WriteLine($"TypeOf2fa: {user.TypeOf2fa}");

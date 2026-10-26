@@ -108,6 +108,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allowed_ips", null);
             }
+            if (!this.attributes.ContainsKey("enforce_parent_site_user_ip_restrictions"))
+            {
+                this.attributes.Add("enforce_parent_site_user_ip_restrictions", false);
+            }
             if (!this.attributes.ContainsKey("always_mkdir_parents"))
             {
                 this.attributes.Add("always_mkdir_parents", false);
@@ -1102,6 +1106,18 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["allowed_ips"]; }
             private set { attributes["allowed_ips"] = value; }
+        }
+
+        /// <summary>
+        /// Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing IP restrictions. Applies to all Workspaces. Defaults to false.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("enforce_parent_site_user_ip_restrictions")]
+        public bool EnforceParentSiteUserIpRestrictions
+        {
+            get { return attributes["enforce_parent_site_user_ip_restrictions"] == null ? false : (bool)attributes["enforce_parent_site_user_ip_restrictions"]; }
+            private set { attributes["enforce_parent_site_user_ip_restrictions"] = value; }
         }
 
         /// <summary>
@@ -3341,6 +3357,7 @@ namespace FilesCom.Models
         ///   allow_user_level_2fa_override - boolean - Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
         ///   allow_user_level_allowed_ip_override - boolean - Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
         ///   allow_user_level_ssl_override - boolean - Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
+        ///   enforce_parent_site_user_ip_restrictions - boolean - Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing IP restrictions. Applies to all Workspaces. Defaults to false.
         ///   disallowed_countries - string - Comma separated list of disallowed Country codes
         ///   days_to_retain_backups - int64 - Number of days to keep deleted files
         ///   max_prior_passwords - int64 - Number of prior passwords to disallow
@@ -3758,6 +3775,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("allow_user_level_ssl_override", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_user_level_ssl_override is null, which cannot be sent" : "Bad parameter: allow_user_level_ssl_override must be of type bool", "allow_user_level_ssl_override");
+            }
+            if (parameters.TryGetValue("enforce_parent_site_user_ip_restrictions", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: enforce_parent_site_user_ip_restrictions is null, which cannot be sent" : "Bad parameter: enforce_parent_site_user_ip_restrictions must be of type bool", "enforce_parent_site_user_ip_restrictions");
             }
             if (parameters.TryGetValue("disallowed_countries", out parameterValue) && !(parameterValue is string))
             {

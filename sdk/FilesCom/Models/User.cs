@@ -356,10 +356,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("sso_strategy_id", null);
             }
-            if (!this.attributes.ContainsKey("subscribe_to_newsletter"))
-            {
-                this.attributes.Add("subscribe_to_newsletter", false);
-            }
             if (!this.attributes.ContainsKey("externally_managed"))
             {
                 this.attributes.Add("externally_managed", false);
@@ -1318,17 +1314,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Is the user subscribed to the newsletter?
-        /// </summary>
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("subscribe_to_newsletter")]
-        public bool SubscribeToNewsletter
-        {
-            get { return attributes["subscribe_to_newsletter"] == null ? false : (bool)attributes["subscribe_to_newsletter"]; }
-            set { attributes["subscribe_to_newsletter"] = value; unsaved.Add("subscribe_to_newsletter"); }
-        }
-
-        /// <summary>
         /// Is this user managed by a SsoStrategy?
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -1743,7 +1728,6 @@ namespace FilesCom.Models
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
-        ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   time_zone - string - User time zone
@@ -1827,7 +1811,6 @@ namespace FilesCom.Models
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
-        ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   time_zone - string - User time zone
@@ -2108,10 +2091,6 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
             }
-            if (parameters.TryGetValue("subscribe_to_newsletter", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subscribe_to_newsletter is null, which cannot be sent" : "Bad parameter: subscribe_to_newsletter must be of type bool", "subscribe_to_newsletter");
-            }
             if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa is null, which cannot be sent" : "Bad parameter: require_2fa must be of type string", "require_2fa");
@@ -2238,8 +2217,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "subscribe_to_newsletter", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "subscribe_to_newsletter", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
+        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -2554,7 +2533,6 @@ namespace FilesCom.Models
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
-        ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   time_zone - string - User time zone
@@ -2831,10 +2809,6 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
             }
-            if (parameters.TryGetValue("subscribe_to_newsletter", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subscribe_to_newsletter is null, which cannot be sent" : "Bad parameter: subscribe_to_newsletter must be of type bool", "subscribe_to_newsletter");
-            }
             if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: require_2fa is null, which cannot be sent" : "Bad parameter: require_2fa must be of type string", "require_2fa");
@@ -3076,7 +3050,6 @@ namespace FilesCom.Models
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
-        ///   subscribe_to_newsletter - boolean - Is the user subscribed to the newsletter?
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
         ///   time_zone - string - User time zone
@@ -3367,10 +3340,6 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
-            }
-            if (parameters.TryGetValue("subscribe_to_newsletter", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: subscribe_to_newsletter is null, which cannot be sent" : "Bad parameter: subscribe_to_newsletter must be of type bool", "subscribe_to_newsletter");
             }
             if (parameters.TryGetValue("require_2fa", out parameterValue) && !(parameterValue is string))
             {

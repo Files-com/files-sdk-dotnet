@@ -5037,6 +5037,7 @@
         "domain_letsencrypt_chain": "DomainLetsencryptChain",
         "email": "Email",
         "email_footer_custom_text": "EmailFooterCustomText",
+        "enforce_parent_site_user_ip_restrictions": "EnforceParentSiteUserIpRestrictions",
         "fedramp": "Fedramp",
         "file_activity_events_enabled": "FileActivityEventsEnabled",
         "files_com_remote_server_enabled": "FilesComRemoteServerEnabled",
@@ -5791,7 +5792,6 @@
         "skip_welcome_screen": "SkipWelcomeScreen",
         "ssl_required": "SslRequired",
         "sso_strategy_id": "SsoStrategyId",
-        "subscribe_to_newsletter": "SubscribeToNewsletter",
         "tags": "Tags",
         "time_zone": "TimeZone",
         "type_of_2fa": "TypeOf2fa",
@@ -5859,6 +5859,9 @@
           ],
           "route": "POST /users/{id}/unlock"
         }
+      },
+      "retired_properties": {
+        "subscribe_to_newsletter": "SubscribeToNewsletter"
       }
     },
     "UserAdditionalEmailRecipient": {
