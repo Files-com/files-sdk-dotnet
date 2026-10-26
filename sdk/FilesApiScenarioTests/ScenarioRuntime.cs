@@ -2286,13 +2286,16 @@ namespace FilesApiScenarioTests
     // (CancelledAttempt), to an entry of its own operation and upload, and keeps its null status apart from the status
     // the server journaled. The journal must be of the reset's epoch, the launcher's instance and the case's definition; an
     // entry of that epoch, with no fault, of an operation the simulator lists for its request, and of the operation its
-    // position meant it to be; an API entry with the client's API key and the SDK's User-Agent, a storage entry with no
-    // credential (and its request with neither the key nor any Authorization). Every entry must be joined whenever the
-    // journal is read, and every request by the final join, which reads it after the case's last request, except a
-    // confirmed cancelled attempt that reached no entry.
+    // position meant it to be; an API entry with the client's API key and the SDK's User-Agent, with its metadata
+    // (IsSdkUserAgent), a storage entry with no credential (and its request with neither the key nor any Authorization),
+    // whatever its User-Agent. Every entry must be joined whenever the journal is read, and every request by the final
+    // join, which reads it after the case's last request, except a confirmed cancelled attempt that reached no entry.
     public static class JournalJoin
     {
-        private static readonly Regex SdkUserAgent = new Regex(@"^Files\.com DOTNET SDK v\S+$");
+        // The User-Agent of the case's client, which names no application product: the SDK's own product, then exactly one
+        // metadata comment, files-sdk-meta/1, naming the coarse family of the operating system and the .NET runtime, with
+        // or without its version.
+        private static readonly Regex SdkUserAgent = new Regex(@"^Files\.com DOTNET SDK v[^\s()]+(?<metadata> \(files-sdk-meta/1; os=(?:windows|macos|linux|android|ios|freebsd|other|unknown); runtime=dotnet(?:/[0-9][A-Za-z0-9._+-]{0,47})?\))\z");
 
         public static long LastSeq(JsonObject journal)
         {
@@ -2397,7 +2400,7 @@ namespace FilesApiScenarioTests
                     {
                         account.Problems.Add($"{where}: the SDK's request did not carry the client's API key");
                     }
-                    if (!SdkUserAgent.IsMatch(entry.UserAgent ?? ""))
+                    if (!IsSdkUserAgent(entry.UserAgent))
                     {
                         account.Problems.Add($"{where} carried the User-Agent {Shown.Of(entry.UserAgent)}, not the SDK's");
                     }
@@ -2427,6 +2430,15 @@ namespace FilesApiScenarioTests
                 }
             }
             return account;
+        }
+
+        // Whether USERAGENT is the case's client's (SdkUserAgent), in printable ASCII, within 190 bytes, and its metadata
+        // comment, with the space before it, within 128. The SDK's product alone is always short enough for the comment, so
+        // the comment is never left out of it.
+        private static bool IsSdkUserAgent(string userAgent)
+        {
+            Match match = SdkUserAgent.Match(userAgent ?? "");
+            return match.Success && userAgent.Length <= 190 && match.Groups["metadata"].Length <= 128 && userAgent.All(c => c >= ' ' && c <= '~');
         }
 
         // Whether ENTRY may stand for REQUEST, which got no answer: only as one of the case's cancelled attempts not

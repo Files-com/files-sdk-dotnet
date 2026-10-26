@@ -2601,8 +2601,84 @@ namespace FilesApiScenarioTests
             return (problems, unanswered, final);
         }
 
+        // The User-Agent the journal shows for an API request of the case's client, which names no application product,
+        // is the SDK's own product, then exactly one metadata comment, files-sdk-meta/1, naming a coarse family of
+        // operating system and the .NET runtime, with or without its version, in printable ASCII within 190 bytes
+        // (JournalJoin). What a storage request carries is not held to it.
+        [TestMethod]
+        [TestCategory(Category)]
+        [DataRow("with-the-runtime-version", "")]
+        [DataRow("without-the-runtime-version", "")]
+        [DataRow("190-bytes", "")]
+        [DataRow("storage", "")]
+        [DataRow("no-metadata", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("191-bytes", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("trailing-text", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("two-comments", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("unlisted-os", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("injected-field", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("runtime-version-of-49", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("non-ascii", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        [DataRow("line-break", "GET /api/rest/v1/file_actions/metadata/ns) carried the User-Agent")]
+        public void AnApiRequestCarriesTheSdksUserAgentWithItsMetadata(string change, string problem)
+        {
+            JournalContract contract = Contract();
+            var lookup = new ObservedRequest(1, 4, "GET", "/api/rest/v1/file_actions/metadata/ns", Array.Empty<string>(), "a", api: true, carriesApiKey: true, apiKeyMatches: true, carriesAuthorization: false);
+            lookup.Answered(404, "not-found");
+            contract.Intended[1] = "files.metadata";
+            var part = new ObservedRequest(2, 5, "PUT", "/upload/ref-7/1", new[] { "X-Files-Signature" }, "b", api: false, carriesApiKey: false, apiKeyMatches: false, carriesAuthorization: false);
+            part.Answered(200, null);
+            var entries = new JsonArray
+            {
+                EntryOf(11, "GET", "/api/rest/v1/file_actions/metadata/ns", "files.metadata", 404),
+                EntryOf(12, "PUT", "/upload/ref-7/1", "transfers.upload_part", 200, upload: 7, part: 1),
+            };
+            const string sdk = "Files.com DOTNET SDK v2.0.0";
+            // The SDK's product, its version made longer so that, with the metadata, the User-Agent is LENGTH bytes.
+            string OfLength(int length) => sdk + "-" + new string('a', length - sdk.Length - 1 - SdkMetadata.Length) + SdkMetadata;
+            if (change == "storage")
+            {
+                // As a storage server's own client might send it.
+                entries[1]["user_agent"] = "aws-sdk-dotnet/4.0 (not the SDK's)";
+            }
+            else
+            {
+                entries[0]["user_agent"] = change switch
+                {
+                    "with-the-runtime-version" => sdk + SdkMetadata,
+                    "without-the-runtime-version" => sdk + " (files-sdk-meta/1; os=linux; runtime=dotnet)",
+                    "190-bytes" => OfLength(190),
+                    "191-bytes" => OfLength(191),
+                    "no-metadata" => sdk,
+                    "trailing-text" => sdk + SdkMetadata + " more",
+                    "two-comments" => sdk + SdkMetadata + SdkMetadata,
+                    "unlisted-os" => sdk + " (files-sdk-meta/1; os=solaris; runtime=dotnet/8.0.31)",
+                    "injected-field" => sdk + " (files-sdk-meta/1; os=linux; runtime=dotnet/8.0.31; os=windows)",
+                    "runtime-version-of-49" => sdk + $" (files-sdk-meta/1; os=linux; runtime=dotnet/{new string('8', 49)})",
+                    "non-ascii" => sdk + " (files-sdk-meta/1; os=linux; runtime=dotnet/8.0.31é)",
+                    "line-break" => sdk + SdkMetadata + "\n",
+                    _ => throw new ArgumentException($"No User-Agent for {change}"),
+                };
+            }
+
+            JournalAccount account = JournalJoin.Join(StubEnvironment.Journal(entries), 10, contract, new[] { lookup, part }, final: true);
+
+            if (problem.Length == 0)
+            {
+                Assert.AreEqual(0, account.Problems.Count, string.Join("; ", account.Problems));
+                Assert.AreEqual(2, account.Joined.Count);
+            }
+            else
+            {
+                Assert.IsTrue(account.Problems.Any(found => found.Contains(problem, StringComparison.Ordinal)), $"expected a problem with \"{problem}\": {string.Join("; ", account.Problems)}");
+            }
+        }
+
+        // The metadata comment, with the space before it, of the SDK's User-Agent in the controls' journal entries.
+        private const string SdkMetadata = " (files-sdk-meta/1; os=linux; runtime=dotnet/8.0.31)";
+
         // A journal entry as the simulator writes one (simulation.rb#step), with no fault: an API entry with the client's
-        // API key, a transfer's with the upload and part it used.
+        // API key and the SDK's User-Agent, with its metadata, a transfer's with the upload and part it used.
         private static JsonObject EntryOf(long seq, string method, string path, string operation, int status, long? upload = null, long? part = null)
         {
             var entry = new JsonObject
@@ -2615,7 +2691,7 @@ namespace FilesApiScenarioTests
                 ["id"] = null,
                 ["fault_id"] = null,
                 ["status"] = status,
-                ["user_agent"] = "Files.com DOTNET SDK v2.0.0",
+                ["user_agent"] = "Files.com DOTNET SDK v2.0.0" + SdkMetadata,
             };
             if (path.StartsWith(ApiRoutes.ApiPrefix + "/", StringComparison.Ordinal))
             {

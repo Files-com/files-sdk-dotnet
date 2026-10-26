@@ -59,6 +59,50 @@ namespace FilesTests
             Assert.IsTrue(seen.All.Where(request => !request.Url.AbsolutePath.StartsWith("/api/")).All(request => !request.HasFilesCredentials), "Storage requests carry no Files.com credentials.");
             PartRequest part = server.Parts.First();
             Assert.AreEqual(server.PartUrl("remote.bin", part.Number, 1), seen.All.First(request => request.Url.AbsolutePath.StartsWith("/part/")).OriginalUrl, "Signed URLs reach the handlers exactly as negotiated.");
+            CollectionAssert.AreEqual(
+                server.Site.Requests.Select(request => ClientConfigurationTest.SdkProduct + ClientConfigurationTest.Metadata()).ToArray(),
+                server.Site.Requests.Select(request => request.Headers["User-Agent"]).ToArray(),
+                "Every request, to Files.com and to storage, of the download and of both kinds of upload, carries the SDK's own User-Agent with its metadata, once.");
+            await client.DisposeAsync();
+        }
+
+        // A User-Agent the application or Files.com sets is sent as it is, without the SDK's metadata, however much it
+        // looks like the SDK's: the one the application's handler gives every request, and the one Files.com negotiates
+        // for a part, which goes to storage with that part alone, the client's own going everywhere else. Storage still
+        // gets no Files.com credential.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow("handler", DisplayName = "Set by the application's handler")]
+        [DataRow("grant", DisplayName = "Negotiated for a part")]
+        public async Task AUserAgentSetOutsideTheSdkIsSentAsItIs(string setBy)
+        {
+            const string literal = "Files.com DOTNET SDK v9.9.9 (set outside the SDK)";
+            HttpTransport transport = null;
+            if (setBy == "handler")
+            {
+                transport = HttpTransport.FromHandlerFactory(() => new UserAgentHandler(literal, new SocketsHttpHandler()));
+            }
+            else
+            {
+                server.ExtraPartFields = $",\"headers\":{{\"User-Agent\":\"{literal}\"}}";
+            }
+            FilesClient client = FilesClient.Create(server.Site.Configuration(), transport);
+
+            await RunEveryKindOfRequest(client);
+
+            string sdk = ClientConfigurationTest.SdkProduct + ClientConfigurationTest.Metadata();
+            IReadOnlyList<ReceivedRequest> requests = server.Site.Requests;
+            Assert.IsTrue(requests.Any(request => request.Path.StartsWith("/part/", StringComparison.Ordinal)), "The negotiated part was sent.");
+            foreach (ReceivedRequest request in requests)
+            {
+                string path = request.Path.Split('?')[0];
+                bool negotiatedPart = path.StartsWith("/part/", StringComparison.Ordinal);
+                Assert.AreEqual(setBy == "handler" || negotiatedPart ? literal : sdk, request.Headers["User-Agent"], $"{request.Method} {path}");
+                if (negotiatedPart || path == "/legacy-part" || path == "/download")
+                {
+                    Assert.IsTrue(request.ApiKey == null && request.SessionId == null, $"{request.Method} {path} carries no Files.com credentials.");
+                }
+            }
             await client.DisposeAsync();
         }
 
@@ -305,6 +349,24 @@ namespace FilesTests
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
             {
                 seen.Add(request);
+                return base.SendAsync(request, cancellationToken);
+            }
+        }
+
+        // An application's handler that sends every request with a User-Agent of its own, in place of the client's.
+        private sealed class UserAgentHandler : DelegatingHandler
+        {
+            private readonly string userAgent;
+
+            public UserAgentHandler(string userAgent, HttpMessageHandler inner) : base(inner)
+            {
+                this.userAgent = userAgent;
+            }
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                request.Headers.Remove("User-Agent");
+                request.Headers.TryAddWithoutValidation("User-Agent", userAgent);
                 return base.SendAsync(request, cancellationToken);
             }
         }

@@ -4,14 +4,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using WireMock;
 
 namespace FilesTests
 {
-    // Where each client logs (FilesConfiguration.LoggerFactory and MinimumLogLevel), and the product an application
-    // names in its client's User-Agent (ProductName and ProductVersion).
+    // Where each client logs (FilesConfiguration.LoggerFactory and MinimumLogLevel), and the User-Agent its requests
+    // carry: the product an application names (ProductName and ProductVersion), the SDK's own, then the SDK's metadata.
     [TestClass]
     public class ClientConfigurationTest
     {
@@ -181,11 +182,54 @@ namespace FilesTests
                 configuration.ProductName = "Changed";
 
                 await client.Users.FindAsync(1);
+                await client.Users.FindAsync(1);
                 await FilesClient.Create(site.Configuration()).Users.FindAsync(1);
 
                 string[] agents = site.Requests.Select(request => request.Headers["User-Agent"]).ToArray();
-                StringAssert.StartsWith(agents[0], "FilesPowerShell/3.1.0-beta.2 Files.com DOTNET SDK v", "The client keeps the product it was made with, then the SDK's own.");
-                StringAssert.StartsWith(agents[1], "Files.com DOTNET SDK v", "Without a product, the SDK's alone.");
+                Assert.AreEqual("FilesPowerShell/3.1.0-beta.2 " + SdkProduct + Metadata(), agents[0], "The client keeps the product it was made with, then the SDK's own, then the SDK's metadata, once.");
+                Assert.AreEqual(agents[0], agents[1], "Each of the client's requests carries the User-Agent it was made with.");
+                Assert.AreEqual(SdkProduct + Metadata(), agents[2], "Without a product, the SDK's alone, with its metadata.");
+            }
+        }
+
+        // The SDK's metadata keeps a User-Agent within 190 bytes: past that, it goes without the runtime's version, and
+        // then not at all. A product the application names is sent as it is, however long: never shortened or refused.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow("fits-with-the-runtime-version")]
+        [DataRow("one-byte-over-with-the-runtime-version")]
+        [DataRow("fits-without-the-runtime-version")]
+        [DataRow("one-byte-over-without-the-runtime-version")]
+        [DataRow("far-longer-than-the-header")]
+        public async Task TheMetadataKeepsTheUserAgentWithin190BytesWithoutShorteningTheProducts(string fit)
+        {
+            using (var site = new LoopbackSite("key-a", "11"))
+            {
+                site.On("GET", "/users/*", request => LoopbackSite.Json("{\"id\":1}"));
+                // The application's product, a space and the SDK's product, then the metadata, make up the User-Agent.
+                int sdk = 1 + SdkProduct.Length;
+                int productLength = fit switch
+                {
+                    "fits-with-the-runtime-version" => 190 - sdk - Metadata().Length,
+                    "one-byte-over-with-the-runtime-version" => 191 - sdk - Metadata().Length,
+                    "fits-without-the-runtime-version" => 190 - sdk - Metadata(withRuntimeVersion: false).Length,
+                    "one-byte-over-without-the-runtime-version" => 191 - sdk - Metadata(withRuntimeVersion: false).Length,
+                    _ => 400,
+                };
+                string product = new string('P', productLength);
+                FilesConfiguration configuration = site.Configuration();
+                configuration.ProductName = product;
+
+                await FilesClient.Create(configuration).Users.FindAsync(1);
+
+                string products = product + " " + SdkProduct;
+                string expected = fit switch
+                {
+                    "fits-with-the-runtime-version" => products + Metadata(),
+                    "one-byte-over-with-the-runtime-version" or "fits-without-the-runtime-version" => products + Metadata(withRuntimeVersion: false),
+                    _ => products,
+                };
+                Assert.AreEqual(expected, site.Requests.Single().Headers["User-Agent"]);
             }
         }
 
@@ -199,6 +243,18 @@ namespace FilesTests
             var configuration = new FilesConfiguration { ApiKey = "key", ProductName = name, ProductVersion = version };
 
             Assert.ThrowsExactly<InvalidParameterException>(() => FilesClient.Create(configuration));
+        }
+
+        // The SDK's own product in the User-Agent: the version of its package, without build metadata.
+        internal static readonly string SdkProduct = "Files.com DOTNET SDK v" + typeof(FilesClient).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion.Split('+')[0];
+
+        // The SDK's metadata comment, with the space before it, as a client of this process sends it after its products:
+        // the coarse family of the operating system the tests run on, and the .NET runtime, with or without the version
+        // it runs on.
+        internal static string Metadata(bool withRuntimeVersion = true)
+        {
+            string os = OperatingSystem.IsWindows() ? "windows" : OperatingSystem.IsMacOS() ? "macos" : OperatingSystem.IsFreeBSD() ? "freebsd" : OperatingSystem.IsLinux() ? "linux" : "other";
+            return $" (files-sdk-meta/1; os={os}; runtime=dotnet{(withRuntimeVersion ? "/" + Environment.Version : "")})";
         }
 
         private static FilesConfiguration Configured(LoopbackSite site, ILoggerFactory factory)

@@ -32,6 +32,10 @@ namespace FilesContractTests
     internal static class Simulator
     {
         private const string OracleAgent = "files-contract-oracle";
+        // The User-Agent of the SDK's client (Sdk), which names no application product: the SDK's own product, then
+        // exactly one metadata comment, files-sdk-meta/1, naming the coarse family of the operating system and the .NET
+        // runtime, with or without its version (IsSdkUserAgent).
+        private static readonly Regex SdkUserAgent = new Regex(@"^Files\.com DOTNET SDK v[^\s()]+(?<metadata> \(files-sdk-meta/1; os=(?:windows|macos|linux|android|ios|freebsd|other|unknown); runtime=dotnet(?:/[0-9][A-Za-z0-9._+-]{0,47})?\))\z");
         private static readonly HttpClient http = new HttpClient(new HttpClientHandler { UseProxy = false, AllowAutoRedirect = false });
         private static readonly Lazy<Task<JsonObject>> inventory = new Lazy<Task<JsonObject>>(() => ControlAsync(HttpMethod.Get, "inventory"));
         private static readonly Lazy<Task<JsonObject>> readiness = new Lazy<Task<JsonObject>>(() => ControlAsync(HttpMethod.Get, "ready"));
@@ -205,7 +209,7 @@ namespace FilesContractTests
 
         // The one request the SDK sent since the reset (the raw oracle's own requests aside): its operation and
         // status, the JSON type of each value it sent (a query value is always a string), its credential, and the
-        // SDK's User-Agent.
+        // SDK's User-Agent, with its metadata.
         public static async Task<JsonObject> SdkRequestAsync(string operation, int status, JsonObject wire)
         {
             JsonObject journal = await ControlAsync(HttpMethod.Get, "journal");
@@ -218,8 +222,17 @@ namespace FilesContractTests
             Assert.AreEqual(status, (int)request["status"], $"the status of {operation}");
             Assert.IsTrue(JsonNode.DeepEquals(wire, request["wire"] ?? new JsonObject()), $"the JSON type of each value {operation} sent: expected {wire.ToJsonString()}, sent {request["wire"]?.ToJsonString()}");
             Assert.IsTrue(JsonNode.DeepEquals(new JsonObject { ["api_key"] = 1 }, request["credentials"]), $"{operation} carried the client's API key: {request["credentials"]?.ToJsonString()}");
-            Assert.IsTrue(Regex.IsMatch((string)request["user_agent"] ?? "", @"^Files\.com DOTNET SDK v\S+$"), $"{operation} carried the SDK's User-Agent: {request["user_agent"]}");
+            Assert.IsTrue(IsSdkUserAgent((string)request["user_agent"]), $"{operation} carried the SDK's User-Agent, with its metadata: {request["user_agent"]}");
             return request;
+        }
+
+        // Whether USERAGENT is the SDK's (SdkUserAgent), in printable ASCII, within 190 bytes, and its metadata comment,
+        // with the space before it, within 128. The SDK's product alone is always short enough for the comment, so the
+        // comment is never left out of it.
+        private static bool IsSdkUserAgent(string userAgent)
+        {
+            Match match = SdkUserAgent.Match(userAgent ?? "");
+            return match.Success && userAgent.Length <= 190 && match.Groups["metadata"].Length <= 128 && userAgent.All(c => c >= ' ' && c <= '~');
         }
 
         // The values a case sends, as JSON: what the raw oracle sends and what the simulator keeps.

@@ -7,6 +7,8 @@ using System.Configuration;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,6 +52,15 @@ namespace FilesCom
     /// Making a new default client does not dispose the previous one, whose objects keep using it, and disposing the
     /// default client leaves <see cref="Instance"/> as it is.
     /// </para>
+    /// <para>
+    /// A client's requests send a <c>User-Agent</c> header naming your application's product, when
+    /// <see cref="FilesConfiguration.ProductName"/> names one, then the SDK and its version, then a comment naming only
+    /// the coarse family of the operating system and the version of the .NET runtime, such as
+    /// <c>Files.com DOTNET SDK v2.0.0 (files-sdk-meta/1; os=linux; runtime=dotnet/8.0.31)</c>. Where the header would
+    /// be longer than 190 bytes, the runtime's version is left out, then the comment; the products are never shortened.
+    /// A <c>User-Agent</c> that handlers of your own (<see cref="HttpTransport"/>) set, or that Files.com gives for an
+    /// upload part, is sent as it is.
+    /// </para>
     /// </remarks>
     public partial class FilesClient : IDisposable, IAsyncDisposable
     {
@@ -65,6 +76,15 @@ namespace FilesCom
         public const string HttpUpload = "HttpUpload";
 
         private static readonly string SdkProduct = "Files.com DOTNET SDK v" + PackageVersion();
+        // The coarse family of the operating system and the version of the .NET runtime this process runs on, which the
+        // metadata of every client's User-Agent names (WithMetadata).
+        private static readonly string ProcessOs = OsFamily();
+        private static readonly string ProcessRuntimeVersion = Environment.Version.ToString();
+        // The families of operating systems the metadata names, coarse as they are.
+        private static readonly string[] OsFamilies = { "windows", "macos", "linux", "android", "ios", "freebsd", "other", "unknown" };
+        // The most bytes a User-Agent with the metadata may have, and the metadata comment itself, with the space before it.
+        private const int UserAgentBytes = 190;
+        private const int MetadataBytes = 128;
         private const string ConfigManagerSectionName = "files.com/filesConfiguration";
 
         private static readonly SdkLog log = SdkLog.For(typeof(FilesConfiguration));
@@ -159,9 +179,15 @@ namespace FilesCom
             }
         }
 
+        // The client's User-Agent header: its products, then the SDK's metadata.
+        private static string UserAgentFor(FilesConfiguration config)
+        {
+            return WithMetadata(ProductsFor(config), ProcessOs, ProcessRuntimeVersion);
+        }
+
         // The products of the client's User-Agent header: the application's, when the configuration names one, then the
         // SDK's own, which is always sent.
-        private static string UserAgentFor(FilesConfiguration config)
+        private static string ProductsFor(FilesConfiguration config)
         {
             if (config.ProductName == null)
             {
@@ -179,6 +205,85 @@ namespace FilesCom
             {
                 throw InvalidParameterException.For(nameof(FilesConfiguration.ProductName), "ProductName and ProductVersion must each be an HTTP token: letters, digits and !#$%&'*+-.^_`|~, without spaces");
             }
+        }
+
+        // PRODUCTS, then the SDK's metadata comment: " (files-sdk-meta/1; os=OS; runtime=dotnet/RUNTIMEVERSION)". OS is
+        // one of OsFamilies, and "unknown" for any other value. RUNTIMEVERSION is the version of the .NET runtime
+        // (Environment.Version: neither the SDK's version nor the application's target framework; on .NET Framework, the
+        // CLR's 4.0.30319...), left out unless it is 1 to 48 ASCII letters, digits and ._+-, the first a digit. Nothing
+        // else of the machine is named: no host or user, path, OS version or build, or architecture. Past UserAgentBytes,
+        // or MetadataBytes for the comment, the version is left out, then the comment: products already that long are
+        // sent as they are, never shortened or changed.
+        private static string WithMetadata(string products, string os, string runtimeVersion)
+        {
+            string family = Array.IndexOf(OsFamilies, os) >= 0 ? os : "unknown";
+            if (IsRuntimeVersion(runtimeVersion))
+            {
+                string versioned = Appended(products, family, "dotnet/" + runtimeVersion);
+                if (versioned != null)
+                {
+                    return versioned;
+                }
+            }
+            return Appended(products, family, "dotnet") ?? products;
+        }
+
+        // PRODUCTS with the metadata comment naming FAMILY and RUNTIME, or null when the comment, whose characters are all
+        // ASCII, or the whole User-Agent would be too long.
+        private static string Appended(string products, string family, string runtime)
+        {
+            string metadata = " (files-sdk-meta/1; os=" + family + "; runtime=" + runtime + ")";
+            string userAgent = products + metadata;
+            return metadata.Length <= MetadataBytes && Encoding.UTF8.GetByteCount(userAgent) <= UserAgentBytes ? userAgent : null;
+        }
+
+        // Whether VERSION can be the metadata's runtime version: 1 to 48 ASCII letters, digits and ._+-, the first a digit.
+        private static bool IsRuntimeVersion(string version)
+        {
+            if (string.IsNullOrEmpty(version) || version.Length > 48 || version[0] < '0' || version[0] > '9')
+            {
+                return false;
+            }
+            foreach (char c in version)
+            {
+                bool allowed = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '.' || c == '_' || c == '+' || c == '-';
+                if (!allowed)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // The coarse family of the operating system this process runs on, and "other" for one the metadata does not
+        // name. Android and iOS are told first: their runtimes can report the platforms they are built on too.
+        private static string OsFamily()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("ANDROID")))
+            {
+                return "android";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("IOS")))
+            {
+                return "ios";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return "windows";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return "macos";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("FREEBSD")))
+            {
+                return "freebsd";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return "linux";
+            }
+            return "other";
         }
 
         /// <summary>
