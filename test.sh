@@ -90,3 +90,9 @@ if [[ "${#packages[@]}" -ne 1 || ! -f "${packages[0]}" ]]; then
 fi
 package_sha256="$(ruby -rdigest -e 'puts Digest::SHA256.file(ARGV[0]).hexdigest' "${packages[0]}")" || exit 1
 ruby "${DIR}/contract-test.rb" "${FILES_CONTRACT_MOCK_SERVER}" "${results}/contract" "${packages[0]}" "${package_sha256}" || exit 1
+
+# The shared API scenarios (verification/scenarios/api.json), generated as sdk/FilesApiScenarioTests, run against the same
+# archive, one case at a time on each framework, each against a simulator of its own that the mock server's
+# with-scenario.rb starts (sdk/FilesApiScenarioTests/README.md). Their results go to FILES_API_SCENARIOS_OUT when it is
+# set, an absent or empty directory outside this SDK, as CI sets it to keep them; otherwise they stay with these results.
+ruby "${DIR}/api-scenarios.rb" "${FILES_CONTRACT_MOCK_SERVER}" "${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}" "${packages[0]}" "${package_sha256}" || exit 1

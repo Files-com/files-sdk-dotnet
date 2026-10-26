@@ -49,7 +49,8 @@ format() {
   step dotnet format --verify-no-changes "${work}/${name}.sln"
 }
 
-format sdk sdk/FilesCom/FilesCom.csproj sdk/FilesTests/FilesTests.csproj sdk/FilesContractTests/FilesContractTests.csproj
+format sdk sdk/FilesCom/FilesCom.csproj sdk/FilesTests/FilesTests.csproj sdk/FilesContractTests/FilesContractTests.csproj \
+  sdk/FilesApiScenarioTests/FilesApiScenarioTests.csproj
 step dotnet build sdk/FilesCom/FilesCom.csproj --configuration Production
 
 # The examples build against a package of this library, as applications install it. Restores take FilesCom only

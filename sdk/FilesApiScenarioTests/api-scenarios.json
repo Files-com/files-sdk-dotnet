@@ -1,0 +1,57 @@
+{
+  "format": "files-dotnet-api-scenarios",
+  "version": 1,
+  "definition": {
+    "path": "verification/scenarios/api.json",
+    "sha256": "5d9b8eff0ef0724a68a458db77dc85784bb7d24436f104b98c2a2fe67086bbe0"
+  },
+  "schema": {
+    "name": "swagger_doc-production.json",
+    "sha256": "469907133146a11b6b62c584c7bd4fce36f5d5fd0e94680181a1f20f0a9e72b9"
+  },
+  "profile": "api-scenarios-canonical",
+  "tests": "FilesApiScenarioTests.ApiScenarioTests",
+  "controls": "FilesApiScenarioTests.ScenarioControls",
+  "cases": [
+    {
+      "id": "files.owned-folder-namespace",
+      "test": "FilesApiScenarioTests.ApiScenarioTests.FilesOwnedFolderNamespace",
+      "positions": 25,
+      "simulator": 23,
+      "site_only": [
+        3,
+        6
+      ]
+    },
+    {
+      "id": "files.owned-binary-roundtrip",
+      "test": "FilesApiScenarioTests.ApiScenarioTests.FilesOwnedBinaryRoundtrip",
+      "positions": 24,
+      "simulator": 22,
+      "site_only": [
+        3,
+        6
+      ]
+    },
+    {
+      "id": "files.owned-namespace-extended",
+      "test": "FilesApiScenarioTests.ApiScenarioTests.FilesOwnedNamespaceExtended",
+      "positions": 48,
+      "simulator": 46,
+      "site_only": [
+        3,
+        6
+      ]
+    },
+    {
+      "id": "files.owned-directory-helpers",
+      "test": "FilesApiScenarioTests.ApiScenarioTests.FilesOwnedDirectoryHelpers",
+      "positions": 44,
+      "simulator": 42,
+      "site_only": [
+        3,
+        6
+      ]
+    }
+  ]
+}

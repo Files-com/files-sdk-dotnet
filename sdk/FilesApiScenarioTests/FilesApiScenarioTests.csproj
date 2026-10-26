@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- The frameworks FilesContractTests runs on; each needs its runtime installed. -->
+    <TargetFrameworks>net10.0;net8.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.4.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Records which FilesCom assembly the run loaded, in the file FILES_CONTRACT_IDENTITY_FILE names, as the record
+         contract cases do: api-scenarios.rb checks it against the package the run is bound to. -->
+    <Compile Include="../FilesContractTests/SdkIdentity.cs" Link="SdkIdentity.cs" />
+    <!-- The generated manifest each case binds itself to before it sends anything. -->
+    <None Update="api-scenarios.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- The SDK under test: this SDK's FilesCom project, or, when FilesComPackageVersion is set, that version of the
+       FilesCom package, installed as an application installs it (api-scenarios.rb restores it from the archive it is
+       given). -->
+  <ItemGroup Condition="'$(FilesComPackageVersion)' == ''">
+    <ProjectReference Include="../FilesCom/FilesCom.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(FilesComPackageVersion)' != ''">
+    <PackageReference Include="FilesCom" Version="[$(FilesComPackageVersion)]" />
+  </ItemGroup>
+</Project>
