@@ -1953,9 +1953,9 @@ have no local file to publish.
 | `ReplaceRegularFile` | Creates a file or replaces a regular file, preserving the access described below. Refuses folders, links and special files, without following them. This is PowerShell's `-Force` behavior. |
 
 A refused destination fails before downloading when already present, and is checked again at publication.
-`CreateNew` never replaces an existing entry. It holds the destination directory and its ancestors while the file is
-downloaded, preventing directory renames. `ReplaceRegularFile` checks the file type and replaces it in separate
-steps; another program changing directory entries can change the entry between those steps.
+`CreateNew` never replaces an existing entry. On Windows, every policy holds the destination directory and its
+ancestors while the file is downloaded, preventing directory renames. `ReplaceRegularFile` checks the file type and
+replaces it in separate steps; another program changing directory entries can change the entry between those steps.
 
 #### Recovering From Publication Failure
 
@@ -1999,14 +1999,13 @@ catch (DownloadPublicationException e) when (e.Problem == DownloadPublicationPro
 
 The staging file has a protected ACL allowing only you, SYSTEM and Administrators, and remains open
 without sharing until publication. Its folder is held while used and removed only if still the same empty folder.
-`CreateNew` and `ReplaceRegularFile` hold the destination directory and its ancestors from transfer start, preventing
-renames. Unsupported paths, such as a volume without a drive letter, fail with `NotSupported` before fetching.
-`ReplaceRegularFile` preserves the replaced file's ACL and hidden attribute; a new file gets the directory's normal
-new-file access.
+Every publication policy holds the destination directory and its ancestors from transfer start, preventing renames.
+Unsupported paths, such as a volume without a drive letter, fail with `NotSupported` before fetching.
+The default `ReplaceExisting` and `ReplaceRegularFile` preserve the replaced file's ACL and hidden attribute;
+a new file gets the directory's normal new-file access. This Windows behavior applies to all supported .NET targets.
 
-The default `ReplaceExisting` uses the directory by path. net8.0 and net10.0 builds give the replacement new-file
-access; netstandard2.0 uses Windows `ReplaceFile`, retaining the replaced file's ACL and attributes. Only the file is
-flushed. Resume requires a retained stage whose owner and ACL are verified private and which has only its own name.
+Only the file is flushed. Resume requires a retained stage whose owner and ACL are verified private and which has
+only its own name.
 Stages without verifiable ACLs, including those retained by earlier Windows SDK versions, restart instead. They can
 still be published with the required final access; inability to apply it fails with `AccessNotKept`.
 
