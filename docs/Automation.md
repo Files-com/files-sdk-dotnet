@@ -45,8 +45,8 @@
   "import_urls": [
     {
       "name": "users.json",
-      "url": "http://example.com/users",
-      "method": "POST",
+      "url": "https://example.com/users",
+      "method": "post",
       "headers": {
         "Content-Type": "application/json"
       },
@@ -537,7 +537,7 @@ parameters.Add("description", "example");
 parameters.Add("definition", new Dictionary<string, object> { { "schema_version", 1 }, { "nodes", new object[] { new Dictionary<string, object> { { "id", "trigger" }, { "type", "trigger_manual" } }, new Dictionary<string, object> { { "id", "create_reports" }, { "type", "create_folder" }, { "config", new Dictionary<string, object> { { "destinations", new object[] { "reports/" } } } } } } }, { "edges", new object[] { new Dictionary<string, object> { { "from", "trigger" }, { "to", "create_reports" } } } } });
 parameters.Add("disabled", true);
 parameters.Add("exclude_pattern", "path/to/exclude/*");
-parameters.Add("import_urls", new object[] { new Dictionary<string, object> { { "name", "users.json" }, { "url", "http://example.com/users" }, { "method", "POST" }, { "headers", new Dictionary<string, object> { { "Content-Type", "application/json" } } }, { "content", new Dictionary<string, object> { { "group", "support" } } } } });
+parameters.Add("import_urls", new object[] { new Dictionary<string, object> { { "name", "users.json" }, { "url", "https://example.com/users" }, { "method", "post" }, { "headers", new Dictionary<string, object> { { "Content-Type", "application/json" } } }, { "content", new Dictionary<string, object> { { "group", "support" } } } } });
 parameters.Add("flatten_destination_structure", true);
 parameters.Add("ignore_locked_folders", true);
 parameters.Add("legacy_folder_matching", false);

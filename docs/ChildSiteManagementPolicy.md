@@ -8,7 +8,17 @@
   "policy_type": "settings",
   "name": "example",
   "description": "example",
-  "value": "{ \"color2_left\": \"#000000\", \"folder_behaviors\": [{ \"behavior\": \"file_expiration\", \"value\": { \"days_to_retain\": 30 } }] }",
+  "value": {
+    "color2_left": "#000000",
+    "folder_behaviors": [
+      {
+        "behavior": "file_expiration",
+        "value": {
+          "days_to_retain": 30
+        }
+      }
+    ]
+  },
   "applied_child_site_ids": [
     1,
     2
@@ -202,7 +212,7 @@ var childSiteManagementPolicy = await ChildSiteManagementPolicy.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("value", new Dictionary<string, object> { { "color2_left", "#000000" } });
+parameters.Add("value", new Dictionary<string, object> { { "color2_left", "#000000" }, { "folder_behaviors", new object[] { new Dictionary<string, object> { { "behavior", "file_expiration" }, { "value", new Dictionary<string, object> { { "days_to_retain", 30 } } } } } } });
 parameters.Add("skip_child_site_ids", new Nullable<Int64>[] { 1, 2 });
 parameters.Add("child_site_ids", new Nullable<Int64>[] { 1, 2 });
 parameters.Add("default_policy", true);

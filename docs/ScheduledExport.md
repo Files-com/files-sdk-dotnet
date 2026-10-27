@@ -44,7 +44,7 @@
 * `name` / `Name`  (string): Name for this scheduled export.
 * `export_type` / `ExportType`  (string): Export report type. Valid values: folder_size_audit, group_membership_audit, permission_audit, share_link_audit
 * `report_name` / `ReportName`  (string): Human-readable report name.
-* `export_options` / `ExportOptions`  (object): Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+* `export_options` / `ExportOptions`  (object): Options for the report selected by export_type.
 * `user_id` / `UserId`  (Nullable<Int64>): Site Admin user who receives the completed export e-mail.
 * `disabled` / `Disabled`  (bool): If true, this scheduled export will not run.
 * `trigger` / `Trigger`  (string): Schedule trigger type: `daily` or `custom_schedule`.
@@ -150,7 +150,7 @@ Task<ScheduledExport> client.ScheduledExports.CreateAsync(
 
 * `name` (string): Required - Name for this scheduled export.
 * `export_type` (string): Required - Export report type. Valid values: folder_size_audit, group_membership_audit, permission_audit, share_link_audit
-* `export_options` (object): Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+* `export_options` (object): Options for the report selected by export_type.
 * `user_id` (Nullable<Int64>): Site Admin user who receives the completed export e-mail.
 * `disabled` (bool): If true, this scheduled export will not run.
 * `trigger` (string): Schedule trigger type: `daily` or `custom_schedule`.
@@ -192,7 +192,7 @@ Task<ScheduledExport> client.ScheduledExports.UpdateAsync(
 * `id` (Nullable<Int64>): Required - Scheduled Export ID.
 * `name` (string): Name for this scheduled export.
 * `export_type` (string): Export report type. Valid values: folder_size_audit, group_membership_audit, permission_audit, share_link_audit
-* `export_options` (object): Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+* `export_options` (object): Options for the report selected by export_type.
 * `user_id` (Nullable<Int64>): Site Admin user who receives the completed export e-mail.
 * `disabled` (bool): If true, this scheduled export will not run.
 * `trigger` (string): Schedule trigger type: `daily` or `custom_schedule`.
@@ -269,7 +269,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Schedu
 * `id` (Nullable<Int64>): Required - Scheduled Export ID.
 * `name` (string): Name for this scheduled export.
 * `export_type` (string): Export report type. Valid values: folder_size_audit, group_membership_audit, permission_audit, share_link_audit
-* `export_options` (object): Report-specific options. `permission_audit` supports `group_by` with `user` or `path`.
+* `export_options` (object): Options for the report selected by export_type.
 * `user_id` (Nullable<Int64>): Site Admin user who receives the completed export e-mail.
 * `disabled` (bool): If true, this scheduled export will not run.
 * `trigger` (string): Schedule trigger type: `daily` or `custom_schedule`.

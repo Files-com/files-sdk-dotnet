@@ -3,7 +3,7 @@
     <!-- netstandard2.0 is the asset .NET Framework 4.8 and 4.8.1 applications use. -->
     <TargetFrameworks>net10.0;net8.0;netstandard2.0</TargetFrameworks>
     <PackageId>FilesCom</PackageId>
-    <Version>2.0.18</Version>
+    <Version>2.0.19</Version>
     <Authors>Files.com - support@files.com - https://www.files.com/</Authors>
     <Title>Files.com Client</Title>
     <Description>The Files.com .NET Client library provides convenient access to the Files.com API from applications using the .NET framework.</Description>

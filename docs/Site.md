@@ -15,11 +15,7 @@
       "workspace_admins": true,
       "folder_admins": true,
       "all_users": false,
-      "selected_group_members": true,
-      "group_ids": [
-        1,
-        2
-      ]
+      "selected_group_members": false
     }
   },
   "allowed_2fa_method_sms": true,

@@ -24,7 +24,13 @@
       "exists": true
     }
   },
-  "delivery_policy": "example",
+  "delivery_policy": {
+    "max_attempts": 3,
+    "retry_delay_minutes": [
+      5,
+      30
+    ]
+  },
   "event_target_ids": [
     1
   ],
@@ -44,7 +50,7 @@
 * `enabled` / `Enabled`  (bool): Whether this Event Subscription can dispatch events.
 * `event_types` / `EventTypes`  (string[]): Event type strings matched by this subscription. Blank means all event types. Valid values: `automation_run.canceled.v1`, `automation_run.failure.v1`, `automation_run.failure_will_retry.v1`, `automation_run.partial_failure.v1`, `automation_run.partial_failure_will_retry.v1`, `automation_run.skipped.v1`, `automation_run.success.v1`, `expectation_evaluation.invalid.v1`, `expectation_evaluation.late.v1`, `expectation_evaluation.missing.v1`, `expectation_evaluation.success.v1`, `expectation_incident.acknowledged.v1`, `expectation_incident.open.v1`, `expectation_incident.resolved.v1`, `expectation_incident.snoozed.v1`, `external_event.client_log.failure.v1`, `external_event.client_log.partial_failure.v1`, `external_event.client_log.skipped.v1`, `external_event.client_log.success.v1`, `pending_work_event.failure.v1`, `pending_work_event.partial_failure.v1`, `pending_work_event.skipped.v1`, `pending_work_event.success.v1`, `siem_http_destination_event.failure.v1`, `siem_http_destination_event.partial_failure.v1`, `siem_http_destination_event.skipped.v1`, `siem_http_destination_event.success.v1`, `sso_event.ldap_login.failure.v1`, `sso_event.ldap_login.partial_failure.v1`, `sso_event.ldap_login.skipped.v1`, `sso_event.ldap_login.success.v1`, `sso_event.ldap_sync.failure.v1`, `sso_event.ldap_sync.partial_failure.v1`, `sso_event.ldap_sync.skipped.v1`, `sso_event.ldap_sync.success.v1`, `sso_event.saml_login.failure.v1`, `sso_event.saml_login.partial_failure.v1`, `sso_event.saml_login.skipped.v1`, `sso_event.saml_login.success.v1`, `sync_run.failure.v1`, `sync_run.partial_failure.v1`, `sync_run.skipped.v1`, `sync_run.success.v1`, `user_security_event.lockout.v1`
 * `filter` / `Filter`  (object): Conditions on event fields that an event must meet to be delivered, keyed by dot-notation field path. All conditions must match.
-* `delivery_policy` / `DeliveryPolicy`  (object): Event Subscription delivery policy.
+* `delivery_policy` / `DeliveryPolicy`  (object): Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy.
 * `event_target_ids` / `EventTargetIds`  (Nullable<Int64>[]): Event Target IDs this subscription sends to.
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Event Subscription create date/time.
 * `updated_at` / `UpdatedAt`  (Nullable<DateTime>): Event Subscription update date/time.
@@ -143,7 +149,7 @@ Task<EventSubscription> client.EventSubscriptions.CreateAsync(
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types. Valid values: `automation_run.canceled.v1`, `automation_run.failure.v1`, `automation_run.failure_will_retry.v1`, `automation_run.partial_failure.v1`, `automation_run.partial_failure_will_retry.v1`, `automation_run.skipped.v1`, `automation_run.success.v1`, `expectation_evaluation.invalid.v1`, `expectation_evaluation.late.v1`, `expectation_evaluation.missing.v1`, `expectation_evaluation.success.v1`, `expectation_incident.acknowledged.v1`, `expectation_incident.open.v1`, `expectation_incident.resolved.v1`, `expectation_incident.snoozed.v1`, `external_event.client_log.failure.v1`, `external_event.client_log.partial_failure.v1`, `external_event.client_log.skipped.v1`, `external_event.client_log.success.v1`, `pending_work_event.failure.v1`, `pending_work_event.partial_failure.v1`, `pending_work_event.skipped.v1`, `pending_work_event.success.v1`, `siem_http_destination_event.failure.v1`, `siem_http_destination_event.partial_failure.v1`, `siem_http_destination_event.skipped.v1`, `siem_http_destination_event.success.v1`, `sso_event.ldap_login.failure.v1`, `sso_event.ldap_login.partial_failure.v1`, `sso_event.ldap_login.skipped.v1`, `sso_event.ldap_login.success.v1`, `sso_event.ldap_sync.failure.v1`, `sso_event.ldap_sync.partial_failure.v1`, `sso_event.ldap_sync.skipped.v1`, `sso_event.ldap_sync.success.v1`, `sso_event.saml_login.failure.v1`, `sso_event.saml_login.partial_failure.v1`, `sso_event.saml_login.skipped.v1`, `sso_event.saml_login.success.v1`, `sync_run.failure.v1`, `sync_run.partial_failure.v1`, `sync_run.skipped.v1`, `sync_run.success.v1`, `user_security_event.lockout.v1`
 * `filter` (object): Conditions on event fields that an event must meet to be delivered, keyed by dot-notation field path. All conditions must match.
-* `delivery_policy` (object): Event Subscription delivery policy.
+* `delivery_policy` (object): Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy.
 * `event_target_ids` (Nullable<Int64>[]): Event Target IDs this subscription sends to.
 
 
@@ -183,7 +189,7 @@ Task<EventSubscription> client.EventSubscriptions.UpdateAsync(
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types. Valid values: `automation_run.canceled.v1`, `automation_run.failure.v1`, `automation_run.failure_will_retry.v1`, `automation_run.partial_failure.v1`, `automation_run.partial_failure_will_retry.v1`, `automation_run.skipped.v1`, `automation_run.success.v1`, `expectation_evaluation.invalid.v1`, `expectation_evaluation.late.v1`, `expectation_evaluation.missing.v1`, `expectation_evaluation.success.v1`, `expectation_incident.acknowledged.v1`, `expectation_incident.open.v1`, `expectation_incident.resolved.v1`, `expectation_incident.snoozed.v1`, `external_event.client_log.failure.v1`, `external_event.client_log.partial_failure.v1`, `external_event.client_log.skipped.v1`, `external_event.client_log.success.v1`, `pending_work_event.failure.v1`, `pending_work_event.partial_failure.v1`, `pending_work_event.skipped.v1`, `pending_work_event.success.v1`, `siem_http_destination_event.failure.v1`, `siem_http_destination_event.partial_failure.v1`, `siem_http_destination_event.skipped.v1`, `siem_http_destination_event.success.v1`, `sso_event.ldap_login.failure.v1`, `sso_event.ldap_login.partial_failure.v1`, `sso_event.ldap_login.skipped.v1`, `sso_event.ldap_login.success.v1`, `sso_event.ldap_sync.failure.v1`, `sso_event.ldap_sync.partial_failure.v1`, `sso_event.ldap_sync.skipped.v1`, `sso_event.ldap_sync.success.v1`, `sso_event.saml_login.failure.v1`, `sso_event.saml_login.partial_failure.v1`, `sso_event.saml_login.skipped.v1`, `sso_event.saml_login.success.v1`, `sync_run.failure.v1`, `sync_run.partial_failure.v1`, `sync_run.skipped.v1`, `sync_run.success.v1`, `user_security_event.lockout.v1`
 * `filter` (object): Conditions on event fields that an event must meet to be delivered, keyed by dot-notation field path. All conditions must match.
-* `delivery_policy` (object): Event Subscription delivery policy.
+* `delivery_policy` (object): Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy.
 * `event_target_ids` (Nullable<Int64>[]): Event Target IDs this subscription sends to.
 
 
@@ -234,7 +240,7 @@ parameters.Add("message_only", true);
 parameters.Add("enabled", true);
 parameters.Add("event_types", new string[] { "sync_run.failure.v1" });
 parameters.Add("filter", new Dictionary<string, object> { { "payload.sync_name", new Dictionary<string, object> { { "prefix", "Nightly" } } }, { "payload.event_errors", new Dictionary<string, object> { { "exists", true } } } });
-parameters.Add("delivery_policy", "example");
+parameters.Add("delivery_policy", new Dictionary<string, object> { { "max_attempts", 3 }, { "retry_delay_minutes", new object[] { 5, 30 } } });
 parameters.Add("event_target_ids", new Nullable<Int64>[] { 1 });
 
 await eventSubscription.Update(parameters);
@@ -256,7 +262,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `EventS
 * `enabled` (bool): Whether this Event Subscription can dispatch events.
 * `event_types` (string[]): Event type strings matched by this subscription. Blank means all event types. Valid values: `automation_run.canceled.v1`, `automation_run.failure.v1`, `automation_run.failure_will_retry.v1`, `automation_run.partial_failure.v1`, `automation_run.partial_failure_will_retry.v1`, `automation_run.skipped.v1`, `automation_run.success.v1`, `expectation_evaluation.invalid.v1`, `expectation_evaluation.late.v1`, `expectation_evaluation.missing.v1`, `expectation_evaluation.success.v1`, `expectation_incident.acknowledged.v1`, `expectation_incident.open.v1`, `expectation_incident.resolved.v1`, `expectation_incident.snoozed.v1`, `external_event.client_log.failure.v1`, `external_event.client_log.partial_failure.v1`, `external_event.client_log.skipped.v1`, `external_event.client_log.success.v1`, `pending_work_event.failure.v1`, `pending_work_event.partial_failure.v1`, `pending_work_event.skipped.v1`, `pending_work_event.success.v1`, `siem_http_destination_event.failure.v1`, `siem_http_destination_event.partial_failure.v1`, `siem_http_destination_event.skipped.v1`, `siem_http_destination_event.success.v1`, `sso_event.ldap_login.failure.v1`, `sso_event.ldap_login.partial_failure.v1`, `sso_event.ldap_login.skipped.v1`, `sso_event.ldap_login.success.v1`, `sso_event.ldap_sync.failure.v1`, `sso_event.ldap_sync.partial_failure.v1`, `sso_event.ldap_sync.skipped.v1`, `sso_event.ldap_sync.success.v1`, `sso_event.saml_login.failure.v1`, `sso_event.saml_login.partial_failure.v1`, `sso_event.saml_login.skipped.v1`, `sso_event.saml_login.success.v1`, `sync_run.failure.v1`, `sync_run.partial_failure.v1`, `sync_run.skipped.v1`, `sync_run.success.v1`, `user_security_event.lockout.v1`
 * `filter` (object): Conditions on event fields that an event must meet to be delivered, keyed by dot-notation field path. All conditions must match.
-* `delivery_policy` (object): Event Subscription delivery policy.
+* `delivery_policy` (object): Event Subscription delivery policy. Overrides retry settings from each Event Target's delivery policy.
 * `event_target_ids` (Nullable<Int64>[]): Event Target IDs this subscription sends to.
 
 

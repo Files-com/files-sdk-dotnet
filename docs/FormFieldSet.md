@@ -15,18 +15,13 @@
   ],
   "form_fields": [
     {
-      "id": 1,
-      "label": "Sample Label",
+      "label": "Department",
+      "field_type": "dropdown",
       "required": true,
-      "help_text": "Help Text",
-      "field_type": "text",
       "options_for_select": [
-        "red",
-        "green",
-        "blue"
-      ],
-      "default_option": "red",
-      "form_field_set_id": 1
+        "Finance",
+        "Sales"
+      ]
     }
   ],
   "skip_name": true,
@@ -219,7 +214,7 @@ parameters.Add("workspace_id", 1L);
 parameters.Add("skip_email", false);
 parameters.Add("skip_name", false);
 parameters.Add("skip_company", false);
-parameters.Add("form_fields", new object[] { new Dictionary<string, object> { { "id", 1 }, { "label", "Sample Label" }, { "required", true }, { "help_text", "Help Text" }, { "field_type", "text" }, { "options_for_select", new object[] { "red", "green", "blue" } }, { "default_option", "red" }, { "form_field_set_id", 1 } } });
+parameters.Add("form_fields", new object[] { new Dictionary<string, object> { { "label", "Department" }, { "field_type", "dropdown" }, { "required", true }, { "options_for_select", new object[] { "Finance", "Sales" } } } });
 
 await formFieldSet.Update(parameters);
 ```

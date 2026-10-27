@@ -12,7 +12,7 @@
     {
       "name": "John Doe",
       "company": "Acme Ltd",
-      "email": "johndoe@gmail.com"
+      "email": "johndoe@example.com"
     }
   ]
 }
@@ -183,7 +183,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("notes", "This group is defined for testing purposes");
 parameters.Add("name", "Test group 1");
-parameters.Add("members", new object[] { new Dictionary<string, object> { { "name", "John Doe" }, { "company", "Acme Ltd" }, { "email", "johndoe@gmail.com" } } });
+parameters.Add("members", new object[] { new Dictionary<string, object> { { "name", "John Doe" }, { "company", "Acme Ltd" }, { "email", "johndoe@example.com" } } });
 
 await shareGroup.Update(parameters);
 ```
