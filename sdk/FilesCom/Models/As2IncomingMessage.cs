@@ -16,6 +16,10 @@ namespace FilesCom.Models
     {
         private Dictionary<string, object> attributes;
         private Dictionary<string, object> options;
+        private FilesClient client;
+        // Where this object's operations send their requests when not to its client's BaseUrl: the address of its
+        // site's region, where an operation moved. Null for BaseUrl.
+        private string origin;
         /// <summary>
         /// Makes a As2IncomingMessage with no attributes set and no options.
         /// </summary>
@@ -35,6 +39,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("id"))
             {
                 this.attributes.Add("id", null);
+            }
+            if (!this.attributes.ContainsKey("replayed_from_message_id"))
+            {
+                this.attributes.Add("replayed_from_message_id", null);
             }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
@@ -194,10 +202,12 @@ namespace FilesCom.Models
 
         void IModel.SetContext(FilesClient client, Dictionary<string, object> options, string origin)
         {
+            this.client = client;
+            this.origin = origin;
             this.options = options != null ? new Dictionary<string, object>(options) : new Dictionary<string, object>();
         }
 
-        string IModel.Origin => null;
+        string IModel.Origin => origin;
 
         IEnumerable<object> IModel.NestedModels
         {
@@ -216,7 +226,7 @@ namespace FilesCom.Models
 
 
         /// <summary>
-        /// Id of the AS2 Partner.
+        /// ID of this AS2 incoming message record.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("id")]
@@ -224,6 +234,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             private set { attributes["id"] = value; }
+        }
+
+        /// <summary>
+        /// ID of the incoming message record this message was replayed from. Empty for messages received directly from a trading partner.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("replayed_from_message_id")]
+        public Nullable<Int64> ReplayedFromMessageId
+        {
+            get { return (Nullable<Int64>)attributes["replayed_from_message_id"]; }
+            private set { attributes["replayed_from_message_id"] = value; }
         }
 
         /// <summary>
@@ -605,6 +626,54 @@ namespace FilesCom.Models
             private set { attributes["mdn_response_uri"] = value; }
         }
 
+        /// <summary>
+        /// Replay AS2 Incoming Message
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        public Task<As2IncomingMessage> Replay(Dictionary<string, object> parameters)
+        {
+            return ReplayCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Replay AS2 Incoming Message
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<As2IncomingMessage> ReplayAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return ReplayCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<As2IncomingMessage> ReplayCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The As2IncomingMessage has no id, which Replay needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/as2_incoming_messages/{System.Uri.EscapeDataString(attributes["id"].ToString())}/replay", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            As2IncomingMessage result = JsonUtil.DeserializeModelResponse<As2IncomingMessage>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
+        }
+
 
 
         /// <summary>
@@ -612,7 +681,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `created_at` or `as2_partner_id`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id`, `replayed_from_message_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ replayed_from_message_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, replayed_from_message_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]`, `[ workspace_id, replayed_from_message_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
@@ -634,7 +703,7 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `created_at` or `as2_partner_id`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id`, `replayed_from_message_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ replayed_from_message_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, replayed_from_message_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]`, `[ workspace_id, replayed_from_message_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
@@ -696,6 +765,121 @@ namespace FilesCom.Models
             }
 
             return new FilesList<As2IncomingMessage>(client, $"/as2_incoming_messages", System.Net.Http.HttpMethod.Get, parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - As2 Incoming Message ID.
+        /// </summary>
+        /// <param name="id">As2 Incoming Message ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<As2IncomingMessage> Find(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return FindCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - As2 Incoming Message ID.
+        /// </summary>
+        /// <param name="id">As2 Incoming Message ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<As2IncomingMessage> Get(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return Find(id, parameters, options);
+        }
+
+        internal static async Task<As2IncomingMessage> FindCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/as2_incoming_messages/{System.Uri.EscapeDataString(parameters["id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
+
+            return JsonUtil.DeserializeModelResponse<As2IncomingMessage>(responseJson, context, options);
+        }
+
+        /// <summary>
+        /// Replay AS2 Incoming Message
+        /// </summary>
+        /// <param name="id">As2 Incoming Message ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<As2IncomingMessage> Replay(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ReplayCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<As2IncomingMessage> ReplayCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/as2_incoming_messages/{System.Uri.EscapeDataString(parameters["id"].ToString())}/replay", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+
+            return JsonUtil.DeserializeModelResponse<As2IncomingMessage>(responseJson, context, options);
         }
 
     }

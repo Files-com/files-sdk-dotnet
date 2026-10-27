@@ -5,6 +5,7 @@
 ```
 {
   "id": 1,
+  "replayed_from_message_id": 1,
   "workspace_id": 1,
   "as2_partner_id": 1,
   "as2_station_id": 1,
@@ -46,7 +47,8 @@
 }
 ```
 
-* `id` / `Id`  (Nullable<Int64>): Id of the AS2 Partner.
+* `id` / `Id`  (Nullable<Int64>): ID of this AS2 incoming message record.
+* `replayed_from_message_id` / `ReplayedFromMessageId`  (Nullable<Int64>): ID of the incoming message record this message was replayed from. Empty for messages received directly from a trading partner.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace associated with this AS2 Incoming Message.
 * `as2_partner_id` / `As2PartnerId`  (Nullable<Int64>): Id of the AS2 Partner associated with this message.
 * `as2_station_id` / `As2StationId`  (Nullable<Int64>): Id of the AS2 Station associated with this message.
@@ -110,8 +112,83 @@ FilesList<As2IncomingMessage> client.As2IncomingMessages.List(
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `workspace_id`, `created_at` or `as2_partner_id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `as2_station_id`, `workspace_id`, `replayed_from_message_id` or `as2_partner_id`. Valid field combinations are `[ as2_station_id, created_at ]`, `[ workspace_id, created_at ]`, `[ replayed_from_message_id, created_at ]`, `[ as2_partner_id, created_at ]`, `[ workspace_id, as2_station_id ]`, `[ workspace_id, replayed_from_message_id ]`, `[ workspace_id, as2_partner_id ]`, `[ workspace_id, as2_station_id, created_at ]`, `[ workspace_id, replayed_from_message_id, created_at ]` or `[ workspace_id, as2_partner_id, created_at ]`.
 * `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
 * `filter_lt` (object): If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
 * `filter_lteq` (object): If set, return records where the specified field is less than or equal the supplied value. Valid fields are `created_at`.
+
+
+---
+
+## Show AS2 Incoming Message
+
+```
+Task<As2IncomingMessage> As2IncomingMessage.Find(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<As2IncomingMessage> client.As2IncomingMessages.FindAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - As2 Incoming Message ID.
+
+
+---
+
+## Replay AS2 Incoming Message
+
+```
+Task<As2IncomingMessage> As2IncomingMessage.Replay(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<As2IncomingMessage> client.As2IncomingMessages.ReplayAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - As2 Incoming Message ID.
+
+
+---
+
+## Replay AS2 Incoming Message
+
+```
+var as2IncomingMessage = await As2IncomingMessage.Find(1L);
+
+var parameters = new Dictionary<string, object>();
+
+await as2IncomingMessage.Replay(parameters);
+```
+
+`ReplayAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - As2 Incoming Message ID.

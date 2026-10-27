@@ -48,14 +48,51 @@ namespace FilesTests
             using (var server = new DownloadServer(contents))
             {
                 var storage = new StorageGate();
-                var drain = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-                server.Intercept = (request, connection) => request.Range?.First == 0 ? Task.FromResult(false) : storage.HoldAsync(Task.WhenAny(drain.Task, Task.Delay(40)));
-                var options = new DownloadOptions { PartSize = SmallPart, AutomaticConcurrency = DownloadTuning(start: 56, max: 72, step: 8) };
+                var reports = new DownloadReports();
+                // The download's cancellation, the test's own from the start: cleanup cancels a download still running.
+                var stopping = new CancellationTokenSource();
+                // Storage that answers in cohorts, each held as long as the first, at the start target, sets (CohortStorage).
+                var cohorts = new CohortStorage(startTarget: 56);
+                Task<DownloadResult> download = null;
+                DownloadResult result;
+                bool reachedAssertions = false;
+                try
+                {
+                    server.Intercept = (request, connection) => request.Range?.First == 0 ? cohorts.FirstPart() : storage.HoldAsync(cohorts.Arrive());
+                    var options = new DownloadOptions { PartSize = SmallPart, Progress = reports, AutomaticConcurrency = DownloadTuning(start: 56, max: 72, step: 8) };
 
-                Task<DownloadResult> download = Client(server).Transfers.DownloadFileAsync("remote.bin", Destination, options);
-                await Until(() => storage.Peak >= 72 || download.IsCompleted, TimeSpan.FromSeconds(30));
-                drain.SetResult(true);
-                DownloadResult result = await download;
+                    download = Client(server).Transfers.DownloadFileAsync("remote.bin", Destination, options, stopping.Token);
+                    await Until(() => storage.Peak >= 72 || download.IsCompleted, TimeSpan.FromSeconds(30));
+                    cohorts.Drain();
+                    if (!await CohortStorage.EndsWithinAsync(download, CohortStorage.CompletionLimit))
+                    {
+                        Assert.Fail($"The download had not ended {CohortStorage.CompletionLimit.TotalSeconds:F0} s after every answer was released: {cohorts.State(download)}");
+                    }
+                    result = await download;
+                    reachedAssertions = true;
+                }
+                finally
+                {
+                    // The test's lifetime of the download and the pacing ends here: every answer held goes, later requests
+                    // are answered at once and a download still running is cancelled, and then both must be seen to have
+                    // ended (SettleAsync). Work not seen to end fails the test, saying what was still running, unless the
+                    // test is already failing: that failure is kept, and this is recorded with it. The token's source is
+                    // disposed only once the download has been seen to end, since one still running may use it.
+                    string unsettled = await cohorts.SettleAsync(download, stopping);
+                    Console.WriteLine(cohorts.Describe(storage.Peak, reports.All));
+                    if (unsettled == null)
+                    {
+                        stopping.Dispose();
+                    }
+                    else
+                    {
+                        Console.WriteLine(unsettled);
+                        if (reachedAssertions)
+                        {
+                            Assert.Fail(unsettled);
+                        }
+                    }
+                }
 
                 CollectionAssert.AreEqual(contents, File.ReadAllBytes(Destination));
                 DownloadConcurrency concurrency = result.FinalProgress.Concurrency;
@@ -66,6 +103,246 @@ namespace FilesTests
                 Assert.AreEqual(72, concurrency.RequestLimit, "The download's own limiter has a slot for every request its target may reach.");
                 Assert.IsTrue(concurrency.Grows >= 2, Describe(concurrency));
             }
+        }
+
+        // The storage of AnAutomaticDownloadFetchesMorePartsAtOnceWhileThatPaysPastTheOld64: it answers part requests in
+        // cohorts, as storage whose time for an answer does not grow with how many requests it serves at once, where more
+        // requests at once deliver more, as the download's raises must find. It holds every request that arrives and, once
+        // the hold has passed since the last arrival, answers all it holds together, however many: it never waits for a
+        // number of requests, so cohorts of 56 and 64 are answered as surely as one of 72. As each answer is written, the
+        // download sends its next request: those make the next cohort.
+        //
+        // The hold is the same for every cohort, so that a cohort's time grows only with the download's own refill, which
+        // this storage measures: from the binding part's answer, or a cohort's release, to the next cohort's last arrival.
+        // The first cohort, at the start target, sets the hold to twelve times its refill. The target is then on the
+        // network for about 12/13 (92 %) of each cohort's time, where a window is judged only above 75 %; and 8 requests
+        // more, whose refill should take at most 64/56 as long, add about 1 % to a cohort's time while it delivers 14 %
+        // more, a gain of about 13 % where a raise needs 3 %. A later cohort no larger than the start target whose refill
+        // takes more than a sixth of the hold, leaving the target on the network for less than 6/7 of the time, raises the
+        // hold to twelve times that refill. Those shares rest on that scaling of the refill, not on any host's timing; each
+        // cohort's size, refill, hold and lateness is recorded (Describe). The hold is at most 500 ms. The 1,499 parts after
+        // the binding one make about 27 cohorts if each holds at least 56: at most 13.5 s of holds, plus their refills.
+        // Cohorts can be smaller, so that is an estimate for full cohorts, not a bound: the test's 30-second wait bounds the
+        // pacing, and its cleanup ends it (SettleAsync).
+        private sealed class CohortStorage
+        {
+            private const int HoldPerRefill = 12;
+            private const int RefillsPerHoldBeforeRaise = 6;
+            // The most cohorts, and changes of target, Describe records.
+            private const int Recorded = 40;
+            private static readonly TimeSpan MaxHold = TimeSpan.FromMilliseconds(500);
+            // The longest the download may take to end once every answer is released (Drain), and the longest cleanup then
+            // waits for the download and the pacing to end (SettleAsync): after the test's 30-second wait, both together stay
+            // within its 60 seconds.
+            public static readonly TimeSpan CompletionLimit = TimeSpan.FromSeconds(10);
+            private static readonly TimeSpan SettleLimit = TimeSpan.FromSeconds(10);
+
+            private readonly object gate = new object();
+            private readonly Stopwatch clock = Stopwatch.StartNew();
+            private readonly int startTarget;
+            private readonly SemaphoreSlim arrived = new SemaphoreSlim(0);
+            private readonly CancellationTokenSource stopping = new CancellationTokenSource();
+            private readonly List<string> record = new List<string>();
+            private readonly Task pacing;
+            private TaskCompletionSource<bool> answer = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            // When the refill of the cohort now arriving began, its last arrival so far, and how many it holds.
+            private TimeSpan? refillFrom;
+            private TimeSpan lastArrival;
+            private int size;
+            private int answered;
+            // Every cohort's hold, once the first has set it.
+            private TimeSpan? hold;
+            private bool draining;
+
+            public CohortStorage(int startTarget)
+            {
+                this.startTarget = startTarget;
+                pacing = Task.Run(PaceAsync);
+            }
+
+            // The binding part, answered at once: the first cohort's refill begins with it.
+            public Task<bool> FirstPart()
+            {
+                lock (gate)
+                {
+                    refillFrom = refillFrom ?? clock.Elapsed;
+                }
+                return Task.FromResult(false);
+            }
+
+            // A part request arrives: it is held until its cohort is answered, or not at all once draining.
+            public Task Arrive()
+            {
+                lock (gate)
+                {
+                    if (draining)
+                    {
+                        return Task.CompletedTask;
+                    }
+                    lastArrival = clock.Elapsed;
+                    refillFrom = refillFrom ?? lastArrival;
+                    if (size++ == 0)
+                    {
+                        arrived.Release();
+                    }
+                    return answer.Task;
+                }
+            }
+
+            // Answers every request held, and every later one at once.
+            public void Drain()
+            {
+                lock (gate)
+                {
+                    if (draining)
+                    {
+                        return;
+                    }
+                    draining = true;
+                    answer.TrySetResult(true);
+                }
+                stopping.Cancel();
+            }
+
+            // Ends the test's lifetime of the pacing and the download: drains, cancels the download, when it was started and
+            // has not ended, then waits, at most SettleLimit, for the download and the pacing to end, checking which ended
+            // rather than assuming it. Returns null once both have ended, the pacing without failing, or else what was seen.
+            // Nothing is thrown here: the download's own outcome is the test's, which awaits it, and a failure the test
+            // already has stays its own. A failure no one awaited, such as a cancelled download's, is observed.
+            public async Task<string> SettleAsync(Task download, CancellationTokenSource cancellation)
+            {
+                Drain();
+                var problems = new List<string>();
+                if (download != null && !download.IsCompleted)
+                {
+                    try
+                    {
+                        cancellation.Cancel();
+                    }
+                    catch (AggregateException e)
+                    {
+                        problems.Add($"cancelling the download failed: {e.GetBaseException().Message}");
+                    }
+                }
+                Task ended = download == null ? pacing : Task.WhenAll(pacing, download);
+                bool settled = await EndsWithinAsync(ended, SettleLimit);
+                _ = ended.ContinueWith(task => { _ = task.Exception; }, TaskContinuationOptions.OnlyOnFaulted);
+                if (!settled)
+                {
+                    problems.Add($"not ended {SettleLimit.TotalSeconds:F0} s after cleanup began");
+                }
+                else if (pacing.IsFaulted)
+                {
+                    problems.Add($"the pacing failed: {pacing.Exception.GetBaseException().Message}");
+                }
+                return problems.Count == 0 ? null : $"Cleanup: {string.Join("; ", problems)}; {State(download)}";
+            }
+
+            // Whether task ended within limit: the task that finished first is checked, so a limit that ran out is never taken
+            // for an end.
+            public static async Task<bool> EndsWithinAsync(Task task, TimeSpan limit)
+            {
+                using (var timer = new CancellationTokenSource())
+                {
+                    Task first = await Task.WhenAny(task, Task.Delay(limit, timer.Token));
+                    timer.Cancel();
+                    return first == task;
+                }
+            }
+
+            // What the download and the storage were doing, for a failure to say.
+            public string State(Task download)
+            {
+                lock (gate)
+                {
+                    return $"download {(download == null ? "not started" : download.Status.ToString())}, pacing {pacing.Status}, {size} requests in the last cohort held, {answered} cohorts answered, {(draining ? "drained" : "not drained")}";
+                }
+            }
+
+            // The cohorts answered, the peak the storage held, the hold, and each change of target the download reported.
+            public string Describe(int peak, IReadOnlyList<DownloadProgress> reports)
+            {
+                var targets = new List<int>();
+                foreach (DownloadProgress report in reports)
+                {
+                    if (report.Concurrency != null && targets.Count < Recorded && (targets.Count == 0 || targets[targets.Count - 1] != report.Concurrency.Target))
+                    {
+                        targets.Add(report.Concurrency.Target);
+                    }
+                }
+                lock (gate)
+                {
+                    string held = hold.HasValue ? $"{hold.Value.TotalMilliseconds:F1} ms" : "never set";
+                    return $"Cohort storage: peak {peak}, hold {held}, {answered} cohorts answered: {string.Join("; ", record)}. Targets reported: {string.Join(" > ", targets)}";
+                }
+            }
+
+            // Answers the cohort held once its hold has passed since its last arrival, until draining.
+            private async Task PaceAsync()
+            {
+                try
+                {
+                    while (true)
+                    {
+                        TimeSpan? wait = null;
+                        lock (gate)
+                        {
+                            if (draining)
+                            {
+                                return;
+                            }
+                            if (size > 0)
+                            {
+                                TimeSpan due = lastArrival + (hold ?? HoldFor(lastArrival - refillFrom.Value));
+                                wait = due - clock.Elapsed;
+                                if (wait <= TimeSpan.Zero)
+                                {
+                                    Answer(due);
+                                    continue;
+                                }
+                            }
+                        }
+                        if (wait.HasValue)
+                        {
+                            await Task.Delay(wait.Value, stopping.Token);
+                        }
+                        else
+                        {
+                            await arrived.WaitAsync(stopping.Token);
+                        }
+                    }
+                }
+                catch (OperationCanceledException) when (stopping.IsCancellationRequested)
+                {
+                    // Drained.
+                }
+            }
+
+            // Answers the cohort held and records it. Its refill sets the hold, if it is the first, or raises it, if it holds
+            // no more than the start target and took more than a sixth of the hold. Called under gate.
+            private void Answer(TimeSpan due)
+            {
+                TimeSpan now = clock.Elapsed;
+                TimeSpan refill = lastArrival - refillFrom.Value;
+                string change = "";
+                if (size <= startTarget && (!hold.HasValue || refill.Ticks * RefillsPerHoldBeforeRaise > hold.Value.Ticks))
+                {
+                    hold = HoldFor(refill);
+                    change = $", hold now {hold.Value.TotalMilliseconds:F1} ms";
+                }
+                answered++;
+                if (record.Count < Recorded)
+                {
+                    record.Add($"{size} after a {refill.TotalMilliseconds:F1} ms refill, answered {(now - lastArrival).TotalMilliseconds:F1} ms after the last, {(now - due).TotalMilliseconds:F1} ms late{change}");
+                }
+                answer.TrySetResult(true);
+                answer = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                size = 0;
+                refillFrom = now;
+            }
+
+            // HoldPerRefill times refill, at most MaxHold.
+            private static TimeSpan HoldFor(TimeSpan refill) => TimeSpan.FromTicks(Math.Min(refill.Ticks * HoldPerRefill, MaxHold.Ticks));
         }
 
         // Without AutomaticConcurrency, the tuning follows the storage the download is bound to, as the Go SDK chooses it

@@ -29,9 +29,15 @@ namespace FilesContractTests.Records
         // by a reset fixture for a resource without one.
         private static async Task<JsonObject[]> RecordsAsync(int count)
         {
-            JsonObject record = new JsonObject { ["workspace_id"] = 7, ["as2_partner_id"] = 7, ["as2_station_id"] = 7, ["uuid"] = "contract-uuid", ["content_type"] = "contract-content_type", ["processing_result"] = "not_started", ["processing_result_description"] = "contract-processing_result_description", ["mic"] = "contract-mic", ["mic_algo"] = "contract-mic_algo", ["as2_to"] = "contract-as2_to", ["as2_from"] = "contract-as2_from", ["message_id"] = "contract-message_id", ["subject"] = "contract-subject", ["date"] = "contract-date", ["body_size"] = "contract-body_size", ["attachment_filename"] = "contract-attachment_filename", ["ip"] = "contract-ip", ["created_at"] = "2030-01-02T03:04:05Z", ["http_response_code"] = "contract-http_response_code", ["recipient_serial"] = "contract-recipient_serial", ["hex_recipient_serial"] = "contract-hex_recipient_serial", ["recipient_issuer"] = "contract-recipient_issuer", ["message_received"] = true, ["message_decrypted"] = true, ["message_signature_verified"] = true, ["message_processing_success"] = true, ["message_mdn_returned"] = true, ["encrypted_uri"] = "contract-encrypted_uri", ["smime_signed_uri"] = "contract-smime_signed_uri", ["smime_uri"] = "contract-smime_uri", ["raw_uri"] = "contract-raw_uri", ["mdn_response_uri"] = "contract-mdn_response_uri" };
+            JsonObject record = new JsonObject { ["replayed_from_message_id"] = 7, ["workspace_id"] = 7, ["as2_partner_id"] = 7, ["as2_station_id"] = 7, ["uuid"] = "contract-uuid", ["content_type"] = "contract-content_type", ["processing_result"] = "not_started", ["processing_result_description"] = "contract-processing_result_description", ["mic"] = "contract-mic", ["mic_algo"] = "contract-mic_algo", ["as2_to"] = "contract-as2_to", ["as2_from"] = "contract-as2_from", ["message_id"] = "contract-message_id", ["subject"] = "contract-subject", ["date"] = "contract-date", ["body_size"] = "contract-body_size", ["attachment_filename"] = "contract-attachment_filename", ["ip"] = "contract-ip", ["created_at"] = "2030-01-02T03:04:05Z", ["http_response_code"] = "contract-http_response_code", ["recipient_serial"] = "contract-recipient_serial", ["hex_recipient_serial"] = "contract-hex_recipient_serial", ["recipient_issuer"] = "contract-recipient_issuer", ["message_received"] = true, ["message_decrypted"] = true, ["message_signature_verified"] = true, ["message_processing_success"] = true, ["message_mdn_returned"] = true, ["encrypted_uri"] = "contract-encrypted_uri", ["smime_signed_uri"] = "contract-smime_signed_uri", ["smime_uri"] = "contract-smime_uri", ["raw_uri"] = "contract-raw_uri", ["mdn_response_uri"] = "contract-mdn_response_uri" };
             await Simulator.ResetWithAsync(ListPath.TrimStart('/'), Enumerable.Repeat(record, count).ToArray());
-            return Conform(await Simulator.ListRawAsync(ListPath, Scope()));
+            // Fixture records get IDs from 1 in the order given.
+            List<JsonObject> held = new List<JsonObject>();
+            for (int id = 1; id <= count; id++)
+            {
+                held.Add(await Simulator.ReadRawAsync(ListPath, $"{ListPath}/{id}", null, null));
+            }
+            return Conform(held.ToArray());
         }
 
         // The records the case starts from, if they hold the types the schema declares.
@@ -39,9 +45,14 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "As2IncomingMessage", ("id", "int64"), ("workspace_id", "int64"), ("as2_partner_id", "int64"), ("as2_station_id", "int64"), ("uuid", "string"), ("content_type", "string"), ("processing_result", "string"), ("processing_result_description", "string"), ("mic", "string"), ("mic_algo", "string"), ("as2_to", "string"), ("as2_from", "string"), ("message_id", "string"), ("subject", "string"), ("date", "string"), ("body_size", "string"), ("attachment_filename", "string"), ("ip", "string"), ("created_at", "date-time"), ("http_response_code", "string"), ("recipient_serial", "string"), ("hex_recipient_serial", "string"), ("recipient_issuer", "string"), ("message_received", "boolean"), ("message_decrypted", "boolean"), ("message_signature_verified", "boolean"), ("message_processing_success", "boolean"), ("message_mdn_returned", "boolean"), ("encrypted_uri", "string"), ("smime_signed_uri", "string"), ("smime_uri", "string"), ("raw_uri", "string"), ("mdn_response_uri", "string"));
+                Simulator.Conforms(record, "As2IncomingMessage", ("id", "int64"), ("replayed_from_message_id", "int64"), ("workspace_id", "int64"), ("as2_partner_id", "int64"), ("as2_station_id", "int64"), ("uuid", "string"), ("content_type", "string"), ("processing_result", "string"), ("processing_result_description", "string"), ("mic", "string"), ("mic_algo", "string"), ("as2_to", "string"), ("as2_from", "string"), ("message_id", "string"), ("subject", "string"), ("date", "string"), ("body_size", "string"), ("attachment_filename", "string"), ("ip", "string"), ("created_at", "date-time"), ("http_response_code", "string"), ("recipient_serial", "string"), ("hex_recipient_serial", "string"), ("recipient_issuer", "string"), ("message_received", "boolean"), ("message_decrypted", "boolean"), ("message_signature_verified", "boolean"), ("message_processing_success", "boolean"), ("message_mdn_returned", "boolean"), ("encrypted_uri", "string"), ("smime_signed_uri", "string"), ("smime_uri", "string"), ("raw_uri", "string"), ("mdn_response_uri", "string"));
             }
             return records;
+        }
+
+        private static string MemberPath(JsonObject record)
+        {
+            return $"{ListPath}/{(long)record["id"]}";
         }
 
         // Every property the record holds, as the As2IncomingMessage the SDK returns gives it.
@@ -49,6 +60,7 @@ namespace FilesContractTests.Records
         {
             Assert.IsNotNull(model, $"{what}: the SDK returned no As2IncomingMessage");
             Simulator.Same(record, "id", model.Id, what);
+            Simulator.Same(record, "replayed_from_message_id", model.ReplayedFromMessageId, what);
             Simulator.Same(record, "workspace_id", model.WorkspaceId, what);
             Simulator.Same(record, "as2_partner_id", model.As2PartnerId, what);
             Simulator.Same(record, "as2_station_id", model.As2StationId, what);
@@ -98,6 +110,17 @@ namespace FilesContractTests.Records
             {
                 AssertModel(held[i], listed[i], $"As2IncomingMessage.list[{i}]");
             }
+        }
+
+        [TestMethod]
+        public async Task Find()
+        {
+            string operation = await Simulator.RecordOperationAsync("As2IncomingMessage", "find");
+            JsonObject record = (await RecordsAsync(1))[0];
+            Dictionary<string, object> sent = new Dictionary<string, object> { };
+            As2IncomingMessage found = await Simulator.Sdk(operation).As2IncomingMessages.FindAsync((long)record["id"], sent);
+            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "string" });
+            AssertModel(record, found, "As2IncomingMessage.find");
         }
     }
 }

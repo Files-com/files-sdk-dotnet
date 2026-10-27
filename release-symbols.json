@@ -502,6 +502,7 @@
         "raw_uri": "RawUri",
         "recipient_issuer": "RecipientIssuer",
         "recipient_serial": "RecipientSerial",
+        "replayed_from_message_id": "ReplayedFromMessageId",
         "smime_signed_uri": "SmimeSignedUri",
         "smime_uri": "SmimeUri",
         "subject": "Subject",
@@ -515,6 +516,20 @@
             "All"
           ],
           "route": "GET /as2_incoming_messages"
+        },
+        "GetAs2IncomingMessagesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /as2_incoming_messages/{id}"
+        },
+        "PostAs2IncomingMessagesIdReplay": {
+          "method": "Replay",
+          "aliases": [
+
+          ],
+          "route": "POST /as2_incoming_messages/{id}/replay"
         }
       }
     },
@@ -5037,6 +5052,7 @@
         "domain_letsencrypt_chain": "DomainLetsencryptChain",
         "email": "Email",
         "email_footer_custom_text": "EmailFooterCustomText",
+        "enforce_parent_site_user_ip_restrictions": "EnforceParentSiteUserIpRestrictions",
         "fedramp": "Fedramp",
         "file_activity_events_enabled": "FileActivityEventsEnabled",
         "files_com_remote_server_enabled": "FilesComRemoteServerEnabled",
