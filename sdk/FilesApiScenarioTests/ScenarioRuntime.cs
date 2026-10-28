@@ -1537,11 +1537,25 @@ namespace FilesApiScenarioTests
         // task holds nothing.
         internal Func<ObservedRequest, Task> HoldStart { get; set; }
 
+        // Runs as a request reaches the handler, once whether its own token had been cancelled has been read and before it
+        // is recorded as begun, with whether the caller's own token had been (RequestRecorder.Begin); null in a scenario.
+        // The two are read one after the other, not as one snapshot: a control sets it to hold the request between them,
+        // as the runtime can hold a thread there, so that the caller cancels in between, its cancellation reaching the
+        // request's own token only after that token was read as not cancelled. A null task holds nothing.
+        internal Func<HttpRequestMessage, Task> HoldBegin { get; set; }
+
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             (string refSha256, long? part) = await UploadPartOfAsync(request.Content).ConfigureAwait(false);
             CancellationToken owner = recorder.Owner;
-            ObservedRequest observed = recorder.Begin(request, refSha256, part, owner, cancellationToken.IsCancellationRequested);
+            // Whether its own token had been cancelled is read first, and whether the caller's had only as it is recorded.
+            bool tokenCancelled = cancellationToken.IsCancellationRequested;
+            Task beginHeld = HoldBegin?.Invoke(request);
+            if (beginHeld != null)
+            {
+                await beginHeld.ConfigureAwait(false);
+            }
+            ObservedRequest observed = recorder.Begin(request, refSha256, part, owner, tokenCancelled);
             // The transport below gets a token of the handler's own, cancelled only once the cancellation of the request's
             // token, whether the caller's own token had been cancelled by then and whether the transport's own task had
             // already ended have been recorded (TokenRelay): a request the transport ends because its token was cancelled
@@ -3099,7 +3113,7 @@ namespace FilesApiScenarioTests
                 {
                     return $"its part {part} is not one of the upload's parts 1 to {parts}";
                 }
-                return request.OwnerCancelledAtBegin ? NotLate(request, requests, beginRoute, path, part.Value, out grantedBy) : null;
+                return request.OwnerCancelledAtBegin ? NotLate(request, requests, beginRoute, path, part.Value, bodyEndedByOwner, out grantedBy) : null;
             }
             if (ApiRoutes.Mismatch(request, beginRoute, path) != null)
             {
@@ -3118,19 +3132,24 @@ namespace FilesApiScenarioTests
 
         // Null when REQUEST, a part of PART that reached the transport's bottom only after the caller had cancelled, is one
         // the SDK had already been granted, or why not; GRANT is then the begin_upload that granted it. Ownership has to be
-        // shown, not assumed: it arrived with its own token already cancelled, as a token linked to the caller's is; it is
-        // the only request for that part of its ref, so not one sent again; and a begin_upload of the step's path, with the
-        // client's API key alone, negotiated exactly that part of that ref and was answered 2xx before the caller's own
-        // token was cancelled (ObservedRequest.OwnerCancelledAtEnd), and before the part arrived. UploadCoordinator sends
-        // only parts it has prepared from such a grant, so the part was the SDK's to send before the caller cancelled;
+        // shown, not assumed: the caller's cancellation reached it, as it arrived with its own token already cancelled, as
+        // a token linked to the caller's is, or as its body's writing ended with the cancellation of the upload's own
+        // token, which the caller's cancellation is what cancelled (BODYENDEDBYOWNER, BodyAccount). Whether its own token
+        // had been cancelled is read as it arrives, before whether the caller's had (ObservingHandler), so the caller can
+        // cancel between the two reads, reaching that token only after the first: a token read as not yet cancelled does
+        // not show it unlinked, but without that end of its body nothing shows it linked. It is the only request for that
+        // part of its ref, so not one sent again; and a begin_upload of the step's path, with the client's API key alone,
+        // negotiated exactly that part of that ref and was answered 2xx before the caller's own token was cancelled
+        // (ObservedRequest.OwnerCancelledAtEnd), and before the part arrived. UploadCoordinator sends only parts it has
+        // prepared from such a grant, so the part was the SDK's to send before the caller cancelled;
         // ConfirmCancelledAttempts then requires the journal to show that begin_upload as the step's upload's.
-        private static string NotLate(ObservedRequest request, IReadOnlyList<ObservedRequest> requests, string beginRoute, Dictionary<string, string> path, long part, out int? grant)
+        private static string NotLate(ObservedRequest request, IReadOnlyList<ObservedRequest> requests, string beginRoute, Dictionary<string, string> path, long part, bool bodyEndedByOwner, out int? grant)
         {
             grant = null;
             const string late = "it began only after the caller cancelled";
-            if (!request.TokenCancelledAtBegin)
+            if (!request.TokenCancelledAtBegin && !bodyEndedByOwner)
             {
-                return $"{late}, with its own token not yet cancelled, so not linked to the caller's";
+                return $"{late}, with its own token not yet cancelled, so not linked to the caller's, and its body not ended by the caller's cancellation of the upload's own token";
             }
             string reference = RefOf(request.Path);
             if (requests.Any(other => other.Sequence != request.Sequence && !other.Api && RefOf(other.Path) == reference && PartOf(other.Path) == part))

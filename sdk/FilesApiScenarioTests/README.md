@@ -69,14 +69,19 @@ operation IDs live readiness lists), with the request's own status, of the reset
 answer is accepted only as an attempt of the case's own upload that the case cancelled at its first acknowledged part,
 in an upload that ended as cancelled. It ended after that intent with the caller's token actually cancelled, and its own
 token was cancelled before it ended, only once the caller's had been and while the transport's own task was still
-running, as read the moment that cancellation is passed on to the transport: a request that a network wait running out,
-or anything else, ended or whose token it cancelled while the caller's token was not yet cancelled, or whose transport
-had already ended it on its own, stays a failure, however soon the caller cancels after and however late its end is
-observed. It reached the transport's bottom before the caller cancelled, or it is a part the SDK had been granted
-before: one that arrived with its own token already cancelled, the only request for that part, after a begin_upload of
-the upload's path negotiating exactly that part with the upload's ref was answered 2xx before the caller cancelled and
-journaled as that upload's (the SDK sends a granted part as soon as the part before it ends, before that part's
-progress report reaches the caller). A begin_upload that arrives only after the caller cancelled never is.
+running, as read the moment that cancellation is passed on to the transport; or, for a part, its body's writing ended
+with the cancellation of the upload's own token, the very token every write of the upload's bodies was made with, as
+the writes before the caller actually cancelled showed it, and the caller's cancellation is what cancelled it. A request
+that a network wait running out, or anything else, ended or whose token it cancelled while the caller's token was not
+yet cancelled, of which anything had already failed when the caller actually cancelled, or whose transport had already
+ended it on its own without that end of its body, stays a failure, however soon the caller cancels after and however
+late its end is observed. It reached the transport's bottom before the caller cancelled, or it is a part the SDK had
+been granted before: one that arrived with its own token already cancelled, or whose body that cancellation of the
+upload's own token ended (whether its own token was cancelled is read as it arrives, before the caller's, and the
+caller can cancel in between), the only request for that part, after a begin_upload of the upload's path negotiating
+exactly that part with the upload's ref was answered 2xx before the caller cancelled and journaled as that upload's
+(the SDK sends a granted part as soon as the part before it ends, before that part's progress report reaches the
+caller). A begin_upload that arrives only after the caller cancelled never is.
 It is either a part (a `PUT` to storage without a credential, of one of the upload's parts under the live profile's one
 partsize, with the ref, to the origin and under the whole upload path, everything before `{ref}/{part}`, of a part
 storage acknowledged and the journal shows of that upload) or the begin_upload that negotiates such a part, which the

@@ -2103,11 +2103,159 @@ namespace FilesApiScenarioTests
             }
         }
 
-        // UploadOptions.Progress for TheSdksPartWhoseBodyTheCancellationEndsBeforeItsTokenIsTheUploadsOwnAttempt: it passes
-        // every report on to PROGRESS, which cancels inside the report of the first acknowledged part, but holds that report
-        // until RELEASE has ended, or Bound has passed. That report follows part 1's answer, which storage holds until the
-        // SDK's dispatcher has returned from starting part 1 (BodyUpload), so holding it never holds the dispatcher that
-        // sends part 2.
+        // The SDK's own upload of a local file of six bytes, in parts of three, through the network of the control above
+        // (BodyUpload), cancelled at its first acknowledged part while part 2, granted by the dispatcher's renewal and sent
+        // before the caller cancels, is reaching the observing handler. The handler reads whether part 2's own token had
+        // been cancelled as it arrives, and holds it there (ObservingHandler.HoldBegin), before it reads whether the
+        // caller's had and records part 2 as begun; the report of part 1's acknowledgement, held until then, cancels, and
+        // part 2 goes on only once the caller has actually cancelled: it is recorded as begun after the caller cancelled,
+        // its own token read as not yet cancelled, as the caller can cancel between the two reads. Its body, the file's
+        // own part content, then finds the upload's own token, which the writes of part 1 showed before the caller
+        // cancelled, cancelled by the caller's cancellation, and ends with it before writing anything; the cancellation
+        // of part 2's own token is recorded and relayed only once its transport has ended (ObservingHandler.HoldRelay),
+        // so only that end of its body shows that the caller's cancellation ended it. With the renewal that granted it
+        // journaled as the upload's, part 2 is the upload's own attempt; without (GRANTJOURNALED), ownership is not
+        // shown, and it stays a failure.
+        [TestMethod]
+        [TestCategory(Category)]
+        [DataRow(true, "")]
+        [DataRow(false, "the begin_upload that granted its part (request")]
+        public async Task TheSdksGrantedPartWhoseBodyTheCancellationEndsAsItArrivesIsTheUploadsOwnAttempt(bool grantJournaled, string problem)
+        {
+            var recorder = new RequestRecorder(StubEnvironment.Url, StubEnvironment.Key);
+            var network = new BodyUpload(honorsWriteToken: true);
+            // Set once part 2 is held at the handler as it arrives; opened once the caller has actually cancelled.
+            var partTwoArrived = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var partTwoGoesOn = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            FilesClient client = FilesClient.Create(new FilesConfiguration { BaseUrl = StubEnvironment.Url, ApiKey = StubEnvironment.Key },
+                HttpTransport.FromHandlerFactory(() => new ObservingHandler(recorder, new Boundary(network.AnswerAsync))
+                {
+                    HoldBegin = request =>
+                    {
+                        if (request.Method != HttpMethod.Put || request.RequestUri.AbsolutePath != "/upload/ref-7/2")
+                        {
+                            return null;
+                        }
+                        partTwoArrived.TrySetResult(true);
+                        return Task.WhenAny(partTwoGoesOn.Task, Task.Delay(Bound));
+                    },
+                    HoldRelay = network.HoldRelay,
+                }));
+            using var caller = new CancellationTokenSource();
+            recorder.Owner = caller.Token;
+            var gate = new CancellationGate();
+            var held = new HeldAcknowledgement(new SynchronousProgress(recorder, 0, gate, caller), partTwoArrived.Task);
+            byte[] bytes = { 1, 2, 3, 4, 5, 6 };
+            string folder = System.IO.Directory.CreateTempSubdirectory("files-api-scenarios-late-body-").FullName;
+            string local = System.IO.Path.Combine(folder, "cancelled.bin");
+            System.IO.File.WriteAllBytes(local, bytes);
+            Exception raised = null;
+            bool cancelledBeforePartTwoWentOn = false;
+            try
+            {
+                Task upload = client.Transfers.UploadFileAsync(local, CancelledPath, new FilesCom.Transfers.UploadOptions { Progress = held }, caller.Token);
+                // The report, passed on once part 2 is held at the handler, cancels; only then does part 2 go on.
+                await Task.WhenAny(held.Passed.Task, upload, Task.Delay(Bound));
+                cancelledBeforePartTwoWentOn = held.Passed.Task.IsCompleted && caller.IsCancellationRequested;
+                partTwoGoesOn.TrySetResult(true);
+                await upload;
+            }
+            catch (Exception e)
+            {
+                raised = e;
+            }
+            finally
+            {
+                partTwoGoesOn.TrySetResult(true);
+                network.EndPartTwoBody();
+                await client.DisposeAsync();
+                System.IO.Directory.Delete(folder, recursive: true);
+            }
+            IReadOnlyList<ObservedRequest> requests = recorder.All;
+            string sent = string.Join("; ", requests.Select(request => $"{request.Sequence} {request.Method} {request.Path} {request.Outcome}"));
+
+            // The SDK's own flow: the dispatcher, past starting part 1, renewed part 2's expired URL while part 1 was held
+            // unanswered; part 2 was then sent, reached the handler before the report of part 1's acknowledgement cancelled
+            // inside it, and went on only once that report had.
+            Assert.IsTrue(raised is OperationCanceledException, $"the upload ended with {(raised == null ? "nothing" : raised.GetType().Name)}, not as cancelled: {sent}");
+            Assert.IsTrue(network.PartOneHeldUntilRenewal, "the SDK's dispatcher renewed part 2's expired URL, having started part 1, before part 1 was answered: " + sent);
+            Assert.IsTrue(held.HeldUntilReleased && cancelledBeforePartTwoWentOn,
+                $"part 2 was held at the handler before the report of the first acknowledged part reached the caller, and went on only once the caller had cancelled: {sent}");
+            Assert.AreEqual(5, requests.Count, sent);
+            ObservedRequest begin = requests.Single(request => request.Api && request.BodyRefSha256 == null);
+            ObservedRequest[] grants = requests.Where(request => request.Api && request.BodyRefSha256 != null).ToArray();
+            ObservedRequest part = requests.Single(request => !request.Api && request.Path == "/upload/ref-7/1");
+            ObservedRequest late = requests.Single(request => !request.Api && request.Path == "/upload/ref-7/2");
+            Assert.AreEqual(2, grants.Length, sent);
+            // Part 2's first grant, of a URL already expired, then the dispatcher's renewal, which granted the part it sent.
+            ObservedRequest renewal = grants[1];
+            Assert.IsTrue(begin.Sequence == 1 && begin.Method == "POST" && begin.Path == BeginPath && begin.Origin == StubEnvironment.Url && begin.Status == 200
+                && begin.CarriesApiKey && begin.ApiKeyMatches && !begin.CarriesAuthorization, sent);
+            Assert.IsTrue(grants.All(grant => grant.Method == "POST" && grant.Path == BeginPath && grant.Status == 200 && grant.BodyRefSha256 == ScenarioDigest.Sha256("ref-7") && grant.BodyPart == 2
+                && grant.CarriesApiKey && grant.ApiKeyMatches && !grant.CarriesAuthorization && grant.EndedAt < gate.CancelEvent && !grant.OwnerCancelledAtEnd), sent);
+            Assert.IsTrue(part.Method == "PUT" && part.Origin == HeldStorage.Url && part.Status == 200 && !part.CarriesApiKey && !part.CarriesAuthorization && part.EndedAt < gate.CancelEvent, sent);
+            // The first acknowledged part, exactly as the report that cancelled saw it.
+            Assert.IsTrue(gate.Cancelled && gate.PartsAcknowledged == 1 && gate.AcknowledgedBytes == 3 && gate.AnsweredStorage.SequenceEqual(new[] { part.Sequence }),
+                $"the caller cancelled inside the report of part 1's acknowledgement, with part 1 alone answered: {string.Join(",", gate.AnsweredStorage)}");
+            // Part 2 was recorded as begun only after the caller actually cancelled, its own token read as not yet cancelled
+            // as it arrived.
+            Assert.IsTrue(late.Method == "PUT" && late.Origin == HeldStorage.Url && late.Status == null && late.ClientFailure == nameof(OperationCanceledException)
+                && !late.CarriesApiKey && !late.CarriesAuthorization && late.BegunAt > gate.OwnerCancelledAt && late.OwnerCancelledAtBegin && !late.TokenCancelledAtBegin && late.OwnerCancelledAtEnd,
+                $"part 2 was recorded as begun at event {late.BegunAt}, after the caller actually cancelled at {Shown.Of(gate.OwnerCancelledAt)}, its own token read as not yet cancelled as it arrived: {sent}");
+            // The token the SDK's bodies of the upload wrote with, as the writes of part 1, acknowledged, showed it before the
+            // caller actually cancelled, and which the caller's actual cancellation cancelled, is the very token part 2's
+            // body, the file's own part content, found cancelled and ended with, before writing anything of it.
+            CancellationToken? own = gate.BodyToken;
+            Assert.IsTrue(own != null && gate.BodyTokenWitnesses.SequenceEqual(new[] { part.Sequence }) && !gate.BodyTokenCancelledBeforeOwner && gate.BodyTokenCancelledByOwner == true
+                && gate.CancelEvent < gate.OwnerCancelledAt,
+                $"the writes of requests {string.Join(",", gate.BodyTokenWitnesses)} showed the upload's own token, which the caller's actual cancellation at event {Shown.Of(gate.OwnerCancelledAt)} cancelled: {sent}");
+            Assert.IsTrue(late.BodyFailure is OperationCanceledException ended && ended.CancellationToken == own && late.WrittenWith.Count == 0 && network.PartTwoWrittenWith == null,
+                $"part 2's body ended with {Shown.Of(late.BodyEndedWith)}, by the upload's own token, before any write of it: {sent}");
+            Assert.IsTrue(late.FailedBeforeOwner == null && late.FailedAcrossOwner.Count == 0,
+                $"nothing of part 2 had failed when the caller actually cancelled: {Shown.Of(late.FailedBeforeOwner)}, and {late.FailedAcrossOwner.Count} of it found failed after");
+            // The cancellation of part 2's own token, made by then, was recorded and relayed only once its transport had
+            // ended it: that cancellation did not end it.
+            Assert.IsTrue(late.TokenCancelled && late.OwnerCancelledWithToken == true && late.TransportEndedBeforeToken == true
+                && late.BegunAt < late.TokenCancelledAt && late.TokenCancelledAt < late.EndedAt,
+                $"the cancellation of part 2's own token reached the handler at event {Shown.Of(late.TokenCancelledAt)}, after its transport had ended it, and it ended at {Shown.Of(late.EndedAt)}");
+
+            var entries = new JsonArray
+            {
+                EntryOf(11, "POST", BeginPath, "files.begin_upload", 200, upload: 7),
+                EntryOf(12, "PUT", "/upload/ref-7/1", "transfers.upload_part", 200, upload: 7, part: 1),
+                // Part 2's first grant, whose URL the SDK renewed before sending the part.
+                EntryOf(13, "POST", BeginPath, "files.begin_upload", 200, upload: 7),
+            };
+            if (grantJournaled)
+            {
+                // The renewal, which granted the part the SDK sent.
+                entries.Add(EntryOf(14, "POST", BeginPath, "files.begin_upload", 200, upload: 7));
+            }
+            (List<string> problems, UnansweredRequests unanswered, JournalAccount final) = AccountForUpload(Contract(3), requests, entries, gate, false, raised, bytes.Length);
+
+            CancelledAttempt attempt = unanswered.Attempts.Single();
+            Assert.IsTrue(attempt.Sequence == late.Sequence && attempt.Storage && attempt.Part == 2 && attempt.GrantedBy == renewal.Sequence && attempt.Origin == HeldStorage.Url
+                && attempt.UploadPath == "/upload" && attempt.RefSha256 == ScenarioDigest.Sha256("ref-7"),
+                "part 2 is the upload's attempt that its body's end, by the upload's own token the caller's cancellation cancelled, and its renewed grant, answered before the caller cancelled, show was the SDK's to send");
+            if (problem.Length == 0)
+            {
+                Assert.AreEqual(0, problems.Count, string.Join("; ", problems));
+                Assert.IsTrue(attempt.Confirmed && attempt.Upload == 7 && final.Excused.Contains(late) && !final.Joined.Any(pair => pair.Request == late),
+                    "the late part is confirmed as the upload's own attempt and excused without an entry, its missing answer kept");
+            }
+            else
+            {
+                // Without the grant journaled as the upload's, ownership is not shown: the late part stays a failure.
+                Assert.IsTrue(attempt.Rejected != null && !final.Excused.Contains(late), "a late part whose grant the journal does not show is not excused");
+                Assert.IsTrue(problems.Any(found => found.Contains(problem, StringComparison.Ordinal)), $"expected a problem with \"{problem}\": {string.Join("; ", problems)}");
+            }
+        }
+
+        // UploadOptions.Progress for TheSdksPartWhoseBodyTheCancellationEndsBeforeItsTokenIsTheUploadsOwnAttempt and
+        // TheSdksGrantedPartWhoseBodyTheCancellationEndsAsItArrivesIsTheUploadsOwnAttempt: it passes every report on to
+        // PROGRESS, which cancels inside the report of the first acknowledged part, but holds that report until RELEASE has
+        // ended, or Bound has passed. That report follows part 1's answer, which storage holds until the SDK's dispatcher
+        // has returned from starting part 1 (BodyUpload), so holding it never holds the dispatcher that sends part 2.
         private sealed class HeldAcknowledgement : IProgress<FilesCom.Transfers.TransferProgress>
         {
             private readonly IProgress<FilesCom.Transfers.TransferProgress> progress;
