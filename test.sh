@@ -100,52 +100,63 @@ ruby "${DIR}/contract-test.rb" "${FILES_CONTRACT_MOCK_SERVER}" "${results}/contr
 # set, an absent or empty directory outside this SDK, as CI sets it to keep them; otherwise they stay with these results.
 ruby "${DIR}/api-scenarios.rb" "${FILES_CONTRACT_MOCK_SERVER}" "${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}" "${packages[0]}" "${package_sha256}" || exit 1
 
-# client.FileSystem writing a whole file and reading it back runs against a real simulator rather than the loopback fakes
-# of the runs above, which leave it out: FilesTests.RemoteFileSystemTest.WholeFilesAreWrittenAndRead, the only test of
-# TestCategory SharedSimulatorFilesystem. Once the shared API scenarios have returned, on each framework, the mock
-# server's with-scenario.rb starts a fresh simulator under the same api-scenarios-canonical preset, with the API
-# scenarios' bounds (30 seconds to start, 210 for the test, 5 to stop each process group), and runs that one test as the
-# runs above built it, from this SDK's source, not the package. The test checks the simulator the launcher names and
-# resets it empty itself. It passes only when the launcher exits 0 (the test passed, the journal is complete and every
-# process group it started is gone) and its TRX shows that one test, discovered once, with one passed result: total,
-# executed and passed 1. Its results go to filesystem-helpers beside the API scenarios' own, made only now that those
-# have returned, and are no part of them.
-filesystem_test="FilesTests.RemoteFileSystemTest.WholeFilesAreWrittenAndRead"
+# client.FileSystem runs against a real simulator rather than the loopback fakes of the runs above, which leave out the
+# two tests of TestCategory SharedSimulatorFilesystem: FilesTests.RemoteFileSystemTest.WholeFilesAreWrittenAndRead,
+# which writes a whole file and reads it back, then ExistenceAndFolderCreationFollowWhatIsThere, which asks what is
+# at a path and creates folders. Once the shared API scenarios have returned, on each framework, the two run one after
+# the other, each alone: the mock server's with-scenario.rb starts a fresh simulator under the same
+# api-scenarios-canonical preset, with the API scenarios' bounds (30 seconds to start, 210 for the test, 5 to stop each
+# process group), and runs that one test as the runs above built it, from this SDK's source, not the package. The test
+# checks the simulator the launcher names and resets it itself, empty or to the folder and file it starts from. It
+# passes only when the launcher exits 0 (the test passed, the journal is complete and every process group it started is
+# gone) and its TRX shows that one test, discovered once, with one passed result: total, executed and passed 1. Both
+# tests must pass on every framework, in that order. Their results go to filesystem-helpers/<framework>/<test> beside
+# the API scenarios' own, made only now that those have returned, and are no part of them.
+filesystem_tests=(WholeFilesAreWrittenAndRead ExistenceAndFolderCreationFollowWhatIsThere)
 filesystem_out="${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}/filesystem-helpers"
+filesystem_expected=()
+for framework in ${frameworks//;/ }; do
+  for name in "${filesystem_tests[@]}"; do
+    filesystem_expected+=("${framework}/${name}")
+  done
+done
 filesystem_passed=()
 for framework in ${frameworks//;/ }; do
-  filesystem_run="${filesystem_out}/${framework}/WholeFilesAreWrittenAndRead"
-  mkdir -p "${filesystem_run}" || exit 1
-  ruby "${FILES_CONTRACT_MOCK_SERVER}/with-scenario.rb" --scenario api-scenarios-canonical --out "${filesystem_run}/launcher" \
-    --startup-timeout 30 --consumer-timeout 210 --settle-timeout 5 -- \
-    dotnet test "${DIR}/sdk/FilesTests/FilesTests.csproj" --no-build --framework "${framework}" \
-    --filter "FullyQualifiedName=${filesystem_test}" --logger "trx;LogFileName=filesystem.trx" --results-directory "${filesystem_run}"
-  launcher_status=$?
-  if [[ "${launcher_status}" -ne 0 ]]; then
-    echo "${filesystem_test} on ${framework}: the launcher exited ${launcher_status}; see ${filesystem_run}" >&2
-    exit 1
-  fi
-  ruby -rrexml/document -e '
-    trx, expected = ARGV
-    abort("#{trx}: no TRX was written") unless File.file?(trx)
-    document = REXML::Document.new(File.read(trx))
-    tests = REXML::XPath.match(document, "//UnitTest").map do |test|
-      method = test.elements["TestMethod"]
-      [ test.attributes["id"], method && "#{method.attributes["className"]}.#{method.attributes["name"]}" ]
-    end
-    results = REXML::XPath.match(document, "//UnitTestResult").map { |result| [ result.attributes["testId"], result.attributes["outcome"] ] }
-    counters = REXML::XPath.first(document, "//ResultSummary/Counters")
-    counts = %w[total executed passed].to_h { |name| [ name, counters && counters.attributes[name] ] }
-    problems = []
-    problems << "it discovered #{tests.map(&:last).inspect}, not #{expected} once" unless tests.size == 1 && tests[0][1] == expected && !tests[0][0].to_s.empty?
-    problems << "its results are #{results.inspect}, not one passed result of that test" unless results.size == 1 && results[0] == [ tests.dig(0, 0), "Passed" ]
-    problems << "its counters are #{counts}, not total, executed and passed 1" unless counts.values.all?("1")
-    abort("#{trx}: #{problems.join("; ")}") unless problems.empty?
-  ' "${filesystem_run}/filesystem.trx" "${filesystem_test}" || exit 1
-  filesystem_passed+=("${framework}")
+  for name in "${filesystem_tests[@]}"; do
+    filesystem_test="FilesTests.RemoteFileSystemTest.${name}"
+    filesystem_run="${filesystem_out}/${framework}/${name}"
+    mkdir -p "${filesystem_run}" || exit 1
+    ruby "${FILES_CONTRACT_MOCK_SERVER}/with-scenario.rb" --scenario api-scenarios-canonical --out "${filesystem_run}/launcher" \
+      --startup-timeout 30 --consumer-timeout 210 --settle-timeout 5 -- \
+      dotnet test "${DIR}/sdk/FilesTests/FilesTests.csproj" --no-build --framework "${framework}" \
+      --filter "FullyQualifiedName=${filesystem_test}" --logger "trx;LogFileName=filesystem.trx" --results-directory "${filesystem_run}"
+    launcher_status=$?
+    if [[ "${launcher_status}" -ne 0 ]]; then
+      echo "${filesystem_test} on ${framework}: the launcher exited ${launcher_status}; see ${filesystem_run}" >&2
+      exit 1
+    fi
+    ruby -rrexml/document -e '
+      trx, expected = ARGV
+      abort("#{trx}: no TRX was written") unless File.file?(trx)
+      document = REXML::Document.new(File.read(trx))
+      tests = REXML::XPath.match(document, "//UnitTest").map do |test|
+        method = test.elements["TestMethod"]
+        [ test.attributes["id"], method && "#{method.attributes["className"]}.#{method.attributes["name"]}" ]
+      end
+      results = REXML::XPath.match(document, "//UnitTestResult").map { |result| [ result.attributes["testId"], result.attributes["outcome"] ] }
+      counters = REXML::XPath.first(document, "//ResultSummary/Counters")
+      counts = %w[total executed passed].to_h { |name| [ name, counters && counters.attributes[name] ] }
+      problems = []
+      problems << "it discovered #{tests.map(&:last).inspect}, not #{expected} once" unless tests.size == 1 && tests[0][1] == expected && !tests[0][0].to_s.empty?
+      problems << "its results are #{results.inspect}, not one passed result of that test" unless results.size == 1 && results[0] == [ tests.dig(0, 0), "Passed" ]
+      problems << "its counters are #{counts}, not total, executed and passed 1" unless counts.values.all?("1")
+      abort("#{trx}: #{problems.join("; ")}") unless problems.empty?
+    ' "${filesystem_run}/filesystem.trx" "${filesystem_test}" || exit 1
+    filesystem_passed+=("${framework}/${name}")
+  done
 done
-if [[ "${#filesystem_passed[@]}" -eq 0 || "${filesystem_passed[*]}" != "${frameworks//;/ }" ]]; then
-  echo "${filesystem_test} passed on ${filesystem_passed[*]:-no framework}, not on every one of ${frameworks}" >&2
+if [[ "${#filesystem_passed[@]}" -eq 0 || "${filesystem_passed[*]}" != "${filesystem_expected[*]}" ]]; then
+  echo "FilesTests.RemoteFileSystemTest passed ${filesystem_passed[*]:-nothing}, not each of ${filesystem_expected[*]:-its simulator tests on ${frameworks}} in turn" >&2
   exit 1
 fi
-echo "${filesystem_test}: passed against the simulator on ${filesystem_passed[*]}"
+echo "FilesTests.RemoteFileSystemTest: passed against the simulator as ${filesystem_passed[*]}"

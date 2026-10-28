@@ -235,32 +235,41 @@ namespace FilesTests
             }
         }
 
+        // One client looks up paths and creates folders against the simulator test.sh starts for this test alone
+        // (SharedSimulator), which holds the folder a-folder and the file a-file on a site that creates a missing
+        // parent folder only when asked: what the SDK finds follows what is there, and the folder it creates is there
+        // afterwards, with the missing parent the SDK asked for (mkdir_parents), both read apart from the SDK.
         [TestMethod]
         [Timeout(60000)]
+        [TestCategory("SharedSimulatorFilesystem")]
         public async Task ExistenceAndFolderCreationFollowWhatIsThere()
         {
-            using (var site = new LoopbackSite("key-a", "11"))
+            using (SharedSimulator simulator = await SharedSimulator.StartWithFolderFixtureAsync())
             {
-                site.On("GET", "/file_actions/metadata/*", request => request.Path.StartsWith("/file_actions/metadata/a-file")
-                    ? LoopbackSite.Json("{\"path\":\"a-file\",\"type\":\"file\"}")
-                    : request.Path.StartsWith("/file_actions/metadata/a-folder")
-                        ? LoopbackSite.Json("{\"path\":\"a-folder\",\"type\":\"directory\"}")
-                        : LoopbackSite.Json("{\"error\":\"Not Found\",\"http-code\":404,\"type\":\"not-found/file-not-found\"}", status: 404));
-                site.On("POST", "/folders/*", request => request.Path.StartsWith("/folders/new")
-                    ? LoopbackSite.Json("{\"path\":\"new\",\"type\":\"directory\"}")
-                    : LoopbackSite.Json("{\"error\":\"Destination exists\",\"http-code\":422,\"type\":\"processing-failure/destination-exists\"}", status: 422));
-                RemoteFileSystem files = FilesClient.Create(site.Configuration()).FileSystem;
+                Assert.IsNull(await simulator.TypeAtAsync("new"), "Nothing is at new before the SDK creates it.");
+                var bodies = new RequestBodies(simulator.Url, "/api/rest/v1/folders/new/deeper");
+                FilesClient client = simulator.CreateClient(bodies);
+                try
+                {
+                    RemoteFileSystem files = client.FileSystem;
 
-                Assert.IsTrue(await files.FileExistsAsync("a-file"));
-                Assert.IsFalse(await files.FileExistsAsync("a-folder"));
-                Assert.IsFalse(await files.FileExistsAsync("nothing"));
-                Assert.IsTrue(await files.DirectoryExistsAsync("a-folder"));
-                Assert.IsFalse(await files.DirectoryExistsAsync("a-file"));
-                await files.CreateDirectoryAsync("new/deeper");
-                await files.CreateDirectoryAsync("a-folder");
-                await Assert.ThrowsExactlyAsync<IOException>(() => files.CreateDirectoryAsync("a-file"));
+                    Assert.IsTrue(await files.FileExistsAsync("a-file"));
+                    Assert.IsFalse(await files.FileExistsAsync("a-folder"));
+                    Assert.IsFalse(await files.FileExistsAsync("nothing"));
+                    Assert.IsTrue(await files.DirectoryExistsAsync("a-folder"));
+                    Assert.IsFalse(await files.DirectoryExistsAsync("a-file"));
+                    await files.CreateDirectoryAsync("new/deeper");
+                    await files.CreateDirectoryAsync("a-folder");
+                    await Assert.ThrowsExactlyAsync<IOException>(() => files.CreateDirectoryAsync("a-file"));
+                }
+                finally
+                {
+                    await client.DisposeAsync();
+                }
 
-                StringAssert.Contains(site.Requests.First(request => request.Path.StartsWith("/folders/new")).Body, "\"mkdir_parents\":true");
+                Assert.AreEqual("directory", await simulator.TypeAtAsync("new"), "The missing parent is created with the folder.");
+                Assert.AreEqual("directory", await simulator.TypeAtAsync("new/deeper"));
+                StringAssert.Contains(bodies.FirstBody(), "\"mkdir_parents\":true");
             }
         }
 
@@ -336,18 +345,25 @@ namespace FilesTests
             return FilesClient.Create(server.Site.Configuration());
         }
 
-        // The simulator with-scenario.rb started for this test, which test.sh runs there alone, as the launcher names it.
+        // The simulator with-scenario.rb started for the test, which test.sh runs there alone, as the launcher names it.
         // Before anything is sent, its URL must be http://HOST:PORT on one loopback address, and its schema SHA-256, instance
         // and synthetic API key of the launcher's forms; then readiness there must be this run's simulation server (contract
-        // version 3, that schema and instance), which is reset to an empty state of its own and must then report the reset's
-        // new epoch. Without that simulator the test fails: it never falls back to another service. It also reads a file's
-        // stored bytes apart from the SDK (StoredBytesAsync). Its own requests name themselves (OracleAgent), take no proxy,
-        // follow no redirect and read a bounded response, and only a download's descriptor carries the synthetic key.
+        // version 3, that schema and instance), which is reset to a state of its own, empty (StartAsync) or with a
+        // folder and a file on a site that creates a missing parent only when asked (StartWithFolderFixtureAsync), and
+        // must then report the reset's new epoch. Without that simulator the test fails: it never falls back to another
+        // service. It also reads what is at a path (TypeAtAsync) and a file's stored bytes (StoredBytesAsync) apart from
+        // the SDK. Its own requests name themselves (OracleAgent), take no proxy, follow no redirect and read a bounded
+        // response, and only its lookups and a download's descriptor carry the synthetic key.
         private sealed class SharedSimulator : IDisposable
         {
             private const string OracleAgent = "files-dotnet-filesystem-oracle/1";
-            // The most of a response that is read: readiness, the reset, a download's descriptor or the file itself.
+            // The most of a response that is read: readiness, the reset, a lookup, a download's descriptor or the file
+            // itself.
             private const int MaxResponseBytes = 1024 * 1024;
+            // The reset of StartWithFolderFixtureAsync: a site that creates a missing parent folder only when a request asks
+            // for it (mkdir_parents), holding the folder a-folder and the file a-file.
+            private const string FolderFixture = "{\"profile\":{\"site_policy\":{\"always_mkdir_parents\":false}},"
+                + "\"fixtures\":{\"folders\":[\"a-folder\"],\"files\":[{\"path\":\"a-file\",\"text\":\"kept\"}]}}";
             private readonly System.Net.Http.HttpClient http;
 
             private SharedSimulator(Uri url, string apiKey)
@@ -368,7 +384,20 @@ namespace FilesTests
             // The launcher's synthetic key, the only credential sent, and only to Url.
             internal string ApiKey { get; }
 
-            internal static async Task<SharedSimulator> StartAsync()
+            // This run's simulator, reset to an empty state with no fixtures and the default profile.
+            internal static Task<SharedSimulator> StartAsync()
+            {
+                return StartAsync("{}", strictParents: false);
+            }
+
+            // This run's simulator, reset to FolderFixture; readiness after the reset must also report a site that creates a
+            // missing parent folder only when asked.
+            internal static Task<SharedSimulator> StartWithFolderFixtureAsync()
+            {
+                return StartAsync(FolderFixture, strictParents: true);
+            }
+
+            private static async Task<SharedSimulator> StartAsync(string reset, bool strictParents)
             {
                 string url = Launcher("FILES_MOCK_SERVER_URL");
                 string host = Launcher("FILES_MOCK_SERVER_HOST");
@@ -404,7 +433,7 @@ namespace FilesTests
                 var simulator = new SharedSimulator(uri, apiKey);
                 try
                 {
-                    await simulator.ResetAsync(schema, instance);
+                    await simulator.ResetAsync(schema, instance, reset, strictParents);
                 }
                 catch
                 {
@@ -415,11 +444,47 @@ namespace FilesTests
             }
 
             // The SDK's own client for this simulator alone, with the launcher's key, through a real transport that takes no
-            // proxy.
-            internal FilesClient CreateClient()
+            // proxy; with OBSERVED, each request it sends passes a BodyObserver first.
+            internal FilesClient CreateClient(RequestBodies observed = null)
             {
                 return FilesClient.Create(new FilesConfiguration { BaseUrl = Url.GetLeftPart(UriPartial.Authority), ApiKey = ApiKey },
-                    HttpTransport.FromHandlerFactory(() => new System.Net.Http.HttpClientHandler { UseProxy = false }));
+                    observed == null
+                        ? HttpTransport.FromHandlerFactory(() => new System.Net.Http.HttpClientHandler { UseProxy = false })
+                        : HttpTransport.FromHandlerFactory(() => new BodyObserver(observed)
+                        {
+                            InnerHandler = new System.Net.Http.HttpClientHandler { UseProxy = false, AllowAutoRedirect = false },
+                        }));
+            }
+
+            // What the simulator holds at PATH, read apart from the SDK (GET /file_actions/metadata/{path}): "file",
+            // "directory", or null when nothing is there.
+            internal async Task<string> TypeAtAsync(string path)
+            {
+                string escaped = string.Join("/", path.Split('/').Select(segment => Uri.EscapeDataString(segment)));
+                using (var lookup = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Get, new Uri(Url, "/api/rest/v1/file_actions/metadata/" + escaped)))
+                {
+                    lookup.Headers.Add("X-FilesAPI-Key", ApiKey);
+                    using (System.Net.Http.HttpResponseMessage response = await http.SendAsync(lookup))
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                        {
+                            return null;
+                        }
+                        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                        {
+                            Assert.Fail($"GET /file_actions/metadata/{path} answered HTTP {(int)response.StatusCode}");
+                        }
+                        using (System.Text.Json.JsonDocument document = System.Text.Json.JsonDocument.Parse(await response.Content.ReadAsStringAsync()))
+                        {
+                            string type = Text(document.RootElement, "type");
+                            if (Text(document.RootElement, "path") != path || (type != "file" && type != "directory"))
+                            {
+                                Assert.Fail($"GET /file_actions/metadata/{path} did not describe a file or folder at {path}");
+                            }
+                            return type;
+                        }
+                    }
+                }
             }
 
             // The file at PATH as the simulator stores it, read apart from the SDK: its download descriptor
@@ -448,17 +513,22 @@ namespace FilesTests
             }
 
             // Readiness must be this run's server, as the launcher accepted it (with-scenario.rb#check_ready); the reset then
-            // empties it, with no fixtures and the default profile, and readiness must then report the reset's new epoch.
-            private async Task ResetAsync(string schema, string instance)
+            // gives it RESET's state, and readiness must then report the reset's new epoch and, with STRICTPARENTS, a site
+            // that creates a missing parent folder only when asked.
+            private async Task ResetAsync(string schema, string instance, string reset, bool strictParents)
             {
                 System.Text.Json.JsonElement before = await ControlAsync("ready");
                 CheckReady(before, schema, instance, "before the reset");
-                long? epoch = Number(await ControlAsync("reset"), "epoch");
+                long? epoch = Number(await ControlAsync("reset", reset), "epoch");
                 System.Text.Json.JsonElement after = await ControlAsync("ready");
                 CheckReady(after, schema, instance, "after the reset");
                 if (epoch == null || epoch <= Number(before, "epoch") || Number(after, "epoch") != epoch)
                 {
                     Assert.Fail($"the reset of {Url} did not begin a new epoch that readiness then reports");
+                }
+                if (strictParents && !CreatesParentsOnlyWhenAsked(after))
+                {
+                    Assert.Fail($"readiness on {Url} after the reset does not report a site that creates a missing parent folder only when asked (namespace.site_policy.always_mkdir_parents false)");
                 }
             }
 
@@ -471,14 +541,14 @@ namespace FilesTests
                 }
             }
 
-            // A control request of the simulator: GET /ready, or POST /reset to an empty state.
-            private Task<System.Text.Json.JsonElement> ControlAsync(string name)
+            // A control request of the simulator: GET /ready, or POST /reset with BODY, {} for an empty state.
+            private Task<System.Text.Json.JsonElement> ControlAsync(string name, string body = "{}")
             {
                 bool reset = name == "reset";
                 var request = new System.Net.Http.HttpRequestMessage(reset ? System.Net.Http.HttpMethod.Post : System.Net.Http.HttpMethod.Get, new Uri(Url, "/__files_mock/v1/" + name));
                 if (reset)
                 {
-                    request.Content = new System.Net.Http.StringContent("{}", System.Text.Encoding.UTF8, "application/json");
+                    request.Content = new System.Net.Http.StringContent(body, System.Text.Encoding.UTF8, "application/json");
                 }
                 return JsonAsync(request, $"the simulator's {name}");
             }
@@ -518,6 +588,16 @@ namespace FilesTests
                     && value.ValueKind == System.Text.Json.JsonValueKind.Number && value.TryGetInt64(out long number) ? number : (long?)null;
             }
 
+            // Whether READY, readiness, reports namespace.site_policy.always_mkdir_parents false: a site that creates a
+            // missing parent folder only when a request asks for it.
+            private static bool CreatesParentsOnlyWhenAsked(System.Text.Json.JsonElement ready)
+            {
+                return ready.ValueKind == System.Text.Json.JsonValueKind.Object && ready.TryGetProperty("namespace", out System.Text.Json.JsonElement space)
+                    && space.ValueKind == System.Text.Json.JsonValueKind.Object && space.TryGetProperty("site_policy", out System.Text.Json.JsonElement policy)
+                    && policy.ValueKind == System.Text.Json.JsonValueKind.Object && policy.TryGetProperty("always_mkdir_parents", out System.Text.Json.JsonElement always)
+                    && always.ValueKind == System.Text.Json.JsonValueKind.False;
+            }
+
             // The launcher's value of NAME; the test fails without it.
             private static string Launcher(string name)
             {
@@ -532,6 +612,99 @@ namespace FilesTests
             public void Dispose()
             {
                 http.Dispose();
+            }
+        }
+
+        // The body of the first POST to one path on one simulator, as the SDK sent it through a BodyObserver.
+        private sealed class RequestBodies
+        {
+            private readonly object gate = new object();
+            private readonly Uri origin;
+            private readonly string path;
+            private string first;
+            private string refused;
+
+            // ORIGIN's scheme, host and port, and PATH once unescaped, name the requests whose bodies are kept.
+            internal RequestBodies(Uri origin, string path)
+            {
+                this.origin = origin;
+                this.path = path;
+            }
+
+            // Whether REQUEST is a POST to that path on that origin.
+            internal bool Matches(System.Net.Http.HttpRequestMessage request)
+            {
+                Uri uri = request.RequestUri;
+                return request.Method == System.Net.Http.HttpMethod.Post && uri != null && uri.IsAbsoluteUri && uri.Scheme == origin.Scheme
+                    && uri.Host == origin.Host && uri.Port == origin.Port && Uri.UnescapeDataString(uri.AbsolutePath) == path;
+            }
+
+            internal void Keep(string body)
+            {
+                lock (gate)
+                {
+                    if (first == null)
+                    {
+                        first = body;
+                    }
+                }
+            }
+
+            // A body that could not be read as it was sent, which fails the test.
+            internal void Refuse(string reason)
+            {
+                lock (gate)
+                {
+                    if (refused == null)
+                    {
+                        refused = reason;
+                    }
+                }
+            }
+
+            // The first body kept; the test fails when there was none, or one could not be read.
+            internal string FirstBody()
+            {
+                lock (gate)
+                {
+                    if (refused != null)
+                    {
+                        Assert.Fail(refused);
+                    }
+                    if (first == null)
+                    {
+                        Assert.Fail($"the SDK sent no POST {path}");
+                    }
+                    return first;
+                }
+            }
+        }
+
+        // The first handler of a transport that keeps, for BODIES, the body of each request it names as the SDK sent it,
+        // then passes on that same request with its own cancellation, changing nothing.
+        private sealed class BodyObserver : System.Net.Http.DelegatingHandler
+        {
+            private readonly RequestBodies bodies;
+
+            internal BodyObserver(RequestBodies bodies)
+            {
+                this.bodies = bodies;
+            }
+
+            protected override async Task<System.Net.Http.HttpResponseMessage> SendAsync(System.Net.Http.HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                if (bodies.Matches(request))
+                {
+                    if (request.Content is System.Net.Http.StringContent content)
+                    {
+                        bodies.Keep(await content.ReadAsStringAsync(cancellationToken));
+                    }
+                    else
+                    {
+                        bodies.Refuse($"POST {request.RequestUri.AbsolutePath} sent {(request.Content == null ? "no body" : request.Content.GetType().Name)}, not the JSON text the test reads");
+                    }
+                }
+                return await base.SendAsync(request, cancellationToken);
             }
         }
     }

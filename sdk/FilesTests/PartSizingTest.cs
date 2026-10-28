@@ -954,9 +954,7 @@ namespace FilesTests
 
         [TestMethod]
         [Timeout(60000)]
-        [DataRow(false, DisplayName = "Every upload completes")]
-        [DataRow(true, DisplayName = "One upload is cancelled; the others complete")]
-        public async Task StreamsSharingATinyLimiterReadOnlyWhatItsBufferSpaceCovers(bool cancelOne)
+        public async Task StreamsSharingATinyLimiterReadOnlyWhatItsBufferSpaceCovers()
         {
             using (var serial = new UploadServer("key-a", "11"))
             using (var chosen = new UploadServer("key-b", "22"))
@@ -975,7 +973,11 @@ namespace FilesTests
                 MeteredStream serialSource = null;
                 MeteredStream chosenSource = null;
                 // Each byte a stream gives goes into a buffer the limiter has handed out, and stays there until its site
-                // has accepted it. The limiter is read first: any release since was preceded by its site's acceptance.
+                // has accepted it: every part of every upload here is accepted, so no buffer is ever let go unsent. The
+                // streams are read, and measured, one read at a time (meter), so no stream moves while a measurement is
+                // taken. The limiter is read first: any release since was preceded by its site's acceptance, and nothing
+                // has been read into any space reserved since.
+                var meter = new object();
                 Action<string, int> check = (name, count) =>
                 {
                     long charged = limiter.BufferedBytes;
@@ -988,39 +990,65 @@ namespace FilesTests
                 byte[] a = Pattern(50);
                 byte[] b = Pattern(45, seed: 3);
                 byte[] c = Pattern(60, seed: 5);
-                serialSource = new MeteredStream("serial", a, 5, check);
-                chosenSource = new MeteredStream("chosen", b, 7, check);
-                var spooledSource = new MeteredStream("spooled", c, 100, check);
-                var cancellation = new CancellationTokenSource();
-                if (cancelOne)
-                {
-                    chosen.RespondToPart = async request =>
-                    {
-                        await Task.Delay(5);
-                        if (request.Number == 2)
-                        {
-                            cancellation.Cancel();
-                        }
-                        return UploadServer.Accept(request);
-                    };
-                }
+                serialSource = new MeteredStream("serial", a, 5, meter, check);
+                chosenSource = new MeteredStream("chosen", b, 7, meter, check);
+                var spooledSource = new MeteredStream("spooled", c, 100, meter, check);
 
                 Task<UploadResult> uploadA = Client(serial).Transfers.UploadStreamAsync(serialSource, "serial.bin", new UploadOptions { Limiter = limiter });
-                Task<UploadResult> uploadB = Client(chosen).Transfers.UploadStreamAsync(chosenSource, "chosen.bin", new UploadOptions { Limiter = limiter, AutomaticPartSizing = GrowingFrom(8, max: 8, unknownStart: 8) }, cancellation.Token);
+                Task<UploadResult> uploadB = Client(chosen).Transfers.UploadStreamAsync(chosenSource, "chosen.bin", new UploadOptions { Limiter = limiter, AutomaticPartSizing = GrowingFrom(8, max: 8, unknownStart: 8) });
                 Task<UploadResult> uploadC = Client(spooled).Transfers.UploadStreamAsync(spooledSource, "spooled.bin", new UploadOptions { Limiter = limiter, SpoolMaxBytes = 100 });
 
                 AssertExactUpload(serial, await Within(uploadA), a, "serial.bin");
+                AssertExactUpload(chosen, await Within(uploadB), b, "chosen.bin");
                 AssertExactUpload(spooled, await Within(uploadC), c, "spooled.bin");
-                if (cancelOne)
-                {
-                    await AssertCancelledPromptly(uploadB);
-                    Assert.AreEqual(0, chosen.Finishes.Count);
-                }
-                else
-                {
-                    AssertExactUpload(chosen, await Within(uploadB), b, "chosen.bin");
-                }
                 Assert.IsTrue(overdrawn.IsEmpty, string.Join("; ", overdrawn));
+                Assert.AreEqual(0, limiter.BufferedBytes + limiter.ActiveRequests + limiter.QueuedBufferReservations + limiter.QueuedRequests, "Everything is released.");
+                Assert.IsTrue(serialSource.CanRead && chosenSource.CanRead && spooledSource.CanRead, "Borrowed streams are left open.");
+            }
+        }
+
+        // The same three uploads, but the one choosing its sizes takes all sixteen bytes of buffer space first, in four-byte
+        // parts: one its site holds unanswered, and parts read ahead, waiting to be sent, with its next part waiting for
+        // space at the front of the limiter's queue. The others queue behind it without reading anything. Cancelling it
+        // gives up all of its space and its place in the queue, and only then do the others read, each its whole stream.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task CancellingAStreamUploadGivesItsBufferSpaceToTheUploadsQueuedBehindIt()
+        {
+            using (var serial = new UploadServer("key-a", "11"))
+            using (var chosen = new UploadServer("key-b", "22") { HoldParts = true })
+            using (var spooled = new UploadServer("key-c", "33"))
+            {
+                serial.PartSize = number => 8;
+                UseAws(chosen, 4, 16, 100, 1 * KiB);
+                var limiter = new TransferLimiter(maxConcurrentRequests: 2, maxBufferedBytes: 16);
+                byte[] a = Pattern(50);
+                byte[] b = Pattern(45, seed: 3);
+                byte[] c = Pattern(60, seed: 5);
+                var serialSource = new ShortReadStream(a);
+                var chosenSource = new ShortReadStream(b);
+                var spooledSource = new ShortReadStream(c);
+                var cancellation = new CancellationTokenSource();
+                Func<string> state = () => $"read {serialSource.BytesRead}/{chosenSource.BytesRead}/{spooledSource.BytesRead}, {limiter.BufferedBytes} bytes charged, {limiter.QueuedBufferReservations} waiting for space, {chosen.PartsInFlight} chosen parts held";
+
+                Task<UploadResult> uploadB = Client(chosen).Transfers.UploadStreamAsync(chosenSource, "chosen.bin", new UploadOptions { Limiter = limiter, AutomaticPartSizing = GrowingFrom(4, max: 4, unknownStart: 4), MaxReadyParts = 4 }, cancellation.Token);
+                await chosen.WaitUntil(site => site.PartsInFlight >= 1 && limiter.BufferedBytes == 16 && limiter.QueuedBufferReservations == 1, "the chosen upload holds all of the buffer space and waits for more", state);
+                Task<UploadResult> uploadA = Client(serial).Transfers.UploadStreamAsync(serialSource, "serial.bin", new UploadOptions { Limiter = limiter });
+                await serial.WaitUntil(site => limiter.QueuedBufferReservations == 2, "the serial upload waits for buffer space", state);
+                Task<UploadResult> uploadC = Client(spooled).Transfers.UploadStreamAsync(spooledSource, "spooled.bin", new UploadOptions { Limiter = limiter, SpoolMaxBytes = 100 });
+                await spooled.WaitUntil(site => limiter.QueuedBufferReservations == 3, "the spooled upload waits for buffer space", state);
+
+                Assert.AreEqual(16, chosenSource.BytesRead, "The chosen upload read only what its space holds.");
+                Assert.AreEqual(0, serialSource.BytesRead + spooledSource.BytesRead, "The queued uploads read nothing without buffer space.");
+                Assert.AreEqual(0, serial.Parts.Count + spooled.Site.Requests.Count, "Nor do they send anything.");
+                Assert.AreEqual(16, limiter.BufferedBytes, state());
+
+                cancellation.Cancel();
+                await AssertCancelledPromptly(uploadB);
+                AssertExactUpload(serial, await Within(uploadA), a, "serial.bin");
+                AssertExactUpload(spooled, await Within(uploadC), c, "spooled.bin");
+                Assert.AreEqual(0, chosen.Finishes.Count, "The cancelled upload is never completed.");
+                Assert.AreEqual(16, chosenSource.BytesRead, "Nothing more is read from the cancelled upload's stream.");
                 Assert.AreEqual(0, limiter.BufferedBytes + limiter.ActiveRequests + limiter.QueuedBufferReservations + limiter.QueuedRequests, "Everything is released.");
                 Assert.IsTrue(serialSource.CanRead && chosenSource.CanRead && spooledSource.CanRead, "Borrowed streams are left open.");
             }
@@ -1476,20 +1504,24 @@ namespace FilesTests
         }
 
         // A forward-only stream whose reads return at most maxRead bytes; onRead sees each read's size before it is read.
+        // Each read, onRead included, holds meter, which streams measured together share: none of them moves while onRead
+        // looks at them.
         private sealed class MeteredStream : Stream
         {
             private readonly string name;
             private readonly byte[] data;
             private readonly int maxRead;
+            private readonly object meter;
             private readonly Action<string, int> onRead;
             private int position;
             private bool disposed;
 
-            public MeteredStream(string name, byte[] data, int maxRead, Action<string, int> onRead)
+            public MeteredStream(string name, byte[] data, int maxRead, object meter, Action<string, int> onRead)
             {
                 this.name = name;
                 this.data = data;
                 this.maxRead = maxRead;
+                this.meter = meter;
                 this.onRead = onRead;
             }
 
@@ -1510,11 +1542,14 @@ namespace FilesTests
 
             public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
             {
-                int length = Math.Min(Math.Min(count, maxRead), data.Length - position);
-                onRead(name, count);
-                Array.Copy(data, position, buffer, offset, length);
-                Volatile.Write(ref position, position + length);
-                return Task.FromResult(length);
+                lock (meter)
+                {
+                    int length = Math.Min(Math.Min(count, maxRead), data.Length - position);
+                    onRead(name, count);
+                    Array.Copy(data, position, buffer, offset, length);
+                    Volatile.Write(ref position, position + length);
+                    return Task.FromResult(length);
+                }
             }
 
             public override void Flush()
