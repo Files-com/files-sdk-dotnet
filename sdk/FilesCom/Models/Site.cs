@@ -432,6 +432,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("immutable_files_set_at", null);
             }
+            if (!this.attributes.ContainsKey("integration_centric_remote_server_admin_access"))
+            {
+                this.attributes.Add("integration_centric_remote_server_admin_access", null);
+            }
             if (!this.attributes.ContainsKey("include_password_in_welcome_email"))
             {
                 this.attributes.Add("include_password_in_welcome_email", false);
@@ -2050,6 +2054,17 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible, user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice modes use the preference or their default.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("integration_centric_remote_server_admin_access")]
+        public string IntegrationCentricRemoteServerAdminAccess
+        {
+            get { return (string)attributes["integration_centric_remote_server_admin_access"]; }
+            private set { attributes["integration_centric_remote_server_admin_access"] = value; }
+        }
+
+        /// <summary>
         /// Include password in emails to new users?
         /// </summary>
         [JsonInclude]
@@ -3341,6 +3356,7 @@ namespace FilesCom.Models
         ///   as2_message_retention_days - int64 - Number of days to retain AS2 messages (incoming and outgoing).
         ///   file_activity_events_enabled - boolean - If true, file operations produce file_action.activity.v1 EventChannel events in all workspaces. Defaults to false; subscription filters and workspace access still control delivery.
         ///   username_display - string - How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
+        ///   integration_centric_remote_server_admin_access - string - Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible, user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice modes use the preference or their default.
         ///   session_expiry_minutes - int64 - Session expiry in minutes
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
@@ -3711,6 +3727,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("username_display", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: username_display is null, which cannot be sent" : "Bad parameter: username_display must be of type string", "username_display");
+            }
+            if (parameters.TryGetValue("integration_centric_remote_server_admin_access", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: integration_centric_remote_server_admin_access is null, which cannot be sent" : "Bad parameter: integration_centric_remote_server_admin_access must be of type string", "integration_centric_remote_server_admin_access");
             }
             if (parameters.TryGetValue("session_expiry_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {

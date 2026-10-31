@@ -140,6 +140,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("server_type", null);
             }
+            if (!this.attributes.ContainsKey("site_admin_access"))
+            {
+                this.attributes.Add("site_admin_access", false);
+            }
+            if (!this.attributes.ContainsKey("effective_site_admin_access"))
+            {
+                this.attributes.Add("effective_site_admin_access", false);
+            }
+            if (!this.attributes.ContainsKey("user_id"))
+            {
+                this.attributes.Add("user_id", null);
+            }
             if (!this.attributes.ContainsKey("workspace_id"))
             {
                 this.attributes.Add("workspace_id", null);
@@ -359,10 +371,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("supports_versioning"))
             {
                 this.attributes.Add("supports_versioning", false);
-            }
-            if (!this.attributes.ContainsKey("user_id"))
-            {
-                this.attributes.Add("user_id", null);
             }
             if (!this.attributes.ContainsKey("password"))
             {
@@ -754,6 +762,38 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["server_type"]; }
             set { attributes["server_type"] = value; unsaved.Add("server_type"); }
+        }
+
+        /// <summary>
+        /// Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default. Only the owner may change it when the Site policy allows user choice.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("site_admin_access")]
+        public bool SiteAdminAccess
+        {
+            get { return attributes["site_admin_access"] == null ? false : (bool)attributes["site_admin_access"]; }
+            set { attributes["site_admin_access"] = value; unsaved.Add("site_admin_access"); }
+        }
+
+        /// <summary>
+        /// Whether Site and Workspace Administrators can access this Remote Server under the current Site policy.
+        /// </summary>
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("effective_site_admin_access")]
+        public bool EffectiveSiteAdminAccess
+        {
+            get { return attributes["effective_site_admin_access"] == null ? false : (bool)attributes["effective_site_admin_access"]; }
+            set { attributes["effective_site_admin_access"] = value; unsaved.Add("effective_site_admin_access"); }
+        }
+
+        /// <summary>
+        /// ID of the user who owns this Remote Server, if any.
+        /// </summary>
+        [JsonPropertyName("user_id")]
+        public Nullable<Int64> UserId
+        {
+            get { return (Nullable<Int64>)attributes["user_id"]; }
+            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
         }
 
         /// <summary>
@@ -1316,16 +1356,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// User ID.  Provide a value of `0` to operate the current session's user.
-        /// </summary>
-        [JsonPropertyName("user_id")]
-        public Nullable<Int64> UserId
-        {
-            get { return (Nullable<Int64>)attributes["user_id"]; }
-            set { attributes["user_id"] = value; unsaved.Add("user_id"); }
-        }
-
-        /// <summary>
         /// Password, if needed.
         /// </summary>
         [JsonPropertyName("password")]
@@ -1720,6 +1750,7 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
         ///   server_type - string - Remote server type.
+        ///   site_admin_access - boolean - Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default. Only the owner may change it when the Site policy allows user choice.
         ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
         ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
         ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
@@ -1817,6 +1848,7 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
         ///   server_type - string - Remote server type.
+        ///   site_admin_access - boolean - Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default. Only the owner may change it when the Site policy allows user choice.
         ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
         ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
         ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
@@ -2159,6 +2191,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_type is null, which cannot be sent" : "Bad parameter: server_type must be of type string", "server_type");
             }
+            if (parameters.TryGetValue("site_admin_access", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_admin_access is null, which cannot be sent" : "Bad parameter: site_admin_access must be of type bool", "site_admin_access");
+            }
             if (parameters.TryGetValue("sharepoint_client_id", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_id is null, which cannot be sent" : "Bad parameter: sharepoint_client_id must be of type string", "sharepoint_client_id");
@@ -2271,8 +2307,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "user_id", "password", "private_key", "private_key_passphrase", "reset_authentication", "sharepoint_client_certificate", "sharepoint_client_secret", "ssl_certificate", "aws_secret_key", "azure_blob_storage_access_key", "azure_blob_storage_sas_token", "azure_files_storage_access_key", "azure_files_storage_sas_token", "backblaze_b2_application_key", "backblaze_b2_key_id", "cloudflare_secret_key", "filebase_secret_key", "google_cloud_storage_credentials_json", "google_cloud_storage_s3_compatible_secret_key", "linode_secret_key", "s3_compatible_secret_key", "wasabi_secret_key", "allow_relative_paths", "aws_access_key", "azure_blob_storage_account", "azure_blob_storage_container", "azure_blob_storage_dns_suffix", "azure_blob_storage_hierarchical_namespace", "azure_files_storage_account", "azure_files_storage_dns_suffix", "azure_files_storage_share_name", "backblaze_b2_bucket", "backblaze_b2_s3_endpoint", "buffer_uploads", "cloudflare_access_key", "cloudflare_bucket", "cloudflare_endpoint", "description", "dropbox_teams", "enable_dedicated_ips", "filebase_access_key", "filebase_bucket", "files_api_key", "files_agent_permission_set", "files_agent_root", "files_agent_version", "outbound_agent_id", "custom_domain_id", "google_cloud_storage_authentication_method", "google_cloud_storage_bucket", "google_cloud_storage_oauth_scope", "google_cloud_storage_project_id", "google_cloud_storage_s3_compatible_access_key", "hostname", "linode_access_key", "linode_bucket", "linode_region", "max_connections", "name", "one_drive_account_type", "pin_to_site_region", "port", "upload_staging_path", "remote_server_credential_id", "s3_assume_role_arn", "s3_assume_role_duration_seconds", "s3_bucket", "s3_compatible_access_key", "s3_compatible_bucket", "s3_compatible_endpoint", "s3_compatible_region", "s3_compatible_virtual_hosted_style", "s3_kms_key_id", "s3_region", "server_certificate", "server_host_key", "server_type", "sharepoint_client_id", "sharepoint_site_url", "sharepoint_tenant_id", "ssl", "username", "wasabi_access_key", "wasabi_bucket", "wasabi_region", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "password", "private_key", "private_key_passphrase", "reset_authentication", "sharepoint_client_certificate", "sharepoint_client_secret", "ssl_certificate", "aws_secret_key", "azure_blob_storage_access_key", "azure_blob_storage_sas_token", "azure_files_storage_access_key", "azure_files_storage_sas_token", "backblaze_b2_application_key", "backblaze_b2_key_id", "cloudflare_secret_key", "filebase_secret_key", "google_cloud_storage_credentials_json", "google_cloud_storage_s3_compatible_secret_key", "linode_secret_key", "s3_compatible_secret_key", "wasabi_secret_key", "allow_relative_paths", "aws_access_key", "azure_blob_storage_account", "azure_blob_storage_container", "azure_blob_storage_dns_suffix", "azure_blob_storage_hierarchical_namespace", "azure_files_storage_account", "azure_files_storage_dns_suffix", "azure_files_storage_share_name", "backblaze_b2_bucket", "backblaze_b2_s3_endpoint", "buffer_uploads", "cloudflare_access_key", "cloudflare_bucket", "cloudflare_endpoint", "description", "dropbox_teams", "enable_dedicated_ips", "filebase_access_key", "filebase_bucket", "files_api_key", "files_agent_permission_set", "files_agent_root", "files_agent_version", "outbound_agent_id", "custom_domain_id", "google_cloud_storage_authentication_method", "google_cloud_storage_bucket", "google_cloud_storage_oauth_scope", "google_cloud_storage_project_id", "google_cloud_storage_s3_compatible_access_key", "hostname", "linode_access_key", "linode_bucket", "linode_region", "max_connections", "name", "one_drive_account_type", "pin_to_site_region", "port", "upload_staging_path", "remote_server_credential_id", "s3_assume_role_arn", "s3_assume_role_duration_seconds", "s3_bucket", "s3_compatible_access_key", "s3_compatible_bucket", "s3_compatible_endpoint", "s3_compatible_region", "s3_compatible_virtual_hosted_style", "s3_kms_key_id", "s3_region", "server_certificate", "server_host_key", "server_type", "sharepoint_client_id", "sharepoint_site_url", "sharepoint_tenant_id", "ssl", "username", "wasabi_access_key", "wasabi_bucket", "wasabi_region" };
+        private static readonly string[] CreateParameterNames = { "user_id", "password", "private_key", "private_key_passphrase", "reset_authentication", "sharepoint_client_certificate", "sharepoint_client_secret", "ssl_certificate", "aws_secret_key", "azure_blob_storage_access_key", "azure_blob_storage_sas_token", "azure_files_storage_access_key", "azure_files_storage_sas_token", "backblaze_b2_application_key", "backblaze_b2_key_id", "cloudflare_secret_key", "filebase_secret_key", "google_cloud_storage_credentials_json", "google_cloud_storage_s3_compatible_secret_key", "linode_secret_key", "s3_compatible_secret_key", "wasabi_secret_key", "allow_relative_paths", "aws_access_key", "azure_blob_storage_account", "azure_blob_storage_container", "azure_blob_storage_dns_suffix", "azure_blob_storage_hierarchical_namespace", "azure_files_storage_account", "azure_files_storage_dns_suffix", "azure_files_storage_share_name", "backblaze_b2_bucket", "backblaze_b2_s3_endpoint", "buffer_uploads", "cloudflare_access_key", "cloudflare_bucket", "cloudflare_endpoint", "description", "dropbox_teams", "enable_dedicated_ips", "filebase_access_key", "filebase_bucket", "files_api_key", "files_agent_permission_set", "files_agent_root", "files_agent_version", "outbound_agent_id", "custom_domain_id", "google_cloud_storage_authentication_method", "google_cloud_storage_bucket", "google_cloud_storage_oauth_scope", "google_cloud_storage_project_id", "google_cloud_storage_s3_compatible_access_key", "hostname", "linode_access_key", "linode_bucket", "linode_region", "max_connections", "name", "one_drive_account_type", "pin_to_site_region", "port", "upload_staging_path", "remote_server_credential_id", "s3_assume_role_arn", "s3_assume_role_duration_seconds", "s3_bucket", "s3_compatible_access_key", "s3_compatible_bucket", "s3_compatible_endpoint", "s3_compatible_region", "s3_compatible_virtual_hosted_style", "s3_kms_key_id", "s3_region", "server_certificate", "server_host_key", "server_type", "site_admin_access", "sharepoint_client_id", "sharepoint_site_url", "sharepoint_tenant_id", "ssl", "username", "wasabi_access_key", "wasabi_bucket", "wasabi_region", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "password", "private_key", "private_key_passphrase", "reset_authentication", "sharepoint_client_certificate", "sharepoint_client_secret", "ssl_certificate", "aws_secret_key", "azure_blob_storage_access_key", "azure_blob_storage_sas_token", "azure_files_storage_access_key", "azure_files_storage_sas_token", "backblaze_b2_application_key", "backblaze_b2_key_id", "cloudflare_secret_key", "filebase_secret_key", "google_cloud_storage_credentials_json", "google_cloud_storage_s3_compatible_secret_key", "linode_secret_key", "s3_compatible_secret_key", "wasabi_secret_key", "allow_relative_paths", "aws_access_key", "azure_blob_storage_account", "azure_blob_storage_container", "azure_blob_storage_dns_suffix", "azure_blob_storage_hierarchical_namespace", "azure_files_storage_account", "azure_files_storage_dns_suffix", "azure_files_storage_share_name", "backblaze_b2_bucket", "backblaze_b2_s3_endpoint", "buffer_uploads", "cloudflare_access_key", "cloudflare_bucket", "cloudflare_endpoint", "description", "dropbox_teams", "enable_dedicated_ips", "filebase_access_key", "filebase_bucket", "files_api_key", "files_agent_permission_set", "files_agent_root", "files_agent_version", "outbound_agent_id", "custom_domain_id", "google_cloud_storage_authentication_method", "google_cloud_storage_bucket", "google_cloud_storage_oauth_scope", "google_cloud_storage_project_id", "google_cloud_storage_s3_compatible_access_key", "hostname", "linode_access_key", "linode_bucket", "linode_region", "max_connections", "name", "one_drive_account_type", "pin_to_site_region", "port", "upload_staging_path", "remote_server_credential_id", "s3_assume_role_arn", "s3_assume_role_duration_seconds", "s3_bucket", "s3_compatible_access_key", "s3_compatible_bucket", "s3_compatible_endpoint", "s3_compatible_region", "s3_compatible_virtual_hosted_style", "s3_kms_key_id", "s3_region", "server_certificate", "server_host_key", "server_type", "site_admin_access", "sharepoint_client_id", "sharepoint_site_url", "sharepoint_tenant_id", "ssl", "username", "wasabi_access_key", "wasabi_bucket", "wasabi_region" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -2648,6 +2684,7 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
         ///   server_type - string - Remote server type.
+        ///   site_admin_access - boolean - Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default. Only the owner may change it when the Site policy allows user choice.
         ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
         ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
         ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
@@ -2989,6 +3026,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_type is null, which cannot be sent" : "Bad parameter: server_type must be of type string", "server_type");
             }
+            if (parameters.TryGetValue("site_admin_access", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_admin_access is null, which cannot be sent" : "Bad parameter: site_admin_access must be of type bool", "site_admin_access");
+            }
             if (parameters.TryGetValue("sharepoint_client_id", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sharepoint_client_id is null, which cannot be sent" : "Bad parameter: sharepoint_client_id must be of type string", "sharepoint_client_id");
@@ -3158,6 +3199,7 @@ namespace FilesCom.Models
         ///   server_certificate - string - Remote server certificate
         ///   server_host_key - string - Pinned SSH host key or OpenSSH host certificate for SFTP. If omitted, Files.com detects and stores a host key, preferring plain keys over certificates. With `server_certificate=require_match` (the default), the server must present the exact pinned key or certificate and prove it holds the matching private key. A pinned certificate is compared in full, so renewal can require updating `server_host_key` even when its underlying key is unchanged. Files.com does not check certificate CA signatures, principals, or validity periods. Certificate expiration alone does not end the pin. Update `server_host_key` to replace the pin.
         ///   server_type - string - Remote server type.
+        ///   site_admin_access - boolean - Owner's preference for administrator access to this user-owned Remote Server. Null uses the Site policy's default. Only the owner may change it when the Site policy allows user choice.
         ///   sharepoint_client_id - string - SharePoint: Microsoft Entra application client ID for app-only authentication.
         ///   sharepoint_site_url - string - SharePoint: Site URL to scope app-only authentication to a single site. Leave blank to browse all sites.
         ///   sharepoint_tenant_id - string - SharePoint: Microsoft Entra tenant ID for app-only authentication.
@@ -3510,6 +3552,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("server_type", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: server_type is null, which cannot be sent" : "Bad parameter: server_type must be of type string", "server_type");
+            }
+            if (parameters.TryGetValue("site_admin_access", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: site_admin_access is null, which cannot be sent" : "Bad parameter: site_admin_access must be of type bool", "site_admin_access");
             }
             if (parameters.TryGetValue("sharepoint_client_id", out parameterValue) && !(parameterValue is string))
             {
