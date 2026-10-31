@@ -188,7 +188,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// The station's formal AS2 name.
+        /// The station's formal AS2 name, unique across all Workspaces on the Site.
         /// </summary>
         [JsonPropertyName("name")]
         public string Name
@@ -359,7 +359,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - The station's formal AS2 name.
+        ///   name - string - The station's formal AS2 name, unique across all Workspaces on the Site.
         ///   public_certificate - string - Public certificate used for message security.
         ///   private_key - string - PEM-encoded private key matching public_certificate.
         ///   private_key_password - string - Password for the PEM-encoded private key.
@@ -378,7 +378,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - The station's formal AS2 name.
+        ///   name - string - The station's formal AS2 name, unique across all Workspaces on the Site.
         ///   public_certificate - string - Public certificate used for message security.
         ///   private_key - string - PEM-encoded private key matching public_certificate.
         ///   private_key_password - string - Password for the PEM-encoded private key.
@@ -707,7 +707,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name (required) - string - The station's formal AS2 name.
+        ///   name (required) - string - The station's formal AS2 name, unique across all Workspaces on the Site.
         ///   workspace_id - int64 - ID of the Workspace associated with this AS2 Station.
         ///   public_certificate - string - Public certificate used for message security.
         ///   private_key - string - PEM-encoded private key matching public_certificate.
@@ -778,7 +778,7 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   name - string - The station's formal AS2 name.
+        ///   name - string - The station's formal AS2 name, unique across all Workspaces on the Site.
         ///   public_certificate - string - Public certificate used for message security.
         ///   private_key - string - PEM-encoded private key matching public_certificate.
         ///   private_key_password - string - Password for the PEM-encoded private key.
