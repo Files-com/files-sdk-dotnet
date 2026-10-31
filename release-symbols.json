@@ -2118,7 +2118,8 @@
         "created_at": "CreatedAt",
         "event_type": "EventType",
         "id": "Id",
-        "status": "Status"
+        "status": "Status",
+        "workspace_id": "WorkspaceId"
       },
       "operations": {
         "GetExternalEvents": {

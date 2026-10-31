@@ -44,7 +44,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "ExternalEvent", ("id", "int64"), ("event_type", "string"), ("status", "string"), ("body", "string"), ("created_at", "date-time"), ("body_url", "string"));
+                Simulator.Conforms(record, "ExternalEvent", ("id", "int64"), ("workspace_id", "int64"), ("event_type", "string"), ("status", "string"), ("body", "string"), ("created_at", "date-time"), ("body_url", "string"));
             }
             return records;
         }
@@ -59,6 +59,7 @@ namespace FilesContractTests.Records
         {
             Assert.IsNotNull(model, $"{what}: the SDK returned no ExternalEvent");
             Simulator.Same(record, "id", model.Id, what);
+            Simulator.Same(record, "workspace_id", model.WorkspaceId, what);
             Simulator.Same(record, "event_type", model.EventType, what);
             Simulator.Same(record, "status", model.Status, what);
             Simulator.Same(record, "body", model.Body, what);

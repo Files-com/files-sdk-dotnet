@@ -44,6 +44,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("workspace_id"))
+            {
+                this.attributes.Add("workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("event_type"))
             {
                 this.attributes.Add("event_type", null);
@@ -123,6 +127,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["id"]; }
             set { attributes["id"] = value; unsaved.Add("id"); }
+        }
+
+        /// <summary>
+        /// Workspace ID
+        /// </summary>
+        [JsonPropertyName("workspace_id")]
+        public Nullable<Int64> WorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["workspace_id"]; }
+            set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
         }
 
         /// <summary>
@@ -233,8 +247,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status` or `event_type`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at` and `status`. Valid field combinations are `[ status, created_at ]`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status`, `event_type` or `workspace_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `status` or `workspace_id`. Valid field combinations are `[ status, created_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
@@ -255,8 +269,8 @@ namespace FilesCom.Models
         /// Parameters:
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status` or `event_type`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at` and `status`. Valid field combinations are `[ status, created_at ]`.
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `status`, `event_type` or `workspace_id`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `status` or `workspace_id`. Valid field combinations are `[ status, created_at ]`.
         ///   filter_gt - object - If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
         ///   filter_gteq - object - If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
         ///   filter_lt - object - If set, return records where the specified field is less than the supplied value. Valid fields are `created_at`.
