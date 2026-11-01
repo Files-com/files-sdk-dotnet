@@ -787,7 +787,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// ID of the user who owns this Remote Server, if any.
+        /// ID of the Integration-Centric user who owns this personal Remote Server, if any. Connections created by Site and Workspace Administrators have no owner.
         /// </summary>
         [JsonPropertyName("user_id")]
         public Nullable<Int64> UserId
