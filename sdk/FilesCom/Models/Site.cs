@@ -288,6 +288,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("legacy_checksums_mode", false);
             }
+            if (!this.attributes.ContainsKey("legacy_pairing_enabled"))
+            {
+                this.attributes.Add("legacy_pairing_enabled", false);
+            }
+            if (!this.attributes.ContainsKey("last_pairing_at"))
+            {
+                this.attributes.Add("last_pairing_at", null);
+            }
             if (!this.attributes.ContainsKey("migrate_remote_server_sync_to_sync"))
             {
                 this.attributes.Add("migrate_remote_server_sync_to_sync", false);
@@ -1630,6 +1638,29 @@ namespace FilesCom.Models
         {
             get { return attributes["legacy_checksums_mode"] == null ? false : (bool)attributes["legacy_checksums_mode"]; }
             private set { attributes["legacy_checksums_mode"] = value; }
+        }
+
+        /// <summary>
+        /// Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed. Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site administrators can re-enable it.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("legacy_pairing_enabled")]
+        public bool LegacyPairingEnabled
+        {
+            get { return attributes["legacy_pairing_enabled"] == null ? false : (bool)attributes["legacy_pairing_enabled"]; }
+            private set { attributes["legacy_pairing_enabled"] = value; }
+        }
+
+        /// <summary>
+        /// Time of the last completed legacy app pairing across all workspaces. Failed or incomplete attempts do not count. Read-only; empty until a pairing completes after tracking begins.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("last_pairing_at")]
+        public Nullable<DateTime> LastPairingAt
+        {
+            get { return (Nullable<DateTime>)attributes["last_pairing_at"]; }
+            private set { attributes["last_pairing_at"] = value; }
         }
 
         /// <summary>
@@ -3358,6 +3389,7 @@ namespace FilesCom.Models
         ///   username_display - string - How usernames are displayed in the web UI. Can be `username_only`, `full_name_only`, `full_name_username`, `full_name_company`, or `full_name_username_company`.
         ///   integration_centric_remote_server_admin_access - string - Administrator access to user-owned Remote Servers in every Workspace: always_visible (default), never_visible, user_choice_default_visible, or user_choice_default_personal. Forced modes override owner preferences; choice modes use the preference or their default.
         ///   session_expiry_minutes - int64 - Session expiry in minutes
+        ///   legacy_pairing_enabled - boolean - Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed. Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site administrators can re-enable it.
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
         ///   sftp_insecure_diffie_hellman - boolean - If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
@@ -3735,6 +3767,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("session_expiry_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: session_expiry_minutes is null, which cannot be sent" : "Bad parameter: session_expiry_minutes must be of type Nullable<Int64>", "session_expiry_minutes");
+            }
+            if (parameters.TryGetValue("legacy_pairing_enabled", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: legacy_pairing_enabled is null, which cannot be sent" : "Bad parameter: legacy_pairing_enabled must be of type bool", "legacy_pairing_enabled");
             }
             if (parameters.TryGetValue("ssl_required", out parameterValue) && !(parameterValue is bool))
             {
