@@ -452,74 +452,6 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("language", null);
             }
-            if (!this.attributes.ContainsKey("ldap_base_dn"))
-            {
-                this.attributes.Add("ldap_base_dn", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_domain"))
-            {
-                this.attributes.Add("ldap_domain", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_enabled"))
-            {
-                this.attributes.Add("ldap_enabled", false);
-            }
-            if (!this.attributes.ContainsKey("ldap_group_action"))
-            {
-                this.attributes.Add("ldap_group_action", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_group_exclusion"))
-            {
-                this.attributes.Add("ldap_group_exclusion", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_group_inclusion"))
-            {
-                this.attributes.Add("ldap_group_inclusion", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_host"))
-            {
-                this.attributes.Add("ldap_host", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_host_2"))
-            {
-                this.attributes.Add("ldap_host_2", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_host_3"))
-            {
-                this.attributes.Add("ldap_host_3", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_port"))
-            {
-                this.attributes.Add("ldap_port", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_secure"))
-            {
-                this.attributes.Add("ldap_secure", false);
-            }
-            if (!this.attributes.ContainsKey("ldap_server_certificate"))
-            {
-                this.attributes.Add("ldap_server_certificate", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_type"))
-            {
-                this.attributes.Add("ldap_type", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_user_action"))
-            {
-                this.attributes.Add("ldap_user_action", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_user_include_groups"))
-            {
-                this.attributes.Add("ldap_user_include_groups", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_username"))
-            {
-                this.attributes.Add("ldap_username", null);
-            }
-            if (!this.attributes.ContainsKey("ldap_username_field"))
-            {
-                this.attributes.Add("ldap_username_field", null);
-            }
             if (!this.attributes.ContainsKey("login_help_text"))
             {
                 this.attributes.Add("login_help_text", null);
@@ -2119,195 +2051,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Base DN for looking up users in LDAP server
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_base_dn")]
-        public string LdapBaseDn
-        {
-            get { return (string)attributes["ldap_base_dn"]; }
-            private set { attributes["ldap_base_dn"] = value; }
-        }
-
-        /// <summary>
-        /// Domain name that will be appended to usernames
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_domain")]
-        public string LdapDomain
-        {
-            get { return (string)attributes["ldap_domain"]; }
-            private set { attributes["ldap_domain"] = value; }
-        }
-
-        /// <summary>
-        /// Main LDAP setting: is LDAP enabled?
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("ldap_enabled")]
-        public bool LdapEnabled
-        {
-            get { return attributes["ldap_enabled"] == null ? false : (bool)attributes["ldap_enabled"]; }
-            private set { attributes["ldap_enabled"] = value; }
-        }
-
-        /// <summary>
-        /// Should we sync groups from LDAP server?
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_group_action")]
-        public string LdapGroupAction
-        {
-            get { return (string)attributes["ldap_group_action"]; }
-            private set { attributes["ldap_group_action"] = value; }
-        }
-
-        /// <summary>
-        /// Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_group_exclusion")]
-        public string LdapGroupExclusion
-        {
-            get { return (string)attributes["ldap_group_exclusion"]; }
-            private set { attributes["ldap_group_exclusion"] = value; }
-        }
-
-        /// <summary>
-        /// Comma or newline separated list of group names (with optional wildcards) to include when syncing.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_group_inclusion")]
-        public string LdapGroupInclusion
-        {
-            get { return (string)attributes["ldap_group_inclusion"]; }
-            private set { attributes["ldap_group_inclusion"] = value; }
-        }
-
-        /// <summary>
-        /// LDAP host
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_host")]
-        public string LdapHost
-        {
-            get { return (string)attributes["ldap_host"]; }
-            private set { attributes["ldap_host"] = value; }
-        }
-
-        /// <summary>
-        /// LDAP backup host
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_host_2")]
-        public string LdapHost2
-        {
-            get { return (string)attributes["ldap_host_2"]; }
-            private set { attributes["ldap_host_2"] = value; }
-        }
-
-        /// <summary>
-        /// LDAP backup host
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_host_3")]
-        public string LdapHost3
-        {
-            get { return (string)attributes["ldap_host_3"]; }
-            private set { attributes["ldap_host_3"] = value; }
-        }
-
-        /// <summary>
-        /// LDAP port
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_port")]
-        public Nullable<Int64> LdapPort
-        {
-            get { return (Nullable<Int64>)attributes["ldap_port"]; }
-            private set { attributes["ldap_port"] = value; }
-        }
-
-        /// <summary>
-        /// Use secure LDAP?
-        /// </summary>
-        [JsonInclude]
-        [JsonConverter(typeof(BooleanJsonConverter))]
-        [JsonPropertyName("ldap_secure")]
-        public bool LdapSecure
-        {
-            get { return attributes["ldap_secure"] == null ? false : (bool)attributes["ldap_secure"]; }
-            private set { attributes["ldap_secure"] = value; }
-        }
-
-        /// <summary>
-        /// How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_server_certificate")]
-        public string LdapServerCertificate
-        {
-            get { return (string)attributes["ldap_server_certificate"]; }
-            private set { attributes["ldap_server_certificate"] = value; }
-        }
-
-        /// <summary>
-        /// LDAP type
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_type")]
-        public string LdapType
-        {
-            get { return (string)attributes["ldap_type"]; }
-            private set { attributes["ldap_type"] = value; }
-        }
-
-        /// <summary>
-        /// Should we sync users from LDAP server?
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_user_action")]
-        public string LdapUserAction
-        {
-            get { return (string)attributes["ldap_user_action"]; }
-            private set { attributes["ldap_user_action"] = value; }
-        }
-
-        /// <summary>
-        /// Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_user_include_groups")]
-        public string LdapUserIncludeGroups
-        {
-            get { return (string)attributes["ldap_user_include_groups"]; }
-            private set { attributes["ldap_user_include_groups"] = value; }
-        }
-
-        /// <summary>
-        /// Username for signing in to LDAP server.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_username")]
-        public string LdapUsername
-        {
-            get { return (string)attributes["ldap_username"]; }
-            private set { attributes["ldap_username"] = value; }
-        }
-
-        /// <summary>
-        /// LDAP username field
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("ldap_username_field")]
-        public string LdapUsernameField
-        {
-            get { return (string)attributes["ldap_username_field"]; }
-            private set { attributes["ldap_username_field"] = value; }
-        }
-
-        /// <summary>
         /// Login help text
         /// </summary>
         [JsonInclude]
@@ -3498,23 +3241,6 @@ namespace FilesCom.Models
         ///   smtp_username - string - SMTP server username
         ///   smtp_port - int64 - SMTP server port
         ///   smtp_ssl - string - Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
-        ///   ldap_enabled - boolean - Main LDAP setting: is LDAP enabled?
-        ///   ldap_type - string - LDAP type
-        ///   ldap_host - string - LDAP host
-        ///   ldap_host_2 - string - LDAP backup host
-        ///   ldap_host_3 - string - LDAP backup host
-        ///   ldap_port - int64 - LDAP port
-        ///   ldap_secure - boolean - Use secure LDAP?
-        ///   ldap_server_certificate - string - How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
-        ///   ldap_username - string - Username for signing in to LDAP server.
-        ///   ldap_username_field - string - LDAP username field
-        ///   ldap_domain - string - Domain name that will be appended to usernames
-        ///   ldap_user_action - string - Should we sync users from LDAP server?
-        ///   ldap_group_action - string - Should we sync groups from LDAP server?
-        ///   ldap_user_include_groups - string - Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
-        ///   ldap_group_exclusion - string - Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
-        ///   ldap_group_inclusion - string - Comma or newline separated list of group names (with optional wildcards) to include when syncing.
-        ///   ldap_base_dn - string - Base DN for looking up users in LDAP server
         ///   uploads_via_email_authentication - boolean - Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   icon16_file - file
@@ -3532,8 +3258,6 @@ namespace FilesCom.Models
         ///   login_page_background_image_file - file
         ///   login_page_background_image_delete - boolean - If true, will delete the file stored in login_page_background_image
         ///   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
-        ///   ldap_password_change - string - New LDAP password.
-        ///   ldap_password_change_confirmation - string - Confirm new LDAP password.
         ///   redirect_old_subdomain - boolean - If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the new Files.com subdomain.
         ///   smtp_password - string - Password for SMTP server.
         /// </summary>
@@ -4204,74 +3928,6 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: smtp_ssl is null, which cannot be sent" : "Bad parameter: smtp_ssl must be of type string", "smtp_ssl");
             }
-            if (parameters.TryGetValue("ldap_enabled", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_enabled is null, which cannot be sent" : "Bad parameter: ldap_enabled must be of type bool", "ldap_enabled");
-            }
-            if (parameters.TryGetValue("ldap_type", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_type is null, which cannot be sent" : "Bad parameter: ldap_type must be of type string", "ldap_type");
-            }
-            if (parameters.TryGetValue("ldap_host", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_host is null, which cannot be sent" : "Bad parameter: ldap_host must be of type string", "ldap_host");
-            }
-            if (parameters.TryGetValue("ldap_host_2", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_host_2 is null, which cannot be sent" : "Bad parameter: ldap_host_2 must be of type string", "ldap_host_2");
-            }
-            if (parameters.TryGetValue("ldap_host_3", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_host_3 is null, which cannot be sent" : "Bad parameter: ldap_host_3 must be of type string", "ldap_host_3");
-            }
-            if (parameters.TryGetValue("ldap_port", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_port is null, which cannot be sent" : "Bad parameter: ldap_port must be of type Nullable<Int64>", "ldap_port");
-            }
-            if (parameters.TryGetValue("ldap_secure", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_secure is null, which cannot be sent" : "Bad parameter: ldap_secure must be of type bool", "ldap_secure");
-            }
-            if (parameters.TryGetValue("ldap_server_certificate", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_server_certificate is null, which cannot be sent" : "Bad parameter: ldap_server_certificate must be of type string", "ldap_server_certificate");
-            }
-            if (parameters.TryGetValue("ldap_username", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_username is null, which cannot be sent" : "Bad parameter: ldap_username must be of type string", "ldap_username");
-            }
-            if (parameters.TryGetValue("ldap_username_field", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_username_field is null, which cannot be sent" : "Bad parameter: ldap_username_field must be of type string", "ldap_username_field");
-            }
-            if (parameters.TryGetValue("ldap_domain", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_domain is null, which cannot be sent" : "Bad parameter: ldap_domain must be of type string", "ldap_domain");
-            }
-            if (parameters.TryGetValue("ldap_user_action", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_user_action is null, which cannot be sent" : "Bad parameter: ldap_user_action must be of type string", "ldap_user_action");
-            }
-            if (parameters.TryGetValue("ldap_group_action", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_group_action is null, which cannot be sent" : "Bad parameter: ldap_group_action must be of type string", "ldap_group_action");
-            }
-            if (parameters.TryGetValue("ldap_user_include_groups", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_user_include_groups is null, which cannot be sent" : "Bad parameter: ldap_user_include_groups must be of type string", "ldap_user_include_groups");
-            }
-            if (parameters.TryGetValue("ldap_group_exclusion", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_group_exclusion is null, which cannot be sent" : "Bad parameter: ldap_group_exclusion must be of type string", "ldap_group_exclusion");
-            }
-            if (parameters.TryGetValue("ldap_group_inclusion", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_group_inclusion is null, which cannot be sent" : "Bad parameter: ldap_group_inclusion must be of type string", "ldap_group_inclusion");
-            }
-            if (parameters.TryGetValue("ldap_base_dn", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_base_dn is null, which cannot be sent" : "Bad parameter: ldap_base_dn must be of type string", "ldap_base_dn");
-            }
             if (parameters.TryGetValue("uploads_via_email_authentication", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: uploads_via_email_authentication is null, which cannot be sent" : "Bad parameter: uploads_via_email_authentication must be of type bool", "uploads_via_email_authentication");
@@ -4339,14 +3995,6 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("disable_2fa_with_delay", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: disable_2fa_with_delay is null, which cannot be sent" : "Bad parameter: disable_2fa_with_delay must be of type bool", "disable_2fa_with_delay");
-            }
-            if (parameters.TryGetValue("ldap_password_change", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_password_change is null, which cannot be sent" : "Bad parameter: ldap_password_change must be of type string", "ldap_password_change");
-            }
-            if (parameters.TryGetValue("ldap_password_change_confirmation", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ldap_password_change_confirmation is null, which cannot be sent" : "Bad parameter: ldap_password_change_confirmation must be of type string", "ldap_password_change_confirmation");
             }
             if (parameters.TryGetValue("redirect_old_subdomain", out parameterValue) && !(parameterValue is bool))
             {

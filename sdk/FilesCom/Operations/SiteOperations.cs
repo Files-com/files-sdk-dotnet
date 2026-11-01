@@ -224,23 +224,6 @@ namespace FilesCom.Operations
         ///   smtp_username - string - SMTP server username
         ///   smtp_port - int64 - SMTP server port
         ///   smtp_ssl - string - Custom SMTP encryption mode: if_available (default) uses STARTTLS when offered and otherwise sends credentials and messages unencrypted. A certificate-verified STARTTLS connection automatically changes if_available to require unless smtp_ssl is managed by a parent policy. require requires STARTTLS before authentication; require_implicit uses TLS from connection start; never disables TLS. TLS verifies the server certificate against smtp_address. Encryption is never automatically downgraded.
-        ///   ldap_enabled - boolean - Main LDAP setting: is LDAP enabled?
-        ///   ldap_type - string - LDAP type
-        ///   ldap_host - string - LDAP host
-        ///   ldap_host_2 - string - LDAP backup host
-        ///   ldap_host_3 - string - LDAP backup host
-        ///   ldap_port - int64 - LDAP port
-        ///   ldap_secure - boolean - Use secure LDAP?
-        ///   ldap_server_certificate - string - How to validate the LDAP server certificate. `require_match` validates the certificate chain and hostname; `allow_any` disables certificate validation.
-        ///   ldap_username - string - Username for signing in to LDAP server.
-        ///   ldap_username_field - string - LDAP username field
-        ///   ldap_domain - string - Domain name that will be appended to usernames
-        ///   ldap_user_action - string - Should we sync users from LDAP server?
-        ///   ldap_group_action - string - Should we sync groups from LDAP server?
-        ///   ldap_user_include_groups - string - Comma or newline separated list of group names (with optional wildcards) - if provided, only users in these groups will be added or synced.
-        ///   ldap_group_exclusion - string - Comma or newline separated list of group names (with optional wildcards) to exclude when syncing.
-        ///   ldap_group_inclusion - string - Comma or newline separated list of group names (with optional wildcards) to include when syncing.
-        ///   ldap_base_dn - string - Base DN for looking up users in LDAP server
         ///   uploads_via_email_authentication - boolean - Require email authentication, virus, and spam checks for incoming emails to Inboxes and Incoming Email Automations in every Workspace on this site?
         ///   bundle_watermark_value - object - Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
         ///   icon16_file - file
@@ -258,8 +241,6 @@ namespace FilesCom.Operations
         ///   login_page_background_image_file - file
         ///   login_page_background_image_delete - boolean - If true, will delete the file stored in login_page_background_image
         ///   disable_2fa_with_delay - boolean - If set to true, we will begin the process of disabling 2FA on this site.
-        ///   ldap_password_change - string - New LDAP password.
-        ///   ldap_password_change_confirmation - string - Confirm new LDAP password.
         ///   redirect_old_subdomain - boolean - If true, and if changing the site subdomain, then create a redirect from the previous Files.com subdomain to the new Files.com subdomain.
         ///   smtp_password - string - Password for SMTP server.
         /// </summary>
