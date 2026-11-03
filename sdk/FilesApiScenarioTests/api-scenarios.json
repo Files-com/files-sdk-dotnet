@@ -7,7 +7,7 @@
   },
   "schema": {
     "name": "swagger_doc-production.json",
-    "sha256": "2999e474c1816c2ec85216a2d5db152bb77f93764c7ebd8c503459748b22b557"
+    "sha256": "2cbfdb31ec2a6fafa70468054929c650a86f1b6d8c14445fd6ffd4e650553a9c"
   },
   "profile": "api-scenarios-canonical",
   "tests": "FilesApiScenarioTests.ApiScenarioTests",

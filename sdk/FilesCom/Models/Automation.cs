@@ -64,6 +64,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("automation", null);
             }
+            if (!this.attributes.ContainsKey("converted_automation_id"))
+            {
+                this.attributes.Add("converted_automation_id", null);
+            }
             if (!this.attributes.ContainsKey("deleted"))
             {
                 this.attributes.Add("deleted", false);
@@ -131,6 +135,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("name"))
             {
                 this.attributes.Add("name", null);
+            }
+            if (!this.attributes.ContainsKey("original_automation_id"))
+            {
+                this.attributes.Add("original_automation_id", null);
             }
             if (!this.attributes.ContainsKey("overwrite_files"))
             {
@@ -334,6 +342,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// ID of this v1 Automation's converted v2 copy, when present.
+        /// </summary>
+        [JsonPropertyName("converted_automation_id")]
+        public Nullable<Int64> ConvertedAutomationId
+        {
+            get { return (Nullable<Int64>)attributes["converted_automation_id"]; }
+            set { attributes["converted_automation_id"] = value; unsaved.Add("converted_automation_id"); }
+        }
+
+        /// <summary>
         /// Indicates if the automation has been deleted.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
@@ -506,6 +524,16 @@ namespace FilesCom.Models
         {
             get { return (string)attributes["name"]; }
             set { attributes["name"] = value; unsaved.Add("name"); }
+        }
+
+        /// <summary>
+        /// ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and revert the conversion.
+        /// </summary>
+        [JsonPropertyName("original_automation_id")]
+        public Nullable<Int64> OriginalAutomationId
+        {
+            get { return (Nullable<Int64>)attributes["original_automation_id"]; }
+            set { attributes["original_automation_id"] = value; unsaved.Add("original_automation_id"); }
         }
 
         /// <summary>

@@ -63,6 +63,23 @@ namespace FilesCom.Operations
 
         /// <summary>
         /// Parameters:
+        ///   end_date (required) - string - New conversion-window end date in YYYY-MM-DD format, in Eastern Time (EST/EDT). Must be a Tuesday, Wednesday, or Thursday. Can only extend the current end date, within six weeks of the originally announced end date.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task ExtendAutomationMigrationWindowAsync(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.Site.ExtendAutomationMigrationWindowCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Parameters:
         ///   name - string - Site name
         ///   subdomain - string - Site subdomain
         ///   domain - string - Custom domain

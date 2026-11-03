@@ -3080,6 +3080,45 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   end_date (required) - string - New conversion-window end date in YYYY-MM-DD format, in Eastern Time (EST/EDT). Must be a Tuesday, Wednesday, or Thursday. Can only extend the current end date, within six weeks of the originally announced end date.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task ExtendAutomationMigrationWindow(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ExtendAutomationMigrationWindowCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task ExtendAutomationMigrationWindowCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (!parameters.TryGetValue("end_date", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: end_date", "end_date");
+            }
+            if (parameters.TryGetValue("end_date", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_date is null, which cannot be sent" : "Bad parameter: end_date must be of type string", "end_date");
+            }
+
+            await FilesClient.SendRequestAndDiscard(context, $"/site/extend_automation_migration_window", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// Parameters:
         ///   name - string - Site name
         ///   subdomain - string - Site subdomain
         ///   domain - string - Custom domain

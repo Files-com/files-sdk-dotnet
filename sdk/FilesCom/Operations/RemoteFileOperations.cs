@@ -382,6 +382,7 @@ namespace FilesCom.Operations
         /// Parameters:
         ///   paths (required) - array(string) - Paths to include in the ZIP.
         ///   destination (required) - string - Destination file path for the ZIP.
+        ///   archive_format - string - Archive format to create.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>

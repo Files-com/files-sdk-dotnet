@@ -603,6 +603,34 @@ Task<UsageSnapshot> client.Sites.GetUsageAsync(
 
 ---
 
+## Extend the Automations conversion window by up to six weeks beyond its originally announced end date
+
+```
+Task Site.ExtendAutomationMigrationWindow(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.Sites.ExtendAutomationMigrationWindowAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `end_date` (string): Required - New conversion-window end date in YYYY-MM-DD format, in Eastern Time (EST/EDT). Must be a Tuesday, Wednesday, or Thursday. Can only extend the current end date, within six weeks of the originally announced end date.
+
+
+---
+
 ## Update Site Settings
 
 ```

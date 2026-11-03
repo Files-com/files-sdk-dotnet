@@ -723,6 +723,7 @@
         "always_overwrite_size_matching_files": "AlwaysOverwriteSizeMatchingFiles",
         "always_serialize_jobs": "AlwaysSerializeJobs",
         "automation": "AutomationType",
+        "converted_automation_id": "ConvertedAutomationId",
         "definition": "Definition",
         "deleted": "Deleted",
         "description": "Description",
@@ -743,6 +744,7 @@
         "last_modified_at": "LastModifiedAt",
         "legacy_folder_matching": "LegacyFolderMatching",
         "name": "Name",
+        "original_automation_id": "OriginalAutomationId",
         "overwrite_files": "OverwriteFiles",
         "path": "Path",
         "path_time_zone": "PathTimeZone",
@@ -5196,6 +5198,13 @@
 
           ],
           "route": "PATCH /site"
+        },
+        "PostSiteExtendAutomationMigrationWindow": {
+          "method": "ExtendAutomationMigrationWindow",
+          "aliases": [
+
+          ],
+          "route": "POST /site/extend_automation_migration_window"
         }
       },
       "retired_properties": {

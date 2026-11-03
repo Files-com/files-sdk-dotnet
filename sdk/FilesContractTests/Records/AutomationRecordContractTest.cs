@@ -44,7 +44,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "Automation", ("id", "int64"), ("workspace_id", "int64"), ("always_serialize_jobs", "boolean"), ("always_overwrite_size_matching_files", "boolean"), ("automation", "string"), ("deleted", "boolean"), ("description", "string"), ("destination_replace_from", "string"), ("destination_replace_to", "string"), ("destinations", "array(string)"), ("disabled", "boolean"), ("exclude_pattern", "string"), ("inbound_email_address", "string"), ("flatten_destination_structure", "boolean"), ("group_ids", "array(int64)"), ("ignore_locked_folders", "boolean"), ("interval", "string"), ("last_modified_at", "date-time"), ("legacy_folder_matching", "boolean"), ("name", "string"), ("overwrite_files", "boolean"), ("path", "string"), ("path_time_zone", "string"), ("version", "int64"), ("recurring_day", "int64"), ("recurring_days", "array(int64)"), ("schedule_id", "int64"), ("retry_on_failure_interval_in_minutes", "int64"), ("retry_on_failure_number_of_attempts", "int64"), ("human_readable_schedule", "string"), ("schedule_days_of_week", "array(int64)"), ("schedule_times_of_day", "array(string)"), ("schedule_time_zone", "string"), ("source", "string"), ("sync_ids", "array(int64)"), ("trigger_actions", "array(string)"), ("trigger", "string"), ("user_id", "int64"), ("user_ids", "array(int64)"), ("webhook_url", "string"), ("holiday_region", "string"));
+                Simulator.Conforms(record, "Automation", ("id", "int64"), ("workspace_id", "int64"), ("always_serialize_jobs", "boolean"), ("always_overwrite_size_matching_files", "boolean"), ("automation", "string"), ("converted_automation_id", "int64"), ("deleted", "boolean"), ("description", "string"), ("destination_replace_from", "string"), ("destination_replace_to", "string"), ("destinations", "array(string)"), ("disabled", "boolean"), ("exclude_pattern", "string"), ("inbound_email_address", "string"), ("flatten_destination_structure", "boolean"), ("group_ids", "array(int64)"), ("ignore_locked_folders", "boolean"), ("interval", "string"), ("last_modified_at", "date-time"), ("legacy_folder_matching", "boolean"), ("name", "string"), ("original_automation_id", "int64"), ("overwrite_files", "boolean"), ("path", "string"), ("path_time_zone", "string"), ("version", "int64"), ("recurring_day", "int64"), ("recurring_days", "array(int64)"), ("schedule_id", "int64"), ("retry_on_failure_interval_in_minutes", "int64"), ("retry_on_failure_number_of_attempts", "int64"), ("human_readable_schedule", "string"), ("schedule_days_of_week", "array(int64)"), ("schedule_times_of_day", "array(string)"), ("schedule_time_zone", "string"), ("source", "string"), ("sync_ids", "array(int64)"), ("trigger_actions", "array(string)"), ("trigger", "string"), ("user_id", "int64"), ("user_ids", "array(int64)"), ("webhook_url", "string"), ("holiday_region", "string"));
             }
             return records;
         }
@@ -63,6 +63,7 @@ namespace FilesContractTests.Records
             Simulator.Same(record, "always_serialize_jobs", model.AlwaysSerializeJobs, what);
             Simulator.Same(record, "always_overwrite_size_matching_files", model.AlwaysOverwriteSizeMatchingFiles, what);
             Simulator.Same(record, "automation", model.AutomationType, what);
+            Simulator.Same(record, "converted_automation_id", model.ConvertedAutomationId, what);
             Simulator.Same(record, "deleted", model.Deleted, what);
             Simulator.Same(record, "description", model.Description, what);
             Simulator.Same(record, "destination_replace_from", model.DestinationReplaceFrom, what);
@@ -78,6 +79,7 @@ namespace FilesContractTests.Records
             Simulator.Same(record, "last_modified_at", model.LastModifiedAt, what);
             Simulator.Same(record, "legacy_folder_matching", model.LegacyFolderMatching, what);
             Simulator.Same(record, "name", model.Name, what);
+            Simulator.Same(record, "original_automation_id", model.OriginalAutomationId, what);
             Simulator.Same(record, "overwrite_files", model.OverwriteFiles, what);
             Simulator.Same(record, "path", model.Path, what);
             Simulator.Same(record, "path_time_zone", model.PathTimeZone, what);

@@ -3558,6 +3558,7 @@ namespace FilesCom.Models
         /// Parameters:
         ///   paths (required) - array(string) - Paths to include in the ZIP.
         ///   destination (required) - string - Destination file path for the ZIP.
+        ///   archive_format - string - Archive format to create.
         ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -3598,6 +3599,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
+            }
+            if (parameters.TryGetValue("archive_format", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: archive_format is null, which cannot be sent" : "Bad parameter: archive_format must be of type string", "archive_format");
             }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {

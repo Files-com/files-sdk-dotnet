@@ -9,6 +9,7 @@
   "always_serialize_jobs": true,
   "always_overwrite_size_matching_files": true,
   "automation": "create_folder",
+  "converted_automation_id": 1,
   "deleted": true,
   "description": "example",
   "definition": {
@@ -66,6 +67,7 @@
   "last_modified_at": "2000-01-01T01:00:00Z",
   "legacy_folder_matching": false,
   "name": "example",
+  "original_automation_id": 1,
   "overwrite_files": true,
   "path": "example",
   "path_time_zone": "Eastern Time (US & Canada)",
@@ -128,6 +130,7 @@
 * `always_serialize_jobs` / `AlwaysSerializeJobs`  (bool): Ordinarily, we will allow automation runs to run in parallel for non-scheduled automations. If this flag is `true` we will force automation runs to be serialized (run one at a time, one after another). This can resolve some issues with race conditions on remote systems at the cost of some performance.
 * `always_overwrite_size_matching_files` / `AlwaysOverwriteSizeMatchingFiles`  (bool): Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
 * `automation` / `AutomationType`  (string): Automation type
+* `converted_automation_id` / `ConvertedAutomationId`  (Nullable<Int64>): ID of this v1 Automation's converted v2 copy, when present.
 * `deleted` / `Deleted`  (bool): Indicates if the automation has been deleted.
 * `description` / `Description`  (string): Description for the this Automation.
 * `definition` / `Definition`  (object): Automation v2 graph definition.
@@ -145,6 +148,7 @@
 * `last_modified_at` / `LastModifiedAt`  (Nullable<DateTime>): Time when automation was last modified. Does not change for name or description updates.
 * `legacy_folder_matching` / `LegacyFolderMatching`  (bool): If `true`, use the legacy behavior for this automation, where it can operate on folders in addition to just files.  This behavior no longer works and should not be used.
 * `name` / `Name`  (string): Name for this automation.
+* `original_automation_id` / `OriginalAutomationId`  (Nullable<Int64>): ID of the retained v1 Automation for a converted Automation. Re-enable that v1 Automation to pause this copy and revert the conversion.
 * `overwrite_files` / `OverwriteFiles`  (bool): If true, existing files will be overwritten with new files on Move/Copy automations.  Note: by default files will not be overwritten on Copy automations if they appear to be the same file size as the newly incoming file.  Use the `always_overwrite_size_matching_files` option in conjunction with `overwrite_files` to override this behavior and overwrite files no matter what.
 * `path` / `Path`  (string): Path on which this Automation runs.  Supports globs, except on remote mounts. This must be slash-delimited, but it must neither start nor end with a slash. Maximum of 5000 characters.
 * `path_time_zone` / `PathTimeZone`  (string): Timezone to use when rendering timestamps in paths.

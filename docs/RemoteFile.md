@@ -558,6 +558,7 @@ Task<FileAction> client.RemoteFiles.ZipAsync(
 
 * `paths` (string[]): Required - Paths to include in the ZIP.
 * `destination` (string): Required - Destination file path for the ZIP.
+* `archive_format` (string): Archive format to create.
 * `overwrite` (bool): Overwrite existing file in the destination?
 
 

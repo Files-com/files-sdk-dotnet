@@ -3559,6 +3559,22 @@ namespace FilesCom
         { }
     }
     /// <summary>
+    /// An error response from Files.com whose error type is <c>rate-limited/files-native-storage-overloaded</c> (Files Native Storage Overloaded, HTTP 429).
+    /// </summary>
+    public partial class FilesNativeStorageOverloadedException : RateLimitedException
+    {
+        /// <summary>
+        /// Creates the exception for an error response of this type.
+        /// </summary>
+        /// <param name="message">The response's error text, or null.</param>
+        /// <param name="httpStatus">The response's HTTP status.</param>
+        /// <param name="responseError">The response's error, as it came.</param>
+        /// <param name="httpHeaders">The response's headers.</param>
+        public FilesNativeStorageOverloadedException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
+            : base(message, httpStatus, responseError, httpHeaders)
+        { }
+    }
+    /// <summary>
     /// An error response from Files.com whose error type is <c>rate-limited/reauthentication-rate-limited</c> (Reauthentication Rate Limited, HTTP 429).
     /// </summary>
     public partial class ReauthenticationRateLimitedException : RateLimitedException
@@ -4103,6 +4119,7 @@ namespace FilesCom
             { "processing-failure/two-factor-authentication-unsubscribed-recipient", (message, httpStatus, responseError, httpHeaders) => new TwoFactorAuthenticationUnsubscribedRecipientException(message, httpStatus, responseError, httpHeaders) },
             { "processing-failure/updates-not-allowed-for-remotes", (message, httpStatus, responseError, httpHeaders) => new UpdatesNotAllowedForRemotesException(message, httpStatus, responseError, httpHeaders) },
             { "rate-limited/duplicate-share-recipient", (message, httpStatus, responseError, httpHeaders) => new DuplicateShareRecipientException(message, httpStatus, responseError, httpHeaders) },
+            { "rate-limited/files-native-storage-overloaded", (message, httpStatus, responseError, httpHeaders) => new FilesNativeStorageOverloadedException(message, httpStatus, responseError, httpHeaders) },
             { "rate-limited/reauthentication-rate-limited", (message, httpStatus, responseError, httpHeaders) => new ReauthenticationRateLimitedException(message, httpStatus, responseError, httpHeaders) },
             { "rate-limited/too-many-concurrent-logins", (message, httpStatus, responseError, httpHeaders) => new TooManyConcurrentLoginsException(message, httpStatus, responseError, httpHeaders) },
             { "rate-limited/too-many-concurrent-requests", (message, httpStatus, responseError, httpHeaders) => new TooManyConcurrentRequestsException(message, httpStatus, responseError, httpHeaders) },
