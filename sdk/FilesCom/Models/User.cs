@@ -348,6 +348,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("skip_welcome_screen", false);
             }
+            if (!this.attributes.ContainsKey("ftp_tls_session_reuse_required"))
+            {
+                this.attributes.Add("ftp_tls_session_reuse_required", null);
+            }
             if (!this.attributes.ContainsKey("ssl_required"))
             {
                 this.attributes.Add("ssl_required", null);
@@ -1294,6 +1298,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
+        /// </summary>
+        [JsonPropertyName("ftp_tls_session_reuse_required")]
+        public string FtpTlsSessionReuseRequired
+        {
+            get { return (string)attributes["ftp_tls_session_reuse_required"]; }
+            set { attributes["ftp_tls_session_reuse_required"] = value; unsaved.Add("ftp_tls_session_reuse_required"); }
+        }
+
+        /// <summary>
         /// SSL required setting
         /// </summary>
         [JsonPropertyName("ssl_required")]
@@ -1727,6 +1741,7 @@ namespace FilesCom.Models
         ///   site_admin - boolean - Is the user an administrator for this site?
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
+        ///   ftp_tls_session_reuse_required - string - FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -1810,6 +1825,7 @@ namespace FilesCom.Models
         ///   site_admin - boolean - Is the user an administrator for this site?
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
+        ///   ftp_tls_session_reuse_required - string - FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -2087,6 +2103,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type string", "ssl_required");
             }
+            if (parameters.TryGetValue("ftp_tls_session_reuse_required", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_tls_session_reuse_required is null, which cannot be sent" : "Bad parameter: ftp_tls_session_reuse_required must be of type string", "ftp_tls_session_reuse_required");
+            }
             if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
@@ -2217,8 +2237,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
+        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "ftp_tls_session_reuse_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "ftp_tls_session_reuse_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -2532,6 +2552,7 @@ namespace FilesCom.Models
         ///   site_admin - boolean - Is the user an administrator for this site?
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
+        ///   ftp_tls_session_reuse_required - string - FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -2805,6 +2826,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type string", "ssl_required");
             }
+            if (parameters.TryGetValue("ftp_tls_session_reuse_required", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_tls_session_reuse_required is null, which cannot be sent" : "Bad parameter: ftp_tls_session_reuse_required must be of type string", "ftp_tls_session_reuse_required");
+            }
             if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sso_strategy_id is null, which cannot be sent" : "Bad parameter: sso_strategy_id must be of type Nullable<Int64>", "sso_strategy_id");
@@ -3049,6 +3074,7 @@ namespace FilesCom.Models
         ///   site_admin - boolean - Is the user an administrator for this site?
         ///   skip_welcome_screen - boolean - Skip Welcome page in the UI?
         ///   ssl_required - string - SSL required setting
+        ///   ftp_tls_session_reuse_required - string - FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
         ///   sso_strategy_id - int64 - SSO (Single Sign On) strategy ID for the user, if applicable.
         ///   require_2fa - string - 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
         ///   tags - string - Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -3336,6 +3362,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("ssl_required", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type string", "ssl_required");
+            }
+            if (parameters.TryGetValue("ftp_tls_session_reuse_required", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_tls_session_reuse_required is null, which cannot be sent" : "Bad parameter: ftp_tls_session_reuse_required must be of type string", "ftp_tls_session_reuse_required");
             }
             if (parameters.TryGetValue("sso_strategy_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {

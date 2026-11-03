@@ -553,16 +553,19 @@ namespace FilesTests
         // warm start's sampling would instead take them down a file each 100 ms (WaitForFileLimitAsync), leaving its raise
         // fewer files to double than are already in progress. Storage answers the parts from when the upload has had time
         // to look at the warm start's first target, so that the raise comes after it has, or at once, whether or not it
-        // has; it answers each once the part has been in flight long enough that the windows the warm start judges are
-        // measured, however slowly the machine runs (BusyStorage), and once Files.com holds a beginning to answer for the
-        // next part. The raise doubles the files the upload may have in progress, and the files it adds begin at once,
-        // before any file finishes: at least eight within 300 ms, where the ordinary pacing, a file each 100 ms while too
-        // few parts are ready, begins four at most. Never more parts at once than MaxConcurrency, nor more files than
-        // MaxConcurrentFiles (the most the transfer allows); cancelled, the upload stops, its limiter left with nothing in
-        // use. However the test ends, it cancels the upload, gives the beginnings, answers and finishes it holds, and waits
-        // for the upload to end (SettleAsync). A failure shows, for each decision, why its window was below target, its
-        // throughput and for how much of it answers were awaited, and for the raise the files then in progress and
-        // allowed; then the beginnings answered one at a time and how long storage had a part in flight and went without.
+        // has; it answers each part after the first once it has been in flight four times as long as storage last went
+        // without a part (BusyStorage), so that while one part is sent at a time each round from one answer to
+        // the next has its part in flight for most of it, however slowly the machine runs, and once Files.com holds a
+        // beginning to answer for the next part. The raise doubles the files the upload may have in progress, and the
+        // files it adds begin at once, before any file finishes: at least eight within 300 ms, where the ordinary
+        // pacing, a file each 100 ms while too few parts are ready, begins four at most. Never more parts at once than
+        // MaxConcurrency, nor more files than MaxConcurrentFiles (the most the transfer allows); cancelled, the upload
+        // stops, its limiter left with nothing in use. However the test ends, it cancels the upload, gives the
+        // beginnings, answers and finishes it holds, and waits for the upload to end (SettleAsync). A failure shows,
+        // for each decision, why its window was below target, its throughput and for how much of it answers were
+        // awaited, and for the raise the files then in progress and allowed; then how long each answer since the last
+        // decision, or the first part, was awaited; the beginnings answered one at a time; and how long storage had a
+        // part in flight and went without, at most and last.
         [TestMethod]
         [Timeout(60000)]
         [DataRow(true, DisplayName = "Answered once the warm start's first target could be seen")]
@@ -696,7 +699,9 @@ namespace FilesTests
                 // before it (or since the first part was sent) with how long they were awaited, which while the target is
                 // one part is how long the upload had it in flight; for the raise, the files begun by then, the files in
                 // progress and allowed as the upload last reported them before it, and the files begun within 300 ms; then
-                // the beginnings answered one at a time, the answers in all and what storage saw.
+                // how long each answer observed since the last decision, or the first part with none, was awaited: the
+                // answers the warm start may still be sampling, though not exactly its window, which can close with no
+                // decision; then the beginnings answered one at a time, the answers in all and what storage saw.
                 string Seen()
                 {
                     List<TimeSpan> starts;
@@ -720,7 +725,11 @@ namespace FilesTests
                                 + (decision.Decision == ConcurrencyDecision.WarmStartRaised ? $", {starts.Count(start => start <= at)} files begun, {allowed.Files} in progress of {allowed.Limit} allowed, {Begun(at)} more within 300 ms" : ""));
                             since = at;
                         }
-                        return (seen.Count > 0 ? string.Join("; ", seen) : "no decisions") + $"; {starts.Count} files begun, {given} beginnings answered one at a time; {attempts.Count} answers in all; {storage}";
+                        string sinceLast = decisions.Count > 0 ? "the last decision" : "the first part was sent";
+                        string observed = string.Join(", ", attempts.Where(a => a.At > since).Select(a => $"{a.Attempt.Duration.TotalMilliseconds:0}"));
+                        return (seen.Count > 0 ? string.Join("; ", seen) : "no decisions")
+                            + (observed.Length > 0 ? $"; answers observed since {sinceLast} awaited {observed} ms" : $"; no answers observed since {sinceLast}")
+                            + $"; {starts.Count} files begun, {given} beginnings answered one at a time; {attempts.Count} answers in all; {storage}";
                     }
                 }
 
@@ -791,14 +800,18 @@ namespace FilesTests
             public void Report(T value) => report(value);
         }
 
-        // Storage that answers each part once it has been in flight InFlightPerIdle times as long as the longest time
-        // storage has gone without a part: from an answer, with no other part in flight, until the next part arrived. That
-        // time holds all the upload did between the two, the answer's way back, ending its attempt, admitting the next and
-        // sending it, and the upload counts an attempt in flight from just before it sends it until after its answer is
-        // back. So an upload whose target is one part had it in flight for at least four fifths of every window from one
-        // answer to another, more than the three quarters it needs to measure the window, however slowly the machine runs,
-        // and its answers, held alike, take alike, so that few of them judge a window. The first part, with no such time
-        // before it, is answered as soon as it may be. Once released, storage answers at once.
+        // Storage that answers each part once it has been in flight InFlightPerIdle times as long as storage last went
+        // without a part: from an answer, with no other part in flight, until the next part arrived. That time holds
+        // all the upload did between the two, the answer's way back, ending its attempt, admitting the next and
+        // sending it, and the upload counts an attempt in flight from just before it sends it until after its answer
+        // is back. So while the upload's target is one part, from its first answer on, each round from one answer to
+        // the next has the part in flight for at least four fifths of it, and so does any run of such rounds: more
+        // than the three quarters the upload needs to measure a window, however slowly the machine runs. Waiting for
+        // the answer gate or for a beginning to answer only keeps the part in flight longer. A long pause lengthens
+        // the hold of the part after it alone, not of every later part, so the answers follow the upload's own pace,
+        // which promises neither how many of them the warm start samples nor when it raises its target. The first
+        // part, with no such time before it, is answered as soon as it may be; a part that arrives while others are
+        // in flight is held as long as the first of them. Once released, storage answers at once.
         private sealed class BusyStorage
         {
             private const int InFlightPerIdle = 4;
@@ -811,7 +824,11 @@ namespace FilesTests
             private TimeSpan? idleSince;
             private TimeSpan busy;
             private TimeSpan idle;
+            // The longest time storage has gone without a part, for a failure to show.
             private TimeSpan longestIdle;
+            // How long storage went without a part before the parts it has, or last had, in flight: each is held
+            // InFlightPerIdle times as long.
+            private TimeSpan lastIdle;
 
             internal BusyStorage(CancellationToken released)
             {
@@ -832,11 +849,12 @@ namespace FilesTests
                         busySince = arrived;
                         if (idleSince.HasValue)
                         {
-                            idle += arrived - idleSince.Value;
-                            longestIdle = Max(longestIdle, arrived - idleSince.Value);
+                            lastIdle = arrived - idleSince.Value;
+                            idle += lastIdle;
+                            longestIdle = Max(longestIdle, lastIdle);
                         }
                     }
-                    hold = TimeSpan.FromTicks(longestIdle.Ticks * InFlightPerIdle);
+                    hold = TimeSpan.FromTicks(lastIdle.Ticks * InFlightPerIdle);
                 }
                 try
                 {
@@ -870,7 +888,7 @@ namespace FilesTests
                 {
                     TimeSpan held = busy + (inFlight > 0 ? UploadServer.Clock - busySince : TimeSpan.Zero);
                     return $"storage answered {answered} parts, with a part in flight for {held.TotalMilliseconds:0} ms and none for {idle.TotalMilliseconds:0} ms between them, "
-                        + $"at most {longestIdle.TotalMilliseconds:0} ms at a time, so holding each part {longestIdle.TotalMilliseconds * InFlightPerIdle:0} ms";
+                        + $"at most {longestIdle.TotalMilliseconds:0} ms at a time and {lastIdle.TotalMilliseconds:0} ms last, so holding the last parts {lastIdle.TotalMilliseconds * InFlightPerIdle:0} ms";
                 }
             }
         }

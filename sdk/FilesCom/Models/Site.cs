@@ -96,6 +96,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("allow_user_level_allowed_ip_override", false);
             }
+            if (!this.attributes.ContainsKey("allow_user_level_ftp_tls_session_reuse_override"))
+            {
+                this.attributes.Add("allow_user_level_ftp_tls_session_reuse_override", false);
+            }
             if (!this.attributes.ContainsKey("allow_user_level_ssl_override"))
             {
                 this.attributes.Add("allow_user_level_ssl_override", false);
@@ -692,6 +696,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("snapshot_sharing_enabled", false);
             }
+            if (!this.attributes.ContainsKey("ftp_tls_session_reuse_required"))
+            {
+                this.attributes.Add("ftp_tls_session_reuse_required", false);
+            }
             if (!this.attributes.ContainsKey("ssl_required"))
             {
                 this.attributes.Add("ssl_required", false);
@@ -1016,6 +1024,18 @@ namespace FilesCom.Models
         {
             get { return attributes["allow_user_level_allowed_ip_override"] == null ? false : (bool)attributes["allow_user_level_allowed_ip_override"]; }
             private set { attributes["allow_user_level_allowed_ip_override"] = value; }
+        }
+
+        /// <summary>
+        /// Allow per-user overrides of the FTP TLS session reuse requirement?
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("allow_user_level_ftp_tls_session_reuse_override")]
+        public bool AllowUserLevelFtpTlsSessionReuseOverride
+        {
+            get { return attributes["allow_user_level_ftp_tls_session_reuse_override"] == null ? false : (bool)attributes["allow_user_level_ftp_tls_session_reuse_override"]; }
+            private set { attributes["allow_user_level_ftp_tls_session_reuse_override"] = value; }
         }
 
         /// <summary>
@@ -2741,6 +2761,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all workspaces.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("ftp_tls_session_reuse_required")]
+        public bool FtpTlsSessionReuseRequired
+        {
+            get { return attributes["ftp_tls_session_reuse_required"] == null ? false : (bool)attributes["ftp_tls_session_reuse_required"]; }
+            private set { attributes["ftp_tls_session_reuse_required"] = value; }
+        }
+
+        /// <summary>
         /// Is SSL required?  Disabling this is insecure.
         /// </summary>
         [JsonInclude]
@@ -3173,6 +3205,7 @@ namespace FilesCom.Models
         ///   session_expiry_minutes - int64 - Session expiry in minutes
         ///   legacy_pairing_enabled - boolean - Allow legacy app pairing in all workspaces? Disabled for new sites; existing sites remain enabled until changed. Disabling blocks new pairing exchanges without revoking existing app credentials or affecting OAuth sign-in. Site administrators can re-enable it.
         ///   ssl_required - boolean - Is SSL required?  Disabling this is insecure.
+        ///   ftp_tls_session_reuse_required - boolean - Require TLS-protected FTP data connections to reuse the control connection TLS session? Applies to all workspaces.
         ///   sftp_insecure_ciphers - boolean - If true, we will allow weak and known insecure ciphers to be used for SFTP connections.  Enabling this setting severely weakens the security of your site and it is not recommend, except as a last resort for compatibility.
         ///   sftp_insecure_diffie_hellman - boolean - If true, we will allow weak Diffie Hellman parameters to be used within ciphers for SFTP that are otherwise on our secure list.  This has the effect of making the cipher weaker than our normal threshold for security, but is required to support certain legacy or broken SSH and MFT clients.  Enabling this weakens security, but not nearly as much as enabling the full `sftp_insecure_ciphers` option.
         ///   disable_files_certificate_generation - boolean - If set, Files.com will not set the CAA records required to generate future SSL certificates for this domain.
@@ -3187,6 +3220,7 @@ namespace FilesCom.Models
         ///   allow_user_level_2fa_override - boolean - Allow the site-wide two-factor authentication requirement to be overriden on a per-user-basis?
         ///   allow_user_level_allowed_ip_override - boolean - Allow the site-wide allowed IP restriction to be overriden on a per-user-basis?
         ///   allow_user_level_ssl_override - boolean - Allow the site-wide FTP SSL requirement to be overriden on a per-user-basis?
+        ///   allow_user_level_ftp_tls_session_reuse_override - boolean - Allow per-user overrides of the FTP TLS session reuse requirement?
         ///   enforce_parent_site_user_ip_restrictions - boolean - Require Parent Site users entering this Child Site to match its allowed IP addresses in addition to their existing IP restrictions. Applies to all Workspaces. Defaults to false.
         ///   disallowed_countries - string - Comma separated list of disallowed Country codes
         ///   days_to_retain_backups - int64 - Number of days to keep deleted files
@@ -3539,6 +3573,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ssl_required is null, which cannot be sent" : "Bad parameter: ssl_required must be of type bool", "ssl_required");
             }
+            if (parameters.TryGetValue("ftp_tls_session_reuse_required", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ftp_tls_session_reuse_required is null, which cannot be sent" : "Bad parameter: ftp_tls_session_reuse_required must be of type bool", "ftp_tls_session_reuse_required");
+            }
             if (parameters.TryGetValue("sftp_insecure_ciphers", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sftp_insecure_ciphers is null, which cannot be sent" : "Bad parameter: sftp_insecure_ciphers must be of type bool", "sftp_insecure_ciphers");
@@ -3594,6 +3632,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("allow_user_level_ssl_override", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_user_level_ssl_override is null, which cannot be sent" : "Bad parameter: allow_user_level_ssl_override must be of type bool", "allow_user_level_ssl_override");
+            }
+            if (parameters.TryGetValue("allow_user_level_ftp_tls_session_reuse_override", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: allow_user_level_ftp_tls_session_reuse_override is null, which cannot be sent" : "Bad parameter: allow_user_level_ftp_tls_session_reuse_override must be of type bool", "allow_user_level_ftp_tls_session_reuse_override");
             }
             if (parameters.TryGetValue("enforce_parent_site_user_ip_restrictions", out parameterValue) && !(parameterValue is bool))
             {

@@ -83,6 +83,7 @@
   "workspace_id": 1,
   "default_workspace_id": 1,
   "skip_welcome_screen": true,
+  "ftp_tls_session_reuse_required": "use_system_setting",
   "ssl_required": "always_require",
   "sso_strategy_id": 1,
   "externally_managed": true,
@@ -174,6 +175,7 @@
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace the user belongs to. 0 is the Default Workspace.
 * `default_workspace_id` / `DefaultWorkspaceId`  (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
 * `skip_welcome_screen` / `SkipWelcomeScreen`  (bool): Skip Welcome page in the UI?
+* `ftp_tls_session_reuse_required` / `FtpTlsSessionReuseRequired`  (string): FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
 * `ssl_required` / `SslRequired`  (string): SSL required setting
 * `sso_strategy_id` / `SsoStrategyId`  (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `externally_managed` / `ExternallyManaged`  (bool): Is this user managed by a SsoStrategy?
@@ -350,6 +352,7 @@ Task<User> client.Users.CreateAsync(
 * `site_admin` (bool): Is the user an administrator for this site?
 * `skip_welcome_screen` (bool): Skip Welcome page in the UI?
 * `ssl_required` (string): SSL required setting
+* `ftp_tls_session_reuse_required` (string): FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
 * `sso_strategy_id` (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `require_2fa` (string): 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
 * `tags` (string): Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -530,6 +533,7 @@ Task<User> client.Users.UpdateAsync(
 * `site_admin` (bool): Is the user an administrator for this site?
 * `skip_welcome_screen` (bool): Skip Welcome page in the UI?
 * `ssl_required` (string): SSL required setting
+* `ftp_tls_session_reuse_required` (string): FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
 * `sso_strategy_id` (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `require_2fa` (string): 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
 * `tags` (string): Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
@@ -690,6 +694,7 @@ parameters.Add("sftp_permission", true);
 parameters.Add("site_admin", true);
 parameters.Add("skip_welcome_screen", true);
 parameters.Add("ssl_required", "always_require");
+parameters.Add("ftp_tls_session_reuse_required", "use_system_setting");
 parameters.Add("sso_strategy_id", 1L);
 parameters.Add("require_2fa", "always_require");
 parameters.Add("tags", "example");
@@ -770,6 +775,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `User` 
 * `site_admin` (bool): Is the user an administrator for this site?
 * `skip_welcome_screen` (bool): Skip Welcome page in the UI?
 * `ssl_required` (string): SSL required setting
+* `ftp_tls_session_reuse_required` (string): FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
 * `sso_strategy_id` (Nullable<Int64>): SSO (Single Sign On) strategy ID for the user, if applicable.
 * `require_2fa` (string): 2FA required setting. `use_system_setting` uses the site-wide setting, including SSO exemptions. `always_require` and `never_require` override the site-wide setting when user-level overrides are allowed.
 * `tags` (string): Comma-separated list of Tags for this user. Tags are used for other features, such as UserLifecycleRules, which can target specific tags.  Tags must only contain lowercase letters, numbers, and hyphens.
