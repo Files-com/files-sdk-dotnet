@@ -38,7 +38,8 @@ namespace FilesTests
         // MaxPartSize. How long a request takes here depends on the host as well as on the stand-in's 25 ms, so a window
         // the host holds up can make a probe of larger parts deliver less, and the probe is then given up; that requests
         // taking the same time make the parts grow, each probe kept, up to MaxPartSize, is shown by
-        // ChosenPartSizesGrowToMaxPartSizeWhileLargerPartsRaiseThroughput, on a clock the test controls.
+        // ChosenPartSizesGrowToMaxPartSizeWhileLargerPartsRaiseThroughput, on a clock the test controls, and that larger
+        // parts that deliver no more are given up, by LargerPartsThatDoNotRaiseThroughputAreGivenUp.
         [TestMethod]
         [Timeout(60000)]
         public async Task ChosenPartSizesFollowTheirDecisionsForPartsNotYetRead()
@@ -123,7 +124,7 @@ namespace FilesTests
             PartSizes plan = PartSizes.Plan(new PartSizeLimits(16 * KiB, 1 * MiB, 10000, 1L << 30), 12 * MiB, null, null, settings, null, "remote.bin", Stopwatch.Frequency, out ServerPlannedReason fallback);
             Assert.AreEqual(ServerPlannedReason.None, fallback);
 
-            (List<long> lengths, List<UploadSizingTrace> sizing) = SendPlanned(plan, 12 * MiB, slots: 2, duration);
+            (List<long> lengths, List<UploadSizingTrace> sizing) = SendPlanned(plan, 12 * MiB, slots: 2, length => duration);
 
             string evidence = $"Lengths: {string.Join(", ", lengths)}\nDecisions: {string.Join("; ", sizing.Select(d => $"{d.Decision} {d.PreviousSize}->{d.Size} {d.ThroughputBytesPerSecond:0}/{d.BaselineBytesPerSecond:0}"))}";
             CollectionAssert.AreEqual(
@@ -143,50 +144,40 @@ namespace FilesTests
             Assert.AreEqual(12 * MiB, lengths.Sum(), evidence);
         }
 
+        // Bandwidth limits instead, on a clock the test controls (SendPlanned): two requests at once, each taking 32 ms for
+        // every 64 KiB, so that larger parts deliver no more. Over a loopback site, a request's time depends on the host as
+        // well, which can hold up any window, even one of the level larger parts are compared with. The upload's own plan,
+        // with its own tuning, grows the size once, after GrowthIntervalWindows windows at the level; the 128 KiB parts,
+        // judged by their own windows alone, deliver what the 64 KiB parts did, short of the ProbeGainPercent gain, so the
+        // probe is given up: the size goes back, every part planned after it has that size, and growth holds through the
+        // rest of the file, twice as many parts as the level took to grow from the start.
         [TestMethod]
-        [Timeout(60000)]
-        public async Task LargerPartsThatDoNotRaiseThroughputAreGivenUp()
+        public void LargerPartsThatDoNotRaiseThroughputAreGivenUp()
         {
-            using (var server = new UploadServer())
-            {
-                UseAws(server, 16 * KiB, 1 * MiB, 10000, 1L << 30);
-                // Bandwidth limits instead: a request's time follows its size, so larger parts deliver no more. The time is
-                // kept on the Stopwatch clock: with a timer, the host's lateness would lengthen the smallest parts the most
-                // for their size, so that larger parts would seem to deliver more.
-                server.RespondToPart = async request =>
-                {
-                    TimeSpan wait = TimeSpan.FromMilliseconds(request.Bytes.Length / (3.0 * KiB));
-                    await DestinationClock.Wait(wait);
-                    request.Mark($"served (asked {wait.TotalMilliseconds:0.0}ms)");
-                    return UploadServer.Accept(request);
-                };
-                byte[] contents = Pattern(3 * MiB);
-                string localPath = WriteFile("local.bin", contents);
-                var trace = new TraceLog();
-                AutomaticPartSizingOptions sizing = GrowingFrom(64 * KiB, max: 512 * KiB);
-                sizing.ProbeGainPercent = 50;
-                sizing.HoldWindows = 100;
-                // The level larger parts are compared with is three windows, so that one window a busy host held up, as a
-                // shared CI runner can, is not taken for the level.
-                sizing.GrowthIntervalWindows = 3;
+            Func<long, TimeSpan> durationOf = length => TimeSpan.FromMilliseconds(length / (2.0 * KiB));
+            AutomaticPartSizingOptions tuning = GrowingFrom(64 * KiB, max: 512 * KiB);
+            tuning.ProbeGainPercent = 50;
+            tuning.HoldWindows = 100;
+            tuning.GrowthIntervalWindows = 3;
+            PartSizingSettings settings = PartSizingSettings.Of(UploadPartSizingMode.Automatic, null, tuning);
+            PartSizes plan = PartSizes.Plan(new PartSizeLimits(16 * KiB, 1 * MiB, 10000, 1L << 30), 4 * MiB, null, null, settings, null, "remote.bin", Stopwatch.Frequency, out ServerPlannedReason fallback);
+            Assert.AreEqual(ServerPlannedReason.None, fallback);
 
-                UploadResult result = await Within(Client(server).Transfers.UploadFileAsync(localPath, "remote.bin", new UploadOptions
-                {
-                    ConcurrencyMode = UploadConcurrencyMode.Static,
-                    MaxConcurrency = 2,
-                    AutomaticPartSizing = sizing,
-                    Trace = trace,
-                }));
+            (List<long> lengths, List<UploadSizingTrace> sizing) = SendPlanned(plan, 4 * MiB, slots: 2, durationOf);
 
-                string evidence = $"Chosen lengths: {string.Join(", ", result.Parts.Select(part => part.Length))}\n{trace.Evidence(server)}";
-                UploadSizingTrace rejected = trace.Sizing.FirstOrDefault(d => d.Decision == PartSizeDecision.ProbeRejected);
-                Assert.IsNotNull(rejected, Describe(trace) + "\n" + evidence);
-                Assert.AreEqual(64 * KiB, rejected.Size, "The size went back.\n" + evidence);
-                Assert.AreEqual(1, trace.Sizing.Count(d => d.Decision == PartSizeDecision.Grew), "Growth then held.\n" + evidence);
-                long[] nonfinal = result.Parts.Take(result.Parts.Count - 1).Select(part => part.Length).ToArray();
-                Assert.AreEqual(64 * KiB, nonfinal.Last(), "Parts read after the probe have the size it went back to.\n" + evidence);
-                AssertExactUpload(server, result, contents);
-            }
+            string evidence = $"Lengths: {string.Join(", ", lengths)}\nDecisions: {string.Join("; ", sizing.Select(d => $"{d.Decision} {d.PreviousSize}->{d.Size} {d.ThroughputBytesPerSecond:0}/{d.BaselineBytesPerSecond:0}"))}";
+            CollectionAssert.AreEqual(new[] { "Grew 128", "ProbeRejected 64" }, sizing.Select(d => $"{d.Decision} {d.Size / KiB}").ToArray(), "The probe was given up, and growth then held.\n" + evidence);
+            UploadSizingTrace rejected = sizing[1];
+            Assert.AreEqual(2 * 64 * KiB / durationOf(64 * KiB).TotalSeconds, rejected.BaselineBytesPerSecond, 1, "Against the level of the 64 KiB parts.\n" + evidence);
+            Assert.AreEqual(rejected.BaselineBytesPerSecond, rejected.ThroughputBytesPerSecond, 1, "The 128 KiB parts delivered no more.\n" + evidence);
+            long[] nonfinal = lengths.Take(lengths.Count - 1).ToArray();
+            long[] before = nonfinal.TakeWhile(size => size == 64 * KiB).ToArray();
+            long[] probe = nonfinal.Skip(before.Length).TakeWhile(size => size == 128 * KiB).ToArray();
+            long[] after = nonfinal.Skip(before.Length + probe.Length).ToArray();
+            Assert.IsTrue(probe.Length > 0, "The probe's larger parts were sent.\n" + evidence);
+            Assert.IsTrue(after.All(size => size == 64 * KiB), "Parts planned after the probe have the size it went back to.\n" + evidence);
+            Assert.IsTrue(after.Length >= 2 * before.Length, "Growth held where it would have been due again.\n" + evidence);
+            Assert.AreEqual(4 * MiB, lengths.Sum(), evidence);
         }
 
         [TestMethod]
@@ -1623,16 +1614,17 @@ namespace FilesTests
         }
 
         // Sends the parts of a static upload's file of total bytes, as its plan sizes them, to the upload's real controller
-        // on a clock it controls, slots at a time, each request taking duration whatever its size: as each part is
-        // answered, the next is planned (PartSizes.LengthFor), in the size chosen then, and sent in its place. Returns the
+        // on a clock it controls, slots at a time, each request taking the time durationOf gives for its length from when
+        // it is sent: as each part is answered, at that time (parts answered at the same time in the order they were
+        // sent), the next is planned (PartSizes.LengthFor), in the size chosen then, and sent in its place. Returns the
         // parts' lengths, in order, and the size decisions.
-        private static (List<long> Lengths, List<UploadSizingTrace> Sizing) SendPlanned(PartSizes plan, long total, int slots, TimeSpan duration)
+        private static (List<long> Lengths, List<UploadSizingTrace> Sizing) SendPlanned(PartSizes plan, long total, int slots, Func<long, TimeSpan> durationOf)
         {
             long now = Stopwatch.Frequency;
             var records = new List<UploadTraceEvent>();
             var controller = new ConcurrencyController(ConcurrencySettings.Static(slots), "remote.bin", now, plan.Controller);
             var lengths = new List<long>();
-            var sending = new List<(long Length, int Epoch)>();
+            var sending = new List<(long Length, int Epoch, TimeSpan Duration, long Due)>();
             long offset = 0;
             void SendNext()
             {
@@ -1641,7 +1633,8 @@ namespace FilesTests
                     long length = plan.LengthFor(lengths.Count + 1, offset, out int epoch);
                     lengths.Add(length);
                     offset += length;
-                    sending.Add((length, epoch));
+                    TimeSpan duration = durationOf(length);
+                    sending.Add((length, epoch, duration, now + (long)(duration.TotalSeconds * Stopwatch.Frequency)));
                     controller.Granted(now);
                     controller.Sending(now);
                 }
@@ -1652,15 +1645,20 @@ namespace FilesTests
             }
             while (sending.Count > 0)
             {
-                now += (long)(duration.TotalSeconds * Stopwatch.Frequency);
-                var answered = sending.ToList();
-                sending.Clear();
-                foreach ((long length, int epoch) in answered)
+                int next = 0;
+                for (int i = 1; i < sending.Count; i++)
                 {
-                    controller.Record(now, 0, new AttemptSample(accepted: true, throttled: false, transient: false, retryAfter: null, bytes: length, duration: duration, sizeEpoch: epoch), records);
-                    controller.Released(now, sending: true);
-                    SendNext();
+                    if (sending[i].Due < sending[next].Due)
+                    {
+                        next = i;
+                    }
                 }
+                (long length, int epoch, TimeSpan duration, long due) = sending[next];
+                sending.RemoveAt(next);
+                now = due;
+                controller.Record(now, 0, new AttemptSample(accepted: true, throttled: false, transient: false, retryAfter: null, bytes: length, duration: duration, sizeEpoch: epoch), records);
+                controller.Released(now, sending: true);
+                SendNext();
             }
             return (lengths, records.OfType<UploadSizingTrace>().ToList());
         }
