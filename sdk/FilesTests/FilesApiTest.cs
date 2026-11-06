@@ -553,51 +553,129 @@ namespace FilesTests
     }
 
     [TestClass]
+    [DoNotParallelize]
     public class FilesApiListTest
     {
-        private static WireMockServer _server;
-        private static string _baseUrl;
-        private static FilesClient client;
+        private WireMockServer _server;
+        private FilesClient client;
+        private HttpClient simulator;
+        private long simulatorEpoch;
+        private string simulatorInstance;
 
-        [ClassInitialize]
-        public static void PrepareClass(TestContext context)
+        public TestContext TestContext { get; set; }
+
+        [TestInitialize]
+        public async Task PrepareTest()
         {
-            // On 127.0.0.1 only, on a port the system assigns, and reached there, as LoopbackSite listens: no other socket
-            // on that port can take the requests.
-            _server = WireMockServer.Start(new WireMockServerSettings
+            // The nested-null sync regression keeps its deliberately shaped response. The ordinary folder-list
+            // tests use the same simulator and canonical root-listing policy as the shared API scenarios.
+            if (TestContext.TestName == nameof(TestSyncListWithInProgressSyncRun))
             {
-                Urls = new[] { "http://127.0.0.1:0" },
-                ReadStaticMappings = true
-            });
-            _baseUrl = _server.Urls[0];
+                _server = WireMockServer.Start(new WireMockServerSettings { Urls = new[] { "http://127.0.0.1:0" }, ReadStaticMappings = true });
+                client = new FilesClient(new FilesConfiguration { ApiKey = "my-key", BaseUrl = _server.Urls[0] });
+                return;
+            }
 
-            // client config
-            FilesConfiguration filesConfig = new FilesConfiguration();
-            filesConfig.ApiKey = "my-key";
-            filesConfig.BaseUrl = _baseUrl;
-            client = new FilesClient(filesConfig);
+            string Required(string name) => Environment.GetEnvironmentVariable(name) is string value && value.Length > 0
+                ? value : throw new InvalidOperationException($"Run the list tests through with-scenario.rb; {name} is missing.");
+            string host = Required("FILES_MOCK_SERVER_HOST");
+            string port = Required("FILES_MOCK_SERVER_PORT");
+            string origin = Required("FILES_MOCK_SERVER_URL");
+            string schema = Required("FILES_MOCK_SCHEMA_SHA256");
+            string instance = Required("FILES_MOCK_INSTANCE");
+            string key = Required("FILES_MOCK_API_KEY");
+            Assert.IsTrue(IPAddress.TryParse(host, out IPAddress address) && IPAddress.IsLoopback(address));
+            Assert.IsTrue(int.TryParse(port, out int number) && number >= 1 && number <= 65535);
+            Assert.AreEqual(new UriBuilder("http", host, number).Uri.GetLeftPart(UriPartial.Authority), origin);
+            Assert.IsTrue(System.Text.RegularExpressions.Regex.IsMatch(schema, "\\A[0-9a-f]{64}\\z"));
+            Assert.IsTrue(System.Text.RegularExpressions.Regex.IsMatch(instance, "\\A[0-9a-f]{12}\\z"));
+            Assert.IsTrue(System.Text.RegularExpressions.Regex.IsMatch(key, "\\A[A-Za-z0-9]+\\z"));
+            simulator = new HttpClient(new HttpClientHandler { UseProxy = false, AllowAutoRedirect = false })
+            {
+                BaseAddress = new Uri(origin),
+                Timeout = TimeSpan.FromSeconds(10),
+                MaxResponseContentBufferSize = 1024 * 1024,
+            };
+            simulator.DefaultRequestHeaders.UserAgent.ParseAdd("files-dotnet-list-fixture/1");
+
+            var before = await Control("ready");
+            void CheckReady(System.Text.Json.Nodes.JsonNode ready)
+            {
+                Assert.AreEqual("ready", ready["status"].GetValue<string>());
+                Assert.AreEqual("simulation", ready["mode"].GetValue<string>());
+                Assert.AreEqual(3, ready["contract_version"].GetValue<int>());
+                Assert.AreEqual(schema, ready["schema_sha256"].GetValue<string>());
+                Assert.AreEqual(instance, ready["instance"].GetValue<string>());
+            }
+            CheckReady(before);
+            var preset = System.Text.Json.Nodes.JsonNode.Parse(System.IO.File.ReadAllText(Required("FILES_MOCK_SCENARIO_FILE")));
+            Assert.AreEqual("api-scenarios-canonical", preset["name"].GetValue<string>());
+            var reset = preset["reset"].DeepClone();
+            reset["fixtures"] = System.Text.Json.Nodes.JsonNode.Parse(TestContext.TestName == nameof(TestSimpleList)
+                ? "{\"files\":[{\"path\":\"test.txt\",\"text\":\"list fixture\"}]}"
+                : TestContext.TestName == nameof(TestEmptyList) ? "{\"folders\":[\"empty\"]}" : "{}");
+            var answer = await Control("reset", reset);
+            var after = await Control("ready");
+            CheckReady(after);
+            Assert.AreEqual(before["epoch"].GetValue<long>() + 1, answer["epoch"].GetValue<long>());
+            Assert.AreEqual(answer["epoch"].GetValue<long>(), after["epoch"].GetValue<long>());
+            Assert.IsTrue(System.Text.Json.Nodes.JsonNode.DeepEquals(reset["profile"]["api_scenarios"], after["profile"]["api_scenarios"]));
+            simulatorEpoch = after["epoch"].GetValue<long>();
+            simulatorInstance = instance;
+            if (TestContext.TestName == nameof(TestNotFoundList))
+            {
+                using (var fault = await simulator.PostAsync("/__files_mock/v1/faults", new StringContent(
+                    "{\"operation\":\"folders.list\",\"match\":{\"path\":\"notfound\"},\"status\":404,\"type\":\"not-found\",\"message\":\"Not Found.  This may be related to your permissions.\"}", Encoding.UTF8, "application/json")))
+                {
+                    Assert.AreEqual(HttpStatusCode.Created, fault.StatusCode);
+                }
+            }
+            client = new FilesClient(new FilesConfiguration { ApiKey = key, BaseUrl = origin });
         }
 
-        [ClassCleanup]
-        public static void TearDown()
+        private async Task<System.Text.Json.Nodes.JsonNode> Control(string name, System.Text.Json.Nodes.JsonNode reset = null)
         {
-            _server.Stop();
+            using (HttpResponseMessage response = reset == null ? await simulator.GetAsync("/__files_mock/v1/" + name)
+                : await simulator.PostAsync("/__files_mock/v1/" + name, new StringContent(reset.ToJsonString(), Encoding.UTF8, "application/json")))
+            {
+                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+                return System.Text.Json.Nodes.JsonNode.Parse(await response.Content.ReadAsStringAsync());
+            }
         }
 
+        [TestCleanup]
+        public async Task TearDown()
+        {
+            try
+            {
+                if (simulator != null && simulatorEpoch > 0)
+                {
+                    var journal = await Control("journal");
+                    Assert.IsTrue(journal["complete"].GetValue<bool>());
+                    Assert.AreEqual(0, journal["dropped"].GetValue<int>());
+                    Assert.AreEqual(simulatorEpoch, journal["epoch"].GetValue<long>());
+                    Assert.AreEqual(simulatorInstance, journal["instance"].GetValue<string>());
+                    var calls = journal["entries"].AsArray().Where(entry => entry["operation"]?.GetValue<string>() == "folders.list").ToArray();
+                    Assert.AreEqual(1, calls.Length, "The static SDK list call reached the shared simulator once.");
+                    Assert.AreEqual(TestContext.TestName == nameof(TestNotFoundList) ? 404 : 200, calls[0]["status"].GetValue<int>());
+                    if (TestContext.TestName == nameof(TestNotFoundList))
+                    {
+                        Assert.IsNotNull(calls[0]["fault_id"], "The queued error was consumed by the SDK call.");
+                    }
+                }
+            }
+            finally
+            {
+                client?.Dispose();
+                simulator?.Dispose();
+                _server?.Stop();
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("SharedSimulatorList")]
         public void TestSimpleList()
         {
-
-            // stub
-            var bodyContent = new[] {
-                new { path = "test.txt", type = "file", size = 81920, mtime = "2014-12-05T06:56:30+00:00", provided_mtime = "2013-11-05T06:56:30+00:00", crc32 = "a7a90a69", md5 = "d41d8cd98f00b204e9800998ecf8427e", permissions = "rwd" }
-            };
-            _server.Given(WireMock.RequestBuilders.Request.Create().WithPath("/api/rest/v1/folders/").UsingGet())
-                            .RespondWith(
-                                Response.Create()
-                                .WithStatusCode(200)
-                                .WithHeader("Content-Type", "application/json")
-                                .WithBodyAsJson(bodyContent)
-                            );
 
             Dictionary<string, object> parameters = new Dictionary<string, object>() { };
             var files = Folder.ListFor("/", parameters, null);
@@ -612,17 +690,9 @@ namespace FilesTests
         }
 
         [TestMethod]
+        [TestCategory("SharedSimulatorList")]
         public void TestNotFoundList()
         {
-            _server
-              .Given(WireMock.RequestBuilders.Request.Create().WithPath("/api/rest/v1/folders/notfound").UsingGet())
-              .RespondWith(
-                Response.Create()
-                  .WithStatusCode(404)
-                  .WithHeader("Content-Type", "application/json")
-                  .WithBody(@"{""type"": ""not-found"",""http-code"": 404,""error"": ""Not Found.  This may be related to your permissions.""}")
-              );
-
             Dictionary<string, object> parameters = new Dictionary<string, object>() { };
             var itemCount = 0;
             try
@@ -645,17 +715,9 @@ namespace FilesTests
         }
 
         [TestMethod]
+        [TestCategory("SharedSimulatorList")]
         public void TestEmptyList()
         {
-            // stub
-            _server.Given(WireMock.RequestBuilders.Request.Create().WithPath("/api/rest/v1/folders/empty").UsingGet())
-                            .RespondWith(
-                                Response.Create()
-                                .WithStatusCode(200)
-                                .WithHeader("Content-Type", "application/json")
-                                .WithBody(@"[]")
-                            );
-
             Dictionary<string, object> parameters = new Dictionary<string, object>() { };
             var files = Folder.ListFor("empty", parameters, null);
             var itemCount = 0;

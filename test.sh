@@ -23,9 +23,9 @@ results="$(mktemp -d)" || exit 1
 trap 'status=$?; if [[ ${status} -eq 0 ]]; then rm -rf "${results}"; else echo "test.sh failed (exit ${status}); its results are kept in ${results}" >&2; fi' EXIT
 
 frameworks="$(dotnet msbuild FilesTests/FilesTests.csproj -getProperty:TargetFrameworks)" || exit 1
-# Every test but the one that runs against a simulator of its own (TestCategory SharedSimulatorFilesystem), which runs
-# last, under the simulator's launcher.
-ordinary_tests="TestCategory!=SharedSimulatorFilesystem"
+# Filesystem and legacy list cases run separately against their own simulator, under its launcher.
+# The ordinary suite retains the specialized unit and transport regressions.
+ordinary_tests="TestCategory!=SharedSimulatorFilesystem&TestCategory!=SharedSimulatorList"
 
 # The frameworks are tested one after another. A CI job (CI=true) can opt in (FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL=1)
 # to testing them at the same time when it has the CPUs and memory for it, which parallel-test-resources.sh decides
@@ -160,3 +160,7 @@ if [[ "${#filesystem_passed[@]}" -eq 0 || "${filesystem_passed[*]}" != "${filesy
   exit 1
 fi
 echo "FilesTests.RemoteFileSystemTest: passed against the simulator as ${filesystem_passed[*]}"
+
+# The three legacy folder-list tests retain their static SDK entry points and run once per framework against a
+# fresh shared simulator. The nullable sync-response regression remains in the ordinary unit suite.
+"${DIR}/shared-list-tests.sh" "${FILES_CONTRACT_MOCK_SERVER}" "${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}/legacy-lists" "${frameworks}" || exit 1
