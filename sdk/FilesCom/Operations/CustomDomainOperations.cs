@@ -116,25 +116,6 @@ namespace FilesCom.Operations
 
         /// <summary>
         /// Parameters:
-        ///   id (required) - int64 - Custom Domain ID.
-        ///   count (required) - int64 - Number of dedicated IP addresses to allocate.
-        /// </summary>
-        /// <param name="id">Custom Domain ID.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.CustomDomain> CreateAllocateIpAsync(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            return global::FilesCom.Models.CustomDomain.CreateAllocateIpCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
-        /// Parameters:
         ///   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
         ///   workspace_id - int64 - Workspace ID (0 for the default workspace).
         ///   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
@@ -153,6 +134,25 @@ namespace FilesCom.Operations
         )
         {
             return global::FilesCom.Models.CustomDomain.CreateCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Custom Domain ID.
+        ///   count (required) - int64 - Number of dedicated IP addresses to allocate.
+        /// </summary>
+        /// <param name="id">Custom Domain ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.CustomDomain> CreateAllocateIpAsync(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.CustomDomain.CreateAllocateIpCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>

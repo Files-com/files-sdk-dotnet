@@ -236,34 +236,6 @@ Task<Sync> client.Syncs.CreateAsync(
 
 ---
 
-## Dry Run Sync
-
-```
-Task Sync.DryRun(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials and takes a cancellation token:
-
-```
-Task client.Syncs.DryRunAsync(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null,
-    CancellationToken cancellationToken = default
-)
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Sync ID.
-
-
----
-
 ## Manually Run Sync
 
 ```
@@ -278,6 +250,34 @@ With a client, which runs it with its own site and credentials and takes a cance
 
 ```
 Task client.Syncs.ManualRunAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Sync ID.
+
+
+---
+
+## Dry Run Sync
+
+```
+Task Sync.DryRun(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.Syncs.DryRunAsync(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -371,25 +371,6 @@ Task client.Syncs.DeleteAsync(
 
 ---
 
-## Dry Run Sync
-
-```
-var sync = await Sync.Find(1L);
-
-var parameters = new Dictionary<string, object>();
-
-await sync.DryRun(parameters);
-```
-
-`DryRunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Sync ID.
-
-
----
-
 ## Manually Run Sync
 
 ```
@@ -401,6 +382,25 @@ await sync.ManualRun(parameters);
 ```
 
 `ManualRunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Sync ID.
+
+
+---
+
+## Dry Run Sync
+
+```
+var sync = await Sync.Find(1L);
+
+var parameters = new Dictionary<string, object>();
+
+await sync.DryRun(parameters);
+```
+
+`DryRunAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

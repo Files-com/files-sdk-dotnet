@@ -249,6 +249,34 @@ Task client.RemoteFiles.DeleteAsync(
 
 ---
 
+## List the contents of a ZIP file
+
+```
+Task<ZipListEntry[]> RemoteFile.ZipListContents(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<ZipListEntry[]> client.RemoteFiles.ZipListContentsAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+
+
+---
+
 ## Find File/Folder by Path
 
 ```
@@ -280,11 +308,11 @@ Task<RemoteFile> client.RemoteFiles.FindAsync(
 
 ---
 
-## List the contents of a ZIP file
+## Create a ZIP from one or more paths and save it to a destination path
 
 ```
-Task<ZipListEntry[]> RemoteFile.ZipListContents(
-    string path, 
+Task<FileAction> RemoteFile.Zip(
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -293,8 +321,8 @@ Task<ZipListEntry[]> RemoteFile.ZipListContents(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<ZipListEntry[]> client.RemoteFiles.ZipListContentsAsync(
-    string path, 
+Task<FileAction> client.RemoteFiles.ZipAsync(
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
     CancellationToken cancellationToken = default
@@ -303,15 +331,18 @@ Task<ZipListEntry[]> client.RemoteFiles.ZipListContentsAsync(
 
 ### Parameters
 
-* `path` (string): Required - Path to operate on.
+* `paths` (string[]): Required - Paths to include in the ZIP.
+* `destination` (string): Required - Destination file path for the ZIP.
+* `archive_format` (string): Archive format to create.
+* `overwrite` (bool): Overwrite existing file in the destination?
 
 
 ---
 
-## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+## Extract a ZIP file to a destination folder
 
 ```
-Task<FileAction> RemoteFile.BeginDelete(
+Task<FileAction> RemoteFile.Unzip(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -321,7 +352,7 @@ Task<FileAction> RemoteFile.BeginDelete(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<FileAction> client.RemoteFiles.BeginDeleteAsync(
+Task<FileAction> client.RemoteFiles.UnzipAsync(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -331,16 +362,18 @@ Task<FileAction> client.RemoteFiles.BeginDeleteAsync(
 
 ### Parameters
 
-* `path` (string): Required - Path to operate on.
-* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+* `path` (string): Required - ZIP file path to extract.
+* `destination` (string): Required - Destination folder path for extracted files.
+* `filename` (string): Optional single entry filename to extract.
+* `overwrite` (bool): Overwrite existing files in the destination?
 
 
 ---
 
-## Copy File/Folder
+## Encrypt a file with GPG and save it to a destination path
 
 ```
-Task<FileAction> RemoteFile.Copy(
+Task<FileAction> RemoteFile.GpgEncrypt(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -350,7 +383,7 @@ Task<FileAction> RemoteFile.Copy(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<FileAction> client.RemoteFiles.CopyAsync(
+Task<FileAction> client.RemoteFiles.GpgEncryptAsync(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -361,74 +394,11 @@ Task<FileAction> client.RemoteFiles.CopyAsync(
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Copy destination path.
-* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-* `structure` (bool): Copy structure only?
-* `overwrite` (bool): Overwrite existing file(s) in the destination?
-
-
----
-
-## Move File/Folder
-
-```
-Task<FileAction> RemoteFile.Move(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials and takes a cancellation token:
-
-```
-Task<FileAction> client.RemoteFiles.MoveAsync(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null,
-    CancellationToken cancellationToken = default
-)
-```
-
-### Parameters
-
-* `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Move destination path.
-* `overwrite` (bool): Overwrite existing file(s) in the destination?
-
-
----
-
-## Transform a file and save the output to a destination path
-
-```
-Task<FileAction> RemoteFile.Transform(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials and takes a cancellation token:
-
-```
-Task<FileAction> client.RemoteFiles.TransformAsync(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null,
-    CancellationToken cancellationToken = default
-)
-```
-
-### Parameters
-
-* `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Destination file path for the transformed output.
-* `transform_type` (string): Required - Transform type. Supported values are `image_convert`, `document_convert`, and `files_transform_script_execute`.
-* `target_format` (string): Required - Destination format to create.
-* `script` (string): Files TransformScript source. Required when transform_type is `files_transform_script_execute`.
-* `width` (Nullable<Int64>): Maximum output width for image_convert.
-* `height` (Nullable<Int64>): Maximum output height for image_convert.
+* `destination` (string): Required - Destination file path for the encrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to encrypt with.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for encryption.
+* `signing_key_id` (Nullable<Int64>): Optional GPG Key ID to sign with.
+* `armor` (bool): Output ASCII-armored encrypted data.
 * `overwrite` (bool): Overwrite existing file in the destination?
 
 
@@ -468,10 +438,10 @@ Task<FileAction> client.RemoteFiles.GpgDecryptAsync(
 
 ---
 
-## Encrypt a file with GPG and save it to a destination path
+## Transform a file and save the output to a destination path
 
 ```
-Task<FileAction> RemoteFile.GpgEncrypt(
+Task<FileAction> RemoteFile.Transform(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -481,7 +451,7 @@ Task<FileAction> RemoteFile.GpgEncrypt(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<FileAction> client.RemoteFiles.GpgEncryptAsync(
+Task<FileAction> client.RemoteFiles.TransformAsync(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -492,20 +462,21 @@ Task<FileAction> client.RemoteFiles.GpgEncryptAsync(
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Destination file path for the encrypted file.
-* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to encrypt with.
-* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for encryption.
-* `signing_key_id` (Nullable<Int64>): Optional GPG Key ID to sign with.
-* `armor` (bool): Output ASCII-armored encrypted data.
+* `destination` (string): Required - Destination file path for the transformed output.
+* `transform_type` (string): Required - Transform type. Supported values are `image_convert`, `document_convert`, and `files_transform_script_execute`.
+* `target_format` (string): Required - Destination format to create.
+* `script` (string): Files TransformScript source. Required when transform_type is `files_transform_script_execute`.
+* `width` (Nullable<Int64>): Maximum output width for image_convert.
+* `height` (Nullable<Int64>): Maximum output height for image_convert.
 * `overwrite` (bool): Overwrite existing file in the destination?
 
 
 ---
 
-## Extract a ZIP file to a destination folder
+## Move File/Folder
 
 ```
-Task<FileAction> RemoteFile.Unzip(
+Task<FileAction> RemoteFile.Move(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -515,7 +486,7 @@ Task<FileAction> RemoteFile.Unzip(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<FileAction> client.RemoteFiles.UnzipAsync(
+Task<FileAction> client.RemoteFiles.MoveAsync(
     string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -525,19 +496,18 @@ Task<FileAction> client.RemoteFiles.UnzipAsync(
 
 ### Parameters
 
-* `path` (string): Required - ZIP file path to extract.
-* `destination` (string): Required - Destination folder path for extracted files.
-* `filename` (string): Optional single entry filename to extract.
-* `overwrite` (bool): Overwrite existing files in the destination?
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Move destination path.
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---
 
-## Create a ZIP from one or more paths and save it to a destination path
+## Copy File/Folder
 
 ```
-Task<FileAction> RemoteFile.Zip(
-    
+Task<FileAction> RemoteFile.Copy(
+    string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -546,8 +516,8 @@ Task<FileAction> RemoteFile.Zip(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<FileAction> client.RemoteFiles.ZipAsync(
-    
+Task<FileAction> client.RemoteFiles.CopyAsync(
+    string path, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
     CancellationToken cancellationToken = default
@@ -556,10 +526,40 @@ Task<FileAction> client.RemoteFiles.ZipAsync(
 
 ### Parameters
 
-* `paths` (string[]): Required - Paths to include in the ZIP.
-* `destination` (string): Required - Destination file path for the ZIP.
-* `archive_format` (string): Archive format to create.
-* `overwrite` (bool): Overwrite existing file in the destination?
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Copy destination path.
+* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+* `structure` (bool): Copy structure only?
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
+
+
+---
+
+## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+
+```
+Task<FileAction> RemoteFile.BeginDelete(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<FileAction> client.RemoteFiles.BeginDeleteAsync(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
 
 
 ---
@@ -697,57 +697,7 @@ await remoteFile.ZipListContents(parameters);
 
 ---
 
-## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
-
-```
-var remoteFile = await RemoteFile.Find("path/file.txt");
-
-var parameters = new Dictionary<string, object>();
-
-parameters.Add("recursive", false);
-
-await remoteFile.BeginDelete(parameters);
-```
-
-`BeginDeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
-
-### Parameters
-
-* `path` (string): Required - Path to operate on.
-* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
-
-
----
-
-## Copy File/Folder
-
-```
-var remoteFile = await RemoteFile.Find("path/file.txt");
-
-var parameters = new Dictionary<string, object>();
-
-parameters.Add("destination", "destination");
-parameters.Add("copy_behaviors", false);
-parameters.Add("structure", false);
-parameters.Add("overwrite", false);
-
-await remoteFile.Copy(parameters);
-```
-
-`CopyAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
-
-### Parameters
-
-* `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Copy destination path.
-* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-* `structure` (bool): Copy structure only?
-* `overwrite` (bool): Overwrite existing file(s) in the destination?
-
-
----
-
-## Move File/Folder
+## Extract a ZIP file to a destination folder
 
 ```
 var remoteFile = await RemoteFile.Find("path/file.txt");
@@ -757,16 +707,79 @@ var parameters = new Dictionary<string, object>();
 parameters.Add("destination", "destination");
 parameters.Add("overwrite", false);
 
-await remoteFile.Move(parameters);
+await remoteFile.Unzip(parameters);
 ```
 
-`MoveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`UnzipAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `path` (string): Required - ZIP file path to extract.
+* `destination` (string): Required - Destination folder path for extracted files.
+* `filename` (string): Optional single entry filename to extract.
+* `overwrite` (bool): Overwrite existing files in the destination?
+
+
+---
+
+## Encrypt a file with GPG and save it to a destination path
+
+```
+var remoteFile = await RemoteFile.Find("path/file.txt");
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("gpg_key_partner_id", 1L);
+parameters.Add("signing_key_id", 1L);
+parameters.Add("armor", false);
+parameters.Add("overwrite", false);
+
+await remoteFile.GpgEncrypt(parameters);
+```
+
+`GpgEncryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Move destination path.
-* `overwrite` (bool): Overwrite existing file(s) in the destination?
+* `destination` (string): Required - Destination file path for the encrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to encrypt with.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for encryption.
+* `signing_key_id` (Nullable<Int64>): Optional GPG Key ID to sign with.
+* `armor` (bool): Output ASCII-armored encrypted data.
+* `overwrite` (bool): Overwrite existing file in the destination?
+
+
+---
+
+## Decrypt a GPG-encrypted file and save it to a destination path
+
+```
+var remoteFile = await RemoteFile.Find("path/file.txt");
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("destination", "destination");
+parameters.Add("gpg_key_partner_id", 1L);
+parameters.Add("use_all_private_keys", false);
+parameters.Add("ignore_mdc_error", false);
+parameters.Add("overwrite", false);
+
+await remoteFile.GpgDecrypt(parameters);
+```
+
+`GpgDecryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `destination` (string): Required - Destination file path for the decrypted file.
+* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for decryption.
+* `use_all_private_keys` (bool): Use every accessible private GPG key in the source workspace for decryption.
+* `ignore_mdc_error` (bool): Ignore errors from the MDC (modification detection code) check.
+* `overwrite` (bool): Overwrite existing file in the destination?
 
 
 ---
@@ -804,7 +817,7 @@ await remoteFile.Transform(parameters);
 
 ---
 
-## Decrypt a GPG-encrypted file and save it to a destination path
+## Move File/Folder
 
 ```
 var remoteFile = await RemoteFile.Find("path/file.txt");
@@ -812,30 +825,23 @@ var remoteFile = await RemoteFile.Find("path/file.txt");
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
-parameters.Add("gpg_key_partner_id", 1L);
-parameters.Add("use_all_private_keys", false);
-parameters.Add("ignore_mdc_error", false);
 parameters.Add("overwrite", false);
 
-await remoteFile.GpgDecrypt(parameters);
+await remoteFile.Move(parameters);
 ```
 
-`GpgDecryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`MoveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Destination file path for the decrypted file.
-* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for decryption.
-* `use_all_private_keys` (bool): Use every accessible private GPG key in the source workspace for decryption.
-* `ignore_mdc_error` (bool): Ignore errors from the MDC (modification detection code) check.
-* `overwrite` (bool): Overwrite existing file in the destination?
+* `destination` (string): Required - Move destination path.
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---
 
-## Encrypt a file with GPG and save it to a destination path
+## Copy File/Folder
 
 ```
 var remoteFile = await RemoteFile.Find("path/file.txt");
@@ -843,50 +849,44 @@ var remoteFile = await RemoteFile.Find("path/file.txt");
 var parameters = new Dictionary<string, object>();
 
 parameters.Add("destination", "destination");
-parameters.Add("gpg_key_partner_id", 1L);
-parameters.Add("signing_key_id", 1L);
-parameters.Add("armor", false);
+parameters.Add("copy_behaviors", false);
+parameters.Add("structure", false);
 parameters.Add("overwrite", false);
 
-await remoteFile.GpgEncrypt(parameters);
+await remoteFile.Copy(parameters);
 ```
 
-`GpgEncryptAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`CopyAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
 * `path` (string): Required - Path to operate on.
-* `destination` (string): Required - Destination file path for the encrypted file.
-* `gpg_key_ids` (Nullable<Int64>[]): GPG Key IDs to encrypt with.
-* `gpg_key_partner_id` (Nullable<Int64>): Partner ID whose GPG keys should be used for encryption.
-* `signing_key_id` (Nullable<Int64>): Optional GPG Key ID to sign with.
-* `armor` (bool): Output ASCII-armored encrypted data.
-* `overwrite` (bool): Overwrite existing file in the destination?
+* `destination` (string): Required - Copy destination path.
+* `copy_behaviors` (bool): If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+* `structure` (bool): Copy structure only?
+* `overwrite` (bool): Overwrite existing file(s) in the destination?
 
 
 ---
 
-## Extract a ZIP file to a destination folder
+## Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
 
 ```
 var remoteFile = await RemoteFile.Find("path/file.txt");
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("destination", "destination");
-parameters.Add("overwrite", false);
+parameters.Add("recursive", false);
 
-await remoteFile.Unzip(parameters);
+await remoteFile.BeginDelete(parameters);
 ```
 
-`UnzipAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`BeginDeleteAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
-* `path` (string): Required - ZIP file path to extract.
-* `destination` (string): Required - Destination folder path for extracted files.
-* `filename` (string): Optional single entry filename to extract.
-* `overwrite` (bool): Overwrite existing files in the destination?
+* `path` (string): Required - Path to operate on.
+* `recursive` (bool): If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
 
 
 ---

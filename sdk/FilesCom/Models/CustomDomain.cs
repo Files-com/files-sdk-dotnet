@@ -627,65 +627,6 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
-        ///   id (required) - int64 - Custom Domain ID.
-        ///   count (required) - int64 - Number of dedicated IP addresses to allocate.
-        /// </summary>
-        /// <param name="id">Custom Domain ID.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<CustomDomain> CreateAllocateIp(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return CreateAllocateIpCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
-        }
-
-        internal static async Task<CustomDomain> CreateAllocateIpCore(
-            OperationContext context,
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options,
-            CancellationToken cancellationToken
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.ContainsKey("id"))
-            {
-                parameters["id"] = id;
-            }
-            else
-            {
-                parameters.Add("id", id);
-            }
-            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: id", "id");
-            }
-            if (!parameters.TryGetValue("count", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: count", "count");
-            }
-            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
-            }
-            if (parameters.TryGetValue("count", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: count is null, which cannot be sent" : "Bad parameter: count must be of type Nullable<Int64>", "count");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest(context, $"/custom_domains/{System.Uri.EscapeDataString(parameters["id"].ToString())}/allocate_ips", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-
-            return JsonUtil.DeserializeModelResponse<CustomDomain>(responseJson, context, options);
-        }
-
-        /// <summary>
-        /// Parameters:
         ///   available_to_all_workspaces - boolean - Allow all workspaces to use this default-workspace Custom Domain.
         ///   workspace_id - int64 - Workspace ID (0 for the default workspace).
         ///   destination - string - Where this custom domain routes. Can be `site_alias`, `public_hosting`, `s3_endpoint`, or `unassigned` (not routing traffic). Set to `unassigned` automatically when a bound `public_hosting` folder behavior is deleted, and can be set manually via the API for any reason.
@@ -746,6 +687,65 @@ namespace FilesCom.Models
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/custom_domains", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+
+            return JsonUtil.DeserializeModelResponse<CustomDomain>(responseJson, context, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   id (required) - int64 - Custom Domain ID.
+        ///   count (required) - int64 - Number of dedicated IP addresses to allocate.
+        /// </summary>
+        /// <param name="id">Custom Domain ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<CustomDomain> CreateAllocateIp(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return CreateAllocateIpCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<CustomDomain> CreateAllocateIpCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (!parameters.TryGetValue("count", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: count", "count");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("count", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: count is null, which cannot be sent" : "Bad parameter: count must be of type Nullable<Int64>", "count");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/custom_domains/{System.Uri.EscapeDataString(parameters["id"].ToString())}/allocate_ips", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<CustomDomain>(responseJson, context, options);
         }

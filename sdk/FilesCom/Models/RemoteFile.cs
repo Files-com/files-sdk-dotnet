@@ -1816,102 +1816,42 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        /// Extract a ZIP file to a destination folder
         ///
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        public Task<FileAction> BeginDelete(Dictionary<string, object> parameters)
+        public Task<FileAction> Unzip(Dictionary<string, object> parameters)
         {
-            return BeginDeleteCore(parameters, CancellationToken.None);
+            return UnzipCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        /// Extract a ZIP file to a destination folder
         ///
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<FileAction> BeginDeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<FileAction> UnzipAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return BeginDeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return UnzipCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<FileAction> BeginDeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<FileAction> UnzipCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The RemoteFile has no path, which BeginDelete needs", "path");
-            }
-            parameters["path"] = parameterValue;
-            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: path", "path");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
-            }
-            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
-            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
-            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/delete/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-            FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
-            // This object's later operations go where this one went.
-            origin = context.RelocatedOrigin;
-            return result;
-        }
-
-        /// <summary>
-        /// Copy File/Folder
-        ///
-        /// Parameters:
-        ///   destination (required) - string - Copy destination path.
-        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-        ///   structure - boolean - Copy structure only?
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        public Task<FileAction> Copy(Dictionary<string, object> parameters)
-        {
-            return CopyCore(parameters, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Copy File/Folder
-        ///
-        /// Parameters:
-        ///   destination (required) - string - Copy destination path.
-        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-        ///   structure - boolean - Copy structure only?
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task<FileAction> CopyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
-        {
-            return CopyCore(DictionaryUtil.Copy(parameters), cancellationToken);
-        }
-
-
-        private async Task<FileAction> CopyCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            object parameterValue;
-            if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("The RemoteFile has no path, which Copy needs", "path");
+                throw new MissingParameterException("The RemoteFile has no path, which Unzip needs", "path");
             }
             parameters["path"] = parameterValue;
             if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
@@ -1930,13 +1870,9 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("copy_behaviors", out parameterValue) && !(parameterValue is bool))
+            if (parameters.TryGetValue("filename", out parameterValue) && !(parameterValue is string))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: copy_behaviors is null, which cannot be sent" : "Bad parameter: copy_behaviors must be of type bool", "copy_behaviors");
-            }
-            if (parameters.TryGetValue("structure", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: structure is null, which cannot be sent" : "Bad parameter: structure must be of type bool", "structure");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filename is null, which cannot be sent" : "Bad parameter: filename must be of type string", "filename");
             }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
@@ -1946,7 +1882,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -1954,40 +1890,48 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Move File/Folder
+        /// Encrypt a file with GPG and save it to a destination path
         ///
         /// Parameters:
-        ///   destination (required) - string - Move destination path.
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        public Task<FileAction> Move(Dictionary<string, object> parameters)
+        public Task<FileAction> GpgEncrypt(Dictionary<string, object> parameters)
         {
-            return MoveCore(parameters, CancellationToken.None);
+            return GpgEncryptCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Move File/Folder
+        /// Encrypt a file with GPG and save it to a destination path
         ///
         /// Parameters:
-        ///   destination (required) - string - Move destination path.
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<FileAction> MoveAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<FileAction> GpgEncryptAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return MoveCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return GpgEncryptCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<FileAction> MoveCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<FileAction> GpgEncryptCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The RemoteFile has no path, which Move needs", "path");
+                throw new MissingParameterException("The RemoteFile has no path, which GpgEncrypt needs", "path");
             }
             parameters["path"] = parameterValue;
             if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
@@ -2006,6 +1950,22 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
+            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
+            }
+            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
+            }
+            if (parameters.TryGetValue("signing_key_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: signing_key_id is null, which cannot be sent" : "Bad parameter: signing_key_id must be of type Nullable<Int64>", "signing_key_id");
+            }
+            if (parameters.TryGetValue("armor", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: armor is null, which cannot be sent" : "Bad parameter: armor must be of type bool", "armor");
+            }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
@@ -2014,7 +1974,99 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
+        }
+
+        /// <summary>
+        /// Decrypt a GPG-encrypted file and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        public Task<FileAction> GpgDecrypt(Dictionary<string, object> parameters)
+        {
+            return GpgDecryptCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Decrypt a GPG-encrypted file and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<FileAction> GpgDecryptAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return GpgDecryptCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<FileAction> GpgDecryptCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            object parameterValue;
+            if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The RemoteFile has no path, which GpgDecrypt needs", "path");
+            }
+            parameters["path"] = parameterValue;
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (!parameters.TryGetValue("destination", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: destination", "destination");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
+            }
+            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
+            }
+            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
+            }
+            if (parameters.TryGetValue("use_all_private_keys", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: use_all_private_keys is null, which cannot be sent" : "Bad parameter: use_all_private_keys must be of type bool", "use_all_private_keys");
+            }
+            if (parameters.TryGetValue("ignore_mdc_error", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_mdc_error is null, which cannot be sent" : "Bad parameter: ignore_mdc_error must be of type bool", "ignore_mdc_error");
+            }
+            if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
+            }
+
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -2128,48 +2180,40 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Decrypt a GPG-encrypted file and save it to a destination path
+        /// Move File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the decrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
-        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
-        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        public Task<FileAction> GpgDecrypt(Dictionary<string, object> parameters)
+        public Task<FileAction> Move(Dictionary<string, object> parameters)
         {
-            return GpgDecryptCore(parameters, CancellationToken.None);
+            return MoveCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Decrypt a GPG-encrypted file and save it to a destination path
+        /// Move File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the decrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
-        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
-        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<FileAction> GpgDecryptAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<FileAction> MoveAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return GpgDecryptCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return MoveCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<FileAction> GpgDecryptCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<FileAction> MoveCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The RemoteFile has no path, which GpgDecrypt needs", "path");
+                throw new MissingParameterException("The RemoteFile has no path, which Move needs", "path");
             }
             parameters["path"] = parameterValue;
             if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
@@ -2188,22 +2232,6 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
-            }
-            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
-            }
-            if (parameters.TryGetValue("use_all_private_keys", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: use_all_private_keys is null, which cannot be sent" : "Bad parameter: use_all_private_keys must be of type bool", "use_all_private_keys");
-            }
-            if (parameters.TryGetValue("ignore_mdc_error", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_mdc_error is null, which cannot be sent" : "Bad parameter: ignore_mdc_error must be of type bool", "ignore_mdc_error");
-            }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
@@ -2212,7 +2240,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/move/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -2220,48 +2248,44 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Encrypt a file with GPG and save it to a destination path
+        /// Copy File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the encrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
-        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
-        ///   armor - boolean - Output ASCII-armored encrypted data.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Copy destination path.
+        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+        ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        public Task<FileAction> GpgEncrypt(Dictionary<string, object> parameters)
+        public Task<FileAction> Copy(Dictionary<string, object> parameters)
         {
-            return GpgEncryptCore(parameters, CancellationToken.None);
+            return CopyCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Encrypt a file with GPG and save it to a destination path
+        /// Copy File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the encrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
-        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
-        ///   armor - boolean - Output ASCII-armored encrypted data.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Copy destination path.
+        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+        ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<FileAction> GpgEncryptAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<FileAction> CopyAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return GpgEncryptCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return CopyCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<FileAction> GpgEncryptCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<FileAction> CopyCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The RemoteFile has no path, which GpgEncrypt needs", "path");
+                throw new MissingParameterException("The RemoteFile has no path, which Copy needs", "path");
             }
             parameters["path"] = parameterValue;
             if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
@@ -2280,21 +2304,13 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            if (parameters.TryGetValue("copy_behaviors", out parameterValue) && !(parameterValue is bool))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: copy_behaviors is null, which cannot be sent" : "Bad parameter: copy_behaviors must be of type bool", "copy_behaviors");
             }
-            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            if (parameters.TryGetValue("structure", out parameterValue) && !(parameterValue is bool))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
-            }
-            if (parameters.TryGetValue("signing_key_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: signing_key_id is null, which cannot be sent" : "Bad parameter: signing_key_id must be of type Nullable<Int64>", "signing_key_id");
-            }
-            if (parameters.TryGetValue("armor", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: armor is null, which cannot be sent" : "Bad parameter: armor must be of type bool", "armor");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: structure is null, which cannot be sent" : "Bad parameter: structure must be of type bool", "structure");
             }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
@@ -2304,7 +2320,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/copy/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -2312,73 +2328,57 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Extract a ZIP file to a destination folder
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination folder path for extracted files.
-        ///   filename - string - Optional single entry filename to extract.
-        ///   overwrite - boolean - Overwrite existing files in the destination?
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        public Task<FileAction> Unzip(Dictionary<string, object> parameters)
+        public Task<FileAction> BeginDelete(Dictionary<string, object> parameters)
         {
-            return UnzipCore(parameters, CancellationToken.None);
+            return BeginDeleteCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Extract a ZIP file to a destination folder
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination folder path for extracted files.
-        ///   filename - string - Optional single entry filename to extract.
-        ///   overwrite - boolean - Overwrite existing files in the destination?
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<FileAction> UnzipAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<FileAction> BeginDeleteAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return UnzipCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return BeginDeleteCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<FileAction> UnzipCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<FileAction> BeginDeleteCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The RemoteFile has no path, which Unzip needs", "path");
+                throw new MissingParameterException("The RemoteFile has no path, which BeginDelete needs", "path");
             }
             parameters["path"] = parameterValue;
             if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
             {
                 throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (!parameters.TryGetValue("destination", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: destination", "destination");
-            }
             if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
+            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
-            }
-            if (parameters.TryGetValue("filename", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filename is null, which cannot be sent" : "Bad parameter: filename must be of type string", "filename");
-            }
-            if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
             }
 
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/delete/{System.Uri.EscapeDataString(attributes["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             FileAction result = JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -2888,6 +2888,55 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// List the contents of a ZIP file
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation takes no parameters besides path.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<ZipListEntry[]> ZipListContents(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ZipListContentsCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<ZipListEntry[]> ZipListContentsCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip_list/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
+
+            return JsonUtil.DeserializeModelResponse<ZipListEntry[]>(responseJson, context, options);
+        }
+
+        /// <summary>
         /// Parameters:
         ///   path (required) - string - Path to operate on.
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
@@ -2972,75 +3021,26 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// List the contents of a ZIP file
-        /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation takes no parameters besides path.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<ZipListEntry[]> ZipListContents(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return ZipListContentsCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
-        }
-
-        internal static async Task<ZipListEntry[]> ZipListContentsCore(
-            OperationContext context,
-            string path,
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options,
-            CancellationToken cancellationToken
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.ContainsKey("path"))
-            {
-                parameters["path"] = path;
-            }
-            else
-            {
-                parameters.Add("path", path);
-            }
-            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: path", "path");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip_list/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options, cancellationToken);
-
-            return JsonUtil.DeserializeModelResponse<ZipListEntry[]>(responseJson, context, options);
-        }
-
-        /// <summary>
-        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
-        ///
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        ///   paths (required) - array(string) - Paths to include in the ZIP.
+        ///   destination (required) - string - Destination file path for the ZIP.
+        ///   archive_format - string - Archive format to create.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> BeginDelete(
-            string path,
+        public static Task<FileAction> Zip(
+
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return BeginDeleteCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+            return ZipCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<FileAction> BeginDeleteCore(
+        internal static async Task<FileAction> ZipCore(
             OperationContext context,
-            string path,
+
             Dictionary<string, object> parameters,
             Dictionary<string, object> options,
             CancellationToken cancellationToken
@@ -3050,54 +3050,57 @@ namespace FilesCom.Models
             options = options != null ? options : new Dictionary<string, object>();
             object parameterValue;
 
-            if (parameters.ContainsKey("path"))
+            if (!parameters.TryGetValue("paths", out parameterValue) || parameterValue == null)
             {
-                parameters["path"] = path;
+                throw new MissingParameterException("Parameter missing: paths", "paths");
             }
-            else
+            if (!parameters.TryGetValue("destination", out parameterValue) || parameterValue == null)
             {
-                parameters.Add("path", path);
+                throw new MissingParameterException("Parameter missing: destination", "destination");
             }
-            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            if (parameters.TryGetValue("paths", out parameterValue) && !(parameterValue is string[]))
             {
-                throw new MissingParameterException("Parameter missing: path", "path");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: paths is null, which cannot be sent" : "Bad parameter: paths must be of type string[]", "paths");
             }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
+            if (parameters.TryGetValue("archive_format", out parameterValue) && !(parameterValue is string))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: archive_format is null, which cannot be sent" : "Bad parameter: archive_format must be of type string", "archive_format");
+            }
+            if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/delete/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
         }
 
         /// <summary>
-        /// Copy File/Folder
+        /// Extract a ZIP file to a destination folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Copy destination path.
-        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-        ///   structure - boolean - Copy structure only?
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
         /// </summary>
-        /// <param name="path">Path to operate on.</param>
+        /// <param name="path">ZIP file path to extract.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> Copy(
+        public static Task<FileAction> Unzip(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return CopyCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+            return UnzipCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<FileAction> CopyCore(
+        internal static async Task<FileAction> UnzipCore(
             OperationContext context,
             string path,
             Dictionary<string, object> parameters,
@@ -3133,44 +3136,44 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("copy_behaviors", out parameterValue) && !(parameterValue is bool))
+            if (parameters.TryGetValue("filename", out parameterValue) && !(parameterValue is string))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: copy_behaviors is null, which cannot be sent" : "Bad parameter: copy_behaviors must be of type bool", "copy_behaviors");
-            }
-            if (parameters.TryGetValue("structure", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: structure is null, which cannot be sent" : "Bad parameter: structure must be of type bool", "structure");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filename is null, which cannot be sent" : "Bad parameter: filename must be of type string", "filename");
             }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
         }
 
         /// <summary>
-        /// Move File/Folder
+        /// Encrypt a file with GPG and save it to a destination path
         ///
         /// Parameters:
-        ///   destination (required) - string - Move destination path.
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> Move(
+        public static Task<FileAction> GpgEncrypt(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return MoveCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+            return GpgEncryptCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<FileAction> MoveCore(
+        internal static async Task<FileAction> GpgEncryptCore(
             OperationContext context,
             string path,
             Dictionary<string, object> parameters,
@@ -3206,12 +3209,113 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
+            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
+            }
+            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
+            }
+            if (parameters.TryGetValue("signing_key_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: signing_key_id is null, which cannot be sent" : "Bad parameter: signing_key_id must be of type Nullable<Int64>", "signing_key_id");
+            }
+            if (parameters.TryGetValue("armor", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: armor is null, which cannot be sent" : "Bad parameter: armor must be of type bool", "armor");
+            }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+
+            return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
+        }
+
+        /// <summary>
+        /// Decrypt a GPG-encrypted file and save it to a destination path
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<FileAction> GpgDecrypt(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return GpgDecryptCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<FileAction> GpgDecryptCore(
+            OperationContext context,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (!parameters.TryGetValue("destination", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: destination", "destination");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
+            }
+            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
+            }
+            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
+            }
+            if (parameters.TryGetValue("use_all_private_keys", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: use_all_private_keys is null, which cannot be sent" : "Bad parameter: use_all_private_keys must be of type bool", "use_all_private_keys");
+            }
+            if (parameters.TryGetValue("ignore_mdc_error", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_mdc_error is null, which cannot be sent" : "Bad parameter: ignore_mdc_error must be of type bool", "ignore_mdc_error");
+            }
+            if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
         }
@@ -3315,29 +3419,25 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Decrypt a GPG-encrypted file and save it to a destination path
+        /// Move File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the decrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
-        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
-        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> GpgDecrypt(
+        public static Task<FileAction> Move(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return GpgDecryptCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+            return MoveCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<FileAction> GpgDecryptCore(
+        internal static async Task<FileAction> MoveCore(
             OperationContext context,
             string path,
             Dictionary<string, object> parameters,
@@ -3373,56 +3473,38 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
-            }
-            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
-            }
-            if (parameters.TryGetValue("use_all_private_keys", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: use_all_private_keys is null, which cannot be sent" : "Bad parameter: use_all_private_keys must be of type bool", "use_all_private_keys");
-            }
-            if (parameters.TryGetValue("ignore_mdc_error", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: ignore_mdc_error is null, which cannot be sent" : "Bad parameter: ignore_mdc_error must be of type bool", "ignore_mdc_error");
-            }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_decrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/move/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
         }
 
         /// <summary>
-        /// Encrypt a file with GPG and save it to a destination path
+        /// Copy File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the encrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
-        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
-        ///   armor - boolean - Output ASCII-armored encrypted data.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Copy destination path.
+        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+        ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> GpgEncrypt(
+        public static Task<FileAction> Copy(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return GpgEncryptCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+            return CopyCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<FileAction> GpgEncryptCore(
+        internal static async Task<FileAction> CopyCore(
             OperationContext context,
             string path,
             Dictionary<string, object> parameters,
@@ -3458,53 +3540,43 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
             }
-            if (parameters.TryGetValue("gpg_key_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            if (parameters.TryGetValue("copy_behaviors", out parameterValue) && !(parameterValue is bool))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_ids is null, which cannot be sent" : "Bad parameter: gpg_key_ids must be of type Nullable<Int64>[]", "gpg_key_ids");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: copy_behaviors is null, which cannot be sent" : "Bad parameter: copy_behaviors must be of type bool", "copy_behaviors");
             }
-            if (parameters.TryGetValue("gpg_key_partner_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            if (parameters.TryGetValue("structure", out parameterValue) && !(parameterValue is bool))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: gpg_key_partner_id is null, which cannot be sent" : "Bad parameter: gpg_key_partner_id must be of type Nullable<Int64>", "gpg_key_partner_id");
-            }
-            if (parameters.TryGetValue("signing_key_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: signing_key_id is null, which cannot be sent" : "Bad parameter: signing_key_id must be of type Nullable<Int64>", "signing_key_id");
-            }
-            if (parameters.TryGetValue("armor", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: armor is null, which cannot be sent" : "Bad parameter: armor must be of type bool", "armor");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: structure is null, which cannot be sent" : "Bad parameter: structure must be of type bool", "structure");
             }
             if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/gpg_encrypt/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/copy/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
         }
 
         /// <summary>
-        /// Extract a ZIP file to a destination folder
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination folder path for extracted files.
-        ///   filename - string - Optional single entry filename to extract.
-        ///   overwrite - boolean - Overwrite existing files in the destination?
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
-        /// <param name="path">ZIP file path to extract.</param>
+        /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> Unzip(
+        public static Task<FileAction> BeginDelete(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return UnzipCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
+            return BeginDeleteCore(OperationContext.OfDefaultClient(), path, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<FileAction> UnzipCore(
+        internal static async Task<FileAction> BeginDeleteCore(
             OperationContext context,
             string path,
             Dictionary<string, object> parameters,
@@ -3528,88 +3600,16 @@ namespace FilesCom.Models
             {
                 throw new MissingParameterException("Parameter missing: path", "path");
             }
-            if (!parameters.TryGetValue("destination", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: destination", "destination");
-            }
             if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
-            if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
+            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
-            }
-            if (parameters.TryGetValue("filename", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: filename is null, which cannot be sent" : "Bad parameter: filename must be of type string", "filename");
-            }
-            if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/unzip", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-
-            return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   paths (required) - array(string) - Paths to include in the ZIP.
-        ///   destination (required) - string - Destination file path for the ZIP.
-        ///   archive_format - string - Archive format to create.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<FileAction> Zip(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return ZipCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
-        }
-
-        internal static async Task<FileAction> ZipCore(
-            OperationContext context,
-
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options,
-            CancellationToken cancellationToken
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (!parameters.TryGetValue("paths", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: paths", "paths");
-            }
-            if (!parameters.TryGetValue("destination", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: destination", "destination");
-            }
-            if (parameters.TryGetValue("paths", out parameterValue) && !(parameterValue is string[]))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: paths is null, which cannot be sent" : "Bad parameter: paths must be of type string[]", "paths");
-            }
-            if (parameters.TryGetValue("destination", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: destination is null, which cannot be sent" : "Bad parameter: destination must be of type string", "destination");
-            }
-            if (parameters.TryGetValue("archive_format", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: archive_format is null, which cannot be sent" : "Bad parameter: archive_format must be of type string", "archive_format");
-            }
-            if (parameters.TryGetValue("overwrite", out parameterValue) && !(parameterValue is bool))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: overwrite is null, which cannot be sent" : "Bad parameter: overwrite must be of type bool", "overwrite");
-            }
-
-            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/zip", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/file_actions/delete/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<FileAction>(responseJson, context, options);
         }

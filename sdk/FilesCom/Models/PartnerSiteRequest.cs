@@ -482,45 +482,6 @@ namespace FilesCom.Models
         /// <summary>
         /// Parameters:
         ///   pairing_key (required) - string - Pairing key for the partner site request
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task Reject(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return RejectCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
-        }
-
-        internal static async Task RejectCore(
-            OperationContext context,
-
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options,
-            CancellationToken cancellationToken
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (!parameters.TryGetValue("pairing_key", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: pairing_key", "pairing_key");
-            }
-            if (parameters.TryGetValue("pairing_key", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: pairing_key is null, which cannot be sent" : "Bad parameter: pairing_key must be of type string", "pairing_key");
-            }
-
-            await FilesClient.SendRequestAndDiscard(context, $"/partner_site_requests/reject", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   pairing_key (required) - string - Pairing key for the partner site request
         ///   partner_id - int64 - ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -560,6 +521,45 @@ namespace FilesCom.Models
             }
 
             await FilesClient.SendRequestAndDiscard(context, $"/partner_site_requests/approve", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   pairing_key (required) - string - Pairing key for the partner site request
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task Reject(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return RejectCore(OperationContext.OfDefaultClient(), parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task RejectCore(
+            OperationContext context,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (!parameters.TryGetValue("pairing_key", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: pairing_key", "pairing_key");
+            }
+            if (parameters.TryGetValue("pairing_key", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: pairing_key is null, which cannot be sent" : "Bad parameter: pairing_key must be of type string", "pairing_key");
+            }
+
+            await FilesClient.SendRequestAndDiscard(context, $"/partner_site_requests/reject", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>

@@ -1543,32 +1543,32 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Unlock user who has been locked out due to failed logins
+        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
-        public Task Unlock(Dictionary<string, object> parameters)
+        public Task User2faReset(Dictionary<string, object> parameters)
         {
-            return UnlockCore(parameters, CancellationToken.None);
+            return User2faResetCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Unlock user who has been locked out due to failed logins
+        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task UnlockAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task User2faResetAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return UnlockCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return User2faResetCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task UnlockCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task User2faResetCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The User has no id, which Unlock needs", "id");
+                throw new MissingParameterException("The User has no id, which User2faReset needs", "id");
             }
             parameters["id"] = parameterValue;
             if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
@@ -1583,7 +1583,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
         }
@@ -1635,32 +1635,32 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+        /// Unlock user who has been locked out due to failed logins
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
-        public Task User2faReset(Dictionary<string, object> parameters)
+        public Task Unlock(Dictionary<string, object> parameters)
         {
-            return User2faResetCore(parameters, CancellationToken.None);
+            return UnlockCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+        /// Unlock user who has been locked out due to failed logins
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task User2faResetAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task UnlockAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return User2faResetCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return UnlockCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task User2faResetCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task UnlockCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The User has no id, which User2faReset needs", "id");
+                throw new MissingParameterException("The User has no id, which Unlock needs", "id");
             }
             parameters["id"] = parameterValue;
             if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
@@ -1675,7 +1675,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(attributes["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
         }
@@ -2873,21 +2873,21 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Unlock user who has been locked out due to failed logins
+        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
         /// <param name="id">User ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task Unlock(
+        public static Task User2faReset(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return UnlockCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+            return User2faResetCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task UnlockCore(
+        internal static async Task User2faResetCore(
             OperationContext context,
             Nullable<Int64> id,
             Dictionary<string, object> parameters,
@@ -2916,7 +2916,7 @@ namespace FilesCom.Models
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>
@@ -2967,21 +2967,21 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+        /// Unlock user who has been locked out due to failed logins
         /// </summary>
         /// <param name="id">User ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task User2faReset(
+        public static Task Unlock(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return User2faResetCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+            return UnlockCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task User2faResetCore(
+        internal static async Task UnlockCore(
             OperationContext context,
             Nullable<Int64> id,
             Dictionary<string, object> parameters,
@@ -3010,7 +3010,7 @@ namespace FilesCom.Models
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/2fa/reset", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            await FilesClient.SendRequestAndDiscard(context, $"/users/{System.Uri.EscapeDataString(parameters["id"].ToString())}/unlock", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>

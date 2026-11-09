@@ -402,9 +402,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Path to operate on.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   path (required) - string - Path to operate on.
         ///   include_children - boolean - Include locks from children objects?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
@@ -442,6 +442,10 @@ namespace FilesCom.Models
             {
                 throw new MissingParameterException("Parameter missing: path", "path");
             }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
             if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
@@ -449,10 +453,6 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
             if (parameters.TryGetValue("include_children", out parameterValue) && !(parameterValue is bool))
             {

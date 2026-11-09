@@ -114,34 +114,6 @@ Task<PartnerSiteRequest> client.PartnerSiteRequests.CreateAsync(
 
 ---
 
-## Reject partner site request
-
-```
-Task PartnerSiteRequest.Reject(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials and takes a cancellation token:
-
-```
-Task client.PartnerSiteRequests.RejectAsync(
-    
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null,
-    CancellationToken cancellationToken = default
-)
-```
-
-### Parameters
-
-* `pairing_key` (string): Required - Pairing key for the partner site request
-
-
----
-
 ## Approve partner site request
 
 ```
@@ -167,6 +139,34 @@ Task client.PartnerSiteRequests.ApproveAsync(
 
 * `pairing_key` (string): Required - Pairing key for the partner site request
 * `partner_id` (Nullable<Int64>): ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
+
+
+---
+
+## Reject partner site request
+
+```
+Task PartnerSiteRequest.Reject(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task client.PartnerSiteRequests.RejectAsync(
+    
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `pairing_key` (string): Required - Pairing key for the partner site request
 
 
 ---

@@ -366,10 +366,10 @@ Task<User> client.Users.CreateAsync(
 
 ---
 
-## Unlock user who has been locked out due to failed logins
+## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
-Task User.Unlock(
+Task User.User2faReset(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -379,7 +379,7 @@ Task User.Unlock(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task client.Users.UnlockAsync(
+Task client.Users.User2faResetAsync(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -422,10 +422,10 @@ Task client.Users.ResendWelcomeEmailAsync(
 
 ---
 
-## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+## Unlock user who has been locked out due to failed logins
 
 ```
-Task User.User2faReset(
+Task User.Unlock(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -435,7 +435,7 @@ Task User.User2faReset(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task client.Users.User2faResetAsync(
+Task client.Users.UnlockAsync(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -578,17 +578,17 @@ Task client.Users.DeleteAsync(
 
 ---
 
-## Unlock user who has been locked out due to failed logins
+## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
 
 ```
 var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-await user.Unlock(parameters);
+await user.User2faReset(parameters);
 ```
 
-`UnlockAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`User2faResetAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -616,17 +616,17 @@ await user.ResendWelcomeEmail(parameters);
 
 ---
 
-## Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+## Unlock user who has been locked out due to failed logins
 
 ```
 var user = await User.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-await user.User2faReset(parameters);
+await user.Unlock(parameters);
 ```
 
-`User2faResetAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`UnlockAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

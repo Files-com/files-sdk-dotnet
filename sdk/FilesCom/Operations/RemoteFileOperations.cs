@@ -158,6 +158,23 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
+        /// List the contents of a ZIP file
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation takes no parameters besides path.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.ZipListEntry[]> ZipListContentsAsync(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.RemoteFile.ZipListContentsCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
         /// Parameters:
         ///   path (required) - string - Path to operate on.
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
@@ -200,84 +217,95 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// List the contents of a ZIP file
+        /// Parameters:
+        ///   paths (required) - array(string) - Paths to include in the ZIP.
+        ///   destination (required) - string - Destination file path for the ZIP.
+        ///   archive_format - string - Archive format to create.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation takes no parameters besides path.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.ZipListEntry[]> ZipListContentsAsync(
+        public Task<global::FilesCom.Models.FileAction> ZipAsync(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.RemoteFile.ZipCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Extract a ZIP file to a destination folder
+        ///
+        /// Parameters:
+        ///   destination (required) - string - Destination folder path for extracted files.
+        ///   filename - string - Optional single entry filename to extract.
+        ///   overwrite - boolean - Overwrite existing files in the destination?
+        /// </summary>
+        /// <param name="path">ZIP file path to extract.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.FileAction> UnzipAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.RemoteFile.ZipListContentsCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.UnzipCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
-        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
+        /// Encrypt a file with GPG and save it to a destination path
         ///
         /// Parameters:
-        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
+        ///   destination (required) - string - Destination file path for the encrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
+        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
+        ///   armor - boolean - Output ASCII-armored encrypted data.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> BeginDeleteAsync(
+        public Task<global::FilesCom.Models.FileAction> GpgEncryptAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.RemoteFile.BeginDeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.GpgEncryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
-        /// Copy File/Folder
+        /// Decrypt a GPG-encrypted file and save it to a destination path
         ///
         /// Parameters:
-        ///   destination (required) - string - Copy destination path.
-        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
-        ///   structure - boolean - Copy structure only?
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
+        ///   destination (required) - string - Destination file path for the decrypted file.
+        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
+        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
+        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
+        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
+        ///   overwrite - boolean - Overwrite existing file in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> CopyAsync(
+        public Task<global::FilesCom.Models.FileAction> GpgDecryptAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.RemoteFile.CopyCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
-        /// Move File/Folder
-        ///
-        /// Parameters:
-        ///   destination (required) - string - Move destination path.
-        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
-        /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> MoveAsync(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            return global::FilesCom.Models.RemoteFile.MoveCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.GpgDecryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -307,95 +335,67 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Decrypt a GPG-encrypted file and save it to a destination path
+        /// Move File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the decrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to decrypt with. If omitted, every accessible private GPG key in the source workspace is used.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for decryption.
-        ///   use_all_private_keys - boolean - Use every accessible private GPG key in the source workspace for decryption.
-        ///   ignore_mdc_error - boolean - Ignore errors from the MDC (modification detection code) check.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Move destination path.
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> GpgDecryptAsync(
+        public Task<global::FilesCom.Models.FileAction> MoveAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.RemoteFile.GpgDecryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.MoveCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
-        /// Encrypt a file with GPG and save it to a destination path
+        /// Copy File/Folder
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination file path for the encrypted file.
-        ///   gpg_key_ids - array(int64) - GPG Key IDs to encrypt with.
-        ///   gpg_key_partner_id - int64 - Partner ID whose GPG keys should be used for encryption.
-        ///   signing_key_id - int64 - Optional GPG Key ID to sign with.
-        ///   armor - boolean - Output ASCII-armored encrypted data.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
+        ///   destination (required) - string - Copy destination path.
+        ///   copy_behaviors - boolean - If copying a folder, also copy supported behaviors, email notification subscriptions, and per-folder branding to the destination folder tree?
+        ///   structure - boolean - Copy structure only?
+        ///   overwrite - boolean - Overwrite existing file(s) in the destination?
         /// </summary>
         /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> GpgEncryptAsync(
+        public Task<global::FilesCom.Models.FileAction> CopyAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.RemoteFile.GpgEncryptCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.CopyCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
-        /// Extract a ZIP file to a destination folder
+        /// Delete File/Folder and return its File Action.  A pending or processing deletion continues in the background after this returns; check its File Migration for completion.  Waiting for the File Migration does not cancel the deletion
         ///
         /// Parameters:
-        ///   destination (required) - string - Destination folder path for extracted files.
-        ///   filename - string - Optional single entry filename to extract.
-        ///   overwrite - boolean - Overwrite existing files in the destination?
+        ///   recursive - boolean - If true, will recursively delete folders.  Otherwise, will error on non-empty folders.
         /// </summary>
-        /// <param name="path">ZIP file path to extract.</param>
+        /// <param name="path">Path to operate on.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> UnzipAsync(
+        public Task<global::FilesCom.Models.FileAction> BeginDeleteAsync(
             string path,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.RemoteFile.UnzipCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   paths (required) - array(string) - Paths to include in the ZIP.
-        ///   destination (required) - string - Destination file path for the ZIP.
-        ///   archive_format - string - Archive format to create.
-        ///   overwrite - boolean - Overwrite existing file in the destination?
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.FileAction> ZipAsync(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            return global::FilesCom.Models.RemoteFile.ZipCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.RemoteFile.BeginDeleteCore(new OperationContext(client), path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>

@@ -75,6 +75,38 @@ FilesList<Behavior> client.Behaviors.List(
 
 ---
 
+## List Behaviors by Path
+
+```
+FilesList<Behavior> Behavior.ListFor(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<Behavior> client.Behaviors.ListFor(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`. Valid field combinations are `[ impacts_ui, behavior ]`.
+* `ancestor_behaviors` (bool): If `true`, behaviors above this path are shown.
+
+
+---
+
 ## Show Behavior
 
 ```
@@ -99,38 +131,6 @@ Task<Behavior> client.Behaviors.FindAsync(
 ### Parameters
 
 * `id` (Nullable<Int64>): Required - Behavior ID.
-
-
----
-
-## List Behaviors by Path
-
-```
-FilesList<Behavior> Behavior.ListFor(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials:
-
-```
-FilesList<Behavior> client.Behaviors.ListFor(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`. Valid field combinations are `[ impacts_ui, behavior ]`.
-* `path` (string): Required - Path to operate on.
-* `ancestor_behaviors` (bool): If `true`, behaviors above this path are shown.
 
 
 ---

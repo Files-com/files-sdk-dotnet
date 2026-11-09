@@ -296,296 +296,6 @@ namespace FilesCom.Models
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-        ///   path (required) - string - Path to operate on.
-        /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static FilesList<HistoryAction> ListForFile(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return ListForFileCore(FilesClient.Instance, path, parameters, options);
-        }
-
-        internal static FilesList<HistoryAction> ListForFileCore(
-            FilesClient client,
-            string path,
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.ContainsKey("path"))
-            {
-                parameters["path"] = path;
-            }
-            else
-            {
-                parameters.Add("path", path);
-            }
-            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: path", "path");
-            }
-            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
-            }
-            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
-            }
-            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
-            }
-            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
-            }
-            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
-            }
-            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
-            }
-
-            return new FilesList<HistoryAction>(client, $"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
-        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
-        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-        ///   path (required) - string - Path to operate on.
-        /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static FilesList<HistoryAction> ListForFolder(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return ListForFolderCore(FilesClient.Instance, path, parameters, options);
-        }
-
-        internal static FilesList<HistoryAction> ListForFolderCore(
-            FilesClient client,
-            string path,
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.ContainsKey("path"))
-            {
-                parameters["path"] = path;
-            }
-            else
-            {
-                parameters.Add("path", path);
-            }
-            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: path", "path");
-            }
-            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
-            }
-            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
-            }
-            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
-            }
-            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
-            }
-            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
-            }
-            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
-            }
-
-            return new FilesList<HistoryAction>(client, $"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
-        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
-        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-        ///   user_id (required) - int64 - User ID.
-        /// </summary>
-        /// <param name="user_id">User ID.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static FilesList<HistoryAction> ListForUser(
-            Nullable<Int64> user_id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return ListForUserCore(FilesClient.Instance, user_id, parameters, options);
-        }
-
-        internal static FilesList<HistoryAction> ListForUserCore(
-            FilesClient client,
-            Nullable<Int64> user_id,
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.ContainsKey("user_id"))
-            {
-                parameters["user_id"] = user_id;
-            }
-            else
-            {
-                parameters.Add("user_id", user_id);
-            }
-            if (!parameters.TryGetValue("user_id", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: user_id", "user_id");
-            }
-            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
-            }
-            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
-            }
-            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
-            }
-            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
-            }
-            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
-            }
-            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
-            }
-            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
-            }
-
-            return new FilesList<HistoryAction>(client, $"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
-        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
-        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static FilesList<HistoryAction> ListLogins(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return ListLoginsCore(FilesClient.Instance, parameters, options);
-        }
-
-        internal static FilesList<HistoryAction> ListLoginsCore(
-            FilesClient client,
-
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
-            }
-            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
-            }
-            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
-            }
-            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
-            }
-            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
-            }
-            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
-            }
-
-            return new FilesList<HistoryAction>(client, $"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
-        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
-        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
         ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`. Valid field combinations are `[  ]`, `[ path ]`, `[ path ]` or `[ path ]`.
         ///   filter_prefix - object - If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
         /// </summary>
@@ -667,6 +377,296 @@ namespace FilesCom.Models
             }
 
             return new FilesList<HistoryAction>(client, $"/history", System.Net.Http.HttpMethod.Get, parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
+        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListLogins(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ListLoginsCore(FilesClient.Instance, parameters, options);
+        }
+
+        internal static FilesList<HistoryAction> ListLoginsCore(
+            FilesClient client,
+
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
+            }
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
+            }
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
+            }
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
+            }
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
+            }
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
+            }
+
+            return new FilesList<HistoryAction>(client, $"/history/login", System.Net.Http.HttpMethod.Get, parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   user_id (required) - int64 - User ID.
+        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
+        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+        /// </summary>
+        /// <param name="user_id">User ID.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListForUser(
+            Nullable<Int64> user_id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ListForUserCore(FilesClient.Instance, user_id, parameters, options);
+        }
+
+        internal static FilesList<HistoryAction> ListForUserCore(
+            FilesClient client,
+            Nullable<Int64> user_id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("user_id"))
+            {
+                parameters["user_id"] = user_id;
+            }
+            else
+            {
+                parameters.Add("user_id", user_id);
+            }
+            if (!parameters.TryGetValue("user_id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: user_id", "user_id");
+            }
+            if (parameters.TryGetValue("user_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: user_id is null, which cannot be sent" : "Bad parameter: user_id must be of type Nullable<Int64>", "user_id");
+            }
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
+            }
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
+            }
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
+            }
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
+            }
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
+            }
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
+            }
+
+            return new FilesList<HistoryAction>(client, $"/history/users/{System.Uri.EscapeDataString(parameters["user_id"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
+        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListForFolder(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ListForFolderCore(FilesClient.Instance, path, parameters, options);
+        }
+
+        internal static FilesList<HistoryAction> ListForFolderCore(
+            FilesClient client,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
+            }
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
+            }
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
+            }
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
+            }
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
+            }
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
+            }
+
+            return new FilesList<HistoryAction>(client, $"/history/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   start_at - string - Leave blank or set to a date/time to filter earlier entries.
+        ///   end_at - string - Leave blank or set to a date/time to filter later entries.
+        ///   display - string - Display format. Leave blank or set to `full` or `parent`.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static FilesList<HistoryAction> ListForFile(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return ListForFileCore(FilesClient.Instance, path, parameters, options);
+        }
+
+        internal static FilesList<HistoryAction> ListForFileCore(
+            FilesClient client,
+            string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("start_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: start_at is null, which cannot be sent" : "Bad parameter: start_at must be of type string", "start_at");
+            }
+            if (parameters.TryGetValue("end_at", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: end_at is null, which cannot be sent" : "Bad parameter: end_at must be of type string", "end_at");
+            }
+            if (parameters.TryGetValue("display", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: display is null, which cannot be sent" : "Bad parameter: display must be of type string", "display");
+            }
+            if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
+            }
+            if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
+            }
+            if (parameters.TryGetValue("sort_by", out parameterValue) && !(parameterValue is object))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: sort_by is null, which cannot be sent" : "Bad parameter: sort_by must be of type object", "sort_by");
+            }
+
+            return new FilesList<HistoryAction>(client, $"/history/files/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
     }

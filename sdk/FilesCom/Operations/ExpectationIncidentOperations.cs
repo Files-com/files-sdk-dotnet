@@ -115,20 +115,20 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Resolve an expectation incident
+        /// Acknowledge an expectation incident
         /// </summary>
         /// <param name="id">Expectation Incident ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.ExpectationIncident> ResolveAsync(
+        public Task<global::FilesCom.Models.ExpectationIncident> AcknowledgeAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.ExpectationIncident.ResolveCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.ExpectationIncident.AcknowledgeCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -152,20 +152,20 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Acknowledge an expectation incident
+        /// Resolve an expectation incident
         /// </summary>
         /// <param name="id">Expectation Incident ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.ExpectationIncident> AcknowledgeAsync(
+        public Task<global::FilesCom.Models.ExpectationIncident> ResolveAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.ExpectationIncident.AcknowledgeCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.ExpectationIncident.ResolveCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
     }
 }

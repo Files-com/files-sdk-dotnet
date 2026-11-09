@@ -676,9 +676,9 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Path to operate on.
         ///   cursor - string - Send cursor to resume an existing list from the point at which you left off.  Get a cursor from an existing list via the X-Files-Cursor-Next header or the X-Files-Cursor-Prev header.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   path (required) - string - Path to operate on.
         ///   preview_size - string - Request a preview size.  Can be `small` (default), `large`, `xlarge`, or `pdf`.
         ///   sort_by - object - Search by field and direction. Valid fields are `path`, `size`, `modified_at_datetime`, `provided_modified_at`.  Valid directions are `asc` and `desc`.  Defaults to `{"path":"asc"}`.
         ///   search - string - If specified, will search the folders/files list by name. Ignores text before last `/`. This is the same API used by the search bar in the web UI when running 'Search This Folder'.  Search results are a best effort, not real time, and not guaranteed to perfectly match the latest folder listing.  Results may be truncated if more than 1,000 possible matches exist.  This field should only be used for ad-hoc (human) searching, and not as part of an automated process.
@@ -724,6 +724,10 @@ namespace FilesCom.Models
             {
                 throw new MissingParameterException("Parameter missing: path", "path");
             }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
             if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
@@ -731,10 +735,6 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("per_page", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
             if (parameters.TryGetValue("preview_size", out parameterValue) && !(parameterValue is string))
             {

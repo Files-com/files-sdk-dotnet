@@ -100,10 +100,10 @@ Task<ExpectationIncident> client.ExpectationIncidents.FindAsync(
 
 ---
 
-## Resolve an expectation incident
+## Acknowledge an expectation incident
 
 ```
-Task<ExpectationIncident> ExpectationIncident.Resolve(
+Task<ExpectationIncident> ExpectationIncident.Acknowledge(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -113,7 +113,7 @@ Task<ExpectationIncident> ExpectationIncident.Resolve(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<ExpectationIncident> client.ExpectationIncidents.ResolveAsync(
+Task<ExpectationIncident> client.ExpectationIncidents.AcknowledgeAsync(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -157,10 +157,10 @@ Task<ExpectationIncident> client.ExpectationIncidents.SnoozeAsync(
 
 ---
 
-## Acknowledge an expectation incident
+## Resolve an expectation incident
 
 ```
-Task<ExpectationIncident> ExpectationIncident.Acknowledge(
+Task<ExpectationIncident> ExpectationIncident.Resolve(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -170,7 +170,7 @@ Task<ExpectationIncident> ExpectationIncident.Acknowledge(
 With a client, which runs it with its own site and credentials and takes a cancellation token:
 
 ```
-Task<ExpectationIncident> client.ExpectationIncidents.AcknowledgeAsync(
+Task<ExpectationIncident> client.ExpectationIncidents.ResolveAsync(
     Nullable<Int64> id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null,
@@ -185,17 +185,17 @@ Task<ExpectationIncident> client.ExpectationIncidents.AcknowledgeAsync(
 
 ---
 
-## Resolve an expectation incident
+## Acknowledge an expectation incident
 
 ```
 var expectationIncident = await ExpectationIncident.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-await expectationIncident.Resolve(parameters);
+await expectationIncident.Acknowledge(parameters);
 ```
 
-`ResolveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`AcknowledgeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 
@@ -226,17 +226,17 @@ await expectationIncident.Snooze(parameters);
 
 ---
 
-## Acknowledge an expectation incident
+## Resolve an expectation incident
 
 ```
 var expectationIncident = await ExpectationIncident.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-await expectationIncident.Acknowledge(parameters);
+await expectationIncident.Resolve(parameters);
 ```
 
-`AcknowledgeAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+`ResolveAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
 
 ### Parameters
 

@@ -218,20 +218,20 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Unlock user who has been locked out due to failed logins
+        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
         /// </summary>
         /// <param name="id">User ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task UnlockAsync(
+        public Task User2faResetAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.User.UnlockCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.User.User2faResetCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>
@@ -252,20 +252,20 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Trigger 2FA Reset process for user who has lost access to their existing 2FA methods
+        /// Unlock user who has been locked out due to failed logins
         /// </summary>
         /// <param name="id">User ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task User2faResetAsync(
+        public Task UnlockAsync(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null,
             CancellationToken cancellationToken = default
         )
         {
-            return global::FilesCom.Models.User.User2faResetCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+            return global::FilesCom.Models.User.UnlockCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>

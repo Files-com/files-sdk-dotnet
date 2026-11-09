@@ -101,35 +101,6 @@ Task<CustomDomain> client.CustomDomains.FindAsync(
 
 ---
 
-## Allocate dedicated IP addresses to this Custom Domain
-
-```
-Task<CustomDomain> CustomDomain.CreateAllocateIp(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials and takes a cancellation token:
-
-```
-Task<CustomDomain> client.CustomDomains.CreateAllocateIpAsync(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null,
-    CancellationToken cancellationToken = default
-)
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Custom Domain ID.
-* `count` (Nullable<Int64>): Required - Number of dedicated IP addresses to allocate.
-
-
----
-
 ## Create Custom Domain
 
 ```
@@ -159,6 +130,35 @@ Task<CustomDomain> client.CustomDomains.CreateAsync(
 * `folder_behavior_id` (Nullable<Int64>): Public Hosting behavior ID when this domain routes to a specific Public Hosting behavior.  Preserved as historical context when `destination` becomes `unassigned`.
 * `ssl_certificate_id` (Nullable<Int64>): Current SSL certificate ID.
 * `domain` (string): Required - Customer-owned domain name.
+
+
+---
+
+## Allocate dedicated IP addresses to this Custom Domain
+
+```
+Task<CustomDomain> CustomDomain.CreateAllocateIp(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<CustomDomain> client.CustomDomains.CreateAllocateIpAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Custom Domain ID.
+* `count` (Nullable<Int64>): Required - Number of dedicated IP addresses to allocate.
 
 
 ---

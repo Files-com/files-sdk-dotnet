@@ -80,6 +80,27 @@ namespace FilesCom.Operations
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
+        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`. Valid field combinations are `[ impacts_ui, behavior ]`.
+        ///   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.Behavior> ListFor(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return global::FilesCom.Models.Behavior.ListForCore(client, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+        }
+
+        /// <summary>
+        /// Parameters:
         ///   id (required) - int64 - Behavior ID.
         /// </summary>
         /// <param name="id">Behavior ID.</param>
@@ -112,27 +133,6 @@ namespace FilesCom.Operations
         )
         {
             return global::FilesCom.Models.Behavior.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `behavior`.
-        ///   filter - object - If set, return records where the specified field is equal to the supplied value. Valid fields are `impacts_ui` and `behavior`. Valid field combinations are `[ impacts_ui, behavior ]`.
-        ///   path (required) - string - Path to operate on.
-        ///   ancestor_behaviors - boolean - If `true`, behaviors above this path are shown.
-        /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public FilesList<global::FilesCom.Models.Behavior> ListFor(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return global::FilesCom.Models.Behavior.ListForCore(client, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>

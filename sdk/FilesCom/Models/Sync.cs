@@ -571,52 +571,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Dry Run Sync
-        /// </summary>
-        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
-        public Task DryRun(Dictionary<string, object> parameters)
-        {
-            return DryRunCore(parameters, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Dry Run Sync
-        /// </summary>
-        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task DryRunAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
-        {
-            return DryRunCore(DictionaryUtil.Copy(parameters), cancellationToken);
-        }
-
-
-        private async Task DryRunCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            object parameterValue;
-            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("The Sync has no id, which DryRun needs", "id");
-            }
-            parameters["id"] = parameterValue;
-            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: id", "id");
-            }
-            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
-            }
-
-            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
-            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
-            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            await FilesClient.SendRequestAndDiscard(context, $"/syncs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/dry_run", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
-            // This object's later operations go where this one went.
-            origin = context.RelocatedOrigin;
-        }
-
-        /// <summary>
         /// Manually Run Sync
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
@@ -658,6 +612,52 @@ namespace FilesCom.Models
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
             await FilesClient.SendRequestAndDiscard(context, $"/syncs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+        }
+
+        /// <summary>
+        /// Dry Run Sync
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        public Task DryRun(Dictionary<string, object> parameters)
+        {
+            return DryRunCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Dry Run Sync
+        /// </summary>
+        /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task DryRunAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return DryRunCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task DryRunCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Sync has no id, which DryRun needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            await FilesClient.SendRequestAndDiscard(context, $"/syncs/{System.Uri.EscapeDataString(attributes["id"].ToString())}/dry_run", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
         }
@@ -1284,53 +1284,6 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Dry Run Sync
-        /// </summary>
-        /// <param name="id">Sync ID.</param>
-        /// <param name="parameters">The operation takes no parameters besides id.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task DryRun(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return DryRunCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
-        }
-
-        internal static async Task DryRunCore(
-            OperationContext context,
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters,
-            Dictionary<string, object> options,
-            CancellationToken cancellationToken
-        )
-        {
-            parameters = parameters != null ? parameters : new Dictionary<string, object>();
-            options = options != null ? options : new Dictionary<string, object>();
-            object parameterValue;
-
-            if (parameters.ContainsKey("id"))
-            {
-                parameters["id"] = id;
-            }
-            else
-            {
-                parameters.Add("id", id);
-            }
-            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
-            {
-                throw new MissingParameterException("Parameter missing: id", "id");
-            }
-            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
-            }
-
-            await FilesClient.SendRequestAndDiscard(context, $"/syncs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/dry_run", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
-        }
-
-        /// <summary>
         /// Manually Run Sync
         /// </summary>
         /// <param name="id">Sync ID.</param>
@@ -1375,6 +1328,53 @@ namespace FilesCom.Models
             }
 
             await FilesClient.SendRequestAndDiscard(context, $"/syncs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/manual_run", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// Dry Run Sync
+        /// </summary>
+        /// <param name="id">Sync ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task DryRun(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return DryRunCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task DryRunCore(
+            OperationContext context,
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+
+            await FilesClient.SendRequestAndDiscard(context, $"/syncs/{System.Uri.EscapeDataString(parameters["id"].ToString())}/dry_run", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
         }
 
         /// <summary>

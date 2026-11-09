@@ -49,10 +49,10 @@ FilesList<IpAddress> client.IpAddresses.List(
 
 ---
 
-## List all possible public SmartFile IP addresses
+## List all possible public IP addresses
 
 ```
-FilesList<PublicIpAddress> IpAddress.GetSmartfileReserved(
+FilesList<PublicIpAddress> IpAddress.GetReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -62,7 +62,7 @@ FilesList<PublicIpAddress> IpAddress.GetSmartfileReserved(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<PublicIpAddress> client.IpAddresses.GetSmartfileReserved(
+FilesList<PublicIpAddress> client.IpAddresses.GetReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -105,10 +105,10 @@ FilesList<PublicIpAddress> client.IpAddresses.GetExavaultReserved(
 
 ---
 
-## List all possible public IP addresses
+## List all possible public SmartFile IP addresses
 
 ```
-FilesList<PublicIpAddress> IpAddress.GetReserved(
+FilesList<PublicIpAddress> IpAddress.GetSmartfileReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
@@ -118,7 +118,7 @@ FilesList<PublicIpAddress> IpAddress.GetReserved(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<PublicIpAddress> client.IpAddresses.GetReserved(
+FilesList<PublicIpAddress> client.IpAddresses.GetSmartfileReserved(
     
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null

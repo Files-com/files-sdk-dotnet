@@ -199,16 +199,16 @@ namespace FilesCom.Models
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static FilesList<PublicIpAddress> GetSmartfileReserved(
+        public static FilesList<PublicIpAddress> GetReserved(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return GetSmartfileReservedCore(FilesClient.Instance, parameters, options);
+            return GetReservedCore(FilesClient.Instance, parameters, options);
         }
 
-        internal static FilesList<PublicIpAddress> GetSmartfileReservedCore(
+        internal static FilesList<PublicIpAddress> GetReservedCore(
             FilesClient client,
 
             Dictionary<string, object> parameters,
@@ -228,7 +228,7 @@ namespace FilesCom.Models
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
 
-            return new FilesList<PublicIpAddress>(client, $"/ip_addresses/smartfile-reserved", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<PublicIpAddress>(client, $"/ip_addresses/reserved", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
         /// <summary>
@@ -277,16 +277,16 @@ namespace FilesCom.Models
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static FilesList<PublicIpAddress> GetReserved(
+        public static FilesList<PublicIpAddress> GetSmartfileReserved(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return GetReservedCore(FilesClient.Instance, parameters, options);
+            return GetSmartfileReservedCore(FilesClient.Instance, parameters, options);
         }
 
-        internal static FilesList<PublicIpAddress> GetReservedCore(
+        internal static FilesList<PublicIpAddress> GetSmartfileReservedCore(
             FilesClient client,
 
             Dictionary<string, object> parameters,
@@ -306,7 +306,7 @@ namespace FilesCom.Models
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: per_page is null, which cannot be sent" : "Bad parameter: per_page must be of type Nullable<Int64>", "per_page");
             }
 
-            return new FilesList<PublicIpAddress>(client, $"/ip_addresses/reserved", System.Net.Http.HttpMethod.Get, parameters, options);
+            return new FilesList<PublicIpAddress>(client, $"/ip_addresses/smartfile-reserved", System.Net.Http.HttpMethod.Get, parameters, options);
         }
 
     }

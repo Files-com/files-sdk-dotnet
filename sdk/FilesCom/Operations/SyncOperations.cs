@@ -155,23 +155,6 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Dry Run Sync
-        /// </summary>
-        /// <param name="id">Sync ID.</param>
-        /// <param name="parameters">The operation takes no parameters besides id.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task DryRunAsync(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            return global::FilesCom.Models.Sync.DryRunCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
         /// Manually Run Sync
         /// </summary>
         /// <param name="id">Sync ID.</param>
@@ -186,6 +169,23 @@ namespace FilesCom.Operations
         )
         {
             return global::FilesCom.Models.Sync.ManualRunCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Dry Run Sync
+        /// </summary>
+        /// <param name="id">Sync ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task DryRunAsync(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.Sync.DryRunCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>

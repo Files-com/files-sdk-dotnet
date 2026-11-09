@@ -165,34 +165,6 @@ Task<AutomationExecutionNode> client.AutomationRuns.FindNodeAsync(
 
 ---
 
-## Cancel Automation Run
-
-```
-Task<AutomationRun> AutomationRun.Cancel(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials and takes a cancellation token:
-
-```
-Task<AutomationRun> client.AutomationRuns.CancelAsync(
-    Nullable<Int64> id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null,
-    CancellationToken cancellationToken = default
-)
-```
-
-### Parameters
-
-* `id` (Nullable<Int64>): Required - Automation Run ID.
-
-
----
-
 ## Re-run Automation from Node
 
 ```
@@ -225,14 +197,23 @@ Task<AutomationRun> client.AutomationRuns.RerunAsync(
 ## Cancel Automation Run
 
 ```
-var automationRun = await AutomationRun.Find(1L);
-
-var parameters = new Dictionary<string, object>();
-
-await automationRun.Cancel(parameters);
+Task<AutomationRun> AutomationRun.Cancel(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
 ```
 
-`CancelAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<AutomationRun> client.AutomationRuns.CancelAsync(
+    Nullable<Int64> id, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
 
 ### Parameters
 
@@ -259,3 +240,22 @@ await automationRun.Rerun(parameters);
 
 * `id` (Nullable<Int64>): Required - Automation Run ID.
 * `node_id` (string): Required - Node ID at which execution should resume.
+
+
+---
+
+## Cancel Automation Run
+
+```
+var automationRun = await AutomationRun.Find(1L);
+
+var parameters = new Dictionary<string, object>();
+
+await automationRun.Cancel(parameters);
+```
+
+`CancelAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Automation Run ID.

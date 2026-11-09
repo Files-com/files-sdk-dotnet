@@ -78,6 +78,24 @@ namespace FilesCom.Operations
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+        /// </summary>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public FilesList<global::FilesCom.Models.MetadataCategory> ListFor(
+            string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return global::FilesCom.Models.MetadataCategory.ListForCore(client, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+        }
+
+        /// <summary>
+        /// Parameters:
         ///   id (required) - int64 - Metadata Category ID.
         /// </summary>
         /// <param name="id">Metadata Category ID.</param>
@@ -110,24 +128,6 @@ namespace FilesCom.Operations
         )
         {
             return global::FilesCom.Models.MetadataCategory.FindCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-        ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-        ///   path (required) - string - Path to operate on.
-        /// </summary>
-        /// <param name="path">Path to operate on.</param>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public FilesList<global::FilesCom.Models.MetadataCategory> ListFor(
-            string path,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null
-        )
-        {
-            return global::FilesCom.Models.MetadataCategory.ListForCore(client, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>

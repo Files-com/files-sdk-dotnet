@@ -396,11 +396,11 @@ namespace FilesCom.Models
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
-        ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
         /// <param name="path">Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -437,6 +437,10 @@ namespace FilesCom.Models
             {
                 throw new MissingParameterException("Parameter missing: path", "path");
             }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
             if (parameters.TryGetValue("cursor", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: cursor is null, which cannot be sent" : "Bad parameter: cursor must be of type string", "cursor");
@@ -452,10 +456,6 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("mine", out parameterValue) && !(parameterValue is bool))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: mine is null, which cannot be sent" : "Bad parameter: mine must be of type bool", "mine");
-            }
-            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
-            {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
             }
 
             return new FilesList<Request>(client, $"/requests/folders/{System.Uri.EscapeDataString(parameters["path"].ToString())}", System.Net.Http.HttpMethod.Get, parameters, options);

@@ -138,23 +138,6 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
-        /// Cancel Automation Run
-        /// </summary>
-        /// <param name="id">Automation Run ID.</param>
-        /// <param name="parameters">The operation takes no parameters besides id.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task<global::FilesCom.Models.AutomationRun> CancelAsync(
-            Nullable<Int64> id,
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            return global::FilesCom.Models.AutomationRun.CancelCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
         /// Re-run Automation from Node
         ///
         /// Parameters:
@@ -172,6 +155,23 @@ namespace FilesCom.Operations
         )
         {
             return global::FilesCom.Models.AutomationRun.RerunCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Cancel Automation Run
+        /// </summary>
+        /// <param name="id">Automation Run ID.</param>
+        /// <param name="parameters">The operation takes no parameters besides id.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.AutomationRun> CancelAsync(
+            Nullable<Int64> id,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.AutomationRun.CancelCore(new OperationContext(client), id, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
     }
 }

@@ -307,32 +307,32 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Resolve an expectation incident
+        /// Acknowledge an expectation incident
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
-        public Task<ExpectationIncident> Resolve(Dictionary<string, object> parameters)
+        public Task<ExpectationIncident> Acknowledge(Dictionary<string, object> parameters)
         {
-            return ResolveCore(parameters, CancellationToken.None);
+            return AcknowledgeCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Resolve an expectation incident
+        /// Acknowledge an expectation incident
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<ExpectationIncident> ResolveAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<ExpectationIncident> AcknowledgeAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return ResolveCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return AcknowledgeCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<ExpectationIncident> ResolveCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<ExpectationIncident> AcknowledgeCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The ExpectationIncident has no id, which Resolve needs", "id");
+                throw new MissingParameterException("The ExpectationIncident has no id, which Acknowledge needs", "id");
             }
             parameters["id"] = parameterValue;
             if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
@@ -347,7 +347,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resolve", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/acknowledge", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             ExpectationIncident result = JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -417,32 +417,32 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Acknowledge an expectation incident
+        /// Resolve an expectation incident
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
-        public Task<ExpectationIncident> Acknowledge(Dictionary<string, object> parameters)
+        public Task<ExpectationIncident> Resolve(Dictionary<string, object> parameters)
         {
-            return AcknowledgeCore(parameters, CancellationToken.None);
+            return ResolveCore(parameters, CancellationToken.None);
         }
 
         /// <summary>
-        /// Acknowledge an expectation incident
+        /// Resolve an expectation incident
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
         /// <param name="cancellationToken">Stops the request.</param>
-        public Task<ExpectationIncident> AcknowledgeAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        public Task<ExpectationIncident> ResolveAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
         {
-            return AcknowledgeCore(DictionaryUtil.Copy(parameters), cancellationToken);
+            return ResolveCore(DictionaryUtil.Copy(parameters), cancellationToken);
         }
 
 
-        private async Task<ExpectationIncident> AcknowledgeCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        private async Task<ExpectationIncident> ResolveCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
         {
             parameters = parameters != null ? parameters : new Dictionary<string, object>();
             object parameterValue;
             if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
             {
-                throw new MissingParameterException("The ExpectationIncident has no id, which Acknowledge needs", "id");
+                throw new MissingParameterException("The ExpectationIncident has no id, which Resolve needs", "id");
             }
             parameters["id"] = parameterValue;
             if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
@@ -457,7 +457,7 @@ namespace FilesCom.Models
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
             Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
-            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/acknowledge", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(attributes["id"].ToString())}/resolve", System.Net.Http.HttpMethod.Post, parameters, requestOptions, cancellationToken);
             ExpectationIncident result = JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, requestOptions);
             // This object's later operations go where this one went.
             origin = context.RelocatedOrigin;
@@ -600,21 +600,21 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Resolve an expectation incident
+        /// Acknowledge an expectation incident
         /// </summary>
         /// <param name="id">Expectation Incident ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<ExpectationIncident> Resolve(
+        public static Task<ExpectationIncident> Acknowledge(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return ResolveCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+            return AcknowledgeCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<ExpectationIncident> ResolveCore(
+        internal static async Task<ExpectationIncident> AcknowledgeCore(
             OperationContext context,
             Nullable<Int64> id,
             Dictionary<string, object> parameters,
@@ -643,7 +643,7 @@ namespace FilesCom.Models
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resolve", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/acknowledge", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, options);
         }
@@ -709,21 +709,21 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Acknowledge an expectation incident
+        /// Resolve an expectation incident
         /// </summary>
         /// <param name="id">Expectation Incident ID.</param>
         /// <param name="parameters">The operation takes no parameters besides id.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public static Task<ExpectationIncident> Acknowledge(
+        public static Task<ExpectationIncident> Resolve(
             Nullable<Int64> id,
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return AcknowledgeCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
+            return ResolveCore(OperationContext.OfDefaultClient(), id, parameters, options, CancellationToken.None);
         }
 
-        internal static async Task<ExpectationIncident> AcknowledgeCore(
+        internal static async Task<ExpectationIncident> ResolveCore(
             OperationContext context,
             Nullable<Int64> id,
             Dictionary<string, object> parameters,
@@ -752,7 +752,7 @@ namespace FilesCom.Models
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
             }
 
-            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/acknowledge", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/expectation_incidents/{System.Uri.EscapeDataString(parameters["id"].ToString())}/resolve", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<ExpectationIncident>(responseJson, context, options);
         }

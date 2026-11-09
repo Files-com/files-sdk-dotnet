@@ -116,23 +116,6 @@ namespace FilesCom.Operations
         /// <summary>
         /// Parameters:
         ///   pairing_key (required) - string - Pairing key for the partner site request
-        /// </summary>
-        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
-        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        /// <param name="cancellationToken">Stops the request.</param>
-        public Task RejectAsync(
-
-            Dictionary<string, object> parameters = null,
-            Dictionary<string, object> options = null,
-            CancellationToken cancellationToken = default
-        )
-        {
-            return global::FilesCom.Models.PartnerSiteRequest.RejectCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
-        }
-
-        /// <summary>
-        /// Parameters:
-        ///   pairing_key (required) - string - Pairing key for the partner site request
         ///   partner_id - int64 - ID of an existing Partner on this site, with the host role, that represents the requesting organization. The connection binds to that Partner and makes it host_and_guest. When omitted, a guest Partner named after the host site is created.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -146,6 +129,23 @@ namespace FilesCom.Operations
         )
         {
             return global::FilesCom.Models.PartnerSiteRequest.ApproveCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
+        /// Parameters:
+        ///   pairing_key (required) - string - Pairing key for the partner site request
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task RejectAsync(
+
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.PartnerSiteRequest.RejectCore(new OperationContext(client), DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
         }
 
         /// <summary>

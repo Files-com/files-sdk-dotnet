@@ -40,11 +40,11 @@
 
 ---
 
-## List history for specific file
+## List site full action history
 
 ```
-FilesList<HistoryAction> History.ListForFile(
-    string path, 
+FilesList<HistoryAction> History.List(
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -53,8 +53,8 @@ FilesList<HistoryAction> History.ListForFile(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<HistoryAction> client.Histories.ListForFile(
-    string path, 
+FilesList<HistoryAction> client.Histories.List(
+    
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -68,73 +68,8 @@ FilesList<HistoryAction> client.Histories.ListForFile(
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-* `path` (string): Required - Path to operate on.
-
-
----
-
-## List history for specific folder
-
-```
-FilesList<HistoryAction> History.ListForFolder(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials:
-
-```
-FilesList<HistoryAction> client.Histories.ListForFolder(
-    string path, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
-* `end_at` (string): Leave blank or set to a date/time to filter later entries.
-* `display` (string): Display format. Leave blank or set to `full` or `parent`.
-* `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-* `path` (string): Required - Path to operate on.
-
-
----
-
-## List history for specific user
-
-```
-FilesList<HistoryAction> History.ListForUser(
-    Nullable<Int64> user_id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-With a client, which runs it with its own site and credentials:
-
-```
-FilesList<HistoryAction> client.Histories.ListForUser(
-    Nullable<Int64> user_id, 
-    Dictionary<string, object> parameters = null,
-    Dictionary<string, object> options = null
-)
-```
-
-### Parameters
-
-* `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
-* `end_at` (string): Leave blank or set to a date/time to filter later entries.
-* `display` (string): Display format. Leave blank or set to `full` or `parent`.
-* `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
-* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-* `user_id` (Nullable<Int64>): Required - User ID.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`. Valid field combinations are `[  ]`, `[ path ]`, `[ path ]` or `[ path ]`.
+* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
 
 
 ---
@@ -171,11 +106,11 @@ FilesList<HistoryAction> client.Histories.ListLogins(
 
 ---
 
-## List site full action history
+## List history for specific user
 
 ```
-FilesList<HistoryAction> History.List(
-    
+FilesList<HistoryAction> History.ListForUser(
+    Nullable<Int64> user_id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -184,8 +119,8 @@ FilesList<HistoryAction> History.List(
 With a client, which runs it with its own site and credentials:
 
 ```
-FilesList<HistoryAction> client.Histories.List(
-    
+FilesList<HistoryAction> client.Histories.ListForUser(
+    Nullable<Int64> user_id, 
     Dictionary<string, object> parameters = null,
     Dictionary<string, object> options = null
 )
@@ -193,11 +128,76 @@ FilesList<HistoryAction> client.Histories.List(
 
 ### Parameters
 
+* `user_id` (Nullable<Int64>): Required - User ID.
 * `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
 * `end_at` (string): Leave blank or set to a date/time to filter later entries.
 * `display` (string): Display format. Leave blank or set to `full` or `parent`.
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
 * `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `user_id`, `folder` or `path`. Valid field combinations are `[  ]`, `[ path ]`, `[ path ]` or `[ path ]`.
-* `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `path`.
+
+
+---
+
+## List history for specific folder
+
+```
+FilesList<HistoryAction> History.ListForFolder(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<HistoryAction> client.Histories.ListForFolder(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
+* `end_at` (string): Leave blank or set to a date/time to filter later entries.
+* `display` (string): Display format. Leave blank or set to `full` or `parent`.
+* `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.
+
+
+---
+
+## List history for specific file
+
+```
+FilesList<HistoryAction> History.ListForFile(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials:
+
+```
+FilesList<HistoryAction> client.Histories.ListForFile(
+    string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+### Parameters
+
+* `path` (string): Required - Path to operate on.
+* `start_at` (string): Leave blank or set to a date/time to filter earlier entries.
+* `end_at` (string): Leave blank or set to a date/time to filter later entries.
+* `display` (string): Display format. Leave blank or set to `full` or `parent`.
+* `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
+* `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`.

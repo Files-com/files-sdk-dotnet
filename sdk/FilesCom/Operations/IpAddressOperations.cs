@@ -68,13 +68,13 @@ namespace FilesCom.Operations
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public FilesList<global::FilesCom.Models.PublicIpAddress> GetSmartfileReserved(
+        public FilesList<global::FilesCom.Models.PublicIpAddress> GetReserved(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return global::FilesCom.Models.IpAddress.GetSmartfileReservedCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.IpAddress.GetReservedCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
 
         /// <summary>
@@ -100,13 +100,13 @@ namespace FilesCom.Operations
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
-        public FilesList<global::FilesCom.Models.PublicIpAddress> GetReserved(
+        public FilesList<global::FilesCom.Models.PublicIpAddress> GetSmartfileReserved(
 
             Dictionary<string, object> parameters = null,
             Dictionary<string, object> options = null
         )
         {
-            return global::FilesCom.Models.IpAddress.GetReservedCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
+            return global::FilesCom.Models.IpAddress.GetSmartfileReservedCore(client, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options));
         }
     }
 }

@@ -82,11 +82,11 @@ namespace FilesCom.Operations
 
         /// <summary>
         /// Parameters:
+        ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         ///   cursor - string - Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
         ///   per_page - int64 - Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
         ///   sort_by - object - If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are .
         ///   mine - boolean - Only show requests of the current user?  (Defaults to true if current user is not a site admin.)
-        ///   path (required) - string - Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.
         /// </summary>
         /// <param name="path">Path to show requests for.  If omitted, shows all paths. Send `/` to represent the root directory.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
