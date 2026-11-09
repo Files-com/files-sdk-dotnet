@@ -23,9 +23,9 @@ results="$(mktemp -d)" || exit 1
 trap 'status=$?; if [[ ${status} -eq 0 ]]; then rm -rf "${results}"; else echo "test.sh failed (exit ${status}); its results are kept in ${results}" >&2; fi' EXIT
 
 frameworks="$(dotnet msbuild FilesTests/FilesTests.csproj -getProperty:TargetFrameworks)" || exit 1
-# Filesystem and legacy list cases run separately against their own simulator, under its launcher.
+# Filesystem, legacy list and shared failure cases run separately against their own simulator, under its launcher.
 # The ordinary suite retains the specialized unit and transport regressions.
-ordinary_tests="TestCategory!=SharedSimulatorFilesystem&TestCategory!=SharedSimulatorList"
+ordinary_tests="TestCategory!=SharedSimulatorFilesystem&TestCategory!=SharedSimulatorList&TestCategory!=SharedSimulatorFailureCases"
 
 # The frameworks are tested one after another. A CI job (CI=true) can opt in (FILES_DOTNET_TEST_FRAMEWORKS_IN_PARALLEL=1)
 # to testing them at the same time when it has the CPUs and memory for it, which parallel-test-resources.sh decides
@@ -164,3 +164,39 @@ echo "FilesTests.RemoteFileSystemTest: passed against the simulator as ${filesys
 # The three legacy folder-list tests retain their static SDK entry points and run once per framework against a
 # fresh shared simulator. The nullable sync-response regression remains in the ordinary unit suite.
 "${DIR}/shared-list-tests.sh" "${FILES_CONTRACT_MOCK_SERVER}" "${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}/legacy-lists" "${frameworks}" || exit 1
+
+# The shared failure-case matrix (the mock server's scenarios/failure-cases.json), FilesTests.FailureCasesTest, runs
+# alone on each framework, as built above, against a simulator of its own that with-scenario.rb resets to the
+# scenario's users and gives its fault rules. The launcher passes only when the test's failure-cases.json reports every
+# case passed, once and in order, and the journal and the fault rules' decisions show exactly each case's expected
+# attempts; the test's TRX must show that one test discovered once with one passed result. Its results go to
+# failure-cases/<framework> beside the API scenarios' own.
+failure_cases_test="FilesTests.FailureCasesTest.TestFailureCases"
+for framework in ${frameworks//;/ }; do
+  failure_run="${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}/failure-cases/${framework}"
+  mkdir -p "${failure_run}" || exit 1
+  # .NET's HTTP client resends a read-only request whose connection closed before any response, before the SDK's own
+  # retries see it: the scenario's automatic-get-resend variant, a bounded count of attempts that is recorded.
+  ruby "${FILES_CONTRACT_MOCK_SERVER}/with-scenario.rb" --scenario failure-cases --out "${failure_run}/launcher" \
+    --startup-timeout 30 --consumer-timeout 120 --settle-timeout 5 --failure-variant automatic-get-resend -- \
+    dotnet test "${DIR}/sdk/FilesTests/FilesTests.csproj" --no-build --framework "${framework}" \
+    --filter "TestCategory=SharedSimulatorFailureCases" --logger "trx;LogFileName=failure-cases.trx" --results-directory "${failure_run}" || {
+    echo "${failure_cases_test} on ${framework}: the launcher failed; see ${failure_run}" >&2
+    exit 1
+  }
+  ruby -rrexml/document -e '
+    trx, expected = ARGV
+    abort("#{trx}: no TRX was written") unless File.file?(trx)
+    document = REXML::Document.new(File.read(trx))
+    tests = REXML::XPath.match(document, "//UnitTest").map do |test|
+      method = test.elements["TestMethod"]
+      [ test.attributes["id"], method && "#{method.attributes["className"]}.#{method.attributes["name"]}" ]
+    end
+    results = REXML::XPath.match(document, "//UnitTestResult").map { |result| [ result.attributes["testId"], result.attributes["outcome"] ] }
+    counters = REXML::XPath.first(document, "//ResultSummary/Counters")
+    counts = %w[total executed passed].to_h { |name| [ name, counters && counters.attributes[name] ] }
+    abort("#{trx}: discovered #{tests.map(&:last).inspect}, not #{expected} once") unless tests.size == 1 && tests[0][1] == expected
+    abort("#{trx}: results #{results.inspect}, not one passed result") unless results == [ [ tests[0][0], "Passed" ] ] && counts.values.all?("1")
+    puts "#{trx}: the shared failure cases passed"
+  ' "${failure_run}/failure-cases.trx" "${failure_cases_test}" || exit 1
+done
