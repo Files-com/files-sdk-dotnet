@@ -61,6 +61,11 @@ namespace FilesCom
         /// </remarks>
         public bool RequestMayHaveBeenProcessed { get; internal set; }
 
+        // For a transfer's storage request: whether storage answered that the request's signed URL has expired
+        // (SignedUrl.RefusedAsExpired), which a new URL for the same part or range can mend. The exception is otherwise
+        // the one the answer is read as, an ApiException or an InvalidResponseException.
+        internal bool StorageSaysExpired { get; set; }
+
         /// <summary>
         /// Returns <see cref="message"/> alone, which is null when the exception was created without a message. Unlike
         /// <see cref="Exception.ToString"/>, it gives neither the exception's class nor its stack trace or inner
@@ -298,10 +303,6 @@ namespace FilesCom
         /// The headers of the error response, or null when no error response is attached.
         /// </summary>
         public HttpHeaders httpHeaders { get; }
-
-        // For a transfer's storage request: whether storage answered that the request's signed URL has expired
-        // (SignedUrl.RefusedAsExpired), which a new URL for the same part or range can mend.
-        internal bool StorageSaysExpired { get; set; }
 
         // For a transfer's storage request: whether storage answered, with its whole error, that it stopped waiting for
         // the request (RetryPolicy.StorageTimedOut), which sending the request again may mend.

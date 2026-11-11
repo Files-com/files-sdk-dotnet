@@ -744,8 +744,9 @@ namespace FilesCom.Transfers
         // A part that storage refuses saying its URL has expired, even though the URL's own expiry is still to come,
         // gets a new URL for the same part of the same upload, with the same number, offset and length, and is sent
         // again at once, with the same bytes: at most SignedUrl.MaxExpiredRenewals times, only when the server allows
-        // retrying parts, and without using any of the client's retries, since nothing was sent that storage kept. Any
-        // other refusal, such as an ordinary 403, is the part's failure.
+        // retrying parts, both before the new URL and with it, and without using any of the client's retries, since
+        // nothing was sent that storage kept. A new URL that withdraws that permission leaves storage's refusal as the
+        // part's failure. Any other refusal, such as an ordinary 403, is the part's failure.
         //
         // firstAttempt, from the dispatcher, has been admitted but not started.
         private async Task<UploadedPart> SendWithRetriesAsync(PreparedPart part, PartAdmission.Admitted admitted, AttemptAdmission.Attempt firstAttempt, CancellationToken token)
@@ -753,11 +754,12 @@ namespace FilesCom.Transfers
             RetryPolicy retries = RetryPolicy.ForStorage(context.Network);
             AttemptAdmission.Attempt attempt = firstAttempt;
             int renewedForExpiry = 0;
-            bool renew = false;
+            // Storage's refusal of the last attempt as expired, whose part is to be sent again with a new URL.
+            Exception refusedAsExpired = null;
             for (int number = 1; ; number++)
             {
-                attempt = await StartAttemptAsync(part, admitted, attempt, token, renew);
-                renew = false;
+                attempt = await StartAttemptAsync(part, admitted, attempt, token, refusedAsExpired);
+                refusedAsExpired = null;
 
                 UploadPartAttempt outcome;
                 byte[] sentSha256 = null;
@@ -800,7 +802,7 @@ namespace FilesCom.Transfers
                 if (outcome.UrlExpired && part.Target.RetryParts && renewedForExpiry < SignedUrl.MaxExpiredRenewals)
                 {
                     renewedForExpiry++;
-                    renew = true;
+                    refusedAsExpired = outcome.Error;
                     log.Info($"Renewing the URL of part {part.Part.Number} of an upload: the storage server says it has expired");
                     progress.PartRetried();
                     continue;
@@ -820,7 +822,8 @@ namespace FilesCom.Transfers
 
         // Starts the part's next attempt: admitted is the part's own admission, and attempt, if not null, an attempt
         // already admitted for it that holds a limiter request slot. The part's URL is renewed first if it is about to
-        // expire, or, with renew, because storage refused it as expired. Then the attempt starts only if the upload
+        // expire, or because storage refused it as expired (refusedAsExpired), when the new URL must still allow
+        // retrying the part, or that refusal is thrown instead. Then the attempt starts only if the upload
         // still allows it: waiting for the slot or the renewal, it may have been overtaken by a throttle's cooldown or a
         // lowered target. If so it gives its slot back and asks again, ahead of new parts, and its wait continues. A
         // renewal that fails gives the slot back before its failure is thrown.
@@ -828,7 +831,7 @@ namespace FilesCom.Transfers
         // A URL renewed here, after admission, may withdraw permission to send the part alongside others. Unless the
         // part was admitted alone, other parts, possibly later ones, are already being sent with it, so the instruction
         // can no longer be followed; the upload stops instead of sending the part against it.
-        private async Task<AttemptAdmission.Attempt> StartAttemptAsync(PreparedPart part, PartAdmission.Admitted admitted, AttemptAdmission.Attempt attempt, CancellationToken token, bool renew = false)
+        private async Task<AttemptAdmission.Attempt> StartAttemptAsync(PreparedPart part, PartAdmission.Admitted admitted, AttemptAdmission.Attempt attempt, CancellationToken token, Exception refusedAsExpired = null)
         {
             TimeSpan askedAt = attempt?.AskedAt ?? progress.Elapsed;
             while (true)
@@ -836,8 +839,12 @@ namespace FilesCom.Transfers
                 attempt = attempt ?? await AdmitAttemptAsync(retry: true, askedAt, token);
                 try
                 {
-                    bool renewed = await RenewIfExpiringAsync(part, token, renew);
-                    renew = false;
+                    bool renewed = await RenewIfExpiringAsync(part, token, refusedAsExpired != null);
+                    if (refusedAsExpired != null && !part.Target.RetryParts)
+                    {
+                        ExceptionDispatchInfo.Capture(refusedAsExpired).Throw();
+                    }
+                    refusedAsExpired = null;
                     if (renewed && !part.Target.ParallelParts)
                     {
                         if (!admitted.Alone)

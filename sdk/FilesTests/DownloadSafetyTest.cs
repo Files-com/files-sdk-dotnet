@@ -739,10 +739,20 @@ namespace FilesTests
 
         [TestMethod]
         [Timeout(60000)]
-        [DataRow(true, "<Error><Code>AccessDenied</Code><Message>Request has expired</Message></Error>", true, DisplayName = "A part, which Amazon S3 refuses as expired: the URL is renewed")]
-        [DataRow(false, "<Error><Code>AuthenticationFailed</Code><Message>Signature not valid in the specified time frame</Message></Error>", true, DisplayName = "A whole file, which Azure refuses as expired: the URL is renewed")]
-        [DataRow(true, "<Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>", false, DisplayName = "A part refused by an ordinary 403: the download's failure")]
-        public async Task ARequestStorageRefusesAsExpiredIsSentAgainWithARenewedUrl(bool bound, string answer, bool renewed)
+        [DataRow(true, 403, "<Error><Code>AccessDenied</Code><Message>Request has expired</Message></Error>", true, DisplayName = "A part, which Amazon S3 refuses as expired: the URL is renewed")]
+        [DataRow(false, 403, "<Error><Code>AuthenticationFailed</Code><Message>Signature not valid in the specified time frame</Message></Error>", true, DisplayName = "A whole file, which Azure refuses as expired: the URL is renewed")]
+        [DataRow(false, 400, "<Error><Code>ExpiredToken</Code><Message>The provided token has expired.</Message></Error>", true, DisplayName = "A whole file, which Google refuses with ExpiredToken: the URL is renewed")]
+        [DataRow(true, 400, UrlRenewalTest.FilesDownloadExpired, true, DisplayName = "A part, which Files.com refuses with download_request_expired: the URL is renewed")]
+        [DataRow(false, 403, UrlRenewalTest.FilesDownloadExpiredListData, true, DisplayName = "A whole file, which Files.com refuses with download_request_expired and a list for data: the URL is renewed")]
+        [DataRow(true, 403, "<Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>", false, DisplayName = "A part refused by an ordinary 403: the download's failure")]
+        [DataRow(false, 403, UrlRenewalTest.FilesDenied, false, DisplayName = "A whole file refused with another JSON error type: the download's failure")]
+        [DataRow(true, 403, "{\"type\":\"other\",\"data\":\"<Code>ExpiredToken</Code>\"}", false, DisplayName = "A part refused with a JSON object naming an expiry only in its data: the download's failure")]
+        [DataRow(false, 403, "[{\"Message\":\"Request has expired\"}]", false, DisplayName = "A whole file refused with a JSON array: the download's failure")]
+        [DataRow(true, 400, "\"Request has expired\"", false, DisplayName = "A part refused with a JSON string: the download's failure")]
+        [DataRow(false, 403, " {\"type\":\"other\",\"error\":\"Request has expired\"", false, DisplayName = "A whole file refused with malformed JSON: the download's failure")]
+        [DataRow(true, 403, "{\"type\":\"download_request_expired\"}INVALID", false, DisplayName = "A part refused with an expiry object followed by more: the download's failure")]
+        [DataRow(false, 403, "{\"type\":\"upload_request_expired\"} {\"type\":\"other\"}", false, DisplayName = "A whole file refused with an expiry object and another JSON value: the download's failure")]
+        public async Task ARequestStorageRefusesAsExpiredIsSentAgainWithARenewedUrl(bool bound, int status, string answer, bool renewed)
         {
             var limiter = new TransferLimiter();
             using (var server = new DownloadServer(Contents) { Bound = bound })
@@ -755,7 +765,7 @@ namespace FilesTests
                         return false;
                     }
                     refused = true;
-                    await connection.RespondAsync(403, answer);
+                    await connection.RespondAsync(status, answer);
                     return true;
                 };
                 var stream = new MemoryStream();
@@ -770,7 +780,8 @@ namespace FilesTests
                 }
                 else
                 {
-                    InvalidResponseException error = await Assert.ThrowsExactlyAsync<InvalidResponseException>(() => download);
+                    SdkException error = await Assert.ThrowsAsync<SdkException>(() => download);
+                    Assert.IsInstanceOfType(error, answer == UrlRenewalTest.FilesDenied ? typeof(ApiException) : typeof(InvalidResponseException));
                     Assert.IsFalse(error.Message.Contains("expired") || error.Message.Contains("AccessDenied"), error.Message);
                     Assert.AreEqual(1, server.ApiRequests.Count, "No renewal.");
                 }

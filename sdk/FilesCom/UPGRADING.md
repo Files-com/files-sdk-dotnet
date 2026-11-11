@@ -139,7 +139,8 @@ Retries and timeouts:
 - A page of a list with no items that gives back the cursor it was loaded with now throws `InvalidResponseException`,
   where it ended the list as if it were complete.
 - `client.RemoteFiles.UploadFileAsync` and `DownloadFileAsync`, like `client.Transfers`, give a part or a download a
-  new address and send it again when storage answers that its address has expired, even before its expiry time.
+  new address and send it again when storage answers that its address has expired, even before its expiry time; an
+  upload part is sent again only while Files.com allows retrying parts (`retry_parts`), with the new address too.
 - `ReadTimeout` limits how long a request waits for its response and then for each part of it, instead of only a
   download's wait for its headers; the new `WriteTimeout` does the same for sending an upload part. A request that
   runs out of either fails with `NetworkTimeoutException`, an `ApiConnectionException`, where a download's header

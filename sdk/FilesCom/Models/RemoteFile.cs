@@ -152,9 +152,11 @@ namespace FilesCom.Models
             System.Net.Http.HttpMethod httpMethod = new System.Net.Http.HttpMethod(uploadAction.HttpMethod);
 
             // A URL that is about to expire before the part is sent is replaced by negotiating the same part of the same
-            // upload again. The part has been read by then, and is sent unchanged.
+            // upload again. The part has been read by then, and is sent unchanged. Whether the part may be sent again
+            // after storage refuses its URL as expired is the latest negotiation's retry_parts.
             Dictionary<string, object> renewal = new Dictionary<string, object>(parameters);
             renewal["ref"] = uploadAction.Ref ?? fileRef;
+            bool retryParts = uploadAction.RetryParts;
             Func<CancellationToken, Task<FilesCom.Http.SignedUrl>> renewUrl = async token =>
             {
                 FileUploadPart renewed = (await BeginUploadCore(context.ForReplaySafeRequests(), path, renewal, options, token))[0];
@@ -162,9 +164,10 @@ namespace FilesCom.Models
                 {
                     throw new InvalidResponseException($"The server changed the size of part {partNumber} from {chunkLength} to {renewed.Partsize} bytes when renewing its URL.");
                 }
+                retryParts = renewed.RetryParts;
                 return PartUrl(renewed);
             };
-            await FilesClient.ChunkUpload(context, httpMethod, PartUrl(uploadAction), readStream, chunkLength, renewUrl, cancellationToken);
+            await FilesClient.ChunkUpload(context, httpMethod, PartUrl(uploadAction), readStream, chunkLength, renewUrl, () => retryParts, cancellationToken);
 
             return Tuple.Create(chunkLength, uploadAction.Ref);
         }

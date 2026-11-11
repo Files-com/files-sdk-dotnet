@@ -80,16 +80,18 @@ namespace FilesTests
     {
         private readonly byte[] body;
         private readonly string charset;
+        private readonly HttpStatusCode status;
 
-        public ErrorBodyHttpMessageHandler(byte[] body, string charset)
+        public ErrorBodyHttpMessageHandler(byte[] body, string charset, HttpStatusCode status = HttpStatusCode.NotFound)
         {
             this.body = body;
             this.charset = charset;
+            this.status = status;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var response = new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new ByteArrayContent(body) };
+            var response = new HttpResponseMessage(status) { Content = new ByteArrayContent(body) };
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = charset };
             return Task.FromResult(response);
         }
@@ -308,7 +310,8 @@ namespace FilesTests
         }
 
         // Error bodies are decoded as HttpContent decodes text: by the declared charset, else by a byte order mark,
-        // else as UTF-8. API, upload and download errors all read them the same way.
+        // else as UTF-8. API, upload and download errors all read them the same way, and a transfer's answer that its
+        // URL has expired, by its JSON type, too.
         [TestMethod]
         [DataRow("utf-8", "utf-8", false, DisplayName = "declared UTF-8")]
         [DataRow("utf-16", "utf-16", false, DisplayName = "declared UTF-16 without a byte order mark")]
@@ -318,12 +321,8 @@ namespace FilesTests
         public async Task ErrorResponsesKeepTheirTypeAndTextInTheirCharset(string encodingName, string charset, bool byteOrderMark)
         {
             Encoding encoding = Encoding.GetEncoding(encodingName);
-            byte[] body = encoding.GetBytes(@"{""type"":""not-found"",""error"":""café"",""http-code"":404}");
-            if (byteOrderMark)
-            {
-                body = encoding.GetPreamble().Concat(body).ToArray();
-            }
-            FilesApiService service = ServiceAnswering(body, charset);
+            byte[] Encoded(string json) => byteOrderMark ? encoding.GetPreamble().Concat(encoding.GetBytes(json)).ToArray() : encoding.GetBytes(json);
+            FilesApiService service = ServiceAnswering(Encoded(@"{""type"":""not-found"",""error"":""café"",""http-code"":404}"), charset);
 
             NotFoundException apiError = await Assert.ThrowsExactlyAsync<NotFoundException>(() =>
                 service.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
@@ -335,6 +334,18 @@ namespace FilesTests
             Assert.AreEqual("café", apiError.Message);
             Assert.AreEqual("Transfer request failed (HTTP 404)", uploadError.Message);
             Assert.AreEqual("Transfer request failed (HTTP 404)", downloadError.Message);
+
+            FilesApiService expiring = ServiceAnswering(Encoded(@"{""type"":""download_request_expired"",""error"":""café""}"), charset, HttpStatusCode.Forbidden);
+            ApiException expiredApi = await Assert.ThrowsExactlyAsync<ApiException>(() =>
+                expiring.SendRequest("/users/1", HttpMethod.Get, new Dictionary<string, object>(), new Dictionary<string, object>()));
+            ApiException expiredUpload = await Assert.ThrowsExactlyAsync<ApiException>(() =>
+                expiring.ChunkUpload(HttpMethod.Put, "http://example.test/part", new MemoryStream(new byte[] { 1 }), 1));
+            ApiException expiredDownload = await Assert.ThrowsExactlyAsync<ApiException>(() =>
+                expiring.StreamDownload("http://example.test/file", new MemoryStream()));
+
+            Assert.AreEqual("download_request_expired", expiredUpload.type);
+            Assert.IsTrue(expiredUpload.StorageSaysExpired && expiredDownload.StorageSaysExpired, "A transfer's answer says its URL has expired.");
+            Assert.IsFalse(expiredApi.StorageSaysExpired, "An API answer is never a transfer URL's.");
         }
 
         [TestMethod]
@@ -452,10 +463,10 @@ namespace FilesTests
             Assert.IsTrue(handler.LastBody.Disposed, "The response was disposed.");
         }
 
-        private static FilesApiService ServiceAnswering(byte[] errorBody, string charset)
+        private static FilesApiService ServiceAnswering(byte[] errorBody, string charset, HttpStatusCode status = HttpStatusCode.NotFound)
         {
             new FilesClient(new FilesConfiguration { ApiKey = "my-key", BaseUrl = "http://example.test", MaxNetworkRetries = 0 });
-            return new FilesApiService(new CapturingHttpClientFactory(new ErrorBodyHttpMessageHandler(errorBody, charset), "http://example.test"));
+            return new FilesApiService(new CapturingHttpClientFactory(new ErrorBodyHttpMessageHandler(errorBody, charset, status), "http://example.test"));
         }
     }
 

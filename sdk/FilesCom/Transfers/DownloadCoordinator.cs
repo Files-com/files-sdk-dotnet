@@ -541,7 +541,7 @@ namespace FilesCom.Transfers
                         await ConfirmOnceAsync(first, current, stop.Token);
                         return;
                     }
-                    catch (InvalidResponseException e) when (e.StorageSaysExpired && renewedForExpiry < SignedUrl.MaxExpiredRenewals && !stop.IsCancellationRequested)
+                    catch (SdkException e) when (e.StorageSaysExpired && renewedForExpiry < SignedUrl.MaxExpiredRenewals && !stop.IsCancellationRequested)
                     {
                         renewedForExpiry++;
                         refused = current;
@@ -938,7 +938,7 @@ namespace FilesCom.Transfers
                             fetched = attempt;
                             attempt = null;
                         }
-                        catch (InvalidResponseException e) when (e.StorageSaysExpired && renewedForExpiry < SignedUrl.MaxExpiredRenewals && !stop.IsCancellationRequested)
+                        catch (SdkException e) when (e.StorageSaysExpired && renewedForExpiry < SignedUrl.MaxExpiredRenewals && !stop.IsCancellationRequested)
                         {
                             renewedForExpiry++;
                             refused = current;
@@ -1280,7 +1280,7 @@ namespace FilesCom.Transfers
                         {
                             await FetchWholeOnceAsync(bound, current, stated, new byte[bufferBytes], stop.Token);
                         }
-                        catch (InvalidResponseException e) when (e.StorageSaysExpired && renewedForExpiry < SignedUrl.MaxExpiredRenewals && !stop.IsCancellationRequested)
+                        catch (SdkException e) when (e.StorageSaysExpired && renewedForExpiry < SignedUrl.MaxExpiredRenewals && !stop.IsCancellationRequested)
                         {
                             renewedForExpiry++;
                             refused = current;

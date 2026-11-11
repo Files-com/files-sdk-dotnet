@@ -533,7 +533,7 @@ namespace FilesCom
         /// <exception cref="SdkException">No client has been made, so there is no default client to upload with.</exception>
         public static Task ChunkUpload(HttpMethod verb, string uri, Stream readStream, Int64 readLength)
         {
-            return ChunkUpload(OperationContext.OfDefaultClient(), verb, SignedUrl.Of(uri), readStream, readLength, null, CancellationToken.None);
+            return ChunkUpload(OperationContext.OfDefaultClient(), verb, SignedUrl.Of(uri), readStream, readLength, null, null, CancellationToken.None);
         }
 
         // Returns the client an object belongs to. An object made without a client (with its constructor, or by
@@ -687,8 +687,8 @@ namespace FilesCom
         }
 
         // Uploads one part to url. renewUrl, when given, supplies a new URL for the same part once url is about to
-        // expire.
-        internal static async Task ChunkUpload(OperationContext context, HttpMethod verb, SignedUrl url, Stream readStream, Int64 readLength, Func<CancellationToken, Task<SignedUrl>> renewUrl, CancellationToken cancellationToken)
+        // expire, and mayResend tells whether Files.com allows sending the part again (FilesApiService.ChunkUpload).
+        internal static async Task ChunkUpload(OperationContext context, HttpMethod verb, SignedUrl url, Stream readStream, Int64 readLength, Func<CancellationToken, Task<SignedUrl>> renewUrl, Func<bool> mayResend, CancellationToken cancellationToken)
         {
             if (context == null)
             {
@@ -699,7 +699,7 @@ namespace FilesCom
             {
                 try
                 {
-                    await context.Client.api.ChunkUpload(context.Network, verb, url, readStream, readLength, renewUrl, operation.Token);
+                    await context.Client.api.ChunkUpload(context.Network, verb, url, readStream, readLength, renewUrl, mayResend, operation.Token);
                 }
                 catch (Exception ex) when (!IsRequestedCancellation(ex, operation.Token))
                 {

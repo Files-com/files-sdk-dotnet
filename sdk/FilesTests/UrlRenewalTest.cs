@@ -213,12 +213,24 @@ namespace FilesTests
         private const string GoogleExpired = "<Error><Code>ExpiredToken</Code><Message>The provided token has expired.</Message></Error>";
         private const string AzureExpired = "<Error><Code>AuthenticationFailed</Code><Message>Server failed to authenticate the request. Signature not valid in the specified time frame: Start [Fri, 25 Sep 2026 12:00:00 GMT] - Expiry [Fri, 25 Sep 2026 13:00:00 GMT]</Message></Error>";
         private const string Denied = "<Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>";
+        // Files.com's own transfer URLs answer with a JSON error, whose type alone says the URL has expired.
+        internal const string FilesUploadExpired = "{\"error\":\"Upload URL no longer valid\",\"http-code\":403,\"type\":\"upload_request_expired\"}";
+        internal const string FilesDownloadExpired = "{\"error\":\"Download URL no longer valid\",\"http-code\":400,\"type\":\"download_request_expired\"}";
+        // The same types, with other members of shapes a Files.com error object does not have.
+        internal const string FilesDownloadExpiredListData = "{\"type\":\"download_request_expired\",\"error\":\"expired\",\"data\":[]}";
+        internal const string FilesUploadExpiredTextData = "{\"type\":\"upload_request_expired\",\"data\":\"text\"}";
+        // Another JSON error, whose message alone would read as an expiry.
+        internal const string FilesDenied = "{\"error\":\"Request has expired\",\"http-code\":403,\"type\":\"not-authorized/api-key-is-disabled\"}";
 
         [TestMethod]
         [Timeout(60000)]
         [DataRow(403, AmazonExpired, DisplayName = "Amazon S3: 403, Request has expired")]
         [DataRow(400, GoogleExpired, DisplayName = "Google: 400, ExpiredToken")]
         [DataRow(403, AzureExpired, DisplayName = "Azure: 403, Signature not valid in the specified time frame")]
+        [DataRow(403, FilesUploadExpired, DisplayName = "Files.com: 403, JSON type upload_request_expired")]
+        [DataRow(400, FilesDownloadExpired, DisplayName = "Files.com: 400, JSON type download_request_expired")]
+        [DataRow(403, FilesDownloadExpiredListData, DisplayName = "Files.com: 403, JSON type download_request_expired, with a list for data")]
+        [DataRow(400, FilesUploadExpiredTextData, DisplayName = "Files.com: 400, JSON type upload_request_expired, with text for data")]
         public async Task APartStorageRefusesAsExpiredGetsANewUrlForTheSamePart(int status, string answer)
         {
             using (var server = new UploadServer())
@@ -252,6 +264,8 @@ namespace FilesTests
         [DataRow("no-retry", DisplayName = "Expired, where the server does not allow retrying parts: the part's failure")]
         [DataRow("always", DisplayName = "Expired again and again: two new URLs, then the part's failure")]
         [DataRow("renewal-refused", DisplayName = "Expired, and Files.com refuses a new URL: its refusal")]
+        [DataRow("other-json", DisplayName = "Another JSON error type, whatever its message: the part's failure, without a new URL")]
+        [DataRow("withdrawn", DisplayName = "Expired, and the new URL no longer allows retrying parts: the refusal, without sending again")]
         public async Task APartRefusedOtherwiseOrTooOftenFailsTheUpload(string refusal)
         {
             using (var server = new UploadServer())
@@ -267,9 +281,20 @@ namespace FilesTests
                         ? LoopbackSite.Json("{\"error\":\"Upload not found\",\"http-code\":404,\"type\":\"not-found/file-upload-not-found\"}", status: 404)
                         : null;
                 }
-                server.RespondToPart = request => Task.FromResult(request.Number == 2 && (refusal == "always" || request.Attempt == 1)
-                    ? LoopbackSite.Json(refusal == "denied" ? Denied : AmazonExpired, status: 403)
-                    : UploadServer.Accept(request));
+                server.RespondToPart = request =>
+                {
+                    if (request.Number != 2 || (refusal != "always" && request.Attempt > 1))
+                    {
+                        return Task.FromResult(UploadServer.Accept(request));
+                    }
+                    if (refusal == "withdrawn")
+                    {
+                        // Part 2's renewal, negotiated once this answer has arrived, withdraws retrying parts.
+                        server.RetryParts = "false";
+                    }
+                    string answer = refusal == "denied" ? Denied : refusal == "other-json" ? FilesDenied : refusal == "withdrawn" ? FilesUploadExpired : AmazonExpired;
+                    return Task.FromResult(LoopbackSite.Json(answer, status: 403));
+                };
                 byte[] contents = Enumerable.Range(0, 20).Select(value => (byte)value).ToArray();
                 var limiter = new TransferLimiter();
 
@@ -277,10 +302,16 @@ namespace FilesTests
 
                 int renewals = server.Negotiations.Count(body => body.TryGetProperty("part", out JsonElement part) && part.GetInt64() == 2 && !body.TryGetProperty("parts", out _));
                 Assert.AreEqual(refusal == "always" ? 3 : 1, server.Parts.Count(part => part.Number == 2), "Times part 2 was sent.");
-                Assert.AreEqual(refusal == "always" ? 2 : refusal == "renewal-refused" ? 1 : 0, renewals, "New URLs asked for.");
+                Assert.AreEqual(refusal == "always" ? 2 : refusal == "renewal-refused" || refusal == "withdrawn" ? 1 : 0, renewals, "New URLs asked for.");
                 if (refusal == "renewal-refused")
                 {
                     Assert.IsInstanceOfType(error, typeof(FileUploadNotFoundException));
+                }
+                else if (refusal == "other-json" || refusal == "withdrawn")
+                {
+                    // Files.com's JSON error, as its type names it.
+                    Assert.AreEqual(refusal == "withdrawn" ? "upload_request_expired" : "not-authorized/api-key-is-disabled", ((ApiException)error).type);
+                    Assert.AreEqual(403, ((ApiException)error).httpStatus);
                 }
                 else
                 {
@@ -295,14 +326,17 @@ namespace FilesTests
 
         [TestMethod]
         [Timeout(60000)]
-        public async Task LegacyTransfersStorageRefusesAsExpiredGetNewUrls()
+        [DataRow(403, AmazonExpired, 403, AzureExpired, DisplayName = "Amazon S3 and Azure answers")]
+        [DataRow(403, FilesUploadExpired, 400, FilesDownloadExpired, DisplayName = "Files.com JSON answers")]
+        [DataRow(400, FilesUploadExpiredTextData, 403, FilesDownloadExpiredListData, DisplayName = "Files.com JSON answers with data of other shapes")]
+        public async Task LegacyTransfersStorageRefusesAsExpiredGetNewUrls(int partStatus, string partAnswer, int downloadStatus, string downloadAnswer)
         {
             int negotiations = 0, puts = 0, downloads = 0, lookups = 0;
-            site.On("POST", "/file_actions/begin_upload/remote.bin", request => LoopbackSite.Json($"[{{\"upload_uri\":\"{site.Url}/part?negotiation={++negotiations}{SignedFor(3600)}\",\"http_method\":\"PUT\",\"partsize\":4,\"ref\":\"upload-ref\"}}]"));
-            site.On("PUT", "//part", request => ++puts == 1 ? LoopbackSite.Json(AmazonExpired, status: 403) : LoopbackSite.Status(200));
+            site.On("POST", "/file_actions/begin_upload/remote.bin", request => LoopbackSite.Json($"[{{\"upload_uri\":\"{site.Url}/part?negotiation={++negotiations}{SignedFor(3600)}\",\"http_method\":\"PUT\",\"partsize\":4,\"ref\":\"upload-ref\",\"retry_parts\":true}}]"));
+            site.On("PUT", "//part", request => ++puts == 1 ? LoopbackSite.Json(partAnswer, status: partStatus) : LoopbackSite.Status(200));
             site.On("POST", "/files/remote.bin", request => LoopbackSite.Json("{\"path\":\"remote.bin\"}"));
             site.On("GET", "/files/remote.bin", request => LoopbackSite.Json($"{{\"path\":\"remote.bin\",\"download_uri\":\"{site.Url}/download?lookup={++lookups}{SignedFor(3600)}\"}}"));
-            site.On("GET", "//download", request => ++downloads == 1 ? LoopbackSite.Json(AzureExpired, status: 403) : LoopbackSite.Json("\"contents\""));
+            site.On("GET", "//download", request => ++downloads == 1 ? LoopbackSite.Json(downloadAnswer, status: downloadStatus) : LoopbackSite.Json("\"contents\""));
             FilesClient client = FilesClient.Create(site.Configuration(maxNetworkRetries: 0));
             byte[] contents = { 1, 2, 3, 4 };
             var destination = new MemoryStream();
@@ -317,6 +351,25 @@ namespace FilesTests
             Assert.AreEqual(2, lookups, "The download's URL was renewed once.");
             StringAssert.Contains(site.Requests.Last(request => request.Path.StartsWith("/download")).Path, "lookup=2");
             Assert.AreEqual("\"contents\"", System.Text.Encoding.UTF8.GetString(destination.ToArray()));
+        }
+
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow("false", "false", DisplayName = "Not allowed by the part's negotiation: no new URL")]
+        [DataRow("true", "false", DisplayName = "Withdrawn by the new URL's negotiation: not sent again")]
+        public async Task LegacyPartRefusedAsExpiredIsNotSentAgainUnlessRetryingPartsIsAllowed(string first, string renewed)
+        {
+            int negotiations = 0;
+            site.On("POST", "/file_actions/begin_upload/remote.bin", request => LoopbackSite.Json($"[{{\"upload_uri\":\"{site.Url}/part?negotiation={++negotiations}{SignedFor(3600)}\",\"http_method\":\"PUT\",\"partsize\":4,\"ref\":\"upload-ref\",\"retry_parts\":{(negotiations == 1 ? first : renewed)}}}]"));
+            site.On("PUT", "//part", request => LoopbackSite.Json(FilesUploadExpired, status: 403));
+            site.On("POST", "/files/remote.bin", request => LoopbackSite.Json("{\"path\":\"remote.bin\"}"));
+
+            ApiException error = await Assert.ThrowsExactlyAsync<ApiException>(() => FilesClient.Create(site.Configuration(maxNetworkRetries: 0)).RemoteFiles.UploadFileAsync("remote.bin", new OnceReadableStream(new byte[] { 1, 2, 3, 4 }), 4, MTime));
+
+            Assert.AreEqual("upload_request_expired", error.type, "Storage's refusal stands.");
+            Assert.AreEqual(first == "true" ? 2 : 1, negotiations);
+            Assert.AreEqual(1, site.Requests.Count(request => request.Path.StartsWith("/part")), "The part was sent once.");
+            Assert.AreEqual(0, site.Requests.Count(request => request.Path == "/files/remote.bin"));
         }
 
         private static string SignedFor(int seconds)

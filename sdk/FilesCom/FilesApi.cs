@@ -98,7 +98,8 @@ namespace FilesCom
         // The exception for an error response whose body has been read: an ApiException, of the class its error type
         // names, for a JSON error object, a LockoutRegionMismatchException for Files.com's former plain-text answer that
         // the site is served from another region (RegionRelocation.IsFormerMismatch), and otherwise an
-        // InvalidResponseException. The body, and why it could not be read, are logged only at DEBUG: the exception's
+        // InvalidResponseException. For a transfer, either says when storage answered that its URL has expired
+        // (SdkException.StorageSaysExpired). The body, and why it could not be read, are logged only at DEBUG: the exception's
         // message and inner exceptions never quote the response, whose
         // JSON property names can be a signed URL. An API error's message is its error text with the credentials of
         // any URL in it removed, while ApiException.error keeps the text as sent. A transfer's message has only its
@@ -111,6 +112,7 @@ namespace FilesCom
             string body = await Decode(response, received);
             int status = (int)response.StatusCode;
             log.Debug(truncated ? $"Error response (HTTP {status}), its first {received.Length} bytes: {body}" : $"Error response (HTTP {status}): {body}");
+            bool expired = isTransfer && SignedUrl.RefusedAsExpired(status, received, body, whole: !truncated);
 
             ResponseError responseError = null;
             if (!truncated)
@@ -132,7 +134,6 @@ namespace FilesCom
                     former.AnsweredTo(response.RequestMessage);
                     return former;
                 }
-                bool expired = isTransfer && SignedUrl.RefusedAsExpired(status, received);
                 // Only a whole body can say so: the start of a longer one is never parsed.
                 bool timedOut = isTransfer && !truncated && RetryPolicy.StorageTimedOut(status, body);
                 string failure = isTransfer
@@ -147,6 +148,7 @@ namespace FilesCom
                 ? $"Transfer request failed (HTTP {status})"
                 : string.IsNullOrEmpty(responseError.error) ? $"HTTP request failed with code {status}" : DiagnosticText.WithoutUrlCredentials(responseError.error);
             ApiException error = ApiErrors.For(message, status, responseError, response.Headers);
+            error.StorageSaysExpired = expired;
             if (!isTransfer && error is LockoutRegionMismatchException mismatch)
             {
                 mismatch.AnsweredTo(response.RequestMessage);
@@ -249,7 +251,7 @@ namespace FilesCom
             // Needs no default client, as it never has: without one, the default settings apply.
             OperationContext context = OperationContext.OfDefaultClient();
             NetworkSettings network = context != null ? context.Network : NetworkSettings.From(new FilesConfiguration());
-            return ChunkUpload(network, verb, SignedUrl.Of(uriString), readStream, readLength, null, CancellationToken.None);
+            return ChunkUpload(network, verb, SignedUrl.Of(uriString), readStream, readLength, null, null, CancellationToken.None);
         }
 
         // The default client's context, for a download, which sends no credentials but needs the client's settings.
@@ -619,7 +621,7 @@ namespace FilesCom
                             cancellationToken);
                         break;
                     }
-                    catch (InvalidResponseException e) when (e.StorageSaysExpired && renewUrl != null && !writing && renewedForExpiry < SignedUrl.MaxExpiredRenewals)
+                    catch (SdkException e) when (e.StorageSaysExpired && renewUrl != null && !writing && renewedForExpiry < SignedUrl.MaxExpiredRenewals)
                     {
                         log.Info("Renewing the URL of a download: the storage server says it has expired");
                         renew = true;
@@ -659,8 +661,9 @@ namespace FilesCom
         }
 
         // Uploads one part to url, which renewUrl, when given, replaces with a new URL for the same part once it is
-        // about to expire.
-        internal async Task ChunkUpload(NetworkSettings network, HttpMethod verb, SignedUrl url, Stream readStream, Int64 readLength, Func<CancellationToken, Task<SignedUrl>> renewUrl, CancellationToken cancellationToken)
+        // about to expire. mayResend tells whether Files.com, as last asked for the part's URL, allows sending the part
+        // again (retry_parts); without it, a part storage refuses as expired is not sent again.
+        internal async Task ChunkUpload(NetworkSettings network, HttpMethod verb, SignedUrl url, Stream readStream, Int64 readLength, Func<CancellationToken, Task<SignedUrl>> renewUrl, Func<bool> mayResend, CancellationToken cancellationToken)
         {
             if (readStream == null)
             {
@@ -685,8 +688,10 @@ namespace FilesCom
             log.Debug($"content: {readLength} bytes");
 
             // A part storage refuses saying its URL has expired gets a new URL for the same part and is sent again at once,
-            // with the same bytes, at most SignedUrl.MaxExpiredRenewals times.
+            // with the same bytes, at most SignedUrl.MaxExpiredRenewals times, while Files.com allows sending it again,
+            // both before the new URL and with it; otherwise storage's refusal stands.
             bool renew = false;
+            SdkException refusal = null;
             try
             {
                 for (int renewedForExpiry = 0; ; renewedForExpiry++)
@@ -701,6 +706,10 @@ namespace FilesCom
                                 {
                                     renewing = true;
                                     url = await RenewAsync(renewUrl, token);
+                                    if (renew && !mayResend())
+                                    {
+                                        ExceptionDispatchInfo.Capture(refusal).Throw();
+                                    }
                                     renewing = false;
                                     renew = false;
                                 }
@@ -711,10 +720,11 @@ namespace FilesCom
                             cancellationToken);
                         break;
                     }
-                    catch (InvalidResponseException e) when (e.StorageSaysExpired && renewUrl != null && renewedForExpiry < SignedUrl.MaxExpiredRenewals)
+                    catch (SdkException e) when (e.StorageSaysExpired && renewUrl != null && mayResend != null && mayResend() && renewedForExpiry < SignedUrl.MaxExpiredRenewals)
                     {
                         log.Info("Renewing the URL of an upload part: the storage server says it has expired");
                         renew = true;
+                        refusal = e;
                     }
                 }
             }
@@ -1075,7 +1085,7 @@ namespace FilesCom
 
         // Storage answered that the part's URL has expired (SignedUrl.RefusedAsExpired): a new URL for the same part can
         // be tried.
-        internal bool UrlExpired => (Error as InvalidResponseException)?.StorageSaysExpired == true;
+        internal bool UrlExpired => (Error as SdkException)?.StorageSaysExpired == true;
 
         internal string ETag { get; }
 

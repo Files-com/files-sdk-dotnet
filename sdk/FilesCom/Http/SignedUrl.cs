@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.Json;
 
 namespace FilesCom.Http
 {
@@ -42,6 +43,16 @@ namespace FilesCom.Http
             "signature not valid in the specified time frame",
         };
 
+        // The types of Files.com's own JSON error, as a transfer URL it serves answers when the URL has expired. Matched
+        // exactly.
+        private static readonly string[] ExpiryTypes =
+        {
+            "download_request_expired",
+            "upload_request_expired",
+        };
+
+        private const char ByteOrderMark = '\uFEFF';
+
         private const string SigningTimeFormat = "yyyyMMdd'T'HHmmss'Z'";
 
         private static readonly string[] AzureExpiryFormats =
@@ -67,14 +78,22 @@ namespace FilesCom.Http
 
         internal string Text { get; }
 
-        // Whether a storage server's answer, status and body, says that the signed URL the request was sent to has
-        // expired: a 400 or 403 whose body names an expiry (ExpiryAnswers). Any other refusal, such as an ordinary 403
-        // that denies access, does not, and nothing of the body is kept.
-        internal static bool RefusedAsExpired(int status, byte[] body)
+        // Whether a storage server's answer says that the signed URL the request was sent to has expired, though the
+        // URL's own expiry may still be to come. Only a 400 or 403 can. text is the body as its charset decodes it, as
+        // the SDK reads every error answer; body is its bytes, of which whole tells whether they are all of it. A text
+        // that starts as JSON does ({, [ or ", after any byte order mark and white space) says so only as exactly one
+        // JSON object, the whole body, whose top-level type is one of ExpiryTypes, whatever its other members are: an
+        // array, a string, malformed JSON or the start of a longer body never does. Any other body says so when its
+        // first RefusalBytes bytes name an expiry (ExpiryAnswers), however long it is. Nothing of the body is kept.
+        internal static bool RefusedAsExpired(int status, byte[] body, string text, bool whole)
         {
-            if ((status != 400 && status != 403) || body == null)
+            if ((status != 400 && status != 403) || body == null || text == null)
             {
                 return false;
+            }
+            if (StartsAsJson(text))
+            {
+                return whole && IsExpiryObject(text);
             }
             string start = System.Text.Encoding.UTF8.GetString(body, 0, Math.Min(body.Length, RefusalBytes));
             foreach (string answer in ExpiryAnswers)
@@ -85,6 +104,40 @@ namespace FilesCom.Http
                 }
             }
             return false;
+        }
+
+        private static bool StartsAsJson(string text)
+        {
+            foreach (char c in text)
+            {
+                if (c == '{' || c == '[' || c == '"')
+                {
+                    return true;
+                }
+                if (c != ByteOrderMark && c != ' ' && c != '\t' && c != '\r' && c != '\n')
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        // Whether text is one JSON object and nothing more, whose type is one of ExpiryTypes.
+        private static bool IsExpiryObject(string text)
+        {
+            try
+            {
+                using (JsonDocument json = JsonDocument.Parse(text.TrimStart(ByteOrderMark)))
+                {
+                    JsonElement root = json.RootElement;
+                    return root.ValueKind == JsonValueKind.Object && root.TryGetProperty("type", out JsonElement type)
+                        && type.ValueKind == JsonValueKind.String && Array.IndexOf(ExpiryTypes, type.GetString()) >= 0;
+                }
+            }
+            catch (JsonException)
+            {
+                return false;
+            }
         }
 
         // Null when unknown.
