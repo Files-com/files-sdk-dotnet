@@ -23,6 +23,8 @@
     <PackageReference Include="MSTest.TestFramework" Version="4.4.1" />
     <PackageReference Include="coverlet.collector" Version="10.0.1" />
     <PackageReference Include="WireMock.Net.Minimal" Version="2.18.0" />
+    <!-- A patched release of the ASP.NET Core library WireMock.Net brings in. -->
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.14" />
   </ItemGroup>
 
   <ItemGroup>
