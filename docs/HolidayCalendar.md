@@ -29,9 +29,10 @@
       ],
       "11": [
         {
-          "name": "Thanksgiving",
+          "name": "Day after Thanksgiving",
           "week": 4,
-          "wday": 4
+          "wday": 4,
+          "day_offset": 1
         }
       ],
       "12": [
@@ -212,7 +213,7 @@ var holidayCalendar = await HolidayCalendar.Find(1L);
 
 var parameters = new Dictionary<string, object>();
 
-parameters.Add("definition", new Dictionary<string, object> { { "months", new Dictionary<string, object> { { "0", new object[] { new Dictionary<string, object> { { "name", "Good Friday" }, { "function", "easter(year)" }, { "function_modifier", -2 } } } }, { "1", new object[] { new Dictionary<string, object> { { "name", "New Year's Day" }, { "mday", 1 }, { "observed", "to_weekday_if_weekend(date)" } }, new Dictionary<string, object> { { "name", "Third Monday" }, { "week", 3 }, { "wday", 1 } } } }, { "11", new object[] { new Dictionary<string, object> { { "name", "Thanksgiving" }, { "week", 4 }, { "wday", 4 } } } }, { "12", new object[] { new Dictionary<string, object> { { "name", "Christmas Eve Early Close" }, { "mday", 24 }, { "start_time", "13:00" }, { "end_time", "17:00" }, { "year_ranges", new Dictionary<string, object> { { "from", 2026 } } } } } } } } });
+parameters.Add("definition", new Dictionary<string, object> { { "months", new Dictionary<string, object> { { "0", new object[] { new Dictionary<string, object> { { "name", "Good Friday" }, { "function", "easter(year)" }, { "function_modifier", -2 } } } }, { "1", new object[] { new Dictionary<string, object> { { "name", "New Year's Day" }, { "mday", 1 }, { "observed", "to_weekday_if_weekend(date)" } }, new Dictionary<string, object> { { "name", "Third Monday" }, { "week", 3 }, { "wday", 1 } } } }, { "11", new object[] { new Dictionary<string, object> { { "name", "Day after Thanksgiving" }, { "week", 4 }, { "wday", 4 }, { "day_offset", 1 } } } }, { "12", new object[] { new Dictionary<string, object> { { "name", "Christmas Eve Early Close" }, { "mday", 24 }, { "start_time", "13:00" }, { "end_time", "17:00" }, { "year_ranges", new Dictionary<string, object> { { "from", 2026 } } } } } } } } });
 parameters.Add("name", "Company Holidays");
 
 await holidayCalendar.Update(parameters);

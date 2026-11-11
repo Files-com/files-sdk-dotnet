@@ -131,6 +131,7 @@ namespace FilesCom.Operations
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
+        ///   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -185,6 +186,7 @@ namespace FilesCom.Operations
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
+        ///   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.

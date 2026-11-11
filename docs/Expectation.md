@@ -32,6 +32,14 @@
   "schedule_time_zone": "UTC",
   "holiday_region": "us",
   "lookback_interval": 3600,
+  "schedule_time_exceptions": [
+    {
+      "holiday_region": "nyse_early_close",
+      "times_of_day": [
+        "13:00"
+      ]
+    }
+  ],
   "late_acceptance_interval": 900,
   "inactivity_interval": 300,
   "max_open_interval": 43200,
@@ -71,6 +79,7 @@
 * `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the Expectation schedule.
 * `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by the Expectation schedule.
 * `lookback_interval` / `LookbackInterval`  (Nullable<Int64>): How many seconds before the due boundary the window starts.
+* `schedule_time_exceptions` / `ScheduleTimeExceptions`  (object[]): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `late_acceptance_interval` / `LateAcceptanceInterval`  (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` / `InactivityInterval`  (Nullable<Int64>): How many quiet seconds are required before final closure.
 * `max_open_interval` / `MaxOpenInterval`  (Nullable<Int64>): Hard-stop duration in seconds for unscheduled expectations.
@@ -181,6 +190,7 @@ Task<Expectation> client.Expectations.CreateAsync(
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
+* `schedule_time_exceptions` (object[]): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `lookback_interval` (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
@@ -258,6 +268,7 @@ Task<Expectation> client.Expectations.UpdateAsync(
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
+* `schedule_time_exceptions` (object[]): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `lookback_interval` (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.
@@ -337,6 +348,7 @@ parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 1, 3, 5 });
 parameters.Add("schedule_times_of_day", new string[] { "06:00" });
 parameters.Add("schedule_time_zone", "UTC");
 parameters.Add("holiday_region", "us");
+parameters.Add("schedule_time_exceptions", new object[] { new Dictionary<string, object> { { "holiday_region", "nyse_early_close" }, { "times_of_day", new object[] { "13:00" } } } });
 parameters.Add("lookback_interval", 3600L);
 parameters.Add("late_acceptance_interval", 900L);
 parameters.Add("inactivity_interval", 300L);
@@ -368,6 +380,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Expect
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
+* `schedule_time_exceptions` (object[]): Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
 * `lookback_interval` (Nullable<Int64>): How many seconds before the due boundary the window starts.
 * `late_acceptance_interval` (Nullable<Int64>): How many seconds a schedule-driven window may remain eligible to close as late.
 * `inactivity_interval` (Nullable<Int64>): How many quiet seconds are required before final closure.

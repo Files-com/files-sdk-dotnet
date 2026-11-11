@@ -26,7 +26,7 @@ namespace FilesCom.Models
         // The JSON, when handed out since then, of the arrays among them that callers can change in place, directly or
         // through a model in them. SaveAsync compares each with the array's JSON now, and sends the ones that differ.
         private readonly Dictionary<string, string> handedOut = new Dictionary<string, string>();
-        private static readonly string[] ArrayAttributeNames = { "recurring_days", "schedule_days_of_week", "schedule_times_of_day" };
+        private static readonly string[] ArrayAttributeNames = { "recurring_days", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_exceptions" };
         /// <summary>
         /// Makes a Expectation with no attributes set and no options.
         /// </summary>
@@ -119,6 +119,10 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("lookback_interval"))
             {
                 this.attributes.Add("lookback_interval", null);
+            }
+            if (!this.attributes.ContainsKey("schedule_time_exceptions"))
+            {
+                this.attributes.Add("schedule_time_exceptions", new object[0]);
             }
             if (!this.attributes.ContainsKey("late_acceptance_interval"))
             {
@@ -409,6 +413,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
+        /// </summary>
+        [JsonPropertyName("schedule_time_exceptions")]
+        public object[] ScheduleTimeExceptions
+        {
+            get { return (object[])HandedOut("schedule_time_exceptions"); }
+            set { attributes["schedule_time_exceptions"] = value; unsaved.Add("schedule_time_exceptions"); }
+        }
+
+        /// <summary>
         /// How many seconds a schedule-driven window may remain eligible to close as late.
         /// </summary>
         [JsonPropertyName("late_acceptance_interval")]
@@ -575,6 +589,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
+        ///   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -609,6 +624,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
+        ///   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -704,6 +720,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("holiday_region", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: holiday_region is null, which cannot be sent" : "Bad parameter: holiday_region must be of type string", "holiday_region");
+            }
+            if (parameters.TryGetValue("schedule_time_exceptions", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_time_exceptions is null, which cannot be sent" : "Bad parameter: schedule_time_exceptions must be of type object[]", "schedule_time_exceptions");
             }
             if (parameters.TryGetValue("lookback_interval", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
@@ -809,8 +829,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
+        private static readonly string[] CreateParameterNames = { "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "schedule_time_exceptions", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "schedule_time_exceptions", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -1032,6 +1052,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
+        ///   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -1121,6 +1142,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("holiday_region", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: holiday_region is null, which cannot be sent" : "Bad parameter: holiday_region must be of type string", "holiday_region");
+            }
+            if (parameters.TryGetValue("schedule_time_exceptions", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_time_exceptions is null, which cannot be sent" : "Bad parameter: schedule_time_exceptions must be of type object[]", "schedule_time_exceptions");
             }
             if (parameters.TryGetValue("lookback_interval", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
@@ -1218,6 +1243,7 @@ namespace FilesCom.Models
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
+        ///   schedule_time_exceptions - array(object) - Calendar-based replacement due times. Matching dates replace all normal times; holiday exclusions still apply. Calendars specifying different times on the same date conflict.
         ///   lookback_interval - int64 - How many seconds before the due boundary the window starts.
         ///   late_acceptance_interval - int64 - How many seconds a schedule-driven window may remain eligible to close as late.
         ///   inactivity_interval - int64 - How many quiet seconds are required before final closure.
@@ -1324,6 +1350,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("holiday_region", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: holiday_region is null, which cannot be sent" : "Bad parameter: holiday_region must be of type string", "holiday_region");
+            }
+            if (parameters.TryGetValue("schedule_time_exceptions", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_time_exceptions is null, which cannot be sent" : "Bad parameter: schedule_time_exceptions must be of type object[]", "schedule_time_exceptions");
             }
             if (parameters.TryGetValue("lookback_interval", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {

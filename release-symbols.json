@@ -1961,6 +1961,7 @@
         "recurring_days": "RecurringDays",
         "schedule_days_of_week": "ScheduleDaysOfWeek",
         "schedule_id": "ScheduleId",
+        "schedule_time_exceptions": "ScheduleTimeExceptions",
         "schedule_time_zone": "ScheduleTimeZone",
         "schedule_times_of_day": "ScheduleTimesOfDay",
         "source": "Source",
