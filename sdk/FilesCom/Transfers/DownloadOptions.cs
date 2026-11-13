@@ -44,6 +44,12 @@ namespace FilesCom.Transfers
         public int? MaxConcurrency { get; set; }
 
         /// <summary>
+        /// Whether this download checks Last-Modified dates; null inherits the client's setting (true by default).
+        /// False disables only timestamp checks, keeping stronger ETag, size, concurrency and checkpoint checks.
+        /// </summary>
+        public bool? CheckDownloadModificationTime { get; set; }
+
+        /// <summary>
         /// Tuning for an automatic download. If null, the tuning for the storage the download is bound to: the scaled S3
         /// policy, <see cref="AutomaticConcurrencyOptions.ScaledS3"/>, for Amazon S3, the only storage whose downloads
         /// are fetched in parts, and the defaults of <see cref="UploadPerformanceProfile.Generic"/> otherwise. Tuning
@@ -199,6 +205,7 @@ namespace FilesCom.Transfers
             {
                 ConcurrencyMode = ConcurrencyMode,
                 MaxConcurrency = MaxConcurrency,
+                CheckDownloadModificationTime = CheckDownloadModificationTime,
                 AutomaticConcurrency = tuning,
                 Tuning = tuning,
                 Requests = requests,

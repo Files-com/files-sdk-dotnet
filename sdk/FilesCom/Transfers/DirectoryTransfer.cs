@@ -440,6 +440,7 @@ namespace FilesCom.Transfers
                 {
                     ConcurrencyMode = template.ConcurrencyMode,
                     MaxConcurrency = template.MaxConcurrency,
+                    CheckDownloadModificationTime = template.CheckDownloadModificationTime,
                     AutomaticConcurrency = template.AutomaticConcurrency,
                     SharedScopes = scopes,
                     PartSize = template.PartSize,

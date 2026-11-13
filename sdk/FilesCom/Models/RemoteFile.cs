@@ -770,8 +770,9 @@ namespace FilesCom.Models
             try
             {
                 Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+                bool checkModificationTime = Http.DownloadDateGuard.Enabled(context.CheckDownloadModificationTime, requestOptions);
                 string uri = await LoadDownloadUri(context, requestOptions, cancellationToken);
-                await FilesClient.StreamDownload(context, uri, writeStream, token => RenewDownloadUri(context, requestOptions, token), cancellationToken);
+                await FilesClient.StreamDownload(context, uri, writeStream, token => RenewDownloadUri(context, requestOptions, token), cancellationToken, Path, checkModificationTime);
             }
             // The failure is thrown as it is, and may be the caller's own stream's, whose message can quote URLs and
             // credentials: only that the download failed is logged below DEBUG.

@@ -2071,6 +2071,23 @@ information also leads to a whole response. If storage ignores ranges **after** 
 the version check: `VersionBound` remains true while `Concurrency` becomes null. A response containing an entire
 small file is accepted only after all bytes arrive; if cut short, the next attempt determines the mode again.
 
+When storage supplies a valid `Last-Modified` response date, the SDK keeps it for later content requests in
+the same attempt. Without a stronger `If-Match` condition, those requests send it in `If-Unmodified-Since`,
+including after URL renewal. A newer source can return HTTP 412 before sending contents. The SDK handles this
+as a `DownloadSourceChangedException` rather than combining the response with bytes already downloaded. Missing or invalid
+dates remain compatible with storage that supplies no timestamp.
+
+Timestamp checks are enabled by default. Set `FilesConfiguration.CheckDownloadModificationTime` to `false` for a
+client, or `DownloadOptions.CheckDownloadModificationTime` to `false` for one download. A null download option inherits
+the client setting. Legacy model helpers accept the Boolean `check_download_modification_time` SDK-local request option.
+The effective value is fixed when the download or read handle starts. Disabling it leaves size and stronger version
+checks in place, but permits changes detectable only by modification time.
+
+Timestamp checks use one-second precision and can miss same-second edits, preserved or earlier modification times and
+changes during a response. An Agent file with a future modification time can be rejected even when its contents
+have not changed. These checks do not establish a strong version or enable parallel downloads or checkpoint
+resume for other storage.
+
 The SDK rejects web-app responses (`X-Files-Frontend-App`), compressed bodies, incorrect ranges or lengths, and
 whole-file responses other than `200`. Bound part requests follow no redirects; other storage redirects must not
 leave HTTPS. These checks run before publication.

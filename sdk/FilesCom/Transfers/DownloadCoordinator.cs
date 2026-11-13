@@ -97,6 +97,7 @@ namespace FilesCom.Transfers
         // (FetchPartOnceAsync).
         private long? statedSize;
         private DownloadVersion version;
+        private readonly DownloadDateGuard dateGuard;
         private Task renewal;
         // What the download's part requests are admitted to, once it fetches parts (ScopeFor).
         private TransferScope scope;
@@ -126,6 +127,8 @@ namespace FilesCom.Transfers
         {
             this.context = context;
             this.path = path;
+            dateGuard = new DownloadDateGuard(path, options.CheckDownloadModificationTime
+                ?? DownloadDateGuard.Enabled(context.CheckDownloadModificationTime, options.RequestOptions));
             this.options = options;
             this.progress = progress;
             this.cancellationToken = cancellationToken;
@@ -1071,6 +1074,7 @@ namespace FilesCom.Transfers
                         int status = (int)response.StatusCode;
                         if (status == 200 || status == 416 || (status >= 300 && status < 400))
                         {
+                            dateGuard.Check(response);
                             // The whole file, a range that cannot be satisfied, such as of an empty file, or a redirect,
                             // which a request for a range does not follow: nothing that binds the download.
                             established.TrySetResult(-1);
@@ -1424,6 +1428,10 @@ namespace FilesCom.Transfers
                     throw new DownloadSourceChangedException(path, "the storage server has fewer bytes than the version (HTTP 416)");
                 }
             }
+            if (version == null)
+            {
+                dateGuard.Check(response);
+            }
             if (status >= 300 && status < 400)
             {
                 throw new InvalidResponseException($"The storage server redirected the download of {path} (HTTP {status}) where it is not followed: a request bound to a version follows no redirect, so that its answer comes from the version's own resource, and no request leaves HTTPS.");
@@ -1493,6 +1501,10 @@ namespace FilesCom.Transfers
                 {
                     request.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
+            }
+            if (version == null)
+            {
+                dateGuard.Apply(request);
             }
             if (part != null || version != null)
             {

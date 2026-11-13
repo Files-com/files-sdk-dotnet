@@ -26,6 +26,7 @@ namespace FilesCom
             WorkspaceId = client.WorkspaceId;
             Language = client.Language;
             ReadTimeout = client.ReadTimeout;
+            CheckDownloadModificationTime = client.CheckDownloadModificationTime;
             RegionRelocation = client.RegionRelocation;
             Network = client.CurrentNetworkSettings();
             Logging = client.Logging;
@@ -43,6 +44,7 @@ namespace FilesCom
             WorkspaceId = context.WorkspaceId;
             Language = context.Language;
             ReadTimeout = context.ReadTimeout;
+            CheckDownloadModificationTime = context.CheckDownloadModificationTime;
             RegionRelocation = context.RegionRelocation;
             Network = network;
             Logging = context.Logging;
@@ -80,6 +82,8 @@ namespace FilesCom
         internal string Language { get; }
 
         internal int ReadTimeout { get; }
+
+        internal bool CheckDownloadModificationTime { get; }
 
         // Retries and timeouts.
         internal NetworkSettings Network { get; }

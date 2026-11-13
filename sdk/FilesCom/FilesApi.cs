@@ -232,7 +232,8 @@ namespace FilesCom
         /// <exception cref="SdkException">No client has been made, so there are no default client settings to download with.</exception>
         public async Task StreamDownload(string uriString, Stream writeStream)
         {
-            await StreamDownload(DefaultClientContext().Network, uriString, writeStream, null, CancellationToken.None);
+            OperationContext context = DefaultClientContext();
+            await StreamDownload(context.Network, uriString, writeStream, null, CancellationToken.None, checkDownloadModificationTime: context.CheckDownloadModificationTime);
         }
 
         /// <summary>
@@ -563,7 +564,7 @@ namespace FilesCom
             }
         }
 
-        internal async Task StreamDownload(NetworkSettings network, string uriString, Stream writeStream, Func<CancellationToken, Task<SignedUrl>> renewUrl, CancellationToken cancellationToken)
+        internal async Task StreamDownload(NetworkSettings network, string uriString, Stream writeStream, Func<CancellationToken, Task<SignedUrl>> renewUrl, CancellationToken cancellationToken, string path = null, bool checkDownloadModificationTime = true)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -572,6 +573,7 @@ namespace FilesCom
             _ = new Uri(uriString);
             SignedUrl url = SignedUrl.Of(uriString);
             bool renewing = false;
+            var dateGuard = new DownloadDateGuard(path, checkDownloadModificationTime);
 
             // What cannot be taken back is writing to the caller's stream. From the first write on, a failure is not
             // retried: a write that fails may already have kept some bytes, and the stream cannot be rewound. A
@@ -612,7 +614,7 @@ namespace FilesCom
                                     renewing = false;
                                     renew = false;
                                 }
-                                await DownloadAttemptAsync(httpClient, url, WriteAsync, network, token);
+                                await DownloadAttemptAsync(httpClient, url, WriteAsync, network, dateGuard, token);
                                 return true;
                             },
                             // A URL that will have expired by the retry is worth retrying only when it can be renewed first,
@@ -641,15 +643,17 @@ namespace FilesCom
             log.Debug($"Successfully downloaded {url.Text}");
         }
 
-        private static async Task DownloadAttemptAsync(HttpClient httpClient, SignedUrl url, Func<byte[], int, Task> write, NetworkSettings network, CancellationToken cancellationToken)
+        private static async Task DownloadAttemptAsync(HttpClient httpClient, SignedUrl url, Func<byte[], int, Task> write, NetworkSettings network, DownloadDateGuard dateGuard, CancellationToken cancellationToken)
         {
             using (var watch = new NetworkWatch(network, cancellationToken))
             using (var request = new HttpRequestMessage(HttpMethod.Get, new Uri(url.Text)))
             {
+                dateGuard.Apply(request);
                 watch.Begin(NetworkWait.ResponseHeaders);
                 using (HttpResponseMessage response = await SendAsync(httpClient, request, watch, e => new InvalidParameterException("Invalid download request")))
                 {
                     DownloadResponse.CheckNotFrontendApp(response);
+                    dateGuard.Check(response);
                     if (!response.IsSuccessStatusCode)
                     {
                         throw await AttemptFailureAsync(response, watch, isTransfer: true);

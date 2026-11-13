@@ -383,6 +383,8 @@ namespace FilesCom
 
         internal RegionRelocationPolicy RegionRelocation => config.RegionRelocation;
 
+        internal bool CheckDownloadModificationTime => config.CheckDownloadModificationTime;
+
         // The version of the package this assembly came from, such as 2.0.1 or 2.0.0-beta.1, without build metadata.
         private static string PackageVersion()
         {
@@ -664,7 +666,7 @@ namespace FilesCom
 
         // Downloads uri into writeStream. renewUrl, when given, supplies a new URL for the same file once uri is about
         // to expire.
-        internal static async Task StreamDownload(OperationContext context, string uri, Stream writeStream, Func<CancellationToken, Task<SignedUrl>> renewUrl, CancellationToken cancellationToken)
+        internal static async Task StreamDownload(OperationContext context, string uri, Stream writeStream, Func<CancellationToken, Task<SignedUrl>> renewUrl, CancellationToken cancellationToken, string path = null, bool? checkDownloadModificationTime = null)
         {
             if (context == null)
             {
@@ -675,7 +677,7 @@ namespace FilesCom
             {
                 try
                 {
-                    await context.Client.api.StreamDownload(context.Network, uri, writeStream, renewUrl, operation.Token);
+                    await context.Client.api.StreamDownload(context.Network, uri, writeStream, renewUrl, operation.Token, path, checkDownloadModificationTime ?? context.CheckDownloadModificationTime);
                 }
                 catch (Exception ex) when (!IsRequestedCancellation(ex, operation.Token))
                 {

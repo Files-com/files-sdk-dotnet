@@ -167,6 +167,17 @@ namespace FilesCom
             set { this["MaxNetworkRetryDelay"] = value; }
         }
 
+        /// <summary>
+        /// Whether downloads use Last-Modified to guard later requests; true by default. Disabling it leaves
+        /// stronger ETag, size and response checks in place. DownloadOptions can override it per download.
+        /// </summary>
+        [ConfigurationProperty("CheckDownloadModificationTime", DefaultValue = true)]
+        public bool CheckDownloadModificationTime
+        {
+            get { return (bool)this["CheckDownloadModificationTime"]; }
+            set { this["CheckDownloadModificationTime"] = value; }
+        }
+
         private RegionRelocationPolicy regionRelocation = RegionRelocationPolicy.Automatic;
 
         /// <summary>
