@@ -47,7 +47,9 @@ namespace FilesCom.Transfers
     // upload, or its grant is not the one the upload started with) the run fails with TransferCheckpointException, or,
     // only when the caller chose CheckpointRestartPolicy.StartOver, starts over with a new upload: parts of two uploads
     // are never completed together. That the final request is being sent is recorded, durably, before it is sent; a run
-    // that finds it recorded does not send it again (UploadCompletionUnknownException), whatever the policy.
+    // that finds it recorded does not send it again (UploadCompletionUnknownException), whatever the policy. Files.com may
+    // answer it that it is completing the file in the background: the request is then sent again until the answer is the
+    // file or an error (UploadFinalization), and the checkpoint keeps recording it as sent meanwhile.
     internal sealed class UploadCoordinator : IDisposable
     {
         // How often, at most, an upload records its progress in its checkpoint while it runs.
@@ -279,17 +281,32 @@ namespace FilesCom.Transfers
                 throw new System.IO.IOException($"The upload to {session.Path} was not completed: its final request was not sent, because the checkpoint could not record durably that it was being sent. If the checkpoint now records it as sent, a later run will not send it; as it was not sent, deleting the checkpoint and uploading again is safe. {e.Message}", e);
             }
             RemoteFile file;
+            // Whether Files.com has answered that it is completing the file in the background.
+            bool completing = false;
             try
             {
-                file = await session.FinishAsync(size, parts, options.ModifiedTime, cancellationToken);
+                // Each answer that Files.com is completing the file in the background is reported, with the bytes as they
+                // are: the handler's exception stops the wait, and leaves the outcome unknown.
+                file = await session.FinishAsync(size, parts, options.ModifiedTime, finalization =>
+                {
+                    completing = true;
+                    progress.Finalizing(finalization);
+                }, cancellationToken);
             }
             catch (Exception e) when (!(e is UploadCompletionUnknownException) && !(e is OperationCanceledException))
             {
-                // Refused: Files.com handled the request and did not complete the upload. The refusal is what the caller
-                // sees.
-                SaveCheckpointAfterStop();
+                // Refused, or, while Files.com was completing the file in the background, answered with an error: Files.com
+                // handled the request and did not complete the upload. That answer is what the caller sees. Except a
+                // refusal of the client's credentials or access (401 or 403) once Files.com was completing the file: it
+                // says nothing of the file, which Files.com may still be completing or have completed, so the checkpoint
+                // keeps recording the final request as sent, and a later run sends nothing.
+                if (!(completing && e is ApiException denied && (denied.httpStatus == 401 || denied.httpStatus == 403)))
+                {
+                    SaveCheckpointAfterStop();
+                }
                 throw;
             }
+            progress.Finalized();
             checkpointing?.Delete();
             // From the planner, which also sees URLs renewed after their parts were admitted.
             return new UploadResult(session.Path, size, file, parts, planner.EveryPartParallel, progress.Snapshot(), resumedParts, resumedBytes);

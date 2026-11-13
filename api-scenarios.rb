@@ -3,7 +3,12 @@
 # target framework, one case at a time, each against a fresh simulator that the generated mock server's with-scenario.rb
 # starts for it under the api-scenarios-canonical preset, and fails unless the controls and every case pass:
 #
-#   ruby api-scenarios.rb MOCK_SERVER OUT PACKAGE.nupkg PACKAGE_SHA256
+#   ruby api-scenarios.rb [--scenario PRESET] [--case ID]... MOCK_SERVER OUT PACKAGE.nupkg PACKAGE_SHA256
+#
+# --scenario runs the cases under another preset of the same simulator instead (PRESETS): api-scenarios-remote-finalize,
+# for a site whose uploads Files.com completes in the background, answering each final request pending before the file,
+# whose journal check (files.finalize_upload background) the launcher then holds every case to. --case runs only the
+# cases it names, by their manifest IDs; without it, every case runs.
 #
 # MOCK_SERVER is a generated mock-server directory (simulation contract 3) with its bundle installed, generated from the
 # schema the cases were (sdk/FilesApiScenarioTests/api-scenarios.json): its lib/simulation/generation.json must record that
@@ -40,6 +45,8 @@ DIR = __dir__
 PROJECT = File.join(DIR, "sdk/FilesApiScenarioTests/FilesApiScenarioTests.csproj")
 MANIFEST = File.join(DIR, "sdk/FilesApiScenarioTests/api-scenarios.json")
 PRESET = "api-scenarios-canonical".freeze
+# The presets the cases can run under: the canonical one, which the manifest names, and those of the same simulator.
+PRESETS = [ PRESET, "api-scenarios-remote-finalize" ].freeze
 CONTROLS = "TestCategory=ScenarioControls".freeze
 STARTUP_SECONDS = 30
 CONSUMER_SECONDS = 210
@@ -230,8 +237,22 @@ def resolved_path(path)
   File.join(File.realpath(path), *names)
 end
 
+USAGE = "usage: ruby api-scenarios.rb [--scenario PRESET] [--case ID]... MOCK_SERVER OUT PACKAGE.nupkg PACKAGE_SHA256".freeze
+preset_name = PRESET
+only = []
+while ARGV.first.to_s.start_with?("--")
+  option = ARGV.shift
+  value = ARGV.shift
+  abort USAGE if value.nil?
+  case option
+  when "--scenario" then preset_name = value
+  when "--case" then only << value
+  else abort USAGE
+  end
+end
+abort "api-scenarios: --scenario #{preset_name} is not one of #{PRESETS.join(", ")}" unless PRESETS.include?(preset_name)
 mock, out, package, package_sha256 = ARGV
-abort "usage: ruby api-scenarios.rb MOCK_SERVER OUT PACKAGE.nupkg PACKAGE_SHA256" unless ARGV.size == 4
+abort USAGE unless ARGV.size == 4
 
 mock = File.expand_path(mock)
 out = File.expand_path(out)
@@ -254,6 +275,7 @@ fail_with = lambda do |problem|
 end
 report = {
   "format" => "files-dotnet-api-scenarios-results", "version" => 1, "started" => Time.now.utc.iso8601, "out" => out,
+  "scenario" => preset_name, "only_cases" => (only unless only.empty?),
   "bounds" => { "startup_seconds" => STARTUP_SECONDS, "consumer_seconds" => CONSUMER_SECONDS, "settle_seconds" => SETTLE_SECONDS,
                 "launcher_seconds" => LAUNCHER_SECONDS, "mock_max_body_bytes" => MOCK_MAX_BODY_BYTES, "case_seconds" => CASE_SECONDS },
   "frameworks" => {},
@@ -269,6 +291,11 @@ begin
     fail_with.("the manifest's preset is #{manifest["profile"].inspect}, not #{PRESET}") unless manifest["profile"] == PRESET
     tests = cases.map { |c| c["test"] }
     fail_with.("the manifest's tests are not distinct") unless tests.uniq.size == tests.size
+    unless only.empty?
+      unknown = only - cases.map { |c| c["id"] }
+      fail_with.("the manifest lists no case #{unknown.join(", ")}") if unknown.any?
+      cases = cases.select { |c| only.include?(c["id"]) }
+    end
     cases.each do |c|
       complete = c["id"].is_a?(String) && c["test"].to_s.start_with?("#{manifest["tests"]}.") && c["positions"].is_a?(Integer) &&
                  c["simulator"].is_a?(Integer) && c["site_only"].is_a?(Array)
@@ -282,7 +309,7 @@ begin
   # The simulator: the launcher, the raw schema its generation records and the preset the cases run under.
   launcher = File.join(mock, "with-scenario.rb")
   generation_path = File.join(mock, "lib/simulation/generation.json")
-  preset_path = File.join(mock, "scenarios", "#{PRESET}.json")
+  preset_path = File.join(mock, "scenarios", "#{preset_name}.json")
   fail_with.("#{mock} has no with-scenario.rb: it is not a generated mock server") unless File.file?(launcher)
   generation, error = read_json(generation_path)
   if !generation.is_a?(Hash)
@@ -292,14 +319,14 @@ begin
   end
   preset, error = read_json(preset_path)
   if !preset.is_a?(Hash)
-    fail_with.("the #{PRESET} preset #{preset_path} cannot be read: #{error}")
+    fail_with.("the #{preset_name} preset #{preset_path} cannot be read: #{error}")
   else
     profile = preset.dig("reset", "profile") || {}
     if profile.dig("api_scenarios", "definition_sha256") != manifest.dig("definition", "sha256")
-      fail_with.("the #{PRESET} preset is for definition #{profile.dig("api_scenarios", "definition_sha256").inspect}, not the cases' #{manifest.dig("definition", "sha256").inspect}")
+      fail_with.("the #{preset_name} preset is for definition #{profile.dig("api_scenarios", "definition_sha256").inspect}, not the cases' #{manifest.dig("definition", "sha256").inspect}")
     end
     unless profile.dig("upload", "mode") == "serial" && profile.dig("upload", "fixed_part_length") == true
-      fail_with.("the #{PRESET} preset's uploads are not serial with fixed part lengths: #{profile["upload"].inspect}")
+      fail_with.("the #{preset_name} preset's uploads are not serial with fixed part lengths: #{profile["upload"].inspect}")
     end
   end
   report["simulator"] = {
@@ -407,7 +434,7 @@ begin
       receipt_file = File.join(case_directory, "receipt.json")
       identity_file = File.join(case_directory, "identity.json")
       command = [
-        RbConfig.ruby, launcher, "--scenario", PRESET, "--out", launcher_out, "--run-id", "dotnet-#{framework}-#{index + 1}-#{SecureRandom.hex(3)}",
+        RbConfig.ruby, launcher, "--scenario", preset_name, "--out", launcher_out, "--run-id", "dotnet-#{framework}-#{index + 1}-#{SecureRandom.hex(3)}",
         "--startup-timeout", STARTUP_SECONDS.to_s, "--consumer-timeout", CONSUMER_SECONDS.to_s, "--settle-timeout", SETTLE_SECONDS.to_s, "--",
         "dotnet", "test", PROJECT, "--framework", framework, "--no-build", "--filter", "FullyQualifiedName=#{c["test"]}",
         "--logger", "trx;LogFileName=case.trx", "--results-directory", case_directory, *properties

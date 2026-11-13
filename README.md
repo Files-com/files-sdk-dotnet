@@ -1768,6 +1768,7 @@ Console.WriteLine("Upload complete");
 | Upload `PartSizing` | Part-size source, limits, next size and growth decisions. |
 | `RequestWait`, `BufferWait`; upload `AdmissionWait`, `ReadyParts` | Time waiting for shared resources or admission, and upload read-ahead. |
 | `Process` | Whole-process CPU and memory, sampled at most once a second. |
+| Upload `Finalizing`, `FinalizationProgress` | While Files.com completes the file in the background (a remote server mount or Agent): true, with its 0–100 percentage or null. Byte fields do not change, and 100 is not completion. |
 | Folder `FilesDone`, `FilesTotal`, `FilesActive`, `FileLimit` | Completed, planned and active files, and the current active-file limit. |
 
 `UploadResult.FinalProgress` and `DownloadResult.FinalProgress` retain the final snapshot. For automatic folder
@@ -1788,7 +1789,9 @@ that context, rather than failing the transfer, and posted callbacks may arrive 
 
 Files.com supplies each upload part's address, size and permission to send parts in parallel or retry them. The SDK
 respects those instructions. Accepted parts are never sent again. After all parts are accepted, it makes one final
-completion request, which is never automatically retried.
+completion request, which is not sent again after a lost or failed answer. Files.com may answer that it is completing
+the file in the background; the SDK then asks again with the same request, one second after the first such answer,
+two after the second and three after each later one, until the file or an error arrives, retrying those requests within `MaxNetworkRetries`.
 
 `MaxNetworkRetries` defaults to 3; 0 disables the SDK's retries. Retryable failures are connection failures,
 timeouts, HTTP 408, HTTP 429, and 5xx other than 501. Upload parts are retried only when Files.com allows it, with
@@ -1828,6 +1831,8 @@ Before the final request, a stopped upload is not completed, and accepted parts 
 request may have reached Files.com, a connection failure, unreadable response, error response or cancellation can
 leave its outcome unknown, even if the response reports an error. The SDK throws `UploadCompletionUnknownException`
 with the underlying failure in `InnerException`. **Check the remote file before sending another upload.**
+Cancelling, or a progress handler that throws, while Files.com completes the file in the background stops the wait
+only; Files.com may still complete the file.
 
 A checkpoint recording a final request also refuses automatic replay on a later run, even with `StartOver`.
 

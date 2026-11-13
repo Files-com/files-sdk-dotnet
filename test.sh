@@ -100,6 +100,17 @@ ruby "${DIR}/contract-test.rb" "${FILES_CONTRACT_MOCK_SERVER}" "${results}/contr
 # set, an absent or empty directory outside this SDK, as CI sets it to keep them; otherwise they stay with these results.
 ruby "${DIR}/api-scenarios.rb" "${FILES_CONTRACT_MOCK_SERVER}" "${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}" "${packages[0]}" "${package_sha256}" || exit 1
 
+# The binary round trip again, against the same simulator for a site whose uploads Files.com completes in the background,
+# as it does for a remote server mount or a Files.com Agent (the api-scenarios-remote-finalize preset): each final request
+# is answered pending, without progress, then with 42, then with 100, before the file. The preset's journal check
+# (files.finalize_upload background) fails the case unless every upload was answered pending and then completed, every
+# request with the same identity. Its results go to remote-finalize beside the API scenarios' own. Once it has passed,
+# the packages it restored, the same as the run above restored from the same archive, are removed; its results stay.
+remote_finalize_out="${FILES_API_SCENARIOS_OUT:-${results}/api-scenarios}/remote-finalize"
+ruby "${DIR}/api-scenarios.rb" --scenario api-scenarios-remote-finalize --case files.owned-binary-roundtrip "${FILES_CONTRACT_MOCK_SERVER}" \
+  "${remote_finalize_out}" "${packages[0]}" "${package_sha256}" || exit 1
+rm -rf "${remote_finalize_out:?}/package/packages" || exit 1
+
 # client.FileSystem runs against a real simulator rather than the loopback fakes of the runs above, which leave out the
 # two tests of TestCategory SharedSimulatorFilesystem: FilesTests.RemoteFileSystemTest.WholeFilesAreWrittenAndRead,
 # which writes a whole file and reads it back, then ExistenceAndFolderCreationFollowWhatIsThere, which asks what is

@@ -754,8 +754,8 @@ namespace FilesApiScenarioTests
         }
     }
 
-    // Whether a case may run against this simulator: the generated manifest and definition, the canonical preset as the
-    // launcher loaded it (serial uploads with fixed part lengths), readiness from the launcher's own instance in
+    // Whether a case may run against this simulator: the generated manifest and definition, the canonical preset, or
+    // another of the same simulator (Presets), as the launcher loaded it (serial uploads with fixed part lengths), readiness from the launcher's own instance in
     // simulation mode with contract version 3, its schema subset and the raw schema its generation records; then the
     // simulator as the reset left it, before the case changes anything: the reset's epoch, with the launcher's instance
     // and the case's definition echoed, live readiness of that epoch under the canonical profile (one partsize for every
@@ -764,6 +764,11 @@ namespace FilesApiScenarioTests
     public static class ScenarioBinding
     {
         public const string Profile = "api-scenarios-canonical";
+
+        // The presets a case may run under: the canonical one, and the canonical simulator for a site whose uploads
+        // Files.com completes in the background, as for a remote server mount or a Files.com Agent (its final requests
+        // answered pending before the file), which api-scenarios.rb selects with --scenario.
+        public static readonly string[] Presets = { Profile, "api-scenarios-remote-finalize" };
 
         public static List<string> Problems(BindingInputs inputs, ScenarioCase scenarioCase)
         {
@@ -784,10 +789,13 @@ namespace FilesApiScenarioTests
                     Same(problems, "the manifest's simulator positions", JsonRead.Integer(listed, "simulator"), scenarioCase.SimulatorPositions);
                 }
             }
-            Same(problems, "the launcher's scenario", inputs.ScenarioName, Profile);
+            if (!Presets.Contains(inputs.ScenarioName))
+            {
+                problems.Add($"the launcher's scenario is {Shown.Of(inputs.ScenarioName)}, not one of {string.Join(", ", Presets)}");
+            }
             if (inputs.Scenario != null)
             {
-                Same(problems, "the scenario file's name", JsonRead.Text(inputs.Scenario, "name"), Profile);
+                Same(problems, "the scenario file's name", JsonRead.Text(inputs.Scenario, "name"), inputs.ScenarioName);
                 JsonNode profile = JsonRead.At(inputs.Scenario, "reset", "profile");
                 Same(problems, "the preset's api_scenarios format", JsonRead.Text(profile, "api_scenarios", "format"), "files-api-scenarios");
                 Same(problems, "the preset's api_scenarios format_version", JsonRead.Integer(profile, "api_scenarios", "format_version"), 1);

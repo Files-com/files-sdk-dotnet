@@ -32,7 +32,9 @@ namespace FilesCom.Transfers
             TimeSpan elapsed,
             UploadConcurrency concurrency,
             UploadPartSizing partSizing,
-            ProcessResourceSample process)
+            ProcessResourceSample process,
+            bool finalizing = false,
+            int? finalizationProgress = null)
         {
             Path = path;
             TotalBytes = totalBytes;
@@ -53,6 +55,8 @@ namespace FilesCom.Transfers
             Concurrency = concurrency;
             PartSizing = partSizing;
             Process = process;
+            Finalizing = finalizing;
+            FinalizationProgress = finalizationProgress;
         }
 
         /// <summary>The remote path being transferred.</summary>
@@ -139,5 +143,19 @@ namespace FilesCom.Transfers
         /// platform does not report it.
         /// </summary>
         public ProcessResourceSample Process { get; }
+
+        /// <summary>
+        /// Whether Files.com has accepted the request that completes the upload and is still completing the file in the
+        /// background, as it does for a destination such as a remote server mount or a Files.com Agent: true in each report
+        /// made for its answer that it is, from the first, until the upload ends. The byte counts stay as they were.
+        /// </summary>
+        public bool Finalizing { get; }
+
+        /// <summary>
+        /// While <see cref="Finalizing"/>, how far Files.com says it has got with completing the file, from 0 to 100, in
+        /// its latest answer; null when that answer gave no such value, and when not finalizing. It can stall, and 100 does
+        /// not mean the file is complete: only the upload's task completing does.
+        /// </summary>
+        public int? FinalizationProgress { get; }
     }
 }

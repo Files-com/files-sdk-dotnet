@@ -71,9 +71,10 @@ namespace FilesCom.Http
         private readonly bool storage;
 
 #if DEBUG
-        // Debug builds only: the TimeProvider for the retry waits of operations started in the current async flow, for
-        // tests that observe those waits at the timer. Null, its value unless a test sets it, leaves Polly's own
-        // default, TimeProvider.System. Release builds have no such state and always use that default.
+        // Debug builds only: the TimeProvider for the retry waits of operations started in the current async flow, and for
+        // an upload's waits while Files.com completes its file in the background (UploadFinalization), for tests that
+        // observe those waits at the timer. Null, its value unless a test sets it, leaves Polly's own default,
+        // TimeProvider.System, and Task.Delay's timer. Release builds have no such state and always use those defaults.
         internal static readonly AsyncLocal<TimeProvider> WaitClock = new AsyncLocal<TimeProvider>();
 #endif
 

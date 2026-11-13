@@ -38,6 +38,14 @@ On each target framework of the project (`net10.0` and `net8.0`, each needing it
    simulator for it under the `api-scenarios-canonical` preset (serial uploads, each part granted its exact length) with
    a 16 MiB body limit, so the 6 MiB + 3 byte file goes as a 5 MiB part and a 1 MiB + 3 byte part.
 
+`--scenario api-scenarios-remote-finalize` runs the cases under the same simulator for a site whose uploads Files.com
+completes in the background, as for a remote server mount or a Files.com Agent: each final request is answered pending
+before the file, and the preset's journal check (`files.finalize_upload background`) fails a case unless every upload
+was answered pending and then completed. `--case ID` runs only the cases it names. `test.sh` runs
+`files.owned-binary-roundtrip` that way after the canonical run, into `remote-finalize` beside its results:
+
+    ruby api-scenarios.rb --scenario api-scenarios-remote-finalize --case files.owned-binary-roundtrip MOCK_SERVER OUT PACKAGE.nupkg PACKAGE_SHA256
+
 A case has 175 seconds for its scenario and 30 more, with a token of its own, to clean up, within 205 seconds for
 everything including its receipt. The launcher gives it 210 seconds, 30 to start the simulator and 5 to stop each process
 group. These bound the harness; they are not product settings or measurements. When the run is interrupted (INT, TERM or

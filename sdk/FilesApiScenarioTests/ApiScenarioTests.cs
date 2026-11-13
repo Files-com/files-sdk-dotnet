@@ -1102,6 +1102,8 @@ namespace FilesApiScenarioTests
         [TestMethod]
         [TestCategory(Category)]
         [DataRow("none", "")]
+        [DataRow("remote-finalize", "")]
+        [DataRow("scenario", "the launcher's scenario is \"users-find\", not one of")]
         [DataRow("instance", "the instance is not the one the launcher gave its server")]
         [DataRow("contract", "contract_version is 2, not 3")]
         [DataRow("definition", "the preset's definition is")]
@@ -1123,6 +1125,14 @@ namespace FilesApiScenarioTests
             BindingInputs inputs = StubEnvironment.Inputs(scenarioCase);
             switch (change)
             {
+                case "remote-finalize":
+                    inputs.ScenarioName = "api-scenarios-remote-finalize";
+                    inputs.Scenario["name"] = inputs.ScenarioName;
+                    break;
+                case "scenario":
+                    inputs.ScenarioName = "users-find";
+                    inputs.Scenario["name"] = inputs.ScenarioName;
+                    break;
                 case "instance":
                     inputs.Ready["instance"] = "another-instance";
                     break;

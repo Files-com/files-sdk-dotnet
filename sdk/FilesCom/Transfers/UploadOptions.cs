@@ -216,7 +216,10 @@ namespace FilesCom.Transfers
         /// <summary>
         /// Receives <see cref="TransferProgress"/> reports: when the upload starts sending, and each time the server
         /// accepts a part. Retries are counted in the next report. A stream being copied to its spool file
-        /// (<see cref="SpoolMaxBytes"/>) is also reported when the copy starts, after each 16 MiB and when it ends.
+        /// (<see cref="SpoolMaxBytes"/>) is also reported when the copy starts, after each 16 MiB and when it ends. When
+        /// Files.com completes the file in the background, as it does for a destination such as a remote server mount or a
+        /// Files.com Agent, each of its answers that it is still doing so is reported too, with
+        /// <see cref="TransferProgress.Finalizing"/> and the byte counts as they were.
         /// </summary>
         /// <remarks>
         /// <see cref="IProgress{T}.Report"/> is called on the upload's own threads, one call at a time. A report
@@ -225,7 +228,11 @@ namespace FilesCom.Transfers
         /// itself throws, the upload stops, cancels its parts in flight and fails with that exception.
         /// <see cref="Progress{T}"/> instead posts each report to the context it was created on, such as a UI
         /// thread, and returns at once; an exception from its handler is raised in that context, not in the upload.
-        /// No report follows the final request, so completing the upload does not depend on the handler.
+        /// No byte report follows the final request, so completing the upload does not depend on the handler; only those
+        /// finalization reports follow it. Once Files.com has accepted the final request, an exception from
+        /// <see cref="IProgress{T}.Report"/> stops the wait for the outcome, and the upload fails with
+        /// <see cref="UploadCompletionUnknownException"/>, with that exception inside: Files.com may still complete the
+        /// file.
         /// </remarks>
         public IProgress<TransferProgress> Progress { get; set; }
 

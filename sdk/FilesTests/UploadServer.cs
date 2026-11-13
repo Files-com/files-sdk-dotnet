@@ -279,6 +279,19 @@ namespace FilesTests
             return LoopbackSite.Status(200);
         }
 
+        // Files.com's answer to a final request that it is completing the file in the background: HTTP 202 with the status
+        // pending and the upload's ref, and progress, a JSON value as written, when it is given.
+        public static ResponseMessage Pending(string reference, string progress = null)
+        {
+            return LoopbackSite.Json($"{{\"status\":\"pending\",\"ref\":{JsonSerializer.Serialize(reference)}{(progress != null ? ",\"progress\":" + progress : "")}}}", status: 202);
+        }
+
+        // The file a final request completes, as Files.com answers with it: its path and size from the request.
+        public static ResponseMessage Completed(JsonElement finish, int status = 201)
+        {
+            return LoopbackSite.Json($"{{\"path\":{JsonSerializer.Serialize(finish.GetProperty("path").GetString())},\"type\":\"file\",\"size\":{finish.GetProperty("size").GetInt64()}}}", status: status);
+        }
+
         // The bytes of every accepted part of file, placed at the offsets their part numbers imply.
         public byte[] AcceptedBytes(string file)
         {

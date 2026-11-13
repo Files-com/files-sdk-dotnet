@@ -610,6 +610,7 @@ namespace FilesCom.Models
             Int64 parts = 0;
             Int64 bytesWritten = 0;
             string fileRef = null;
+            List<FilesCom.Transfers.UploadedPart> sent = new List<FilesCom.Transfers.UploadedPart>();
 
             // TODO: Set up multiple parallel streams instead of looping serial uploads here.
             // Each request checks the token before it is sent, so cancellation starts no further part or the final request.
@@ -617,6 +618,7 @@ namespace FilesCom.Models
             {
                 parts++;
                 Tuple<Int64, string> result = await UploadChunk(context, destinationPath, readStream, fileRef, parts, bytesWritten, fileLength, options, parameters, cancellationToken);
+                sent.Add(new FilesCom.Transfers.UploadedPart(parts, bytesWritten, result.Item1, null, 1));
                 bytesWritten += result.Item1;
                 fileRef = result.Item2;
             }
@@ -629,8 +631,14 @@ namespace FilesCom.Models
 
             // Sent without the client's automatic retries (a redirect it is answered with is still followed, within the
             // attempt): Files.com forgets an upload's reference when it
-            // completes it, so a repeat after a lost answer would report a completed upload as not found.
-            await RemoteFile.CreateCore(context.WithoutRetries(), destinationPath, createParams, options, cancellationToken);
+            // completes it, so a repeat after a lost answer would report a completed upload as not found. Its failure is
+            // thrown as it is. Where Files.com completes the file in the background, as it may for a remote server mount or
+            // a Files.com Agent, the same request is sent again after each answer that it is still doing so (one, two, then
+            // three seconds after it), until
+            // the answer is the file or an error; a failure of that wait leaves the outcome unknown
+            // (UploadCompletionUnknownException), and cancelling it does not stop Files.com from completing the file.
+            var finalization = new FilesCom.Transfers.UploadFinalization(context, destinationPath, createParams, options, fileLength, sent, null);
+            await finalization.CompleteAsync(null, cancellationToken);
         }
 
         /// <summary>

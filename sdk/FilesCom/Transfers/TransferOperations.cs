@@ -26,7 +26,13 @@ namespace FilesCom.Transfers
     /// long, or not at all without one; when the wait is longer than the platform can schedule, the part is not sent
     /// again and the throttling error is thrown. After other failures it waits 100 milliseconds. A part whose URL is
     /// about to expire gets a new one, for the same part, before it is sent. Parts already accepted are never sent
-    /// again. The upload is completed with a single final request once every part has been accepted.
+    /// again. The upload is completed with a single final request once every part has been accepted. For a destination
+    /// such as a remote server mount or a Files.com Agent, Files.com may answer it that it is completing the file in the
+    /// background: the upload then asks again, with the same request, after each such answer (one, two, then three
+    /// seconds after it), until Files.com
+    /// answers with the file or an error, and reports each answer (<see cref="TransferProgress.Finalizing"/>). That error
+    /// is the upload's outcome; a request that fails in a way that may be temporary meanwhile is sent again, up to the
+    /// client's <c>MaxNetworkRetries</c>.
     /// <para>
     /// Every request uses the client's settings as they were when the upload started. The part requests go to the
     /// storage URLs Files.com provides and carry no Files.com credentials. A part follows a redirect only if it can go
@@ -43,7 +49,8 @@ namespace FilesCom.Transfers
     /// failure also stops every other part, and the upload ends with the first failure. In either case the upload is
     /// not completed, unless its final request had already been sent: if that request fails in a way that does not
     /// show whether Files.com completed the file, the upload ends with <see cref="UploadCompletionUnknownException"/>;
-    /// if it is cancelled, whether the file was completed is also unknown.
+    /// if it is cancelled, whether the file was completed is also unknown. So it is when the wait while Files.com completes
+    /// the file in the background is cancelled, or fails once its retries are spent: Files.com may still complete it.
     /// </para>
     /// </remarks>
     public sealed class TransferOperations
@@ -101,7 +108,7 @@ namespace FilesCom.Transfers
         /// or the size cannot be used (<see cref="UploadLimit.FixedPartSize"/>); or a part's copy buffer is more than the
         /// limiter may buffer (<see cref="UploadLimit.BufferSpace"/>). No part was sent.
         /// </exception>
-        /// <exception cref="UploadCompletionUnknownException">The final request failed after it may have reached Files.com, or the checkpoint records that an earlier run sent it.</exception>
+        /// <exception cref="UploadCompletionUnknownException">The final request failed after it may have reached Files.com, the wait while Files.com completed the file in the background failed, or the checkpoint records that an earlier run sent the final request.</exception>
         /// <exception cref="ObjectDisposedException">The client has been disposed.</exception>
         public Task<UploadResult> UploadFileAsync(string localPath, string destinationPath = null, UploadOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -147,7 +154,7 @@ namespace FilesCom.Transfers
         /// <exception cref="MissingParameterException"><paramref name="source"/> or <paramref name="destinationPath"/> is null.</exception>
         /// <exception cref="InvalidParameterException"><paramref name="source"/> cannot be read, <paramref name="length"/> is negative, a setting of <paramref name="options"/> is out of range, settings of <paramref name="options"/> contradict each other, or <see cref="UploadOptions.CheckpointPath"/> is set: only a file upload can be continued.</exception>
         /// <exception cref="EndOfStreamException">The stream ended before <paramref name="length"/> bytes were read. The upload was not completed.</exception>
-        /// <exception cref="UploadCompletionUnknownException">The final request failed after it may have reached Files.com.</exception>
+        /// <exception cref="UploadCompletionUnknownException">The final request failed after it may have reached Files.com, or the wait while Files.com completed the file in the background failed.</exception>
         /// <exception cref="ObjectDisposedException">The client has been disposed.</exception>
         /// <exception cref="UploadLimitException">
         /// The stream needs more parts than its limits allow, with parts the limiter can hold in memory or of a fixed
@@ -245,7 +252,7 @@ namespace FilesCom.Transfers
         /// (<see cref="UploadLimit.BufferSpace"/>) or an array can hold (<see cref="UploadLimit.MemoryPart"/>). The upload
         /// was not completed.
         /// </exception>
-        /// <exception cref="UploadCompletionUnknownException">The final request failed after it may have reached Files.com.</exception>
+        /// <exception cref="UploadCompletionUnknownException">The final request failed after it may have reached Files.com, or the wait while Files.com completed the file in the background failed.</exception>
         /// <exception cref="ObjectDisposedException">The client has been disposed.</exception>
         public Task<UploadResult> UploadStreamAsync(Stream source, string destinationPath, UploadOptions options = null, CancellationToken cancellationToken = default)
         {
@@ -481,7 +488,7 @@ namespace FilesCom.Transfers
         /// <exception cref="InvalidParameterException">A setting of <paramref name="options"/> is out of range or not allowed, such as a checkpoint directory inside <paramref name="localDirectory"/>.</exception>
         /// <exception cref="DirectoryNotFoundException"><paramref name="localDirectory"/> does not exist.</exception>
         /// <exception cref="TransferCheckpointException">The checkpoint directory holds the record of another transfer, or another user could have changed it. Nothing was sent.</exception>
-        /// <exception cref="UploadCompletionUnknownException">A file's final request failed after it may have reached Files.com.</exception>
+        /// <exception cref="UploadCompletionUnknownException">A file's final request failed after it may have reached Files.com, or the wait while Files.com completed it in the background failed.</exception>
         /// <exception cref="ObjectDisposedException">The client has been disposed.</exception>
         public Task<DirectoryTransferResult> UploadDirectoryAsync(string localDirectory, string remoteDirectory, DirectoryUploadOptions options = null, CancellationToken cancellationToken = default)
         {

@@ -82,7 +82,12 @@ namespace FilesCom.Transfers
         // means nothing was completed; any other failure after sending, even an error such as a 422, which Files.com
         // also answers after completing the file in storage, leaves the outcome unknown, reported as
         // UploadCompletionUnknownException with the failure inside.
-        internal async Task<RemoteFile> FinishAsync(long size, IReadOnlyList<UploadedPart> parts, DateTime? modifiedTime, CancellationToken cancellationToken)
+        //
+        // The request asks Files.com to complete the file in the background where it does so, for a destination such as
+        // a remote server mount or a Files.com Agent. Once Files.com has answered that it is doing that, the same request
+        // is sent again to ask for the outcome, until it is the file or an error (UploadFinalization); finalizing, if not
+        // null, receives the progress of each such answer.
+        internal async Task<RemoteFile> FinishAsync(long size, IReadOnlyList<UploadedPart> parts, DateTime? modifiedTime, System.Action<int?> finalizing, CancellationToken cancellationToken)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -105,14 +110,18 @@ namespace FilesCom.Transfers
                 throw new InvalidResponseException($"The server accepted {withoutETag.Count} of the {parts.Count} parts (the first is part {withoutETag[0].Number}) without an ETag, and the rest with one, so the upload cannot be completed.");
             }
 
-            try
+            var finalization = new UploadFinalization(context, path, parameters, requestOptions, size, parts, finalizing);
+            return await finalization.CompleteAsync(failure => FirstRequestFailed(failure, size, parts), cancellationToken);
+        }
+
+        // What a failure of the final request, before any answer that Files.com is completing the upload, is thrown as.
+        private Exception FirstRequestFailed(Exception failure, long size, IReadOnlyList<UploadedPart> parts)
+        {
+            if (failure is OperationCanceledException || NotSent(failure) || WasRefused(failure))
             {
-                return await RemoteFile.CreateCore(context.WithoutRetries(), path, parameters, requestOptions, cancellationToken);
+                return failure;
             }
-            catch (Exception e) when (!(e is OperationCanceledException) && !NotSent(e) && !WasRefused(e))
-            {
-                throw new UploadCompletionUnknownException(path, size, parts, e);
-            }
+            return new UploadCompletionUnknownException(path, size, parts, Ref, failure);
         }
 
         // Incorrect use, found before the final request is sent.

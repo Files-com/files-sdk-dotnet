@@ -86,6 +86,7 @@ namespace FilesTests
                 Assert.AreEqual("end", finish.GetProperty("action").GetString());
                 Assert.AreEqual("ref-remote.bin", finish.GetProperty("ref").GetString());
                 Assert.AreEqual(25, finish.GetProperty("size").GetInt64());
+                Assert.IsTrue(finish.GetProperty("async_finalize").GetBoolean(), "Files.com may complete the file in the background; here it answered with the file at once.");
                 Assert.AreEqual(
                     "1=\"etag-remote.bin-1-1\" 2=\"etag-remote.bin-2-1\" 3=\"etag-remote.bin-3-1\" 4=\"etag-remote.bin-4-1\"",
                     string.Join(" ", finish.GetProperty("etags").EnumerateArray().Select(etag => $"{etag.GetProperty("part").GetInt64()}={etag.GetProperty("etag").GetString()}")),

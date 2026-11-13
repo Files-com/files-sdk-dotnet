@@ -570,7 +570,7 @@ namespace FilesCom.Transfers
                 {
                     Dictionary<long, long[]> planned = saved.Planned.ToDictionary(part => part[0]);
                     List<UploadedPart> parts = saved.Accepted.Select(part => new UploadedPart(part.Part, planned[part.Part][1], planned[part.Part][2], part.ETag, 0)).ToList();
-                    throw new UploadCompletionUnknownException(remotePath, saved.SourceLength, parts, checkpointPath);
+                    throw new UploadCompletionUnknownException(remotePath, saved.SourceLength, parts, saved.Ref, checkpointPath);
                 }
             }
             return new UploadCheckpointing(checkpointPath, site, workspace, remotePath, full, sourceLength, sourceModifiedUtc.Ticks, saved);

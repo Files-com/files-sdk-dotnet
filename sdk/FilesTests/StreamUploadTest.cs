@@ -1,5 +1,6 @@
 using FilesCom;
 using FilesCom.Models;
+using FilesCom.Transfers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
@@ -127,6 +128,46 @@ namespace FilesTests
                 Assert.AreEqual(10, end.RootElement.GetProperty("size").GetInt64());
             }
             Assert.IsFalse(stream.CanRead, "UploadFile disposes the stream it is given.");
+        }
+
+        // Files.com may answer the final request that it is completing the file in the background, as it may for a remote
+        // server mount or a Files.com Agent: UploadFile asks again, with the same request, until the file comes. An answer
+        // that is not the upload's pending completion leaves the outcome unknown, and nothing is sent again.
+        [TestMethod]
+        [DataRow("{\"status\":\"pending\",\"ref\":\"upload-ref\",\"progress\":42}", true, DisplayName = "Pending, then the file")]
+        [DataRow("{\"status\":\"pending\",\"ref\":\"another-ref\"}", false, DisplayName = "Another upload's pending completion")]
+        public async Task UploadFileWaitsWhileFilesComCompletesTheFileInTheBackground(string pending, bool completes)
+        {
+            server.Given(Request.Create().WithPath("/api/rest/v1/file_actions/begin_upload/remote.bin").UsingPost())
+                .RespondWith(Response.Create().WithStatusCode(200).WithBodyAsJson(new[] { new { upload_uri = PartUrl, http_method = "PUT", partsize = 8, @ref = "upload-ref" } }));
+            server.Given(Request.Create().WithPath("/api/rest/v1/files/remote.bin").UsingPost())
+                .InScenario("finalize").WillSetStateTo("answered pending")
+                .RespondWith(Response.Create().WithStatusCode(202).WithHeader("Content-Type", "application/json").WithBody(pending));
+            server.Given(Request.Create().WithPath("/api/rest/v1/files/remote.bin").UsingPost())
+                .InScenario("finalize").WhenStateIs("answered pending")
+                .RespondWith(Response.Create().WithStatusCode(201).WithBodyAsJson(new { path = "remote.bin", type = "file", size = 6 }));
+            using var waits = new FinalizationWaits();
+            Task<bool> upload = RemoteFile.UploadFile("remote.bin", new ShortReadStream(Bytes(1, 6)), 6, MTime);
+
+            if (completes)
+            {
+                Assert.IsTrue(await upload);
+                AssertRequests("begin", "PUT " + Hex(Bytes(1, 6)), "end", "end");
+                string[] ends = server.LogEntries.Where(entry => entry.RequestMessage.Method == "POST" && entry.RequestMessage.Path.StartsWith("/api/rest/v1/files/")).Select(entry => entry.RequestMessage.Body).ToArray();
+                Assert.AreEqual(ends[0], ends[1], "The same final request, both times.");
+                using (JsonDocument end = JsonDocument.Parse(ends[0]))
+                {
+                    Assert.IsTrue(end.RootElement.GetProperty("async_finalize").GetBoolean());
+                }
+            }
+            else
+            {
+                UploadCompletionUnknownException error = await Assert.ThrowsExactlyAsync<UploadCompletionUnknownException>(() => upload);
+                AssertRequests("begin", "PUT " + Hex(Bytes(1, 6)), "end");
+                Assert.IsInstanceOfType(error.InnerException, typeof(InvalidResponseException));
+                Assert.AreEqual("upload-ref", error.Ref);
+                Assert.AreEqual(6, error.Size);
+            }
         }
 
         [TestMethod]

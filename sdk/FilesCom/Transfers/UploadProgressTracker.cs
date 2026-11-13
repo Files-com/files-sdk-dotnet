@@ -30,6 +30,9 @@ namespace FilesCom.Transfers
         private int readyLimitWaits;
         private Func<UploadConcurrency> concurrency;
         private Func<UploadPartSizing> partSizing;
+        // While Files.com completes the file in the background: the progress of its latest answer, or -1 for none; and
+        // int.MinValue otherwise.
+        private int finalization = int.MinValue;
 
         // mode and callerTuning describe the upload's concurrency until the controller exists, once Files.com has
         // answered its first request.
@@ -132,6 +135,20 @@ namespace FilesCom.Transfers
             Interlocked.Increment(ref partRetries);
         }
 
+        // Files.com answered the final request that it is completing the file in the background, with progress from 0 to
+        // 100 or none: reported, with every byte count as it is.
+        internal void Finalizing(int? progress)
+        {
+            Volatile.Write(ref finalization, progress ?? -1);
+            Report();
+        }
+
+        // Files.com answered with the file: the upload is no longer finalizing. Nothing is reported.
+        internal void Finalized()
+        {
+            Volatile.Write(ref finalization, int.MinValue);
+        }
+
         internal void ReadyChanged(int change)
         {
             Interlocked.Add(ref readyParts, change);
@@ -159,6 +176,7 @@ namespace FilesCom.Transfers
 
         internal TransferProgress Snapshot()
         {
+            int finalizing = Volatile.Read(ref finalization);
             return new TransferProgress(
                 path,
                 Interlocked.Read(ref totalBytes),
@@ -177,7 +195,9 @@ namespace FilesCom.Transfers
                 Elapsed,
                 concurrency != null ? concurrency() : pendingConcurrency,
                 partSizing?.Invoke(),
-                ProcessResourceSample.Current());
+                ProcessResourceSample.Current(),
+                finalizing != int.MinValue,
+                finalizing >= 0 ? finalizing : (int?)null);
         }
 
         internal void Report()
