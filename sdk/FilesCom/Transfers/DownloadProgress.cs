@@ -95,7 +95,8 @@ namespace FilesCom.Transfers
 
         /// <summary>
         /// The number of times the download started over from its first byte: a download into a local file without a
-        /// bound version, after its request failed partway, or one continued from a checkpoint whose version was gone.
+        /// bound version, after its request failed partway, one continued from a checkpoint whose version was gone, or
+        /// one whose file changed while it was downloaded, which is then downloaded again as it is now.
         /// </summary>
         public int Restarts { get; }
 

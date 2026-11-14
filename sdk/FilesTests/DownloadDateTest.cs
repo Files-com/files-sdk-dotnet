@@ -89,46 +89,81 @@ namespace FilesTests
                 }
                 else
                 {
+                    // Changed every time it is asked for: each start over is a new download, without the date of the one
+                    // given up, and once the two retries are used the change fails the download.
                     await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => Client(server, retries: 2).Transfers.DownloadFileAsync("remote.bin", Destination, Parts()));
                     AssertNothingPublished();
                 }
-                Assert.AreEqual(2, server.StorageRequests.Count);
-                Assert.IsNotNull(server.StorageRequests[0].Range);
-                Assert.IsNull(server.StorageRequests[1].Range);
-                Assert.IsNull(server.StorageRequests[1].IfMatch);
-                Assert.AreEqual(BaselineDate, server.StorageRequests[1].Header("If-Unmodified-Since"));
+                int downloads = answer == "stable" ? 1 : 3;
+                Assert.AreEqual(2 * downloads, server.StorageRequests.Count);
+                for (int i = 0; i < downloads; i++)
+                {
+                    StorageRequest probe = server.StorageRequests[2 * i];
+                    StorageRequest whole = server.StorageRequests[2 * i + 1];
+                    Assert.IsNotNull(probe.Range);
+                    Assert.IsNull(probe.Header("If-Unmodified-Since"));
+                    Assert.IsNull(whole.Range);
+                    Assert.IsNull(whole.IfMatch);
+                    Assert.AreEqual(BaselineDate, whole.Header("If-Unmodified-Since"));
+                }
+                Assert.AreEqual(downloads, server.ApiRequests.Count);
             }
         }
 
+        // A file replaced, with the same size, before its whole request arrives is refused by storage that obeys the
+        // date, and detected by its newer date where storage ignores it: its bytes are never taken for the file the
+        // download began with. With a retry the download starts over as a new one, which gets the newer file alone, with
+        // its own date; without one, the change fails it.
         [TestMethod]
         [Timeout(60000)]
-        [DataRow(true)]
-        [DataRow(false)]
-        public async Task ANewerSameSizeFileIsNeverPublishedEvenWhenTheConditionIsIgnored(bool obeys)
+        [DataRow(true, 2)]
+        [DataRow(false, 2)]
+        [DataRow(true, 0)]
+        [DataRow(false, 0)]
+        public async Task ANewerSameSizeFileIsNeverSplicedAndIsDownloadedAgainWhenRetriesAllow(bool obeys, int retries)
         {
             using (var server = new DownloadServer(Contents))
             {
+                byte[] changed = Contents.Reverse().ToArray();
+                bool replaced = false;
                 server.Intercept = async (request, connection) =>
                 {
+                    byte[] current = replaced ? changed : Contents;
                     if (request.Range != null)
                     {
-                        await DownloadServer.SendAsync(connection, 206, Contents, 0, 16384,
-                            $"Content-Range: bytes 0-16383/{Contents.Length}\r\nLast-Modified: {BaselineDate}\r\n");
+                        await DownloadServer.SendAsync(connection, 206, current, 0, 16384,
+                            $"Content-Range: bytes 0-16383/{current.Length}\r\nLast-Modified: {(replaced ? NewerDate : BaselineDate)}\r\n");
+                        return true;
                     }
-                    else if (obeys && request.Header("If-Unmodified-Since") == BaselineDate)
+                    bool refuses = obeys && !replaced && request.Header("If-Unmodified-Since") == BaselineDate;
+                    replaced = true;
+                    if (refuses)
                     {
                         await connection.RespondAsync(412, "");
                     }
                     else
                     {
-                        byte[] changed = Contents.Reverse().ToArray();
                         await DownloadServer.SendAsync(connection, 200, changed, 0, changed.Length, $"Last-Modified: {NewerDate}\r\n");
                     }
                     return true;
                 };
-                await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => Client(server, retries: 2).Transfers.DownloadFileAsync("remote.bin", Destination, Parts()));
-                AssertNothingPublished();
-                Assert.AreEqual(2, server.StorageRequests.Count, "Source change is terminal, not a retry with a new baseline.");
+                if (retries == 0)
+                {
+                    await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => Client(server, retries).Transfers.DownloadFileAsync("remote.bin", Destination, Parts()));
+                    AssertNothingPublished();
+                    Assert.AreEqual(2, server.StorageRequests.Count, "No retry, no start over.");
+                    Assert.AreEqual(1, server.ApiRequests.Count);
+                    return;
+                }
+                DownloadResult result = await Client(server, retries).Transfers.DownloadFileAsync("remote.bin", Destination, Parts());
+
+                CollectionAssert.AreEqual(changed, File.ReadAllBytes(Destination), "The newer file alone.");
+                Assert.AreEqual(1, result.FinalProgress.Restarts);
+                Assert.AreEqual(2, server.ApiRequests.Count, "Files.com is asked for the file again.");
+                Assert.AreEqual(4, server.StorageRequests.Count);
+                Assert.AreEqual(BaselineDate, server.StorageRequests[1].Header("If-Unmodified-Since"));
+                Assert.IsNull(server.StorageRequests[2].Header("If-Unmodified-Since"), "The new download carries no date of the one given up.");
+                Assert.AreEqual(NewerDate, server.StorageRequests[3].Header("If-Unmodified-Since"), "It guards with its own.");
             }
         }
 
@@ -189,12 +224,21 @@ namespace FilesTests
                     }
                     return true;
                 };
-                await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => Client(server, retries: 2).Transfers.DownloadFileAsync("remote.bin", Destination, Parts()));
-                AssertNothingPublished();
-                Assert.AreEqual(2, server.StorageRequests.Count);
+                // The retry of the interrupted body keeps the first answer's date, which storage refuses: the file changed.
+                // Then, and only then, the download starts over as a new one, without that date.
+                DownloadResult result = await Client(server, retries: 2).Transfers.DownloadFileAsync("remote.bin", Destination, Parts());
+
+                CollectionAssert.AreEqual(Contents, File.ReadAllBytes(Destination));
+                Assert.AreEqual(2, result.FinalProgress.Restarts, "Once after the interrupted body, once after the change.");
+                Assert.AreEqual(3, server.StorageRequests.Count);
+                Assert.AreEqual(BaselineDate, server.StorageRequests[1].Header("If-Unmodified-Since"), "An ordinary retry keeps the date.");
+                Assert.IsNull(server.StorageRequests[2].Header("If-Unmodified-Since"), "Starting over after the change does not.");
             }
         }
 
+        // A download into a stream keeps its date across a retry, and nothing written to the stream is written again. The
+        // change the retry finds starts a download of client.Transfers over, as nothing has been written yet; the legacy
+        // RemoteFile download does not start over, and fails with the change.
         [TestMethod]
         [Timeout(60000)]
         [DataRow(false)]
@@ -224,9 +268,16 @@ namespace FilesTests
                     return true;
                 };
                 var client = Client(server, retries: 2);
-                DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => legacy
-                    ? client.RemoteFiles.DownloadFileAsync("remote.bin", destination)
-                    : client.Transfers.DownloadStreamAsync("remote.bin", destination, Parts()));
+                if (!legacy)
+                {
+                    await client.Transfers.DownloadStreamAsync("remote.bin", destination, Parts());
+                    CollectionAssert.AreEqual(Contents, destination.ToArray());
+                    Assert.AreEqual(3, server.StorageRequests.Count);
+                    Assert.AreEqual(BaselineDate, server.StorageRequests[1].Header("If-Unmodified-Since"));
+                    Assert.IsNull(server.StorageRequests[2].Header("If-Unmodified-Since"));
+                    return;
+                }
+                DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => client.RemoteFiles.DownloadFileAsync("remote.bin", destination));
                 Assert.AreEqual("remote.bin", error.Path);
                 Assert.AreEqual(0, destination.Length);
                 Assert.IsTrue(destination.CanWrite);

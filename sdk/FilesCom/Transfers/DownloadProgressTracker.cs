@@ -65,6 +65,14 @@ namespace FilesCom.Transfers
             Interlocked.Exchange(ref partsWritten, 0);
         }
 
+        // The download starts over because the file changed: the size, and the version, it knew were the file's before.
+        internal void SizeForgotten()
+        {
+            Volatile.Write(ref totalBytesKnown, 0);
+            Volatile.Write(ref versionBound, 0);
+            Interlocked.Exchange(ref totalBytes, 0);
+        }
+
         internal void Received(int bytes)
         {
             Interlocked.Add(ref receivedBytes, bytes);

@@ -1549,10 +1549,14 @@ file.** Choose `PublicationPolicy = DownloadPublicationPolicy.CreateNew` to keep
 See [Putting Downloaded Files in Place](#putting-downloaded-files-in-place) for the policies and platform limits.
 
 The SDK uses parallel parts where storage supports both ranges and reliable version checks, and fetches the whole
-file in one response when needed. A version-bound download fails with `DownloadSourceChangedException` if the source
-changes, instead of combining different versions. `DownloadResult.VersionBound` reports version protection, not
-whether parts were used: a whole-response fallback can remain bound to a version. Unbound downloads cannot reuse
-partial bytes on a later run.
+file in one response when needed. It never combines different versions. When the source changes during a download
+(a version check fails, storage refuses `If-Unmodified-Since` or returns a newer `Last-Modified`, or storage answers
+HTTP 409 with error type `download_source_changed`), the SDK stops every request of that attempt, discards what it
+wrote, and downloads the file again from its first byte with a new download URL and size from Files.com. Each restart
+uses one of the `MaxNetworkRetries`, however much was fetched, so a file that keeps changing fails with
+`DownloadSourceChangedException` once they are used, or at its first change with `MaxNetworkRetries = 0`.
+`DownloadResult.VersionBound` reports version protection, not whether parts were used: a whole-response fallback can
+remain bound to a version. Unbound downloads cannot reuse partial bytes on a later run.
 
 Temporary failures are retried within `MaxNetworkRetries`. A whole-response download into a local file can restart
 from its first byte after a failed attempt. Cancellation or a failure before publication leaves the destination
@@ -1796,7 +1800,9 @@ two after the second and three after each later one, until the file or an error 
 `MaxNetworkRetries` defaults to 3; 0 disables the SDK's retries. Retryable failures are connection failures,
 timeouts, HTTP 408, HTTP 429, and 5xx other than 501. Upload parts are retried only when Files.com allows it, with
 the same bytes. Version-bound download parts are retried individually. Whole-response file downloads may restart;
-downloads into your stream retry only before any bytes have been written.
+downloads into your stream retry only before any bytes have been written. A source change restarts the whole
+download, counting as one retry, as described in [Downloads](#downloads); a request's own retries are counted
+separately.
 
 For storage requests, HTTP 429 or 503 waits for the server's `Retry-After`, without shortening it to
 `MaxNetworkRetryDelay`; without that header there is no retry wait. Other transient failures wait 100 milliseconds.
@@ -1888,7 +1894,7 @@ power loss can undo the latest checkpoint update.
 | Situation | Behavior |
 | --- | --- |
 | Upload source changed, upload expired, or granted limits changed | `TransferCheckpointException` with `SourceChanged`, `UploadExpired` or `GrantChanged`; no part is sent. Delete the checkpoint or choose `CheckpointRestartPolicy.StartOver` to start a new upload. |
-| Download's stored version is gone or its address now names another object | Starts from byte zero in a new staging file. |
+| Download's stored version is gone or its address now names another object | Starts from byte zero in the staging file, without using a retry. The checkpoint is removed before the stage changes, under the platform durability limits above. If that removal cannot be completed, the download stops with an `IOException` before changing the stage. A change found later in the run does the same, using a retry. |
 | Version confirmation is cancelled, fails or is refused access | Leaves the download checkpoint and stage unchanged for another attempt. |
 | Download stage is shorter than recorded | Fails by default; `StartOver` discards only a stage proven to belong to the transfer and starts again. |
 | Checkpoint belongs to another site, workspace or paths (`OtherTransfer`), is untrusted, or is from a newer unsupported format | Refuses it regardless of restart policy. |

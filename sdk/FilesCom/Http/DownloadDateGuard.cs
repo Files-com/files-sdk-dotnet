@@ -7,7 +7,8 @@ using System.Net.Http;
 namespace FilesCom.Http
 {
     // Best-effort, in-memory protection for requests not carrying a stronger If-Match condition.
-    // A date grants no multipart or checkpoint identity, and is never reset by URL renewal or retries.
+    // A date grants no multipart or checkpoint identity, and is never reset by URL renewal or retries: only a download
+    // that discards everything it fetched to start the file again from its first byte forgets it (Forget).
     internal sealed class DownloadDateGuard
     {
         private readonly string path;
@@ -31,6 +32,13 @@ namespace FilesCom.Http
                 throw InvalidParameterException.For("check_download_modification_time", "The download setting must be a Boolean");
             }
             return enabled;
+        }
+
+        // For a download that starts the file again from its first byte after a source change, having discarded every
+        // byte it fetched: the date of the file it gave up guards nothing, and the new download's first answer sets one.
+        internal void Forget()
+        {
+            baseline = null;
         }
 
         internal void Apply(HttpRequestMessage request)

@@ -104,19 +104,69 @@ namespace FilesCom.Transfers
             }
             using (directory)
             {
-                Durable.DirectoryFlush flushed;
-                try
+                FlushDurably(directory, $"The checkpoint {full} was replaced");
+            }
+        }
+
+        // For the SDK's own tests: called with the checkpoint's full path as DeleteDurably begins, before anything is
+        // removed, within the flow of a test that sets it, so that a test can see what the transfer holds then, or fail
+        // the removal by throwing. Nothing else sets it.
+        internal static readonly System.Threading.AsyncLocal<Action<string>> DurableDeleteFaults = new System.Threading.AsyncLocal<Action<string>>();
+
+        // Removes the checkpoint at path, durably, for a transfer about to change what it records, such as a download
+        // giving up the version a checkpoint records before it writes anything else to its stage: once this returns, no
+        // checkpoint is there, under the same directory-flush policy as Write. Unix requires the removal to be flushed;
+        // Windows has no directory flush here and leaves durability to the system (DirectoryFlush.NotAttempted).
+        // Unlike Delete, a removal that cannot be made, shown, or flushed where required throws as an IOException:
+        // the transfer must then change nothing it recorded.
+        internal static void DeleteDurably(string path)
+        {
+            string full = Path.GetFullPath(path);
+            DurableDeleteFaults.Value?.Invoke(full);
+            string name = NameOf(full);
+            StateDirectory directory = null;
+            try
+            {
+                directory = CheckpointStorage.Open(DirectoryOf(full));
+                directory.Delete(name);
+                // Where a removal's own failure is not reported (Windows), what is left there now tells.
+                if (directory.Read(name) != null)
                 {
-                    flushed = directory.Flush();
+                    throw new IOException($"The checkpoint {full} could not be removed.");
                 }
-                catch (IOException e)
-                {
-                    throw new IOException($"The checkpoint {full} was replaced, but may not survive a system crash: {e.Message}", e);
-                }
-                if (flushed == Durable.DirectoryFlush.Unsupported)
-                {
-                    throw new IOException($"The checkpoint {full} was replaced, but the file system it is on cannot flush a directory to storage, so it may not survive a system crash. Keep checkpoints on a file system that can, such as a local disk.");
-                }
+            }
+            catch (UntrustedStateException e)
+            {
+                directory?.Dispose();
+                throw new IOException(e.Whole ? $"The checkpoint {full} was not removed: {e.Reason}." : $"The checkpoint {full} was not removed: {e.Reason}, so another user could change it.", e);
+            }
+            catch
+            {
+                directory?.Dispose();
+                throw;
+            }
+            using (directory)
+            {
+                FlushDurably(directory, $"The checkpoint {full} was removed");
+            }
+        }
+
+        // Flushes directory, where a checkpoint was just replaced or removed (done says which), as Write describes: a flush
+        // that fails, or that the file system cannot make, throws.
+        private static void FlushDurably(StateDirectory directory, string done)
+        {
+            Durable.DirectoryFlush flushed;
+            try
+            {
+                flushed = directory.Flush();
+            }
+            catch (IOException e)
+            {
+                throw new IOException($"{done}, but may not survive a system crash: {e.Message}", e);
+            }
+            if (flushed == Durable.DirectoryFlush.Unsupported)
+            {
+                throw new IOException($"{done}, but the file system it is on cannot flush a directory to storage, so it may not survive a system crash. Keep checkpoints on a file system that can, such as a local disk.");
             }
         }
 

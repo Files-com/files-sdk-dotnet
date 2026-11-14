@@ -316,6 +316,13 @@ namespace FilesCom.Transfers
         /// size, what arrives before such an answer ends is taken as the whole file.
         /// </para>
         /// <para>
+        /// When the file changes during the download (<see cref="DownloadSourceChangedException"/>), every request of
+        /// the attempt is stopped and has ended, what it wrote is discarded, and the file is downloaded again from its
+        /// first byte, as a new download of the file as it is now, with a new download URL and size from Files.com.
+        /// Each start over is one of the client's <c>MaxNetworkRetries</c>, however much had been fetched, so a file
+        /// that keeps changing fails once they are used, and with none at its first change.
+        /// </para>
+        /// <para>
         /// The file is written into a stage, a temporary file in a private directory beside <paramref name="localPath"/>,
         /// and put in place under its name only once every byte has been written and checked, as
         /// <see cref="DownloadOptions.PublicationPolicy"/> says: by default replacing a file of that name, or a symbolic
@@ -362,7 +369,7 @@ namespace FilesCom.Transfers
         /// </remarks>
         /// <exception cref="MissingParameterException"><paramref name="remotePath"/> or <paramref name="localPath"/> is null.</exception>
         /// <exception cref="InvalidParameterException"><paramref name="localPath"/> names no file, a setting of <paramref name="options"/> is out of range, or settings of <paramref name="options"/> contradict each other.</exception>
-        /// <exception cref="DownloadSourceChangedException">The file changed during the download, so its version can no longer be downloaded. Nothing was put in place.</exception>
+        /// <exception cref="DownloadSourceChangedException">The file changed during the download, and changed again each time it was downloaded again, as the client's <c>MaxNetworkRetries</c> allow. Nothing was put in place.</exception>
         /// <exception cref="TransferCheckpointException">The checkpoint cannot be used, is kept where another user could have changed it, or records another transfer. Nothing was downloaded.</exception>
         /// <exception cref="DownloadPublicationException">The file was not put in place as the publication policy says, or was put in place without certainty that it will survive a crash or was recorded.</exception>
         /// <exception cref="InvalidResponseException">The storage server's answer was not the file's bytes, such as the Files.com web app's page, or declared no Content-Length and held another number of bytes than Files.com stated for the file.</exception>
@@ -406,16 +413,20 @@ namespace FilesCom.Transfers
         /// When the download is bound to a version, as for a local file, parts are fetched several at once, and
         /// written to the stream in order: each is kept in memory, within the limiter's buffer space, until the parts
         /// before it have been written. Only whole, checked parts are written, so after a failure the stream holds the
-        /// file's first parts and nothing else. Otherwise the file comes in one request and is written as it arrives; that
-        /// request is retried only while nothing has been written, since the stream cannot be taken back. An answer to it
+        /// file's first parts and nothing else, except that a stream, such as a pipe or a socket, may have taken in some of
+        /// the part whose write failed or was cancelled. Otherwise the file comes in one request and is written as it
+        /// arrives; that request is retried only before any write to the stream has begun, since the stream cannot be
+        /// taken back. An answer to it
         /// that declares no length is checked against the size Files.com stated for the file, as for a local file: the
         /// stream then holds what was written before the difference showed, which for a shorter body is all of it.
         /// <see cref="DownloadResult.Size"/> and <see cref="DownloadProgress.TotalBytes"/> give the file's length, known
-        /// before its first byte is written whenever the storage server states it.
+        /// before its first byte is written whenever the storage server states it. A file that changes during the
+        /// download is downloaded again from its first byte, as for a local file, only before any write to the stream has
+        /// begun; once one has, even one that then failed or was cancelled, the change fails the download.
         /// </remarks>
         /// <exception cref="MissingParameterException"><paramref name="remotePath"/> or <paramref name="destination"/> is null.</exception>
         /// <exception cref="InvalidParameterException"><paramref name="destination"/> cannot be written, <see cref="DownloadOptions.CheckpointPath"/> or a <see cref="DownloadOptions.PublicationPolicy"/> other than the default is set, a setting of <paramref name="options"/> is out of range, or settings of <paramref name="options"/> contradict each other.</exception>
-        /// <exception cref="DownloadSourceChangedException">The file changed during the download, so its version can no longer be downloaded.</exception>
+        /// <exception cref="DownloadSourceChangedException">The file changed during the download after a write to <paramref name="destination"/> had begun, or changed again each time it was downloaded again, as the client's <c>MaxNetworkRetries</c> allow.</exception>
         /// <exception cref="InvalidResponseException">The storage server's answer was not the file's bytes, such as the Files.com web app's page, or declared no Content-Length and held another number of bytes than Files.com stated for the file.</exception>
         /// <exception cref="ApiConnectionException">The connection failed, while the file was being asked for or while it arrived, and still failed when retried, or once any of it had been written to <paramref name="destination"/>, which is not written again; a <see cref="NetworkTimeoutException"/> when it stalled. The stream holds what was written before. A failure of <paramref name="destination"/> itself is thrown as it threw it.</exception>
         /// <exception cref="ObjectDisposedException">The client has been disposed.</exception>

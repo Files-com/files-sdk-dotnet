@@ -17,8 +17,9 @@ namespace FilesTests
     // hold its answer, send a body slowly or stop halfway, or stop reading a request body. serve runs once for each
     // connection the client opens, and the server records every connection, so a test can check how many the client
     // opened and see when the client closed one: that is how a test knows a stalled request was really ended, not
-    // merely abandoned. With certificateFor, it serves HTTPS, with the certificate it returns for the name the client
-    // asks for; a connection whose handshake fails is recorded, and not served.
+    // merely abandoned. A connection the client resets before the server has set it up is closed, neither served nor
+    // recorded, and the server goes on accepting. With certificateFor, it serves HTTPS, with the certificate it returns
+    // for the name the client asks for; a connection whose handshake fails is recorded, and not served.
     //
     // With receiveBuffer, each connection receives into a buffer of about that many bytes, set before the client
     // connects, so that its TCP window stays that small. A connection that stops reading (StallAsync) then takes little
@@ -103,7 +104,19 @@ namespace FilesTests
                 {
                     return;
                 }
-                var connection = new ScriptedConnection(client, stopping.Token);
+                ScriptedConnection connection;
+                try
+                {
+                    connection = new ScriptedConnection(client, stopping.Token);
+                }
+                catch (SocketException)
+                {
+                    // The client reset the connection before it could be set up, as a client does that cancels a
+                    // request it just opened the connection for (on macOS the reset socket's options can no longer be
+                    // set): there is nothing to serve on it, so it is closed, and the server goes on accepting.
+                    client.Dispose();
+                    continue;
+                }
                 lock (connections)
                 {
                     connections.Add(connection);

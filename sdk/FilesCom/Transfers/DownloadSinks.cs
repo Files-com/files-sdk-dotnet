@@ -36,7 +36,7 @@ namespace FilesCom.Transfers
         // Whether everything written so far may be discarded to start again from the file's first byte.
         internal abstract bool CanRestart { get; }
 
-        // Discards everything written.
+        // Discards everything written, and everything received and not yet written. Only once every part has ended.
         internal abstract void Restart();
 
         // The buffer space a part holds from the limiter, from before it is fetched until it has been placed: exactly the
@@ -283,9 +283,11 @@ namespace FilesCom.Transfers
 
     // A caller's stream, written forward from its position and never seeked, flushed or disposed. Parts may arrive in any
     // order but are written in order: each is read into an array of its own, the buffer space reserved for it, and kept
-    // there until the parts before it have been written (DeliverAsync). Only whole, checked parts are written, so after a failure the stream
-    // holds whole parts only. A file that comes in one response is written as it arrives; once any of it has been
-    // written the download cannot start over, since the stream cannot be taken back.
+    // there until the parts before it have been written (DeliverAsync). Only whole, checked parts are handed to the stream,
+    // so after a failure it holds whole parts, and at most part of the one whose write was under way: a stream, such as a
+    // pipe or a socket, can take in some of a write before that write fails or is cancelled. A file that comes in one
+    // response is written as it arrives. Once a write has begun the download cannot start over, since nothing the stream
+    // may have taken in can be taken back.
     internal sealed class StreamDownloadSink : DownloadSink
     {
         private const int WriteChunk = 81920;
@@ -295,6 +297,8 @@ namespace FilesCom.Transfers
         private readonly Dictionary<long, Arrived> arrived = new Dictionary<long, Arrived>();
         private readonly SemaphoreSlim arrivals = new SemaphoreSlim(0);
         private long delivered;
+        // 1 once a write of any bytes to the stream has begun, whether or not it then returned (Writing).
+        private int written;
 
         internal StreamDownloadSink(Stream destination, DownloadProgressTracker progress)
         {
@@ -302,16 +306,34 @@ namespace FilesCom.Transfers
             this.progress = progress;
         }
 
-        internal override bool CanRestart => Interlocked.Read(ref delivered) == 0;
+        // Only before any write to the stream has begun: a write that failed or was cancelled may still have put some of
+        // its bytes in the stream, which Delivered does not count.
+        internal override bool CanRestart => Volatile.Read(ref written) == 0;
 
-        // The bytes written to the stream so far.
+        // The bytes of the writes to the stream that returned.
         internal long Delivered => Interlocked.Read(ref delivered);
 
+        // Called before each write of bytes to the stream: from then on they may be in it, whatever the write does.
+        private void Writing()
+        {
+            Volatile.Write(ref written, 1);
+        }
+
+        // No write to the stream has begun: parts that arrived but were not written are discarded, with the buffer space
+        // they held, so that none of them is ever written in place of a part of what is fetched next.
         internal override void Restart()
         {
             if (!CanRestart)
             {
                 throw new InvalidOperationException("Bytes already written to the stream cannot be taken back.");
+            }
+            lock (arrived)
+            {
+                foreach (Arrived part in arrived.Values)
+                {
+                    part.Reservation.Dispose();
+                }
+                arrived.Clear();
             }
         }
 
@@ -353,6 +375,7 @@ namespace FilesCom.Transfers
                     {
                         cancellationToken.ThrowIfCancellationRequested();
                         int count = Math.Min(WriteChunk, part.Bytes.Length - offset);
+                        Writing();
                         await destination.WriteAsync(part.Bytes, offset, count, cancellationToken);
                         Interlocked.Add(ref delivered, count);
                     }
@@ -368,6 +391,10 @@ namespace FilesCom.Transfers
         internal override async Task WriteWholeAsync(long position, byte[] buffer, int count, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (count > 0)
+            {
+                Writing();
+            }
             await destination.WriteAsync(buffer, 0, count, cancellationToken);
             Interlocked.Add(ref delivered, count);
         }

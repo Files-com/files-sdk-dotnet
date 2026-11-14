@@ -326,47 +326,276 @@ namespace FilesTests
                 Exception error = await Assert.ThrowsAsync<Exception>(() => Client(server, retries: 2).Transfers.DownloadFileAsync("remote.bin", Destination, Parts()));
 
                 Assert.AreEqual(expected, error.GetType(), error.ToString());
-                Assert.AreEqual(1, server.StorageRequests.Count(request => request.Range?.First == 16384), "Not retried.");
+                // A change starts the whole file over, as it is now, once for each of the two retries, and fails once they
+                // are used; anything else is not retried.
+                int attempts = expected == typeof(DownloadSourceChangedException) ? 3 : 1;
+                Assert.AreEqual(attempts, server.StorageRequests.Count(request => request.Range?.First == 16384));
+                Assert.AreEqual(attempts, server.ApiRequests.Count, "Each start over asks Files.com for the file again.");
+                Assert.AreEqual(attempts, server.StorageRequests.Count(request => request.Range?.First == 0 && request.IfMatch == null), "Each start over binds its version anew.");
                 AssertNothingPublished();
             }
         }
 
-        // When the file changes during the download, the storage server refuses the old version's parts: the download
-        // stops, nothing is published, and a stream holds only whole parts of the old version.
+        // When the file changes during the download, the storage server refuses the old version's parts. Every request of
+        // that attempt is stopped, even one the server never answers, and has ended before the file is downloaded again
+        // from its first byte, as Files.com describes it now (a new URL and size), bound to its new version: the file
+        // published holds the new version alone. That start over is one of the client's retries; without one, the change
+        // fails the download and nothing is published.
         [TestMethod]
         [Timeout(60000)]
-        [DataRow("file")]
-        [DataRow("stream")]
-        public async Task AChangeDuringTheDownloadStopsItWithoutMixingVersions(string destination)
+        [DataRow(1)]
+        [DataRow(0)]
+        public async Task AFileThatChangesDuringTheDownloadIsDownloadedAgainAsItIsNow(int retries)
+        {
+            using (var server = new DownloadServer(Contents))
+            {
+                byte[] changed = Contents.Take(Contents.Length - 5000).Select(b => (byte)(b ^ 0xFF)).ToArray();
+                string first = server.ETag;
+                var held = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                server.Intercept = async (request, connection) =>
+                {
+                    if (request.IfMatch == first && request.Range?.First == 2 * 16384)
+                    {
+                        // Never answered: only the download's own stop ends it.
+                        held.TrySetResult(true);
+                        await connection.HoldAsync();
+                        return true;
+                    }
+                    if (request.IfMatch == first && request.Range?.First == 16384)
+                    {
+                        await held.Task;
+                        server.Change(changed);
+                    }
+                    return false;
+                };
+                var options = new DownloadOptions { PartSize = 16 * 1024, MaxConcurrency = 4, ConcurrencyMode = DownloadConcurrencyMode.Static };
+                Task<DownloadResult> download = Client(server, retries).Transfers.DownloadFileAsync("remote.bin", Destination, options);
+
+                if (retries == 0)
+                {
+                    DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => download);
+                    StringAssert.Contains(error.Message, "412");
+                    AssertNothingPublished();
+                    Assert.AreEqual(1, server.ApiRequests.Count, "Not started over.");
+                    return;
+                }
+                DownloadResult result = await download;
+
+                CollectionAssert.AreEqual(changed, File.ReadAllBytes(Destination), "The new version alone.");
+                Assert.IsTrue(result.VersionBound);
+                Assert.AreEqual(changed.Length, result.Size);
+                Assert.AreEqual(6, result.Parts, "The new version's own parts.");
+                Assert.AreEqual(1, result.FinalProgress.Restarts);
+                Assert.AreEqual(2, server.ApiRequests.Count, "Files.com is asked for the file again, for a new URL and size.");
+                List<StorageRequest> requests = server.StorageRequests.ToList();
+                Assert.AreEqual(2, requests.Count(request => request.IfMatch == null), "Each download binds its own version with its first part.");
+                Assert.IsTrue(requests.All(request => request.IfMatch == null || request.IfMatch == first || request.IfMatch == server.ETag));
+                CollectionAssert.AreEquivalent(Enumerable.Range(1, 5).Select(i => $"GET {i * 16384}-{Math.Min(i * 16384 + 16383, changed.Length - 1)}").ToList(),
+                    requests.Where(request => request.IfMatch == server.ETag).Select(request => request.ToString()).ToList(), "The new version is planned by its own size.");
+                AssertNoStage();
+            }
+        }
+
+        // Once any of the file is in the caller's stream, which cannot be taken back, a change fails the download instead
+        // of starting it over, whatever retries are left: the stream holds only whole parts of the version that changed.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task AChangeAfterBytesReachTheStreamStopsTheDownloadWithoutMixingVersions()
         {
             using (var server = new DownloadServer(Contents))
             {
                 byte[] changed = Contents.Select(b => (byte)(b ^ 0xFF)).ToArray();
-                server.Intercept = (request, connection) =>
+                var stream = new WatchedStream();
+                server.Intercept = async (request, connection) =>
                 {
                     if (request.Range?.First == 16384 && server.Contents == Contents)
                     {
+                        // The first part is in the stream before the file changes.
+                        await stream.Written;
                         server.Change(changed);
                     }
-                    return Task.FromResult(false);
+                    return false;
                 };
-                var stream = new MemoryStream();
-                Task download = destination == "file"
-                    ? Client(server, retries: 3).Transfers.DownloadFileAsync("remote.bin", Destination, Parts(concurrency: 1))
-                    : Client(server, retries: 3).Transfers.DownloadStreamAsync("remote.bin", stream, Parts(concurrency: 1));
 
-                DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => download);
+                DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => Client(server, retries: 3).Transfers.DownloadStreamAsync("remote.bin", stream, Parts(concurrency: 1)));
 
                 StringAssert.Contains(error.Message, "412");
-                AssertNothingPublished();
-                Assert.AreEqual(0, stream.Length % 16384, "Only whole parts.");
-                CollectionAssert.AreEqual(Contents.Take((int)stream.Length).ToArray(), stream.ToArray(), "Only the first version's bytes.");
+                Assert.AreEqual(1, server.ApiRequests.Count, "Not started over.");
+                CollectionAssert.AreEqual(Contents.Take(16384).ToArray(), stream.ToArray(), "Only the first version's whole parts.");
+            }
+        }
+
+        // A caller's stream, such as a pipe or a socket, can take in what a write hands it before that write returns, and
+        // keep it when the write is then cancelled. Once a write has begun, the download never starts over, whatever
+        // retries are left, so nothing handed to the stream is handed to it again: here the first part's write is under
+        // way, its bytes already in the stream, when another part finds the file changed, or finds that storage now
+        // ignores Range, which would otherwise have the file fetched again whole.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow("file changed")]
+        [DataRow("ranges ignored")]
+        public async Task AChangeWhileTheStreamsFirstWriteIsPendingNeverReplaysBytes(string sibling)
+        {
+            using (var server = new DownloadServer(Contents))
+            {
+                byte[] changed = Contents.Select(b => (byte)(b ^ 0x42)).ToArray();
+                string first = server.ETag;
+                var stream = new TakingStream();
+                server.Intercept = async (request, connection) =>
+                {
+                    if (request.IfMatch == first && request.Range?.First == 16384 && server.Contents == Contents)
+                    {
+                        // The first part's write has handed its bytes over, and has not returned.
+                        await stream.FirstWriteTaken;
+                        if (sibling == "ranges ignored")
+                        {
+                            await DownloadServer.SendAsync(connection, 200, Contents, 0, Contents.Length, $"ETag: {first}\r\n");
+                            return true;
+                        }
+                        server.Change(changed);
+                    }
+                    return false;
+                };
+                var options = new DownloadOptions { PartSize = 16 * 1024, MaxConcurrency = 2, ConcurrencyMode = DownloadConcurrencyMode.Static };
+
+                Exception error = null;
+                try
+                {
+                    await Client(server, retries: 2).Transfers.DownloadStreamAsync("remote.bin", stream, options);
+                }
+                catch (Exception e)
+                {
+                    error = e;
+                }
+
+                byte[] taken = stream.Taken;
+                CollectionAssert.AreEqual(Contents.Take(16384).ToArray(), taken, $"Only what the first write handed over, once: the stream took {taken.Length} bytes.");
+                Assert.IsNotNull(error, "The download does not succeed once its stream holds what it cannot take back.");
+                Assert.AreEqual(sibling == "ranges ignored" ? typeof(InvalidResponseException) : typeof(DownloadSourceChangedException), error.GetType(), error.ToString());
+                Assert.AreEqual(1, server.ApiRequests.Count, "Not started over.");
+                Assert.AreEqual(1, server.StorageRequests.Count(request => request.IfMatch == null), "No other version is bound.");
+                Assert.AreEqual(0, server.StorageRequests.Count(request => request.Range == null), "The file is not fetched again whole.");
+            }
+        }
+
+        // A stream that holds nothing of the file yet starts over when the file changes, even with the old version's later
+        // parts already here, waiting for its first: those are discarded, and never written in place of the new version's.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task AStreamThatHoldsNothingYetStartsOverWithoutTheOldVersionsWaitingParts()
+        {
+            using (var server = new DownloadServer(Contents))
+            {
+                byte[] changed = Contents.Select(b => (byte)(b ^ 0x42)).ToArray();
+                string first = server.ETag;
+                var stream = new WatchedStream();
+                var laterParts = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                int laterServed = 0;
+                server.Intercept = async (request, connection) =>
+                {
+                    if (request.IfMatch == null && server.Contents == Contents)
+                    {
+                        // The first part binds the download, then its body breaks off, once the version's other parts are here.
+                        await connection.SendAsync($"HTTP/1.1 206 OK\r\nContent-Length: 16384\r\nContent-Range: bytes 0-16383/{Contents.Length}\r\nETag: {first}\r\n\r\n");
+                        await connection.SendAsync(Contents.Take(100).ToArray());
+                        await laterParts.Task;
+                        server.Change(changed);
+                        connection.Dispose();
+                        return true;
+                    }
+                    if (request.IfMatch == first && request.Range?.First > 0)
+                    {
+                        (long from, long to) = request.Range.Value;
+                        long last = Math.Min(to, Contents.Length - 1);
+                        await DownloadServer.SendAsync(connection, 206, Contents, from, last - from + 1, $"Content-Range: bytes {from}-{last}/{Contents.Length}\r\nETag: {first}\r\n");
+                        if (Interlocked.Increment(ref laterServed) == 6)
+                        {
+                            laterParts.TrySetResult(true);
+                        }
+                        return true;
+                    }
+                    if (request.IfMatch == server.ETag && request.Range?.First == 16384)
+                    {
+                        // The new version's second part comes only once its first is in the stream.
+                        await stream.Written;
+                    }
+                    return false;
+                };
+                var options = new DownloadOptions { PartSize = 16 * 1024, MaxConcurrency = 7, ConcurrencyMode = DownloadConcurrencyMode.Static };
+
+                DownloadResult result = await Client(server, retries: 2).Transfers.DownloadStreamAsync("remote.bin", stream, options);
+
+                CollectionAssert.AreEqual(changed, stream.ToArray(), "The new version alone.");
+                Assert.AreEqual(1, result.FinalProgress.Restarts);
+                Assert.AreEqual(2, server.ApiRequests.Count);
+            }
+        }
+
+        // Storage such as a Files Agent answers HTTP 409 with the error type download_source_changed when the file is no
+        // longer the one its download URL was issued for, so that no range of that URL can be fetched any more. The
+        // download then starts over, with a new URL and the size Files.com states now, and gets the new file alone, whether
+        // it comes in one request (here without a length, so only the new stated size matches it) or in parts. Any other
+        // 409, the type anywhere but at the top of a JSON error, or that type with another status, is an error like any
+        // other, thrown as it is and not tried again.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow(false, 409, "{\"error\":\"The file changed\",\"http-code\":409,\"type\":\"download_source_changed\"}", true)]
+        [DataRow(true, 409, "{\"error\":\"The file changed\",\"http-code\":409,\"type\":\"download_source_changed\"}", true)]
+        [DataRow(false, 409, "{\"error\":\"Conflict\",\"http-code\":409,\"type\":\"processing-failure/conflict\"}", false)]
+        [DataRow(false, 409, "{\"error\":\"Conflict\",\"type\":\"conflict\",\"data\":{\"type\":\"download_source_changed\"}}", false)]
+        [DataRow(false, 409, "download_source_changed", false)]
+        [DataRow(false, 400, "{\"error\":\"Bad Request\",\"http-code\":400,\"type\":\"download_source_changed\"}", false)]
+        public async Task AStorageAnswerThatTheFileChangedStartsItOverWithANewUrlAndSize(bool bound, int status, string body, bool startsOver)
+        {
+            using (var server = new DownloadServer(Contents) { Bound = bound })
+            {
+                byte[] newer = Contents.Take(Contents.Length - 3000).Select(b => (byte)(b ^ 0x3C)).ToArray();
+                server.Intercept = async (request, connection) =>
+                {
+                    bool issuedForOld = request.Line.Contains("/storage/1/");
+                    if (issuedForOld && (!bound || request.Range?.First == 16384))
+                    {
+                        // The file is replaced as its URL is used: the URL issued for the old file serves nothing more.
+                        if (server.Contents == Contents)
+                        {
+                            server.Relocate(contents: newer);
+                        }
+                        await connection.RespondAsync(status, body);
+                        return true;
+                    }
+                    if (!bound && !issuedForOld)
+                    {
+                        await SendWithoutLengthAsync(connection, server.Contents);
+                        return true;
+                    }
+                    return false;
+                };
+                Task<DownloadResult> download = Client(server, retries: 1).Transfers.DownloadFileAsync("remote.bin", Destination, Parts(concurrency: 1));
+
+                if (!startsOver)
+                {
+                    Exception error = await Assert.ThrowsAsync<Exception>(() => download);
+                    Assert.IsFalse(error is DownloadSourceChangedException, error.ToString());
+                    Assert.AreEqual(status, error is ApiException answered ? answered.httpStatus : ((InvalidResponseException)error).httpStatus, error.ToString());
+                    Assert.AreEqual(1, server.ApiRequests.Count, "Not started over.");
+                    Assert.AreEqual(1, server.StorageRequests.Count, "Not tried again.");
+                    AssertNothingPublished();
+                    return;
+                }
+                DownloadResult result = await download;
+
+                CollectionAssert.AreEqual(newer, File.ReadAllBytes(Destination), "The new file alone.");
+                Assert.AreEqual(1, result.FinalProgress.Restarts);
+                Assert.AreEqual(2, server.ApiRequests.Count, "Files.com is asked for the file again.");
+                int changedAt = server.StorageRequests.ToList().FindIndex(request => !request.Line.Contains("/storage/1/"));
+                Assert.IsTrue(changedAt > 0 && server.StorageRequests.Skip(changedAt).All(request => request.Line.Contains("/storage/2/")), "Only the new URL once started over.");
             }
         }
 
         // Storage that ignores If-Match, as one behind a server that drops the condition would, still cannot make the
         // download mix versions: the part that comes from the new version is answered with its entity tag, which is not
-        // the version's, so it is refused, nothing is published, and a stream holds only whole parts of the old version.
+        // the version's, so it is refused. A local file is then downloaded again from its first byte, as the new version
+        // alone; a stream that holds parts of the old version keeps only those whole parts, and the download fails.
         [TestMethod]
         [Timeout(60000)]
         [DataRow("file")]
@@ -376,25 +605,32 @@ namespace FilesTests
             using (var server = new DownloadServer(Contents) { IgnoresIfMatch = true })
             {
                 byte[] changed = Contents.Select(b => (byte)(b ^ 0x5A)).ToArray();
-                server.Intercept = (request, connection) =>
+                var stream = new WatchedStream();
+                server.Intercept = async (request, connection) =>
                 {
                     if (request.Range?.First == 2 * 16384 && server.Contents == Contents)
                     {
+                        if (destination == "stream")
+                        {
+                            await stream.Written;
+                        }
                         server.Change(changed);
                     }
-                    return Task.FromResult(false);
+                    return false;
                 };
-                var stream = new MemoryStream();
-                Task download = destination == "file"
-                    ? Client(server, retries: 3).Transfers.DownloadFileAsync("remote.bin", Destination, Parts(concurrency: 1))
-                    : Client(server, retries: 3).Transfers.DownloadStreamAsync("remote.bin", stream, Parts(concurrency: 1));
 
-                DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => download);
+                if (destination == "file")
+                {
+                    await Client(server, retries: 3).Transfers.DownloadFileAsync("remote.bin", Destination, Parts(concurrency: 1));
+                    CollectionAssert.AreEqual(changed, File.ReadAllBytes(Destination), "The new version alone.");
+                    Assert.AreEqual(2, server.StorageRequests.Count(request => request.Range?.First == 2 * 16384), "Once as each version.");
+                    return;
+                }
+                DownloadSourceChangedException error = await Assert.ThrowsExactlyAsync<DownloadSourceChangedException>(() => Client(server, retries: 3).Transfers.DownloadStreamAsync("remote.bin", stream, Parts(concurrency: 1)));
 
                 StringAssert.Contains(error.Message, "entity tag");
                 Assert.AreEqual(1, server.StorageRequests.Count(request => request.Range?.First == 2 * 16384), "Not fetched again.");
-                AssertNothingPublished();
-                Assert.AreEqual(0, stream.Length % 16384, "Only whole parts.");
+                Assert.IsTrue(stream.Length > 0 && stream.Length % 16384 == 0, "Only whole parts.");
                 CollectionAssert.AreEqual(Contents.Take((int)stream.Length).ToArray(), stream.ToArray(), "Only the first version's bytes.");
             }
         }
@@ -765,6 +1001,158 @@ namespace FilesTests
                     Assert.AreEqual(1, server.StorageRequests.Count, "No other part starts before the first one's answer.");
                 }
             }
+        }
+
+        // Cancelling stops a download that is starting over because its file changed, here while Files.com is asked for
+        // the file again: nothing more is asked for, nothing is published, and nothing is kept for a later run, since the
+        // version it had is gone and its checkpoint was removed before the start over.
+        [TestMethod]
+        [Timeout(60000)]
+        public async Task CancellingStopsADownloadStartingOverAfterItsFileChanged()
+        {
+            string checkpoint = Path.Combine(folder, "download.checkpoint");
+            using (var server = new DownloadServer(Contents))
+            {
+                byte[] changed = Contents.Select(b => (byte)(b ^ 0x77)).ToArray();
+                var cancellation = new CancellationTokenSource();
+                server.Intercept = (request, connection) =>
+                {
+                    if (request.Range?.First == 16384 && server.Contents == Contents)
+                    {
+                        server.Change(changed);
+                    }
+                    return Task.FromResult(false);
+                };
+                server.ApiIntercept = async (target, connection) =>
+                {
+                    if (server.ApiRequests.Count < 2)
+                    {
+                        return false;
+                    }
+                    cancellation.Cancel();
+                    await connection.HoldAsync();
+                    return true;
+                };
+                var options = new DownloadOptions { PartSize = 16 * 1024, MaxConcurrency = 1, CheckpointPath = checkpoint };
+
+                await Assert.ThrowsAsync<OperationCanceledException>(() => Client(server, retries: 3).Transfers.DownloadFileAsync("remote.bin", Destination, options, cancellation.Token));
+                await server.SettledAsync();
+
+                Assert.AreEqual(2, server.ApiRequests.Count);
+                Assert.AreEqual(2, server.StorageRequests.Count, "Nothing is asked for once cancelled.");
+                Assert.IsFalse(File.Exists(checkpoint));
+                AssertNothingPublished();
+            }
+        }
+
+        // A download gives up the version its checkpoint records, to start over as the file is now, only once that
+        // checkpoint has been durably removed, before anything of its stage, which the checkpoint says holds that version,
+        // is emptied or written over: for a change found while the download runs, and for an earlier run's version found
+        // gone as the download is continued. When the removal fails, the download stops there, with its stage, its version
+        // and their checkpoint as they were, and nothing asked for under a new version; a later run then starts over. Once
+        // a download has started over, no checkpoint claims the old version.
+        [TestMethod]
+        [Timeout(60000)]
+        [DataRow("while it runs", false)]
+        [DataRow("while it runs", true)]
+        [DataRow("on confirmation", false)]
+        [DataRow("on confirmation", true)]
+        public async Task AVersionIsGivenUpOnlyOnceItsCheckpointIsDurablyRemoved(string when, bool removalFails)
+        {
+            string checkpoint = Path.Combine(folder, "download.checkpoint");
+            using (var server = new DownloadServer(Contents))
+            {
+                byte[] changed = Contents.Select(b => (byte)(b ^ 0x99)).ToArray();
+                string first = server.ETag;
+                var options = new DownloadOptions { PartSize = 16 * 1024, MaxConcurrency = 1, CheckpointPath = checkpoint };
+                string recorded = null;
+                if (when == "on confirmation")
+                {
+                    var stopped = new CancellationTokenSource();
+                    server.Intercept = async (request, connection) =>
+                    {
+                        if (request.Range?.First == 3 * 16384 && !stopped.IsCancellationRequested)
+                        {
+                            stopped.Cancel();
+                            await connection.HoldAsync();
+                            return true;
+                        }
+                        return false;
+                    };
+                    await Assert.ThrowsAsync<OperationCanceledException>(() => Client(server).Transfers.DownloadFileAsync("remote.bin", Destination, options, stopped.Token));
+                    recorded = File.ReadAllText(checkpoint);
+                    server.Change(changed);
+                }
+                bool? checkpointWhenStartedOver = null;
+                server.Intercept = (request, connection) =>
+                {
+                    if (when == "while it runs" && request.Range?.First == 3 * 16384 && server.Contents == Contents)
+                    {
+                        server.Change(changed);
+                    }
+                    else if (request.IfMatch == null && request.Range?.First == 0 && server.Contents == changed && checkpointWhenStartedOver == null)
+                    {
+                        checkpointWhenStartedOver = File.Exists(checkpoint);
+                    }
+                    return Task.FromResult(false);
+                };
+                long? stagedAtRemoval = null;
+                CheckpointFile.DurableDeleteFaults.Value = path =>
+                {
+                    stagedAtRemoval = new FileInfo(StageFiles().Single()).Length;
+                    if (removalFails)
+                    {
+                        throw new IOException("The checkpoint could not be removed (a test's fault).");
+                    }
+                };
+                int apiBefore = server.ApiRequests.Count;
+                int storageBefore = server.StorageRequests.Count;
+                Task<DownloadResult> download = Client(server, retries: when == "while it runs" ? 1 : 0).Transfers.DownloadFileAsync("remote.bin", Destination, options);
+
+                if (!removalFails)
+                {
+                    DownloadResult result = await download;
+                    CollectionAssert.AreEqual(changed, File.ReadAllBytes(Destination));
+                    Assert.AreEqual(1, result.FinalProgress.Restarts);
+                    Assert.AreEqual(3 * 16384L, stagedAtRemoval, "The stage still held what its checkpoint records as the checkpoint was removed.");
+                    Assert.AreEqual(false, checkpointWhenStartedOver, "No checkpoint claims the old version once the download starts over.");
+                    Assert.IsFalse(File.Exists(checkpoint));
+                    AssertNoStage();
+                    return;
+                }
+                IOException error = await Assert.ThrowsExactlyAsync<IOException>(() => download);
+
+                StringAssert.Contains(error.Message, "could not be removed");
+                Assert.AreEqual(3 * 16384L, stagedAtRemoval);
+                Assert.AreEqual(apiBefore + 1, server.ApiRequests.Count, "Files.com is not asked for the file again.");
+                List<StorageRequest> sent = server.StorageRequests.Skip(storageBefore).ToList();
+                Assert.AreEqual(when == "while it runs" ? 1 : 0, sent.Count(request => request.IfMatch == null), "No new version is bound.");
+                Assert.IsTrue(sent.All(request => request.IfMatch == null || request.IfMatch == first), "Nothing is asked for as a new version.");
+                CollectionAssert.AreEqual(Contents.Take(3 * 16384).ToArray(), File.ReadAllBytes(StageFiles().Single()), "The stage is as it was.");
+                using (var saved = System.Text.Json.JsonDocument.Parse(File.ReadAllText(checkpoint)))
+                {
+                    Assert.AreEqual(first, saved.RootElement.GetProperty("etag").GetString(), "The checkpoint still records the version its stage holds.");
+                }
+                if (recorded != null)
+                {
+                    Assert.AreEqual(recorded, File.ReadAllText(checkpoint), "A version not yet given up keeps its checkpoint exactly.");
+                }
+                Assert.IsFalse(File.Exists(Destination));
+
+                // Once the checkpoint can be removed, the version is found gone as the download is continued, given up
+                // without a retry, and the file downloaded as it is now.
+                CheckpointFile.DurableDeleteFaults.Value = null;
+                DownloadResult later = await Client(server).Transfers.DownloadFileAsync("remote.bin", Destination, options);
+                CollectionAssert.AreEqual(changed, File.ReadAllBytes(Destination));
+                Assert.AreEqual(0, later.ResumedBytes);
+                Assert.IsFalse(File.Exists(checkpoint));
+                AssertNoStage();
+            }
+        }
+
+        private IEnumerable<string> StageFiles()
+        {
+            return Directory.GetDirectories(folder, ".files-download-*").SelectMany(Directory.GetFiles);
         }
 
         // The destination stream's own failure is thrown as it is, and never retried, whatever its type, and whatever the
@@ -1300,6 +1688,7 @@ namespace FilesTests
         [DataRow("error answer")]
         [DataRow("access refused")]
         [DataRow("site error answer")]
+        [DataRow("another conflict")]
         public async Task AContinuedDownloadStoppedAsItsVersionIsConfirmedKeepsWhatItHad(string stop)
         {
             string checkpoint = Path.Combine(folder, "download.checkpoint");
@@ -1342,6 +1731,11 @@ namespace FilesTests
                     else if (stop == "site error answer")
                     {
                         await connection.RespondAsync(503, "{\"error\":\"Service Unavailable\",\"http-code\":503}");
+                    }
+                    else if (stop == "another conflict")
+                    {
+                        // A 409 of another type says nothing of the version.
+                        await connection.RespondAsync(409, "{\"error\":\"Conflict\",\"http-code\":409,\"type\":\"processing-failure/conflict\"}");
                     }
                     else
                     {
@@ -1473,6 +1867,7 @@ namespace FilesTests
         [Timeout(60000)]
         [DataRow("version gone")]
         [DataRow("version gone, If-Match ignored")]
+        [DataRow("version gone, storage answers download_source_changed")]
         [DataRow("another object, same entity tag")]
         [DataRow("stage gone")]
         public async Task ADownloadWhoseCheckpointCannotBeContinuedStartsOver(string lost)
@@ -1481,12 +1876,19 @@ namespace FilesTests
             using (var server = new DownloadServer(Contents))
             {
                 var cancellation = new CancellationTokenSource();
+                string first = server.ETag;
                 server.Intercept = async (request, connection) =>
                 {
                     if (request.Range?.First == 3 * 16384 && !cancellation.IsCancellationRequested)
                     {
                         cancellation.Cancel();
                         await connection.HoldAsync();
+                        return true;
+                    }
+                    if (lost.EndsWith("download_source_changed", StringComparison.Ordinal) && request.IfMatch == first && server.ETag != first)
+                    {
+                        // As a Files Agent answers for a URL issued for the file before it changed.
+                        await connection.RespondAsync(409, "{\"error\":\"The file changed\",\"http-code\":409,\"type\":\"download_source_changed\"}");
                         return true;
                     }
                     return false;
@@ -1499,6 +1901,7 @@ namespace FilesTests
                     server.Change(changed);
                     server.IgnoresIfMatch = lost.EndsWith("ignored", StringComparison.Ordinal);
                 }
+                // Without a retry: giving up an earlier run's version is not one of them.
                 else if (lost == "another object, same entity tag")
                 {
                     server.Relocate(contents: changed, keepETag: true);
@@ -1638,6 +2041,90 @@ namespace FilesTests
             UnixFileMode mode = File.GetUnixFileMode(probe);
             File.Delete(probe);
             return mode;
+        }
+
+        // A caller's stream that tells when anything has been written to it.
+        private sealed class WatchedStream : MemoryStream
+        {
+            private readonly TaskCompletionSource<bool> written = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            // Completes once a write has put bytes in the stream.
+            public Task Written => written.Task;
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                base.Write(buffer, offset, count);
+                written.TrySetResult(true);
+            }
+
+            public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            {
+                await base.WriteAsync(buffer, offset, count, cancellationToken);
+                written.TrySetResult(true);
+            }
+        }
+
+        // A caller's stream that, as a pipe or a socket can, takes in every byte a write hands it before the write returns:
+        // its first write then waits until it is cancelled, and is cancelled with its bytes kept; later writes return.
+        private sealed class TakingStream : Stream
+        {
+            private readonly MemoryStream taken = new MemoryStream();
+            private readonly TaskCompletionSource<bool> firstWriteTaken = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            private int writes;
+
+            // Completes once the first write has handed its bytes over.
+            public Task FirstWriteTaken => firstWriteTaken.Task;
+
+            // Every byte handed to the stream, in order, whether or not its write returned.
+            public byte[] Taken
+            {
+                get
+                {
+                    lock (taken)
+                    {
+                        return taken.ToArray();
+                    }
+                }
+            }
+
+            public override bool CanRead => false;
+
+            public override bool CanSeek => false;
+
+            public override bool CanWrite => true;
+
+            public override long Length => throw new NotSupportedException();
+
+            public override long Position
+            {
+                get => throw new NotSupportedException();
+                set => throw new NotSupportedException();
+            }
+
+            public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            {
+                lock (taken)
+                {
+                    taken.Write(buffer, offset, count);
+                }
+                if (Interlocked.Increment(ref writes) == 1)
+                {
+                    firstWriteTaken.TrySetResult(true);
+                    await Task.Delay(Timeout.Infinite, cancellationToken);
+                }
+            }
+
+            public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+            public override void Flush()
+            {
+            }
+
+            public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+            public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+            public override void SetLength(long value) => throw new NotSupportedException();
         }
 
         private sealed class FailingStream : Stream

@@ -39,7 +39,7 @@ namespace FilesCom.Transfers
     //                       shows neither a body cut short nor a changed file, and fails the download, which is not
     //                       tried again; without a stated size, what arrives before the body ends is taken as the file.
     //                       A local file starts again from its first byte if that request fails partway; a stream only
-    //                       if nothing has been written to it. A file no larger than the first part, answered without a
+    //                       if no write to it has begun. A file no larger than the first part, answered without a
     //                       strong entity tag, is that one answer, whole, once all of it has arrived: cut short, it
     //                       decides nothing, and the part's next answer may bind a version. Without a Content-Length,
     //                       that answer too must have the size Files.com stated with the URL, which its Content-Range
@@ -51,6 +51,13 @@ namespace FilesCom.Transfers
     // (DownloadSourceChangedException). Requests that carry a condition or a range follow no redirect, so every answer
     // comes from the resource the version belongs to. An answer from the Files.com web app is refused before any byte
     // is written.
+    //
+    // A file that changes while it is downloaded (DownloadSourceChangedException: the above, a 412 to If-Unmodified-Since
+    // or a newer Last-Modified (DownloadDateGuard), a URL renewed for another storage resource, or storage's HTTP 409
+    // download_source_changed) is downloaded again from its first byte, once every request of the attempt has ended and
+    // what it fetched is discarded, with a new URL and size from Files.com, and no version or date of the attempt given
+    // up (FetchFromStartAsync). Each start over is one of the client's retries; a stream starts over only before any
+    // write to it has begun, since a write that fails or is cancelled may already have put some of its bytes there.
     //
     // Parts are admitted in order: each first takes buffer space from the limiter (a copy buffer for a file, the whole
     // part for a stream, which holds it until the parts before it are written), then admission to the download's scope
@@ -188,7 +195,7 @@ namespace FilesCom.Transfers
             {
                 coordinator.sink = stream;
                 await coordinator.NegotiateAsync();
-                long parts = await coordinator.FetchAsync(stream);
+                long parts = await coordinator.FetchFromStartAsync(stream);
                 // Cancelled at the last moment, even by a progress handler: the download does not succeed.
                 cancellationToken.ThrowIfCancellationRequested();
                 return new DownloadResult(progress.Snapshot(), parts);
@@ -340,7 +347,7 @@ namespace FilesCom.Transfers
                         await NegotiateAsync();
                     }
                     await SaveCheckpointAsync(force: true);
-                    long parts = await FetchAsync(sink);
+                    long parts = await FetchFromStartAsync(sink);
                     // Cancelled at the last moment, even by a progress handler reporting the end: the file is not put in
                     // place, and the file already there stays.
                     cancellationToken.ThrowIfCancellationRequested();
@@ -454,11 +461,11 @@ namespace FilesCom.Transfers
                 {
                     // Recorded by an earlier version of the SDK, for storage this one does not bind downloads to: nothing it
                     // answers can confirm the version, so the stage's bytes are not used.
-                    confirming = false;
                     log.Info("Starting a download over: its checkpoint records a version of storage that cannot confirm it");
+                    InvalidateCheckpoint($"The version of {path} the checkpoint records cannot be confirmed");
+                    confirming = false;
                     version = null;
                     FileSink.Restart();
-                    DiscardStaleCheckpoint();
                     progress.Restarted();
                     return;
                 }
@@ -466,12 +473,13 @@ namespace FilesCom.Transfers
             }
             catch (DownloadSourceChangedException e)
             {
-                confirming = false;
                 log.Info("Starting a download over: the version its checkpoint records is gone");
                 log.Debug($"The version of {path} the checkpoint records is gone", e);
+                // Until the checkpoint is gone, the stage is still the one it records, kept as it was if this fails.
+                InvalidateCheckpoint($"The version of {path} the checkpoint records is gone");
+                confirming = false;
                 version = null;
                 FileSink.Restart();
-                DiscardStaleCheckpoint();
                 progress.Restarted();
                 await NegotiateAsync();
                 return;
@@ -481,17 +489,38 @@ namespace FilesCom.Transfers
             progress.Resumed(FileSink.Written.Total);
         }
 
-        // Removes the checkpoint of a download that starts over in its stage: it records the version that is gone and the
-        // ranges of the stage that held it, which the new download now writes over. Until the download binds a new version
-        // and records it (SaveCheckpointAsync, which records nothing before then), a run that found that checkpoint after
-        // a crash would take the stage's bytes for the old version's. Removal that fails leaves it, as CheckpointFile.Delete
-        // says; the next checkpoint written replaces it.
+        // Removes the checkpoint of a download that starts over in a stage that does not hold what it records. Removal that
+        // fails leaves it, as CheckpointFile.Delete says; the next checkpoint written replaces it.
         private void DiscardStaleCheckpoint()
         {
             if (options.CheckpointPath != null)
             {
                 CheckpointFile.Delete(options.CheckpointPath);
             }
+        }
+
+        // Removes the checkpoint of a download about to give up the version it records, before anything of the stage, which
+        // the checkpoint says holds ranges of that version, is emptied or written over (CheckpointFile.DeleteDurably).
+        // This follows the existing platform directory-flush policy; Windows leaves durability to the system. A new
+        // checkpoint is written once the download binds a new version, at its first part
+        // (SaveCheckpointAsync, which records nothing before then and is then due at once). A removal that fails throws,
+        // saying why (why) the download was to start over, before the download changes anything: what the stage holds, and
+        // the version, are as they were.
+        private void InvalidateCheckpoint(string why)
+        {
+            if (options.CheckpointPath == null)
+            {
+                return;
+            }
+            try
+            {
+                CheckpointFile.DeleteDurably(options.CheckpointPath);
+            }
+            catch (Exception e) when (e is IOException || e is UnauthorizedAccessException)
+            {
+                throw new IOException($"{why}, but the download was stopped instead of starting over: its checkpoint, which records that version, could not be removed. {e.Message}", e);
+            }
+            lastCheckpoint = default;
         }
 
         // Asks Files.com for the file's download URL, and the size it states for the file, as any download does. A download
@@ -619,6 +648,85 @@ namespace FilesCom.Transfers
             }
         }
 
+        // Fetches the file into target, as FetchAsync does, and fetches it again from its first byte each time it changes
+        // meanwhile (DownloadSourceChangedException), while target can give up what it holds of it, which a local file
+        // always can and a stream only before any write to it has begun (StreamDownloadSink.CanRestart), and while the
+        // client's retries (MaxNetworkRetries) allow: each start over is one of them, however much had been fetched, so a
+        // file that keeps changing fails with its change once they are used, and with no retries at its first change. The
+        // retries of each request are counted on their own, as before. A version an earlier run recorded is given up in
+        // ContinueAsync, without using one. Returns the number of parts the file was fetched in.
+        private async Task<long> FetchFromStartAsync(DownloadSink target)
+        {
+            RetryPolicy retries = RetryPolicy.ForStorage(context.Network);
+            for (int restarts = 0; ; restarts++)
+            {
+                try
+                {
+                    return await FetchAsync(target);
+                }
+                catch (DownloadSourceChangedException change) when (restarts < retries.MaxRetries && target.CanRestart)
+                {
+                    await StartOverAfterChangeAsync(target, change, restarts + 1, retries);
+                }
+            }
+        }
+
+        // The file changed while it was being downloaded, and every request of the attempt has ended, as it has once
+        // FetchAsync ends, a renewal of its URL included (SettleRenewalAsync). What the attempt fetched is discarded, and
+        // the download starts again as a new one would: first the checkpoint, which records the version that changed and
+        // what the stage held of it, is removed durably (InvalidateCheckpoint), and only then is the stage emptied; a
+        // removal that fails stops the download there, with the stage and version as they were. After the client's retry
+        // wait, Files.com is asked for the file again, for its size and a new URL (NegotiateAsync); no version, date, part
+        // size or progress of the attempt given up is kept. Cancellation, and the operation's time limit, come first: once
+        // requested, the download starts nothing more.
+        private async Task StartOverAfterChangeAsync(DownloadSink target, DownloadSourceChangedException change, int restart, RetryPolicy retries)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            log.Info($"Starting a download over: the file changed while it was being downloaded (retry {restart} of {retries.MaxRetries})");
+            log.Debug($"The file {path} changed while it was being downloaded", change);
+            await SettleRenewalAsync();
+            InvalidateCheckpoint($"The file {path} changed while it was being downloaded");
+            version = null;
+            dateGuard.Forget();
+            target.Restart();
+            wholeFirstPart = null;
+            wholeWritten = 0;
+            partsFetched = 0;
+            partSize = null;
+            failure = null;
+            stop.Dispose();
+            stop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            progress.Restarted();
+            progress.SizeForgotten();
+            progress.Report();
+            await Task.Delay(retries.DelayAfterFailure(change, restart), cancellationToken);
+            await NegotiateAsync();
+        }
+
+        // Waits for a renewal of the URL that a stopped attempt's part started, which that attempt's stop ends, so that its
+        // answer cannot replace a URL asked for afterwards. How it ended is the stopped attempt's, not the download's.
+        private async Task SettleRenewalAsync()
+        {
+            Task pending;
+            lock (renewLock)
+            {
+                pending = renewal;
+                renewal = null;
+            }
+            if (pending == null)
+            {
+                return;
+            }
+            try
+            {
+                await pending;
+            }
+            catch (Exception e)
+            {
+                log.Debug($"A renewal of the download URL of {path} for an attempt that was given up ended", e);
+            }
+        }
+
         // Fetches the file into target: in parts when it is bound to a version, or when its storage can bind it, from its
         // first answer (Establish); whole otherwise. Returns the number of parts it was fetched in.
         private async Task<long> FetchAsync(DownloadSink target)
@@ -641,7 +749,7 @@ namespace FilesCom.Transfers
             {
                 if (!target.CanRestart)
                 {
-                    throw new InvalidResponseException($"The storage server answered part of {path} with the whole file after other parts had been written to the stream, so the download was stopped.");
+                    throw new InvalidResponseException($"The storage server answered part of {path} with the whole file after writing other parts to the stream had begun, so the download was stopped.");
                 }
                 target.Restart();
                 if (version != null)
@@ -728,9 +836,10 @@ namespace FilesCom.Transfers
             if (scope == null)
             {
                 scope = ScopeFor(url);
-                TransferScope observed = scope;
-                progress.Observe(() => observed.Snapshot(Limiter));
             }
+            // Again for a download that started over after its file came in one request, which reports no concurrency.
+            TransferScope observed = scope;
+            progress.Observe(() => observed.Snapshot(Limiter));
             // One for the dispatch itself, counted out once it has dispatched every part.
             running = 1;
             partsEnded = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -1230,7 +1339,7 @@ namespace FilesCom.Transfers
 
         // Fetches the whole file in one request: bound, as the version, after the server ignored Range; otherwise as the
         // storage server has it now. A local file starts again from its first byte after a failure partway, within the
-        // client's retries; a stream is retried only while nothing has been written to it. A refusal saying the URL has
+        // client's retries; a stream is retried only before any write to it has begun. A refusal saying the URL has
         // expired renews it and fetches again at once, as a part's does.
         private async Task FetchWholeAsync(bool bound)
         {
@@ -1438,7 +1547,13 @@ namespace FilesCom.Transfers
             }
             if (!response.IsSuccessStatusCode)
             {
-                throw await FilesApiService.StorageFailureAsync(response, watch);
+                // The body is read, to its bound, and parsed once, into the failure, whose type then tells.
+                Exception failed = await FilesApiService.StorageFailureAsync(response, watch);
+                if (SaysSourceChanged(failed))
+                {
+                    throw new DownloadSourceChangedException(path, $"the storage server answered that the file changed since its download URL was issued (HTTP {status} {SourceChangedType})", failed);
+                }
+                throw failed;
             }
             if (version != null)
             {
@@ -1452,6 +1567,17 @@ namespace FilesCom.Transfers
                     throw new DownloadSourceChangedException(path, "the storage server answered with another version's entity tag");
                 }
             }
+        }
+
+        // The error type storage, such as a Files Agent, answers with HTTP 409 when the file is no longer the one its
+        // download URL was issued for: no range of that URL can be fetched any more, so the download needs a new one.
+        private const string SourceChangedType = "download_source_changed";
+
+        // Whether failed, a storage error answer as FilesApiService read it, is HTTP 409 with a whole JSON error whose
+        // top-level type is exactly SourceChangedType. Any other 409, or that text anywhere else, is not.
+        private static bool SaysSourceChanged(Exception failed)
+        {
+            return failed is ApiException answered && answered.httpStatus == 409 && string.Equals(answered.type, SourceChangedType, StringComparison.Ordinal);
         }
 
         private string Overrun(ByteRange part)
