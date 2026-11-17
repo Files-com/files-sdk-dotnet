@@ -1142,22 +1142,6 @@ namespace FilesCom
         { }
     }
     /// <summary>
-    /// An error response from Files.com whose error type is <c>bad-request/unsupported-currency</c> (Unsupported Currency, HTTP 422).
-    /// </summary>
-    public partial class UnsupportedCurrencyException : BadRequestException
-    {
-        /// <summary>
-        /// Creates the exception for an error response of this type.
-        /// </summary>
-        /// <param name="message">The response's error text, or null.</param>
-        /// <param name="httpStatus">The response's HTTP status.</param>
-        /// <param name="responseError">The response's error, as it came.</param>
-        /// <param name="httpHeaders">The response's headers.</param>
-        public UnsupportedCurrencyException(string message = null, int httpStatus = 0, ResponseError responseError = null, HttpHeaders httpHeaders = null)
-            : base(message, httpStatus, responseError, httpHeaders)
-        { }
-    }
-    /// <summary>
     /// An error response from Files.com whose error type is <c>bad-request/unsupported-http-response-format</c> (Unsupported Http Response Format, HTTP 422).
     /// </summary>
     public partial class UnsupportedHttpResponseFormatException : BadRequestException
@@ -3974,7 +3958,6 @@ namespace FilesCom
             { "bad-request/request-params-required", (message, httpStatus, responseError, httpHeaders) => new RequestParamsRequiredException(message, httpStatus, responseError, httpHeaders) },
             { "bad-request/search-all-on-child-path", (message, httpStatus, responseError, httpHeaders) => new SearchAllOnChildPathException(message, httpStatus, responseError, httpHeaders) },
             { "bad-request/unrecognized-sort-index", (message, httpStatus, responseError, httpHeaders) => new UnrecognizedSortIndexException(message, httpStatus, responseError, httpHeaders) },
-            { "bad-request/unsupported-currency", (message, httpStatus, responseError, httpHeaders) => new UnsupportedCurrencyException(message, httpStatus, responseError, httpHeaders) },
             { "bad-request/unsupported-http-response-format", (message, httpStatus, responseError, httpHeaders) => new UnsupportedHttpResponseFormatException(message, httpStatus, responseError, httpHeaders) },
             { "bad-request/unsupported-media-type", (message, httpStatus, responseError, httpHeaders) => new UnsupportedMediaTypeException(message, httpStatus, responseError, httpHeaders) },
             { "bad-request/user-id-invalid", (message, httpStatus, responseError, httpHeaders) => new UserIdInvalidException(message, httpStatus, responseError, httpHeaders) },
