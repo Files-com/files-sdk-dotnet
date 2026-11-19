@@ -164,7 +164,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Options to display for radio and dropdown
+        /// Options to display for radio, dropdown, and multi_select
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("options_for_select")]
@@ -175,7 +175,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Default option for radio and dropdown
+        /// Default option for radio, dropdown, and multi_select
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("default_option")]
