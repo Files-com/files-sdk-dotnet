@@ -1624,7 +1624,8 @@
         "message": "Message",
         "sender": "Sender",
         "sender_name": "SenderName",
-        "status": "Status"
+        "status": "Status",
+        "workspace_id": "WorkspaceId"
       },
       "operations": {
         "GetEmailIncomingMessages": {

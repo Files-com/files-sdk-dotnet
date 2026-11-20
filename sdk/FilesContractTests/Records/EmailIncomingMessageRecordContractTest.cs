@@ -29,7 +29,7 @@ namespace FilesContractTests.Records
         // by a reset fixture for a resource without one.
         private static async Task<JsonObject[]> RecordsAsync(int count)
         {
-            JsonObject record = new JsonObject { ["inbox_id"] = 7, ["sender"] = "contract-sender", ["sender_name"] = "contract-sender_name", ["status"] = "success", ["body"] = "contract-body", ["message"] = "contract-message", ["created_at"] = "2030-01-02T03:04:05Z", ["inbox_title"] = "contract-inbox_title" };
+            JsonObject record = new JsonObject { ["inbox_id"] = 7, ["workspace_id"] = 7, ["sender"] = "contract-sender", ["sender_name"] = "contract-sender_name", ["status"] = "success", ["body"] = "contract-body", ["message"] = "contract-message", ["created_at"] = "2030-01-02T03:04:05Z", ["inbox_title"] = "contract-inbox_title" };
             await Simulator.ResetWithAsync(ListPath.TrimStart('/'), Enumerable.Repeat(record, count).ToArray());
             return Conform(await Simulator.ListRawAsync(ListPath, Scope()));
         }
@@ -39,7 +39,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "EmailIncomingMessage", ("id", "int64"), ("inbox_id", "int64"), ("sender", "string"), ("sender_name", "string"), ("status", "string"), ("body", "string"), ("message", "string"), ("created_at", "date-time"), ("inbox_title", "string"));
+                Simulator.Conforms(record, "EmailIncomingMessage", ("id", "int64"), ("inbox_id", "int64"), ("workspace_id", "int64"), ("sender", "string"), ("sender_name", "string"), ("status", "string"), ("body", "string"), ("message", "string"), ("created_at", "date-time"), ("inbox_title", "string"));
             }
             return records;
         }
@@ -50,6 +50,7 @@ namespace FilesContractTests.Records
             Assert.IsNotNull(model, $"{what}: the SDK returned no EmailIncomingMessage");
             Simulator.Same(record, "id", model.Id, what);
             Simulator.Same(record, "inbox_id", model.InboxId, what);
+            Simulator.Same(record, "workspace_id", model.WorkspaceId, what);
             Simulator.Same(record, "sender", model.Sender, what);
             Simulator.Same(record, "sender_name", model.SenderName, what);
             Simulator.Same(record, "status", model.Status, what);

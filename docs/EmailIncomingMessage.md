@@ -6,6 +6,7 @@
 {
   "id": 1,
   "inbox_id": 1,
+  "workspace_id": 1,
   "sender": "example",
   "sender_name": "example",
   "status": "success",
@@ -18,10 +19,11 @@
 
 * `id` / `Id`  (Nullable<Int64>): Id of the Email Incoming Message
 * `inbox_id` / `InboxId`  (Nullable<Int64>): Id of the Inbox associated with this message
+* `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace that owns the Inbox. The Default Workspace has ID 0.
 * `sender` / `Sender`  (string): Sender of the email
 * `sender_name` / `SenderName`  (string): Sender name
 * `status` / `Status`  (string): Status of the message
-* `body` / `Body`  (string): Body of the email
+* `body` / `Body`  (string): Body of the email. Only available to Site Administrators.
 * `message` / `Message`  (string): Message describing the failure
 * `created_at` / `CreatedAt`  (Nullable<DateTime>): Message creation date/time
 * `inbox_title` / `InboxTitle`  (string): Title of the Inbox associated with this message
@@ -53,8 +55,8 @@ FilesList<EmailIncomingMessage> client.EmailIncomingMessages.List(
 
 * `cursor` (string): Used for pagination.  When a list request has more records available, cursors are provided in the response headers `X-Files-Cursor-Next` and `X-Files-Cursor-Prev`.  Send one of those cursor value here to resume an existing list from the next available record.  Note: many of our SDKs have iterator methods that will automatically handle cursor-based pagination.
 * `per_page` (Nullable<Int64>): Number of records to show per page.  (Max: 10000, 1,000 or less is recommended).
-* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `sender`, `status` or `inbox_id`.
-* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `inbox_id`, `sender` or `status`. Valid field combinations are `[ inbox_id, created_at ]`, `[ sender, created_at ]`, `[ status, created_at ]`, `[ inbox_id, status ]`, `[ status, sender ]`, `[ inbox_id, status, created_at ]`, `[ status, sender, created_at ]`, `[ inbox_id, status, sender ]` or `[ inbox_id, status, sender, created_at ]`.
+* `sort_by` (object): If set, sort records by the specified field in either `asc` or `desc` direction. Valid fields are `created_at`, `workspace_id`, `sender`, `status` or `inbox_id`.
+* `filter` (object): If set, return records where the specified field is equal to the supplied value. Valid fields are `created_at`, `inbox_id`, `sender`, `status` or `workspace_id`. Valid field combinations are `[ inbox_id, created_at ]`, `[ sender, created_at ]`, `[ status, created_at ]`, `[ workspace_id, created_at ]`, `[ inbox_id, status ]`, `[ workspace_id, inbox_id ]`, `[ status, sender ]`, `[ workspace_id, sender ]`, `[ workspace_id, status ]`, `[ inbox_id, status, created_at ]`, `[ workspace_id, inbox_id, created_at ]`, `[ status, sender, created_at ]`, `[ workspace_id, sender, created_at ]`, `[ workspace_id, status, created_at ]`, `[ inbox_id, status, sender ]`, `[ workspace_id, inbox_id, status ]`, `[ workspace_id, status, sender ]`, `[ inbox_id, status, sender, created_at ]`, `[ workspace_id, inbox_id, status, created_at ]`, `[ workspace_id, status, sender, created_at ]`, `[ workspace_id, inbox_id, status, sender ]` or `[ workspace_id, inbox_id, status, sender, created_at ]`.
 * `filter_gt` (object): If set, return records where the specified field is greater than the supplied value. Valid fields are `created_at`.
 * `filter_gteq` (object): If set, return records where the specified field is greater than or equal the supplied value. Valid fields are `created_at`.
 * `filter_prefix` (object): If set, return records where the specified field is prefixed by the supplied value. Valid fields are `sender`.
