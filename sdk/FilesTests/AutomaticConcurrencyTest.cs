@@ -674,7 +674,7 @@ namespace FilesTests
         // AttemptAdmission, as an upload's do, each answered 20 ms after it starts, two kept in flight once the second window
         // at 1, its baseline of two answers, has raised the target to 2. While one of the two attempts started as it rose to 2 has not ended, the
         // windows the other slot's answers close judge nothing; once it has ended, answered or cancelled, the first window
-        // that opens after that does.
+        // measured after that does.
         [TestMethod]
         [Timeout(10000)]
         [DataRow(true, DisplayName = "Answered")]
@@ -695,7 +695,8 @@ namespace FilesTests
                 }
                 void Answer(AttemptAdmission.Attempt attempt)
                 {
-                    decisions.AddRange(attempt.Complete(new AttemptSample(accepted: true, throttled: false, transient: false, retryAfter: null, bytes: 1, duration: TimeSpan.FromMilliseconds(1))).OfType<UploadDecisionTrace>());
+                    decisions.AddRange(attempt.Complete(new AttemptSample(accepted: true, throttled: false, transient: false, retryAfter: null, bytes: 1, duration: TimeSpan.FromMilliseconds(1)))
+                        .OfType<UploadDecisionTrace>().Where(d => d.Decision != ConcurrencyDecision.WindowNotMeasured));
                 }
                 // Answers the attempt in flight longest, after 20 ms, and starts another in its place unless that judged the
                 // raise.
@@ -738,7 +739,7 @@ namespace FilesTests
                     await Turn();
                 }
 
-                Assert.IsTrue(decisions.Count > 1 && decisions[1].PreviousTarget == 2, "The first window after it ended judged the raise: " + string.Join(", ", decisions.Select(d => $"{d.Decision} {d.PreviousTarget}->{d.Target}")));
+                Assert.IsTrue(decisions.Count > 1 && decisions[1].PreviousTarget == 2, "The first window measured after it ended judged the raise: " + string.Join(", ", decisions.Select(d => $"{d.Decision} {d.PreviousTarget}->{d.Target}")));
                 while (inFlight.Count > 0)
                 {
                     inFlight.Dequeue().Dispose();
