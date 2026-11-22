@@ -270,7 +270,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Only returned when generating keys. Private key generated for the user.
+        /// Available for 60 minutes after key creation, only to the API key or login session that requested generation.
         /// </summary>
         [JsonPropertyName("generated_private_key")]
         public string GeneratedPrivateKey

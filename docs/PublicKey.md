@@ -31,7 +31,7 @@
 * `fingerprint_sha256` / `FingerprintSha256`  (string): Public key fingerprint (SHA256)
 * `status` / `Status`  (string): Only returned when generating keys. Can be invalid, not_generated, generating, complete
 * `last_login_at` / `LastLoginAt`  (Nullable<DateTime>): Key's most recent login time via SFTP
-* `generated_private_key` / `GeneratedPrivateKey`  (string): Only returned when generating keys. Private key generated for the user.
+* `generated_private_key` / `GeneratedPrivateKey`  (string): Available for 60 minutes after key creation, only to the API key or login session that requested generation.
 * `generated_public_key` / `GeneratedPublicKey`  (string): Only returned when generating keys. Public key generated for the user.
 * `username` / `Username`  (string): Username of the user this public key is associated with
 * `user_id` / `UserId`  (Nullable<Int64>): User ID this public key is associated with
