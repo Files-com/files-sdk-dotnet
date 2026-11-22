@@ -2990,7 +2990,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Include this email in welcome emails if enabled
+        /// Copy welcome emails to this address when the email contains neither a create-password link nor a password.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("welcome_email_cc")]
@@ -3164,7 +3164,7 @@ namespace FilesCom.Models
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
         ///   always_mkdir_parents - boolean - Create parent directories if they do not exist during uploads?  This is primarily used to work around broken upload clients that assume servers will perform this step.
-        ///   welcome_email_cc - string - Include this email in welcome emails if enabled
+        ///   welcome_email_cc - string - Copy welcome emails to this address when the email contains neither a create-password link nor a password.
         ///   welcome_email_subject - string - Include this email subject in welcome emails if enabled
         ///   welcome_custom_text - string - Custom text send in user welcome email
         ///   language - string - Site default language

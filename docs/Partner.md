@@ -49,7 +49,7 @@
 * `allow_credential_changes` / `AllowCredentialChanges`  (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` / `AllowProvidingGpgKeys`  (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` / `AllowUserCreation`  (bool): Allow Partner Admins to create users.
-* `cc_emails_to_responsible_party` / `CcEmailsToResponsibleParty`  (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
+* `cc_emails_to_responsible_party` / `CcEmailsToResponsibleParty`  (bool): When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
 * `connections` / `Connections`  (PartnerConnection[]): Approved Connected Sites relationships for this Partner, in both directions. Empty when this Partner has no connections. Read-only.
 * `id` / `Id`  (Nullable<Int64>): The unique ID of the Partner.
 * `ai_assistant_personality_id` / `AiAssistantPersonalityId`  (Nullable<Int64>): AI Assistant Personality ID assigned to this Partner, if any. Users in the Partner inherit it unless a direct per-user assignment overrides it.
@@ -156,7 +156,7 @@ Task<Partner> client.Partners.CreateAsync(
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
-* `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
+* `cc_emails_to_responsible_party` (bool): When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
 * `notes` (string): Notes about this Partner.
 * `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
@@ -200,7 +200,7 @@ Task<Partner> client.Partners.UpdateAsync(
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
-* `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
+* `cc_emails_to_responsible_party` (bool): When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
 * `notes` (string): Notes about this Partner.
 * `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
@@ -281,7 +281,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Partne
 * `allow_credential_changes` (bool): Allow Partner Admins to change or reset credentials for users belonging to this Partner.
 * `allow_providing_gpg_keys` (bool): Allow Partner Admins to provide GPG keys.
 * `allow_user_creation` (bool): Allow Partner Admins to create users.
-* `cc_emails_to_responsible_party` (bool): When `true`, emails sent to Partner users are copied to the responsible User or Group.
+* `cc_emails_to_responsible_party` (bool): When `true`, the responsible User or Group receives eligible email copies for Partner Users without their own Responsible Party. Welcome emails trigger a separate onboarding notice. Password recovery links, email verification codes, and signed export links go only to the primary email address.
 * `notes` (string): Notes about this Partner.
 * `partner_channel_template_id` (Nullable<Int64>): ID of the Partner Channel Template assigned to this Partner.
 * `responsible_group_id` (Nullable<Int64>): ID of the Group responsible for this Partner.
