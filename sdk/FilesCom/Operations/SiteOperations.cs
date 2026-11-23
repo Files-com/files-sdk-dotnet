@@ -90,6 +90,7 @@ namespace FilesCom.Operations
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
         ///   bundle_expiration - int64 - Site-wide Bundle expiration in days
         ///   bundle_max_uses - int64 - Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
+        ///   dangerously_use_custom_domain_for_transfer_urls - boolean - Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can serve file content from the same hostname as the signed-in web app. Disabled by default.
         ///   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.

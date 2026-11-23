@@ -1326,6 +1326,98 @@
         }
       }
     },
+    "Certificate": {
+      "type": "Certificate",
+      "operations_property": "Certificates",
+      "properties": {
+        "brick_managed": "BrickManaged",
+        "certificate": "CertificateType",
+        "certificate_city_or_locale": "CertificateCityOrLocale",
+        "certificate_company_name": "CertificateCompanyName",
+        "certificate_country": "CertificateCountry",
+        "certificate_domain": "CertificateDomain",
+        "certificate_email_address": "CertificateEmailAddress",
+        "certificate_extra_domains": "CertificateExtraDomains",
+        "certificate_state_or_province": "CertificateStateOrProvince",
+        "created_at": "CreatedAt",
+        "csr_ou1": "CsrOu1",
+        "csr_ou2": "CsrOu2",
+        "csr_ou3": "CsrOu3",
+        "custom_domain_id": "CustomDomainId",
+        "display_status": "DisplayStatus",
+        "domains": "Domains",
+        "expires_at": "ExpiresAt",
+        "id": "Id",
+        "intermediates": "Intermediates",
+        "ip_addresses": "IpAddresses",
+        "issuer": "Issuer",
+        "key_type": "KeyType",
+        "name": "Name",
+        "password": "Password",
+        "private_key": "PrivateKey",
+        "request": "Request",
+        "status": "Status",
+        "subject": "Subject"
+      },
+      "operations": {
+        "DeleteCertificatesId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /certificates/{id}"
+        },
+        "GetCertificates": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /certificates"
+        },
+        "GetCertificatesId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /certificates/{id}"
+        },
+        "PatchCertificatesId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /certificates/{id}"
+        },
+        "PostCertificates": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /certificates"
+        },
+        "PostCertificatesIdActivate": {
+          "method": "Activate",
+          "aliases": [
+
+          ],
+          "route": "POST /certificates/{id}/activate"
+        },
+        "PostCertificatesIdDeactivate": {
+          "method": "Deactivate",
+          "aliases": [
+
+          ],
+          "route": "POST /certificates/{id}/deactivate"
+        },
+        "PostCertificatesIdReplaceWithFilesCertificate": {
+          "method": "ReplaceWithFiles",
+          "aliases": [
+
+          ],
+          "route": "POST /certificates/{id}/replace_with_files_certificate"
+        }
+      }
+    },
     "ChatMessage": {
       "type": "ChatMessage",
       "properties": {
@@ -5044,6 +5136,7 @@
         "created_at": "CreatedAt",
         "currency": "Currency",
         "custom_namespace": "CustomNamespace",
+        "dangerously_use_custom_domain_for_transfer_urls": "DangerouslyUseCustomDomainForTransferUrls",
         "dav_enabled": "DavEnabled",
         "dav_user_root_enabled": "DavUserRootEnabled",
         "days_to_retain_backups": "DaysToRetainBackups",

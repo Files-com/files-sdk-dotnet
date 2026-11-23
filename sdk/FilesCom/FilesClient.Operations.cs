@@ -120,6 +120,11 @@ namespace FilesCom
         public BundleRegistrationOperations BundleRegistrations => new BundleRegistrationOperations(this);
 
         /// <summary>
+        /// Certificate operations that run with this client.
+        /// </summary>
+        public CertificateOperations Certificates => new CertificateOperations(this);
+
+        /// <summary>
         /// ChatSession operations that run with this client.
         /// </summary>
         public ChatSessionOperations ChatSessions => new ChatSessionOperations(this);

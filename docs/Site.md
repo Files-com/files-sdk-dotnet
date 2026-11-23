@@ -103,6 +103,7 @@
   "file_activity_events_enabled": true,
   "disable_password_reset": true,
   "domain": "my-custom-domain.com",
+  "dangerously_use_custom_domain_for_transfer_urls": true,
   "domain_hsts_header": true,
   "domain_letsencrypt_chain": "example",
   "email": "john.doe@files.com",
@@ -447,6 +448,7 @@
 * `file_activity_events_enabled` / `FileActivityEventsEnabled`  (bool): If true, file operations produce file_action.activity.v1 EventChannel events in all workspaces. Defaults to false; subscription filters and workspace access still control delivery.
 * `disable_password_reset` / `DisablePasswordReset`  (bool): Is password reset disabled?
 * `domain` / `Domain`  (string): Custom domain
+* `dangerously_use_custom_domain_for_transfer_urls` / `DangerouslyUseCustomDomainForTransferUrls`  (bool): Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can serve file content from the same hostname as the signed-in web app. Disabled by default.
 * `domain_hsts_header` / `DomainHstsHeader`  (bool): Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
 * `domain_letsencrypt_chain` / `DomainLetsencryptChain`  (string): Letsencrypt chain to use when registering SSL Certificate for domain. No longer used as of 2026.
 * `email` / `Email`  (string): Main email for this site
@@ -672,6 +674,7 @@ Task<Site> client.Sites.UpdateAsync(
 * `allow_bundle_names` (bool): Are manual Bundle names allowed?
 * `bundle_expiration` (Nullable<Int64>): Site-wide Bundle expiration in days
 * `bundle_max_uses` (Nullable<Int64>): Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
+* `dangerously_use_custom_domain_for_transfer_urls` (bool): Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can serve file content from the same hostname as the signed-in web app. Disabled by default.
 * `welcome_email_enabled` (bool): Will the welcome email be sent to new users?
 * `ask_about_overwrites` (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `show_request_access_link` (bool): Show request access link for users without access?  Currently unused.

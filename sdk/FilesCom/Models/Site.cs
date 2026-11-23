@@ -352,6 +352,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("domain", null);
             }
+            if (!this.attributes.ContainsKey("dangerously_use_custom_domain_for_transfer_urls"))
+            {
+                this.attributes.Add("dangerously_use_custom_domain_for_transfer_urls", false);
+            }
             if (!this.attributes.ContainsKey("domain_hsts_header"))
             {
                 this.attributes.Add("domain_hsts_header", false);
@@ -1772,6 +1776,18 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can serve file content from the same hostname as the signed-in web app. Disabled by default.
+        /// </summary>
+        [JsonInclude]
+        [JsonConverter(typeof(BooleanJsonConverter))]
+        [JsonPropertyName("dangerously_use_custom_domain_for_transfer_urls")]
+        public bool DangerouslyUseCustomDomainForTransferUrls
+        {
+            get { return attributes["dangerously_use_custom_domain_for_transfer_urls"] == null ? false : (bool)attributes["dangerously_use_custom_domain_for_transfer_urls"]; }
+            private set { attributes["dangerously_use_custom_domain_for_transfer_urls"] = value; }
+        }
+
+        /// <summary>
         /// Send HSTS (HTTP Strict Transport Security) header when visitors access the site via a custom domain?
         /// </summary>
         [JsonInclude]
@@ -3176,6 +3192,7 @@ namespace FilesCom.Models
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
         ///   bundle_expiration - int64 - Site-wide Bundle expiration in days
         ///   bundle_max_uses - int64 - Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
+        ///   dangerously_use_custom_domain_for_transfer_urls - boolean - Allow eligible Remote Server Mount and Files.com Agent transfer URLs to use the Site's custom domain. Enabling can serve file content from the same hostname as the signed-in web app. Disabled by default.
         ///   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
@@ -3412,6 +3429,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("bundle_max_uses", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_max_uses is null, which cannot be sent" : "Bad parameter: bundle_max_uses must be of type Nullable<Int64>", "bundle_max_uses");
+            }
+            if (parameters.TryGetValue("dangerously_use_custom_domain_for_transfer_urls", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: dangerously_use_custom_domain_for_transfer_urls is null, which cannot be sent" : "Bad parameter: dangerously_use_custom_domain_for_transfer_urls must be of type bool", "dangerously_use_custom_domain_for_transfer_urls");
             }
             if (parameters.TryGetValue("welcome_email_enabled", out parameterValue) && !(parameterValue is bool))
             {
