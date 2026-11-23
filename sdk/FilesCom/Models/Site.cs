@@ -136,6 +136,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("bundle_expiration", null);
             }
+            if (!this.attributes.ContainsKey("bundle_max_uses"))
+            {
+                this.attributes.Add("bundle_max_uses", null);
+            }
             if (!this.attributes.ContainsKey("bundle_not_found_message"))
             {
                 this.attributes.Add("bundle_not_found_message", null);
@@ -1139,6 +1143,17 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["bundle_expiration"]; }
             private set { attributes["bundle_expiration"] = value; }
+        }
+
+        /// <summary>
+        /// Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("bundle_max_uses")]
+        public Nullable<Int64> BundleMaxUses
+        {
+            get { return (Nullable<Int64>)attributes["bundle_max_uses"]; }
+            private set { attributes["bundle_max_uses"] = value; }
         }
 
         /// <summary>
@@ -3160,6 +3175,7 @@ namespace FilesCom.Models
         ///   reply_to_email - string - Reply-to email for this site
         ///   allow_bundle_names - boolean - Are manual Bundle names allowed?
         ///   bundle_expiration - int64 - Site-wide Bundle expiration in days
+        ///   bundle_max_uses - int64 - Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
         ///   welcome_email_enabled - boolean - Will the welcome email be sent to new users?
         ///   ask_about_overwrites - boolean - If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
         ///   show_request_access_link - boolean - Show request access link for users without access?  Currently unused.
@@ -3392,6 +3408,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("bundle_expiration", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_expiration is null, which cannot be sent" : "Bad parameter: bundle_expiration must be of type Nullable<Int64>", "bundle_expiration");
+            }
+            if (parameters.TryGetValue("bundle_max_uses", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: bundle_max_uses is null, which cannot be sent" : "Bad parameter: bundle_max_uses must be of type Nullable<Int64>", "bundle_max_uses");
             }
             if (parameters.TryGetValue("welcome_email_enabled", out parameterValue) && !(parameterValue is bool))
             {

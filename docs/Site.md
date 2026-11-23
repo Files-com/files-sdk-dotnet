@@ -40,6 +40,7 @@
   "ask_about_overwrites": true,
   "bundle_activity_notifications": "never",
   "bundle_expiration": 1,
+  "bundle_max_uses": 1,
   "bundle_not_found_message": "example",
   "bundle_password_required": true,
   "bundles_default_owned_by_primary_group": true,
@@ -392,6 +393,7 @@
 * `ask_about_overwrites` / `AskAboutOverwrites`  (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `bundle_activity_notifications` / `BundleActivityNotifications`  (string): Do Bundle owners receive activity notifications?
 * `bundle_expiration` / `BundleExpiration`  (Nullable<Int64>): Site-wide Bundle expiration in days
+* `bundle_max_uses` / `BundleMaxUses`  (Nullable<Int64>): Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
 * `bundle_not_found_message` / `BundleNotFoundMessage`  (string): Custom error message to show when bundle is not found.
 * `bundle_password_required` / `BundlePasswordRequired`  (bool): Do Bundles require password protection?
 * `bundles_default_owned_by_primary_group` / `BundlesDefaultOwnedByPrimaryGroup`  (bool): If true, new Share Links created by a user with a primary group will default to that group as owner.
@@ -669,6 +671,7 @@ Task<Site> client.Sites.UpdateAsync(
 * `reply_to_email` (string): Reply-to email for this site
 * `allow_bundle_names` (bool): Are manual Bundle names allowed?
 * `bundle_expiration` (Nullable<Int64>): Site-wide Bundle expiration in days
+* `bundle_max_uses` (Nullable<Int64>): Maximum visitors per Share Link on this Site. Applies immediately to existing Share Links and across all Workspaces. Null disables the Site-wide cap.
 * `welcome_email_enabled` (bool): Will the welcome email be sent to new users?
 * `ask_about_overwrites` (bool): If false, rename conflicting files instead of asking for overwrite confirmation.  Only applies to web interface.
 * `show_request_access_link` (bool): Show request access link for users without access?  Currently unused.

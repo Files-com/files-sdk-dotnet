@@ -63,6 +63,7 @@
   "dont_separate_submissions_by_folder": true,
   "effective_expires_at": "2000-01-01T01:00:00Z",
   "max_uses": 1,
+  "effective_max_uses": 1,
   "internal_name": "Quarterly reports",
   "note": "The internal note on the bundle.",
   "path_template": "{{name}}_{{ip}}",
@@ -132,7 +133,8 @@
 * `deleted_at` / `DeletedAt`  (Nullable<DateTime>): Bundle deleted at date/time
 * `dont_separate_submissions_by_folder` / `DontSeparateSubmissionsByFolder`  (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `effective_expires_at` / `EffectiveExpiresAt`  (Nullable<DateTime>): Read-only expiration date/time, using the explicit expiration or the site-wide setting when applicable. Null when the Share Link does not expire.
-* `max_uses` / `MaxUses`  (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `max_uses` / `MaxUses`  (Nullable<Int64>): Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot exceed the Site-wide cap.
+* `effective_max_uses` / `EffectiveMaxUses`  (Nullable<Int64>): Read-only visitor limit actually enforced for this Share Link. Uses the lower of the link limit and the Site-wide cap when both are set. Null means unlimited.
 * `internal_name` / `InternalName`  (string): Internal name for identifying this Share Link.
 * `note` / `Note`  (string): Bundle internal note
 * `path_template` / `PathTemplate`  (string): Template for creating submission subfolders. Can use the uploader's name, email address, ip, company, `strftime` directives, and any custom form data.
@@ -261,7 +263,7 @@ Task<Bundle> client.Bundles.CreateAsync(
 * `dont_separate_submissions_by_folder` (bool): Do not create subfolders for files uploaded to this share. Note: there are subtle security pitfalls with allowing anonymous uploads from multiple users to live in the same folder. We strongly discourage use of this option unless absolutely required.
 * `expires_at` (string): Explicit Bundle expiration date/time. If not set, the site-wide expiration setting may apply.
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
-* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `max_uses` (Nullable<Int64>): Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot exceed the Site-wide cap.
 * `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `internal_name` (string): Internal name for identifying this Share Link.
 * `description` (string): Public description
@@ -355,7 +357,7 @@ Task<Bundle> client.Bundles.UpdateAsync(
 * `expires_at` (string): Explicit Bundle expiration date/time. If not set, the site-wide expiration setting may apply.
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
-* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `max_uses` (Nullable<Int64>): Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot exceed the Site-wide cap.
 * `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `internal_name` (string): Internal name for identifying this Share Link.
 * `note` (string): Bundle internal note
@@ -493,7 +495,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Bundle
 * `expires_at` (string): Explicit Bundle expiration date/time. If not set, the site-wide expiration setting may apply.
 * `finalize_snapshot` (bool): If true, finalize the snapshot of this bundle's contents. Note that `create_snapshot` must also be true.
 * `inbox_id` (Nullable<Int64>): ID of the associated inbox, if available.
-* `max_uses` (Nullable<Int64>): Maximum number of times bundle can be accessed
+* `max_uses` (Nullable<Int64>): Visitor limit configured for this Share Link. Null uses the Site-wide cap, if set. The configured limit cannot exceed the Site-wide cap.
 * `group_id` (Nullable<Int64>): Owning group ID. If set, members of this group can view, edit, and share this Share Link.
 * `internal_name` (string): Internal name for identifying this Share Link.
 * `note` (string): Bundle internal note
