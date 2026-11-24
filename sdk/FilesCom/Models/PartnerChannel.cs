@@ -26,7 +26,7 @@ namespace FilesCom.Models
         // The JSON, when handed out since then, of the arrays among them that callers can change in place, directly or
         // through a model in them. SaveAsync compares each with the array's JSON now, and sends the ones that differ.
         private readonly Dictionary<string, string> handedOut = new Dictionary<string, string>();
-        private static readonly string[] ArrayAttributeNames = { "to_partner_managed_folder_paths", "from_partner_managed_folder_paths" };
+        private static readonly string[] ArrayAttributeNames = { "to_partner_managed_folder_paths", "from_partner_managed_folder_paths", "from_partner_upload_forms" };
         /// <summary>
         /// Makes a PartnerChannel with no attributes set and no options.
         /// </summary>
@@ -96,6 +96,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("from_partner_managed_folder_paths", new string[0]);
             }
+            if (!this.attributes.ContainsKey("from_partner_upload_forms"))
+            {
+                this.attributes.Add("from_partner_upload_forms", new PartnerChannelUploadForm[0]);
+            }
             if (!this.attributes.ContainsKey("effective_to_partner_folder_name"))
             {
                 this.attributes.Add("effective_to_partner_folder_name", null);
@@ -152,7 +156,7 @@ namespace FilesCom.Models
 
         IEnumerable<object> IModel.NestedModels
         {
-            get { return new object[0]; }
+            get { return new object[] { FromPartnerUploadForms }; }
         }
 
         /// <summary>
@@ -305,6 +309,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Form Field Sets attached to From Partner upload destinations.
+        /// </summary>
+        [JsonPropertyName("from_partner_upload_forms")]
+        public PartnerChannelUploadForm[] FromPartnerUploadForms
+        {
+            get { return (PartnerChannelUploadForm[])HandedOut("from_partner_upload_forms"); }
+            set { attributes["from_partner_upload_forms"] = value; unsaved.Add("from_partner_upload_forms"); }
+        }
+
+        /// <summary>
         /// Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
         /// </summary>
         [JsonPropertyName("effective_to_partner_folder_name")]
@@ -360,6 +374,7 @@ namespace FilesCom.Models
         ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
+        ///   from_partner_upload_forms - array(object) - Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
@@ -382,6 +397,7 @@ namespace FilesCom.Models
         ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
+        ///   from_partner_upload_forms - array(object) - Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
@@ -432,6 +448,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("from_partner_managed_folder_paths", out parameterValue) && !(parameterValue is string[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_managed_folder_paths is null, which cannot be sent" : "Bad parameter: from_partner_managed_folder_paths must be of type string[]", "from_partner_managed_folder_paths");
+            }
+            if (parameters.TryGetValue("from_partner_upload_forms", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_upload_forms is null, which cannot be sent" : "Bad parameter: from_partner_upload_forms must be of type object[]", "from_partner_upload_forms");
             }
             if (parameters.TryGetValue("from_partner_route_path", out parameterValue) && !(parameterValue is string))
             {
@@ -533,8 +553,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "direction", "use_channel_root", "from_partner_folder_name", "from_partner_managed_folder_paths", "from_partner_route_path", "to_partner_folder_name", "to_partner_managed_folder_paths", "to_partner_route_path", "partner_id", "path", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "direction", "use_channel_root", "from_partner_folder_name", "from_partner_managed_folder_paths", "from_partner_route_path", "to_partner_folder_name", "to_partner_managed_folder_paths", "to_partner_route_path", "path" };
+        private static readonly string[] CreateParameterNames = { "direction", "use_channel_root", "from_partner_folder_name", "from_partner_managed_folder_paths", "from_partner_upload_forms", "from_partner_route_path", "to_partner_folder_name", "to_partner_managed_folder_paths", "to_partner_route_path", "partner_id", "path", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "direction", "use_channel_root", "from_partner_folder_name", "from_partner_managed_folder_paths", "from_partner_upload_forms", "from_partner_route_path", "to_partner_folder_name", "to_partner_managed_folder_paths", "to_partner_route_path", "path" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -745,6 +765,7 @@ namespace FilesCom.Models
         ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
+        ///   from_partner_upload_forms - array(object) - Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
@@ -800,6 +821,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_managed_folder_paths is null, which cannot be sent" : "Bad parameter: from_partner_managed_folder_paths must be of type string[]", "from_partner_managed_folder_paths");
             }
+            if (parameters.TryGetValue("from_partner_upload_forms", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_upload_forms is null, which cannot be sent" : "Bad parameter: from_partner_upload_forms must be of type object[]", "from_partner_upload_forms");
+            }
             if (parameters.TryGetValue("from_partner_route_path", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_route_path is null, which cannot be sent" : "Bad parameter: from_partner_route_path must be of type string", "from_partner_route_path");
@@ -840,6 +865,7 @@ namespace FilesCom.Models
         ///   use_channel_root - boolean - Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
         ///   from_partner_folder_name - string - Optional Channel-level from-Partner folder name override.
         ///   from_partner_managed_folder_paths - array(string) - Managed folder paths inside the from-Partner folder.
+        ///   from_partner_upload_forms - array(object) - Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
         ///   from_partner_route_path - string - Optional route path for files uploaded by the Partner.
         ///   to_partner_folder_name - string - Optional Channel-level to-Partner folder name override.
         ///   to_partner_managed_folder_paths - array(string) - Managed folder paths inside the to-Partner folder.
@@ -901,6 +927,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("from_partner_managed_folder_paths", out parameterValue) && !(parameterValue is string[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_managed_folder_paths is null, which cannot be sent" : "Bad parameter: from_partner_managed_folder_paths must be of type string[]", "from_partner_managed_folder_paths");
+            }
+            if (parameters.TryGetValue("from_partner_upload_forms", out parameterValue) && !(parameterValue is object[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: from_partner_upload_forms is null, which cannot be sent" : "Bad parameter: from_partner_upload_forms must be of type object[]", "from_partner_upload_forms");
             }
             if (parameters.TryGetValue("from_partner_route_path", out parameterValue) && !(parameterValue is string))
             {

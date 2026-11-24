@@ -81,7 +81,7 @@
   "workspace_admin": true,
   "site_id": 1,
   "workspace_id": 1,
-  "default_workspace_id": 1,
+  "preferred_workspace_id": 1,
   "skip_welcome_screen": true,
   "ftp_tls_session_reuse_required": "use_system_setting",
   "ssl_required": "always_require",
@@ -173,7 +173,7 @@
 * `workspace_admin` / `WorkspaceAdmin`  (bool): Whether the user is an administrator of their own Custom Workspace. Does not reflect administration granted through Permissions.
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): ID of the Workspace the user belongs to. 0 is the Default Workspace.
-* `default_workspace_id` / `DefaultWorkspaceId`  (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
+* `preferred_workspace_id` / `PreferredWorkspaceId`  (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
 * `skip_welcome_screen` / `SkipWelcomeScreen`  (bool): Skip Welcome page in the UI?
 * `ftp_tls_session_reuse_required` / `FtpTlsSessionReuseRequired`  (string): FTP TLS session reuse requirement: use_system_setting, always_require, or never_require
 * `ssl_required` / `SslRequired`  (string): SSL required setting
@@ -315,7 +315,7 @@ Task<User> client.Users.CreateAsync(
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
-* `default_workspace_id` (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
+* `preferred_workspace_id` (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
@@ -496,7 +496,7 @@ Task<User> client.Users.UpdateAsync(
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
-* `default_workspace_id` (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
+* `preferred_workspace_id` (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?
@@ -657,7 +657,7 @@ parameters.Add("bypass_user_lifecycle_rules", false);
 parameters.Add("bypass_site_allowed_ips", false);
 parameters.Add("dav_permission", true);
 parameters.Add("desktop_configuration_profile_id", 1L);
-parameters.Add("default_workspace_id", 1L);
+parameters.Add("preferred_workspace_id", 1L);
 parameters.Add("disabled", true);
 parameters.Add("filesystem_layout", "site_root");
 parameters.Add("ftp_permission", true);
@@ -738,7 +738,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `User` 
 * `bypass_site_allowed_ips` (bool): Allow this user to skip site-wide IP blacklists?
 * `dav_permission` (bool): Can the user connect with WebDAV?
 * `desktop_configuration_profile_id` (Nullable<Int64>): Desktop Configuration Profile ID assigned directly to this user, if any.
-* `default_workspace_id` (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
+* `preferred_workspace_id` (Nullable<Int64>): Workspace ID the user should land in by default when more than one Workspace is available.
 * `disabled` (bool): Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
 * `filesystem_layout` (string): File system layout
 * `ftp_permission` (bool): Can the user access with FTP/FTPS?

@@ -21,6 +21,12 @@
   "from_partner_managed_folder_paths": [
     "claims/received"
   ],
+  "from_partner_upload_forms": [
+    {
+      "path": "reports/monthly",
+      "form_field_set_id": 1
+    }
+  ],
   "effective_to_partner_folder_name": "outgoing",
   "effective_from_partner_folder_name": "incoming",
   "channel_path": "partners/acme/claims/medical",
@@ -42,6 +48,7 @@
 * `to_partner_route_path` / `ToPartnerRoutePath`  (string): Optional route path for files delivered to the Partner.
 * `to_partner_managed_folder_paths` / `ToPartnerManagedFolderPaths`  (string[]): Managed folder paths inside the to-Partner folder.
 * `from_partner_managed_folder_paths` / `FromPartnerManagedFolderPaths`  (string[]): Managed folder paths inside the from-Partner folder.
+* `from_partner_upload_forms` / `FromPartnerUploadForms`  (PartnerChannelUploadForm[]): Form Field Sets attached to From Partner upload destinations.
 * `effective_to_partner_folder_name` / `EffectiveToPartnerFolderName`  (string): Resolved to-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
 * `effective_from_partner_folder_name` / `EffectiveFromPartnerFolderName`  (string): Resolved from-Partner subfolder name. Null when the direction is disabled or uses the Channel folder directly.
 * `channel_path` / `ChannelPath`  (string): Resolved Channel folder path.
@@ -136,6 +143,7 @@ Task<PartnerChannel> client.PartnerChannels.CreateAsync(
 * `use_channel_root` (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
+* `from_partner_upload_forms` (object[]): Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
 * `to_partner_folder_name` (string): Optional Channel-level to-Partner folder name override.
 * `to_partner_managed_folder_paths` (string[]): Managed folder paths inside the to-Partner folder.
@@ -175,6 +183,7 @@ Task<PartnerChannel> client.PartnerChannels.UpdateAsync(
 * `use_channel_root` (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
+* `from_partner_upload_forms` (object[]): Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
 * `to_partner_folder_name` (string): Optional Channel-level to-Partner folder name override.
 * `to_partner_managed_folder_paths` (string[]): Managed folder paths inside the to-Partner folder.
@@ -223,6 +232,7 @@ parameters.Add("direction", "two_way");
 parameters.Add("use_channel_root", false);
 parameters.Add("from_partner_folder_name", "incoming");
 parameters.Add("from_partner_managed_folder_paths", new string[] { "claims/received" });
+parameters.Add("from_partner_upload_forms", new object[] { new Dictionary<string, object> { { "path", "reports/monthly" }, { "form_field_set_id", 1 } } });
 parameters.Add("from_partner_route_path", "processing/from-partner");
 parameters.Add("to_partner_folder_name", "outgoing");
 parameters.Add("to_partner_managed_folder_paths", new string[] { "reports/monthly" });
@@ -242,6 +252,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Partne
 * `use_channel_root` (bool): Use the Channel folder directly for a one-way exchange. Defaults to false. Cannot be changed after creation. Folder name overrides must be blank when enabled, and the Channel must remain one-way.
 * `from_partner_folder_name` (string): Optional Channel-level from-Partner folder name override.
 * `from_partner_managed_folder_paths` (string[]): Managed folder paths inside the from-Partner folder.
+* `from_partner_upload_forms` (object[]): Form Field Sets for From Partner upload destinations. Each entry has a `path` relative to the From Partner folder and a `form_field_set_id`. Use an empty `path` when the Channel has no managed folders. Providing this replaces all assignments, and an empty array removes them.
 * `from_partner_route_path` (string): Optional route path for files uploaded by the Partner.
 * `to_partner_folder_name` (string): Optional Channel-level to-Partner folder name override.
 * `to_partner_managed_folder_paths` (string[]): Managed folder paths inside the to-Partner folder.

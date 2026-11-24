@@ -340,9 +340,9 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
-            if (!this.attributes.ContainsKey("default_workspace_id"))
+            if (!this.attributes.ContainsKey("preferred_workspace_id"))
             {
-                this.attributes.Add("default_workspace_id", null);
+                this.attributes.Add("preferred_workspace_id", null);
             }
             if (!this.attributes.ContainsKey("skip_welcome_screen"))
             {
@@ -1279,11 +1279,11 @@ namespace FilesCom.Models
         /// <summary>
         /// Workspace ID the user should land in by default when more than one Workspace is available.
         /// </summary>
-        [JsonPropertyName("default_workspace_id")]
-        public Nullable<Int64> DefaultWorkspaceId
+        [JsonPropertyName("preferred_workspace_id")]
+        public Nullable<Int64> PreferredWorkspaceId
         {
-            get { return (Nullable<Int64>)attributes["default_workspace_id"]; }
-            set { attributes["default_workspace_id"] = value; unsaved.Add("default_workspace_id"); }
+            get { return (Nullable<Int64>)attributes["preferred_workspace_id"]; }
+            set { attributes["preferred_workspace_id"] = value; unsaved.Add("preferred_workspace_id"); }
         }
 
         /// <summary>
@@ -1704,7 +1704,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
-        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
+        ///   preferred_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1788,7 +1788,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
-        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
+        ///   preferred_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -1955,9 +1955,9 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_configuration_profile_id is null, which cannot be sent" : "Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "desktop_configuration_profile_id");
             }
-            if (parameters.TryGetValue("default_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            if (parameters.TryGetValue("preferred_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_workspace_id is null, which cannot be sent" : "Bad parameter: default_workspace_id must be of type Nullable<Int64>", "default_workspace_id");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: preferred_workspace_id is null, which cannot be sent" : "Bad parameter: preferred_workspace_id must be of type Nullable<Int64>", "preferred_workspace_id");
             }
             if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {
@@ -2237,8 +2237,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "ftp_tls_session_reuse_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "default_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "ftp_tls_session_reuse_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
+        private static readonly string[] CreateParameterNames = { "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "preferred_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "ftp_tls_session_reuse_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "avatar_file", "avatar_delete", "change_password", "change_password_confirmation", "email", "grant_permission", "group_id", "group_ids", "imported_password_hash", "password", "password_confirmation", "announcements_read", "ai_assistant_personality_id", "allowed_ips", "attachments_permission", "authenticate_until", "authentication_method", "billing_permission", "bypass_user_lifecycle_rules", "bypass_site_allowed_ips", "dav_permission", "desktop_configuration_profile_id", "preferred_workspace_id", "disabled", "filesystem_layout", "ftp_permission", "header_text", "integration_centric_profile_id", "language", "notification_daily_send_time", "name", "company", "notes", "office_integration_enabled", "partner_admin", "partner_id", "password_validity_days", "primary_group_id", "readonly_site_admin", "receive_admin_alerts", "notify_on_all_site_warnings", "notify_on_all_sso_failures", "notify_on_all_user_security_events", "notify_on_all_pending_work_failures", "notify_on_all_siem_http_destination_failures", "notify_on_all_sync_failures", "notify_on_all_automation_failures", "notify_on_all_expectation_failures", "require_login_by", "require_password_change", "responsible_group_id", "responsible_user_id", "restapi_permission", "s3_compatible_endpoint_permission", "self_managed", "sftp_permission", "site_admin", "skip_welcome_screen", "ssl_required", "ftp_tls_session_reuse_required", "sso_strategy_id", "require_2fa", "tags", "time_zone", "user_root", "user_home", "workspace_admin", "username", "workspace_id", "clear_2fa", "convert_to_partner_user" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -2515,7 +2515,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
-        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
+        ///   preferred_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -2678,9 +2678,9 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_configuration_profile_id is null, which cannot be sent" : "Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "desktop_configuration_profile_id");
             }
-            if (parameters.TryGetValue("default_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            if (parameters.TryGetValue("preferred_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_workspace_id is null, which cannot be sent" : "Bad parameter: default_workspace_id must be of type Nullable<Int64>", "default_workspace_id");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: preferred_workspace_id is null, which cannot be sent" : "Bad parameter: preferred_workspace_id must be of type Nullable<Int64>", "preferred_workspace_id");
             }
             if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {
@@ -3037,7 +3037,7 @@ namespace FilesCom.Models
         ///   bypass_site_allowed_ips - boolean - Allow this user to skip site-wide IP blacklists?
         ///   dav_permission - boolean - Can the user connect with WebDAV?
         ///   desktop_configuration_profile_id - int64 - Desktop Configuration Profile ID assigned directly to this user, if any.
-        ///   default_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
+        ///   preferred_workspace_id - int64 - Workspace ID the user should land in by default when more than one Workspace is available.
         ///   disabled - boolean - Is user disabled? Disabled users cannot log in, and do not count for billing purposes. Users can be automatically disabled after an inactivity period via a Site setting or schedule to be deactivated after specific date.
         ///   filesystem_layout - string - File system layout
         ///   ftp_permission - boolean - Can the user access with FTP/FTPS?
@@ -3215,9 +3215,9 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: desktop_configuration_profile_id is null, which cannot be sent" : "Bad parameter: desktop_configuration_profile_id must be of type Nullable<Int64>", "desktop_configuration_profile_id");
             }
-            if (parameters.TryGetValue("default_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            if (parameters.TryGetValue("preferred_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
-                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: default_workspace_id is null, which cannot be sent" : "Bad parameter: default_workspace_id must be of type Nullable<Int64>", "default_workspace_id");
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: preferred_workspace_id is null, which cannot be sent" : "Bad parameter: preferred_workspace_id must be of type Nullable<Int64>", "preferred_workspace_id");
             }
             if (parameters.TryGetValue("disabled", out parameterValue) && !(parameterValue is bool))
             {

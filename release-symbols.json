@@ -3706,6 +3706,7 @@
         "from_partner_folder_path": "FromPartnerFolderPath",
         "from_partner_managed_folder_paths": "FromPartnerManagedFolderPaths",
         "from_partner_route_path": "FromPartnerRoutePath",
+        "from_partner_upload_forms": "FromPartnerUploadForms",
         "id": "Id",
         "partner_channel_template_id": "PartnerChannelTemplateId",
         "partner_id": "PartnerId",
@@ -3765,6 +3766,7 @@
         "from_partner_folder_name": "FromPartnerFolderName",
         "from_partner_managed_folder_paths": "FromPartnerManagedFolderPaths",
         "from_partner_route_path_pattern": "FromPartnerRoutePathPattern",
+        "from_partner_upload_forms": "FromPartnerUploadForms",
         "id": "Id",
         "name": "Name",
         "path": "Path",
@@ -3810,6 +3812,15 @@
           ],
           "route": "POST /partner_channel_templates"
         }
+      }
+    },
+    "PartnerChannelUploadForm": {
+      "type": "PartnerChannelUploadForm",
+      "properties": {
+        "form_field_set_id": "FormFieldSetId",
+        "path": "Path"
+      },
+      "operations": {
       }
     },
     "PartnerConnection": {
@@ -5903,7 +5914,6 @@
         "created_at": "CreatedAt",
         "dav_permission": "DavPermission",
         "days_remaining_until_password_expire": "DaysRemainingUntilPasswordExpire",
-        "default_workspace_id": "DefaultWorkspaceId",
         "desktop_configuration_profile_id": "DesktopConfigurationProfileId",
         "disabled": "Disabled",
         "disabled_expired_or_inactive": "DisabledExpiredOrInactive",
@@ -5953,6 +5963,7 @@
         "password_expired": "PasswordExpired",
         "password_set_at": "PasswordSetAt",
         "password_validity_days": "PasswordValidityDays",
+        "preferred_workspace_id": "PreferredWorkspaceId",
         "primary_group_id": "PrimaryGroupId",
         "public_keys_count": "PublicKeysCount",
         "readonly_site_admin": "ReadonlySiteAdmin",
@@ -6040,6 +6051,7 @@
         }
       },
       "retired_properties": {
+        "default_workspace_id": "DefaultWorkspaceId",
         "subscribe_to_newsletter": "SubscribeToNewsletter"
       }
     },
