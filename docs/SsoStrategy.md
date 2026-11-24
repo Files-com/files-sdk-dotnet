@@ -48,7 +48,6 @@
   "ldap_domain": "mysite.com",
   "display_on_login_page": true,
   "public_sso_domain": "partner.example.com",
-  "public_sso_domain_dns_value": "files-sso=…",
   "ldap_host": "ldap.site.com",
   "ldap_host_2": "ldap2.site.com",
   "ldap_host_3": "ldap3.site.com",
@@ -105,8 +104,7 @@
 * `ldap_base_dn` / `LdapBaseDn`  (string): Base DN for looking up users in LDAP server
 * `ldap_domain` / `LdapDomain`  (string): Domain name that will be appended to LDAP usernames
 * `display_on_login_page` / `DisplayOnLoginPage`  (bool): Should this strategy be displayed on the login page?
-* `public_sso_domain` / `PublicSsoDomain`  (string): Username domain that can publicly discover this SSO provider on this site. Set after saving the provider. Set to null to turn off discovery.
-* `public_sso_domain_dns_value` / `PublicSsoDomainDnsValue`  (string): This provider's DNS TXT value to publish at _files-sso.<domain> before enabling public SSO discovery for that domain.
+* `public_sso_domain` / `PublicSsoDomain`  (string): Username domain that can publicly discover this SSO provider on this site. Set to null to turn off discovery.
 * `ldap_host` / `LdapHost`  (string): LDAP host
 * `ldap_host_2` / `LdapHost2`  (string): LDAP backup host
 * `ldap_host_3` / `LdapHost3`  (string): LDAP backup host

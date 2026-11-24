@@ -5499,7 +5499,6 @@
         "provision_time_zone": "ProvisionTimeZone",
         "provision_users": "ProvisionUsers",
         "public_sso_domain": "PublicSsoDomain",
-        "public_sso_domain_dns_value": "PublicSsoDomainDnsValue",
         "saml_provider_cert_fingerprint": "SamlProviderCertFingerprint",
         "saml_provider_issuer_url": "SamlProviderIssuerUrl",
         "saml_provider_metadata_content": "SamlProviderMetadataContent",
@@ -5535,6 +5534,9 @@
           ],
           "route": "POST /sso_strategies/{id}/sync"
         }
+      },
+      "retired_properties": {
+        "public_sso_domain_dns_value": "PublicSsoDomainDnsValue"
       }
     },
     "Status": {
