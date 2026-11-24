@@ -1,7 +1,7 @@
 {
   "schema": {
     "name": "swagger_doc-production.json",
-    "sha256": "e2606650f2b1ea8de8df33087b173346ed451757e042fc0838682d6bfc256610"
+    "sha256": "c1da9256fdc3452fe4ee353b18e6fba5c942c947ff4ee2cc480189cfdad74422"
   },
   "cases": [
     {
@@ -212,6 +212,16 @@
     {
       "test": "FilesContractTests.Records.AutomationRunRecordContractTest.Find",
       "model": "AutomationRun",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationVersionRecordContractTest.List",
+      "model": "AutomationVersion",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.AutomationVersionRecordContractTest.Find",
+      "model": "AutomationVersion",
       "method": "find"
     },
     {

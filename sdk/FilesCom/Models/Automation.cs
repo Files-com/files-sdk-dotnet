@@ -762,7 +762,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
+        /// If trigger is `webhook`, this is the URL to start the Automation. For a v2 webhook configured to upload a file, POST multipart form data with a single `file` part or send a raw body with the `X-Files-Filename` header. A JSON body is saved as `payload.json` when the header is omitted.
         /// </summary>
         [JsonPropertyName("webhook_url")]
         public string WebhookUrl

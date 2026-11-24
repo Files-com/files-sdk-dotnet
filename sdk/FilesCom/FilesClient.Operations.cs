@@ -80,6 +80,11 @@ namespace FilesCom
         public AutomationRunOperations AutomationRuns => new AutomationRunOperations(this);
 
         /// <summary>
+        /// AutomationVersion operations that run with this client.
+        /// </summary>
+        public AutomationVersionOperations AutomationVersions => new AutomationVersionOperations(this);
+
+        /// <summary>
         /// BandwidthSnapshot operations that run with this client.
         /// </summary>
         public BandwidthSnapshotOperations BandwidthSnapshots => new BandwidthSnapshotOperations(this);

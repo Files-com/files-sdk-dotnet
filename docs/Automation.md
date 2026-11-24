@@ -172,7 +172,7 @@
 * `user_id` / `UserId`  (Nullable<Int64>): User ID of the Automation's creator.
 * `user_ids` / `UserIds`  (Nullable<Int64>[]): IDs of Users for the Automation (i.e. who to Request File from)
 * `value` / `Value`  (object): A Hash of attributes specific to the automation type.
-* `webhook_url` / `WebhookUrl`  (string): If trigger is `webhook`, this is the URL of the webhook to trigger the Automation.
+* `webhook_url` / `WebhookUrl`  (string): If trigger is `webhook`, this is the URL to start the Automation. For a v2 webhook configured to upload a file, POST multipart form data with a single `file` part or send a raw body with the `X-Files-Filename` header. A JSON body is saved as `payload.json` when the header is omitted.
 * `holiday_region` / `HolidayRegion`  (string): Skip the automation if there is a formal, observed holiday for this region.
 
 

@@ -958,6 +958,44 @@
         }
       }
     },
+    "AutomationVersion": {
+      "type": "AutomationVersion",
+      "operations_property": "AutomationVersions",
+      "properties": {
+        "api_key_id": "ApiKeyId",
+        "automation_id": "AutomationId",
+        "created_at": "CreatedAt",
+        "definition": "Definition",
+        "id": "Id",
+        "user_id": "UserId",
+        "username": "Username",
+        "version": "Version",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "GetAutomationVersions": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /automation_versions"
+        },
+        "GetAutomationVersionsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /automation_versions/{id}"
+        },
+        "PostAutomationVersionsIdRestore": {
+          "method": "Restore",
+          "aliases": [
+
+          ],
+          "route": "POST /automation_versions/{id}/restore"
+        }
+      }
+    },
     "BandwidthSnapshot": {
       "type": "BandwidthSnapshot",
       "operations_property": "BandwidthSnapshots",
