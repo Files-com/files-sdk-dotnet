@@ -26,6 +26,7 @@
     3,
     5
   ],
+  "schedule_interval_minutes": 15,
   "schedule_times_of_day": [
     "06:00"
   ],
@@ -75,6 +76,7 @@
 * `recurring_days` / `RecurringDays`  (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+* `schedule_interval_minutes` / `ScheduleIntervalMinutes`  (Nullable<Int64>): Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone used by the Expectation schedule.
 * `holiday_region` / `HolidayRegion`  (string): Optional holiday region used by the Expectation schedule.
@@ -187,6 +189,7 @@ Task<Expectation> client.Expectations.CreateAsync(
 * `recurring_days` (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+* `schedule_interval_minutes` (Nullable<Int64>): Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
@@ -265,6 +268,7 @@ Task<Expectation> client.Expectations.UpdateAsync(
 * `recurring_days` (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+* `schedule_interval_minutes` (Nullable<Int64>): Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.
@@ -345,6 +349,7 @@ parameters.Add("recurring_day", 3L);
 parameters.Add("recurring_days", new Nullable<Int64>[] { 1, 15 });
 parameters.Add("schedule_id", 1L);
 parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 1, 3, 5 });
+parameters.Add("schedule_interval_minutes", 15L);
 parameters.Add("schedule_times_of_day", new string[] { "06:00" });
 parameters.Add("schedule_time_zone", "UTC");
 parameters.Add("holiday_region", "us");
@@ -377,6 +382,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Expect
 * `recurring_days` (Nullable<Int64>[]): If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+* `schedule_interval_minutes` (Nullable<Int64>): Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_times_of_day` (string[]): Times of day in HH:MM format for the Expectation schedule.
 * `schedule_time_zone` (string): Time zone used by the Expectation schedule.
 * `holiday_region` (string): Optional holiday region used by the Expectation schedule.

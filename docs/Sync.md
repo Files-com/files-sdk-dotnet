@@ -44,6 +44,7 @@
     2,
     4
   ],
+  "schedule_interval_minutes": 15,
   "schedule_times_of_day": [
     "06:30",
     "14:30"
@@ -119,6 +120,7 @@
 * `recurring_days` / `RecurringDays`  (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` / `ScheduleId`  (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` / `ScheduleDaysOfWeek`  (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_interval_minutes` / `ScheduleIntervalMinutes`  (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
 * `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone for the schedule. If not set, times are interpreted as UTC.
 * `holiday_region` / `HolidayRegion`  (string): Skip the sync if there is a formal, observed holiday for this region.
@@ -223,6 +225,7 @@ Task<Sync> client.Syncs.CreateAsync(
 * `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_interval_minutes` (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_time_zone` (string): Time zone for the schedule. If not set, times are interpreted as UTC.
 * `schedule_times_of_day` (string[]): Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
 * `src_path` (string): Absolute source path for the sync
@@ -331,6 +334,7 @@ Task<Sync> client.Syncs.UpdateAsync(
 * `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_interval_minutes` (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_time_zone` (string): Time zone for the schedule. If not set, times are interpreted as UTC.
 * `schedule_times_of_day` (string[]): Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
 * `src_path` (string): Absolute source path for the sync
@@ -431,6 +435,7 @@ parameters.Add("recurring_day", 25L);
 parameters.Add("recurring_days", new Nullable<Int64>[] { 1, 15 });
 parameters.Add("schedule_id", 1L);
 parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 0, 2, 4 });
+parameters.Add("schedule_interval_minutes", 15L);
 parameters.Add("schedule_time_zone", "Eastern Time (US & Canada)");
 parameters.Add("schedule_times_of_day", new string[] { "06:30", "14:30" });
 parameters.Add("src_path", "example");
@@ -464,6 +469,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Sync` 
 * `recurring_days` (Nullable<Int64>[]): If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+* `schedule_interval_minutes` (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
 * `schedule_time_zone` (string): Time zone for the schedule. If not set, times are interpreted as UTC.
 * `schedule_times_of_day` (string[]): Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
 * `src_path` (string): Absolute source path for the sync

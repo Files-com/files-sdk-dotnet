@@ -188,6 +188,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("schedule_interval_minutes"))
+            {
+                this.attributes.Add("schedule_interval_minutes", null);
+            }
             if (!this.attributes.ContainsKey("schedule_times_of_day"))
             {
                 this.attributes.Add("schedule_times_of_day", new string[0]);
@@ -658,6 +662,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
+        /// </summary>
+        [JsonPropertyName("schedule_interval_minutes")]
+        public Nullable<Int64> ScheduleIntervalMinutes
+        {
+            get { return (Nullable<Int64>)attributes["schedule_interval_minutes"]; }
+            set { attributes["schedule_interval_minutes"] = value; unsaved.Add("schedule_interval_minutes"); }
+        }
+
+        /// <summary>
         /// Times of day to run in HH:MM format (24-hour). For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         /// </summary>
         [JsonPropertyName("schedule_times_of_day")]
@@ -884,7 +898,8 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
         ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
         ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
@@ -932,7 +947,8 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
         ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
         ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
@@ -1029,6 +1045,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {
@@ -1206,8 +1226,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation" };
+        private static readonly string[] CreateParameterNames = { "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -1494,7 +1514,8 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
         ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
         ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
@@ -1590,6 +1611,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {
@@ -1813,7 +1838,8 @@ namespace FilesCom.Models
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
-        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id`. Optional for `daily` triggers; if not set, runs at midnight UTC.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
+        ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
         ///   schedule_time_zone - string - Time zone for schedule fields. Optional for `custom_schedule` without `schedule_id` and for `daily`. If not set, times are interpreted as UTC.
         ///   holiday_region - string - Skip automation on holidays in this region. Optional for `custom_schedule` without `schedule_id` and for `daily`.
         ///   always_overwrite_size_matching_files - boolean - Ordinarily, files with identical size in the source and destination will be skipped from copy operations to prevent wasted transfer.  If this flag is `true` we will overwrite the destination file always.  Note that this may cause large amounts of wasted transfer usage.  This setting has no effect unless `overwrite_files` is also set to `true`.
@@ -1921,6 +1947,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {

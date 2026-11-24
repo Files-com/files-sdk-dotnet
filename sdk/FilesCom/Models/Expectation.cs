@@ -104,6 +104,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("schedule_interval_minutes"))
+            {
+                this.attributes.Add("schedule_interval_minutes", null);
+            }
             if (!this.attributes.ContainsKey("schedule_times_of_day"))
             {
                 this.attributes.Add("schedule_times_of_day", new string[0]);
@@ -373,6 +377,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
+        /// </summary>
+        [JsonPropertyName("schedule_interval_minutes")]
+        public Nullable<Int64> ScheduleIntervalMinutes
+        {
+            get { return (Nullable<Int64>)attributes["schedule_interval_minutes"]; }
+            set { attributes["schedule_interval_minutes"] = value; unsaved.Add("schedule_interval_minutes"); }
+        }
+
+        /// <summary>
         /// Times of day in HH:MM format for the Expectation schedule.
         /// </summary>
         [JsonPropertyName("schedule_times_of_day")]
@@ -586,6 +600,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+        ///   schedule_interval_minutes - int64 - Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
@@ -621,6 +636,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+        ///   schedule_interval_minutes - int64 - Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
@@ -708,6 +724,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {
@@ -829,8 +849,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "schedule_time_exceptions", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "schedule_time_exceptions", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
+        private static readonly string[] CreateParameterNames = { "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "schedule_time_exceptions", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "name", "description", "path", "source", "exclude_pattern", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "schedule_time_exceptions", "lookback_interval", "late_acceptance_interval", "inactivity_interval", "max_open_interval", "criteria", "workspace_id" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -1049,6 +1069,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+        ///   schedule_interval_minutes - int64 - Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
@@ -1130,6 +1151,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {
@@ -1240,6 +1265,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger is `daily`, this selects one or more day numbers inside a `week`, `month`, `quarter`, or `year` interval.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the Expectation's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, the 0-based weekdays used by the schedule.
+        ///   schedule_interval_minutes - int64 - Set a delivery deadline every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_times_of_day - array(string) - Times of day in HH:MM format for the Expectation schedule.
         ///   schedule_time_zone - string - Time zone used by the Expectation schedule.
         ///   holiday_region - string - Optional holiday region used by the Expectation schedule.
@@ -1338,6 +1364,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_times_of_day", out parameterValue) && !(parameterValue is string[]))
             {

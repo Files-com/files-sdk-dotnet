@@ -34,7 +34,7 @@ namespace FilesContractTests.Records
             List<JsonObject> made = new List<JsonObject>();
             for (int i = 0; i < count; i++)
             {
-                made.Add(await Simulator.CreateRawAsync(ListPath, Simulator.Json(new Dictionary<string, object> { ["name"] = "contract-name", ["export_type"] = "contract-export_type", ["user_id"] = (Int64)7, ["disabled"] = true, ["trigger"] = "daily", ["interval"] = "contract-interval", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_times_of_day"] = new string[] { "a" }, ["schedule_time_zone"] = "contract-schedule_time_zone", ["holiday_region"] = "contract-holiday_region" })));
+                made.Add(await Simulator.CreateRawAsync(ListPath, Simulator.Json(new Dictionary<string, object> { ["name"] = "contract-name", ["export_type"] = "contract-export_type", ["user_id"] = (Int64)7, ["disabled"] = true, ["trigger"] = "daily", ["interval"] = "contract-interval", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_interval_minutes"] = (Int64)7, ["schedule_times_of_day"] = new string[] { "a" }, ["schedule_time_zone"] = "contract-schedule_time_zone", ["holiday_region"] = "contract-holiday_region" })));
             }
             return Conform(made.ToArray());
         }
@@ -44,7 +44,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "ScheduledExport", ("id", "int64"), ("name", "string"), ("export_type", "string"), ("report_name", "string"), ("user_id", "int64"), ("disabled", "boolean"), ("trigger", "string"), ("interval", "string"), ("recurring_day", "int64"), ("recurring_days", "array(int64)"), ("schedule_id", "int64"), ("schedule_days_of_week", "array(int64)"), ("schedule_times_of_day", "array(string)"), ("schedule_time_zone", "string"), ("holiday_region", "string"), ("human_readable_schedule", "string"), ("last_run_at", "date-time"), ("last_export_id", "int64"), ("last_error", "string"), ("created_at", "date-time"), ("updated_at", "date-time"));
+                Simulator.Conforms(record, "ScheduledExport", ("id", "int64"), ("name", "string"), ("export_type", "string"), ("report_name", "string"), ("user_id", "int64"), ("disabled", "boolean"), ("trigger", "string"), ("interval", "string"), ("recurring_day", "int64"), ("recurring_days", "array(int64)"), ("schedule_id", "int64"), ("schedule_days_of_week", "array(int64)"), ("schedule_interval_minutes", "int64"), ("schedule_times_of_day", "array(string)"), ("schedule_time_zone", "string"), ("holiday_region", "string"), ("human_readable_schedule", "string"), ("last_run_at", "date-time"), ("last_export_id", "int64"), ("last_error", "string"), ("created_at", "date-time"), ("updated_at", "date-time"));
             }
             return records;
         }
@@ -70,6 +70,7 @@ namespace FilesContractTests.Records
             Simulator.Same(record, "recurring_days", model.RecurringDays, what);
             Simulator.Same(record, "schedule_id", model.ScheduleId, what);
             Simulator.Same(record, "schedule_days_of_week", model.ScheduleDaysOfWeek, what);
+            Simulator.Same(record, "schedule_interval_minutes", model.ScheduleIntervalMinutes, what);
             Simulator.Same(record, "schedule_times_of_day", model.ScheduleTimesOfDay, what);
             Simulator.Same(record, "schedule_time_zone", model.ScheduleTimeZone, what);
             Simulator.Same(record, "holiday_region", model.HolidayRegion, what);
@@ -86,11 +87,11 @@ namespace FilesContractTests.Records
         {
             string operation = await Simulator.RecordOperationAsync("ScheduledExport", "create");
             await Simulator.ResetAsync();
-            Dictionary<string, object> sent = new Dictionary<string, object> { ["name"] = "contract-name", ["export_type"] = "contract-export_type", ["user_id"] = (Int64)7, ["disabled"] = true, ["trigger"] = "daily", ["interval"] = "contract-interval", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_times_of_day"] = new string[] { "a" }, ["schedule_time_zone"] = "contract-schedule_time_zone", ["holiday_region"] = "contract-holiday_region" };
+            Dictionary<string, object> sent = new Dictionary<string, object> { ["name"] = "contract-name", ["export_type"] = "contract-export_type", ["user_id"] = (Int64)7, ["disabled"] = true, ["trigger"] = "daily", ["interval"] = "contract-interval", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_interval_minutes"] = (Int64)7, ["schedule_times_of_day"] = new string[] { "a" }, ["schedule_time_zone"] = "contract-schedule_time_zone", ["holiday_region"] = "contract-holiday_region" };
             ScheduledExport created = await Simulator.Sdk(operation).ScheduledExports.CreateAsync(sent);
-            await Simulator.SdkRequestAsync(operation, 201, new JsonObject { ["name"] = "string", ["export_type"] = "string", ["user_id"] = "number", ["disabled"] = "boolean", ["trigger"] = "string", ["interval"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_times_of_day"] = "array", ["schedule_time_zone"] = "string", ["holiday_region"] = "string" });
+            await Simulator.SdkRequestAsync(operation, 201, new JsonObject { ["name"] = "string", ["export_type"] = "string", ["user_id"] = "number", ["disabled"] = "boolean", ["trigger"] = "string", ["interval"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_interval_minutes"] = "number", ["schedule_times_of_day"] = "array", ["schedule_time_zone"] = "string", ["holiday_region"] = "string" });
             JsonObject record = await Simulator.ReadRawAsync(ListPath, $"{ListPath}/{created.Id}", null, null);
-            await Simulator.KeptAsync(sent, record, "ScheduledExport.create", "name", "export_type", "user_id", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region");
+            await Simulator.KeptAsync(sent, record, "ScheduledExport.create", "name", "export_type", "user_id", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region");
             AssertModel(record, created, "ScheduledExport.create");
         }
 
@@ -138,13 +139,14 @@ namespace FilesContractTests.Records
             sent["recurring_days"] = new Nullable<Int64>[] { 4 };
             sent["schedule_id"] = (Int64)8;
             sent["schedule_days_of_week"] = new Nullable<Int64>[] { 4 };
+            sent["schedule_interval_minutes"] = (Int64)8;
             sent["schedule_times_of_day"] = new string[] { "b" };
             sent["schedule_time_zone"] = "contract-schedule_time_zone-2";
             sent["holiday_region"] = "contract-holiday_region-2";
             ScheduledExport updated = await Simulator.Sdk(operation).ScheduledExports.UpdateAsync((long)record["id"], sent);
-            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "number", ["name"] = "string", ["export_type"] = "string", ["user_id"] = "number", ["disabled"] = "boolean", ["trigger"] = "string", ["interval"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_times_of_day"] = "array", ["schedule_time_zone"] = "string", ["holiday_region"] = "string" });
+            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "number", ["name"] = "string", ["export_type"] = "string", ["user_id"] = "number", ["disabled"] = "boolean", ["trigger"] = "string", ["interval"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_interval_minutes"] = "number", ["schedule_times_of_day"] = "array", ["schedule_time_zone"] = "string", ["holiday_region"] = "string" });
             JsonObject now = await Simulator.ReadRawAsync(ListPath, MemberPath(record), null, null);
-            await Simulator.KeptAsync(sent, now, "ScheduledExport.update", "name", "export_type", "user_id", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_times_of_day", "schedule_time_zone", "holiday_region");
+            await Simulator.KeptAsync(sent, now, "ScheduledExport.update", "name", "export_type", "user_id", "disabled", "trigger", "interval", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region");
             AssertModel(now, updated, "ScheduledExport.update");
         }
 

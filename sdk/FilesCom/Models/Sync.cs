@@ -160,6 +160,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("schedule_days_of_week", new Nullable<Int64>[0]);
             }
+            if (!this.attributes.ContainsKey("schedule_interval_minutes"))
+            {
+                this.attributes.Add("schedule_interval_minutes", null);
+            }
             if (!this.attributes.ContainsKey("schedule_times_of_day"))
             {
                 this.attributes.Add("schedule_times_of_day", new string[0]);
@@ -531,6 +535,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
+        /// </summary>
+        [JsonPropertyName("schedule_interval_minutes")]
+        public Nullable<Int64> ScheduleIntervalMinutes
+        {
+            get { return (Nullable<Int64>)attributes["schedule_interval_minutes"]; }
+            set { attributes["schedule_interval_minutes"] = value; unsaved.Add("schedule_interval_minutes"); }
+        }
+
+        /// <summary>
         /// Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         /// </summary>
         [JsonPropertyName("schedule_times_of_day")]
@@ -679,6 +693,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
@@ -715,6 +730,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
@@ -812,6 +828,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_time_zone", out parameterValue) && !(parameterValue is string))
             {
@@ -925,8 +945,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "delete_empty_folders", "description", "dest_path", "dest_remote_server_id", "disabled", "exclude_patterns", "holiday_region", "include_patterns", "interval", "keep_after_copy", "name", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_time_zone", "schedule_times_of_day", "src_path", "src_remote_server_id", "sync_interval_minutes", "trigger", "trigger_file", "always_write_trigger_file", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "delete_empty_folders", "description", "dest_path", "dest_remote_server_id", "disabled", "exclude_patterns", "holiday_region", "include_patterns", "interval", "keep_after_copy", "name", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_time_zone", "schedule_times_of_day", "src_path", "src_remote_server_id", "sync_interval_minutes", "trigger", "trigger_file", "always_write_trigger_file" };
+        private static readonly string[] CreateParameterNames = { "delete_empty_folders", "description", "dest_path", "dest_remote_server_id", "disabled", "exclude_patterns", "holiday_region", "include_patterns", "interval", "keep_after_copy", "name", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_time_zone", "schedule_times_of_day", "src_path", "src_remote_server_id", "sync_interval_minutes", "trigger", "trigger_file", "always_write_trigger_file", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "delete_empty_folders", "description", "dest_path", "dest_remote_server_id", "disabled", "exclude_patterns", "holiday_region", "include_patterns", "interval", "keep_after_copy", "name", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_time_zone", "schedule_times_of_day", "src_path", "src_remote_server_id", "sync_interval_minutes", "trigger", "trigger_file", "always_write_trigger_file" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -1148,6 +1168,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
@@ -1240,6 +1261,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_time_zone", out parameterValue) && !(parameterValue is string))
             {
@@ -1394,6 +1419,7 @@ namespace FilesCom.Models
         ///   recurring_days - array(int64) - If trigger type is `daily`, this specifies one or more day numbers to run in one of the supported intervals: `week`, `month`, `quarter`, `year`.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the sync's schedule fields.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule`, Custom schedule description for when the sync should be run. 0-based days of the week. 0 is Sunday, 1 is Monday, etc.
+        ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`.
         ///   schedule_time_zone - string - Time zone for the schedule. If not set, times are interpreted as UTC.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format. For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
         ///   src_path - string - Absolute source path for the sync
@@ -1502,6 +1528,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_days_of_week is null, which cannot be sent" : "Bad parameter: schedule_days_of_week must be of type Nullable<Int64>[]", "schedule_days_of_week");
+            }
+            if (parameters.TryGetValue("schedule_interval_minutes", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_interval_minutes is null, which cannot be sent" : "Bad parameter: schedule_interval_minutes must be of type Nullable<Int64>", "schedule_interval_minutes");
             }
             if (parameters.TryGetValue("schedule_time_zone", out parameterValue) && !(parameterValue is string))
             {

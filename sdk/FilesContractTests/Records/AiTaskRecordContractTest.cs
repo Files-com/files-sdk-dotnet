@@ -34,7 +34,7 @@ namespace FilesContractTests.Records
             List<JsonObject> made = new List<JsonObject>();
             for (int i = 0; i < count; i++)
             {
-                made.Add(await Simulator.CreateRawAsync(ListPath, Simulator.Json(new Dictionary<string, object> { ["description"] = "contract-description", ["disabled"] = true, ["holiday_region"] = "contract-holiday_region", ["interval"] = "contract-interval", ["name"] = "contract-name", ["path"] = "contract-path", ["permission_set"] = "full", ["prompt"] = "contract-prompt", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_time_zone"] = "contract-schedule_time_zone", ["schedule_times_of_day"] = new string[] { "a" }, ["source"] = "contract-source", ["trigger"] = "manual", ["trigger_actions"] = new string[] { "a" }, ["workspace_id"] = (Int64)7 })));
+                made.Add(await Simulator.CreateRawAsync(ListPath, Simulator.Json(new Dictionary<string, object> { ["description"] = "contract-description", ["disabled"] = true, ["holiday_region"] = "contract-holiday_region", ["interval"] = "contract-interval", ["name"] = "contract-name", ["path"] = "contract-path", ["permission_set"] = "full", ["prompt"] = "contract-prompt", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_interval_minutes"] = (Int64)7, ["schedule_time_zone"] = "contract-schedule_time_zone", ["schedule_times_of_day"] = new string[] { "a" }, ["source"] = "contract-source", ["trigger"] = "manual", ["trigger_actions"] = new string[] { "a" }, ["workspace_id"] = (Int64)7 })));
             }
             return Conform(made.ToArray());
         }
@@ -44,7 +44,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "AiTask", ("id", "int64"), ("workspace_id", "int64"), ("name", "string"), ("description", "string"), ("prompt", "string"), ("permission_set", "string"), ("path", "string"), ("source", "string"), ("disabled", "boolean"), ("trigger", "string"), ("trigger_actions", "array(string)"), ("interval", "string"), ("recurring_day", "int64"), ("recurring_days", "array(int64)"), ("schedule_id", "int64"), ("schedule_days_of_week", "array(int64)"), ("schedule_times_of_day", "array(string)"), ("schedule_time_zone", "string"), ("holiday_region", "string"), ("human_readable_schedule", "string"), ("last_run_at", "date-time"), ("master_admin_user_id", "int64"), ("created_at", "date-time"), ("updated_at", "date-time"));
+                Simulator.Conforms(record, "AiTask", ("id", "int64"), ("workspace_id", "int64"), ("name", "string"), ("description", "string"), ("prompt", "string"), ("permission_set", "string"), ("path", "string"), ("source", "string"), ("disabled", "boolean"), ("trigger", "string"), ("trigger_actions", "array(string)"), ("interval", "string"), ("recurring_day", "int64"), ("recurring_days", "array(int64)"), ("schedule_id", "int64"), ("schedule_days_of_week", "array(int64)"), ("schedule_interval_minutes", "int64"), ("schedule_times_of_day", "array(string)"), ("schedule_time_zone", "string"), ("holiday_region", "string"), ("human_readable_schedule", "string"), ("last_run_at", "date-time"), ("master_admin_user_id", "int64"), ("created_at", "date-time"), ("updated_at", "date-time"));
             }
             return records;
         }
@@ -74,6 +74,7 @@ namespace FilesContractTests.Records
             Simulator.Same(record, "recurring_days", model.RecurringDays, what);
             Simulator.Same(record, "schedule_id", model.ScheduleId, what);
             Simulator.Same(record, "schedule_days_of_week", model.ScheduleDaysOfWeek, what);
+            Simulator.Same(record, "schedule_interval_minutes", model.ScheduleIntervalMinutes, what);
             Simulator.Same(record, "schedule_times_of_day", model.ScheduleTimesOfDay, what);
             Simulator.Same(record, "schedule_time_zone", model.ScheduleTimeZone, what);
             Simulator.Same(record, "holiday_region", model.HolidayRegion, what);
@@ -89,11 +90,11 @@ namespace FilesContractTests.Records
         {
             string operation = await Simulator.RecordOperationAsync("AiTask", "create");
             await Simulator.ResetAsync();
-            Dictionary<string, object> sent = new Dictionary<string, object> { ["description"] = "contract-description", ["disabled"] = true, ["holiday_region"] = "contract-holiday_region", ["interval"] = "contract-interval", ["name"] = "contract-name", ["path"] = "contract-path", ["permission_set"] = "full", ["prompt"] = "contract-prompt", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_time_zone"] = "contract-schedule_time_zone", ["schedule_times_of_day"] = new string[] { "a" }, ["source"] = "contract-source", ["trigger"] = "manual", ["trigger_actions"] = new string[] { "a" }, ["workspace_id"] = (Int64)7 };
+            Dictionary<string, object> sent = new Dictionary<string, object> { ["description"] = "contract-description", ["disabled"] = true, ["holiday_region"] = "contract-holiday_region", ["interval"] = "contract-interval", ["name"] = "contract-name", ["path"] = "contract-path", ["permission_set"] = "full", ["prompt"] = "contract-prompt", ["recurring_day"] = (Int64)7, ["recurring_days"] = new Nullable<Int64>[] { 3 }, ["schedule_id"] = (Int64)7, ["schedule_days_of_week"] = new Nullable<Int64>[] { 3 }, ["schedule_interval_minutes"] = (Int64)7, ["schedule_time_zone"] = "contract-schedule_time_zone", ["schedule_times_of_day"] = new string[] { "a" }, ["source"] = "contract-source", ["trigger"] = "manual", ["trigger_actions"] = new string[] { "a" }, ["workspace_id"] = (Int64)7 };
             AiTask created = await Simulator.Sdk(operation).AiTasks.CreateAsync(sent);
-            await Simulator.SdkRequestAsync(operation, 201, new JsonObject { ["description"] = "string", ["disabled"] = "boolean", ["holiday_region"] = "string", ["interval"] = "string", ["name"] = "string", ["path"] = "string", ["permission_set"] = "string", ["prompt"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_time_zone"] = "string", ["schedule_times_of_day"] = "array", ["source"] = "string", ["trigger"] = "string", ["trigger_actions"] = "array", ["workspace_id"] = "number" });
+            await Simulator.SdkRequestAsync(operation, 201, new JsonObject { ["description"] = "string", ["disabled"] = "boolean", ["holiday_region"] = "string", ["interval"] = "string", ["name"] = "string", ["path"] = "string", ["permission_set"] = "string", ["prompt"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_interval_minutes"] = "number", ["schedule_time_zone"] = "string", ["schedule_times_of_day"] = "array", ["source"] = "string", ["trigger"] = "string", ["trigger_actions"] = "array", ["workspace_id"] = "number" });
             JsonObject record = await Simulator.ReadRawAsync(ListPath, $"{ListPath}/{created.Id}", null, null);
-            await Simulator.KeptAsync(sent, record, "AiTask.create", "description", "disabled", "holiday_region", "interval", "name", "path", "permission_set", "prompt", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_time_zone", "schedule_times_of_day", "source", "trigger", "trigger_actions", "workspace_id");
+            await Simulator.KeptAsync(sent, record, "AiTask.create", "description", "disabled", "holiday_region", "interval", "name", "path", "permission_set", "prompt", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_time_zone", "schedule_times_of_day", "source", "trigger", "trigger_actions", "workspace_id");
             AssertModel(record, created, "AiTask.create");
         }
 
@@ -143,6 +144,7 @@ namespace FilesContractTests.Records
             sent["recurring_days"] = new Nullable<Int64>[] { 4 };
             sent["schedule_id"] = (Int64)8;
             sent["schedule_days_of_week"] = new Nullable<Int64>[] { 4 };
+            sent["schedule_interval_minutes"] = (Int64)8;
             sent["schedule_time_zone"] = "contract-schedule_time_zone-2";
             sent["schedule_times_of_day"] = new string[] { "b" };
             sent["source"] = "contract-source-2";
@@ -150,9 +152,9 @@ namespace FilesContractTests.Records
             sent["trigger_actions"] = new string[] { "b" };
             sent["workspace_id"] = (Int64)8;
             AiTask updated = await Simulator.Sdk(operation).AiTasks.UpdateAsync((long)record["id"], sent);
-            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "number", ["description"] = "string", ["disabled"] = "boolean", ["holiday_region"] = "string", ["interval"] = "string", ["name"] = "string", ["path"] = "string", ["permission_set"] = "string", ["prompt"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_time_zone"] = "string", ["schedule_times_of_day"] = "array", ["source"] = "string", ["trigger"] = "string", ["trigger_actions"] = "array", ["workspace_id"] = "number" });
+            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "number", ["description"] = "string", ["disabled"] = "boolean", ["holiday_region"] = "string", ["interval"] = "string", ["name"] = "string", ["path"] = "string", ["permission_set"] = "string", ["prompt"] = "string", ["recurring_day"] = "number", ["recurring_days"] = "array", ["schedule_id"] = "number", ["schedule_days_of_week"] = "array", ["schedule_interval_minutes"] = "number", ["schedule_time_zone"] = "string", ["schedule_times_of_day"] = "array", ["source"] = "string", ["trigger"] = "string", ["trigger_actions"] = "array", ["workspace_id"] = "number" });
             JsonObject now = await Simulator.ReadRawAsync(ListPath, MemberPath(record), null, null);
-            await Simulator.KeptAsync(sent, now, "AiTask.update", "description", "disabled", "holiday_region", "interval", "name", "path", "permission_set", "prompt", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_time_zone", "schedule_times_of_day", "source", "trigger", "trigger_actions", "workspace_id");
+            await Simulator.KeptAsync(sent, now, "AiTask.update", "description", "disabled", "holiday_region", "interval", "name", "path", "permission_set", "prompt", "recurring_day", "recurring_days", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_time_zone", "schedule_times_of_day", "source", "trigger", "trigger_actions", "workspace_id");
             AssertModel(now, updated, "AiTask.update");
         }
 
