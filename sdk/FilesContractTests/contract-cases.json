@@ -1,7 +1,7 @@
 {
   "schema": {
     "name": "swagger_doc-production.json",
-    "sha256": "05051b266ef548459cf89c1806be49f771ac86b5036273c10b843eecce0ab7db"
+    "sha256": "96c50a844f7a00e54c75f131f45c3e8ce0be0cba2ec53d82509fa3c186808390"
   },
   "cases": [
     {
@@ -437,6 +437,31 @@
     {
       "test": "FilesContractTests.Records.CustomDomainRecordContractTest.Delete",
       "model": "CustomDomain",
+      "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.DatabaseDestinationRecordContractTest.List",
+      "model": "DatabaseDestination",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.DatabaseDestinationRecordContractTest.Find",
+      "model": "DatabaseDestination",
+      "method": "find"
+    },
+    {
+      "test": "FilesContractTests.Records.DatabaseDestinationRecordContractTest.Create",
+      "model": "DatabaseDestination",
+      "method": "create"
+    },
+    {
+      "test": "FilesContractTests.Records.DatabaseDestinationRecordContractTest.Update",
+      "model": "DatabaseDestination",
+      "method": "update"
+    },
+    {
+      "test": "FilesContractTests.Records.DatabaseDestinationRecordContractTest.Delete",
+      "model": "DatabaseDestination",
       "method": "delete"
     },
     {
@@ -1379,6 +1404,16 @@
       "test": "FilesContractTests.Records.ShareGroupRecordContractTest.Delete",
       "model": "ShareGroup",
       "method": "delete"
+    },
+    {
+      "test": "FilesContractTests.Records.SharedWorkflowRecordContractTest.List",
+      "model": "SharedWorkflow",
+      "method": "list"
+    },
+    {
+      "test": "FilesContractTests.Records.SharedWorkflowRecordContractTest.Find",
+      "model": "SharedWorkflow",
+      "method": "find"
     },
     {
       "test": "FilesContractTests.Records.SiemHttpDestinationRecordContractTest.List",

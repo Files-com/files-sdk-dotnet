@@ -72,6 +72,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
+            if (!this.attributes.ContainsKey("shared_workflow_id"))
+            {
+                this.attributes.Add("shared_workflow_id", null);
+            }
             if (!this.attributes.ContainsKey("paths"))
             {
                 this.attributes.Add("paths", new string[0]);
@@ -201,6 +205,16 @@ namespace FilesCom.Models
         {
             get { return (Nullable<Int64>)attributes["workspace_id"]; }
             set { attributes["workspace_id"] = value; unsaved.Add("workspace_id"); }
+        }
+
+        /// <summary>
+        /// Shared Workflow for which the Snapshot was created.
+        /// </summary>
+        [JsonPropertyName("shared_workflow_id")]
+        public Nullable<Int64> SharedWorkflowId
+        {
+            get { return (Nullable<Int64>)attributes["shared_workflow_id"]; }
+            set { attributes["shared_workflow_id"] = value; unsaved.Add("shared_workflow_id"); }
         }
 
         /// <summary>
@@ -402,7 +416,7 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "expires_at", "name", "paths", "workspace_id" };
+        private static readonly string[] CreateParameterNames = { "expires_at", "name", "paths", "workspace_id", "shared_workflow_id" };
         private static readonly string[] UpdateParameterNames = { "id", "expires_at", "name", "paths" };
 
         /// <summary>
@@ -614,6 +628,7 @@ namespace FilesCom.Models
         ///   name - string - A name for the snapshot.
         ///   paths - array(string) - An array of paths to add to the snapshot.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
+        ///   shared_workflow_id - int64 - Shared Workflow for which the Snapshot was created.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
@@ -653,6 +668,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: workspace_id is null, which cannot be sent" : "Bad parameter: workspace_id must be of type Nullable<Int64>", "workspace_id");
+            }
+            if (parameters.TryGetValue("shared_workflow_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_workflow_id is null, which cannot be sent" : "Bad parameter: shared_workflow_id must be of type Nullable<Int64>", "shared_workflow_id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/snapshots", System.Net.Http.HttpMethod.Post, parameters, options, cancellationToken);

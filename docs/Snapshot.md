@@ -10,7 +10,8 @@
   "name": "My Snapshot",
   "user_id": 1,
   "bundle_id": 1,
-  "workspace_id": 1
+  "workspace_id": 1,
+  "shared_workflow_id": 1
 }
 ```
 
@@ -21,6 +22,7 @@
 * `user_id` / `UserId`  (Nullable<Int64>): The user that created this snapshot, if applicable.
 * `bundle_id` / `BundleId`  (Nullable<Int64>): The bundle using this snapshot, if applicable.
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID. `0` means the default workspace.
+* `shared_workflow_id` / `SharedWorkflowId`  (Nullable<Int64>): Shared Workflow for which the Snapshot was created.
 * `paths` / `Paths`  (string[]): An array of paths to add to the snapshot.
 
 
@@ -109,6 +111,7 @@ Task<Snapshot> client.Snapshots.CreateAsync(
 * `name` (string): A name for the snapshot.
 * `paths` (string[]): An array of paths to add to the snapshot.
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
+* `shared_workflow_id` (Nullable<Int64>): Shared Workflow for which the Snapshot was created.
 
 
 ---

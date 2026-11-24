@@ -105,6 +105,15 @@
   ],
   "schedule_time_zone": "Eastern Time (US & Canada)",
   "source": "example",
+  "shared_trigger_user_ids": [
+    1
+  ],
+  "shared_trigger_group_ids": [
+    1
+  ],
+  "shared_trigger_partner_ids": [
+    1
+  ],
   "sync_ids": [
     1,
     2
@@ -166,6 +175,9 @@
 * `schedule_times_of_day` / `ScheduleTimesOfDay`  (string[]): Times of day to run in HH:MM format (24-hour). For `custom_schedule`, run at these times on specified days of week. For `daily`, run at these times on the scheduled interval date.
 * `schedule_time_zone` / `ScheduleTimeZone`  (string): Time zone for the schedule. If not set, times are interpreted as UTC.
 * `source` / `Source`  (string): Source path/glob.  See Automation docs for exact description, but this is used to filter for files in the `path` to find files to operate on. Supports globs, except on remote mounts.
+* `shared_trigger_user_ids` / `SharedTriggerUserIds`  (Nullable<Int64>[]): Users who can start this Shared Workflow.
+* `shared_trigger_group_ids` / `SharedTriggerGroupIds`  (Nullable<Int64>[]): Groups whose members can start this Shared Workflow.
+* `shared_trigger_partner_ids` / `SharedTriggerPartnerIds`  (Nullable<Int64>[]): Partners whose users can start this Shared Workflow.
 * `sync_ids` / `SyncIds`  (Nullable<Int64>[]): IDs of Syncs to run by this Automation.
 * `trigger_actions` / `TriggerActions`  (string[]): If trigger is `action`, this is the list of action types on which to trigger the automation. Valid actions are create, copy, move, archived_delete, update, read, destroy
 * `trigger` / `Trigger`  (string): How this automation is triggered to run.
@@ -297,6 +309,9 @@ Task<Automation> client.Automations.CreateAsync(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+* `shared_trigger_user_ids` (Nullable<Int64>[]): Users who can start this Shared Workflow.
+* `shared_trigger_group_ids` (Nullable<Int64>[]): Groups whose members can start this Shared Workflow.
+* `shared_trigger_partner_ids` (Nullable<Int64>[]): Partners whose users can start this Shared Workflow.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
 * `schedule_interval_minutes` (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
 * `schedule_times_of_day` (string[]): Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
@@ -419,6 +434,9 @@ Task<Automation> client.Automations.UpdateAsync(
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+* `shared_trigger_user_ids` (Nullable<Int64>[]): Users who can start this Shared Workflow.
+* `shared_trigger_group_ids` (Nullable<Int64>[]): Groups whose members can start this Shared Workflow.
+* `shared_trigger_partner_ids` (Nullable<Int64>[]): Partners whose users can start this Shared Workflow.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
 * `schedule_interval_minutes` (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
 * `schedule_times_of_day` (string[]): Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
@@ -535,6 +553,9 @@ parameters.Add("sync_ids", new object[] { 1, 2 });
 parameters.Add("user_ids", new object[] { 1, 2 });
 parameters.Add("group_ids", new object[] { 1, 2 });
 parameters.Add("schedule_id", 1L);
+parameters.Add("shared_trigger_user_ids", new Nullable<Int64>[] { 1 });
+parameters.Add("shared_trigger_group_ids", new Nullable<Int64>[] { 1 });
+parameters.Add("shared_trigger_partner_ids", new Nullable<Int64>[] { 1 });
 parameters.Add("schedule_days_of_week", new Nullable<Int64>[] { 0, 1, 3 });
 parameters.Add("schedule_interval_minutes", 15L);
 parameters.Add("schedule_times_of_day", new string[] { "7:30", "11:30" });
@@ -581,6 +602,9 @@ When it succeeds, the object takes the attributes Files.com returns. The `Automa
 * `user_ids` (string): A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `group_ids` (string): A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
 * `schedule_id` (Nullable<Int64>): If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+* `shared_trigger_user_ids` (Nullable<Int64>[]): Users who can start this Shared Workflow.
+* `shared_trigger_group_ids` (Nullable<Int64>[]): Groups whose members can start this Shared Workflow.
+* `shared_trigger_partner_ids` (Nullable<Int64>[]): Partners whose users can start this Shared Workflow.
 * `schedule_days_of_week` (Nullable<Int64>[]): If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
 * `schedule_interval_minutes` (Nullable<Int64>): Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
 * `schedule_times_of_day` (string[]): Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.

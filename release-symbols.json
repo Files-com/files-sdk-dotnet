@@ -759,6 +759,9 @@
         "schedule_interval_minutes": "ScheduleIntervalMinutes",
         "schedule_time_zone": "ScheduleTimeZone",
         "schedule_times_of_day": "ScheduleTimesOfDay",
+        "shared_trigger_group_ids": "SharedTriggerGroupIds",
+        "shared_trigger_partner_ids": "SharedTriggerPartnerIds",
+        "shared_trigger_user_ids": "SharedTriggerUserIds",
         "source": "Source",
         "sync_ids": "SyncIds",
         "trigger": "Trigger",
@@ -905,6 +908,8 @@
         "execution_nodes": "ExecutionNodes",
         "failed_operations": "FailedOperations",
         "id": "Id",
+        "initiating_interface": "InitiatingInterface",
+        "initiating_user_id": "InitiatingUserId",
         "journal_url": "JournalUrl",
         "node_states": "NodeStates",
         "rerun_from_node_id": "RerunFromNodeId",
@@ -1662,6 +1667,57 @@
 
           ],
           "route": "POST /custom_domains/{id}/allocate_ips"
+        }
+      }
+    },
+    "DatabaseDestination": {
+      "type": "DatabaseDestination",
+      "operations_property": "DatabaseDestinations",
+      "properties": {
+        "config": "Config",
+        "created_at": "CreatedAt",
+        "id": "Id",
+        "name": "Name",
+        "provider": "Provider",
+        "secret_id": "SecretId",
+        "updated_at": "UpdatedAt",
+        "workspace_id": "WorkspaceId"
+      },
+      "operations": {
+        "DeleteDatabaseDestinationsId": {
+          "method": "Delete",
+          "aliases": [
+            "Destroy"
+          ],
+          "route": "DELETE /database_destinations/{id}"
+        },
+        "GetDatabaseDestinations": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /database_destinations"
+        },
+        "GetDatabaseDestinationsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /database_destinations/{id}"
+        },
+        "PatchDatabaseDestinationsId": {
+          "method": "Update",
+          "aliases": [
+
+          ],
+          "route": "PATCH /database_destinations/{id}"
+        },
+        "PostDatabaseDestinations": {
+          "method": "Create",
+          "aliases": [
+
+          ],
+          "route": "POST /database_destinations"
         }
       }
     },
@@ -4989,6 +5045,47 @@
       "operations": {
       }
     },
+    "SharedWorkflow": {
+      "type": "SharedWorkflow",
+      "operations_property": "SharedWorkflows",
+      "properties": {
+        "description": "Description",
+        "form_fields": "FormFields",
+        "id": "Id",
+        "name": "Name",
+        "submission_revision": "SubmissionRevision"
+      },
+      "operations": {
+        "GetSharedWorkflows": {
+          "method": "List",
+          "aliases": [
+            "All"
+          ],
+          "route": "GET /shared_workflows"
+        },
+        "GetSharedWorkflowsId": {
+          "method": "Find",
+          "aliases": [
+            "Get"
+          ],
+          "route": "GET /shared_workflows/{id}"
+        },
+        "GetSharedWorkflowsIdRunsRunId": {
+          "method": "FindRun",
+          "aliases": [
+
+          ],
+          "route": "GET /shared_workflows/{id}/runs/{run_id}"
+        },
+        "PostSharedWorkflowsIdRunWorkflow": {
+          "method": "RunWorkflow",
+          "aliases": [
+
+          ],
+          "route": "POST /shared_workflows/{id}/run_workflow"
+        }
+      }
+    },
     "SiemHttpDestination": {
       "type": "SiemHttpDestination",
       "operations_property": "SiemHttpDestinations",
@@ -5422,6 +5519,7 @@
         "id": "Id",
         "name": "Name",
         "paths": "Paths",
+        "shared_workflow_id": "SharedWorkflowId",
         "user_id": "UserId",
         "workspace_id": "WorkspaceId"
       },

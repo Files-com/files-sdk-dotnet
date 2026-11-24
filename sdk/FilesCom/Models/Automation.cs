@@ -26,7 +26,7 @@ namespace FilesCom.Models
         // The JSON, when handed out since then, of the arrays among them that callers can change in place, directly or
         // through a model in them. SaveAsync compares each with the array's JSON now, and sends the ones that differ.
         private readonly Dictionary<string, string> handedOut = new Dictionary<string, string>();
-        private static readonly string[] ArrayAttributeNames = { "destinations", "import_urls", "group_ids", "recurring_days", "schedule_days_of_week", "schedule_times_of_day", "sync_ids", "trigger_actions", "user_ids" };
+        private static readonly string[] ArrayAttributeNames = { "destinations", "import_urls", "group_ids", "recurring_days", "schedule_days_of_week", "schedule_times_of_day", "shared_trigger_user_ids", "shared_trigger_group_ids", "shared_trigger_partner_ids", "sync_ids", "trigger_actions", "user_ids" };
         /// <summary>
         /// Makes a Automation with no attributes set and no options.
         /// </summary>
@@ -203,6 +203,18 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("source"))
             {
                 this.attributes.Add("source", null);
+            }
+            if (!this.attributes.ContainsKey("shared_trigger_user_ids"))
+            {
+                this.attributes.Add("shared_trigger_user_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("shared_trigger_group_ids"))
+            {
+                this.attributes.Add("shared_trigger_group_ids", new Nullable<Int64>[0]);
+            }
+            if (!this.attributes.ContainsKey("shared_trigger_partner_ids"))
+            {
+                this.attributes.Add("shared_trigger_partner_ids", new Nullable<Int64>[0]);
             }
             if (!this.attributes.ContainsKey("sync_ids"))
             {
@@ -702,6 +714,36 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Users who can start this Shared Workflow.
+        /// </summary>
+        [JsonPropertyName("shared_trigger_user_ids")]
+        public Nullable<Int64>[] SharedTriggerUserIds
+        {
+            get { return (Nullable<Int64>[])HandedOut("shared_trigger_user_ids"); }
+            set { attributes["shared_trigger_user_ids"] = value; unsaved.Add("shared_trigger_user_ids"); }
+        }
+
+        /// <summary>
+        /// Groups whose members can start this Shared Workflow.
+        /// </summary>
+        [JsonPropertyName("shared_trigger_group_ids")]
+        public Nullable<Int64>[] SharedTriggerGroupIds
+        {
+            get { return (Nullable<Int64>[])HandedOut("shared_trigger_group_ids"); }
+            set { attributes["shared_trigger_group_ids"] = value; unsaved.Add("shared_trigger_group_ids"); }
+        }
+
+        /// <summary>
+        /// Partners whose users can start this Shared Workflow.
+        /// </summary>
+        [JsonPropertyName("shared_trigger_partner_ids")]
+        public Nullable<Int64>[] SharedTriggerPartnerIds
+        {
+            get { return (Nullable<Int64>[])HandedOut("shared_trigger_partner_ids"); }
+            set { attributes["shared_trigger_partner_ids"] = value; unsaved.Add("shared_trigger_partner_ids"); }
+        }
+
+        /// <summary>
         /// IDs of Syncs to run by this Automation.
         /// </summary>
         [JsonPropertyName("sync_ids")]
@@ -897,6 +939,9 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   shared_trigger_user_ids - array(int64) - Users who can start this Shared Workflow.
+        ///   shared_trigger_group_ids - array(int64) - Groups whose members can start this Shared Workflow.
+        ///   shared_trigger_partner_ids - array(int64) - Partners whose users can start this Shared Workflow.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
@@ -946,6 +991,9 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   shared_trigger_user_ids - array(int64) - Users who can start this Shared Workflow.
+        ///   shared_trigger_group_ids - array(int64) - Groups whose members can start this Shared Workflow.
+        ///   shared_trigger_partner_ids - array(int64) - Partners whose users can start this Shared Workflow.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
@@ -1041,6 +1089,18 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_id is null, which cannot be sent" : "Bad parameter: schedule_id must be of type Nullable<Int64>", "schedule_id");
+            }
+            if (parameters.TryGetValue("shared_trigger_user_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_user_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_user_ids must be of type Nullable<Int64>[]", "shared_trigger_user_ids");
+            }
+            if (parameters.TryGetValue("shared_trigger_group_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_group_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_group_ids must be of type Nullable<Int64>[]", "shared_trigger_group_ids");
+            }
+            if (parameters.TryGetValue("shared_trigger_partner_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_partner_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_partner_ids must be of type Nullable<Int64>[]", "shared_trigger_partner_ids");
             }
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
@@ -1226,8 +1286,8 @@ namespace FilesCom.Models
         }
 
 
-        private static readonly string[] CreateParameterNames = { "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation" };
+        private static readonly string[] CreateParameterNames = { "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "shared_trigger_user_ids", "shared_trigger_group_ids", "shared_trigger_partner_ids", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation", "workspace_id" };
+        private static readonly string[] UpdateParameterNames = { "id", "source", "destinations", "destination_replace_from", "destination_replace_to", "interval", "path", "sync_ids", "user_ids", "group_ids", "schedule_id", "shared_trigger_user_ids", "shared_trigger_group_ids", "shared_trigger_partner_ids", "schedule_days_of_week", "schedule_interval_minutes", "schedule_times_of_day", "schedule_time_zone", "holiday_region", "always_overwrite_size_matching_files", "always_serialize_jobs", "description", "definition", "disabled", "exclude_pattern", "import_urls", "flatten_destination_structure", "ignore_locked_folders", "legacy_folder_matching", "name", "overwrite_files", "path_time_zone", "retry_on_failure_interval_in_minutes", "retry_on_failure_number_of_attempts", "trigger", "trigger_actions", "value", "recurring_day", "recurring_days", "automation" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -1513,6 +1573,9 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   shared_trigger_user_ids - array(int64) - Users who can start this Shared Workflow.
+        ///   shared_trigger_group_ids - array(int64) - Groups whose members can start this Shared Workflow.
+        ///   shared_trigger_partner_ids - array(int64) - Partners whose users can start this Shared Workflow.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
@@ -1607,6 +1670,18 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_id is null, which cannot be sent" : "Bad parameter: schedule_id must be of type Nullable<Int64>", "schedule_id");
+            }
+            if (parameters.TryGetValue("shared_trigger_user_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_user_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_user_ids must be of type Nullable<Int64>[]", "shared_trigger_user_ids");
+            }
+            if (parameters.TryGetValue("shared_trigger_group_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_group_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_group_ids must be of type Nullable<Int64>[]", "shared_trigger_group_ids");
+            }
+            if (parameters.TryGetValue("shared_trigger_partner_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_partner_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_partner_ids must be of type Nullable<Int64>[]", "shared_trigger_partner_ids");
             }
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {
@@ -1837,6 +1912,9 @@ namespace FilesCom.Models
         ///   user_ids - string - A list of user IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   group_ids - string - A list of group IDs the automation is associated with. If sent as a string, it should be comma-delimited.
         ///   schedule_id - int64 - If trigger is `custom_schedule`, the reusable Schedule used instead of the automation's schedule fields.
+        ///   shared_trigger_user_ids - array(int64) - Users who can start this Shared Workflow.
+        ///   shared_trigger_group_ids - array(int64) - Groups whose members can start this Shared Workflow.
+        ///   shared_trigger_partner_ids - array(int64) - Partners whose users can start this Shared Workflow.
         ///   schedule_days_of_week - array(int64) - If trigger is `custom_schedule` without `schedule_id`, a list of days of the week to run this automation. 0 is Sunday, 1 is Monday, etc.
         ///   schedule_interval_minutes - int64 - Run every N minutes (1–59, subject to the Site plan minimum). Use by itself with `custom_schedule`. For v2 Automations, set this field in the Scheduled trigger's definition.
         ///   schedule_times_of_day - array(string) - Times of day to run in HH:MM format (24-hour). Required for `custom_schedule` without `schedule_id` or `schedule_interval_minutes`. For `daily` triggers, the default is midnight UTC.
@@ -1943,6 +2021,18 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("schedule_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: schedule_id is null, which cannot be sent" : "Bad parameter: schedule_id must be of type Nullable<Int64>", "schedule_id");
+            }
+            if (parameters.TryGetValue("shared_trigger_user_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_user_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_user_ids must be of type Nullable<Int64>[]", "shared_trigger_user_ids");
+            }
+            if (parameters.TryGetValue("shared_trigger_group_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_group_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_group_ids must be of type Nullable<Int64>[]", "shared_trigger_group_ids");
+            }
+            if (parameters.TryGetValue("shared_trigger_partner_ids", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: shared_trigger_partner_ids is null, which cannot be sent" : "Bad parameter: shared_trigger_partner_ids must be of type Nullable<Int64>[]", "shared_trigger_partner_ids");
             }
             if (parameters.TryGetValue("schedule_days_of_week", out parameterValue) && !(parameterValue is Nullable<Int64>[]))
             {

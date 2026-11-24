@@ -150,6 +150,11 @@ namespace FilesCom
         public CustomDomainOperations CustomDomains => new CustomDomainOperations(this);
 
         /// <summary>
+        /// DatabaseDestination operations that run with this client.
+        /// </summary>
+        public DatabaseDestinationOperations DatabaseDestinations => new DatabaseDestinationOperations(this);
+
+        /// <summary>
         /// DesktopConfigurationProfile operations that run with this client.
         /// </summary>
         public DesktopConfigurationProfileOperations DesktopConfigurationProfiles => new DesktopConfigurationProfileOperations(this);
@@ -483,6 +488,11 @@ namespace FilesCom
         /// ShareGroup operations that run with this client.
         /// </summary>
         public ShareGroupOperations ShareGroups => new ShareGroupOperations(this);
+
+        /// <summary>
+        /// SharedWorkflow operations that run with this client.
+        /// </summary>
+        public SharedWorkflowOperations SharedWorkflows => new SharedWorkflowOperations(this);
 
         /// <summary>
         /// SiemHttpDestination operations that run with this client.

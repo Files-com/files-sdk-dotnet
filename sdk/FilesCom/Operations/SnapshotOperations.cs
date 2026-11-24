@@ -116,6 +116,7 @@ namespace FilesCom.Operations
         ///   name - string - A name for the snapshot.
         ///   paths - array(string) - An array of paths to add to the snapshot.
         ///   workspace_id - int64 - Workspace ID. `0` means the default workspace.
+        ///   shared_workflow_id - int64 - Shared Workflow for which the Snapshot was created.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>

@@ -34,7 +34,7 @@ namespace FilesContractTests.Records
             List<JsonObject> made = new List<JsonObject>();
             for (int i = 0; i < count; i++)
             {
-                made.Add(await Simulator.CreateRawAsync(ListPath, Simulator.Json(new Dictionary<string, object> { ["expires_at"] = "2030-01-02T03:04:05Z", ["name"] = "contract-name", ["workspace_id"] = (Int64)7 })));
+                made.Add(await Simulator.CreateRawAsync(ListPath, Simulator.Json(new Dictionary<string, object> { ["expires_at"] = "2030-01-02T03:04:05Z", ["name"] = "contract-name", ["workspace_id"] = (Int64)7, ["shared_workflow_id"] = (Int64)7 })));
             }
             return Conform(made.ToArray());
         }
@@ -44,7 +44,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "Snapshot", ("id", "int64"), ("expires_at", "date-time"), ("finalized_at", "date-time"), ("name", "string"), ("user_id", "int64"), ("bundle_id", "int64"), ("workspace_id", "int64"));
+                Simulator.Conforms(record, "Snapshot", ("id", "int64"), ("expires_at", "date-time"), ("finalized_at", "date-time"), ("name", "string"), ("user_id", "int64"), ("bundle_id", "int64"), ("workspace_id", "int64"), ("shared_workflow_id", "int64"));
             }
             return records;
         }
@@ -65,6 +65,7 @@ namespace FilesContractTests.Records
             Simulator.Same(record, "user_id", model.UserId, what);
             Simulator.Same(record, "bundle_id", model.BundleId, what);
             Simulator.Same(record, "workspace_id", model.WorkspaceId, what);
+            Simulator.Same(record, "shared_workflow_id", model.SharedWorkflowId, what);
         }
 
         [TestMethod]
@@ -72,11 +73,11 @@ namespace FilesContractTests.Records
         {
             string operation = await Simulator.RecordOperationAsync("Snapshot", "create");
             await Simulator.ResetAsync();
-            Dictionary<string, object> sent = new Dictionary<string, object> { ["expires_at"] = "2030-01-02T03:04:05Z", ["name"] = "contract-name", ["workspace_id"] = (Int64)7 };
+            Dictionary<string, object> sent = new Dictionary<string, object> { ["expires_at"] = "2030-01-02T03:04:05Z", ["name"] = "contract-name", ["workspace_id"] = (Int64)7, ["shared_workflow_id"] = (Int64)7 };
             Snapshot created = await Simulator.Sdk(operation).Snapshots.CreateAsync(sent);
-            await Simulator.SdkRequestAsync(operation, 201, new JsonObject { ["expires_at"] = "string", ["name"] = "string", ["workspace_id"] = "number" });
+            await Simulator.SdkRequestAsync(operation, 201, new JsonObject { ["expires_at"] = "string", ["name"] = "string", ["workspace_id"] = "number", ["shared_workflow_id"] = "number" });
             JsonObject record = await Simulator.ReadRawAsync(ListPath, $"{ListPath}/{created.Id}", null, null);
-            await Simulator.KeptAsync(sent, record, "Snapshot.create", "expires_at", "name", "workspace_id");
+            await Simulator.KeptAsync(sent, record, "Snapshot.create", "expires_at", "name", "workspace_id", "shared_workflow_id");
             AssertModel(record, created, "Snapshot.create");
         }
 

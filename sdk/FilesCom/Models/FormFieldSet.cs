@@ -230,7 +230,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Form Field Set is in use by an active Inbox / Bundle / Inbox Registration / Bundle Registration / Partner Channel upload destination
+        /// Form Field Set is in use by an active Inbox, Share Link, Partner Channel upload destination, or Shared Trigger.
         /// </summary>
         [JsonConverter(typeof(BooleanJsonConverter))]
         [JsonPropertyName("in_use")]

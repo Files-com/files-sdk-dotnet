@@ -40,6 +40,18 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("id", null);
             }
+            if (!this.attributes.ContainsKey("completed_at"))
+            {
+                this.attributes.Add("completed_at", null);
+            }
+            if (!this.attributes.ContainsKey("created_at"))
+            {
+                this.attributes.Add("created_at", null);
+            }
+            if (!this.attributes.ContainsKey("status"))
+            {
+                this.attributes.Add("status", null);
+            }
             if (!this.attributes.ContainsKey("automation_id"))
             {
                 this.attributes.Add("automation_id", null);
@@ -56,17 +68,17 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("workspace_id", null);
             }
+            if (!this.attributes.ContainsKey("initiating_user_id"))
+            {
+                this.attributes.Add("initiating_user_id", null);
+            }
+            if (!this.attributes.ContainsKey("initiating_interface"))
+            {
+                this.attributes.Add("initiating_interface", null);
+            }
             if (!this.attributes.ContainsKey("cancel_requested_at"))
             {
                 this.attributes.Add("cancel_requested_at", null);
-            }
-            if (!this.attributes.ContainsKey("completed_at"))
-            {
-                this.attributes.Add("completed_at", null);
-            }
-            if (!this.attributes.ContainsKey("created_at"))
-            {
-                this.attributes.Add("created_at", null);
             }
             if (!this.attributes.ContainsKey("retry_at"))
             {
@@ -95,10 +107,6 @@ namespace FilesCom.Models
             if (!this.attributes.ContainsKey("runtime"))
             {
                 this.attributes.Add("runtime", null);
-            }
-            if (!this.attributes.ContainsKey("status"))
-            {
-                this.attributes.Add("status", null);
             }
             if (!this.attributes.ContainsKey("successful_operations"))
             {
@@ -185,6 +193,39 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Automation run completion/failure date/time.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("completed_at")]
+        public Nullable<DateTime> CompletedAt
+        {
+            get { return (Nullable<DateTime>)attributes["completed_at"]; }
+            private set { attributes["completed_at"] = value; }
+        }
+
+        /// <summary>
+        /// Automation run start date/time.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("created_at")]
+        public Nullable<DateTime> CreatedAt
+        {
+            get { return (Nullable<DateTime>)attributes["created_at"]; }
+            private set { attributes["created_at"] = value; }
+        }
+
+        /// <summary>
+        /// The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("status")]
+        public string Status
+        {
+            get { return (string)attributes["status"]; }
+            private set { attributes["status"] = value; }
+        }
+
+        /// <summary>
         /// ID of the associated Automation.
         /// </summary>
         [JsonInclude]
@@ -229,6 +270,28 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// User who initiated a Shared Workflow run.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("initiating_user_id")]
+        public Nullable<Int64> InitiatingUserId
+        {
+            get { return (Nullable<Int64>)attributes["initiating_user_id"]; }
+            private set { attributes["initiating_user_id"] = value; }
+        }
+
+        /// <summary>
+        /// Interface from which the Shared Workflow was started.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("initiating_interface")]
+        public string InitiatingInterface
+        {
+            get { return (string)attributes["initiating_interface"]; }
+            private set { attributes["initiating_interface"] = value; }
+        }
+
+        /// <summary>
         /// Date/time at which cancellation was requested.
         /// </summary>
         [JsonInclude]
@@ -237,28 +300,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<DateTime>)attributes["cancel_requested_at"]; }
             private set { attributes["cancel_requested_at"] = value; }
-        }
-
-        /// <summary>
-        /// Automation run completion/failure date/time.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("completed_at")]
-        public Nullable<DateTime> CompletedAt
-        {
-            get { return (Nullable<DateTime>)attributes["completed_at"]; }
-            private set { attributes["completed_at"] = value; }
-        }
-
-        /// <summary>
-        /// Automation run start date/time.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("created_at")]
-        public Nullable<DateTime> CreatedAt
-        {
-            get { return (Nullable<DateTime>)attributes["created_at"]; }
-            private set { attributes["created_at"] = value; }
         }
 
         /// <summary>
@@ -336,17 +377,6 @@ namespace FilesCom.Models
         {
             get { return (Nullable<double>)attributes["runtime"]; }
             private set { attributes["runtime"] = value; }
-        }
-
-        /// <summary>
-        /// The status of the AutomationRun. One of `queued`, `running`, `success`, `partial_failure`, `failure`, `skipped`, or `canceled`.
-        /// </summary>
-        [JsonInclude]
-        [JsonPropertyName("status")]
-        public string Status
-        {
-            get { return (string)attributes["status"]; }
-            private set { attributes["status"] = value; }
         }
 
         /// <summary>
