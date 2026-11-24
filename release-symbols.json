@@ -2887,6 +2887,7 @@
         "integration_centric_profile_id": "IntegrationCentricProfileId",
         "name": "Name",
         "notes": "Notes",
+        "preferred_workspace_id": "PreferredWorkspaceId",
         "restapi_permission": "RestapiPermission",
         "s3_compatible_endpoint_permission": "S3CompatibleEndpointPermission",
         "sftp_permission": "SftpPermission",

@@ -44,7 +44,7 @@ namespace FilesContractTests.Records
         {
             foreach (JsonObject record in records)
             {
-                Simulator.Conforms(record, "Group", ("id", "int64"), ("name", "string"), ("allowed_ips", "string"), ("admin_ids", "string"), ("notes", "string"), ("user_ids", "string"), ("usernames", "string"), ("ai_assistant_personality_id", "int64"), ("ftp_permission", "boolean"), ("sftp_permission", "boolean"), ("dav_permission", "boolean"), ("restapi_permission", "boolean"), ("s3_compatible_endpoint_permission", "boolean"), ("desktop_configuration_profile_id", "int64"), ("integration_centric_profile_id", "int64"), ("site_id", "int64"), ("workspace_id", "int64"));
+                Simulator.Conforms(record, "Group", ("id", "int64"), ("name", "string"), ("allowed_ips", "string"), ("admin_ids", "string"), ("notes", "string"), ("user_ids", "string"), ("usernames", "string"), ("ai_assistant_personality_id", "int64"), ("ftp_permission", "boolean"), ("sftp_permission", "boolean"), ("dav_permission", "boolean"), ("restapi_permission", "boolean"), ("s3_compatible_endpoint_permission", "boolean"), ("desktop_configuration_profile_id", "int64"), ("integration_centric_profile_id", "int64"), ("preferred_workspace_id", "int64"), ("site_id", "int64"), ("workspace_id", "int64"));
             }
             return records;
         }
@@ -73,6 +73,7 @@ namespace FilesContractTests.Records
             Simulator.Same(record, "s3_compatible_endpoint_permission", model.S3CompatibleEndpointPermission, what);
             Simulator.Same(record, "desktop_configuration_profile_id", model.DesktopConfigurationProfileId, what);
             Simulator.Same(record, "integration_centric_profile_id", model.IntegrationCentricProfileId, what);
+            Simulator.Same(record, "preferred_workspace_id", model.PreferredWorkspaceId, what);
             Simulator.Same(record, "site_id", model.SiteId, what);
             Simulator.Same(record, "workspace_id", model.WorkspaceId, what);
         }
@@ -137,10 +138,11 @@ namespace FilesContractTests.Records
             sent["integration_centric_profile_id"] = (Int64)8;
             sent["allowed_ips"] = "contract-allowed_ips-2";
             sent["name"] = "contract-name-2";
+            sent["preferred_workspace_id"] = (Int64)8;
             Group updated = await Simulator.Sdk(operation).Groups.UpdateAsync((long)record["id"], sent);
-            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "number", ["notes"] = "string", ["user_ids"] = "string", ["admin_ids"] = "string", ["ai_assistant_personality_id"] = "number", ["ftp_permission"] = "boolean", ["sftp_permission"] = "boolean", ["dav_permission"] = "boolean", ["restapi_permission"] = "boolean", ["s3_compatible_endpoint_permission"] = "boolean", ["desktop_configuration_profile_id"] = "number", ["integration_centric_profile_id"] = "number", ["allowed_ips"] = "string", ["name"] = "string" });
+            await Simulator.SdkRequestAsync(operation, 200, new JsonObject { ["id"] = "number", ["notes"] = "string", ["user_ids"] = "string", ["admin_ids"] = "string", ["ai_assistant_personality_id"] = "number", ["ftp_permission"] = "boolean", ["sftp_permission"] = "boolean", ["dav_permission"] = "boolean", ["restapi_permission"] = "boolean", ["s3_compatible_endpoint_permission"] = "boolean", ["desktop_configuration_profile_id"] = "number", ["integration_centric_profile_id"] = "number", ["allowed_ips"] = "string", ["name"] = "string", ["preferred_workspace_id"] = "number" });
             JsonObject now = await Simulator.ReadRawAsync(ListPath, MemberPath(record), null, null);
-            await Simulator.KeptAsync(sent, now, "Group.update", "notes", "user_ids", "admin_ids", "ai_assistant_personality_id", "ftp_permission", "sftp_permission", "dav_permission", "restapi_permission", "s3_compatible_endpoint_permission", "desktop_configuration_profile_id", "integration_centric_profile_id", "allowed_ips", "name");
+            await Simulator.KeptAsync(sent, now, "Group.update", "notes", "user_ids", "admin_ids", "ai_assistant_personality_id", "ftp_permission", "sftp_permission", "dav_permission", "restapi_permission", "s3_compatible_endpoint_permission", "desktop_configuration_profile_id", "integration_centric_profile_id", "allowed_ips", "name", "preferred_workspace_id");
             AssertModel(now, updated, "Group.update");
         }
 

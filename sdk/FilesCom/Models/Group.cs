@@ -100,6 +100,10 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("integration_centric_profile_id", null);
             }
+            if (!this.attributes.ContainsKey("preferred_workspace_id"))
+            {
+                this.attributes.Add("preferred_workspace_id", null);
+            }
             if (!this.attributes.ContainsKey("site_id"))
             {
                 this.attributes.Add("site_id", null);
@@ -315,6 +319,16 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
+        /// </summary>
+        [JsonPropertyName("preferred_workspace_id")]
+        public Nullable<Int64> PreferredWorkspaceId
+        {
+            get { return (Nullable<Int64>)attributes["preferred_workspace_id"]; }
+            set { attributes["preferred_workspace_id"] = value; unsaved.Add("preferred_workspace_id"); }
+        }
+
+        /// <summary>
         /// Site ID
         /// </summary>
         [JsonPropertyName("site_id")]
@@ -349,6 +363,7 @@ namespace FilesCom.Models
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
+        ///   preferred_workspace_id - int64 - Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <remarks>
@@ -375,6 +390,7 @@ namespace FilesCom.Models
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
+        ///   preferred_workspace_id - int64 - Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
         /// </summary>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
         /// <param name="cancellationToken">Stops the request.</param>
@@ -457,6 +473,10 @@ namespace FilesCom.Models
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
             }
+            if (parameters.TryGetValue("preferred_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: preferred_workspace_id is null, which cannot be sent" : "Bad parameter: preferred_workspace_id must be of type Nullable<Int64>", "preferred_workspace_id");
+            }
 
             OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
             // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
@@ -538,7 +558,7 @@ namespace FilesCom.Models
 
 
         private static readonly string[] CreateParameterNames = { "notes", "user_ids", "admin_ids", "ai_assistant_personality_id", "ftp_permission", "sftp_permission", "dav_permission", "restapi_permission", "s3_compatible_endpoint_permission", "desktop_configuration_profile_id", "integration_centric_profile_id", "allowed_ips", "name", "workspace_id" };
-        private static readonly string[] UpdateParameterNames = { "id", "notes", "user_ids", "admin_ids", "ai_assistant_personality_id", "ftp_permission", "sftp_permission", "dav_permission", "restapi_permission", "s3_compatible_endpoint_permission", "desktop_configuration_profile_id", "integration_centric_profile_id", "allowed_ips", "name" };
+        private static readonly string[] UpdateParameterNames = { "id", "notes", "user_ids", "admin_ids", "ai_assistant_personality_id", "ftp_permission", "sftp_permission", "dav_permission", "restapi_permission", "s3_compatible_endpoint_permission", "desktop_configuration_profile_id", "integration_centric_profile_id", "allowed_ips", "name", "preferred_workspace_id" };
 
         /// <summary>
         /// Same as <see cref="SaveAsync"/>, without a cancellation token.
@@ -869,6 +889,7 @@ namespace FilesCom.Models
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
+        ///   preferred_workspace_id - int64 - Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
         /// </summary>
         /// <param name="id">Group ID.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
@@ -961,6 +982,10 @@ namespace FilesCom.Models
             if (parameters.TryGetValue("name", out parameterValue) && !(parameterValue is string))
             {
                 throw new InvalidParameterException(parameterValue == null ? "Bad parameter: name is null, which cannot be sent" : "Bad parameter: name must be of type string", "name");
+            }
+            if (parameters.TryGetValue("preferred_workspace_id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: preferred_workspace_id is null, which cannot be sent" : "Bad parameter: preferred_workspace_id must be of type Nullable<Int64>", "preferred_workspace_id");
             }
 
             string responseJson = await FilesClient.SendStringRequest(context, $"/groups/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);

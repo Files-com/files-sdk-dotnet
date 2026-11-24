@@ -19,6 +19,7 @@
   "s3_compatible_endpoint_permission": true,
   "desktop_configuration_profile_id": 1,
   "integration_centric_profile_id": 1,
+  "preferred_workspace_id": 1,
   "site_id": 1,
   "workspace_id": 1
 }
@@ -39,6 +40,7 @@
 * `s3_compatible_endpoint_permission` / `S3CompatibleEndpointPermission`  (bool): If true, users in this group can access the S3-compatible endpoint. This will override a false value of `s3_compatible_endpoint_permission` on the user level. Defaults to false.
 * `desktop_configuration_profile_id` / `DesktopConfigurationProfileId`  (Nullable<Int64>): Desktop Configuration Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `integration_centric_profile_id` / `IntegrationCentricProfileId`  (Nullable<Int64>): Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
+* `preferred_workspace_id` / `PreferredWorkspaceId`  (Nullable<Int64>): Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
 * `site_id` / `SiteId`  (Nullable<Int64>): Site ID
 * `workspace_id` / `WorkspaceId`  (Nullable<Int64>): Workspace ID
 
@@ -185,6 +187,7 @@ Task<Group> client.Groups.UpdateAsync(
 * `integration_centric_profile_id` (Nullable<Int64>): Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Group name.
+* `preferred_workspace_id` (Nullable<Int64>): Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
 
 
 ---
@@ -237,6 +240,7 @@ parameters.Add("desktop_configuration_profile_id", 1L);
 parameters.Add("integration_centric_profile_id", 1L);
 parameters.Add("allowed_ips", "10.0.0.0/8\n127.0.0.1");
 parameters.Add("name", "owners");
+parameters.Add("preferred_workspace_id", 1L);
 
 await group.Update(parameters);
 ```
@@ -260,6 +264,7 @@ When it succeeds, the object takes the attributes Files.com returns. The `Group`
 * `integration_centric_profile_id` (Nullable<Int64>): Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
 * `allowed_ips` (string): A list of allowed IPs if applicable.  Newline delimited
 * `name` (string): Group name.
+* `preferred_workspace_id` (Nullable<Int64>): Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
 
 
 ---

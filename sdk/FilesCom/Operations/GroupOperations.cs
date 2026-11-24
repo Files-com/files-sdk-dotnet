@@ -167,6 +167,7 @@ namespace FilesCom.Operations
         ///   integration_centric_profile_id - int64 - Integration Centric Profile ID assigned to this Group, if any. Users in the Group inherit it unless a direct per-user assignment overrides it.
         ///   allowed_ips - string - A list of allowed IPs if applicable.  Newline delimited
         ///   name - string - Group name.
+        ///   preferred_workspace_id - int64 - Custom Workspace a new Group member will use as their Preferred Workspace if they have no saved preference. The Group must have a Permission in that Workspace.
         /// </summary>
         /// <param name="id">Group ID.</param>
         /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
