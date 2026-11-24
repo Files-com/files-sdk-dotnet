@@ -186,7 +186,7 @@ var parameters = new Dictionary<string, object>();
 
 parameters.Add("name", "Orders");
 parameters.Add("secret_id", 1L);
-parameters.Add("config", "example");
+parameters.Add("config", new Dictionary<string, object> { { "account_identifier", "value" }, { "database_name", "value" }, { "schema_name", "value" }, { "table_name", "value" } });
 
 await databaseDestination.Update(parameters);
 ```

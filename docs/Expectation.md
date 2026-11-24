@@ -353,7 +353,7 @@ parameters.Add("schedule_interval_minutes", 15L);
 parameters.Add("schedule_times_of_day", new string[] { "06:00" });
 parameters.Add("schedule_time_zone", "UTC");
 parameters.Add("holiday_region", "us");
-parameters.Add("schedule_time_exceptions", new object[] { new Dictionary<string, object> { { "holiday_region", "nyse_early_close" }, { "times_of_day", new object[] { "13:00" } } } });
+parameters.Add("schedule_time_exceptions", new object[] { new Dictionary<string, object> { { "holiday_region", "value" }, { "times_of_day", new object[] { "value" } } } });
 parameters.Add("lookback_interval", 3600L);
 parameters.Add("late_acceptance_interval", 900L);
 parameters.Add("inactivity_interval", 300L);
