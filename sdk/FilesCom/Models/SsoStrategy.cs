@@ -208,6 +208,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("display_on_login_page", false);
             }
+            if (!this.attributes.ContainsKey("public_sso_domain"))
+            {
+                this.attributes.Add("public_sso_domain", null);
+            }
+            if (!this.attributes.ContainsKey("public_sso_domain_dns_value"))
+            {
+                this.attributes.Add("public_sso_domain_dns_value", null);
+            }
             if (!this.attributes.ContainsKey("ldap_host"))
             {
                 this.attributes.Add("ldap_host", null);
@@ -774,6 +782,28 @@ namespace FilesCom.Models
         {
             get { return attributes["display_on_login_page"] == null ? false : (bool)attributes["display_on_login_page"]; }
             private set { attributes["display_on_login_page"] = value; }
+        }
+
+        /// <summary>
+        /// Username domain that can publicly discover this SSO provider on this site. Set after saving the provider. Set to null to turn off discovery.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("public_sso_domain")]
+        public string PublicSsoDomain
+        {
+            get { return (string)attributes["public_sso_domain"]; }
+            private set { attributes["public_sso_domain"] = value; }
+        }
+
+        /// <summary>
+        /// This provider's DNS TXT value to publish at _files-sso.&lt;domain&gt; before enabling public SSO discovery for that domain.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("public_sso_domain_dns_value")]
+        public string PublicSsoDomainDnsValue
+        {
+            get { return (string)attributes["public_sso_domain_dns_value"]; }
+            private set { attributes["public_sso_domain_dns_value"] = value; }
         }
 
         /// <summary>
