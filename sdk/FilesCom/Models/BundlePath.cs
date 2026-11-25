@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace FilesCom.Models
 {
     /// <summary>
-    /// A BundlePath object of the Files.com API.
+    /// BundlePathEntity model
     /// </summary>
     public class BundlePath : IModel
     {

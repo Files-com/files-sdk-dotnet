@@ -1224,6 +1224,78 @@ namespace FilesCom.Models
         }
 
         /// <summary>
+        /// Update Bundle Path
+        ///
+        /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   recursive (required) - boolean - Allow access to subfolders content?
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        public Task<BundlePath> UpdateBundle(Dictionary<string, object> parameters)
+        {
+            return UpdateBundleCore(parameters, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Update Bundle Path
+        ///
+        /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   recursive (required) - boolean - Allow access to subfolders content?
+        /// </summary>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<BundlePath> UpdateBundleAsync(Dictionary<string, object> parameters = null, CancellationToken cancellationToken = default)
+        {
+            return UpdateBundleCore(DictionaryUtil.Copy(parameters), cancellationToken);
+        }
+
+
+        private async Task<BundlePath> UpdateBundleCore(Dictionary<string, object> parameters, CancellationToken cancellationToken)
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            object parameterValue;
+            if (!attributes.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("The Bundle has no id, which UpdateBundle needs", "id");
+            }
+            parameters["id"] = parameterValue;
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (!parameters.TryGetValue("recursive", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: recursive", "recursive");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
+            }
+
+            OperationContext context = new OperationContext(FilesClient.Bind(ref client), origin);
+            // This operation's options, for its request and the objects it returns, unaffected by later SetOption calls.
+            Dictionary<string, object> requestOptions = DictionaryUtil.Copy(options);
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundles/{System.Uri.EscapeDataString(attributes["id"].ToString())}/paths/{System.Uri.EscapeDataString(attributes["path"].ToString())}", new HttpMethod("PATCH"), parameters, requestOptions, cancellationToken);
+            BundlePath result = JsonUtil.DeserializeModelResponse<BundlePath>(responseJson, context, requestOptions);
+            // This object's later operations go where this one went.
+            origin = context.RelocatedOrigin;
+            return result;
+        }
+
+        /// <summary>
         /// Sends DELETE /bundles/{id} to the Files.com API.
         /// </summary>
         /// <param name="parameters">The operation takes no parameters besides id, which this object supplies.</param>
@@ -2023,6 +2095,84 @@ namespace FilesCom.Models
             string responseJson = await FilesClient.SendStringRequest(context, $"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
 
             return JsonUtil.DeserializeModelResponse<Bundle>(responseJson, context, options);
+        }
+
+        /// <summary>
+        /// Update Bundle Path
+        ///
+        /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   recursive (required) - boolean - Allow access to subfolders content?
+        /// </summary>
+        /// <param name="id">Bundle ID.</param>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        public static Task<BundlePath> UpdateBundle(
+            Nullable<Int64> id, string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null
+        )
+        {
+            return UpdateBundleCore(OperationContext.OfDefaultClient(), id, path, parameters, options, CancellationToken.None);
+        }
+
+        internal static async Task<BundlePath> UpdateBundleCore(
+            OperationContext context,
+            Nullable<Int64> id, string path,
+            Dictionary<string, object> parameters,
+            Dictionary<string, object> options,
+            CancellationToken cancellationToken
+        )
+        {
+            parameters = parameters != null ? parameters : new Dictionary<string, object>();
+            options = options != null ? options : new Dictionary<string, object>();
+            object parameterValue;
+
+            if (parameters.ContainsKey("id"))
+            {
+                parameters["id"] = id;
+            }
+            else
+            {
+                parameters.Add("id", id);
+            }
+            if (parameters.ContainsKey("path"))
+            {
+                parameters["path"] = path;
+            }
+            else
+            {
+                parameters.Add("path", path);
+            }
+            if (!parameters.TryGetValue("id", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: id", "id");
+            }
+            if (!parameters.TryGetValue("path", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: path", "path");
+            }
+            if (!parameters.TryGetValue("recursive", out parameterValue) || parameterValue == null)
+            {
+                throw new MissingParameterException("Parameter missing: recursive", "recursive");
+            }
+            if (parameters.TryGetValue("id", out parameterValue) && !(parameterValue is Nullable<Int64>))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: id is null, which cannot be sent" : "Bad parameter: id must be of type Nullable<Int64>", "id");
+            }
+            if (parameters.TryGetValue("path", out parameterValue) && !(parameterValue is string))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: path is null, which cannot be sent" : "Bad parameter: path must be of type string", "path");
+            }
+            if (parameters.TryGetValue("recursive", out parameterValue) && !(parameterValue is bool))
+            {
+                throw new InvalidParameterException(parameterValue == null ? "Bad parameter: recursive is null, which cannot be sent" : "Bad parameter: recursive must be of type bool", "recursive");
+            }
+
+            string responseJson = await FilesClient.SendStringRequest(context, $"/bundles/{System.Uri.EscapeDataString(parameters["id"].ToString())}/paths/{System.Uri.EscapeDataString(parameters["path"].ToString())}", new HttpMethod("PATCH"), parameters, options, cancellationToken);
+
+            return JsonUtil.DeserializeModelResponse<BundlePath>(responseJson, context, options);
         }
 
         /// <summary>

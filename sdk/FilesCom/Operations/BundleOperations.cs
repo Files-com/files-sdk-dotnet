@@ -250,6 +250,28 @@ namespace FilesCom.Operations
         }
 
         /// <summary>
+        /// Update Bundle Path
+        ///
+        /// Parameters:
+        ///   path (required) - string - Path to operate on.
+        ///   recursive (required) - boolean - Allow access to subfolders content?
+        /// </summary>
+        /// <param name="id">Bundle ID.</param>
+        /// <param name="path">Path to operate on.</param>
+        /// <param name="parameters">The operation's parameters listed in the summary, keyed by their API names.</param>
+        /// <param name="options">Request options, such as api_key, session_id or workspace_id.</param>
+        /// <param name="cancellationToken">Stops the request.</param>
+        public Task<global::FilesCom.Models.BundlePath> UpdateBundleAsync(
+            Nullable<Int64> id, string path,
+            Dictionary<string, object> parameters = null,
+            Dictionary<string, object> options = null,
+            CancellationToken cancellationToken = default
+        )
+        {
+            return global::FilesCom.Models.Bundle.UpdateBundleCore(new OperationContext(client), id, path, DictionaryUtil.Copy(parameters), DictionaryUtil.Copy(options), cancellationToken);
+        }
+
+        /// <summary>
         /// Sends DELETE /bundles/{id} to the Files.com API.
         /// </summary>
         /// <param name="id">Bundle ID.</param>

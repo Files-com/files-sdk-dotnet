@@ -381,6 +381,36 @@ Task<Bundle> client.Bundles.UpdateAsync(
 
 ---
 
+## Update Bundle Path
+
+```
+Task<BundlePath> Bundle.UpdateBundle(
+    Nullable<Int64> id, string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null
+)
+```
+
+With a client, which runs it with its own site and credentials and takes a cancellation token:
+
+```
+Task<BundlePath> client.Bundles.UpdateBundleAsync(
+    Nullable<Int64> id, string path, 
+    Dictionary<string, object> parameters = null,
+    Dictionary<string, object> options = null,
+    CancellationToken cancellationToken = default
+)
+```
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+* `path` (string): Required - Path to operate on.
+* `recursive` (bool): Required - Allow access to subfolders content?
+
+
+---
+
 ## Delete Share Link
 
 ```
@@ -515,6 +545,29 @@ When it succeeds, the object takes the attributes Files.com returns. The `Bundle
 * `watermark_attachment_file` (FileAttachment): Preview watermark image applied to all bundle items.
 * `watermark_value` (object): Preview watermark settings applied to all bundle items. Uses the same keys as Behavior.value
 * `workspace_id` (Nullable<Int64>): Workspace ID. `0` means the default workspace.
+
+
+---
+
+## Update Bundle Path
+
+```
+var bundle = await Bundle.Find(1L);
+
+var parameters = new Dictionary<string, object>();
+
+parameters.Add("recursive", true);
+
+await bundle.UpdateBundle(parameters);
+```
+
+`UpdateBundleAsync(parameters, cancellationToken)` does the same and can be cancelled. The object sends it with the client it came from.
+
+### Parameters
+
+* `id` (Nullable<Int64>): Required - Bundle ID.
+* `path` (string): Required - Path to operate on.
+* `recursive` (bool): Required - Allow access to subfolders content?
 
 
 ---

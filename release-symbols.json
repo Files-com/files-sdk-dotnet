@@ -1161,6 +1161,13 @@
         "workspace_id": "WorkspaceId"
       },
       "operations": {
+        "BundleUpdateBundlePath": {
+          "method": "UpdateBundle",
+          "aliases": [
+
+          ],
+          "route": "PATCH /bundles/{id}/paths/{path}"
+        },
         "DeleteBundlesId": {
           "method": "Delete",
           "aliases": [
