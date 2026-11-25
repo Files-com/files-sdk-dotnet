@@ -88,6 +88,14 @@ namespace FilesCom.Models
             {
                 this.attributes.Add("output_items", null);
             }
+            if (!this.attributes.ContainsKey("item_refs"))
+            {
+                this.attributes.Add("item_refs", new object[0]);
+            }
+            if (!this.attributes.ContainsKey("item_values"))
+            {
+                this.attributes.Add("item_values", new object[0]);
+            }
         }
 
         /// <summary>
@@ -265,7 +273,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Materialized input items currently available, grouped by inlet.
+        /// Available input items grouped by inlet. Resolve large values with item_refs and item_values.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("input_items")]
@@ -276,7 +284,7 @@ namespace FilesCom.Models
         }
 
         /// <summary>
-        /// Materialized output items grouped by outlet.
+        /// Output items grouped by outlet. Resolve large values with item_refs and item_values.
         /// </summary>
         [JsonInclude]
         [JsonPropertyName("output_items")]
@@ -284,6 +292,28 @@ namespace FilesCom.Models
         {
             get { return (object)attributes["output_items"]; }
             private set { attributes["output_items"] = value; }
+        }
+
+        /// <summary>
+        /// References with a path from the response root and a digest. Replace the null at each path with the value for that digest. Path segments are literal object keys or zero-based array indexes.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("item_refs")]
+        public object[] ItemRefs
+        {
+            get { return (object[])attributes["item_refs"]; }
+            private set { attributes["item_refs"] = value; }
+        }
+
+        /// <summary>
+        /// Ordered entries with a digest, a value, and optional item_refs relative to that value. References inside entries point to earlier entries in this array.
+        /// </summary>
+        [JsonInclude]
+        [JsonPropertyName("item_values")]
+        public object[] ItemValues
+        {
+            get { return (object[])attributes["item_values"]; }
+            private set { attributes["item_values"] = value; }
         }
 
 

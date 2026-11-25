@@ -851,6 +851,8 @@
         "failed_operations": "FailedOperations",
         "input_items": "InputItems",
         "inputs": "Inputs",
+        "item_refs": "ItemRefs",
+        "item_values": "ItemValues",
         "node_id": "NodeId",
         "node_type": "NodeType",
         "output_items": "OutputItems",
